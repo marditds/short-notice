@@ -124,6 +124,7 @@ export const createNotice = async ({ user_id, text, timestamp }) => {
             }
         );
         console.log('Notice created succesfully:', response);
+        return response;
     } catch (error) {
         console.error('Error creating notice:', error);
     }
@@ -164,6 +165,9 @@ export const updateNotice = async (noticeId, newText) => {
 };
 
 export const deleteNotice = async (noticeId) => {
+
+    console.log('Attempting to delete notice with ID:', noticeId);
+
     try {
         const response = await databases.deleteDocument(
             import.meta.env.VITE_DATABASE,

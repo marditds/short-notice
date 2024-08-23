@@ -1,45 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { Profile } from '../../../components/User/Profile';
 import { Notices } from '../../../components/User/Notices';
-import { UserId } from '../../../components/User/UserId';
 import { Form, Modal, Button } from 'react-bootstrap';
 import { useUserContext } from '../../../lib/context/UserContext';
-import { createNotice, getUserNotices, updateNotice, deleteNotice } from '../../../lib/context/dbhandler';
 import { useUserAvatar } from '../../../lib/hooks/useUserAvatar.js';
+import useNotices from '../../../lib/hooks/useNotices.js';
+import { Loading } from '../../../components/Loading/Loading.jsx'
 
 const UserProfile = () => {
 
-    const [isLoading, setIsLoading] = useState(true);
     const { googleUserData, username } = useUserContext();
-    const [user_id, setUserId] = useState(null);
     const [noticeText, setNoticeText] = useState('');
     const [editingNoticeId, setEditingNoticeId] = useState(null);
-    const [userNotices, setUserNotices] = useState([]);
     const [showModal, setShowModal] = useState(false);
 
+    const { user_id, userNotices, isLoading, addNotice, editNotice, removeNotice } = useNotices(googleUserData);
+
     const { avatarUrl, handleAvatarUpload } = useUserAvatar(user_id);
-
-
-    useEffect(() => {
-        const fetchUserNotices = async () => {
-            if (googleUserData) {
-                const id = UserId(googleUserData);
-
-                setUserId(id);
-
-                try {
-                    const notices = await getUserNotices(id);
-                    setUserNotices(notices);
-                } catch (error) {
-                    console.error('Error fetching user notices:', error);
-                } finally {
-                    setIsLoading(false);
-                }
-            }
-        };
-
-        fetchUserNotices();
-    }, [googleUserData]);
 
 
     const onTextareaChange = (e) => {
@@ -47,25 +24,12 @@ const UserProfile = () => {
     }
 
     const handleNotify = async () => {
-        if (user_id) {
-            const newNotice = {
-                user_id: user_id,
-                text: noticeText,
-                timestamp: new Date()
-            };
-
-            await createNotice(newNotice);
-
-            setUserNotices(prevNotices => [newNotice, ...prevNotices,]);
-
+        if (noticeText.trim()) {
+            await addNotice(noticeText);
             setNoticeText('');
         }
     };
 
-    const handleDeleteNotice = async (noticeId) => {
-        await deleteNotice(noticeId);
-        setUserNotices(prevNotices => prevNotices.filter(notice => notice.$id !== noticeId));
-    };
 
     const handleEditNotice = (noticeId, currentText) => {
         setEditingNoticeId(noticeId);
@@ -73,16 +37,10 @@ const UserProfile = () => {
         setShowModal(true);
     };
 
-    const handleSaveEdit = async () => {
+
+    const handleSaveEdit = () => {
         if (editingNoticeId && noticeText.trim()) {
-            await updateNotice(editingNoticeId, noticeText);
-            setUserNotices(prevNotices =>
-                prevNotices.map(notice =>
-                    notice.$id === editingNoticeId
-                        ? { ...notice, text: noticeText }
-                        : notice
-                )
-            );
+            editNotice(editingNoticeId, noticeText);
             setEditingNoticeId(null);
             setNoticeText('');
             setShowModal(false);
@@ -96,11 +54,12 @@ const UserProfile = () => {
     }
 
     if (isLoading) {
-        return <div>Loading user profile...</div>;
+        return <div><Loading />Loading {username}'s profile</div>;
     }
 
     return (
         <>
+
             <Profile
                 username={username}
                 avatarUrl={avatarUrl}
@@ -128,7 +87,7 @@ const UserProfile = () => {
             <Notices
                 notices={userNotices}
                 handleEditNotice={handleEditNotice}
-                handleDeleteNotice={handleDeleteNotice}
+                handleDeleteNotice={removeNotice}
             />
 
             <Modal show={showModal} onHide={handleCloseModal}>
