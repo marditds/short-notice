@@ -1,0 +1,11 @@
+.navigationbar, .navigationbar div {
+    background-color: var(--nav-bg-color) !important;
+}
+
+.navigationbar div>div>div>div>a:hover {
+    background-color: #45474B !important;
+}
+
+.navigationbar a {
+    color: var(--nav-text-color);
+}

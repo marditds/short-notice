@@ -1,0 +1,19 @@
+.footer__container {
+    background-color: var(--nav-bg-color);
+}
+
+.footer__container h5,
+.footer__container a {
+    color: var(--nav-text-color) !important;
+}
+
+h5 {
+    margin-bottom: 0;
+    text-transform: uppercase;
+}
+
+@media (max-width: 767px) {
+    .footer__col:nth-child(n + 3) {
+        margin-top: 15px;
+    }
+}

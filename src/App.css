@@ -1,0 +1,12 @@
+:root {
+    --main-bg-color: #000000;
+    --main-text-color: #F5F7F8;
+    --nav-bg-color: #454545;
+    --nav-text-color: #ffffff;
+    /* --main-bg-color: #45474B;
+    --main-text-color: #F5F7F8;
+    --nav-bg-color: #495E57;
+    --nav-text-color: #F4CE14; */
+    --primary-font-size: 16px;
+    --primary-font-family: 'Arial';
+}

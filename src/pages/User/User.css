@@ -1,0 +1,62 @@
+body {
+    background-color: var(--main-bg-color) !important;
+}
+
+.userhome__body {
+    padding-top: 12px;
+    color: var(--main-text-color) !important;
+}
+
+.userhome__body--profile--tools,
+.userhome__body--profile--info {
+    padding-bottom: 12px;
+}
+
+.userhome__body--profile--tools--dropdown>button {
+    padding: 0;
+    background-color: var(--main-bg-color) !important;
+    border-radius: 0;
+    border-top: 0 !important;
+    border-bottom: 0 !important;
+    border-left: 2px solid var(--main-bg-color) !important;
+    border-right: 2px solid var(--main-bg-color) !important;
+    transition: none;
+}
+
+.userhome__body--profile--tools--dropdown>button::after {
+    display: none !important;
+}
+
+.userhome__body--profile--tools--dropdown>button.btn.show {
+    border-left: 2px solid var(--nav-bg-color) !important;
+    border-right: 2px solid var(--nav-bg-color) !important;
+    border-radius: 0;
+}
+
+.userhome__body--profile--tools--dropdown>div {
+    padding: 0;
+    margin-top: -2px;
+    color: var(--main-text-color) !important;
+    background-color: var(--main-bg-color) !important;
+    border-color: var(--main-bg-color) !important;
+    border-radius: 0 0 7px 7px;
+    border-top: 0;
+    border-bottom: 2px solid var(--nav-bg-color) !important;
+    border-left: 2px solid var(--nav-bg-color) !important;
+    border-right: 2px solid var(--nav-bg-color) !important;
+}
+
+.userhome__body--profile--tools--dropdown>div>a {
+    padding: 4px 0;
+    text-align: center;
+    color: var(--main-text-color) !important;
+}
+
+.userhome__body--profile--tools--dropdown>div>a:hover {
+    background-color: var(--nav-bg-color) !important;
+}
+
+.userhome__body--btn {
+    background-color: transparent !important;
+    border: 0 !important;
+}
