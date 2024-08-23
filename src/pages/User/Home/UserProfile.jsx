@@ -107,8 +107,6 @@ const UserProfile = () => {
                 handleAvatarUpload={handleAvatarUpload}
             />
 
-            Hello {username}
-
             <Form>
                 <Form.Group className="mb-3" controlId="user__post--textarea">
                     <Form.Label>Example textarea</Form.Label>
