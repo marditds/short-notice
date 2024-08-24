@@ -3,7 +3,7 @@ import { Profile } from '../../../components/User/Profile';
 import { Notices } from '../../../components/User/Notices';
 import { Form, Modal, Button } from 'react-bootstrap';
 import { useUserContext } from '../../../lib/context/UserContext';
-import { useUserAvatar } from '../../../lib/hooks/useUserAvatar.js';
+import useUserAvatar from '../../../lib/hooks/useUserAvatar.js';
 import useNotices from '../../../lib/hooks/useNotices.js';
 import { Loading } from '../../../components/Loading/Loading.jsx'
 
@@ -16,7 +16,7 @@ const UserProfile = () => {
 
     const { user_id, userNotices, isLoading, isAddingNotice, removingNoticeId, addNotice, editNotice, removeNotice } = useNotices(googleUserData);
 
-    const { avatarUrl, isUploading, handleAvatarUpload, handleAvatarUpdate, handleDeleteAvatar } = useUserAvatar(user_id);
+    const { avatarUrl } = useUserAvatar(user_id);
 
 
     const onTextareaChange = (e) => {
@@ -63,10 +63,6 @@ const UserProfile = () => {
             <Profile
                 username={username}
                 avatarUrl={avatarUrl}
-                handleAvatarUpload={handleAvatarUpload}
-                handleAvatarUpdate={handleAvatarUpdate}
-                handleDeleteAvatar={handleDeleteAvatar}
-                isUploading={isUploading}
             />
 
             <Form>

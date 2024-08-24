@@ -48,7 +48,7 @@ export const updateAvatar = async (fileId, newName) => {
     }
 };
 
-export const deleteAvatar = async (fileId) => {
+export const deleteAvatarFromStrg = async (fileId) => {
     try {
         const response = await storage.deleteFile(import.meta.env.VITE_AVATAR_BUCKET, fileId);
         console.log('Avatar deleted successfully:', response);
@@ -68,6 +68,37 @@ export const updateUserProfile = async (userId, profilePictureId) => {
         console.log('User profile updated successfully');
     } catch (error) {
         console.error('Error updating user profile:', error);
+    }
+};
+
+export const deleteAvatarFromDoc = async (userId) => {
+    try {
+
+
+        await databases.updateDocument(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_USERS_COLLECTION,
+            userId,
+            { avatar: '' }
+        );
+        console.log('User profile avatar set to null successfully');
+    } catch (error) {
+        console.error('Error updating avatar in user document:', error);
+    }
+}
+
+export const getUserDocument = async (userId) => {
+    try {
+        const response = await databases.getDocument(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_USERS_COLLECTION,
+            userId
+        );
+        console.log('User document:', response);
+        return response;
+    } catch (error) {
+        console.error('Error fetching user document:', error);
+        throw error;
     }
 };
 

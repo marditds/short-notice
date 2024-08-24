@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { uploadAvatar, updateAvatar, deleteAvatar, updateUserProfile, getUserById } from '../context/dbhandler';
+import { uploadAvatar, updateAvatar, deleteAvatarFromStrg, updateUserProfile, deleteAvatarFromDoc, getUserById } from '../context/dbhandler';
 
-export const useUserAvatar = (userId) => {
+const useUserAvatar = (userId) => {
 
     const [avatarUrl, setAvatarUrl] = useState('');
     const [isUploading, setIsUploading] = useState(false);
@@ -65,16 +65,15 @@ export const useUserAvatar = (userId) => {
         }
     }
 
-    const handleDeleteAvatar = async (fileId) => {
+    const handleDeleteAvatarFromStrg = async (fileId) => {
         try {
-            const response = await deleteAvatar(fileId);
-            console.log('Avatar deleted successfully:', response);
+            const response = await deleteAvatarFromStrg(fileId);
+            console.log('Avatar deleted from storage:', response);
 
         } catch (error) {
-            console.error('Error deleting avatar:', error);
+            console.error('Error deleting avatar from storage:', error);
         }
     };
-
 
     const handleAvatarUpdate = async (fileId, newName) => {
         try {
@@ -90,5 +89,16 @@ export const useUserAvatar = (userId) => {
         }
     };
 
-    return { avatarUrl, isUploading, handleAvatarUpload, handleAvatarUpdate, handleDeleteAvatar };
+    const handleDeleteAvatarFromDoc = async () => {
+        try {
+            const response = await deleteAvatarFromDoc(userId);
+            console.log('Avatar deleted from doc successfully:', response);
+        } catch (error) {
+            console.error('Error deleting avatar from doc:', error);
+        }
+    }
+
+    return { avatarUrl, setAvatarUrl, isUploading, handleAvatarUpload, handleAvatarUpdate, handleDeleteAvatarFromStrg, handleDeleteAvatarFromDoc };
 }
+
+export default useUserAvatar;
