@@ -4,6 +4,8 @@ import { AiFillEdit } from "react-icons/ai";
 import { Button } from 'react-bootstrap';
 
 export const Notices = ({ notices, handleEditNotice, handleDeleteNotice }) => {
+
+
     return (
         <>
             {notices.map((notice, idx) => (

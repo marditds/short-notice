@@ -6,6 +6,7 @@ const useNotices = (googleUserData) => {
     const [user_id, setUserId] = useState(null);
     const [userNotices, setUserNotices] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [isAddingNotice, setIsAddingNotice] = useState(false);
 
     useEffect(() => {
         const fetchUserNotices = async () => {
@@ -41,14 +42,15 @@ const useNotices = (googleUserData) => {
                 timestamp: new Date(),
             };
 
+            setIsAddingNotice(true);
             try {
                 const createdNotice = await createNotice(newNotice);
                 setUserNotices((prevNotices) => [createdNotice, ...prevNotices]);
             } catch (error) {
-
+                console.error('Error adding notice:', error);
+            } finally {
+                setIsAddingNotice(false);
             }
-            // await createNotice(newNotice);
-            // setUserNotices((prevNotices) => [newNotice, ...prevNotices]);
         }
     };
 
@@ -79,6 +81,7 @@ const useNotices = (googleUserData) => {
         user_id,
         userNotices,
         isLoading,
+        isAddingNotice,
         addNotice,
         editNotice,
         removeNotice,

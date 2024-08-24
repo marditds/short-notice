@@ -14,7 +14,7 @@ const UserProfile = () => {
     const [editingNoticeId, setEditingNoticeId] = useState(null);
     const [showModal, setShowModal] = useState(false);
 
-    const { user_id, userNotices, isLoading, addNotice, editNotice, removeNotice } = useNotices(googleUserData);
+    const { user_id, userNotices, isLoading, isAddingNotice, addNotice, editNotice, removeNotice } = useNotices(googleUserData);
 
     const { avatarUrl, handleAvatarUpload, handleAvatarUpdate, handleDeleteAvatar } = useUserAvatar(user_id);
 
@@ -80,9 +80,9 @@ const UserProfile = () => {
                 </Form.Group>
                 <Button
                     onClick={handleNotify}
-                    disabled={noticeText === ''}
+                    disabled={noticeText === '' || isAddingNotice}
                 >
-                    Notify
+                    {isAddingNotice ? <Loading /> : 'Notify'}
                 </Button>
             </Form>
 
