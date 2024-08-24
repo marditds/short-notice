@@ -32,6 +32,31 @@ export const uploadAvatar = async (file) => {
     }
 };
 
+export const updateAvatar = async (fileId, newName) => {
+    try {
+        const response = await storage.updateFile(
+            import.meta.env.VITE_AVATAR_BUCKET,
+            fileId,
+            newName
+        );
+
+        console.log('File updated successfully:', response);
+        return response;
+    } catch (error) {
+        console.error('Error updating file in storage:', error);
+        throw error;
+    }
+};
+
+export const deleteAvatar = async (fileId) => {
+    try {
+        const response = await storage.deleteFile(import.meta.env.VITE_AVATAR_BUCKET, fileId);
+        console.log('Avatar deleted successfully:', response);
+    } catch (error) {
+        console.error('Error deleting avatar:', error);
+    }
+};
+
 export const updateUserProfile = async (userId, profilePictureId) => {
     try {
         await databases.updateDocument(

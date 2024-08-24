@@ -16,7 +16,7 @@ const UserProfile = () => {
 
     const { user_id, userNotices, isLoading, addNotice, editNotice, removeNotice } = useNotices(googleUserData);
 
-    const { avatarUrl, handleAvatarUpload } = useUserAvatar(user_id);
+    const { avatarUrl, handleAvatarUpload, handleAvatarUpdate, handleDeleteAvatar } = useUserAvatar(user_id);
 
 
     const onTextareaChange = (e) => {
@@ -64,6 +64,8 @@ const UserProfile = () => {
                 username={username}
                 avatarUrl={avatarUrl}
                 handleAvatarUpload={handleAvatarUpload}
+                handleAvatarUpdate={handleAvatarUpdate}
+                handleDeleteAvatar={handleDeleteAvatar}
             />
 
             <Form>

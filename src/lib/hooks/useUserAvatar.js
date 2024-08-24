@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { uploadAvatar, updateUserProfile, getUserById } from '../context/dbhandler';
+import { uploadAvatar, updateAvatar, deleteAvatar, updateUserProfile, getUserById } from '../context/dbhandler';
 
 export const useUserAvatar = (userId) => {
 
@@ -49,6 +49,7 @@ export const useUserAvatar = (userId) => {
                 const fileId = await uploadAvatar(file);
 
                 await updateUserProfile(userId, fileId);
+
                 const url = `${import.meta.env.VITE_ENDPOINT}/storage/buckets/${import.meta.env.VITE_AVATAR_BUCKET}/files/${fileId}/view?project=${import.meta.env.VITE_PROJECT}&mode=admin`;
 
                 setAvatarUrl(url);
@@ -58,5 +59,30 @@ export const useUserAvatar = (userId) => {
         }
     }
 
-    return { avatarUrl, handleAvatarUpload };
+    const handleDeleteAvatar = async (fileId) => {
+        try {
+            const response = await deleteAvatar(fileId);
+            console.log('Avatar deleted successfully:', response);
+
+        } catch (error) {
+            console.error('Error deleting avatar:', error);
+        }
+    };
+
+
+    const handleAvatarUpdate = async (fileId, newName) => {
+        try {
+            const response = await updateAvatar(fileId, newName);
+
+            console.log('Avatar updated successfully:', response);
+
+            const updatedUrl = `${import.meta.env.VITE_ENDPOINT}/storage/buckets/${import.meta.env.VITE_AVATAR_BUCKET}/files/${fileId}/view?project=${import.meta.env.VITE_PROJECT}&mode=admin`;
+
+            setAvatarUrl(updatedUrl);
+        } catch (error) {
+            console.error('Error updating avatar:', error);
+        }
+    };
+
+    return { avatarUrl, handleAvatarUpload, handleAvatarUpdate, handleDeleteAvatar };
 }
