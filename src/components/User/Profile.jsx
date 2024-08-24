@@ -1,8 +1,9 @@
 import React from 'react';
 import { Form } from 'react-bootstrap';
-import defaultAvatar from '../../assets/default.png'
+import defaultAvatar from '../../assets/default.png';
+import { Loading } from '../Loading/Loading';
 
-export const Profile = ({ username, avatarUrl, handleAvatarUpload, handleDeleteAvatar }) => {
+export const Profile = ({ username, avatarUrl, isUploading, handleAvatarUpload, handleDeleteAvatar }) => {
 
     const handleFileChange = async (e) => {
         const file = e.target.files[0];
@@ -31,10 +32,17 @@ export const Profile = ({ username, avatarUrl, handleAvatarUpload, handleDeleteA
                 <Form>
                     <Form.Group className="mb-3" controlId="profilePictureUpload">
                         <Form.Label>Upload Profile Picture</Form.Label>
-                        <Form.Control
-                            type="file"
-                            onChange={handleFileChange}
-                        />
+                        {isUploading ?
+                            (
+                                <Loading />
+
+                            )
+                            : (
+                                <Form.Control
+                                    type="file"
+                                    onChange={handleFileChange}
+                                />
+                            )}
                     </Form.Group>
                 </Form>
             </div>

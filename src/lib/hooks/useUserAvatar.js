@@ -4,6 +4,7 @@ import { uploadAvatar, updateAvatar, deleteAvatar, updateUserProfile, getUserByI
 export const useUserAvatar = (userId) => {
 
     const [avatarUrl, setAvatarUrl] = useState('');
+    const [isUploading, setIsUploading] = useState(false);
 
     useEffect(() => {
         const fetchUserAvatar = async () => {
@@ -45,6 +46,9 @@ export const useUserAvatar = (userId) => {
         const file = e.target.files[0];
 
         if (file) {
+
+            setIsUploading(true);
+
             try {
                 const fileId = await uploadAvatar(file);
 
@@ -55,6 +59,8 @@ export const useUserAvatar = (userId) => {
                 setAvatarUrl(url);
             } catch (error) {
                 console.error('Profile picture upload failed:', error);
+            } finally {
+                setIsUploading(false);
             }
         }
     }
@@ -84,5 +90,5 @@ export const useUserAvatar = (userId) => {
         }
     };
 
-    return { avatarUrl, handleAvatarUpload, handleAvatarUpdate, handleDeleteAvatar };
+    return { avatarUrl, isUploading, handleAvatarUpload, handleAvatarUpdate, handleDeleteAvatar };
 }
