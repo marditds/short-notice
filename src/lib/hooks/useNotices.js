@@ -7,6 +7,8 @@ const useNotices = (googleUserData) => {
     const [userNotices, setUserNotices] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isAddingNotice, setIsAddingNotice] = useState(false);
+    const [isRemovingNotice, setIsRemovingNotice] = useState(false);
+    const [removingNoticeId, setRemovingNoticeId] = useState(null);
 
     useEffect(() => {
         const fetchUserNotices = async () => {
@@ -68,11 +70,15 @@ const useNotices = (googleUserData) => {
         console.log('Attempting to delete notice with ID:', noticeId);
         console.log('Current notices:', userNotices);
 
+        setRemovingNoticeId(noticeId);
+
         try {
             await deleteNotice(noticeId);
             setUserNotices((prevNotices) => prevNotices.filter((notice) => notice.$id !== noticeId));
         } catch (error) {
             console.error('Error deleting notice:', error);
+        } finally {
+            setRemovingNoticeId(null);
         }
 
     };
@@ -82,6 +88,8 @@ const useNotices = (googleUserData) => {
         userNotices,
         isLoading,
         isAddingNotice,
+        isRemovingNotice,
+        removingNoticeId,
         addNotice,
         editNotice,
         removeNotice,

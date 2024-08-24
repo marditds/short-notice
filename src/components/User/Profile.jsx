@@ -31,17 +31,21 @@ export const Profile = ({ username, avatarUrl, isUploading, handleAvatarUpload, 
                 <p className='my-0 text-center'>{username}</p>
                 <Form>
                     <Form.Group className="mb-3" controlId="profilePictureUpload">
-                        <Form.Label>Upload Profile Picture</Form.Label>
+
                         {isUploading ?
                             (
-                                <Loading />
-
+                                <>
+                                    Updating avatar <Loading />
+                                </>
                             )
                             : (
-                                <Form.Control
-                                    type="file"
-                                    onChange={handleFileChange}
-                                />
+                                <>
+                                    <Form.Label>Upload Profile Picture</Form.Label>
+                                    <Form.Control
+                                        type="file"
+                                        onChange={handleFileChange}
+                                    />
+                                </>
                             )}
                     </Form.Group>
                 </Form>
