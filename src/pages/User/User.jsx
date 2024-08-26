@@ -24,7 +24,7 @@ const User = () => {
                 setIsLoggedIn={setIsLoggedIn}
             />
             <Outlet />
-            <p>HAKOP</p>
+
         </Container>
     );
 }

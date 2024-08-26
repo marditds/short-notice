@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import { Row, Col, Form, Button } from 'react-bootstrap';
 import { Loading } from '../../Loading/Loading';
 import defaultAvatar from '../../../assets/default.png';
 import { useUserContext } from '../../../lib/context/UserContext';
@@ -71,35 +71,49 @@ export const Avatar = () => {
     }
 
     return (
-        <>
-            <img src={avatarUrl ? avatarUrl : defaultAvatar} alt="Profile" style={{ borderRadius: '50%', width: 100, height: 100 }} />
-            <Form>
-                <Form.Group className="mb-3" controlId="profilePictureUpload">
+        <Row>
+            <Col>
+                <h4>Update Avatar:</h4>
+                <p>Add, update, or delete your avatar.</p>
+            </Col>
+            <Col className='d-flex justify-content-start align-items-center'>
+                <img
+                    src={avatarUrl ? avatarUrl : defaultAvatar}
+                    alt="Profile"
+                    style={{ borderRadius: '50%', width: 100, height: 100 }}
+                    className='me-5'
+                />
+                <Form>
+                    <Form.Group className="mb-3" controlId="profilePictureUpload">
 
-                    {isUploading ?
-                        (
-                            <>
-                                Updating avatar <Loading />
-                            </>
-                        )
-                        : (
-                            <>
-                                <Form.Label>Upload Profile Picture</Form.Label>
-                                <Form.Control
-                                    type="file"
-                                    onChange={handleFileChange}
-                                />
-                            </>
-                        )}
-                </Form.Group>
-                <Button
-                    onClick={handleDeleteAvatar}
-                    disabled={isDeleting ? true : false}
-                >
-                    {isDeleting ? 'Deleting...' : 'Delete Avatar'}
-                    {isDeleting && <Loading />}
-                </Button>
-            </Form>
-        </>
+                        {isUploading ?
+                            (
+                                <>
+                                    Updating avatar <Loading />
+                                </>
+                            )
+                            : (
+                                <>
+                                    <Form.Label>Upload Profile Picture</Form.Label>
+                                    <Form.Control
+                                        type="file"
+                                        onChange={handleFileChange}
+                                    />
+                                </>
+                            )}
+                    </Form.Group>
+                    <Button
+                        onClick={handleDeleteAvatar}
+                        disabled={isDeleting ? true : false}
+                        className='float-start'
+                    >
+                        {isDeleting ? 'Deleting...' : 'Delete Avatar'}
+                        {isDeleting && <Loading />}
+                    </Button>
+                </Form>
+
+            </Col>
+
+        </Row>
     )
 }

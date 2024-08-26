@@ -3,6 +3,7 @@ import { Loading } from '../../../components/Loading/Loading.jsx'
 import { Avatar } from '../../../components/User/Settings/Avatar.jsx';
 import { Info } from '../../../components/User/Settings/Info.jsx';
 import { Visibility } from '../../../components/User/Settings/Visibility.jsx';
+import { Stack, Container } from 'react-bootstrap';
 
 const UserSettings = () => {
 
@@ -19,13 +20,15 @@ const UserSettings = () => {
     }
 
     return (
-        <>
-            <Avatar />
+        <Container fluid>
+            <Stack gap={5}>
+                <Avatar />
 
-            <Info />
+                <Info />
 
-            <Visibility />
-        </>
+                <Visibility />
+            </Stack>
+        </Container>
     )
 }
 
