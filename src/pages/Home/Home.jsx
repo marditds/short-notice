@@ -1,8 +1,8 @@
 import React from 'react';
 import { Container } from 'react-bootstrap';
+import { GoogleLoginForm } from '../../components/LoginForm/Google/GoogleLoginForm';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
-import { GoogleLoginForm } from '../../components/LoginForm/Google/GoogleLoginForm';
 import './Home.css';
 
 
