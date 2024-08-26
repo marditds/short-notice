@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
-import { Loading } from '../Loading/Loading';
-import defaultAvatar from '../../assets/default.png';
+import { Loading } from '../../Loading/Loading';
+import defaultAvatar from '../../../assets/default.png';
 
 
-export const Settings = ({ avatarUrl, setAvatarUrl, isUploading, handleAvatarUpload, handleDeleteAvatarFromStrg, handleDeleteAvatarFromDoc }) => {
+export const Avatar = ({ avatarUrl, setAvatarUrl, isUploading, handleAvatarUpload, handleDeleteAvatarFromStrg, handleDeleteAvatarFromDoc }) => {
+
+    const [isDeleting, setIsDeleting] = useState(false);
 
     const handleFileChange = async (e) => {
         const file = e.target.files[0];
@@ -26,11 +28,20 @@ export const Settings = ({ avatarUrl, setAvatarUrl, isUploading, handleAvatarUpl
     };
 
     const handleDeleteAvatar = async (user_id) => {
-        if (avatarUrl) {
-            const fileId = extractFileIdFromUrl(avatarUrl);
-            await handleDeleteAvatarFromStrg(fileId);
-            await handleDeleteAvatarFromDoc(user_id);
-            setAvatarUrl('');
+
+        setIsDeleting(true);
+
+        try {
+            if (avatarUrl) {
+                const fileId = extractFileIdFromUrl(avatarUrl);
+                await handleDeleteAvatarFromStrg(fileId);
+                await handleDeleteAvatarFromDoc(user_id);
+                setAvatarUrl('');
+            }
+        } catch (error) {
+            console.error("Error deleting avatar:", error);
+        } finally {
+            setIsDeleting(false); // End loading state
         }
     }
 
@@ -56,7 +67,13 @@ export const Settings = ({ avatarUrl, setAvatarUrl, isUploading, handleAvatarUpl
                             </>
                         )}
                 </Form.Group>
-                <Button onClick={handleDeleteAvatar}>Delete Avatar</Button>
+                <Button
+                    onClick={handleDeleteAvatar}
+                    disabled={isDeleting ? true : false}
+                >
+                    {isDeleting ? 'Deleting...' : 'Delete Avatar'}
+                    {isDeleting && <Loading />}
+                </Button>
             </Form>
         </>
     )

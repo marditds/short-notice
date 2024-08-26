@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Loading } from '../../../components/Loading/Loading.jsx'
-import { Settings } from '../../../components/User/Settings.jsx';
+import { Avatar } from '../../../components/User/Settings/Avatar.jsx';
+import { Info } from '../../../components/User/Settings/Info.jsx';
+import { Visibility } from '../../../components/User/Settings/Visibility.jsx';
+
 import { useUserContext } from '../../../lib/context/UserContext.jsx';
 import useNotices from '../../../lib/hooks/useNotices.js';
 import useUserAvatar from '../../../lib/hooks/useUserAvatar.js';
@@ -9,7 +12,7 @@ const UserSettings = () => {
 
     const { googleUserData } = useUserContext();
     const { user_id } = useNotices(googleUserData);
-    const { avatarUrl, setAvatarUrl, isUploading, handleAvatarUpload, handleAvatarUpdate, handleDeleteAvatarFromStrg, handleDeleteAvatarFromDoc } = useUserAvatar(user_id);
+    const { avatarUrl, setAvatarUrl, isUploading, handleAvatarUpload, handleDeleteAvatarFromStrg, handleDeleteAvatarFromDoc } = useUserAvatar(user_id);
 
     const [isLoading, setIsLoading] = useState(true);
 
@@ -28,14 +31,18 @@ const UserSettings = () => {
     }
 
     return (
-        <Settings
-            avatarUrl={avatarUrl}
-            setAvatarUrl={setAvatarUrl}
-            handleAvatarUpload={handleAvatarUpload}
-            handleDeleteAvatarFromStrg={handleDeleteAvatarFromStrg}
-            handleDeleteAvatarFromDoc={handleDeleteAvatarFromDoc}
-            isUploading={isUploading}
-        />
+        <>
+            <Avatar
+                avatarUrl={avatarUrl}
+                setAvatarUrl={setAvatarUrl}
+                handleAvatarUpload={handleAvatarUpload}
+                handleDeleteAvatarFromStrg={handleDeleteAvatarFromStrg}
+                handleDeleteAvatarFromDoc={handleDeleteAvatarFromDoc}
+                isUploading={isUploading}
+            />
+            <Info />
+            <Visibility />
+        </>
     )
 }
 
