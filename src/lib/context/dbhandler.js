@@ -32,21 +32,21 @@ export const uploadAvatar = async (file) => {
     }
 };
 
-export const updateAvatar = async (fileId, newName) => {
-    try {
-        const response = await storage.updateFile(
-            import.meta.env.VITE_AVATAR_BUCKET,
-            fileId,
-            newName
-        );
+// export const updateAvatar = async (fileId, newName) => {
+//     try {
+//         const response = await storage.updateFile(
+//             import.meta.env.VITE_AVATAR_BUCKET,
+//             fileId,
+//             newName
+//         );
 
-        console.log('File updated successfully:', response);
-        return response;
-    } catch (error) {
-        console.error('Error updating file in storage:', error);
-        throw error;
-    }
-};
+//         console.log('File updated successfully:', response);
+//         return response;
+//     } catch (error) {
+//         console.error('Error updating file in storage:', error);
+//         throw error;
+//     }
+// };
 
 export const deleteAvatarFromStrg = async (fileId) => {
     try {
@@ -57,7 +57,7 @@ export const deleteAvatarFromStrg = async (fileId) => {
     }
 };
 
-export const updateUserProfile = async (userId, profilePictureId) => {
+export const updateAvatar = async (userId, profilePictureId) => {
     try {
         await databases.updateDocument(
             import.meta.env.VITE_DATABASE,
@@ -163,6 +163,21 @@ export const createUser = async ({ email, given_name, username }) => {
         console.log('Document created successfully:', response);
     } catch (error) {
         console.error('Error creating document:', error);
+    }
+};
+
+export const updateUser = async ({ userId, username }) => {
+    try {
+        await databases.updateDocument(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_USERS_COLLECTION,
+            userId,
+            { username: username }
+        );
+        console.log('Username successfully updated.');
+    } catch (error) {
+        console.error('Error updating the username:', error);
+
     }
 };
 

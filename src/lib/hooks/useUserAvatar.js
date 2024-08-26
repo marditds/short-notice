@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { uploadAvatar, updateAvatar, deleteAvatarFromStrg, updateUserProfile, deleteAvatarFromDoc, getUserById } from '../context/dbhandler';
+import { uploadAvatar, deleteAvatarFromStrg, updateAvatar, deleteAvatarFromDoc, getUserById } from '../context/dbhandler';
 
 const useUserAvatar = (userId) => {
 
@@ -52,7 +52,7 @@ const useUserAvatar = (userId) => {
             try {
                 const fileId = await uploadAvatar(file);
 
-                await updateUserProfile(userId, fileId);
+                await updateAvatar(userId, fileId);
 
                 const url = `${import.meta.env.VITE_ENDPOINT}/storage/buckets/${import.meta.env.VITE_AVATAR_BUCKET}/files/${fileId}/view?project=${import.meta.env.VITE_PROJECT}&mode=admin`;
 
@@ -75,19 +75,7 @@ const useUserAvatar = (userId) => {
         }
     };
 
-    const handleAvatarUpdate = async (fileId, newName) => {
-        try {
-            const response = await updateAvatar(fileId, newName);
 
-            console.log('Avatar updated successfully:', response);
-
-            const updatedUrl = `${import.meta.env.VITE_ENDPOINT}/storage/buckets/${import.meta.env.VITE_AVATAR_BUCKET}/files/${fileId}/view?project=${import.meta.env.VITE_PROJECT}&mode=admin`;
-
-            setAvatarUrl(updatedUrl);
-        } catch (error) {
-            console.error('Error updating avatar:', error);
-        }
-    };
 
     const handleDeleteAvatarFromDoc = async () => {
         try {
@@ -98,7 +86,9 @@ const useUserAvatar = (userId) => {
         }
     }
 
-    return { avatarUrl, setAvatarUrl, isUploading, handleAvatarUpload, handleAvatarUpdate, handleDeleteAvatarFromStrg, handleDeleteAvatarFromDoc };
+    return {
+        avatarUrl, setAvatarUrl, isUploading, handleAvatarUpload, handleDeleteAvatarFromStrg, handleDeleteAvatarFromDoc
+    };
 }
 
 export default useUserAvatar;
