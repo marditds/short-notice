@@ -89,10 +89,10 @@ function App() {
         await createUser({
           email: googleUserData.email,
           given_name: googleUserData.given_name,
-          username: username
+          username: username.toLowerCase()
         });
 
-        localStorage.setItem('username', username);
+        localStorage.setItem('username', username.toLowerCase());
 
         setHasUsername(true);
 

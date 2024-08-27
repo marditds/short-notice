@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { googleLogout } from '@react-oauth/google';
-import { Container, Form, Button } from 'react-bootstrap';
+import { Container, Form, Button, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useUserContext } from '../../lib/context/UserContext';
+import { getUserByUsername } from '../../lib/context/dbhandler';
+
 import ReCAPTCHA from 'react-google-recaptcha';
 
 const CreateUsername = ({ setUser }) => {
@@ -13,9 +15,12 @@ const CreateUsername = ({ setUser }) => {
 
     const [captchaVerified, setCaptchaVerified] = useState(false);
 
+    const [errorMessage, setErrorMessage] = useState('');
+
     const onUsernameChange = (e) => {
         console.log('Input changed:', e.target.value);
         setUsername(e.target.value);
+        setErrorMessage('');
     };
 
 
@@ -26,18 +31,33 @@ const CreateUsername = ({ setUser }) => {
             return;
         }
 
-        await setUser();
-        if (username) {
-            setHasUsername(true);
+        if (!username || username.trim() === '') {
+            setErrorMessage('Username cannot be empty. Please enter a valid username.');
+            return;
+        }
 
-            console.log('BEFORE NAVIGATION - Username after setUser:', username);
+        try {
+            const existingUser = await getUserByUsername(username);
+            if (existingUser) {
+                setErrorMessage('Username already taken. Please choose another one.');
+                return;
+            }
 
-            setTimeout(() => {
+            await setUser();
+            if (username) {
+                setHasUsername(true);
+
+                console.log('BEFORE NAVIGATION - Username after setUser:', username);
+
+                // setTimeout(() => {
                 navigate('/user/profile');
 
                 console.log('AFTER NAVIGATION - Username after setUser:', username);
-            }, 100);
-
+                // }, 100);
+            }
+        } catch (error) {
+            console.error('Error checking username:', error);
+            setErrorMessage('An error occurred. Please try again.');
         }
     };
 
@@ -68,6 +88,7 @@ const CreateUsername = ({ setUser }) => {
                                 Your userame must be unique.
                             </Form.Text>
                         </Form.Group>
+                        {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
                         <Button onClick={handleDoneClick}>
                             Done
                         </Button>

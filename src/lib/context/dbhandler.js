@@ -135,6 +135,38 @@ export const getUserByEmail = async (email) => {
     }
 };
 
+export const getUserByUsername = async (username) => {
+    try {
+        const userList = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_USERS_COLLECTION,
+            [Query.equal('username', username.toLowerCase())]
+        );
+
+        if (userList.total > 0) {
+            return userList.documents[0];
+        }
+
+        return null;
+    } catch (error) {
+        console.error('Error fetching user by username:', error);
+        return null;
+    }
+};
+
+const checkUsernameExists = async (username) => {
+    try {
+        const users = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_USERS_COLLECTION,
+            [Query.equal('username', username.toLowerCase())]
+        );
+        return users.total > 0;
+    } catch (error) {
+        console.error('Error checking username existence:', error);
+        throw error;
+    }
+};
 
 export const createUser = async ({ email, given_name, username }) => {
     try {
@@ -145,9 +177,16 @@ export const createUser = async ({ email, given_name, username }) => {
             [Query.equal('email', email)]
         );
 
+        const usernameExists = await checkUsernameExists(username);
+
         if (existingUser.total > 0) {
             console.log('User already exists:', existingUser.documents[0]);
             return;
+        }
+
+        if (usernameExists) {
+            console.log('Username already exists:', username);
+            throw new Error('Username already exists');
         }
 
         const response = await databases.createDocument(
@@ -157,7 +196,7 @@ export const createUser = async ({ email, given_name, username }) => {
             {
                 email,
                 given_name,
-                username
+                username: username.toLowerCase()
             }
         );
         console.log('Document created successfully:', response);
