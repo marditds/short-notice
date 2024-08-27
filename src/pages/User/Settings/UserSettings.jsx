@@ -4,6 +4,7 @@ import { Avatar } from '../../../components/User/Settings/Avatar.jsx';
 import { Info } from '../../../components/User/Settings/Info.jsx';
 import { Visibility } from '../../../components/User/Settings/Visibility.jsx';
 import { Stack, Container } from 'react-bootstrap';
+import { DeleteAccount } from '../../../components/User/Settings/DeleteAccount.jsx';
 
 const UserSettings = () => {
 
@@ -27,6 +28,8 @@ const UserSettings = () => {
                 <Info />
 
                 <Visibility />
+
+                <DeleteAccount />
             </Stack>
         </Container>
     )

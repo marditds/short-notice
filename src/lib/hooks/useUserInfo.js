@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { updateUser } from '../context/dbhandler';
+import { updateUser, deleteUser } from '../context/dbhandler';
 import { useUserContext } from '../context/UserContext';
 import { UserId } from '../../components/User/UserId';
 
@@ -39,9 +39,19 @@ const useUserInfo = (data) => {
         }
     }
 
+    const handleDeleteUser = async () => {
+        try {
+            await deleteUser(userId);
+            console.log('User deleted successfully.');
+
+        } catch (error) {
+            console.error('Error deleting user:', error);
+
+        }
+    }
 
     return {
-        handleUpdateUser
+        handleUpdateUser, handleDeleteUser
     }
 }
 

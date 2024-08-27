@@ -220,6 +220,18 @@ export const updateUser = async ({ userId, username }) => {
     }
 };
 
+export const deleteUser = async (userId) => {
+    try {
+        const response = await databases.deleteDocument(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_USERS_COLLECTION,
+            userId
+        );
+        console.log('User deleted successfully:', response);
+    } catch (error) {
+        console.error('Error deleting user:', error);
+    }
+};
 
 export const createNotice = async ({ user_id, text, timestamp }) => {
     try {

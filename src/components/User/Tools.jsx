@@ -2,12 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Dropdown, DropdownButton } from 'react-bootstrap';
 import { PiDotsThreeOutlineVertical } from "react-icons/pi";
-import { useNavigate } from 'react-router-dom';
 
 
 export const Tools = ({ googleLogout, setIsLoggedIn, setGoogleUserData }) => {
-
-    const navigate = useNavigate();
 
 
     return (
