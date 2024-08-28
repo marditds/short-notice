@@ -16,6 +16,7 @@ const Home = ({ onSuccess }) => {
                 <Container>
                     <GoogleLoginForm
                         onSuccess={onSuccess}
+
                     />
                 </Container>
             </main>

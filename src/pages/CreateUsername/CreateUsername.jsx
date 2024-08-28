@@ -11,6 +11,7 @@ const CreateUsername = ({ setUser }) => {
 
     const navigate = useNavigate();
 
+
     const { username, setUsername, setHasUsername, setGoogleUserData, setIsLoggedIn } = useUserContext();
 
     const [captchaVerified, setCaptchaVerified] = useState(false);
@@ -43,17 +44,13 @@ const CreateUsername = ({ setUser }) => {
                 return;
             }
 
-            await setUser();
+            await setUser(username);
+
             if (username) {
                 setHasUsername(true);
 
-                console.log('BEFORE NAVIGATION - Username after setUser:', username);
-
-                // setTimeout(() => {
                 navigate('/user/profile');
 
-                console.log('AFTER NAVIGATION - Username after setUser:', username);
-                // }, 100);
             }
         } catch (error) {
             console.error('Error checking username:', error);

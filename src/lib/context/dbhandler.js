@@ -202,6 +202,7 @@ export const createUser = async ({ email, given_name, username }) => {
         console.log('Document created successfully:', response);
     } catch (error) {
         console.error('Error creating document:', error);
+        throw error;
     }
 };
 
@@ -305,6 +306,3 @@ export const deleteNotice = async (noticeId) => {
 
 export const account = new Account(client);
 export { ID } from 'appwrite';
-
-
-

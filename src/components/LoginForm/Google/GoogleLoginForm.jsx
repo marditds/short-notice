@@ -4,12 +4,20 @@ import { GoogleLogin } from '@react-oauth/google';
 
 export const GoogleLoginForm = ({ onSuccess }) => {
 
+    const handleSuccess = (credentialResponse) => {
+        if (typeof onSuccess === 'function') {
+            onSuccess(credentialResponse);
+        } else {
+            console.error('onSuccess is not a function');
+        }
+    };
+
     return (
         <>
 
             <div className="login__btn">
                 <GoogleLogin
-                    onSuccess={onSuccess}
+                    onSuccess={handleSuccess}
 
                     onError={() => {
                         console.log('Login Failed');

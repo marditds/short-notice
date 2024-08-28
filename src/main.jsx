@@ -87,9 +87,7 @@ createRoot(document.getElementById('root')).render(
   <StrictMode>
     <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_API_TOKEN}>
       <UserProvider>
-        <RouterProvider router={router}>
-          <App />
-        </RouterProvider>
+        <RouterProvider router={router} />
       </UserProvider>
     </GoogleOAuthProvider>
 

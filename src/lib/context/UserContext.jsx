@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useCallback, useState } from 'react';
 
 const UserContext = createContext();
 
@@ -9,8 +9,15 @@ export const UserProvider = ({ children }) => {
     const [username, setUsername] = useState('');
     const [hasUsername, setHasUsername] = useState(false);
 
-    console.log('UserProvider re-rendered with username:', username);
 
+    const resetState = useCallback(() => {
+        setGoogleUserData(null);
+        setIsLoggedIn(false);
+        setUsername('');
+        setHasUsername(false);
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('username');
+    }, []);
 
     return (
         <UserContext.Provider
@@ -18,7 +25,8 @@ export const UserProvider = ({ children }) => {
                 googleUserData, setGoogleUserData,
                 isLoggedIn, setIsLoggedIn,
                 username, setUsername,
-                hasUsername, setHasUsername
+                hasUsername, setHasUsername,
+                resetState
             }}>
             {children}
         </UserContext.Provider>

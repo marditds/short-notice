@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 import { useNavigate, Outlet } from 'react-router-dom';
 import Home from './pages/Home/Home';
 import CreateUsername from './pages/CreateUsername/CreateUsername.jsx';
@@ -6,7 +6,7 @@ import { jwtDecode } from "jwt-decode";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import { createUser, getUserByEmail } from './lib/context/dbhandler.js';
-import { useUserContext } from './lib/context/UserContext';
+import { UserProvider, useUserContext } from './lib/context/UserContext';
 
 function App() {
 
@@ -19,13 +19,24 @@ function App() {
 
   const navigate = useNavigate();
 
+  const resetState = useCallback(() => {
+    setGoogleUserData(null);
+    setIsLoggedIn(false);
+    setUsername('');
+    setHasUsername(false);
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('username');
+  }, [setGoogleUserData, setIsLoggedIn, setUsername, setHasUsername]);
+
+
+
   useEffect(() => {
     const storedToken = localStorage.getItem('accessToken');
 
     if (storedToken) {
       const decoded = jwtDecode(storedToken);
       setGoogleUserData(decoded);
-      setIsLoggedIn(preVal => true);
+      setIsLoggedIn(true);
       checkUsernameInDatabase(decoded.email);
     } else {
       navigate('/');
@@ -79,21 +90,22 @@ function App() {
     checkUsernameInDatabase(decoded.email);
   };
 
-  const setUser = async () => {
+  const setUser = async (usrnm) => {
 
-    console.log('setUser 1:', username);
+    console.log('setUser 1:', { email: googleUserData?.email, given_name: googleUserData?.given_name, usrnm });
 
-    if (googleUserData?.email && googleUserData?.given_name && username) {
+    if (googleUserData?.email && googleUserData?.given_name && usrnm) {
       try {
-
+        console.log('Attempting to create user in Appwrite');
         await createUser({
           email: googleUserData.email,
           given_name: googleUserData.given_name,
-          username: username.toLowerCase()
+          username: usrnm.toLowerCase()
         });
 
-        localStorage.setItem('username', username.toLowerCase());
+        console.log('User created successfully');
 
+        localStorage.setItem('username', usrnm.toLowerCase());
         setHasUsername(true);
 
         setTimeout(() => {
@@ -102,9 +114,12 @@ function App() {
 
       } catch (error) {
         console.error('Error creating user:', error);
+        setErrorMessage('Failed to create user. Please try again.');
       }
+    } else {
+      console.warn('Missing data:', { email: googleUserData?.email, given_name: googleUserData?.given_name, usrnm });
     }
-    console.log('setUser 2:', username);
+    console.log('setUser 2:', usrnm);
 
   };
 
@@ -113,32 +128,55 @@ function App() {
 
   return (
     <>
-      {isLoggedIn ? (
-        hasUsername ? (
-          <Outlet
-            context={{
-              googleUserData, setGoogleUserData,
-              isLoggedIn, setIsLoggedIn,
-              username, setUsername,
-              hasUsername, setHasUsername
-            }}
-          />
-        )
-          : (
-            <CreateUsername
-              username={username}
-              setUsername={setUsername}
-              setUser={setUser}
-              setHasUsername={setHasUsername}
-              setIsLoggedIn={setIsLoggedIn}
-              setGoogleUserData={setGoogleUserData}
-            />
+      <UserProvider
+        value={{
+          googleUserData, setGoogleUserData,
+          isLoggedIn, setIsLoggedIn,
+          username, setUsername,
+          hasUsername, setHasUsername,
+          resetState
+        }}
+      >
+        {isLoggedIn ? (
+          hasUsername ? (
+            <Outlet />
+          ) : (
+            <CreateUsername setUser={setUser} />
           )
-      )
-        : (
+        ) : (
           <Home onSuccess={onSuccess} />
         )}
+      </UserProvider>
+      {/* <UserProvider
+        value={{
+          googleUserData, setGoogleUserData,
+          isLoggedIn, setIsLoggedIn,
+          username, setUsername,
+          hasUsername, setHasUsername,
+          resetState
+        }}
+      >
+        {isLoggedIn ? (
+          hasUsername ? (
+            <Outlet
+              context={{ setUser }}
 
+            />
+          )
+            : (
+              <CreateUsername
+                username={username}
+                setUsername={setUsername}
+                setHasUsername={setHasUsername}
+                setIsLoggedIn={setIsLoggedIn}
+                setGoogleUserData={setGoogleUserData}
+              />
+            )
+        )
+          : (
+            <Home onSuccess={onSuccess} />
+          )}
+      </UserProvider> */}
     </>
   )
 }
