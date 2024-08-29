@@ -44,12 +44,16 @@ const CreateUsername = ({ setUser }) => {
                 return;
             }
 
-            await setUser(username);
+            await setUser();
 
             if (username) {
                 setHasUsername(true);
 
+                console.log('BEFORE NAVIGATION - Username after setUser:', username);
+
                 navigate('/user/profile');
+
+                console.log('AFTER NAVIGATION - Username after setUser:', username);
 
             }
         } catch (error) {

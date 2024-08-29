@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { updateUser, deleteUser, getUserById } from '../context/dbhandler';
+import { updateUser, deleteUser } from '../context/dbhandler';
 import { useUserContext } from '../context/UserContext';
 import { UserId } from '../../components/User/UserId';
 
@@ -17,24 +17,6 @@ const useUserInfo = (data) => {
         };
         fetchUserId();
     }, [data]);
-
-    const handleReadUser = async () => {
-        if (!userId) {
-            console.error('User ID is not set.');
-            return;
-        }
-        try {
-            const response = await getUserById(userId);
-
-            console.log('Found user:', response);
-            return response;
-
-        } catch (error) {
-            console.error('Could not find user.', error);
-
-        }
-    }
-
 
     const handleUpdateUser = async (username) => {
 
@@ -68,7 +50,7 @@ const useUserInfo = (data) => {
     }
 
     return {
-        handleReadUser, handleUpdateUser, handleDeleteUser
+        handleUpdateUser, handleDeleteUser
     }
 }
 

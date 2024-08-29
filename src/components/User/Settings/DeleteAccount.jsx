@@ -9,7 +9,7 @@ import { Loading } from '../../Loading/Loading';
 
 export const DeleteAccount = () => {
 
-    const { googleUserData, resetState } = useUserContext();
+    const { googleUserData } = useUserContext();
     const { handleDeleteUser } = useUserInfo(googleUserData);
     const navigate = useNavigate();
     const [showModal, setShowModal] = useState(false);
@@ -23,8 +23,6 @@ export const DeleteAccount = () => {
             await handleDeleteUser();
 
             googleLogout();
-
-            resetState();
 
             localStorage.removeItem('accessToken');
 

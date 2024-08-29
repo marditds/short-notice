@@ -5,13 +5,11 @@ import { Form, Modal, Button } from 'react-bootstrap';
 import { useUserContext } from '../../../lib/context/UserContext';
 import useUserAvatar from '../../../lib/hooks/useUserAvatar.js';
 import useNotices from '../../../lib/hooks/useNotices.js';
-import useUserInfo from '../../../lib/hooks/useUserInfo.js'
 import { Loading } from '../../../components/Loading/Loading.jsx'
 
 const UserProfile = () => {
 
     const { googleUserData, username } = useUserContext();
-    const { handleReadUser } = useUserInfo(googleUserData);
     const [noticeText, setNoticeText] = useState('');
     const [editingNoticeId, setEditingNoticeId] = useState(null);
     const [showModal, setShowModal] = useState(false);
@@ -21,9 +19,9 @@ const UserProfile = () => {
     const { avatarUrl } = useUserAvatar(user_id);
 
 
+
     const onTextareaChange = (e) => {
         setNoticeText(() => e.target.value);
-        console.log(handleReadUser());
 
     }
 

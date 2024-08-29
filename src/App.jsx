@@ -14,20 +14,20 @@ function App() {
     googleUserData, setGoogleUserData,
     isLoggedIn, setIsLoggedIn,
     username, setUsername,
-    hasUsername, setHasUsername
+    hasUsername, setHasUsername,
+    isLoading, setIsLoading
   } = useUserContext();
 
   const navigate = useNavigate();
 
-  const resetState = useCallback(() => {
-    setGoogleUserData(null);
-    setIsLoggedIn(false);
-    setUsername('');
-    setHasUsername(false);
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('username');
-  }, [setGoogleUserData, setIsLoggedIn, setUsername, setHasUsername]);
-
+  // const resetState = useCallback(() => {
+  //   setGoogleUserData(null);
+  //   setIsLoggedIn(false);
+  //   setUsername('');
+  //   setHasUsername(false);
+  //   localStorage.removeItem('accessToken');
+  //   localStorage.removeItem('username');
+  // }, [setGoogleUserData, setIsLoggedIn, setUsername, setHasUsername]);
 
 
   useEffect(() => {
@@ -36,7 +36,7 @@ function App() {
     if (storedToken) {
       const decoded = jwtDecode(storedToken);
       setGoogleUserData(decoded);
-      setIsLoggedIn(true);
+      setIsLoggedIn(preVal => true);
       checkUsernameInDatabase(decoded.email);
     } else {
       navigate('/');
@@ -44,24 +44,30 @@ function App() {
   }, [navigate]);
 
 
+
   const checkUsernameInDatabase = async (email) => {
 
     console.log('checkUsernameInDatabase 1:', username);
 
-    const user = await getUserByEmail(email);
-    if (user && user.username) {
+    try {
+      const user = await getUserByEmail(email);
 
-      console.log('checkUsernameInDatabase 2:', user.username);
+      if (user && user.username) {
 
-      setUsername(user.username);
-      localStorage.setItem('username', user.username);
-      setHasUsername(preVal => true);
+        console.log('checkUsernameInDatabase 2:', user.username);
 
-      console.log('checkUsernameInDatabase 3:', user.username);
+        setUsername(user.username);
+        localStorage.setItem('username', user.username);
+        setHasUsername(true);
 
-    } else {
-      setHasUsername(preVal => false);
-      navigate('/set-username');
+        console.log('checkUsernameInDatabase 3:', user.username);
+
+      } else {
+        setHasUsername(false);
+        navigate('/set-username');
+      }
+    } catch (error) {
+      console.error('App.jsx - Error checking username:', error);
     }
   };
 
@@ -90,22 +96,22 @@ function App() {
     checkUsernameInDatabase(decoded.email);
   };
 
-  const setUser = async (usrnm) => {
 
-    console.log('setUser 1:', { email: googleUserData?.email, given_name: googleUserData?.given_name, usrnm });
+  const setUser = async () => {
 
-    if (googleUserData?.email && googleUserData?.given_name && usrnm) {
+    console.log('setUser 1:', username);
+
+    if (googleUserData?.email && googleUserData?.given_name && username) {
       try {
-        console.log('Attempting to create user in Appwrite');
+
         await createUser({
           email: googleUserData.email,
           given_name: googleUserData.given_name,
-          username: usrnm.toLowerCase()
+          username: username.toLowerCase()
         });
 
-        console.log('User created successfully');
+        localStorage.setItem('username', username.toLowerCase());
 
-        localStorage.setItem('username', usrnm.toLowerCase());
         setHasUsername(true);
 
         setTimeout(() => {
@@ -114,12 +120,9 @@ function App() {
 
       } catch (error) {
         console.error('Error creating user:', error);
-        setErrorMessage('Failed to create user. Please try again.');
       }
-    } else {
-      console.warn('Missing data:', { email: googleUserData?.email, given_name: googleUserData?.given_name, usrnm });
     }
-    console.log('setUser 2:', usrnm);
+    console.log('setUser 2:', username);
 
   };
 
@@ -128,25 +131,40 @@ function App() {
 
   return (
     <>
-      <UserProvider
+      {/* <UserProvider
         value={{
           googleUserData, setGoogleUserData,
           isLoggedIn, setIsLoggedIn,
           username, setUsername,
           hasUsername, setHasUsername,
+          isLoading, setIsLoading
           resetState
         }}
-      >
-        {isLoggedIn ? (
-          hasUsername ? (
-            <Outlet />
-          ) : (
-            <CreateUsername setUser={setUser} />
-          )
+      > */}
+      {isLoggedIn ? (
+        hasUsername ? (
+          <Outlet
+            context={{
+              googleUserData, setGoogleUserData,
+              isLoggedIn, setIsLoggedIn,
+              username, setUsername,
+              hasUsername, setHasUsername
+            }}
+          />
         ) : (
-          <Home onSuccess={onSuccess} />
-        )}
-      </UserProvider>
+          <CreateUsername
+            username={username}
+            setUsername={setUsername}
+            setUser={setUser}
+            setHasUsername={setHasUsername}
+            setIsLoggedIn={setIsLoggedIn}
+            setGoogleUserData={setGoogleUserData}
+          />
+        )
+      ) : (
+        <Home onSuccess={onSuccess} />
+      )}
+      {/* </UserProvider> */}
       {/* <UserProvider
         value={{
           googleUserData, setGoogleUserData,
