@@ -14,7 +14,7 @@ export const Avatar = () => {
     const [user_id, setUserId] = useState(null);
     const [isDeleting, setIsDeleting] = useState(false);
 
-    const { avatarUrl, setAvatarUrl, isUploading, handleAvatarUpload, handleDeleteAvatarFromStrg, handleDeleteAvatarFromDoc } = useUserAvatar(user_id);
+    const { avatarUrl, setAvatarUrl, isUploading, handleAvatarUpload, handleDeleteAvatarFromStrg, handleDeleteAvatarFromDoc, extractFileIdFromUrl } = useUserAvatar(user_id);
 
 
     useEffect(() => {
@@ -46,11 +46,6 @@ export const Avatar = () => {
         }
     };
 
-    const extractFileIdFromUrl = (url) => {
-        const parts = url.split('/');
-        const fileId = parts[parts.length - 2];
-        return fileId;
-    };
 
     const handleDeleteAvatar = async (user_id) => {
 
