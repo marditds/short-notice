@@ -6,7 +6,7 @@ import { jwtDecode } from "jwt-decode";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import { createUser, getUserByEmail } from './lib/context/dbhandler.js';
-import { UserProvider, useUserContext } from './lib/context/UserContext';
+import { useUserContext } from './lib/context/UserContext';
 
 function App() {
 
@@ -15,19 +15,9 @@ function App() {
     isLoggedIn, setIsLoggedIn,
     username, setUsername,
     hasUsername, setHasUsername,
-    isLoading, setIsLoading
   } = useUserContext();
 
   const navigate = useNavigate();
-
-  // const resetState = useCallback(() => {
-  //   setGoogleUserData(null);
-  //   setIsLoggedIn(false);
-  //   setUsername('');
-  //   setHasUsername(false);
-  //   localStorage.removeItem('accessToken');
-  //   localStorage.removeItem('username');
-  // }, [setGoogleUserData, setIsLoggedIn, setUsername, setHasUsername]);
 
 
   useEffect(() => {
@@ -131,16 +121,6 @@ function App() {
 
   return (
     <>
-      {/* <UserProvider
-        value={{
-          googleUserData, setGoogleUserData,
-          isLoggedIn, setIsLoggedIn,
-          username, setUsername,
-          hasUsername, setHasUsername,
-          isLoading, setIsLoading
-          resetState
-        }}
-      > */}
       {isLoggedIn ? (
         hasUsername ? (
           <Outlet
@@ -164,37 +144,6 @@ function App() {
       ) : (
         <Home onSuccess={onSuccess} />
       )}
-      {/* </UserProvider> */}
-      {/* <UserProvider
-        value={{
-          googleUserData, setGoogleUserData,
-          isLoggedIn, setIsLoggedIn,
-          username, setUsername,
-          hasUsername, setHasUsername,
-          resetState
-        }}
-      >
-        {isLoggedIn ? (
-          hasUsername ? (
-            <Outlet
-              context={{ setUser }}
-
-            />
-          )
-            : (
-              <CreateUsername
-                username={username}
-                setUsername={setUsername}
-                setHasUsername={setHasUsername}
-                setIsLoggedIn={setIsLoggedIn}
-                setGoogleUserData={setGoogleUserData}
-              />
-            )
-        )
-          : (
-            <Home onSuccess={onSuccess} />
-          )}
-      </UserProvider> */}
     </>
   )
 }

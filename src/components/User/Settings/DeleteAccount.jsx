@@ -58,6 +58,7 @@ export const DeleteAccount = () => {
             setTimeout(() => {
                 setLoading(false);
                 navigate('/');
+                window.location.reload();
             }, 3000);
         } catch (error) {
             console.error('User not deleted:', error);
