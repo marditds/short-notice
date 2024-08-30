@@ -303,6 +303,24 @@ export const deleteNotice = async (noticeId) => {
     }
 };
 
+export const deleteAllNotices = async (userId) => {
+    try {
+        const notices = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_NOTICES_COLLECTION,
+            [Query.equal('user_id', userId)]
+        );
+
+        for (const notice of notices.documents) {
+            await deleteNotice(notice.$id);
+        }
+
+        console.log(`All notices for user ${userId} deleted successfully.`);
+    } catch (error) {
+        console.error('Error deleting user notices:', error);
+        throw error;
+    }
+}
 
 export const account = new Account(client);
 export { ID } from 'appwrite';

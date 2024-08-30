@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { updateUser, deleteUser } from '../context/dbhandler';
+import { updateUser, deleteUser, deleteAllNotices } from '../context/dbhandler';
 import { useUserContext } from '../context/UserContext';
 import { UserId } from '../../components/User/UserId';
 
@@ -40,6 +40,8 @@ const useUserInfo = (data) => {
 
     const handleDeleteUser = async () => {
         try {
+            await deleteAllNotices(userId)
+
             await deleteUser(userId);
             console.log('User deleted successfully.');
 
