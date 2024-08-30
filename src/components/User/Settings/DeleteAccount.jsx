@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { googleLogout } from '@react-oauth/google';
 import { useUserContext } from '../../../lib/context/UserContext';
 import useUserInfo from '../../../lib/hooks/useUserInfo';
+import useUserAvatar from '../../../lib/hooks/useUserAvatar';
+import { UserId } from '../UserId';
 import { Row, Col, Modal, Button } from 'react-bootstrap';
 import { Loading } from '../../Loading/Loading';
 
@@ -14,12 +16,37 @@ export const DeleteAccount = () => {
     const navigate = useNavigate();
     const [showModal, setShowModal] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [user_id, setUserId] = useState(null);
+
+    const { avatarUrl, setAvatarUrl, handleDeleteAvatarFromStrg, extractFileIdFromUrl } = useUserAvatar(user_id);
+
+    useEffect(() => {
+
+        const fetchUserId = async () => {
+            try {
+                const id = await UserId(googleUserData);
+                setUserId(id);
+            } catch (error) {
+                console.error('Error fetching user ID:', error);
+            }
+        };
+
+        fetchUserId();
+
+    }, [googleUserData]);
+
 
     const handleDeleteAccount = async () => {
 
         setLoading(true);
 
         try {
+            if (avatarUrl) {
+                const fileId = extractFileIdFromUrl(avatarUrl);
+                await handleDeleteAvatarFromStrg(fileId);
+                setAvatarUrl('');
+            }
+
             await handleDeleteUser();
 
             googleLogout();

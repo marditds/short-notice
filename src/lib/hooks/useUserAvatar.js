@@ -76,7 +76,6 @@ const useUserAvatar = (userId) => {
     };
 
 
-
     const handleDeleteAvatarFromDoc = async () => {
         try {
             const response = await deleteAvatarFromDoc(userId);
@@ -86,8 +85,20 @@ const useUserAvatar = (userId) => {
         }
     }
 
+
+    const extractFileIdFromUrl = (url) => {
+        const parts = url.split('/');
+        const fileId = parts[parts.length - 2];
+        return fileId;
+    };
+
     return {
-        avatarUrl, setAvatarUrl, isUploading, handleAvatarUpload, handleDeleteAvatarFromStrg, handleDeleteAvatarFromDoc
+        avatarUrl, setAvatarUrl,
+        isUploading,
+        handleAvatarUpload,
+        handleDeleteAvatarFromStrg,
+        handleDeleteAvatarFromDoc,
+        extractFileIdFromUrl
     };
 }
 
