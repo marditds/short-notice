@@ -14,26 +14,33 @@ const CreateUsername = ({ setUser }) => {
 
     const { username, setUsername, setHasUsername, setGoogleUserData, setIsLoggedIn } = useUserContext();
 
-    const [captchaVerified, setCaptchaVerified] = useState(false);
+    const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
 
     const [errorMessage, setErrorMessage] = useState('');
 
     const onUsernameChange = (e) => {
         console.log('Input changed:', e.target.value);
-        setUsername(e.target.value);
+
+        const usrnm = e.target.value.replace(/\s/g, '');
+        setUsername(usrnm);
         setErrorMessage('');
     };
 
 
     const handleDoneClick = async () => {
 
-        if (!captchaVerified) {
+        if (!isCaptchaVerified) {
             alert('Please complete the reCAPTCHA verification');
             return;
         }
 
         if (!username || username.trim() === '') {
             setErrorMessage('Username cannot be empty. Please enter a valid username.');
+            return;
+        }
+
+        if (username.includes(' ')) {
+            setErrorMessage('Username cannot contain spaces. Please remove any spaces.');
             return;
         }
 
@@ -64,48 +71,54 @@ const CreateUsername = ({ setUser }) => {
 
     const onCaptchaChange = (value) => {
         if (value) {
-            setCaptchaVerified(true);
+            setIsCaptchaVerified(true);
         }
     };
 
     return (
         <Container>
             <Form>
-                {!captchaVerified && (
+                {/* {!isCaptchaVerified && ( */}
+
+                {/* )} */}
+
+                {/* {isCaptchaVerified && ( */}
+                <>
+                    <Form.Group className='mb-3' controlId='user__username--field'>
+                        <Form.Label>Please enter your username:</Form.Label>
+                        <Form.Control type='username' placeholder='Enter your username' value={username || ''} onChange={onUsernameChange} />
+                        <Form.Text className='text-muted'>
+                            Your userame must be unique.
+                        </Form.Text>
+                    </Form.Group>
+                    {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
+
                     <div className='mb-3'>
                         <ReCAPTCHA
                             sitekey={import.meta.env.VITE_CAPTCHA_SITE_KEY}
                             onChange={onCaptchaChange}
                         />
                     </div>
-                )}
 
-                {captchaVerified && (
-                    <>
-                        <Form.Group className='mb-3' controlId='user__username--field'>
-                            <Form.Label>Please enter your username:</Form.Label>
-                            <Form.Control type='username' placeholder='Enter your username' value={username || ''} onChange={onUsernameChange} />
-                            <Form.Text className='text-muted'>
-                                Your userame must be unique.
-                            </Form.Text>
-                        </Form.Group>
-                        {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
-                        <Button onClick={handleDoneClick}>
-                            Done
-                        </Button>
-                        <Button
-                            onClick={() => {
-                                googleLogout();
-                                setIsLoggedIn(preVal => false)
-                                setGoogleUserData(null);
-                                localStorage.removeItem('accessToken');
-                                console.log('Logged out successfully.');
-                                window.location.href = '/';
+                    <Button
+                        onClick={handleDoneClick}
+                        disabled={!isCaptchaVerified || !username || username.trim() === ''}
+                    >
+                        Done
+                    </Button>
+                    <Button
+                        onClick={() => {
+                            googleLogout();
+                            setIsLoggedIn(preVal => false)
+                            setGoogleUserData(null);
+                            localStorage.removeItem('accessToken');
+                            console.log('Logged out successfully.');
+                            window.location.href = '/';
 
-                            }}>Log out</Button>
-                    </>
+                        }}>Cancel</Button>
+                </>
 
-                )}
+                {/* )} */}
             </Form>
         </Container>
     )
