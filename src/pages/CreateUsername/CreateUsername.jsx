@@ -78,47 +78,40 @@ const CreateUsername = ({ setUser }) => {
     return (
         <Container>
             <Form>
-                {/* {!isCaptchaVerified && ( */}
 
-                {/* )} */}
+                <Form.Group className='mb-3' controlId='user__username--field'>
+                    <Form.Label>Please enter your username:</Form.Label>
+                    <Form.Control type='username' placeholder='Enter your username' value={username || ''} onChange={onUsernameChange} />
+                    <Form.Text className='text-muted'>
+                        Your userame must be unique.
+                    </Form.Text>
+                </Form.Group>
+                {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
 
-                {/* {isCaptchaVerified && ( */}
-                <>
-                    <Form.Group className='mb-3' controlId='user__username--field'>
-                        <Form.Label>Please enter your username:</Form.Label>
-                        <Form.Control type='username' placeholder='Enter your username' value={username || ''} onChange={onUsernameChange} />
-                        <Form.Text className='text-muted'>
-                            Your userame must be unique.
-                        </Form.Text>
-                    </Form.Group>
-                    {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
+                <div className='mb-3'>
+                    <ReCAPTCHA
+                        sitekey={import.meta.env.VITE_CAPTCHA_SITE_KEY}
+                        onChange={onCaptchaChange}
+                    />
+                </div>
 
-                    <div className='mb-3'>
-                        <ReCAPTCHA
-                            sitekey={import.meta.env.VITE_CAPTCHA_SITE_KEY}
-                            onChange={onCaptchaChange}
-                        />
-                    </div>
+                <Button
+                    onClick={handleDoneClick}
+                    disabled={!isCaptchaVerified || !username || username.trim() === ''}
+                >
+                    Done
+                </Button>
+                <Button
+                    onClick={() => {
+                        googleLogout();
+                        setIsLoggedIn(preVal => false)
+                        setGoogleUserData(null);
+                        localStorage.removeItem('accessToken');
+                        console.log('Logged out successfully.');
+                        window.location.href = '/';
 
-                    <Button
-                        onClick={handleDoneClick}
-                        disabled={!isCaptchaVerified || !username || username.trim() === ''}
-                    >
-                        Done
-                    </Button>
-                    <Button
-                        onClick={() => {
-                            googleLogout();
-                            setIsLoggedIn(preVal => false)
-                            setGoogleUserData(null);
-                            localStorage.removeItem('accessToken');
-                            console.log('Logged out successfully.');
-                            window.location.href = '/';
+                    }}>Cancel</Button>
 
-                        }}>Cancel</Button>
-                </>
-
-                {/* )} */}
             </Form>
         </Container>
     )
