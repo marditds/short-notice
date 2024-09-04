@@ -10,6 +10,7 @@ const useNotices = (googleUserData) => {
     const [isRemovingNotice, setIsRemovingNotice] = useState(false);
     const [removingNoticeId, setRemovingNoticeId] = useState(null);
 
+
     useEffect(() => {
         const fetchUserNotices = async () => {
             if (googleUserData) {
@@ -33,15 +34,35 @@ const useNotices = (googleUserData) => {
 
         fetchUserNotices();
 
+        const checkExpiredNotices = setInterval(() => {
+            const now = new Date();
+            setUserNotices((prevNotices) =>
+                prevNotices.filter((notice) => {
+                    if (notice.expiresIn && new Date(notice.expiresIn) <= now) {
+                        deleteNotice(notice.$id);
+                        return false;
+                    }
+                    return true;
+                })
+            );
+        }, 60000);
+
+        return () => clearInterval(checkExpiredNotices);
+
     }, [googleUserData]);
 
-    const addNotice = async (text) => {
+    const addNotice = async (text, duration) => {
 
         if (user_id) {
+
+            const now = new Date();
+            const expiresIn = duration * 60000;
+
             const newNotice = {
                 user_id: user_id,
                 text,
-                timestamp: new Date(),
+                timestamp: now.toISOString(),
+                expiresIn: Math.floor(expiresIn / 1000)
             };
 
             setIsAddingNotice(true);
@@ -82,6 +103,8 @@ const useNotices = (googleUserData) => {
         }
 
     };
+
+
 
     return {
         user_id,

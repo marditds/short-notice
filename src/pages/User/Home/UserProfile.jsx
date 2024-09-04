@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Profile } from '../../../components/User/Profile';
 import { Notices } from '../../../components/User/Notices';
 import { Form, Modal, Button, Dropdown, DropdownButton } from 'react-bootstrap';
@@ -11,6 +11,7 @@ const UserProfile = () => {
 
     const { googleUserData, username } = useUserContext();
     const [noticeText, setNoticeText] = useState('');
+    const [duration, setDuration] = useState(1);
     const [editingNoticeId, setEditingNoticeId] = useState(null);
     const [showModal, setShowModal] = useState(false);
 
@@ -18,16 +19,17 @@ const UserProfile = () => {
 
     const { avatarUrl } = useUserAvatar(user_id);
 
-    const hours = Array.from({ length: 7 }, (_, i) => (i + 1) * 24);
+
 
     const onTextareaChange = (e) => {
         setNoticeText(() => e.target.value);
+        console.log('Curr notation:', duration);
 
     }
 
     const handleNotify = async () => {
         if (noticeText.trim()) {
-            await addNotice(noticeText);
+            await addNotice(noticeText, duration);
             setNoticeText('');
         }
     };
@@ -82,15 +84,19 @@ const UserProfile = () => {
 
                 <div className='d-flex align-items-center'>
                     <h6 className='mb-0'>Set Notice Timer</h6>
+
                     <Form.Select
                         aria-label="notice-timer--hh"
                         className='w-25 mx-2'
+                        value={duration}
+                        onChange={(e) => setDuration(Number(e.target.value))}
                     >
-                        {hours.map(hour => (
-                            <option key={hour} value={hour}>
-                                {hour}
+                        {[...Array(7).keys()].map(i => (
+                            <option value={i + 1} key={i + 1}>
+                                {i + 1} minute(s)
                             </option>
                         ))}
+
                     </Form.Select>
                     <span>hrs</span>
 

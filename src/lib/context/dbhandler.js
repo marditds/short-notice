@@ -234,8 +234,10 @@ export const deleteUser = async (userId) => {
     }
 };
 
-export const createNotice = async ({ user_id, text, timestamp }) => {
+export const createNotice = async ({ user_id, text, timestamp, expiresIn }) => {
+
     try {
+
         const response = await databases.createDocument(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_NOTICES_COLLECTION,
@@ -243,7 +245,8 @@ export const createNotice = async ({ user_id, text, timestamp }) => {
             {
                 user_id,
                 text,
-                timestamp
+                timestamp,
+                expiresIn: Math.floor(expiresIn)
             }
         );
         console.log('Notice created succesfully:', response);
