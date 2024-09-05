@@ -38,31 +38,35 @@ const useNotices = (googleUserData) => {
             const now = new Date();
             setUserNotices((prevNotices) =>
                 prevNotices.filter((notice) => {
-                    if (notice.expiresIn && new Date(notice.expiresIn) <= now) {
+                    if (notice.expiresAt && new Date(notice.expiresAt) <= now) {
                         deleteNotice(notice.$id);
                         return false;
                     }
                     return true;
                 })
             );
-        }, 60000);
+        }, 10000);
 
         return () => clearInterval(checkExpiredNotices);
 
     }, [googleUserData]);
+
+
+
+
 
     const addNotice = async (text, duration) => {
 
         if (user_id) {
 
             const now = new Date();
-            const expiresIn = duration * 60000;
+            const expiresAt = new Date(now.getTime() + duration * 60000);
 
             const newNotice = {
                 user_id: user_id,
                 text,
                 timestamp: now.toISOString(),
-                expiresIn: Math.floor(expiresIn / 1000)
+                expiresAt: expiresAt.toISOString()
             };
 
             setIsAddingNotice(true);
@@ -97,7 +101,11 @@ const useNotices = (googleUserData) => {
             await deleteNotice(noticeId);
             setUserNotices((prevNotices) => prevNotices.filter((notice) => notice.$id !== noticeId));
         } catch (error) {
-            console.error('Error deleting notice:', error);
+            if (error.code === 404) {
+                console.log('Notice already deleted or does not exist:', noticeId);
+            } else {
+                console.error('Error deleting notice:', error);
+            }
         } finally {
             setRemovingNoticeId(null);
         }

@@ -234,7 +234,7 @@ export const deleteUser = async (userId) => {
     }
 };
 
-export const createNotice = async ({ user_id, text, timestamp, expiresIn }) => {
+export const createNotice = async ({ user_id, text, timestamp, expiresAt }) => {
 
     try {
 
@@ -246,7 +246,7 @@ export const createNotice = async ({ user_id, text, timestamp, expiresIn }) => {
                 user_id,
                 text,
                 timestamp,
-                expiresIn: Math.floor(expiresIn)
+                expiresAt
             }
         );
         console.log('Notice created succesfully:', response);
@@ -291,9 +291,7 @@ export const updateNotice = async (noticeId, newText) => {
 };
 
 export const deleteNotice = async (noticeId) => {
-
     console.log('Attempting to delete notice with ID:', noticeId);
-
     try {
         const response = await databases.deleteDocument(
             import.meta.env.VITE_DATABASE,
@@ -302,7 +300,11 @@ export const deleteNotice = async (noticeId) => {
         );
         console.log('Notice deleted successfully:', response);
     } catch (error) {
-        console.error('Error deleting notice:', error);
+        if (error.code === 404) {
+            console.log('Ha, 404. Kez inch. 🤪');
+        } else {
+            console.error('Error deleting notice:', error);
+        }
     }
 };
 
