@@ -11,7 +11,7 @@ const UserProfile = () => {
 
     const { googleUserData, username } = useUserContext();
     const [noticeText, setNoticeText] = useState('');
-    const [duration, setDuration] = useState(1);
+    const [duration, setDuration] = useState(24);
     const [editingNoticeId, setEditingNoticeId] = useState(null);
     const [showModal, setShowModal] = useState(false);
 
@@ -19,12 +19,10 @@ const UserProfile = () => {
 
     const { avatarUrl } = useUserAvatar(user_id);
 
-
+    const hours = Array.from({ length: 7 }, (_, i) => (i + 1) * 24);
 
     const onTextareaChange = (e) => {
         setNoticeText(() => e.target.value);
-        console.log('Curr notation:', duration);
-
     }
 
     const handleNotify = async () => {
@@ -91,9 +89,9 @@ const UserProfile = () => {
                         value={duration}
                         onChange={(e) => setDuration(Number(e.target.value))}
                     >
-                        {[...Array(7).keys()].map(i => (
-                            <option value={i + 1} key={i + 1}>
-                                {i + 1} minute(s)
+                        {hours.map(hour => (
+                            <option value={hour} key={hour}>
+                                {hour}
                             </option>
                         ))}
 
