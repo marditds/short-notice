@@ -14,11 +14,10 @@ const UserProfile = () => {
     const [noticeText, setNoticeText] = useState('');
     const [duration, setDuration] = useState(24);
     const [editingNoticeId, setEditingNoticeId] = useState(null);
-    const [deletingNoticeId, setDeletingNoticeId] = useState(null);
     const [showEditModal, setShowEditModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-    const { user_id, userNotices, isLoading, isAddingNotice, removingNoticeId, addNotice, editNotice, removeNotice } = useNotices(googleUserData);
+    const { user_id, userNotices, isLoading, isAddingNotice, removingNoticeId, isRemovingNotice, addNotice, editNotice, removeNotice, setRemovingNoticeId } = useNotices(googleUserData);
 
     const { avatarUrl } = useUserAvatar(user_id);
 
@@ -51,14 +50,14 @@ const UserProfile = () => {
     };
 
     const handleDeleteNotice = (noticeId) => {
-        setDeletingNoticeId(noticeId);
+        setRemovingNoticeId(noticeId);
         setShowDeleteModal(true);
     }
 
-    const handleDelete = () => {
-        if (deletingNoticeId) {
-            removeNotice(deletingNoticeId);
-            setEditingNoticeId(null);
+    const handleDelete = async () => {
+        if (removingNoticeId) {
+            await removeNotice(removingNoticeId);
+            setRemovingNoticeId(null);
             setShowDeleteModal(false);
         }
     }
@@ -71,6 +70,7 @@ const UserProfile = () => {
 
     const handleCloseDeleteModal = () => {
         setShowDeleteModal(false);
+        setRemovingNoticeId(null);
     }
 
     const timerSpacing = 'mx-2';
@@ -135,7 +135,6 @@ const UserProfile = () => {
                 notices={userNotices}
                 handleEditNotice={handleEditNotice}
                 handleDeleteNotice={handleDeleteNotice}
-                removingNoticeId={removingNoticeId}
             />
 
             {/* Edit Notice Modal */}
@@ -176,7 +175,12 @@ const UserProfile = () => {
                     <Button onClick={handleCloseDeleteModal}>
                         Cancel
                     </Button>
-                    <Button onClick={handleDelete}>Delete</Button>
+                    <Button
+                        onClick={handleDelete}
+                        disabled={isRemovingNotice}
+                    >
+                        {isRemovingNotice ? <Loading /> : 'Delete'}
+                    </Button>
                 </Modal.Footer>
             </Modal>
         </>

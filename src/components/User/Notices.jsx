@@ -7,7 +7,7 @@ import { Loading } from '../Loading/Loading';
 
 
 
-export const Notices = ({ notices, handleEditNotice, handleDeleteNotice, removingNoticeId }) => {
+export const Notices = ({ notices, handleEditNotice, handleDeleteNotice }) => {
 
     const [countdowns, setCountdowns] = useState([]);
 
@@ -43,12 +43,10 @@ export const Notices = ({ notices, handleEditNotice, handleDeleteNotice, removin
                         </Button>
                         <Button
                             className='ms-2 notice__delete-btn'
-                            onClick={() => handleDeleteNotice(notice.$id)} disabled={removingNoticeId === notice.$id}
+                            onClick={() => handleDeleteNotice(notice.$id)}
                         >
-                            {removingNoticeId === notice.$id ?
-                                <Loading /> :
-                                <CgTrash size={20} />
-                            }
+                            <CgTrash size={20} />
+
                         </Button>
                     </p>
 

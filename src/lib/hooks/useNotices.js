@@ -95,6 +95,7 @@ const useNotices = (googleUserData) => {
         console.log('Attempting to delete notice with ID:', noticeId);
         console.log('Current notices:', userNotices);
 
+        setIsRemovingNotice(true);
         setRemovingNoticeId(noticeId);
 
         try {
@@ -108,6 +109,7 @@ const useNotices = (googleUserData) => {
             }
         } finally {
             setRemovingNoticeId(null);
+            setIsRemovingNotice(false);
         }
 
     };
@@ -124,6 +126,7 @@ const useNotices = (googleUserData) => {
         addNotice,
         editNotice,
         removeNotice,
+        setRemovingNoticeId,
     };
 };
 
