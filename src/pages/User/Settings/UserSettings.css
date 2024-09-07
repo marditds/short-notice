@@ -1,0 +1,41 @@
+.settings__delete-avatar-btn,
+.settings__update-username-btn,
+.settings__delete-avatar-btn:focus,
+.settings__update-username-btn:focus {
+    background-color: var(--main-accent-color) !important;
+    color: black !important;
+    border: none;
+}
+
+.settings__delete-avatar-btn:hover,
+.settings__update-username-btn:hover {
+    background-color: var(--main-accent-color-hover) !important;
+    color: black !important;
+}
+
+.settings__username-field {
+    border-width: 1.5px;
+    border-color: transparent;
+    border-style: groove;
+}
+
+.settings__username-field:focus {
+    border-color: var(--main-accent-color);
+    border-width: 1.5px;
+    box-shadow: none !important;
+}
+
+.settings__username-field::selection {
+    background-color: var(--main-accent-color) !important;
+}
+
+.settings__delete-account-btn,
+.settings__delete-account-btn:focus {
+    background-color: var(--main-caution-color) !important;
+    color: white;
+    border: none;
+}
+
+.settings__delete-account-btn:hover {
+    background-color: var(--main-caution-color-hover) !important;
+}

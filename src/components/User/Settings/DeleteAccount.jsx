@@ -84,6 +84,7 @@ export const DeleteAccount = () => {
                 <Col>
                     <Button
                         onClick={handleShowModal}
+                        className='settings__delete-account-btn'
                     >
                         Delete Account
                     </Button>
@@ -101,7 +102,10 @@ export const DeleteAccount = () => {
                     <Button variant="secondary" onClick={handleCloseModal} disabled={loading}>
                         Cancel
                     </Button>
-                    <Button variant="danger" onClick={confirmDeletion}>
+                    <Button
+                        onClick={confirmDeletion}
+                        className='settings__delete-account-btn'
+                    >
                         {loading ? <Loading /> : 'Yes, Delete My Account'}
                     </Button>
                 </Modal.Footer>

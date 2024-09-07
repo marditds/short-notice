@@ -100,7 +100,7 @@ export const Avatar = () => {
                     <Button
                         onClick={handleDeleteAvatar}
                         disabled={isDeleting ? true : false}
-                        className='float-start'
+                        className='float-start settings__delete-avatar-btn'
                     >
                         {isDeleting ? 'Deleting...' : 'Delete Avatar'}
                         {isDeleting && <Loading />}

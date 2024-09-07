@@ -5,6 +5,7 @@ import { Info } from '../../../components/User/Settings/Info.jsx';
 import { Visibility } from '../../../components/User/Settings/Visibility.jsx';
 import { Stack, Container } from 'react-bootstrap';
 import { DeleteAccount } from '../../../components/User/Settings/DeleteAccount.jsx';
+import './UserSettings.css';
 
 const UserSettings = () => {
 
@@ -21,7 +22,7 @@ const UserSettings = () => {
     }
 
     return (
-        <Container fluid>
+        <Container fluid className='settings'>
             <Stack gap={5}>
                 <Avatar />
 

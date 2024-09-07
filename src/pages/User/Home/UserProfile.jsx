@@ -89,23 +89,33 @@ const UserProfile = () => {
                 avatarUrl={avatarUrl}
             />
 
-            <Form className='mb-3'>
-                <Form.Group className="mb-3" controlId="user__post--textarea">
-                    <Form.Label>Example textarea</Form.Label>
+            <Form className='mb-3 user-profile__form'>
+                <Form.Group
+                    className="mb-3 user-profile__form-group"
+                    controlId="noticeTextarea">
+                    <Form.Label
+                        className="user-profile__form-label">
+                        Example textarea
+                    </Form.Label>
                     <Form.Control
                         as="textarea"
                         rows={3}
                         value={noticeText}
                         onChange={onTextareaChange}
+                        className="user-profile__form-control"
                     />
                 </Form.Group>
 
-                <div className='d-flex align-items-center'>
-                    <h6 className='mb-0'>Set Notice Timer</h6>
+                <div
+                    className='d-flex align-items-center user-profile__timer-settings'>
+                    <h6
+                        className='mb-0 user-profile__timer-label'>
+                        Set Notice Timer
+                    </h6>
 
                     <Form.Select
-                        aria-label="notice-timer--hh"
-                        className='w-25 mx-2'
+                        aria-label="notice-timer-hh"
+                        className='w-25 mx-2 user-profile__timer-select'
                         value={duration}
                         onChange={(e) => setDuration(Number(e.target.value))}
                     >
@@ -121,7 +131,7 @@ const UserProfile = () => {
                     <Button
                         onClick={handleNotify}
                         disabled={noticeText === '' || isAddingNotice}
-                        className='ms-auto'
+                        className='ms-auto user-profile__notify-btn'
                     >
                         {isAddingNotice ? <Loading /> : 'Notify'}
                     </Button>

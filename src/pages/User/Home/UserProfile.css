@@ -1,22 +1,71 @@
- .notice__edit-btn,
- .notice__delete-btn,
- .notice__edit-btn:hover,
- .notice__delete-btn:hover,
- .notice__edit-btn:focus,
- .notice__delete-btn:focus {
-     background-color: transparent !important;
-     border-color: transparent !important;
- }
+.user-profile__form-control,
+.user-profile__timer-select {
+    border-width: 1.5px;
+    border-color: transparent;
+    border-style: groove;
 
- .notice__edit-btn>svg,
- .notice__delete-btn>svg {
-     transition: 0.3s;
-     filter: drop-shadow(0px 0px 5px #17c76900) !important;
+}
 
- }
+.user-profile__form-control:focus,
+.user-profile__timer-select:focus {
+    border-color: var(--main-accent-color);
+    border-width: 1.5px;
+    box-shadow: none !important;
+}
 
- .notice__edit-btn:hover>svg,
- .notice__delete-btn:hover>svg {
-     color: #17c769 !important;
-     filter: drop-shadow(0px 0px 5px #17c769) !important;
- }
+.user-profile__form-control::selection {
+    background-color: var(--main-accent-color) !important;
+}
+
+.user-profile__timer-select {
+    padding-left: 5px;
+    padding-right: 0px;
+    max-width: 65px;
+}
+
+.user-profile__notify-btn,
+.user-profile__notify-btn:focus {
+    background-color: var(--main-accent-color) !important;
+    color: black !important;
+    border: transparent;
+    transition: 0.3s !important;
+}
+
+.user-profile__notify-btn:disabled {
+    color: black;
+}
+
+.user-profile__notify-btn:hover {
+    background-color: var(--main-accent-color-hover) !important;
+    color: black !important;
+
+}
+
+.form__notify-btn {
+    background-color: var(--main-accent-color) !important;
+    color: black;
+    border: transparent;
+}
+
+.notice__edit-btn,
+.notice__delete-btn,
+.notice__edit-btn:hover,
+.notice__delete-btn:hover,
+.notice__edit-btn:focus,
+.notice__delete-btn:focus {
+    background-color: transparent !important;
+    border-color: transparent !important;
+}
+
+.notice__edit-btn>svg,
+.notice__delete-btn>svg {
+    transition: 0.3s;
+    filter: drop-shadow(0px 0px 5px #17c76900) !important;
+
+}
+
+.notice__edit-btn:hover>svg,
+.notice__delete-btn:hover>svg {
+    color: #17c769 !important;
+    filter: drop-shadow(0px 0px 5px var(--main-accent-color)) !important;
+}

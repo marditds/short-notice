@@ -55,7 +55,7 @@ export const Info = () => {
                     onSubmit={handleSubmit}
                 >
                     <Form.Group
-                        controlId='user__username--field'>
+                        controlId='usernameField'>
                         <Form.Label>
                             Username:
                         </Form.Label>
@@ -65,6 +65,7 @@ export const Info = () => {
                             value={localUsername || ''}
                             onChange={handleUsernameChange}
                             style={{ maxWidth: '320px' }}
+                            className='settings__username-field'
                         />
                         <Form.Text className='text-muted'>
                             Your userame must be unique.
@@ -73,6 +74,7 @@ export const Info = () => {
                     <Button
                         type='submit'
                         disabled={isUpdating || localUsername === '' ? true : false}
+                        className='settings__update-username-btn'
                     >
                         {isUpdating ? 'Updating...' : 'Update'}
                         {isUpdating && <Loading />}

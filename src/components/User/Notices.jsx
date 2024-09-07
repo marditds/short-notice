@@ -53,7 +53,9 @@ export const Notices = ({ notices, handleEditNotice, handleDeleteNotice }) => {
                     <div className='d-flex'>
 
                         <small className='me-auto'>
-                            <span style={{ color: 'gray' }}>
+                            <span
+                                style={{ color: 'gray' }}
+                            >
                                 Expires In:
                             </span>  {countdowns[idx] || calculateCountdown(notice.expiresAt)}
                         </small>
