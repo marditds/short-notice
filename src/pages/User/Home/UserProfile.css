@@ -1,0 +1,9 @@
+.notice__edit-btn,
+.notice__delete-btn,
+.notice__edit-btn:hover,
+.notice__delete-btn:hover,
+.notice__edit-btn:focus,
+.notice__delete-btn:focus {
+    background-color: transparent !important;
+    border-color: transparent !important;
+}

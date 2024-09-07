@@ -6,6 +6,7 @@ import { useUserContext } from '../../../lib/context/UserContext';
 import useUserAvatar from '../../../lib/hooks/useUserAvatar.js';
 import useNotices from '../../../lib/hooks/useNotices.js';
 import { Loading } from '../../../components/Loading/Loading.jsx'
+import './UserProfile.css'
 
 const UserProfile = () => {
 
@@ -13,7 +14,9 @@ const UserProfile = () => {
     const [noticeText, setNoticeText] = useState('');
     const [duration, setDuration] = useState(24);
     const [editingNoticeId, setEditingNoticeId] = useState(null);
-    const [showModal, setShowModal] = useState(false);
+    const [deletingNoticeId, setDeletingNoticeId] = useState(null);
+    const [showEditModal, setShowEditModal] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
 
     const { user_id, userNotices, isLoading, isAddingNotice, removingNoticeId, addNotice, editNotice, removeNotice } = useNotices(googleUserData);
 
@@ -35,7 +38,7 @@ const UserProfile = () => {
     const handleEditNotice = (noticeId, currentText) => {
         setEditingNoticeId(noticeId);
         setNoticeText(currentText);
-        setShowModal(true);
+        setShowEditModal(true);
     };
 
     const handleSaveEdit = () => {
@@ -43,14 +46,31 @@ const UserProfile = () => {
             editNotice(editingNoticeId, noticeText);
             setEditingNoticeId(null);
             setNoticeText('');
-            setShowModal(false);
+            setShowEditModal(false);
         }
     };
 
-    const handleCloseModal = () => {
-        setShowModal(false);
+    const handleDeleteNotice = (noticeId) => {
+        setDeletingNoticeId(noticeId);
+        setShowDeleteModal(true);
+    }
+
+    const handleDelete = () => {
+        if (deletingNoticeId) {
+            removeNotice(deletingNoticeId);
+            setEditingNoticeId(null);
+            setShowDeleteModal(false);
+        }
+    }
+
+    const handleCloseEditModal = () => {
+        setShowEditModal(false);
         setEditingNoticeId(null);
         setNoticeText('');
+    }
+
+    const handleCloseDeleteModal = () => {
+        setShowDeleteModal(false);
     }
 
     const timerSpacing = 'mx-2';
@@ -114,11 +134,12 @@ const UserProfile = () => {
             <Notices
                 notices={userNotices}
                 handleEditNotice={handleEditNotice}
-                handleDeleteNotice={removeNotice}
+                handleDeleteNotice={handleDeleteNotice}
                 removingNoticeId={removingNoticeId}
             />
 
-            <Modal show={showModal} onHide={handleCloseModal}>
+            {/* Edit Notice Modal */}
+            <Modal show={showEditModal} onHide={handleCloseEditModal}>
                 <Modal.Header>
                     <Modal.Title>Edit Notice</Modal.Title>
                 </Modal.Header>
@@ -136,13 +157,28 @@ const UserProfile = () => {
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button onClick={handleCloseModal}>
-                        Close
+                    <Button onClick={handleCloseEditModal}>
+                        Cancel
                     </Button>
-                    <Button onClick={handleSaveEdit}>Save Changes</Button>
+                    <Button onClick={handleSaveEdit}>Save</Button>
                 </Modal.Footer>
             </Modal>
 
+            {/* Delete Notice Modal */}
+            <Modal show={showDeleteModal} onHide={handleCloseDeleteModal}>
+                <Modal.Header>
+                    <Modal.Title>Delete Notice</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <h4>Are you sure you want to delete this notice❓</h4>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button onClick={handleCloseDeleteModal}>
+                        Cancel
+                    </Button>
+                    <Button onClick={handleDelete}>Delete</Button>
+                </Modal.Footer>
+            </Modal>
         </>
     )
 }
