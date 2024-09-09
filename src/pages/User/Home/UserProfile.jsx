@@ -1,12 +1,41 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Profile } from '../../../components/User/Profile';
 import { Notices } from '../../../components/User/Notices';
-import { Form, Modal, Button, Dropdown, DropdownButton } from 'react-bootstrap';
+import { Form, Modal, Button } from 'react-bootstrap';
 import { useUserContext } from '../../../lib/context/UserContext';
 import useUserAvatar from '../../../lib/hooks/useUserAvatar.js';
 import useNotices from '../../../lib/hooks/useNotices.js';
 import { Loading } from '../../../components/Loading/Loading.jsx'
 import './UserProfile.css'
+
+
+const CustomCheckbox = ({ label, name }) => {
+
+    const handleCheckChange = () => {
+        console.log(`${label} clicled.`);
+    }
+
+    return (
+        <div>
+            <Form.Check
+                type='radio'
+                // checked={checked}
+                onChange={handleCheckChange}
+                id={`custom-radio-${label}`}
+                label={label}
+                name={name}
+            // style={{ display: 'none' }}
+            />
+            <label
+                htmlFor={`custom-radio-${label}`}
+                style={{ cursor: 'pointer' }}
+                className='user-select-none'
+            >
+                {label}
+            </label>
+        </div>
+    );
+}
 
 const UserProfile = () => {
 
@@ -22,6 +51,12 @@ const UserProfile = () => {
     const { avatarUrl } = useUserAvatar(user_id);
 
     const hours = Array.from({ length: 7 }, (_, i) => (i + 1) * 24);
+
+    const tagsOne = ['Science', 'Technology', 'Engineering', 'Math', 'Other'];
+
+    const tagsTwo = ['Literature', 'History', 'Philosophy', 'Music', 'Other'];
+
+    const tagsThree = ['Medicine', 'Economics', 'Law', 'Political ', 'Other'];
 
     const onTextareaChange = (e) => {
         setNoticeText(() => e.target.value);
@@ -105,6 +140,51 @@ const UserProfile = () => {
                         className="user-profile__form-control"
                     />
                 </Form.Group>
+
+                <div
+                    className='user-profile__timer-settings'>
+                    <h6
+                        className='mb-0 user-profile__timer-label'>
+                        Add tags:
+                    </h6>
+
+                    <div className='d-flex justify-content-between w-100'>
+                        {tagsOne.map((tag) => {
+                            return (
+                                <CustomCheckbox
+                                    key={tag}
+                                    label={tag}
+                                    name='tagsOne'
+                                />
+                            )
+                        })}
+                    </div>
+
+                    <div className='d-flex justify-content-between w-100'>
+                        {tagsTwo.map((tag, index) =>
+                            <Form.Check
+                                key={tag}
+                                type='checkbox'
+                                id={`tagsTwo-checkbox-${index}`}
+                                label={tag}
+                            />
+                        )}
+                    </div>
+
+                    <div className='d-flex justify-content-between w-100'>
+                        {tagsThree.map((tag, index) =>
+                            <Form.Check
+                                key={tag}
+                                type='checkbox'
+                                id={`tagsThree-checkbox-${index}`}
+                                label={tag}
+                            />
+                        )}
+                    </div>
+
+                </div>
+
+
 
                 <div
                     className='d-flex align-items-center user-profile__timer-settings'>
