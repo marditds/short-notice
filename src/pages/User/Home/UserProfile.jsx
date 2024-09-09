@@ -1,41 +1,15 @@
 import React, { useState } from 'react';
 import { Profile } from '../../../components/User/Profile';
 import { Notices } from '../../../components/User/Notices';
-import { Form, Modal, Button } from 'react-bootstrap';
+import { Form, Modal, Button, Accordion } from 'react-bootstrap';
 import { useUserContext } from '../../../lib/context/UserContext';
 import useUserAvatar from '../../../lib/hooks/useUserAvatar.js';
 import useNotices from '../../../lib/hooks/useNotices.js';
+import { NoticeTags } from '../../../components/User/NoticeTags.jsx';
 import { Loading } from '../../../components/Loading/Loading.jsx'
 import './UserProfile.css'
 
 
-const CustomCheckbox = ({ label, name }) => {
-
-    const handleCheckChange = () => {
-        console.log(`${label} clicled.`);
-    }
-
-    return (
-        <div>
-            <Form.Check
-                type='radio'
-                // checked={checked}
-                onChange={handleCheckChange}
-                id={`custom-radio-${label}`}
-                label={label}
-                name={name}
-            // style={{ display: 'none' }}
-            />
-            <label
-                htmlFor={`custom-radio-${label}`}
-                style={{ cursor: 'pointer' }}
-                className='user-select-none'
-            >
-                {label}
-            </label>
-        </div>
-    );
-}
 
 const UserProfile = () => {
 
@@ -52,9 +26,9 @@ const UserProfile = () => {
 
     const hours = Array.from({ length: 7 }, (_, i) => (i + 1) * 24);
 
-    const tagsOne = ['Science', 'Technology', 'Engineering', 'Math', 'Other'];
+    const tagsOne = ['Science', 'Technology', 'Engineering', 'Math'];
 
-    const tagsTwo = ['Literature', 'History', 'Philosophy', 'Music', 'Other'];
+    const tagsTwo = ['Literature', 'History', 'Philosophy', 'Music'];
 
     const tagsThree = ['Medicine', 'Economics', 'Law', 'Political ', 'Other'];
 
@@ -128,63 +102,80 @@ const UserProfile = () => {
                 <Form.Group
                     className="mb-3 user-profile__form-group"
                     controlId="noticeTextarea">
-                    <Form.Label
+                    {/* <Form.Label
                         className="user-profile__form-label">
-                        Example textarea
-                    </Form.Label>
+                        Got a notice to share?
+                    </Form.Label> */}
                     <Form.Control
                         as="textarea"
                         rows={3}
                         value={noticeText}
                         onChange={onTextareaChange}
                         className="user-profile__form-control"
+                        placeholder='Got a notice to share?'
                     />
                 </Form.Group>
 
-                <div
-                    className='user-profile__timer-settings'>
-                    <h6
-                        className='mb-0 user-profile__timer-label'>
-                        Add tags:
-                    </h6>
 
-                    <div className='d-flex justify-content-between w-100'>
-                        {tagsOne.map((tag) => {
-                            return (
-                                <CustomCheckbox
-                                    key={tag}
-                                    label={tag}
-                                    name='tagsOne'
-                                />
-                            )
-                        })}
-                    </div>
+                <h6
+                    className='mb-2 user-profile__tags-title'>
+                    Add tags: <span className='small' style={{ color: 'gray' }}>At least 1 required.</span>
+                </h6>
 
-                    <div className='d-flex justify-content-between w-100'>
-                        {tagsTwo.map((tag, index) =>
-                            <Form.Check
-                                key={tag}
-                                type='checkbox'
-                                id={`tagsTwo-checkbox-${index}`}
-                                label={tag}
-                            />
-                        )}
-                    </div>
+                <Accordion
+                    defaultActiveKey={['0']}
+                    alwaysOpen
+                    className='user-profile__tags-accordion'
+                >
+                    <Accordion.Item eventKey="0">
+                        <Accordion.Header>Stem</Accordion.Header>
+                        <Accordion.Body className='d-flex justify-content-around w-100'>
+                            {tagsOne.map((tag) => {
+                                return (
+                                    <NoticeTags
+                                        key={tag}
+                                        label={tag}
+                                        name='tagsOne'
+                                        categoryName='STEM'
+                                    />
+                                )
+                            })}
+                        </Accordion.Body>
+                    </Accordion.Item>
+                    <Accordion.Item eventKey="1">
+                        <Accordion.Header>Humanities and Arts</Accordion.Header>
+                        <Accordion.Body className='d-flex justify-content-between w-100'>
+                            {tagsTwo.map((tag) => {
+                                return (
+                                    <NoticeTags
+                                        key={tag}
+                                        label={tag}
+                                        name='tagsOne'
+                                        categoryName='STEM'
+                                    />
+                                )
+                            })}
+                        </Accordion.Body>
+                    </Accordion.Item>
+                    <Accordion.Item eventKey="2">
+                        <Accordion.Header>Social Sciences and Professions</Accordion.Header>
+                        <Accordion.Body className='d-flex justify-content-between w-100'>
+                            {tagsThree.map((tag) => {
+                                return (
+                                    <NoticeTags
+                                        key={tag}
+                                        label={tag}
+                                        name='tagsOne'
+                                        categoryName='STEM'
+                                    />
+                                )
+                            })}
+                        </Accordion.Body>
+                    </Accordion.Item>
+                </Accordion>
 
-                    <div className='d-flex justify-content-between w-100'>
-                        {tagsThree.map((tag, index) =>
-                            <Form.Check
-                                key={tag}
-                                type='checkbox'
-                                id={`tagsThree-checkbox-${index}`}
-                                label={tag}
-                            />
-                        )}
-                    </div>
 
-                </div>
-
-
+                <br />
 
                 <div
                     className='d-flex align-items-center user-profile__timer-settings'>
@@ -216,8 +207,6 @@ const UserProfile = () => {
                         {isAddingNotice ? <Loading /> : 'Notify'}
                     </Button>
                 </div>
-
-
 
             </Form>
 

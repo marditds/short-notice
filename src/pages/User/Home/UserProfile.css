@@ -17,6 +17,33 @@
     background-color: var(--main-accent-color) !important;
 }
 
+
+.user-profile__tags-accordion>div,
+.user-profile__tags-accordion>div>h2>button {
+    color: var(--main-text-color) !important;
+    background-color: var(--main-bg-color) !important;
+    box-shadow: none !important;
+    padding-inline: 10px !important;
+    padding-block: 5px !important;
+    border-radius: 0 !important;
+    border-inline: 1px;
+}
+
+.user-profile__tags-accordion>div>h2>button::after {
+    display: none;
+}
+
+.user-profile__notice-tag {
+    padding-inline: 10px;
+    padding-block: 5px;
+    border: 1px solid var(--main-accent-color);
+    border-radius: 7px;
+}
+
+.user-profile__notice-tag.tagIsChecked {
+    color: black !important;
+}
+
 .user-profile__timer-select {
     padding-left: 5px;
     padding-right: 0px;
