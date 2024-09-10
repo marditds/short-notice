@@ -234,7 +234,8 @@ export const deleteUser = async (userId) => {
     }
 };
 
-export const createNotice = async ({ user_id, text, timestamp, expiresAt }) => {
+export const createNotice = async ({ user_id, text, timestamp, expiresAt, science, technology, engineering, math, literature, history, philosophy, music, medicine, economics, law, polSci, other
+}) => {
 
     try {
 
@@ -246,7 +247,20 @@ export const createNotice = async ({ user_id, text, timestamp, expiresAt }) => {
                 user_id,
                 text,
                 timestamp,
-                expiresAt
+                expiresAt,
+                science,
+                technology,
+                engineering,
+                math,
+                literature,
+                history,
+                philosophy,
+                music,
+                medicine,
+                economics,
+                law,
+                polSci,
+                other
             }
         );
         console.log('Notice created succesfully:', response);

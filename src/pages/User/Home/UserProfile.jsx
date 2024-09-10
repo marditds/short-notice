@@ -8,6 +8,7 @@ import useNotices from '../../../lib/hooks/useNotices.js';
 import { NoticeTags } from '../../../components/User/NoticeTags.jsx';
 import { Loading } from '../../../components/Loading/Loading.jsx'
 import './UserProfile.css'
+import { ComposeNotice } from '../../../components/User/ComposeNotice';
 
 
 
@@ -24,24 +25,6 @@ const UserProfile = () => {
 
     const { avatarUrl } = useUserAvatar(user_id);
 
-    const hours = Array.from({ length: 7 }, (_, i) => (i + 1) * 24);
-
-    const tagsOne = ['Science', 'Technology', 'Engineering', 'Math'];
-
-    const tagsTwo = ['Literature', 'History', 'Philosophy', 'Music'];
-
-    const tagsThree = ['Medicine', 'Economics', 'Law', 'Political ', 'Other'];
-
-    const onTextareaChange = (e) => {
-        setNoticeText(() => e.target.value);
-    }
-
-    const handleNotify = async () => {
-        if (noticeText.trim()) {
-            await addNotice(noticeText, duration);
-            setNoticeText('');
-        }
-    };
 
     const handleEditNotice = (noticeId, currentText) => {
         setEditingNoticeId(noticeId);
@@ -98,117 +81,15 @@ const UserProfile = () => {
                 avatarUrl={avatarUrl}
             />
 
-            <Form className='mb-3 user-profile__form'>
-                <Form.Group
-                    className="mb-3 user-profile__form-group"
-                    controlId="noticeTextarea">
-                    {/* <Form.Label
-                        className="user-profile__form-label">
-                        Got a notice to share?
-                    </Form.Label> */}
-                    <Form.Control
-                        as="textarea"
-                        rows={3}
-                        value={noticeText}
-                        onChange={onTextareaChange}
-                        className="user-profile__form-control"
-                        placeholder='Got a notice to share?'
-                    />
-                </Form.Group>
+            <ComposeNotice
+                duration={duration}
+                isAddingNotice={isAddingNotice}
+                noticeText={noticeText}
+                setNoticeText={setNoticeText}
+                setDuration={setDuration}
+                addNotice={addNotice}
+            />
 
-
-                <h6
-                    className='mb-2 user-profile__tags-title'>
-                    Add tags: <span className='small' style={{ color: 'gray' }}>At least 1 required.</span>
-                </h6>
-
-                <Accordion
-                    defaultActiveKey={['0']}
-                    alwaysOpen
-                    className='user-profile__tags-accordion'
-                >
-                    <Accordion.Item eventKey="0">
-                        <Accordion.Header>Stem</Accordion.Header>
-                        <Accordion.Body className='d-flex justify-content-around w-100'>
-                            {tagsOne.map((tag) => {
-                                return (
-                                    <NoticeTags
-                                        key={tag}
-                                        label={tag}
-                                        name='tagsOne'
-                                        categoryName='STEM'
-                                    />
-                                )
-                            })}
-                        </Accordion.Body>
-                    </Accordion.Item>
-                    <Accordion.Item eventKey="1">
-                        <Accordion.Header>Humanities and Arts</Accordion.Header>
-                        <Accordion.Body className='d-flex justify-content-between w-100'>
-                            {tagsTwo.map((tag) => {
-                                return (
-                                    <NoticeTags
-                                        key={tag}
-                                        label={tag}
-                                        name='tagsOne'
-                                        categoryName='STEM'
-                                    />
-                                )
-                            })}
-                        </Accordion.Body>
-                    </Accordion.Item>
-                    <Accordion.Item eventKey="2">
-                        <Accordion.Header>Social Sciences and Professions</Accordion.Header>
-                        <Accordion.Body className='d-flex justify-content-between w-100'>
-                            {tagsThree.map((tag) => {
-                                return (
-                                    <NoticeTags
-                                        key={tag}
-                                        label={tag}
-                                        name='tagsOne'
-                                        categoryName='STEM'
-                                    />
-                                )
-                            })}
-                        </Accordion.Body>
-                    </Accordion.Item>
-                </Accordion>
-
-
-                <br />
-
-                <div
-                    className='d-flex align-items-center user-profile__timer-settings'>
-                    <h6
-                        className='mb-0 user-profile__timer-label'>
-                        Set Notice Timer
-                    </h6>
-
-                    <Form.Select
-                        aria-label="notice-timer-hh"
-                        className='w-25 mx-2 user-profile__timer-select'
-                        value={duration}
-                        onChange={(e) => setDuration(Number(e.target.value))}
-                    >
-                        {hours.map(hour => (
-                            <option value={hour} key={hour}>
-                                {hour}
-                            </option>
-                        ))}
-
-                    </Form.Select>
-                    <span>hrs</span>
-
-                    <Button
-                        onClick={handleNotify}
-                        disabled={noticeText === '' || isAddingNotice}
-                        className='ms-auto user-profile__notify-btn'
-                    >
-                        {isAddingNotice ? <Loading /> : 'Notify'}
-                    </Button>
-                </div>
-
-            </Form>
 
             <Notices
                 notices={userNotices}

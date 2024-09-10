@@ -55,7 +55,7 @@ const useNotices = (googleUserData) => {
 
 
 
-    const addNotice = async (text, duration) => {
+    const addNotice = async (text, duration, selectedTags) => {
 
         if (user_id) {
 
@@ -66,7 +66,21 @@ const useNotices = (googleUserData) => {
                 user_id: user_id,
                 text,
                 timestamp: now.toISOString(),
-                expiresAt: expiresAt.toISOString()
+                expiresAt: expiresAt.toISOString(),
+
+                science: selectedTags['STEM-0'] || false,
+                technology: selectedTags['STEM-1'] || false,
+                engineering: selectedTags['STEM-2'] || false,
+                math: selectedTags['STEM-3'] || false,
+                literature: selectedTags['Humanities and Arts-0'] || false,
+                history: selectedTags['Humanities and Arts-1'] || false,
+                philosophy: selectedTags['Humanities and Arts-2'] || false,
+                music: selectedTags['Humanities and Arts-3'] || false,
+                medicine: selectedTags['Social Sciences and Professions-0'] || false,
+                economics: selectedTags['Social Sciences and Professions-1'] || false,
+                law: selectedTags['Social Sciences and Professions-2'] || false,
+                polSci: selectedTags['Social Sciences and Professions-3'] || false,
+                other: selectedTags['Social Sciences and Professions-4'] || false,
             };
 
             setIsAddingNotice(true);

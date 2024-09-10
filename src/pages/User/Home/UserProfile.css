@@ -38,10 +38,13 @@
     padding-block: 5px;
     border: 1px solid var(--main-accent-color);
     border-radius: 7px;
+    background-color: transparent;
+    cursor: pointer;
 }
 
 .user-profile__notice-tag.tagIsChecked {
     color: black !important;
+    background-color: var(--main-accent-color);
 }
 
 .user-profile__timer-select {
