@@ -17,6 +17,30 @@
     background-color: var(--main-accent-color) !important;
 }
 
+.user-profile__notice-char-counter {
+    font-size: 0.9rem;
+    font-weight: normal;
+    color: gray;
+}
+
+.user-profile__notice-char-counter.extra {
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: red;
+    animation: extra-text 0.5s alternate infinite;
+
+}
+
+@keyframes extra-text {
+    0% {
+        color: red;
+    }
+
+    100% {
+        color: gray;
+    }
+}
+
 .user-profile__tags-accordion>div>h2>button,
 .user-profile__tags-accordion>div {
     background-color: var(--main-bg-color) !important;
@@ -52,6 +76,7 @@
 }
 
 .user-profile__notice-tag:hover {
+    border-color: var(--main-accent-color-hover);
     background-color: var(--main-accent-color-hover);
 }
 
@@ -109,6 +134,6 @@
 
 .notice__edit-btn:hover>svg,
 .notice__delete-btn:hover>svg {
-    color: #17c769 !important;
+    color: var(--main-accent-color) !important;
     filter: drop-shadow(0px 0px 5px var(--main-accent-color)) !important;
 }

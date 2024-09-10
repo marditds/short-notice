@@ -90,11 +90,8 @@ export const ComposeNotice = ({ noticeText, setNoticeText, duration, setDuration
                     className="user-profile__form-control"
                     placeholder='Got a notice to share?'
                 />
-                <div style={{
-                    fontSize: '0.9rem',
-                    fontWeight: charCount > charLimit ? 'bold' : 'normal',
-                    color: charCount > charLimit ? 'red' : 'gray'
-                }}
+                <div
+                    className={`user-profile__notice-char-counter ${charCount > charLimit && 'extra'}`}
                 >
                     {`${charCount}/${charLimit} characters`}
                 </div>
