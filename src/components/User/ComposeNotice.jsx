@@ -25,10 +25,16 @@ export const ComposeNotice = ({ noticeText, setNoticeText, duration, setDuration
     ]);
 
     const [selectedTags, setSelectedTags] = useState({});
-
+    const [charCount, setCharCount] = useState(0);
+    const charLimit = 300;
 
     const onTextareaChange = (e) => {
-        setNoticeText(() => e.target.value);
+        // const inputValue = e.target.value;
+
+        // if (inputValue.length <= charLimit) {
+        setNoticeText(e.target.value);
+        setCharCount(e.target.value.length);
+        // }
     }
 
     const handleNotify = async () => {
@@ -37,6 +43,7 @@ export const ComposeNotice = ({ noticeText, setNoticeText, duration, setDuration
             await addNotice(noticeText, duration, selectedTags);
             setNoticeText('');
             setSelectedTags({});
+            setCharCount(0);
 
             setTagCategories(prevCategories => prevCategories.map(category => ({
                 ...category,
@@ -83,6 +90,14 @@ export const ComposeNotice = ({ noticeText, setNoticeText, duration, setDuration
                     className="user-profile__form-control"
                     placeholder='Got a notice to share?'
                 />
+                <div style={{
+                    fontSize: '0.9rem',
+                    fontWeight: charCount > charLimit ? 'bold' : 'normal',
+                    color: charCount > charLimit ? 'red' : 'gray'
+                }}
+                >
+                    {`${charCount}/${charLimit} characters`}
+                </div>
             </Form.Group>
 
 
@@ -144,7 +159,7 @@ export const ComposeNotice = ({ noticeText, setNoticeText, duration, setDuration
 
                 <Button
                     onClick={handleNotify}
-                    disabled={noticeText === '' || isAddingNotice || !isAnyTagSelected}
+                    disabled={noticeText === '' || isAddingNotice || !isAnyTagSelected || charCount > charLimit}
                     className='ms-auto user-profile__notify-btn'
                 >
                     {isAddingNotice ? <Loading /> : 'Notify'}
