@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Form, Accordion, Button } from 'react-bootstrap';
 import { NoticeTags } from './NoticeTags';
 import { Loading } from '../Loading/Loading';
+import { FaAngleDown } from "react-icons/fa6";
 
 export const ComposeNotice = ({ noticeText, setNoticeText, duration, setDuration, addNotice, isAddingNotice }) => {
 
@@ -46,24 +47,6 @@ export const ComposeNotice = ({ noticeText, setNoticeText, duration, setDuration
 
     const hours = Array.from({ length: 7 }, (_, i) => (i + 1) * 24);
 
-
-    // const tagCategories = [
-    //     {
-    //         name: 'STEM',
-    //         tags: ['Science', 'Technology', 'Engineering', 'Math'],
-    //         values: [false, false, false, false, false]
-    //     },
-    //     {
-    //         name: 'Humanities and Arts',
-    //         tags: ['Literature', 'History', 'Philosophy', 'Music'],
-    //         values: [false, false, false, false, false]
-    //     },
-    //     {
-    //         name: 'Social Sciences and Professions',
-    //         tags: ['Medicine', 'Economics', 'Law', 'Political Science', 'Other'],
-    //         values: [false, false, false, false, false]
-    //     }
-    // ];
 
     const handleTagSelect = (categoryName, tagIndex, isSelected) => {
         setTagCategories(prevCategories => prevCategories.map(category => {
@@ -114,7 +97,10 @@ export const ComposeNotice = ({ noticeText, setNoticeText, duration, setDuration
             >
                 {tagCategories.map((category, categoryIndex) => (
                     <Accordion.Item eventKey={categoryIndex} key={category.name}>
-                        <Accordion.Header>{category.name}</Accordion.Header>
+                        <Accordion.Header className='d-flex w-100'>
+                            <FaAngleDown size={20} className='me-3' />
+                            {category.name}
+                        </Accordion.Header>
                         <Accordion.Body className='d-flex justify-content-around w-100'>
                             {category.tags.map((tag, tagIndex) => (
                                 <NoticeTags

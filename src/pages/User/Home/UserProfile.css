@@ -17,20 +17,28 @@
     background-color: var(--main-accent-color) !important;
 }
 
-
-.user-profile__tags-accordion>div,
-.user-profile__tags-accordion>div>h2>button {
-    color: var(--main-text-color) !important;
+.user-profile__tags-accordion>div>h2>button,
+.user-profile__tags-accordion>div {
     background-color: var(--main-bg-color) !important;
-    box-shadow: none !important;
-    padding-inline: 10px !important;
-    padding-block: 5px !important;
+    color: var(--main-text-color) !important;
     border-radius: 0 !important;
+    box-shadow: none !important;
     border-inline: 1px;
+    transition: 0.3s;
+}
+
+.user-profile__tags-accordion>div>h2>button {
+    background-color: var(--main-bg-color) !important;
+    padding-inline: 5px !important;
+    padding-block: 10px !important;
 }
 
 .user-profile__tags-accordion>div>h2>button::after {
     display: none;
+}
+
+.user-profile__tags-accordion>div>h2>button:hover {
+    color: var(--main-accent-color) !important;
 }
 
 .user-profile__notice-tag {
@@ -40,6 +48,11 @@
     border-radius: 7px;
     background-color: transparent;
     cursor: pointer;
+    transition: 0.3s;
+}
+
+.user-profile__notice-tag:hover {
+    background-color: var(--main-accent-color-hover);
 }
 
 .user-profile__notice-tag.tagIsChecked {
