@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
-import { createNotice, getUserNotices, updateNotice, deleteNotice } from '../../lib/context/dbhandler';
+import { createNotice, getUserNotices, updateNotice, deleteNotice, getNoitceByTagname } from '../../lib/context/dbhandler';
 import { UserId } from '../../components/User/UserId.jsx';
 
 const useNotices = (googleUserData) => {
     const [user_id, setUserId] = useState(null);
     const [userNotices, setUserNotices] = useState([]);
+    const [feedNotices, setFeedNotices] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isAddingNotice, setIsAddingNotice] = useState(false);
     const [isRemovingNotice, setIsRemovingNotice] = useState(false);
@@ -50,9 +51,6 @@ const useNotices = (googleUserData) => {
         return () => clearInterval(checkExpiredNotices);
 
     }, [googleUserData]);
-
-
-
 
 
     const addNotice = async (text, duration, selectedTags) => {
@@ -128,6 +126,14 @@ const useNotices = (googleUserData) => {
 
     };
 
+    const getFeedNotices = async (tagname) => {
+        try {
+            const notices = await getNoitceByTagname(tagname);
+            return notices;
+        } catch (error) {
+            console.error('Error fetching feed notices:', error);
+        }
+    }
 
 
     return {
@@ -140,6 +146,7 @@ const useNotices = (googleUserData) => {
         addNotice,
         editNotice,
         removeNotice,
+        getFeedNotices,
         setRemovingNoticeId,
     };
 };

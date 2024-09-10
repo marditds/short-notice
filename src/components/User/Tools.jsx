@@ -18,6 +18,13 @@ export const Tools = ({ googleLogout, setIsLoggedIn, setGoogleUserData }) => {
                 />}>
                 <Dropdown.Item
                     as={Link}
+                    to='/user/feed'
+                    className='userhome__body--btn w-100'
+                >
+                    Feed
+                </Dropdown.Item>
+                <Dropdown.Item
+                    as={Link}
                     to='/user/profile'
                     className='userhome__body--btn w-100'
                 >

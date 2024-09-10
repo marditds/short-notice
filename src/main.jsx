@@ -17,6 +17,7 @@ import './index.css';
 import CreateUsername from './pages/CreateUsername/CreateUsername.jsx';
 import UserSettings from './pages/User/Settings/UserSettings.jsx';
 import UserProfile from './pages/User/Home/UserProfile.jsx';
+import UserFeed from './pages/User/Feed/UserFeed.jsx';
 
 const router = createBrowserRouter([
   {
@@ -40,7 +41,7 @@ const router = createBrowserRouter([
           const decoded = jwtDecode(accessToken);
           const user = await getUserByEmail(decoded.email);
           if (user && user.username) {
-            return redirect('/user/profile');
+            return redirect('/user/feed');
           }
 
           return null;
@@ -72,8 +73,12 @@ const router = createBrowserRouter([
             element: <UserSettings />,
           },
           {
+            path: 'feed',
+            element: <UserFeed />
+          },
+          {
             index: true,
-            element: <UserProfile />,
+            element: <UserFeed />,
           }
         ]
       }

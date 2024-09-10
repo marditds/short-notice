@@ -65,7 +65,7 @@ function App() {
     if (isLoggedIn && hasUsername) {
       const currentPath = window.location.pathname;
       if (currentPath === '/' || currentPath === '/user') {
-        navigate('/user/profile');
+        navigate('/user/feed');
       } else {
         navigate(currentPath);
       }

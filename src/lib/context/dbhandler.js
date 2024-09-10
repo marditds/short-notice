@@ -288,6 +288,23 @@ export const getUserNotices = async (user_id) => {
     }
 };
 
+export const getNoitceByTagname = async (tagname) => {
+    try {
+        const response = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_NOTICES_COLLECTION,
+            [
+                Query.equal(tagname, true),
+                Query.orderDesc('timestamp'),
+            ]
+        );
+        return response.documents;
+    } catch (error) {
+        console.error('Error fetching notices:', error);
+        return [];
+    }
+};
+
 export const updateNotice = async (noticeId, newText) => {
     try {
         const response = await databases.updateDocument(
