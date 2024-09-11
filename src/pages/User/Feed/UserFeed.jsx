@@ -42,7 +42,7 @@ const UserFeed = () => {
 
     const [selectedTags, setSelectedTags] = useState({});
 
-    const { getFeedNotices, isLoading } = useNotices();
+    const { getFeedNotices } = useNotices();
 
     useEffect(() => {
 
@@ -50,13 +50,19 @@ const UserFeed = () => {
 
             try {
 
+                console.log('Selected Tags:', selectedTags);
+
+                // const selectedTagKeys = Object.keys(selectedTags).filter(tag => selectedTags[tag]);
+
+                // console.log('selected Tag Keys:', selectedTagKeys);
+
                 const filteredNotices = await getFeedNotices(selectedTags);
 
+                console.log('Filtered notices:', filteredNotices);
 
                 setFeedNotices(filteredNotices);
 
-
-                console.log('Filtered notices:', filteredNotices);
+                console.log('Feed Notices:', feedNotices);
 
 
             } catch (error) {
@@ -74,21 +80,26 @@ const UserFeed = () => {
 
         console.log('Tag:', tag.key);
 
-        setSelectedTags(prevTags => {
-            const updatedTags = { ...prevTags };
-            if (updatedTags.hasOwnProperty(tag.key)) {
-                delete updatedTags[tag.key];
-            } else {
-                updatedTags[tag.key] = true;
-            }
-            return updatedTags;
-        });
+        setSelectedTags(prevTags => ({
+            ...prevTags,
+            [tag.key]: !prevTags[tag.key]
+        }));
+
+        // setSelectedTags(prevTags => {
+        //     const updatedTags = { ...prevTags };
+        //     if (updatedTags.hasOwnProperty(tag.key)) {
+        //         delete updatedTags[tag.key];
+        //     } else {
+        //         updatedTags[tag.key] = true;
+        //     }
+        //     return updatedTags;
+        // });
 
     };
 
-    if (isLoading) {
-        return <div><Loading />Loading your feed</div>;
-    }
+    // if (isLoading) {
+    //     return <div><Loading />Loading your feed</div>;
+    // }
 
     return (
         <div>

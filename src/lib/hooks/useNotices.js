@@ -125,18 +125,11 @@ const useNotices = (googleUserData) => {
 
     };
 
-    // const getFeedNotices = async () => {
-    //     try {
-    //         const notices = await getAllNoitces();
-    //         return notices;
-    //     } catch (error) {
-    //         console.error('Error fetching feed notices:', error);
-    //     }
-    // }
+
 
     const getFeedNotices = async (selectedTags) => {
         try {
-            console.log('selected tags', selectedTags);
+            // console.log('selected tags', selectedTags);
 
             const notices = await getFilteredNotices(selectedTags);
             return notices;

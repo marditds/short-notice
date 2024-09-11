@@ -322,23 +322,37 @@ export const getAllNoitces = async () => {
 
 export const getFilteredNotices = async (selectedTags) => {
     try {
-        const queries = [];
+        if (typeof selectedTags !== 'object' || selectedTags === null) {
+            throw new Error('selectedTags must be an object');
+        }
 
-        // Create queries based on selected tags that are true
-        Object.keys(selectedTags).forEach(tag => {
-            if (selectedTags[tag] === true) {
-                queries.push(Query.equal(tag, true));
-            }
-        });
+        const queryList = Object.keys(selectedTags)
+            .filter(tagKey => selectedTags[tagKey] === true)
+            .map(tagKey => Query.equal(tagKey, true));
 
-        // Fetch documents that match the selected tag conditions
-        const response = await databases.listDocuments(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_NOTICES_COLLECTION,
-            queries
-        );
+        let notices;
+        if (queryList.length === 0) {
+            notices = { documents: [] };
+        } else if (queryList.length === 1) {
+            notices = await databases.listDocuments(
+                import.meta.env.VITE_DATABASE,
+                import.meta.env.VITE_NOTICES_COLLECTION,
+                [queryList[0]]
+            );
+        } else {
+            notices = await databases.listDocuments(
+                import.meta.env.VITE_DATABASE,
+                import.meta.env.VITE_NOTICES_COLLECTION,
+                [
+                    Query.or(queryList),
+                    Query.orderDesc('timestamp')
+                ]
+            );
+        }
 
-        return response.documents;
+        return notices.documents;
+
+
     } catch (error) {
         console.error('Error fetching filtered notices:', error);
     }
