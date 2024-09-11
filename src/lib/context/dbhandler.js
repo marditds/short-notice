@@ -248,19 +248,19 @@ export const createNotice = async ({ user_id, text, timestamp, expiresAt, scienc
                 text,
                 timestamp,
                 expiresAt,
-                science,
-                technology,
-                engineering,
-                math,
-                literature,
-                history,
-                philosophy,
-                music,
-                medicine,
-                economics,
-                law,
-                polSci,
-                other
+                science: science || false,
+                technology: technology || false,
+                engineering: engineering || false,
+                math: math || false,
+                literature: literature || false,
+                history: history || false,
+                philosophy: philosophy || false,
+                music: music || false,
+                medicine: medicine || false,
+                economics: economics || false,
+                law: law || false,
+                polSci: polSci || false,
+                other: other || false
             }
         );
         console.log('Notice created succesfully:', response);
@@ -288,13 +288,13 @@ export const getUserNotices = async (user_id) => {
     }
 };
 
-export const getNoitceByTagname = async (tagname) => {
+export const getNoticeByTagname = async (tagnames) => {
     try {
         const response = await databases.listDocuments(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_NOTICES_COLLECTION,
             [
-                Query.equal(tagname, true),
+                Query.equal(tagnames, true),
                 Query.orderDesc('timestamp'),
             ]
         );
@@ -304,6 +304,46 @@ export const getNoitceByTagname = async (tagname) => {
         return [];
     }
 };
+
+export const getAllNoitces = async () => {
+    try {
+        const response = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_NOTICES_COLLECTION,
+            [
+                Query.orderDesc('timestamp')
+            ]
+        );
+        return response.documents;
+    } catch (error) {
+        console.error('Error fetching notices:', error);
+    }
+}
+
+export const getFilteredNotices = async (selectedTags) => {
+    try {
+        const queries = [];
+
+        // Create queries based on selected tags that are true
+        Object.keys(selectedTags).forEach(tag => {
+            if (selectedTags[tag] === true) {
+                queries.push(Query.equal(tag, true));
+            }
+        });
+
+        // Fetch documents that match the selected tag conditions
+        const response = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_NOTICES_COLLECTION,
+            queries
+        );
+
+        return response.documents;
+    } catch (error) {
+        console.error('Error fetching filtered notices:', error);
+    }
+};
+
 
 export const updateNotice = async (noticeId, newText) => {
     try {

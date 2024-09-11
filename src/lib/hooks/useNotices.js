@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react';
-import { createNotice, getUserNotices, updateNotice, deleteNotice, getNoitceByTagname } from '../../lib/context/dbhandler';
+import { createNotice, getUserNotices, updateNotice, deleteNotice, getNoticeByTagname, getAllNoitces, getFilteredNotices } from '../../lib/context/dbhandler';
 import { UserId } from '../../components/User/UserId.jsx';
 
 const useNotices = (googleUserData) => {
     const [user_id, setUserId] = useState(null);
     const [userNotices, setUserNotices] = useState([]);
-    const [feedNotices, setFeedNotices] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isAddingNotice, setIsAddingNotice] = useState(false);
     const [isRemovingNotice, setIsRemovingNotice] = useState(false);
@@ -66,19 +65,19 @@ const useNotices = (googleUserData) => {
                 timestamp: now.toISOString(),
                 expiresAt: expiresAt.toISOString(),
 
-                science: selectedTags['STEM-0'] || false,
-                technology: selectedTags['STEM-1'] || false,
-                engineering: selectedTags['STEM-2'] || false,
-                math: selectedTags['STEM-3'] || false,
-                literature: selectedTags['Humanities and Arts-0'] || false,
-                history: selectedTags['Humanities and Arts-1'] || false,
-                philosophy: selectedTags['Humanities and Arts-2'] || false,
-                music: selectedTags['Humanities and Arts-3'] || false,
-                medicine: selectedTags['Social Sciences and Professions-0'] || false,
-                economics: selectedTags['Social Sciences and Professions-1'] || false,
-                law: selectedTags['Social Sciences and Professions-2'] || false,
-                polSci: selectedTags['Social Sciences and Professions-3'] || false,
-                other: selectedTags['Social Sciences and Professions-4'] || false,
+                science: selectedTags['science'] || false,
+                technology: selectedTags['technology'] || false,
+                engineering: selectedTags['engineering'] || false,
+                math: selectedTags['math'] || false,
+                literature: selectedTags['literature'] || false,
+                history: selectedTags['history'] || false,
+                philosophy: selectedTags['philosophy'] || false,
+                music: selectedTags['music'] || false,
+                medicine: selectedTags['medicine'] || false,
+                economics: selectedTags['economics'] || false,
+                law: selectedTags['law'] || false,
+                polSci: selectedTags['polSci'] || false,
+                other: selectedTags['other'] || false,
             };
 
             setIsAddingNotice(true);
@@ -126,14 +125,25 @@ const useNotices = (googleUserData) => {
 
     };
 
-    const getFeedNotices = async (tagname) => {
+    // const getFeedNotices = async () => {
+    //     try {
+    //         const notices = await getAllNoitces();
+    //         return notices;
+    //     } catch (error) {
+    //         console.error('Error fetching feed notices:', error);
+    //     }
+    // }
+
+    const getFeedNotices = async (selectedTags) => {
         try {
-            const notices = await getNoitceByTagname(tagname);
+            console.log('selected tags', selectedTags);
+
+            const notices = await getFilteredNotices(selectedTags);
             return notices;
         } catch (error) {
-            console.error('Error fetching feed notices:', error);
+            console.error('Error fetching filtered notices:', error);
         }
-    }
+    };
 
 
     return {

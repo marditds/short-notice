@@ -8,18 +8,34 @@ export const ComposeNotice = ({ noticeText, setNoticeText, duration, setDuration
 
     const [tagCategories, setTagCategories] = useState([
         {
-            name: 'STEM',
-            tags: ['Science', 'Technology', 'Engineering', 'Math'],
+            group: 'STEM',
+            tags: [
+                { name: 'Science', key: 'science' },
+                { name: 'Technology', key: 'technology' },
+                { name: 'Engineering', key: 'engineering' },
+                { name: 'Math', key: 'math' }
+            ],
             values: [false, false, false, false]
         },
         {
-            name: 'Humanities and Arts',
-            tags: ['Literature', 'History', 'Philosophy', 'Music'],
+            group: 'Humanities and Arts',
+            tags: [
+                { name: 'Literature', key: 'literature' },
+                { name: 'History', key: 'history' },
+                { name: 'Philosophy', key: 'philosophy' },
+                { name: 'Music', key: 'music' }
+            ],
             values: [false, false, false, false]
         },
         {
-            name: 'Social Sciences and Professions',
-            tags: ['Medicine', 'Economics', 'Law', 'Political Science', 'Other'],
+            group: 'Social Sciences and Professions',
+            tags: [
+                { name: 'Medicine', key: 'medicine' },
+                { name: 'Economics', key: 'economics' },
+                { name: 'Law', key: 'law' },
+                { name: 'Political Science', key: 'polSci' },
+                { name: 'Other', key: 'other' }
+            ],
             values: [false, false, false, false, false]
         }
     ]);
@@ -29,12 +45,8 @@ export const ComposeNotice = ({ noticeText, setNoticeText, duration, setDuration
     const charLimit = 300;
 
     const onTextareaChange = (e) => {
-        // const inputValue = e.target.value;
-
-        // if (inputValue.length <= charLimit) {
         setNoticeText(e.target.value);
         setCharCount(e.target.value.length);
-        // }
     }
 
     const handleNotify = async () => {
@@ -55,9 +67,9 @@ export const ComposeNotice = ({ noticeText, setNoticeText, duration, setDuration
     const hours = Array.from({ length: 7 }, (_, i) => (i + 1) * 24);
 
 
-    const handleTagSelect = (categoryName, tagIndex, isSelected) => {
+    const handleTagSelect = (categoryGroup, tagIndex, tag, isSelected) => {
         setTagCategories(prevCategories => prevCategories.map(category => {
-            if (category.name === categoryName) {
+            if (category.group === categoryGroup) {
                 const newValues = [...category.values];
                 newValues[tagIndex] = !isSelected;
                 return { ...category, values: newValues };
@@ -65,10 +77,16 @@ export const ComposeNotice = ({ noticeText, setNoticeText, duration, setDuration
             return category;
         }));
 
-        setSelectedTags(prev => ({
-            ...prev,
-            [`${categoryName}-${tagIndex}`]: !isSelected
-        }));
+        setSelectedTags(prev => {
+            const updatedTags = { ...prev };
+
+            if (updatedTags[tag.key]) {
+                delete updatedTags[tag.key];
+            } else {
+                updatedTags[tag.key] = true;
+            }
+            return updatedTags;
+        });
     };
 
     const isAnyTagSelected = Object.values(selectedTags).some(Boolean);
@@ -103,7 +121,13 @@ export const ComposeNotice = ({ noticeText, setNoticeText, duration, setDuration
                 Add tags: <span className='small' style={{ color: 'gray' }}>At least 1 required.</span>
             </h6>
 
-            <Accordion
+            <NoticeTags
+                tagCategories={tagCategories}
+                handleTagSelect={handleTagSelect}
+                selectedTags={selectedTags}
+            />
+
+            {/* <Accordion
                 defaultActiveKey={['0']}
                 className='user-profile__tags-accordion'
             >
@@ -127,7 +151,7 @@ export const ComposeNotice = ({ noticeText, setNoticeText, duration, setDuration
                         </Accordion.Body>
                     </Accordion.Item>
                 ))}
-            </Accordion>
+            </Accordion> */}
 
 
             <br />
