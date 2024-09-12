@@ -34,7 +34,7 @@ export const ComposeNotice = ({ noticeText, setNoticeText, duration, setDuration
                 { name: 'Economics', key: 'economics' },
                 { name: 'Law', key: 'law' },
                 { name: 'Political Science', key: 'polSci' },
-                { name: 'Other', key: 'other' }
+                { name: 'Sports', key: 'sports' }
             ],
             values: [false, false, false, false, false]
         }

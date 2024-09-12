@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import useNotices from '../../../lib/hooks/useNotices';
 import { NoticeTags } from '../../../components/User/NoticeTags';
+import { Notices } from '../../../components/User/Notices';
 import { Loading } from '../../../components/Loading/Loading';
 
 const UserFeed = () => {
@@ -34,7 +35,7 @@ const UserFeed = () => {
                 { name: 'Economics', key: 'economics' },
                 { name: 'Law', key: 'law' },
                 { name: 'Political Science', key: 'polSci' },
-                { name: 'Other', key: 'other' }
+                { name: 'Sports', key: 'sports' }
             ],
             values: [false, false, false, false, false]
         }
@@ -113,8 +114,9 @@ const UserFeed = () => {
                 selectedTags={selectedTags}
             />
 
+            <Notices notices={feedNotices} />
 
-            {feedNotices.length > 0 ? (
+            {/* {feedNotices.length > 0 ? (
                 <ul>
                     {feedNotices.map((notice) => (
                         <li key={notice.$id}>{notice.text}</li>
@@ -122,7 +124,8 @@ const UserFeed = () => {
                 </ul>
             ) : (
                 <p>No notices found for the selected tag.</p>
-            )}
+            )} */}
+
         </div>
     )
 }

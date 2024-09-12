@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useUserContext } from '../../../lib/context/UserContext';
 import { Row, Col, Form, Button } from 'react-bootstrap';
 import useUserInfo from '../../../lib/hooks/useUserInfo';
@@ -67,7 +67,7 @@ export const Info = () => {
                             style={{ maxWidth: '320px' }}
                             className='settings__username-field'
                         />
-                        <Form.Text className='text-muted'>
+                        <Form.Text className='settings__username-unique'>
                             Your userame must be unique.
                         </Form.Text>
                     </Form.Group>

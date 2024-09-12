@@ -3,6 +3,7 @@ import { Loading } from '../../../components/Loading/Loading.jsx'
 import { Avatar } from '../../../components/User/Settings/Avatar.jsx';
 import { Info } from '../../../components/User/Settings/Info.jsx';
 import { Visibility } from '../../../components/User/Settings/Visibility.jsx';
+import { Interests } from '../../../components/User/Settings/Interests.jsx';
 import { Stack, Container } from 'react-bootstrap';
 import { DeleteAccount } from '../../../components/User/Settings/DeleteAccount.jsx';
 import './UserSettings.css';
@@ -27,6 +28,8 @@ const UserSettings = () => {
                 <Avatar />
 
                 <Info />
+
+                <Interests />
 
                 <Visibility />
 

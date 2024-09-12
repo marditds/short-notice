@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { formatDateToLocal, calculateCountdown } from '../../lib/utils/dateUtils';
 import { CgTrash } from "react-icons/cg";
 import { AiFillEdit } from "react-icons/ai";
@@ -8,6 +9,8 @@ import { Loading } from '../Loading/Loading';
 
 
 export const Notices = ({ notices, handleEditNotice, handleDeleteNotice }) => {
+
+    const location = useLocation();
 
     const [countdowns, setCountdowns] = useState([]);
 
@@ -34,20 +37,24 @@ export const Notices = ({ notices, handleEditNotice, handleDeleteNotice }) => {
                     <p className='d-flex w-100 mb-0'>
                         {notice.text}
 
+                        {location.pathname === '/user/profile' && <>
+                            <Button
+                                className='ms-auto notice__edit-btn'
+                                onClick={() => handleEditNotice(notice.$id, notice.text)}
+                            >
+                                <AiFillEdit size={20} />
+                            </Button>
+                            <Button
+                                className='ms-2 notice__delete-btn'
+                                onClick={() => handleDeleteNotice(notice.$id)}
+                            >
+                                <CgTrash size={20} />
 
-                        <Button
-                            className='ms-auto notice__edit-btn'
-                            onClick={() => handleEditNotice(notice.$id, notice.text)}
-                        >
-                            <AiFillEdit size={20} />
-                        </Button>
-                        <Button
-                            className='ms-2 notice__delete-btn'
-                            onClick={() => handleDeleteNotice(notice.$id)}
-                        >
-                            <CgTrash size={20} />
+                            </Button>
+                        </>
 
-                        </Button>
+                        }
+
                     </p>
 
                     <div className='d-flex'>
@@ -67,6 +74,7 @@ export const Notices = ({ notices, handleEditNotice, handleDeleteNotice }) => {
                         </small>
 
                     </div>
+
                 </div>
             ))}
         </>

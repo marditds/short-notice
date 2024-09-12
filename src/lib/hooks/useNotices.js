@@ -77,7 +77,7 @@ const useNotices = (googleUserData) => {
                 economics: selectedTags['economics'] || false,
                 law: selectedTags['law'] || false,
                 polSci: selectedTags['polSci'] || false,
-                other: selectedTags['other'] || false,
+                sports: selectedTags['sports'] || false,
             };
 
             setIsAddingNotice(true);

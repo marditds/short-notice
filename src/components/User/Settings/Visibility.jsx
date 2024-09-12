@@ -26,7 +26,7 @@ export const Visibility = () => {
                         label="Switch to private"
                         disabled
                     />
-                    <Form.Text>
+                    <Form.Text className='settings__username-switch'>
                         Feature currently unavailable.
                     </Form.Text>
                 </Form>
