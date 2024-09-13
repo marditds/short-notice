@@ -31,11 +31,6 @@
 
 }
 
-.settings__username-unique,
-.settings__username-switch {
-    color: var(--main-text-muted) !important;
-}
-
 @keyframes extra-text {
     0% {
         color: red;

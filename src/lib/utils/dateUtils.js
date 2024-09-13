@@ -18,7 +18,7 @@ export const calculateCountdown = (expiresAt) => {
     const difference = expiryTime - currentTime;
 
     if (difference <= 0) {
-        return "Expired";
+        return "Expiring soon";
     }
 
     const hours = Math.floor(difference / (1000 * 60 * 60));

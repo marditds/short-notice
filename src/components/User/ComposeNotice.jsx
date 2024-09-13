@@ -64,7 +64,8 @@ export const ComposeNotice = ({ noticeText, setNoticeText, duration, setDuration
         }
     };
 
-    const hours = Array.from({ length: 7 }, (_, i) => (i + 1) * 24);
+    // const hours = Array.from({ length: 7 }, (_, i) => (i + 1) * 24);
+    const hours = [3, 5, 10, 15, 20]
 
 
     const handleTagSelect = (categoryGroup, tagIndex, tag, isSelected) => {
@@ -126,33 +127,6 @@ export const ComposeNotice = ({ noticeText, setNoticeText, duration, setDuration
                 handleTagSelect={handleTagSelect}
                 selectedTags={selectedTags}
             />
-
-            {/* <Accordion
-                defaultActiveKey={['0']}
-                className='user-profile__tags-accordion'
-            >
-                {tagCategories.map((category, categoryIndex) => (
-                    <Accordion.Item eventKey={categoryIndex} key={category.name}>
-                        <Accordion.Header className='d-flex w-100'>
-                            <FaAngleDown size={20} className='me-3' />
-                            {category.name}
-                        </Accordion.Header>
-                        <Accordion.Body className='d-flex justify-content-around w-100'>
-                            {category.tags.map((tag, tagIndex) => (
-                                <NoticeTags
-                                    key={tag}
-                                    label={tag}
-                                    name={`tag${categoryIndex + 1}-${tagIndex}`}
-                                    onSelect={(isSelected) => handleTagSelect(category.name, tagIndex, isSelected)}
-                                    isChecked={category.values[tagIndex] || false}
-
-                                />
-                            ))}
-                        </Accordion.Body>
-                    </Accordion.Item>
-                ))}
-            </Accordion> */}
-
 
             <br />
 

@@ -1,14 +1,17 @@
 .settings__delete-avatar-btn,
 .settings__update-username-btn,
+.settings__update-interests-btn,
 .settings__delete-avatar-btn:focus,
-.settings__update-username-btn:focus {
+.settings__update-username-btn:focus,
+.settings__update-interests-btn:focus {
     background-color: var(--main-accent-color) !important;
     color: black !important;
     border: none;
 }
 
 .settings__delete-avatar-btn:hover,
-.settings__update-username-btn:hover {
+.settings__update-username-btn:hover,
+.settings__update-interests-btn:hover {
     background-color: var(--main-accent-color-hover) !important;
     color: black !important;
 }
@@ -27,6 +30,11 @@
 
 .settings__username-field::selection {
     background-color: var(--main-accent-color) !important;
+}
+
+.settings__username-unique,
+.settings__username-switch {
+    color: var(--main-text-muted) !important;
 }
 
 .settings__delete-account-btn,

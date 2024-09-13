@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { createNotice, getUserNotices, updateNotice, deleteNotice, getNoticeByTagname, getAllNoitces, getFilteredNotices } from '../../lib/context/dbhandler';
+import { createNotice, getUserNotices, updateNotice, deleteNotice, getNoticeByTagname, getAllNoitces, getFilteredNotices, updateUserInterests } from '../../lib/context/dbhandler';
 import { UserId } from '../../components/User/UserId.jsx';
 
 const useNotices = (googleUserData) => {
@@ -57,7 +57,7 @@ const useNotices = (googleUserData) => {
         if (user_id) {
 
             const now = new Date();
-            const expiresAt = new Date(now.getTime() + duration * 3600000);
+            const expiresAt = new Date(now.getTime() + duration * 6000);
 
             const newNotice = {
                 user_id: user_id,
@@ -125,8 +125,6 @@ const useNotices = (googleUserData) => {
 
     };
 
-
-
     const getFeedNotices = async (selectedTags) => {
         try {
             // console.log('selected tags', selectedTags);
@@ -137,6 +135,16 @@ const useNotices = (googleUserData) => {
             console.error('Error fetching filtered notices:', error);
         }
     };
+
+    const updateInterests = async (user_id, selectedTags) => {
+        try {
+            const interests = await updateUserInterests(user_id, selectedTags);
+            return interests;
+        } catch (error) {
+            console.error('Error updating user interests:', error);
+
+        }
+    }
 
 
     return {
@@ -151,6 +159,7 @@ const useNotices = (googleUserData) => {
         removeNotice,
         getFeedNotices,
         setRemovingNoticeId,
+        updateInterests
     };
 };
 

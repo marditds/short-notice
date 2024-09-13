@@ -270,7 +270,6 @@ export const createNotice = async ({ user_id, text, timestamp, expiresAt, scienc
     }
 };
 
-
 export const getUserNotices = async (user_id) => {
     try {
         const response = await databases.listDocuments(
@@ -358,7 +357,6 @@ export const getFilteredNotices = async (selectedTags) => {
     }
 };
 
-
 export const updateNotice = async (noticeId, newText) => {
     try {
         const response = await databases.updateDocument(
@@ -411,6 +409,68 @@ export const deleteAllNotices = async (userId) => {
         throw error;
     }
 }
+
+export const getInterests = async (userId, science, technology, engineering, math, literature, history, philosophy, music, medicine, economics, law, polSci, sports) => {
+    try {
+        const response = await databases.updateDocument(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_NOTICES_COLLECTION,
+            userId,
+            {
+                science: science || false,
+                technology: technology || false,
+                engineering: engineering || false,
+                math: math || false,
+                literature: literature || false,
+                history: history || false,
+                philosophy: philosophy || false,
+                music: music || false,
+                medicine: medicine || false,
+                economics: economics || false,
+                law: law || false,
+                polSci: polSci || false,
+                sports: sports || false
+            }
+        );
+        return response.documents;
+    } catch (error) {
+        console.error('Error updating the interests:', error);
+    }
+}
+
+export const updateUserInterests = async (userId, selectedTags) => {
+    try {
+        const interestsData = {
+            science: selectedTags.science || false,
+            technology: selectedTags.technology || false,
+            engineering: selectedTags.engineering || false,
+            math: selectedTags.math || false,
+            literature: selectedTags.literature || false,
+            history: selectedTags.history || false,
+            philosophy: selectedTags.philosophy || false,
+            music: selectedTags.music || false,
+            medicine: selectedTags.medicine || false,
+            economics: selectedTags.economics || false,
+            law: selectedTags.law || false,
+            polSci: selectedTags.polSci || false,
+            sports: selectedTags.sports || false
+        };
+
+        const response = await databases.updateDocument(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_INTERESTS_COLLECTION,
+            userId,
+            interestsData
+        );
+
+        console.log('Interests updated successfully:', response);
+        return response;
+    } catch (error) {
+        console.error('Error updating user interests:', error);
+        throw error;
+    }
+};
+
 
 export const account = new Account(client);
 export { ID } from 'appwrite';
