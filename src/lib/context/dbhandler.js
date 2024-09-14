@@ -456,12 +456,29 @@ export const updateUserInterests = async (userId, selectedTags) => {
             sports: selectedTags.sports || false
         };
 
-        const response = await databases.updateDocument(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_INTERESTS_COLLECTION,
-            userId,
-            interestsData
-        );
+        let response;
+
+        try {
+            response = await databases.updateDocument(
+                import.meta.env.VITE_DATABASE,
+                import.meta.env.VITE_INTERESTS_COLLECTION,
+                userId,
+                interestsData
+            );
+        } catch (updateError) {
+            if (updateError.code === 404) {
+                // If the document doesn't exist, create it
+                response = await databases.createDocument(
+                    import.meta.env.VITE_DATABASE,
+                    import.meta.env.VITE_INTERESTS_COLLECTION,
+                    userId,
+                    interestsData
+                );
+            } else {
+                throw updateError;
+            }
+        }
+
 
         console.log('Interests updated successfully:', response);
         return response;

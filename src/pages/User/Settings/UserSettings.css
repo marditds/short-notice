@@ -37,6 +37,14 @@
     color: var(--main-text-muted) !important;
 }
 
+.settings__update-interests-tag-col {
+    max-width: 500px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 10px
+}
+
 .settings__update-interests-tag {
     padding: 5px 10px;
     border: 1px solid;
@@ -54,6 +62,10 @@
 .settings__update-interests-tag.tagIsChecked {
     background-color: var(--main-accent-color);
     color: black
+}
+
+.settings__update-interests-btn {
+    max-width: fit-content;
 }
 
 .settings__delete-account-btn,

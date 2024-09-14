@@ -50,8 +50,8 @@ export const Interests = () => {
     const handleUpdateInterests = async () => {
         if (user_id) {
             try {
-                await updateInterests(user_id, selectedTags); // Send selectedTags to update in Appwrite
-                console.log('Interests updated:', selectedTags);
+                const interests = await updateInterests(user_id, selectedTags); // Send selectedTags to update in Appwrite
+                console.log('Interests updated:', interests);
             } catch (error) {
                 console.error('Error updating interests:', error);
             }
@@ -71,34 +71,19 @@ export const Interests = () => {
 
                 <div className='d-grid'>
                     <div
-                        className='mb-3'
-                    // style={{
-                    //     maxWidth: '500px',
-                    //     display: 'flex',
-                    //     flexWrap: 'wrap',
-                    //     gap: '10px'
-                    // }}
+                        className='mb-1'
                     >
                         {
                             tagCategories.map((category, idx) => (
-                                <div key={idx}
-                                    style={{
-                                        maxWidth: '500px',
-                                        display: 'flex',
-                                        flexWrap: 'wrap',
-                                        gap: '10px',
-                                        margin: '10px'
-                                    }}>
+                                <div
+                                    key={idx}
+                                    className='settings__update-interests-tag-col' >
                                     {
                                         category.tags.map((tag, index) => (
                                             <div
                                                 key={tag.key}
                                                 onClick={() => toggleTag(tag.key)}
-                                                // style={{
-                                                // backgroundColor: selectedTags[tag.key] ? 'var(--main-accent-color)' : 'transparent',
-                                                // color: selectedTags[tag.key] ? 'black' : 'white',
 
-                                                // }}
                                                 className={`settings__update-interests-tag ${selectedTags[tag.key] && 'tagIsChecked'}`}
                                             >
                                                 {tag.name}
