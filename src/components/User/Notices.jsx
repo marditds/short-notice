@@ -4,11 +4,12 @@ import { formatDateToLocal, calculateCountdown } from '../../lib/utils/dateUtils
 import { CgTrash } from "react-icons/cg";
 import { AiFillEdit } from "react-icons/ai";
 import { Button } from 'react-bootstrap';
+import defaultAvatar from '../../assets/default.png';
 import { Loading } from '../Loading/Loading';
 
 
 
-export const Notices = ({ notices, handleEditNotice, handleDeleteNotice }) => {
+export const Notices = ({ notices, handleEditNotice, handleDeleteNotice, avatarUrl, username }) => {
 
     const location = useLocation();
 
@@ -60,6 +61,11 @@ export const Notices = ({ notices, handleEditNotice, handleDeleteNotice }) => {
                     <div className='d-flex'>
 
                         <small className='me-auto'>
+
+                            <img src={avatarUrl ? avatarUrl : defaultAvatar} alt="Profile" style={{ borderRadius: '50%', width: 100, height: 100 }} />
+
+                            <p className='my-0 text-center'>{username}</p>
+
                             <span
                                 style={{ color: 'gray' }}
                             >

@@ -57,7 +57,7 @@ const useNotices = (googleUserData) => {
         if (user_id) {
 
             const now = new Date();
-            const expiresAt = new Date(now.getTime() + duration * 6000);
+            const expiresAt = new Date(now.getTime() + duration * 3600000);
 
             const newNotice = {
                 user_id: user_id,

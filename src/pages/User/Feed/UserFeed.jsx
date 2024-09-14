@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import { useUserContext } from '../../../lib/context/UserContext';
 import useNotices from '../../../lib/hooks/useNotices';
+import useUserInfo from '../../../lib/hooks/useUserInfo';
+import useUserAvatar from '../../../lib/hooks/useUserAvatar';
 import { NoticeTags } from '../../../components/User/NoticeTags';
 import { Notices } from '../../../components/User/Notices';
 import { Loading } from '../../../components/Loading/Loading';
@@ -42,20 +45,59 @@ const UserFeed = () => {
     ]);
 
     const [selectedTags, setSelectedTags] = useState({});
+    const { googleUserData, username } = useUserContext();
+    const { user_id, getInterests, getFeedNotices } = useNotices(googleUserData);
 
-    const { getFeedNotices } = useNotices();
+    const { getUserData } = useUserInfo(googleUserData);
+
+    const { avatarUrl } = useUserAvatar(user_id);
+
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
+        const fetchUserInterests = async () => {
+            if (user_id) {
+                try {
+                    const userInterests = await getInterests(user_id);
+
+                    console.log('these are user interests:', userInterests);
+
+                    if (userInterests) {
+                        const newSelectedTags = {};
+                        tagCategories.forEach(category => {
+                            category.tags.forEach(tag => {
+                                newSelectedTags[tag.key] = userInterests[tag.key] || false;
+                            });
+                        });
+                        setSelectedTags(newSelectedTags);
+                    }
+                } catch (error) {
+                    console.error('Error fetching user interests:', error);
+                    if (error.code === 404) {
+                        const newSelectedTags = {};
+                        tagCategories.forEach(category => {
+                            category.tags.forEach(tag => {
+                                newSelectedTags[tag.key] = false;
+                            });
+                        });
+                        setSelectedTags(newSelectedTags);
+                    }
+                }
+            }
+        };
+
+        fetchUserInterests();
+    }, [user_id, tagCategories]);
+
+    useEffect(() => {
+
+        setIsLoading(true);
 
         const fetchFeedNotices = async () => {
 
             try {
 
                 console.log('Selected Tags:', selectedTags);
-
-                // const selectedTagKeys = Object.keys(selectedTags).filter(tag => selectedTags[tag]);
-
-                // console.log('selected Tag Keys:', selectedTagKeys);
 
                 const filteredNotices = await getFeedNotices(selectedTags);
 
@@ -68,6 +110,8 @@ const UserFeed = () => {
 
             } catch (error) {
                 console.error('Error fetching feed notices:', error);
+            } finally {
+                setIsLoading(false);
             }
 
         };
@@ -75,6 +119,23 @@ const UserFeed = () => {
         fetchFeedNotices();
 
     }, [selectedTags])
+
+    useEffect(() => {
+
+        const fetchUserData = async () => {
+            try {
+                const userData = await getUserData(user_id);
+                console.log('This is user data', userData);
+
+            } catch (error) {
+                console.error('Error getting user data', error);
+
+            }
+        };
+
+        fetchUserData();
+
+    }, [googleUserData])
 
 
     const handleTagSelect = (categoryName, tagIndex, tag, isSelected) => {
@@ -86,21 +147,8 @@ const UserFeed = () => {
             [tag.key]: !prevTags[tag.key]
         }));
 
-        // setSelectedTags(prevTags => {
-        //     const updatedTags = { ...prevTags };
-        //     if (updatedTags.hasOwnProperty(tag.key)) {
-        //         delete updatedTags[tag.key];
-        //     } else {
-        //         updatedTags[tag.key] = true;
-        //     }
-        //     return updatedTags;
-        // });
-
     };
 
-    // if (isLoading) {
-    //     return <div><Loading />Loading your feed</div>;
-    // }
 
     return (
         <div>
@@ -114,18 +162,16 @@ const UserFeed = () => {
                 selectedTags={selectedTags}
             />
 
-            <Notices notices={feedNotices} />
-
-            {/* {feedNotices.length > 0 ? (
-                <ul>
-                    {feedNotices.map((notice) => (
-                        <li key={notice.$id}>{notice.text}</li>
-                    ))}
-                </ul>
-            ) : (
-                <p>No notices found for the selected tag.</p>
-            )} */}
-
+            {
+                isLoading ?
+                    <Loading size={24} />
+                    :
+                    <Notices
+                        notices={feedNotices}
+                        username={username}
+                        avatarUrl={avatarUrl}
+                    />
+            }
         </div>
     )
 }

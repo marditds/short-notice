@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Row, Col, Button } from 'react-bootstrap';
 import { useUserContext } from '../../../lib/context/UserContext';
 import useNotices from '../../../lib/hooks/useNotices';
+import { Loading } from '../../Loading/Loading';
 
 export const Interests = () => {
 
@@ -39,6 +40,7 @@ export const Interests = () => {
     const [selectedTags, setSelectedTags] = useState({});
     const { googleUserData } = useUserContext();
     const { user_id, updateInterests, getInterests } = useNotices(googleUserData);
+    const [isUpdating, setIsUpdating] = useState(false);
 
     useEffect(() => {
         const fetchUserInterests = async () => {
@@ -81,12 +83,17 @@ export const Interests = () => {
     };
 
     const handleUpdateInterests = async () => {
+
+        setIsUpdating(true);
+
         if (user_id) {
             try {
                 const interests = await updateInterests(user_id, selectedTags);
                 console.log('Interests updated:', interests);
             } catch (error) {
                 console.error('Error updating interests:', error);
+            } finally {
+                setIsUpdating(false);
             }
         } else {
             console.error('User ID not found');
@@ -133,7 +140,7 @@ export const Interests = () => {
                         onClick={handleUpdateInterests}
                         className='settings__update-interests-btn'
                     >
-                        Update Interests
+                        {isUpdating ? <Loading /> : 'Update Interests'}
                     </Button>
                 </div>
             </Col>
