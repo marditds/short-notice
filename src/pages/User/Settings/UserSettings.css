@@ -37,6 +37,25 @@
     color: var(--main-text-muted) !important;
 }
 
+.settings__update-interests-tag {
+    padding: 5px 10px;
+    border: 1px solid;
+    border-radius: 5px;
+    border-color: var(--main-accent-color);
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.settings__update-interests-tag:hover {
+    border-color: var(--main-accent-color-hover);
+    background-color: var(--main-accent-color-hover);
+}
+
+.settings__update-interests-tag.tagIsChecked {
+    background-color: var(--main-accent-color);
+    color: black
+}
+
 .settings__delete-account-btn,
 .settings__delete-account-btn:focus {
     background-color: var(--main-caution-color) !important;

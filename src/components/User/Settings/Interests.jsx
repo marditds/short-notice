@@ -94,14 +94,12 @@ export const Interests = () => {
                                             <div
                                                 key={tag.key}
                                                 onClick={() => toggleTag(tag.key)}
-                                                style={{
-                                                    padding: '5px 10px',
-                                                    backgroundColor: selectedTags[tag.key] ? 'var(--main-accent-color)' : 'black',
-                                                    border: '1px solid',
-                                                    borderRadius: '5px',
-                                                    borderColor: 'var(--main-accent-color)',
-                                                    cursor: 'pointer'
-                                                }}
+                                                // style={{
+                                                // backgroundColor: selectedTags[tag.key] ? 'var(--main-accent-color)' : 'transparent',
+                                                // color: selectedTags[tag.key] ? 'black' : 'white',
+
+                                                // }}
+                                                className={`settings__update-interests-tag ${selectedTags[tag.key] && 'tagIsChecked'}`}
                                             >
                                                 {tag.name}
                                             </div>
