@@ -410,31 +410,16 @@ export const deleteAllNotices = async (userId) => {
     }
 }
 
-export const getInterests = async (userId, science, technology, engineering, math, literature, history, philosophy, music, medicine, economics, law, polSci, sports) => {
+export const getUserInterests = async (userId) => {
     try {
-        const response = await databases.updateDocument(
+        const response = await databases.getDocument(
             import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_NOTICES_COLLECTION,
-            userId,
-            {
-                science: science || false,
-                technology: technology || false,
-                engineering: engineering || false,
-                math: math || false,
-                literature: literature || false,
-                history: history || false,
-                philosophy: philosophy || false,
-                music: music || false,
-                medicine: medicine || false,
-                economics: economics || false,
-                law: law || false,
-                polSci: polSci || false,
-                sports: sports || false
-            }
+            import.meta.env.VITE_INTERESTS_COLLECTION,
+            userId
         );
-        return response.documents;
+        return response;
     } catch (error) {
-        console.error('Error updating the interests:', error);
+        console.error('Error fetching user interests:', error);
     }
 }
 
@@ -467,7 +452,6 @@ export const updateUserInterests = async (userId, selectedTags) => {
             );
         } catch (updateError) {
             if (updateError.code === 404) {
-                // If the document doesn't exist, create it
                 response = await databases.createDocument(
                     import.meta.env.VITE_DATABASE,
                     import.meta.env.VITE_INTERESTS_COLLECTION,
@@ -479,7 +463,6 @@ export const updateUserInterests = async (userId, selectedTags) => {
             }
         }
 
-
         console.log('Interests updated successfully:', response);
         return response;
     } catch (error) {
@@ -487,6 +470,7 @@ export const updateUserInterests = async (userId, selectedTags) => {
         throw error;
     }
 };
+
 
 
 export const account = new Account(client);

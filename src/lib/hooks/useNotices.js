@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { createNotice, getUserNotices, updateNotice, deleteNotice, getNoticeByTagname, getAllNoitces, getFilteredNotices, updateUserInterests } from '../../lib/context/dbhandler';
+import { createNotice, getUserNotices, updateNotice, deleteNotice, getFilteredNotices, updateUserInterests, getUserInterests } from '../../lib/context/dbhandler';
 import { UserId } from '../../components/User/UserId.jsx';
 
 const useNotices = (googleUserData) => {
@@ -146,6 +146,15 @@ const useNotices = (googleUserData) => {
         }
     }
 
+    const getInterests = async (user_id) => {
+        try {
+            const interests = await getUserInterests(user_id);
+            return interests;
+        } catch (error) {
+            console.error('Error gettin user interests:', error);
+        }
+    }
+
 
     return {
         user_id,
@@ -158,6 +167,7 @@ const useNotices = (googleUserData) => {
         editNotice,
         removeNotice,
         getFeedNotices,
+        getInterests,
         setRemovingNoticeId,
         updateInterests
     };
