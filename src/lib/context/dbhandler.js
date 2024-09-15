@@ -87,17 +87,17 @@ export const deleteAvatarFromDoc = async (userId) => {
     }
 }
 
-export const getUserDocument = async (userId) => {
+export const getUsersDocument = async () => {
     try {
-        const response = await databases.getDocument(
+        const response = await databases.listDocuments(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_USERS_COLLECTION,
-            userId
+            // userId
         );
-        console.log('User document:', response);
+        // console.log('Users documents:', response);
         return response;
     } catch (error) {
-        console.error('Error fetching user document:', error);
+        console.error('Error fetching users documents:', error);
         throw error;
     }
 };

@@ -13,16 +13,16 @@ const User = () => {
 
 
     if (isLoading) {
-        console.log('User.jsx - Rendering loading state');
+        // console.log('Rendering loading state');
         return <Loading />;
     }
 
     if (!isLoading && (!username || !googleUserData)) {
-        console.log('User.jsx - Redirecting to home due to missing data');
+        // console.log('Redirecting to home due to missing data');
         return <Navigate to="/" />;
     }
 
-    console.log('User.jsx - Rendering User component');
+    // console.log('Rendering User component');
     return (
         <Container className='userhome__body'>
             <Tools

@@ -37,27 +37,27 @@ function App() {
 
   const checkUsernameInDatabase = async (email) => {
 
-    console.log('checkUsernameInDatabase 1:', username);
+    // console.log('checkUsernameInDatabase 1:', username);
 
     try {
       const user = await getUserByEmail(email);
 
       if (user && user.username) {
 
-        console.log('checkUsernameInDatabase 2:', user.username);
+        // console.log('checkUsernameInDatabase 2:', user.username);
 
         setUsername(user.username);
         localStorage.setItem('username', user.username);
         setHasUsername(true);
 
-        console.log('checkUsernameInDatabase 3:', user.username);
+        // console.log('checkUsernameInDatabase 3:', user.username);
 
       } else {
         setHasUsername(false);
         navigate('/set-username');
       }
     } catch (error) {
-      console.error('App.jsx - Error checking username:', error);
+      console.error('Error checking username:', error);
     }
   };
 

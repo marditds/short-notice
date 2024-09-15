@@ -3,13 +3,15 @@ import { useUserContext } from '../../../lib/context/UserContext';
 import useNotices from '../../../lib/hooks/useNotices';
 import useUserInfo from '../../../lib/hooks/useUserInfo';
 import useUserAvatar from '../../../lib/hooks/useUserAvatar';
+import { getAvatarUrl } from '../../../lib/utils/avatarUtils';
 import { NoticeTags } from '../../../components/User/NoticeTags';
 import { Notices } from '../../../components/User/Notices';
 import { Loading } from '../../../components/Loading/Loading';
 
 const UserFeed = () => {
 
-    const [feedNotices, setFeedNotices] = useState([]);
+    const [usersData, setUsersData] = useState([]);
+
     const [tagCategories, setTagCategories] = useState([
         {
             group: 'STEM',
@@ -48,19 +50,19 @@ const UserFeed = () => {
     const { googleUserData, username } = useUserContext();
     const { user_id, getInterests, getFeedNotices } = useNotices(googleUserData);
 
-    const { getUserData } = useUserInfo(googleUserData);
-
-    const { avatarUrl } = useUserAvatar(user_id);
+    const { getUsersData } = useUserInfo(googleUserData);
+    const [feedNotices, setFeedNotices] = useState([]);
 
     const [isLoading, setIsLoading] = useState(false);
 
+    // User's interets (tags)
     useEffect(() => {
         const fetchUserInterests = async () => {
             if (user_id) {
                 try {
                     const userInterests = await getInterests(user_id);
 
-                    console.log('these are user interests:', userInterests);
+                    // console.log('these are user interests:', userInterests);
 
                     if (userInterests) {
                         const newSelectedTags = {};
@@ -89,6 +91,10 @@ const UserFeed = () => {
         fetchUserInterests();
     }, [user_id, tagCategories]);
 
+
+
+
+    // Notices based on interests
     useEffect(() => {
 
         setIsLoading(true);
@@ -97,15 +103,13 @@ const UserFeed = () => {
 
             try {
 
-                console.log('Selected Tags:', selectedTags);
+                // console.log('Selected Tags:', selectedTags);
 
                 const filteredNotices = await getFeedNotices(selectedTags);
 
                 console.log('Filtered notices:', filteredNotices);
 
                 setFeedNotices(filteredNotices);
-
-                console.log('Feed Notices:', feedNotices);
 
 
             } catch (error) {
@@ -120,22 +124,74 @@ const UserFeed = () => {
 
     }, [selectedTags])
 
+
+
+    // All users info
     useEffect(() => {
 
-        const fetchUserData = async () => {
+        const fetchUsersData = async () => {
             try {
-                const userData = await getUserData(user_id);
-                console.log('This is user data', userData);
-
+                const allUsersData = await getUsersData();
+                // console.log('This is allUsersData', allUsersData);
+                setUsersData(allUsersData);
             } catch (error) {
-                console.error('Error getting user data', error);
+                console.error('Error getting users data', error);
 
             }
         };
 
-        fetchUserData();
+        fetchUsersData();
 
-    }, [googleUserData])
+    }, []);
+
+
+
+    // useEffect(() => {
+
+    //     console.log('usersData:', usersData);
+    //     console.log('feedNotices:', feedNotices);
+
+    //     if (feedNotices.length > 0 && usersData.documents && usersData.documents.length > 0) {
+    //         const matchingUser = usersData.documents.find(user =>
+    //             feedNotices.some(notice => notice.user_id === user.$id)
+    //         );
+
+    //         if (matchingUser) {
+    //             setUserDocId(matchingUser.$id);
+    //         } else {
+    //             console.log('No matching user found.');
+    //         }
+    //     }
+    // }, [feedNotices, usersData]);
+
+    useEffect(() => {
+        const fetchUsersData = async () => {
+            try {
+                const allUsersData = await getUsersData();
+                const updatedFeedNotices = await Promise.all(
+                    feedNotices.map(async (notice) => {
+                        const user = allUsersData.documents.find(user => user.$id === notice.user_id);
+                        if (user && user.avatar) {
+                            const avatarUrl = getAvatarUrl(user.avatar);
+                            return { ...notice, avatarUrl, username: user.username };
+                        }
+                        return { ...notice, avatarUrl: null, username: user?.username || 'Unknown User' };
+                    })
+                );
+
+                if (JSON.stringify(updatedFeedNotices) !== JSON.stringify(feedNotices)) {
+                    setFeedNotices(updatedFeedNotices);
+                }
+
+            } catch (error) {
+                console.error('Error getting users data', error);
+            }
+        };
+
+        fetchUsersData();
+    }, [feedNotices]);
+
+
 
 
     const handleTagSelect = (categoryName, tagIndex, tag, isSelected) => {
@@ -162,16 +218,14 @@ const UserFeed = () => {
                 selectedTags={selectedTags}
             />
 
-            {
-                isLoading ?
-                    <Loading size={24} />
-                    :
-                    <Notices
-                        notices={feedNotices}
-                        username={username}
-                        avatarUrl={avatarUrl}
-                    />
+            {!isLoading ?
+                <Notices
+                    notices={feedNotices}
+                    username={username}
+                /> :
+                <Loading size={24} />
             }
+
         </div>
     )
 }

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { updateUser, deleteUser, deleteAllNotices, getUserDocument } from '../context/dbhandler';
+import { updateUser, deleteUser, deleteAllNotices, getUsersDocument } from '../context/dbhandler';
 import { useUserContext } from '../context/UserContext';
 import { UserId } from '../../components/User/UserId';
 
@@ -51,12 +51,12 @@ const useUserInfo = (data) => {
         }
     }
 
-    const getUserData = async (userId) => {
+    const getUsersData = async () => {
         try {
-            const response = await getUserDocument(userId);
-            return response.document;
+            const response = await getUsersDocument();
+            return response;
         } catch (error) {
-            console.error('Error getting user data:', error);
+            console.error('Error getting users data:', error);
 
         }
     }
@@ -64,7 +64,7 @@ const useUserInfo = (data) => {
     return {
         handleUpdateUser,
         handleDeleteUser,
-        getUserData
+        getUsersData
     }
 }
 

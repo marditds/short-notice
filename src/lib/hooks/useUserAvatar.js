@@ -1,24 +1,27 @@
 import { useState, useEffect } from 'react';
 import { uploadAvatar, deleteAvatarFromStrg, updateAvatar, deleteAvatarFromDoc, getUserById } from '../context/dbhandler';
+import { getAvatarUrl } from '../utils/avatarUtils';
 
 const useUserAvatar = (userId) => {
 
-    const [avatarUrl, setAvatarUrl] = useState('');
+    const [avatarUrl, setAvatarUrl] = useState(null);
     const [isUploading, setIsUploading] = useState(false);
 
     useEffect(() => {
         const fetchUserAvatar = async () => {
 
-            if (!userId) {
+            if (userId === null) {
                 console.log("No userId, skipping fetch");
                 return;
             }
+
             const retryFetch = async (retries = 3, delay = 1000) => {
                 try {
                     const user = await getUserById(userId);
 
                     if (user && user.avatar) {
-                        const url = `${import.meta.env.VITE_ENDPOINT}/storage/buckets/${import.meta.env.VITE_AVATAR_BUCKET}/files/${user.avatar}/view?project=${import.meta.env.VITE_PROJECT}&mode=admin`;
+
+                        const url = getAvatarUrl(user.avatar);
 
                         setAvatarUrl(url);
                     } else {
@@ -93,7 +96,8 @@ const useUserAvatar = (userId) => {
     };
 
     return {
-        avatarUrl, setAvatarUrl,
+        avatarUrl,
+        setAvatarUrl,
         isUploading,
         handleAvatarUpload,
         handleDeleteAvatarFromStrg,

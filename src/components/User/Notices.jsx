@@ -9,7 +9,7 @@ import { Loading } from '../Loading/Loading';
 
 
 
-export const Notices = ({ notices, handleEditNotice, handleDeleteNotice, avatarUrl, username }) => {
+export const Notices = ({ notices, handleEditNotice, handleDeleteNotice, username }) => {
 
     const location = useLocation();
 
@@ -62,9 +62,13 @@ export const Notices = ({ notices, handleEditNotice, handleDeleteNotice, avatarU
 
                         <small className='me-auto'>
 
-                            <img src={avatarUrl ? avatarUrl : defaultAvatar} alt="Profile" style={{ borderRadius: '50%', width: 100, height: 100 }} />
+                            <img
+                                src={notice.avatarUrl || defaultAvatar}
+                                alt="Profile"
+                                style={{ borderRadius: '50%', width: 100, height: 100 }}
+                            />
 
-                            <p className='my-0 text-center'>{username}</p>
+                            <p className='my-0 text-center'>{notice.username}</p>
 
                             <span
                                 style={{ color: 'gray' }}
