@@ -107,7 +107,7 @@ const UserFeed = () => {
 
                 const filteredNotices = await getFeedNotices(selectedTags);
 
-                console.log('Filtered notices:', filteredNotices);
+                // console.log('Filtered notices:', filteredNotices);
 
                 setFeedNotices(filteredNotices);
 
@@ -144,25 +144,6 @@ const UserFeed = () => {
 
     }, []);
 
-
-
-    // useEffect(() => {
-
-    //     console.log('usersData:', usersData);
-    //     console.log('feedNotices:', feedNotices);
-
-    //     if (feedNotices.length > 0 && usersData.documents && usersData.documents.length > 0) {
-    //         const matchingUser = usersData.documents.find(user =>
-    //             feedNotices.some(notice => notice.user_id === user.$id)
-    //         );
-
-    //         if (matchingUser) {
-    //             setUserDocId(matchingUser.$id);
-    //         } else {
-    //             console.log('No matching user found.');
-    //         }
-    //     }
-    // }, [feedNotices, usersData]);
 
     useEffect(() => {
         const fetchUsersData = async () => {

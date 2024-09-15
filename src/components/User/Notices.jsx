@@ -35,41 +35,44 @@ export const Notices = ({ notices, handleEditNotice, handleDeleteNotice, usernam
                 >
                     <hr />
 
-                    <p className='d-flex w-100 mb-0'>
-                        {notice.text}
+                    <div className='d-flex align-items-center w-100 mb-0'>
 
-                        {location.pathname === '/user/profile' && <>
-                            <Button
-                                className='ms-auto notice__edit-btn'
-                                onClick={() => handleEditNotice(notice.$id, notice.text)}
-                            >
-                                <AiFillEdit size={20} />
-                            </Button>
-                            <Button
-                                className='ms-2 notice__delete-btn'
-                                onClick={() => handleDeleteNotice(notice.$id)}
-                            >
-                                <CgTrash size={20} />
+                        <p>{notice.text}</p>
 
-                            </Button>
-                        </>
+                        {location.pathname === '/user/profile' ?
+                            <span className='d-flex ms-auto'>
+                                <Button
+                                    className='ms-auto notice__edit-btn'
+                                    onClick={() => handleEditNotice(notice.$id, notice.text)}
+                                >
+                                    <AiFillEdit size={20} />
+                                </Button>
+                                <Button
+                                    className='ms-2 notice__delete-btn'
+                                    onClick={() => handleDeleteNotice(notice.$id)}
+                                >
+                                    <CgTrash size={20} />
 
+                                </Button>
+                            </span>
+                            :
+                            <span className='d-grid ms-auto'>
+                                <img
+                                    src={notice.avatarUrl || defaultAvatar}
+                                    alt="Profile"
+                                    style={{ borderRadius: '50%', width: 50, height: 50 }}
+                                />
+                                <p className='my-0 text-center'>
+                                    <strong>{notice.username}</strong>
+                                </p>
+                            </span>
                         }
 
-                    </p>
+                    </div>
 
-                    <div className='d-flex'>
+                    <div className='d-flex align-items-end'>
 
                         <small className='me-auto'>
-
-                            <img
-                                src={notice.avatarUrl || defaultAvatar}
-                                alt="Profile"
-                                style={{ borderRadius: '50%', width: 100, height: 100 }}
-                            />
-
-                            <p className='my-0 text-center'>{notice.username}</p>
-
                             <span
                                 style={{ color: 'gray' }}
                             >

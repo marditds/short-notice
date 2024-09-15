@@ -18,7 +18,6 @@ const useNotices = (googleUserData) => {
                     const id = await UserId(googleUserData);
 
                     console.log('TYPE OF USER ID:', typeof (id));
-                    console.log('USER ID:', id);
 
                     setUserId(id);
 
