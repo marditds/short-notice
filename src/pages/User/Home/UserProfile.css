@@ -117,23 +117,28 @@
 
 .notice__edit-btn,
 .notice__delete-btn,
+.notice__reaction-btn,
 .notice__edit-btn:hover,
 .notice__delete-btn:hover,
+.notice__reaction-btn,
 .notice__edit-btn:focus,
-.notice__delete-btn:focus {
+.notice__delete-btn:focus,
+.notice__reaction-btn {
     background-color: transparent !important;
     border-color: transparent !important;
 }
 
 .notice__edit-btn>svg,
-.notice__delete-btn>svg {
+.notice__delete-btn>svg,
+.notice__reaction-btn>svg {
     transition: 0.3s;
     filter: drop-shadow(0px 0px 5px #17c76900) !important;
 
 }
 
 .notice__edit-btn:hover>svg,
-.notice__delete-btn:hover>svg {
+.notice__delete-btn:hover>svg,
+.notice__reaction-btn:hover>svg {
     color: var(--main-accent-color) !important;
     filter: drop-shadow(0px 0px 5px var(--main-accent-color)) !important;
 }

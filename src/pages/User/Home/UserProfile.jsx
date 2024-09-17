@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Profile } from '../../../components/User/Profile';
 import { Notices } from '../../../components/User/Notices';
-import { Form, Modal, Button } from 'react-bootstrap';
+import { Tabs, Tab, Form, Modal, Button } from 'react-bootstrap';
 import { useUserContext } from '../../../lib/context/UserContext';
 import useUserAvatar from '../../../lib/hooks/useUserAvatar.js';
 import useNotices from '../../../lib/hooks/useNotices.js';
@@ -90,12 +90,23 @@ const UserProfile = () => {
                 addNotice={addNotice}
             />
 
-
-            <Notices
-                notices={userNotices}
-                handleEditNotice={handleEditNotice}
-                handleDeleteNotice={handleDeleteNotice}
-            />
+            <Tabs
+                defaultActiveKey="notices"
+                id="justify-tab-example"
+                className="mb-3"
+                justify
+            >
+                <Tab eventKey="notices" title="Notices">
+                    <Notices
+                        notices={userNotices}
+                        handleEditNotice={handleEditNotice}
+                        handleDeleteNotice={handleDeleteNotice}
+                    />
+                </Tab>
+                <Tab eventKey="spreads" title="Spreads">
+                    THIS IS THE SPREADS TAB.
+                </Tab>
+            </Tabs>
 
             {/* Edit Notice Modal */}
             <Modal show={showEditModal} onHide={handleCloseEditModal}>
