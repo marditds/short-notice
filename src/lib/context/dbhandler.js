@@ -471,7 +471,43 @@ export const updateUserInterests = async (userId, selectedTags) => {
     }
 };
 
+export const createSpreads = async (user_id, author_id, notice_id, timestamp) => {
+    try {
+        const response = await databases.createDocument(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_SPREADS_COLLECTION,
+            ID.unique(),
+            {
+                user_id: user_id,
+                author_id: author_id,
+                notice_id: notice_id,
+                timestamp: timestamp,
+            }
+        );
+        console.log('Spread entry created successfully:', response);
+        return response;
+    } catch (error) {
+        console.error('Error adding to spreads:', error);
+        throw error;
+    }
+};
 
+export const fetchSpreads = async (user_id) => {
+    try {
+        const response = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_SPREADS_COLLECTION,
+            [
+                Query.equal('user_id', user_id),
+                Query.orderDesc('timestamp'),
+            ]
+        )
+        console.log('Success fetching the spreads:', response.documents);
+        return response.documents;
+    } catch (error) {
+        console.error('Error fetching spreads:', error);
+    }
+}
 
 export const account = new Account(client);
 export { ID } from 'appwrite';

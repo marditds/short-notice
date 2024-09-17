@@ -12,7 +12,7 @@ import { FaRProject } from 'react-icons/fa6';
 
 
 
-export const Notices = ({ notices, handleEditNotice, handleDeleteNotice, username }) => {
+export const Notices = ({ notices, handleEditNotice, handleDeleteNotice, handleCreateSpread, username }) => {
 
     const location = useLocation();
 
@@ -25,22 +25,22 @@ export const Notices = ({ notices, handleEditNotice, handleDeleteNotice, usernam
             setCountdowns(newCountdowns);
         }, 60000);
 
-
         return () => clearInterval(intervalId);
     }, [notices]);
+
 
     return (
         <>
             {notices.map((notice, idx) => (
                 <div key={idx}>
-                    <Row>
+                    <Row className='mt-3'>
                         <Col className='col-md-9 d-flex justify-content-between flex-column'
                         >
                             <p className='mb-0' style={{ marginLeft: '12px' }}>{notice.text}</p>
 
                             <small className='me-auto'>
                                 <span
-                                    style={{ color: 'gray' }}
+                                    style={{ color: 'gray', marginLeft: '12px' }}
                                 >
                                     Expires In:
                                 </span>  {countdowns[idx] || calculateCountdown(notice.expiresAt)}
@@ -65,7 +65,6 @@ export const Notices = ({ notices, handleEditNotice, handleDeleteNotice, usernam
                                             <CgTrash size={20} />
 
                                         </Button>
-                                        {/* </span> */}
                                     </span>
                                     <small className='text-end  notice__create-date'
                                         style={{ marginRight: '12px' }}>
@@ -82,8 +81,8 @@ export const Notices = ({ notices, handleEditNotice, handleDeleteNotice, usernam
                                         <img
                                             src={notice.avatarUrl || defaultAvatar}
                                             alt="Profile"
-                                            style={{ borderRadius: '50%', width: 50, height: 50 }}
-                                            className='d-flex ms-auto me-0'
+                                            style={{ borderRadius: '50%', width: 50, height: 50, marginRight: '12px' }}
+                                            className='d-flex ms-auto'
                                         />
                                     </div>
                                     <div className='d-grid'>
@@ -97,6 +96,7 @@ export const Notices = ({ notices, handleEditNotice, handleDeleteNotice, usernam
                                                 />
                                             </Button>
                                             <Button
+                                                onClick={() => handleCreateSpread(notice)}
                                                 className='notice__reaction-btn'
                                             >
                                                 <RiMegaphoneLine
@@ -111,7 +111,7 @@ export const Notices = ({ notices, handleEditNotice, handleDeleteNotice, usernam
                                                 />
                                             </Button>
                                         </div>
-                                        <small className='text-end mt-auto notice__create-date'>
+                                        <small style={{ marginRight: '12px' }} className='text-end mt-auto notice__create-date'>
                                             {formatDateToLocal(notice.timestamp)}
                                         </small>
                                     </div>
@@ -121,95 +121,6 @@ export const Notices = ({ notices, handleEditNotice, handleDeleteNotice, usernam
 
                     </Row>
                     <hr />
-                    {/* <div
-                    key={idx}
-                    className='d-grid mt-2 notice'
-                >
-                    <hr />
-
-                    <div className='d-flex align-items-center w-100 mb-0'>
-
-                        <p className='mb-0'>{notice.text}</p>
-
-                        {location.pathname === '/user/profile' ?
-                            <span className='d-flex ms-auto'>
-                                <Button
-                                    className='ms-auto notice__edit-btn'
-                                    onClick={() => handleEditNotice(notice.$id, notice.text)}
-                                >
-                                    <AiFillEdit size={20} />
-                                </Button>
-                                <Button
-                                    className='ms-2 notice__delete-btn'
-                                    onClick={() => handleDeleteNotice(notice.$id)}
-                                >
-                                    <CgTrash size={20} />
-
-                                </Button>
-                            </span>
-                            :
-                            <span className='ms-auto'>
-                                <img
-                                    src={notice.avatarUrl || defaultAvatar}
-                                    alt="Profile"
-                                    style={{ borderRadius: '50%', width: 50, height: 50 }}
-                                    className='d-flex ms-auto me-auto'
-                                />
-                                <p className='my-0 text-center'>
-                                    <strong>{notice.username}</strong>
-                                </p> 
-                            </span>
-                        }
-
-                    </div>
-
-                    <div className='d-flex align-items-end'>
-
-                        <small className='me-auto'>
-                            <span
-                                style={{ color: 'gray' }}
-                            >
-                                Expires In:
-                            </span>  {countdowns[idx] || calculateCountdown(notice.expiresAt)}
-                        </small>
-
-
-                        <div
-                            className='d-grid'
-                        >
-                            <div
-                                className='d-flex justify-content-between'>
-                                <Button
-                                    className='notice__reaction-btn'
-                                >
-                                    <BsHandThumbsUp
-                                        size={20}
-                                    />
-                                </Button>
-                                <Button
-                                    className='notice__reaction-btn'
-                                >
-                                    <RiMegaphoneLine
-                                        size={20}
-                                    />
-                                </Button>
-                                <Button
-                                    className='notice__reaction-btn'
-                                >
-                                    <BsExclamationTriangle
-                                        size={20}
-                                    />
-                                </Button>
-                            </div>
-                            <small>
-                                <span style={{ color: 'gray' }}>
-                                    Created on:
-                                </span> {formatDateToLocal(notice.timestamp)}
-                            </small>
-                        </div>
-                    </div>
-
-                </div> */}
 
                 </div>
             ))}

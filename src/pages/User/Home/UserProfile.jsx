@@ -21,7 +21,7 @@ const UserProfile = () => {
     const [showEditModal, setShowEditModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-    const { user_id, userNotices, isLoading, isAddingNotice, removingNoticeId, isRemovingNotice, addNotice, editNotice, removeNotice, setRemovingNoticeId } = useNotices(googleUserData);
+    const { user_id, userNotices, isLoading, isAddingNotice, removingNoticeId, isRemovingNotice, addNotice, editNotice, removeNotice, setRemovingNoticeId, getSpreads } = useNotices(googleUserData);
 
     const { avatarUrl } = useUserAvatar(user_id);
 
@@ -65,6 +65,12 @@ const UserProfile = () => {
         setRemovingNoticeId(null);
     }
 
+    const handleViewSpreads = (user_id) => {
+        const spreads = getSpreads(user_id);
+        console.log(spreads);
+    }
+
+
     const timerSpacing = 'mx-2';
     const timerDisplay = 'd-flex';
     const classname = `${timerDisplay} ${timerSpacing}`;
@@ -93,7 +99,6 @@ const UserProfile = () => {
             <Tabs
                 defaultActiveKey="notices"
                 id="justify-tab-example"
-                className="mb-3"
                 justify
             >
                 <Tab eventKey="notices" title="Notices">
@@ -105,6 +110,7 @@ const UserProfile = () => {
                 </Tab>
                 <Tab eventKey="spreads" title="Spreads">
                     THIS IS THE SPREADS TAB.
+                    <Button onClick={() => { handleViewSpreads(user_id) }}>View Spreads</Button>
                 </Tab>
             </Tabs>
 

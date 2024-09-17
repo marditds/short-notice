@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useUserContext } from '../../../lib/context/UserContext';
 import useNotices from '../../../lib/hooks/useNotices';
 import useUserInfo from '../../../lib/hooks/useUserInfo';
-import useUserAvatar from '../../../lib/hooks/useUserAvatar';
 import { getAvatarUrl } from '../../../lib/utils/avatarUtils';
 import { NoticeTags } from '../../../components/User/NoticeTags';
 import { Notices } from '../../../components/User/Notices';
 import { Loading } from '../../../components/Loading/Loading';
+// import { createSpreads } from '../../../lib/context/dbhandler';
 
 const UserFeed = () => {
 
@@ -48,7 +48,7 @@ const UserFeed = () => {
 
     const [selectedTags, setSelectedTags] = useState({});
     const { googleUserData, username } = useUserContext();
-    const { user_id, getInterests, getFeedNotices } = useNotices(googleUserData);
+    const { user_id, getInterests, getFeedNotices, addSpreads } = useNotices(googleUserData);
 
     const { getUsersData } = useUserInfo(googleUserData);
     const [feedNotices, setFeedNotices] = useState([]);
@@ -107,7 +107,7 @@ const UserFeed = () => {
 
                 const filteredNotices = await getFeedNotices(selectedTags);
 
-                // console.log('Filtered notices:', filteredNotices);
+                console.log('Filtered notices:', filteredNotices);
 
                 setFeedNotices(filteredNotices);
 
@@ -173,8 +173,6 @@ const UserFeed = () => {
     }, [feedNotices]);
 
 
-
-
     const handleTagSelect = (categoryName, tagIndex, tag, isSelected) => {
 
         console.log('Tag:', tag.key);
@@ -186,6 +184,18 @@ const UserFeed = () => {
 
     };
 
+
+    const handleCreateSpread = async (notice) => {
+        const now = new Date();
+        const expiresAt = new Date(notice.timestamp);
+        expiresAt.setHours(expiresAt.getHours() + 24);
+        try {
+            await addSpreads(user_id, notice.user_id, notice.$id, expiresAt.toISOString());
+            console.log('Spread entry created successfully');
+        } catch (error) {
+            console.error('Error creating spread entry:', error);
+        }
+    };
 
     return (
         <div>
@@ -203,6 +213,7 @@ const UserFeed = () => {
                 <Notices
                     notices={feedNotices}
                     username={username}
+                    handleCreateSpread={handleCreateSpread}
                 /> :
                 <Loading size={24} />
             }

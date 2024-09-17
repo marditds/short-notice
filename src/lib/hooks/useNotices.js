@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { createNotice, getUserNotices, updateNotice, deleteNotice, getFilteredNotices, updateUserInterests, getUserInterests } from '../../lib/context/dbhandler';
+import { createNotice, getUserNotices, updateNotice, deleteNotice, getFilteredNotices, updateUserInterests, getUserInterests, createSpreads, fetchSpreads } from '../../lib/context/dbhandler';
 import { UserId } from '../../components/User/UserId.jsx';
 
 const useNotices = (googleUserData) => {
@@ -158,6 +158,25 @@ const useNotices = (googleUserData) => {
         }
     }
 
+    const addSpreads = async (user_id, author_id, notice_id, timestamp) => {
+        try {
+            const response = await createSpreads(user_id, author_id, notice_id, timestamp);
+            console.log('Spreading!', response);
+        } catch (error) {
+            console.error('Not spreading:', error);
+
+        }
+    }
+
+    const getSpreads = async (user_id) => {
+        try {
+            const spreads = await fetchSpreads(user_id);
+            return spreads;
+        } catch (error) {
+            console.error('Not getting spreads:', error);
+        }
+    }
+
 
     return {
         user_id,
@@ -172,7 +191,9 @@ const useNotices = (googleUserData) => {
         getFeedNotices,
         getInterests,
         setRemovingNoticeId,
-        updateInterests
+        updateInterests,
+        addSpreads,
+        getSpreads
     };
 };
 
