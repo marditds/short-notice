@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
-import { createNotice, getUserNotices, updateNotice, deleteNotice, getFilteredNotices, updateUserInterests, getUserInterests, createSpreads, fetchSpreads } from '../../lib/context/dbhandler';
+import { createNotice, getUserNotices, updateNotice, deleteNotice, getAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSpreads, fetchSpreads } from '../../lib/context/dbhandler';
 import { UserId } from '../../components/User/UserId.jsx';
 
 const useNotices = (googleUserData) => {
     const [user_id, setUserId] = useState(null);
     const [userNotices, setUserNotices] = useState([]);
+    const [userSpreads, setUserSpreads] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isAddingNotice, setIsAddingNotice] = useState(false);
     const [isRemovingNotice, setIsRemovingNotice] = useState(false);
@@ -54,6 +55,30 @@ const useNotices = (googleUserData) => {
 
     }, [googleUserData]);
 
+    useEffect(() => {
+        const fetchUserSpreads = async () => {
+            if (user_id) {
+                const spreads = await getSpreads();
+                // setUserSpreads(spreads);
+                console.log('Fetched spreads collection for user:', spreads);
+
+                // Fetch all notices and compare with spreads
+                const allNotices = await getAllNotices();
+                const matchedNotices = compareNoticesWithSpreads(allNotices, spreads);
+                setUserSpreads(matchedNotices);
+                console.log('Users spreads:', matchedNotices);
+
+            }
+        };
+
+        fetchUserSpreads();
+    }, [user_id]);
+
+    const compareNoticesWithSpreads = (notices, spreads) => {
+        return notices.filter(notice =>
+            spreads.some(spread => spread.notice_id === notice.$id)
+        );
+    };
 
     const addNotice = async (text, duration, selectedTags) => {
 
@@ -168,12 +193,19 @@ const useNotices = (googleUserData) => {
         }
     }
 
-    const getSpreads = async (user_id) => {
+    const getSpreads = async () => {
         try {
-            const spreads = await fetchSpreads(user_id);
-            return spreads;
+            if (user_id) {
+                const spreads = await fetchSpreads(user_id);
+                setUserSpreads(spreads);
+                // console.log('Got User Spreads:', spreads);
+                return spreads;
+            } else {
+                console.log('User ID is not available');
+                return [];
+            }
         } catch (error) {
-            console.error('Not getting spreads:', error);
+            console.error('Error fetching spreads:', error);
         }
     }
 
@@ -181,6 +213,7 @@ const useNotices = (googleUserData) => {
     return {
         user_id,
         userNotices,
+        userSpreads,
         isLoading,
         isAddingNotice,
         isRemovingNotice,

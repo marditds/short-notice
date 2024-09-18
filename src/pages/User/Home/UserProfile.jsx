@@ -21,7 +21,7 @@ const UserProfile = () => {
     const [showEditModal, setShowEditModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-    const { user_id, userNotices, isLoading, isAddingNotice, removingNoticeId, isRemovingNotice, addNotice, editNotice, removeNotice, setRemovingNoticeId, getSpreads } = useNotices(googleUserData);
+    const { user_id, userNotices, userSpreads, isLoading, isAddingNotice, removingNoticeId, isRemovingNotice, addNotice, editNotice, removeNotice, setRemovingNoticeId, getSpreads } = useNotices(googleUserData);
 
     const { avatarUrl } = useUserAvatar(user_id);
 
@@ -65,10 +65,9 @@ const UserProfile = () => {
         setRemovingNoticeId(null);
     }
 
-    const handleViewSpreads = (user_id) => {
-        const spreads = getSpreads(user_id);
-        console.log(spreads);
-    }
+    // const handleViewSpreads = () => {    
+    //     console.log(userSpreads);
+    // }
 
 
     const timerSpacing = 'mx-2';
@@ -97,11 +96,11 @@ const UserProfile = () => {
             />
 
             <Tabs
-                defaultActiveKey="notices"
+                defaultActiveKey="my-notices"
                 id="justify-tab-example"
                 justify
             >
-                <Tab eventKey="notices" title="Notices">
+                <Tab eventKey="my-notices" title="My Notices">
                     <Notices
                         notices={userNotices}
                         handleEditNotice={handleEditNotice}
@@ -110,7 +109,10 @@ const UserProfile = () => {
                 </Tab>
                 <Tab eventKey="spreads" title="Spreads">
                     THIS IS THE SPREADS TAB.
-                    <Button onClick={() => { handleViewSpreads(user_id) }}>View Spreads</Button>
+
+                    <Notices
+                        notices={userSpreads}
+                    />
                 </Tab>
             </Tabs>
 

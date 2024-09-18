@@ -304,7 +304,7 @@ export const getNoticeByTagname = async (tagnames) => {
     }
 };
 
-export const getAllNoitces = async () => {
+export const getAllNotices = async () => {
     try {
         const response = await databases.listDocuments(
             import.meta.env.VITE_DATABASE,
