@@ -12,7 +12,7 @@ import { FaRProject } from 'react-icons/fa6';
 
 
 
-export const Notices = ({ notices, handleEditNotice, handleDeleteNotice, handleCreateSpread, username }) => {
+export const Notices = ({ notices, handleEditNotice, handleDeleteNotice, handleCreateSpread, eventKey, username }) => {
 
     const location = useLocation();
 
@@ -48,7 +48,7 @@ export const Notices = ({ notices, handleEditNotice, handleDeleteNotice, handleC
                         </Col>
                         <Col>
 
-                            {location.pathname === '/user/profile' ?
+                            {location.pathname === '/user/profile' && eventKey === 'my-notices' ?
                                 <div
                                     className='d-flex flex-column justify-content-end h-100'>
                                     <span className='d-flex ms-auto mt-auto'>

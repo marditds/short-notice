@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useUserContext } from '../../../lib/context/UserContext';
 import useNotices from '../../../lib/hooks/useNotices';
 import useUserInfo from '../../../lib/hooks/useUserInfo';
-import { getAvatarUrl } from '../../../lib/utils/avatarUtils';
+import { getAvatarUrl as avatarUtil } from '../../../lib/utils/avatarUtils';
 import { NoticeTags } from '../../../components/User/NoticeTags';
 import { Notices } from '../../../components/User/Notices';
 import { Loading } from '../../../components/Loading/Loading';
@@ -50,7 +50,7 @@ const UserFeed = () => {
     const { googleUserData, username } = useUserContext();
     const { user_id, getInterests, getFeedNotices, addSpreads } = useNotices(googleUserData);
 
-    const { getUsersData } = useUserInfo(googleUserData);
+    const { getUsersData, fetchUsersData } = useUserInfo(googleUserData);
     const [feedNotices, setFeedNotices] = useState([]);
 
     const [isLoading, setIsLoading] = useState(false);
@@ -145,32 +145,36 @@ const UserFeed = () => {
     }, []);
 
 
+    // useEffect(() => {
+    //     const fetchUsersData = async () => {
+    //         try {
+    //             const allUsersData = await getUsersData();
+    //             const updatedFeedNotices = await Promise.all(
+    //                 feedNotices.map(async (notice) => {
+    //                     const user = allUsersData.documents.find(user => user.$id === notice.user_id);
+    //                     if (user && user.avatar) {
+    //                         const avatarUrl = getAvatarUrl(user.avatar);
+    //                         return { ...notice, avatarUrl, username: user.username };
+    //                     }
+    //                     return { ...notice, avatarUrl: null, username: user?.username || 'Unknown User' };
+    //                 })
+    //             );
+
+    //             if (JSON.stringify(updatedFeedNotices) !== JSON.stringify(feedNotices)) {
+    //                 setFeedNotices(updatedFeedNotices);
+    //             }
+
+    //         } catch (error) {
+    //             console.error('Error getting users data', error);
+    //         }
+    //     };
+
+    //     fetchUsersData();
+    // }, [feedNotices]);
+
     useEffect(() => {
-        const fetchUsersData = async () => {
-            try {
-                const allUsersData = await getUsersData();
-                const updatedFeedNotices = await Promise.all(
-                    feedNotices.map(async (notice) => {
-                        const user = allUsersData.documents.find(user => user.$id === notice.user_id);
-                        if (user && user.avatar) {
-                            const avatarUrl = getAvatarUrl(user.avatar);
-                            return { ...notice, avatarUrl, username: user.username };
-                        }
-                        return { ...notice, avatarUrl: null, username: user?.username || 'Unknown User' };
-                    })
-                );
-
-                if (JSON.stringify(updatedFeedNotices) !== JSON.stringify(feedNotices)) {
-                    setFeedNotices(updatedFeedNotices);
-                }
-
-            } catch (error) {
-                console.error('Error getting users data', error);
-            }
-        };
-
-        fetchUsersData();
-    }, [feedNotices]);
+        fetchUsersData(feedNotices, setFeedNotices, avatarUtil)
+    }, feedNotices)
 
 
     const handleTagSelect = (categoryName, tagIndex, tag, isSelected) => {

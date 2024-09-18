@@ -59,14 +59,11 @@ const useNotices = (googleUserData) => {
         const fetchUserSpreads = async () => {
             if (user_id) {
                 const spreads = await getSpreads();
-                // setUserSpreads(spreads);
-                console.log('Fetched spreads collection for user:', spreads);
 
-                // Fetch all notices and compare with spreads
                 const allNotices = await getAllNotices();
                 const matchedNotices = compareNoticesWithSpreads(allNotices, spreads);
                 setUserSpreads(matchedNotices);
-                console.log('Users spreads:', matchedNotices);
+                // console.log('Users spreads:', matchedNotices);
 
             }
         };

@@ -61,10 +61,33 @@ const useUserInfo = (data) => {
         }
     }
 
+    const fetchUsersData = async (notices, setNotices, getAvatarUrl) => {
+        try {
+            const allUsersData = await getUsersData();
+            const updatedNotices = await Promise.all(
+                notices.map(async (notice) => {
+                    const user = allUsersData.documents.find((user) => user.$id === notice.user_id);
+                    if (user && user.avatar) {
+                        const avatarUrl = getAvatarUrl(user.avatar);
+                        return { ...notice, avatarUrl, username: user.username };
+                    }
+                    return { ...notice, avatarUrl: null, username: user?.username || 'Unknown User' };
+                })
+            );
+            if (JSON.stringify(updatedNotices) !== JSON.stringify(notices)) {
+                setNotices(updatedNotices);
+            }
+        } catch (error) {
+            console.error('Error getting users data:', error);
+        }
+    };
+
+
     return {
         handleUpdateUser,
         handleDeleteUser,
-        getUsersData
+        getUsersData,
+        fetchUsersData
     }
 }
 

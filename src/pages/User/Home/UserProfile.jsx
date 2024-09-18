@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Profile } from '../../../components/User/Profile';
 import { Notices } from '../../../components/User/Notices';
 import { Tabs, Tab, Form, Modal, Button } from 'react-bootstrap';
 import { useUserContext } from '../../../lib/context/UserContext';
+import useUserInfo from '../../../lib/hooks/useUserInfo.js';
+import { getAvatarUrl as avatarUtil } from '../../../lib/utils/avatarUtils.js';
 import useUserAvatar from '../../../lib/hooks/useUserAvatar.js';
 import useNotices from '../../../lib/hooks/useNotices.js';
 import { ComposeNotice } from '../../../components/User/ComposeNotice';
@@ -21,9 +23,46 @@ const UserProfile = () => {
     const [showEditModal, setShowEditModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-    const { user_id, userNotices, userSpreads, isLoading, isAddingNotice, removingNoticeId, isRemovingNotice, addNotice, editNotice, removeNotice, setRemovingNoticeId, getSpreads } = useNotices(googleUserData);
+    const { user_id, userNotices, userSpreads, isLoading, isAddingNotice, removingNoticeId, isRemovingNotice, addNotice, editNotice, removeNotice, setRemovingNoticeId } = useNotices(googleUserData);
+
+    const { fetchUsersData } = useUserInfo(googleUserData);
+
+    const [spreadNotices, setSpreadNotices] = useState(userSpreads);
 
     const { avatarUrl } = useUserAvatar(user_id);
+
+    // useEffect(() => {
+    //     const fetchUsersData = async () => {
+    //         try {
+    //             const allUsersData = await getUsersData();
+
+
+    //             const updatedSpreadsNotices = await Promise.all(
+    //                 userSpreads.map(async (notice) => {
+    //                     const user = allUsersData.documents.find(user => user.$id === notice.user_id);
+    //                     if (user && user.avatar) {
+    //                         const avatarUrl = getAvatarUrl(user.avatar);
+    //                         return { ...notice, avatarUrl, username: user.username };
+    //                     }
+    //                     return { ...notice, avatarUrl: null, username: user?.username || 'Unknown User' };
+    //                 })
+    //             );
+
+    //             if (JSON.stringify(updatedSpreadsNotices) !== JSON.stringify(userSpreads)) {
+    //                 setSpreadNotices(updatedSpreadsNotices);
+    //             }
+
+    //         } catch (error) {
+    //             console.error('Error getting users data', error);
+    //         }
+    //     };
+
+    //     fetchUsersData();
+    // }, [userSpreads]);
+
+    useEffect(() => {
+        fetchUsersData(userSpreads, setSpreadNotices, avatarUtil);
+    }, [userSpreads])
 
 
     const handleEditNotice = (noticeId, currentText) => {
@@ -100,18 +139,24 @@ const UserProfile = () => {
                 id="justify-tab-example"
                 justify
             >
-                <Tab eventKey="my-notices" title="My Notices">
+                <Tab
+                    eventKey='my-notices'
+                    title="My Notices"
+                >
                     <Notices
                         notices={userNotices}
                         handleEditNotice={handleEditNotice}
                         handleDeleteNotice={handleDeleteNotice}
+                        eventKey='my-notices'
                     />
                 </Tab>
-                <Tab eventKey="spreads" title="Spreads">
-                    THIS IS THE SPREADS TAB.
-
+                <Tab
+                    eventKey='my-spreads'
+                    title="Spreads"
+                >
                     <Notices
-                        notices={userSpreads}
+                        notices={spreadNotices}
+                        username={username}
                     />
                 </Tab>
             </Tabs>
