@@ -1,22 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { formatDateToLocal, calculateCountdown } from '../../lib/utils/dateUtils';
-import { Row, Col } from 'react-bootstrap';
+import { useUserContext } from '../../lib/context/UserContext';
+import useNotices from '../../lib/hooks/useNotices';
+import { Row, Col, Form, Modal } from 'react-bootstrap';
 import { CgTrash } from 'react-icons/cg';
 import { AiFillEdit } from 'react-icons/ai';
 import { RiMegaphoneLine } from 'react-icons/ri';
 import { BsHandThumbsUp, BsExclamationTriangle } from 'react-icons/bs';
 import { Button } from 'react-bootstrap';
 import defaultAvatar from '../../assets/default.png';
-import { FaRProject } from 'react-icons/fa6';
 
 
 
-export const Notices = ({ notices, handleEditNotice, handleDeleteNotice, handleCreateSpread, eventKey, username }) => {
+export const Notices = ({ notices,
+    handleEditNotice,
+    handleDeleteNotice,
+    handleCreateSpread, handleReport, eventKey, username }) => {
 
     const location = useLocation();
 
     const [countdowns, setCountdowns] = useState([]);
+
+    const { googleUserData } = useUserContext();
+    const { removingNoticeId, isRemovingNotice, addNotice, editNotice, removeNotice, setRemovingNoticeId } = useNotices(googleUserData);
+
 
     useEffect(() => {
 
@@ -27,6 +35,9 @@ export const Notices = ({ notices, handleEditNotice, handleDeleteNotice, handleC
 
         return () => clearInterval(intervalId);
     }, [notices]);
+
+
+
 
 
     return (
@@ -49,6 +60,7 @@ export const Notices = ({ notices, handleEditNotice, handleDeleteNotice, handleC
                         <Col>
 
                             {location.pathname === '/user/profile' && eventKey === 'my-notices' ?
+
                                 <div
                                     className='d-flex flex-column justify-content-end h-100'>
                                     <span className='d-flex ms-auto mt-auto'>
@@ -86,10 +98,14 @@ export const Notices = ({ notices, handleEditNotice, handleDeleteNotice, handleC
                                         />
                                     </div>
                                     <div className='d-grid'>
+
+
                                         <div
-                                            className='d-flex justify-content-end'>
+                                            className='d-flex justify-content-end'
+                                        >
                                             <Button
                                                 className='notice__reaction-btn'
+                                                disabled={username === notice.username}
                                             >
                                                 <BsHandThumbsUp
                                                     size={19}
@@ -98,6 +114,7 @@ export const Notices = ({ notices, handleEditNotice, handleDeleteNotice, handleC
                                             <Button
                                                 onClick={() => handleCreateSpread(notice)}
                                                 className='notice__reaction-btn'
+                                                disabled={username === notice.username}
                                             >
                                                 <RiMegaphoneLine
                                                     size={19}
@@ -105,12 +122,15 @@ export const Notices = ({ notices, handleEditNotice, handleDeleteNotice, handleC
                                             </Button>
                                             <Button
                                                 className='notice__reaction-btn'
+                                                disabled={username === notice.username}
                                             >
                                                 <BsExclamationTriangle
+                                                    onClick={() => handleReport(notice)}
                                                     size={19}
                                                 />
                                             </Button>
                                         </div>
+
                                         <small style={{ marginRight: '12px' }} className='text-end mt-auto notice__create-date'>
                                             {formatDateToLocal(notice.timestamp)}
                                         </small>
@@ -124,6 +144,7 @@ export const Notices = ({ notices, handleEditNotice, handleDeleteNotice, handleC
 
                 </div>
             ))}
+
         </>
     );
 };

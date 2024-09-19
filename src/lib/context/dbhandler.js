@@ -509,5 +509,26 @@ export const fetchSpreads = async (user_id) => {
     }
 }
 
+export const createReport = async (notice_id, author_id, reason, user_id) => {
+    try {
+        const response = await databases.createDocument(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_REPORTS_COLLECTION,
+            ID.unique(),
+            {
+                notice_id: notice_id,
+                author_id: author_id,
+                reason: reason,
+                user_id: user_id
+            }
+        );
+        console.log('Report created successfully:', response);
+        return response;
+    } catch (error) {
+        console.error('Error adding to spreads:', error);
+        throw error;
+    }
+}
+
 export const account = new Account(client);
 export { ID } from 'appwrite';

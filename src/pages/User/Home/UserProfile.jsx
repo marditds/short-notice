@@ -104,9 +104,9 @@ const UserProfile = () => {
         setRemovingNoticeId(null);
     }
 
-    // const handleViewSpreads = () => {    
-    //     console.log(userSpreads);
-    // }
+    const handleViewSpreads = () => {
+        console.log(userSpreads);
+    }
 
 
     const timerSpacing = 'mx-2';
@@ -161,7 +161,7 @@ const UserProfile = () => {
                 </Tab>
             </Tabs>
 
-            {/* Edit Notice Modal */}
+
             <Modal show={showEditModal} onHide={handleCloseEditModal}>
                 <Modal.Header>
                     <Modal.Title>Edit Notice</Modal.Title>
@@ -187,7 +187,7 @@ const UserProfile = () => {
                 </Modal.Footer>
             </Modal>
 
-            {/* Delete Notice Modal */}
+
             <Modal show={showDeleteModal} onHide={handleCloseDeleteModal}>
                 <Modal.Header>
                     <Modal.Title>Delete Notice</Modal.Title>

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { createNotice, getUserNotices, updateNotice, deleteNotice, getAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSpreads, fetchSpreads } from '../../lib/context/dbhandler';
+import { createNotice, getUserNotices, updateNotice, deleteNotice, getAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSpreads, fetchSpreads, createReport } from '../../lib/context/dbhandler';
 import { UserId } from '../../components/User/UserId.jsx';
 
 const useNotices = (googleUserData) => {
@@ -63,8 +63,6 @@ const useNotices = (googleUserData) => {
                 const allNotices = await getAllNotices();
                 const matchedNotices = compareNoticesWithSpreads(allNotices, spreads);
                 setUserSpreads(matchedNotices);
-                // console.log('Users spreads:', matchedNotices);
-
             }
         };
 
@@ -206,6 +204,14 @@ const useNotices = (googleUserData) => {
         }
     }
 
+    const reportNotice = async (notice_id, author_id, reason, user_id) => {
+        try {
+            const response = await createReport(notice_id, author_id, reason, user_id);
+            console.log('Reporting!', response);
+        } catch (error) {
+            console.error('Not reporting:', error);
+        }
+    }
 
     return {
         user_id,
@@ -223,7 +229,8 @@ const useNotices = (googleUserData) => {
         setRemovingNoticeId,
         updateInterests,
         addSpreads,
-        getSpreads
+        getSpreads,
+        reportNotice
     };
 };
 

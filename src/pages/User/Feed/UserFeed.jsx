@@ -6,7 +6,6 @@ import { getAvatarUrl as avatarUtil } from '../../../lib/utils/avatarUtils';
 import { NoticeTags } from '../../../components/User/NoticeTags';
 import { Notices } from '../../../components/User/Notices';
 import { Loading } from '../../../components/Loading/Loading';
-// import { createSpreads } from '../../../lib/context/dbhandler';
 
 const UserFeed = () => {
 
@@ -48,7 +47,7 @@ const UserFeed = () => {
 
     const [selectedTags, setSelectedTags] = useState({});
     const { googleUserData, username } = useUserContext();
-    const { user_id, getInterests, getFeedNotices, addSpreads } = useNotices(googleUserData);
+    const { user_id, getInterests, getFeedNotices, addSpreads, reportNotice } = useNotices(googleUserData);
 
     const { getUsersData, fetchUsersData } = useUserInfo(googleUserData);
     const [feedNotices, setFeedNotices] = useState([]);
@@ -92,8 +91,6 @@ const UserFeed = () => {
     }, [user_id, tagCategories]);
 
 
-
-
     // Notices based on interests
     useEffect(() => {
 
@@ -125,7 +122,6 @@ const UserFeed = () => {
     }, [selectedTags])
 
 
-
     // All users info
     useEffect(() => {
 
@@ -145,36 +141,10 @@ const UserFeed = () => {
     }, []);
 
 
-    // useEffect(() => {
-    //     const fetchUsersData = async () => {
-    //         try {
-    //             const allUsersData = await getUsersData();
-    //             const updatedFeedNotices = await Promise.all(
-    //                 feedNotices.map(async (notice) => {
-    //                     const user = allUsersData.documents.find(user => user.$id === notice.user_id);
-    //                     if (user && user.avatar) {
-    //                         const avatarUrl = getAvatarUrl(user.avatar);
-    //                         return { ...notice, avatarUrl, username: user.username };
-    //                     }
-    //                     return { ...notice, avatarUrl: null, username: user?.username || 'Unknown User' };
-    //                 })
-    //             );
-
-    //             if (JSON.stringify(updatedFeedNotices) !== JSON.stringify(feedNotices)) {
-    //                 setFeedNotices(updatedFeedNotices);
-    //             }
-
-    //         } catch (error) {
-    //             console.error('Error getting users data', error);
-    //         }
-    //     };
-
-    //     fetchUsersData();
-    // }, [feedNotices]);
-
+    // Feed notices
     useEffect(() => {
         fetchUsersData(feedNotices, setFeedNotices, avatarUtil)
-    }, feedNotices)
+    }, [feedNotices])
 
 
     const handleTagSelect = (categoryName, tagIndex, tag, isSelected) => {
@@ -201,6 +171,15 @@ const UserFeed = () => {
         }
     };
 
+    const handleReport = async (notice) => {
+        try {
+            await reportNotice(notice.$id, notice.user_id, reason, user_id);
+            console.log('Notice REPORTED!');
+        } catch (error) {
+            console.error('Could not report notice');
+        }
+    }
+
     return (
         <div>
 
@@ -218,6 +197,7 @@ const UserFeed = () => {
                     notices={feedNotices}
                     username={username}
                     handleCreateSpread={handleCreateSpread}
+                    handleReport={handleReport}
                 /> :
                 <Loading size={24} />
             }
