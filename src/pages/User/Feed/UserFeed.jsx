@@ -47,7 +47,7 @@ const UserFeed = () => {
 
     const [selectedTags, setSelectedTags] = useState({});
     const { googleUserData, username } = useUserContext();
-    const { user_id, getInterests, getFeedNotices, addSpreads, reportNotice, likeNotice } = useNotices(googleUserData);
+    const { user_id, userNotices, getInterests, getFeedNotices, addSpreads, reportNotice, likeNotice, fetchLikes, likedNotices } = useNotices(googleUserData);
 
     const { getUsersData, fetchUsersData } = useUserInfo(googleUserData);
     const [feedNotices, setFeedNotices] = useState([]);
@@ -146,6 +146,20 @@ const UserFeed = () => {
         fetchUsersData(feedNotices, setFeedNotices, avatarUtil)
     }, [feedNotices])
 
+    // useEffect(() => {
+    //     const fetchAllLikes = async () => {
+    //         // Fetch likes for user-created notices
+    //         if (userNotices.length > 0) {
+    //             await fetchLikes(userNotices);
+    //         }
+    //         // Fetch likes for spread notices
+    //         if (spreadNotices.length > 0) {
+    //             await fetchLikes(spreadNotices);
+    //         }
+    //     };
+    //     fetchAllLikes();
+    // }, [userNotices, spreadNotices]); 
+
 
     const handleTagSelect = (categoryName, tagIndex, tag, isSelected) => {
 
@@ -184,7 +198,7 @@ const UserFeed = () => {
 
     const handleLike = async (notice) => {
         try {
-            await likeNotice(notice.$id, notice.user_id, user_id)
+            await likeNotice(notice.$id, notice.user_id)
         } catch (error) {
             console.error('Could not like notice');
         }
@@ -209,6 +223,7 @@ const UserFeed = () => {
                     notices={feedNotices}
                     username={username}
                     handleCreateSpread={handleCreateSpread}
+                    likedNotices={likedNotices}
                     handleLike={handleLike}
                     handleReport={handleReport}
                 /> :

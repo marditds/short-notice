@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
-import { createNotice, getUserNotices, updateNotice, deleteNotice, getAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSpreads, fetchSpreads, createReport, createLike } from '../../lib/context/dbhandler';
+import { createNotice, getUserNotices, updateNotice, deleteNotice, getAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSpreads, fetchSpreads, createReport, createLike, removeLike, getUserLikes } from '../../lib/context/dbhandler';
 import { UserId } from '../../components/User/UserId.jsx';
 
 const useNotices = (googleUserData) => {
     const [user_id, setUserId] = useState(null);
     const [userNotices, setUserNotices] = useState([]);
     const [userSpreads, setUserSpreads] = useState([]);
+    const [likedNotices, setLikedNotices] = useState({});
     const [isLoading, setIsLoading] = useState(true);
     const [isAddingNotice, setIsAddingNotice] = useState(false);
     const [isRemovingNotice, setIsRemovingNotice] = useState(false);
@@ -213,14 +214,49 @@ const useNotices = (googleUserData) => {
         }
     }
 
-    const likeNotice = async (notice_id, author_id, user_id) => {
+    const likeNotice = async (notice_id, author_id) => {
         try {
-            const response = await createLike(notice_id, author_id, user_id);
-            console.log('Like added!', response);
+            if (likedNotices[notice_id]) {
+                // Remove like if already liked
+                await removeLike(likedNotices[notice_id]);
+                setLikedNotices((prevLikes) => {
+                    const updatedLikes = { ...prevLikes };
+                    delete updatedLikes[notice_id]; // Remove from liked notices
+                    return updatedLikes;
+                });
+            } else {
+                // Create a new like if not liked yet
+                const newLike = await createLike(notice_id, author_id, user_id);
+                setLikedNotices((prevLikes) => ({
+                    ...prevLikes,
+                    [notice_id]: newLike.$id, // Add the new like
+                }));
+            }
         } catch (error) {
-            console.error('Error adding like:', error);
+            console.error('Error toggling like:', error);
         }
-    }
+    };
+
+
+    useEffect(() => {
+        const fetchUserLikes = async () => {
+            try {
+                const userLikes = await getUserLikes(user_id); // Fetch likes for the current user
+                const likedNoticesMap = {}; // Create a map of liked notice IDs
+                userLikes.forEach(like => {
+                    likedNoticesMap[like.notice_id] = like.$id; // Map notice ID to like document ID
+                });
+                setLikedNotices(likedNoticesMap); // Set the liked notices state
+            } catch (error) {
+                console.error('Error fetching user likes:', error);
+            }
+        };
+
+        if (user_id) {
+            fetchUserLikes();
+        }
+    }, [user_id]);
+
 
     return {
         user_id,
@@ -240,7 +276,9 @@ const useNotices = (googleUserData) => {
         addSpreads,
         getSpreads,
         reportNotice,
-        likeNotice
+        likeNotice,
+        likeNotice,
+        likedNotices
     };
 };
 

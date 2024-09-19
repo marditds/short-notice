@@ -17,7 +17,8 @@ export const Notices = ({ notices,
     handleCreateSpread, handleReport,
     handleLike,
     eventKey,
-    username
+    username,
+    likedNotices
 }) => {
 
     const location = useLocation();
@@ -105,9 +106,11 @@ export const Notices = ({ notices,
                                                 disabled={username === notice.username}
                                                 onClick={() => handleLike(notice)}
                                             >
-                                                <BsHandThumbsUp
-                                                    size={19}
-                                                />
+                                                {likedNotices[notice.$id] ? (
+                                                    <BsHandThumbsUpFill size={19} />
+                                                ) : (
+                                                    <BsHandThumbsUp size={19} />
+                                                )}
                                             </Button>
                                             <Button
                                                 onClick={() => handleCreateSpread(notice)}
@@ -119,11 +122,11 @@ export const Notices = ({ notices,
                                                 />
                                             </Button>
                                             <Button
+                                                onClick={() => handleReport(notice)}
                                                 className='notice__reaction-btn'
                                                 disabled={username === notice.username}
                                             >
                                                 <BsExclamationTriangle
-                                                    onClick={() => handleReport(notice)}
                                                     size={19}
                                                 />
                                             </Button>

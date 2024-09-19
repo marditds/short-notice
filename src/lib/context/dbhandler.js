@@ -550,5 +550,36 @@ export const createLike = async (notice_id, author_id, user_id) => {
     }
 }
 
+export const removeLike = async (like_id) => {
+    try {
+        const response = await databases.deleteDocument(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_LIKES_COLLECTION,
+            like_id
+        );
+        console.log('Like removed successfully:', response);
+        return response;
+    } catch (error) {
+        console.error('Error removing like:', error);
+        throw error;
+    }
+}
+
+export const getUserLikes = async (user_id) => {
+    try {
+        const response = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_LIKES_COLLECTION,
+            [Query.equal('user_id', user_id)] // Get all likes for this user
+        );
+        return response.documents;
+    } catch (error) {
+        console.error('Error fetching user likes:', error);
+        return [];
+    }
+};
+
+
+
 export const account = new Account(client);
 export { ID } from 'appwrite';

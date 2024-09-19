@@ -23,11 +23,12 @@ const UserProfile = () => {
     const [showEditModal, setShowEditModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-    const { user_id, userNotices, userSpreads, isLoading, isAddingNotice, removingNoticeId, isRemovingNotice, addNotice, editNotice, removeNotice, setRemovingNoticeId } = useNotices(googleUserData);
+    const { user_id, userNotices, userSpreads, isLoading, isAddingNotice, removingNoticeId, isRemovingNotice, addNotice, editNotice, removeNotice, setRemovingNoticeId, likedNotices, likeNotice } = useNotices(googleUserData);
 
     const { fetchUsersData } = useUserInfo(googleUserData);
 
     const [spreadNotices, setSpreadNotices] = useState(userSpreads);
+    const [likedNoticesData, setLikedNoticesData] = useState([]);
 
     const { avatarUrl } = useUserAvatar(user_id);
 
@@ -63,6 +64,18 @@ const UserProfile = () => {
     useEffect(() => {
         fetchUsersData(userSpreads, setSpreadNotices, avatarUtil);
     }, [userSpreads])
+
+    useEffect(() => {
+        const filterLikedNotices = () => {
+            const likedNoticeIds = Object.keys(likedNotices); // Get the IDs of liked notices
+            const allNotices = [...userNotices, ...spreadNotices]; // Combine user and spread notices
+            const filteredLikedNotices = allNotices.filter(notice => likedNoticeIds.includes(notice.$id)); // Filter liked notices
+            setLikedNoticesData(filteredLikedNotices); // Update state with only liked notices
+        };
+        filterLikedNotices();
+    }, [likedNotices, userNotices, spreadNotices]); // Re-run whenever any of these change
+
+
 
 
     const handleEditNotice = (noticeId, currentText) => {
@@ -104,8 +117,8 @@ const UserProfile = () => {
         setRemovingNoticeId(null);
     }
 
-    const handleViewSpreads = () => {
-        console.log(userSpreads);
+    const handleLike = async (notice) => {
+        await likeNotice(notice.$id, notice.user_id);
     }
 
 
@@ -157,6 +170,8 @@ const UserProfile = () => {
                     <Notices
                         notices={spreadNotices}
                         username={username}
+                        likedNotices={likedNotices}
+                        handleLike={handleLike}
                     />
                 </Tab>
                 <Tab
@@ -164,8 +179,10 @@ const UserProfile = () => {
                     title="Likes"
                 >
                     <Notices
-                        notices={spreadNotices}
+                        notices={likedNoticesData}
                         username={username}
+                        likedNotices={likedNotices}
+                        handleLike={handleLike}
                     />
                 </Tab>
             </Tabs>
