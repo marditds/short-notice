@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { createNotice, getUserNotices, updateNotice, deleteNotice, getAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSpreads, fetchSpreads, createReport } from '../../lib/context/dbhandler';
+import { createNotice, getUserNotices, updateNotice, deleteNotice, getAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSpreads, fetchSpreads, createReport, createLike } from '../../lib/context/dbhandler';
 import { UserId } from '../../components/User/UserId.jsx';
 
 const useNotices = (googleUserData) => {
@@ -213,6 +213,15 @@ const useNotices = (googleUserData) => {
         }
     }
 
+    const likeNotice = async (notice_id, author_id, user_id) => {
+        try {
+            const response = await createLike(notice_id, author_id, user_id);
+            console.log('Like added!', response);
+        } catch (error) {
+            console.error('Error adding like:', error);
+        }
+    }
+
     return {
         user_id,
         userNotices,
@@ -230,7 +239,8 @@ const useNotices = (googleUserData) => {
         updateInterests,
         addSpreads,
         getSpreads,
-        reportNotice
+        reportNotice,
+        likeNotice
     };
 };
 

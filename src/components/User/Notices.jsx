@@ -1,29 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { formatDateToLocal, calculateCountdown } from '../../lib/utils/dateUtils';
-import { useUserContext } from '../../lib/context/UserContext';
-import useNotices from '../../lib/hooks/useNotices';
-import { Row, Col, Form, Modal } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
 import { CgTrash } from 'react-icons/cg';
 import { AiFillEdit } from 'react-icons/ai';
 import { RiMegaphoneLine } from 'react-icons/ri';
-import { BsHandThumbsUp, BsExclamationTriangle } from 'react-icons/bs';
+import { BsHandThumbsUp, BsHandThumbsUpFill, BsExclamationTriangle } from 'react-icons/bs';
 import { Button } from 'react-bootstrap';
-import defaultAvatar from '../../assets/default.png';
+import defaultAvatar from '../../assets/default.png';;
 
 
 
 export const Notices = ({ notices,
     handleEditNotice,
     handleDeleteNotice,
-    handleCreateSpread, handleReport, eventKey, username }) => {
+    handleCreateSpread, handleReport,
+    handleLike,
+    eventKey,
+    username
+}) => {
 
     const location = useLocation();
 
     const [countdowns, setCountdowns] = useState([]);
-
-    const { googleUserData } = useUserContext();
-    const { removingNoticeId, isRemovingNotice, addNotice, editNotice, removeNotice, setRemovingNoticeId } = useNotices(googleUserData);
 
 
     useEffect(() => {
@@ -35,8 +34,6 @@ export const Notices = ({ notices,
 
         return () => clearInterval(intervalId);
     }, [notices]);
-
-
 
 
 
@@ -106,6 +103,7 @@ export const Notices = ({ notices,
                                             <Button
                                                 className='notice__reaction-btn'
                                                 disabled={username === notice.username}
+                                                onClick={() => handleLike(notice)}
                                             >
                                                 <BsHandThumbsUp
                                                     size={19}

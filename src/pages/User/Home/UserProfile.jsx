@@ -159,6 +159,15 @@ const UserProfile = () => {
                         username={username}
                     />
                 </Tab>
+                <Tab
+                    eventKey='my-likes'
+                    title="Likes"
+                >
+                    <Notices
+                        notices={spreadNotices}
+                        username={username}
+                    />
+                </Tab>
             </Tabs>
 
 

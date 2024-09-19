@@ -47,7 +47,7 @@ const UserFeed = () => {
 
     const [selectedTags, setSelectedTags] = useState({});
     const { googleUserData, username } = useUserContext();
-    const { user_id, getInterests, getFeedNotices, addSpreads, reportNotice } = useNotices(googleUserData);
+    const { user_id, getInterests, getFeedNotices, addSpreads, reportNotice, likeNotice } = useNotices(googleUserData);
 
     const { getUsersData, fetchUsersData } = useUserInfo(googleUserData);
     const [feedNotices, setFeedNotices] = useState([]);
@@ -180,6 +180,18 @@ const UserFeed = () => {
         }
     }
 
+
+
+    const handleLike = async (notice) => {
+        try {
+            await likeNotice(notice.$id, notice.user_id, user_id)
+        } catch (error) {
+            console.error('Could not like notice');
+        }
+    }
+
+
+
     return (
         <div>
 
@@ -197,6 +209,7 @@ const UserFeed = () => {
                     notices={feedNotices}
                     username={username}
                     handleCreateSpread={handleCreateSpread}
+                    handleLike={handleLike}
                     handleReport={handleReport}
                 /> :
                 <Loading size={24} />
