@@ -471,7 +471,7 @@ export const updateUserInterests = async (userId, selectedTags) => {
     }
 };
 
-export const createSpreads = async (user_id, author_id, notice_id, timestamp) => {
+export const createSpreads = async (user_id, author_id, notice_id) => {
     try {
         const response = await databases.createDocument(
             import.meta.env.VITE_DATABASE,
@@ -481,7 +481,6 @@ export const createSpreads = async (user_id, author_id, notice_id, timestamp) =>
                 user_id: user_id,
                 author_id: author_id,
                 notice_id: notice_id,
-                timestamp: timestamp,
             }
         );
         console.log('Spread entry created successfully:', response);
@@ -499,13 +498,27 @@ export const fetchSpreads = async (user_id) => {
             import.meta.env.VITE_SPREADS_COLLECTION,
             [
                 Query.equal('user_id', user_id),
-                Query.orderDesc('timestamp'),
             ]
         )
         console.log('Success fetching the spreads:', response.documents);
         return response.documents;
     } catch (error) {
         console.error('Error fetching spreads:', error);
+    }
+}
+
+export const removeSpread = async (spread_id) => {
+    try {
+        const response = await databases.deleteDocument(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_SPREADS_COLLECTION,
+            spread_id
+        );
+        console.log('Spread removed successfully:', response);
+        return response;
+    } catch (error) {
+        console.error('Error removing spread:', error);
+        throw error;
     }
 }
 
@@ -575,6 +588,24 @@ export const getUserLikes = async (user_id) => {
         return response.documents;
     } catch (error) {
         console.error('Error fetching user likes:', error);
+        return [];
+    }
+};
+
+export const getAllLikedNotices = async (likedNoticeIds) => {
+    try {
+        if (likedNoticeIds.length === 0) {
+            return []; // Return empty array if no likes
+        }
+
+        const allLikedNotices = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_NOTICES_COLLECTION,
+            [Query.equal('$id', likedNoticeIds)]
+        );
+        return allLikedNotices.documents;
+    } catch (error) {
+        console.error('Error fetching all liked notices:', error);
         return [];
     }
 };

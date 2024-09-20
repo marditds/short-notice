@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Profile } from '../../../components/User/Profile';
 import { Notices } from '../../../components/User/Notices';
 import { Tabs, Tab, Form, Modal, Button } from 'react-bootstrap';
@@ -23,7 +23,7 @@ const UserProfile = () => {
     const [showEditModal, setShowEditModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-    const { user_id, userNotices, userSpreads, isLoading, isAddingNotice, removingNoticeId, isRemovingNotice, addNotice, editNotice, removeNotice, setRemovingNoticeId, likedNotices, likeNotice } = useNotices(googleUserData);
+    const { user_id, userNotices, userSpreads, likedNotices, isLoading, isAddingNotice, removingNoticeId, isRemovingNotice, addNotice, editNotice, removeNotice, setRemovingNoticeId, likeNotice, getAllLikedNotices } = useNotices(googleUserData);
 
     const { fetchUsersData } = useUserInfo(googleUserData);
 
@@ -32,49 +32,37 @@ const UserProfile = () => {
 
     const { avatarUrl } = useUserAvatar(user_id);
 
-    // useEffect(() => {
-    //     const fetchUsersData = async () => {
-    //         try {
-    //             const allUsersData = await getUsersData();
-
-
-    //             const updatedSpreadsNotices = await Promise.all(
-    //                 userSpreads.map(async (notice) => {
-    //                     const user = allUsersData.documents.find(user => user.$id === notice.user_id);
-    //                     if (user && user.avatar) {
-    //                         const avatarUrl = getAvatarUrl(user.avatar);
-    //                         return { ...notice, avatarUrl, username: user.username };
-    //                     }
-    //                     return { ...notice, avatarUrl: null, username: user?.username || 'Unknown User' };
-    //                 })
-    //             );
-
-    //             if (JSON.stringify(updatedSpreadsNotices) !== JSON.stringify(userSpreads)) {
-    //                 setSpreadNotices(updatedSpreadsNotices);
-    //             }
-
-    //         } catch (error) {
-    //             console.error('Error getting users data', error);
-    //         }
-    //     };
-
-    //     fetchUsersData();
-    // }, [userSpreads]);
 
     useEffect(() => {
         fetchUsersData(userSpreads, setSpreadNotices, avatarUtil);
     }, [userSpreads])
 
-    useEffect(() => {
-        const filterLikedNotices = () => {
-            const likedNoticeIds = Object.keys(likedNotices); // Get the IDs of liked notices
-            const allNotices = [...userNotices, ...spreadNotices]; // Combine user and spread notices
-            const filteredLikedNotices = allNotices.filter(notice => likedNoticeIds.includes(notice.$id)); // Filter liked notices
-            setLikedNoticesData(filteredLikedNotices); // Update state with only liked notices
-        };
-        filterLikedNotices();
-    }, [likedNotices, userNotices, spreadNotices]); // Re-run whenever any of these change
 
+    useEffect(() => {
+        fetchUsersData(likedNoticesData, setLikedNoticesData, avatarUtil);
+    }, [likedNoticesData])
+
+
+    // Fetch liked notices
+    useEffect(() => {
+        const fetchLikedNotices = async () => {
+            const allLikedNotices = await getAllLikedNotices();
+
+            console.log('allLikedNotices', allLikedNotices);
+
+            setLikedNoticesData(allLikedNotices);
+        };
+        fetchLikedNotices();
+    }, [user_id]);
+
+
+    // useEffect(() => {
+    //     const fetchLikedNotices = async () => {
+    //         const allLikedNotices = await getAllLikedNotices();
+    //         setLikedNoticesData(allLikedNotices);
+    //     };
+    //     fetchLikedNotices();
+    // }, [getAllLikedNotices]);
 
 
 
@@ -119,6 +107,8 @@ const UserProfile = () => {
 
     const handleLike = async (notice) => {
         await likeNotice(notice.$id, notice.user_id);
+        const updatedLikedNotices = await getAllLikedNotices();
+        setLikedNoticesData(updatedLikedNotices);
     }
 
 

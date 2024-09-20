@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { createNotice, getUserNotices, updateNotice, deleteNotice, getAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSpreads, fetchSpreads, createReport, createLike, removeLike, getUserLikes } from '../../lib/context/dbhandler';
+import { createNotice, getUserNotices, updateNotice, deleteNotice, getAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSpreads, fetchSpreads, removeSpread, createReport, createLike, removeLike, getUserLikes, getAllLikedNotices as fetchAllLikedNotices } from '../../lib/context/dbhandler';
 import { UserId } from '../../components/User/UserId.jsx';
 
 const useNotices = (googleUserData) => {
@@ -12,7 +12,7 @@ const useNotices = (googleUserData) => {
     const [isRemovingNotice, setIsRemovingNotice] = useState(false);
     const [removingNoticeId, setRemovingNoticeId] = useState(null);
 
-
+    // Fetch User Notces
     useEffect(() => {
         const fetchUserNotices = async () => {
             if (googleUserData) {
@@ -56,12 +56,18 @@ const useNotices = (googleUserData) => {
 
     }, [googleUserData]);
 
+    // Fetch User Spreads
     useEffect(() => {
         const fetchUserSpreads = async () => {
             if (user_id) {
-                const spreads = await getSpreads();
+                const spreads = await fetchSpreads(user_id);
+
+                // console.log('Spreads', spreads);
 
                 const allNotices = await getAllNotices();
+
+                // console.log('allNotices', allNotices);
+
                 const matchedNotices = compareNoticesWithSpreads(allNotices, spreads);
                 setUserSpreads(matchedNotices);
             }
@@ -75,6 +81,31 @@ const useNotices = (googleUserData) => {
             spreads.some(spread => spread.notice_id === notice.$id)
         );
     };
+
+    // Fetch User Likes
+    useEffect(() => {
+        const fetchUserLikes = async () => {
+            try {
+                const userLikes = await getUserLikes(user_id); // Fetch likes for the current user
+
+                console.log('userLikes1', userLikes);
+
+                const likedNoticesMap = {}; // Create a map of liked notice IDs
+                userLikes.forEach(like => {
+                    likedNoticesMap[like.notice_id] = like.$id; // Map notice ID to like document ID
+                });
+                setLikedNotices(likedNoticesMap); // Set the liked notices state
+            } catch (error) {
+                console.error('Error fetching user likes:', error);
+            }
+        };
+
+        if (user_id) {
+            fetchUserLikes();
+        }
+    }, [user_id]);
+
+
 
     const addNotice = async (text, duration, selectedTags) => {
 
@@ -179,31 +210,44 @@ const useNotices = (googleUserData) => {
         }
     }
 
-    const addSpreads = async (user_id, author_id, notice_id, timestamp) => {
+    const addSpreads = async (author_id, notice_id) => {
         try {
-            const response = await createSpreads(user_id, author_id, notice_id, timestamp);
-            console.log('Spreading!', response);
-        } catch (error) {
-            console.error('Not spreading:', error);
-
-        }
-    }
-
-    const getSpreads = async () => {
-        try {
-            if (user_id) {
-                const spreads = await fetchSpreads(user_id);
-                setUserSpreads(spreads);
-                // console.log('Got User Spreads:', spreads);
-                return spreads;
+            if (userSpreads[notice_id]) {
+                // Remove spread if already spread
+                await removeSpread(userSpreads[notice_id]);
+                setUserSpreads((prevSpreads) => {
+                    const updatedSpreads = { ...prevSpreads };
+                    delete updatedSpreads[notice_id]; // Remove from spread notices
+                    return updatedSpreads;
+                });
             } else {
-                console.log('User ID is not available');
-                return [];
+                // Create a new spread if not spread yet
+                const newSpread = await createSpreads(notice_id, author_id, user_id);
+                setUserSpreads((prevSpread) => ({
+                    ...prevSpread,
+                    [notice_id]: newSpread.$id, // Add the new like
+                }));
             }
         } catch (error) {
-            console.error('Error fetching spreads:', error);
+            console.error('Error toggling spreads:', error);
         }
     }
+
+    // const getSpreads = async () => {
+    //     try {
+    //         if (user_id) {
+    //             const spreads = await fetchSpreads(user_id);
+    //             setUserSpreads(spreads);
+    //             // console.log('Got User Spreads:', spreads);
+    //             return spreads;
+    //         } else {
+    //             console.log('User ID is not available');
+    //             return [];
+    //         }
+    //     } catch (error) {
+    //         console.error('Error fetching spreads:', error);
+    //     }
+    // }
 
     const reportNotice = async (notice_id, author_id, reason, user_id) => {
         try {
@@ -237,31 +281,33 @@ const useNotices = (googleUserData) => {
         }
     };
 
+    const getAllLikedNotices = async () => {
+        try {
 
-    useEffect(() => {
-        const fetchUserLikes = async () => {
-            try {
-                const userLikes = await getUserLikes(user_id); // Fetch likes for the current user
-                const likedNoticesMap = {}; // Create a map of liked notice IDs
-                userLikes.forEach(like => {
-                    likedNoticesMap[like.notice_id] = like.$id; // Map notice ID to like document ID
-                });
-                setLikedNotices(likedNoticesMap); // Set the liked notices state
-            } catch (error) {
-                console.error('Error fetching user likes:', error);
-            }
-        };
+            const userLikes = await getUserLikes(user_id);
 
-        if (user_id) {
-            fetchUserLikes();
+            console.log('userLikes2', userLikes);
+
+            const likedNoticeIds = userLikes.map(like => like.notice_id);
+
+            console.log('likedNoticeIds', likedNoticeIds);
+
+            return await fetchAllLikedNotices(likedNoticeIds);
+
+
+        } catch (error) {
+            console.error('Error fetching all liked notices:', error);
+            return [];
         }
-    }, [user_id]);
+    };
+
 
 
     return {
         user_id,
         userNotices,
         userSpreads,
+        likedNotices,
         isLoading,
         isAddingNotice,
         isRemovingNotice,
@@ -274,11 +320,10 @@ const useNotices = (googleUserData) => {
         setRemovingNoticeId,
         updateInterests,
         addSpreads,
-        getSpreads,
+        getAllLikedNotices,
         reportNotice,
         likeNotice,
-        likeNotice,
-        likedNotices
+
     };
 };
 

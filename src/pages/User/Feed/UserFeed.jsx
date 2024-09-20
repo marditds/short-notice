@@ -47,7 +47,7 @@ const UserFeed = () => {
 
     const [selectedTags, setSelectedTags] = useState({});
     const { googleUserData, username } = useUserContext();
-    const { user_id, userNotices, getInterests, getFeedNotices, addSpreads, reportNotice, likeNotice, fetchLikes, likedNotices } = useNotices(googleUserData);
+    const { user_id, getInterests, getFeedNotices, addSpreads, reportNotice, likeNotice, likedNotices } = useNotices(googleUserData);
 
     const { getUsersData, fetchUsersData } = useUserInfo(googleUserData);
     const [feedNotices, setFeedNotices] = useState([]);
@@ -174,26 +174,12 @@ const UserFeed = () => {
 
 
     const handleCreateSpread = async (notice) => {
-        const now = new Date();
-        const expiresAt = new Date(notice.timestamp);
-        expiresAt.setHours(expiresAt.getHours() + 24);
         try {
-            await addSpreads(user_id, notice.user_id, notice.$id, expiresAt.toISOString());
-            console.log('Spread entry created successfully');
+            await addSpreads(user_id, notice.user_id, notice.$id);
         } catch (error) {
             console.error('Error creating spread entry:', error);
         }
     };
-
-    const handleReport = async (notice) => {
-        try {
-            await reportNotice(notice.$id, notice.user_id, reason, user_id);
-            console.log('Notice REPORTED!');
-        } catch (error) {
-            console.error('Could not report notice');
-        }
-    }
-
 
 
     const handleLike = async (notice) => {
@@ -204,6 +190,15 @@ const UserFeed = () => {
         }
     }
 
+
+    const handleReport = async (notice) => {
+        try {
+            await reportNotice(notice.$id, notice.user_id, reason, user_id);
+            console.log('Notice REPORTED!');
+        } catch (error) {
+            console.error('Could not report notice');
+        }
+    }
 
 
     return (
