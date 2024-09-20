@@ -86,15 +86,13 @@ const useNotices = (googleUserData) => {
     useEffect(() => {
         const fetchUserLikes = async () => {
             try {
-                const userLikes = await getUserLikes(user_id); // Fetch likes for the current user
+                const userLikes = await getUserLikes(user_id);
 
-                console.log('userLikes1', userLikes);
-
-                const likedNoticesMap = {}; // Create a map of liked notice IDs
+                const likedNoticesMap = {};
                 userLikes.forEach(like => {
-                    likedNoticesMap[like.notice_id] = like.$id; // Map notice ID to like document ID
+                    likedNoticesMap[like.notice_id] = like.$id;
                 });
-                setLikedNotices(likedNoticesMap); // Set the liked notices state
+                setLikedNotices(likedNoticesMap);
             } catch (error) {
                 console.error('Error fetching user likes:', error);
             }
@@ -213,19 +211,17 @@ const useNotices = (googleUserData) => {
     const addSpreads = async (notice_id, author_id) => {
         try {
             if (userSpreads[notice_id]) {
-                // Remove spread if already spread
                 await removeSpread(userSpreads[notice_id]);
                 setUserSpreads((prevSpreads) => {
                     const updatedSpreads = { ...prevSpreads };
-                    delete updatedSpreads[notice_id]; // Remove from spread notices
+                    delete updatedSpreads[notice_id];
                     return updatedSpreads;
                 });
             } else {
-                // Create a new spread if not spread yet
                 const newSpread = await createSpreads(notice_id, author_id, user_id);
                 setUserSpreads((prevSpread) => ({
                     ...prevSpread,
-                    [notice_id]: newSpread.$id, // Add the new spread
+                    [notice_id]: newSpread.$id,
                 }));
             }
         } catch (error) {
@@ -286,14 +282,9 @@ const useNotices = (googleUserData) => {
 
             const userLikes = await getUserLikes(user_id);
 
-            console.log('userLikes2', userLikes);
-
             const likedNoticeIds = userLikes.map(like => like.notice_id);
 
-            console.log('likedNoticeIds', likedNoticeIds);
-
             return await fetchAllLikedNotices(likedNoticeIds);
-
 
         } catch (error) {
             console.error('Error fetching all liked notices:', error);

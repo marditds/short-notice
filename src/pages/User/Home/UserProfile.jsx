@@ -48,8 +48,6 @@ const UserProfile = () => {
         const fetchLikedNotices = async () => {
             const allLikedNotices = await getAllLikedNotices();
 
-            console.log('allLikedNotices', allLikedNotices);
-
             setLikedNoticesData(allLikedNotices);
         };
         fetchLikedNotices();

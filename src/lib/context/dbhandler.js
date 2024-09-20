@@ -500,7 +500,6 @@ export const getUserSpreads = async (user_id) => {
                 Query.equal('user_id', user_id),
             ]
         )
-        console.log('Success fetching the spreads:', response.documents);
         return response.documents;
     } catch (error) {
         console.error('Error fetching spreads:', error);

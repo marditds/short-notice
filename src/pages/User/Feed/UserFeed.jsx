@@ -104,7 +104,7 @@ const UserFeed = () => {
 
                 const filteredNotices = await getFeedNotices(selectedTags);
 
-                console.log('Filtered notices:', filteredNotices);
+                // console.log('Filtered notices:', filteredNotices);
 
                 setFeedNotices(filteredNotices);
 
