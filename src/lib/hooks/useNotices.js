@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { createNotice, getUserNotices, updateNotice, deleteNotice, getAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSpreads, fetchSpreads, removeSpread, createReport, createLike, removeLike, getUserLikes, getAllLikedNotices as fetchAllLikedNotices } from '../../lib/context/dbhandler';
+import { createNotice, getUserNotices, updateNotice, deleteNotice, getAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSpreads, getUserSpreads, removeSpread, createReport, createLike, removeLike, getUserLikes, getAllLikedNotices as fetchAllLikedNotices } from '../../lib/context/dbhandler';
 import { UserId } from '../../components/User/UserId.jsx';
 
 const useNotices = (googleUserData) => {
@@ -60,7 +60,7 @@ const useNotices = (googleUserData) => {
     useEffect(() => {
         const fetchUserSpreads = async () => {
             if (user_id) {
-                const spreads = await fetchSpreads(user_id);
+                const spreads = await getUserSpreads(user_id);
 
                 // console.log('Spreads', spreads);
 
@@ -210,7 +210,7 @@ const useNotices = (googleUserData) => {
         }
     }
 
-    const addSpreads = async (author_id, notice_id) => {
+    const addSpreads = async (notice_id, author_id) => {
         try {
             if (userSpreads[notice_id]) {
                 // Remove spread if already spread
@@ -225,7 +225,7 @@ const useNotices = (googleUserData) => {
                 const newSpread = await createSpreads(notice_id, author_id, user_id);
                 setUserSpreads((prevSpread) => ({
                     ...prevSpread,
-                    [notice_id]: newSpread.$id, // Add the new like
+                    [notice_id]: newSpread.$id, // Add the new spread
                 }));
             }
         } catch (error) {

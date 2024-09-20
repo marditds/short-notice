@@ -471,16 +471,16 @@ export const updateUserInterests = async (userId, selectedTags) => {
     }
 };
 
-export const createSpreads = async (user_id, author_id, notice_id) => {
+export const createSpreads = async (notice_id, author_id, user_id) => {
     try {
         const response = await databases.createDocument(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_SPREADS_COLLECTION,
             ID.unique(),
             {
-                user_id: user_id,
-                author_id: author_id,
                 notice_id: notice_id,
+                author_id: author_id,
+                user_id: user_id
             }
         );
         console.log('Spread entry created successfully:', response);
@@ -491,7 +491,7 @@ export const createSpreads = async (user_id, author_id, notice_id) => {
     }
 };
 
-export const fetchSpreads = async (user_id) => {
+export const getUserSpreads = async (user_id) => {
     try {
         const response = await databases.listDocuments(
             import.meta.env.VITE_DATABASE,
@@ -506,6 +506,25 @@ export const fetchSpreads = async (user_id) => {
         console.error('Error fetching spreads:', error);
     }
 }
+
+export const getAllSpreadNotices = async (spreadNoticeIds) => {
+    try {
+        if (spreadNoticeIds.length === 0) {
+            return []; // Return empty array if no spread
+        }
+
+        const allSpreadNotices = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_NOTICES_COLLECTION,
+            [Query.equal('$id', spreadNoticeIds)]
+        );
+        return allSpreadNotices.documents;
+    } catch (error) {
+        console.error('Error fetching all spread notices:', error);
+        return [];
+    }
+};
+
 
 export const removeSpread = async (spread_id) => {
     try {

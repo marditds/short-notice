@@ -175,7 +175,7 @@ const UserFeed = () => {
 
     const handleCreateSpread = async (notice) => {
         try {
-            await addSpreads(user_id, notice.user_id, notice.$id);
+            await addSpreads(notice.$id, notice.user_id, user_id);
         } catch (error) {
             console.error('Error creating spread entry:', error);
         }
