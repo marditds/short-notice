@@ -18,6 +18,7 @@ import CreateUsername from './pages/CreateUsername/CreateUsername.jsx';
 import UserSettings from './pages/User/Settings/UserSettings.jsx';
 import UserProfile from './pages/User/Home/UserProfile.jsx';
 import UserFeed from './pages/User/Feed/UserFeed.jsx';
+import OtherUserProfile from './pages/User/OtherUser/OtherUserProfile.jsx';
 
 const router = createBrowserRouter([
   {
@@ -75,6 +76,10 @@ const router = createBrowserRouter([
           {
             path: 'feed',
             element: <UserFeed />
+          },
+          {
+            path: ':otherUsername',
+            element: <OtherUserProfile />
           },
           {
             index: true,

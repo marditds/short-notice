@@ -146,19 +146,6 @@ const UserFeed = () => {
         fetchUsersData(feedNotices, setFeedNotices, avatarUtil)
     }, [feedNotices])
 
-    // useEffect(() => {
-    //     const fetchAllLikes = async () => {
-    //         // Fetch likes for user-created notices
-    //         if (userNotices.length > 0) {
-    //             await fetchLikes(userNotices);
-    //         }
-    //         // Fetch likes for spread notices
-    //         if (spreadNotices.length > 0) {
-    //             await fetchLikes(spreadNotices);
-    //         }
-    //     };
-    //     fetchAllLikes();
-    // }, [userNotices, spreadNotices]); 
 
 
     const handleTagSelect = (categoryName, tagIndex, tag, isSelected) => {
@@ -205,13 +192,20 @@ const UserFeed = () => {
         <div>
 
 
-            <h2>Select a tag to see related notices:</h2>
 
-            <NoticeTags
-                tagCategories={tagCategories}
-                handleTagSelect={handleTagSelect}
-                selectedTags={selectedTags}
-            />
+            {!isLoading ?
+                <>
+                    <h2>Select a tag to see related notices:</h2>
+
+                    <NoticeTags
+                        tagCategories={tagCategories}
+                        handleTagSelect={handleTagSelect}
+                        selectedTags={selectedTags}
+                    />
+                </>
+                :
+                <div><Loading size={24} />Loaidng {username}'s tags</div>
+            }
 
             {!isLoading ?
                 <Notices
@@ -222,7 +216,8 @@ const UserFeed = () => {
                     handleLike={handleLike}
                     handleReport={handleReport}
                 /> :
-                <Loading size={24} />
+                <div><Loading size={24} />Loaidng {username}'s feed</div>
+
             }
 
         </div>

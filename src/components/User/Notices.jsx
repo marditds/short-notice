@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { formatDateToLocal, calculateCountdown } from '../../lib/utils/dateUtils';
 import { Row, Col } from 'react-bootstrap';
 import { CgTrash } from 'react-icons/cg';
@@ -83,18 +83,20 @@ export const Notices = ({ notices,
                                 </div>
                                 :
                                 <div className='d-flex flex-column justify-content-end h-100'>
-                                    <div className='d-flex align-items-center mt-auto'>
-                                        <p className='w-100 my-0 text-end'
-                                            style={{ marginRight: '12px' }}>
-                                            <strong>{notice.username}</strong>
-                                        </p>
-                                        <img
-                                            src={notice.avatarUrl || defaultAvatar}
-                                            alt="Profile"
-                                            style={{ borderRadius: '50%', width: 50, height: 50, marginRight: '12px' }}
-                                            className='d-flex ms-auto'
-                                        />
-                                    </div>
+                                    <Link to={`../${notice.username}`}>
+                                        <div className='d-flex align-items-center mt-auto'>
+                                            <p className='w-100 my-0 text-end'
+                                                style={{ marginRight: '12px' }}>
+                                                <strong>{notice.username}</strong>
+                                            </p>
+                                            <img
+                                                src={notice.avatarUrl || defaultAvatar}
+                                                alt="Profile"
+                                                style={{ borderRadius: '50%', width: 50, height: 50, marginRight: '12px' }}
+                                                className='d-flex ms-auto'
+                                            />
+                                        </div>
+                                    </Link>
                                     <div className='d-grid'>
 
 
