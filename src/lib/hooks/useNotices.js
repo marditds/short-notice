@@ -189,6 +189,15 @@ const useNotices = (googleUserData) => {
         }
     };
 
+    const getNoticesByUser = async (user_id) => {
+        try {
+            const response = await getUserNotices(user_id);
+            return response;
+        } catch (error) {
+            console.error('Error getNoticesByUser - useNotices');
+        }
+    }
+
     const updateInterests = async (user_id, selectedTags) => {
         try {
             const interests = await updateUserInterests(user_id, selectedTags);
@@ -228,22 +237,6 @@ const useNotices = (googleUserData) => {
             console.error('Error toggling spreads:', error);
         }
     }
-
-    // const getSpreads = async () => {
-    //     try {
-    //         if (user_id) {
-    //             const spreads = await fetchSpreads(user_id);
-    //             setUserSpreads(spreads);
-    //             // console.log('Got User Spreads:', spreads);
-    //             return spreads;
-    //         } else {
-    //             console.log('User ID is not available');
-    //             return [];
-    //         }
-    //     } catch (error) {
-    //         console.error('Error fetching spreads:', error);
-    //     }
-    // }
 
     const reportNotice = async (notice_id, author_id, reason, user_id) => {
         try {
@@ -307,6 +300,7 @@ const useNotices = (googleUserData) => {
         editNotice,
         removeNotice,
         getFeedNotices,
+        getNoticesByUser,
         getInterests,
         setRemovingNoticeId,
         updateInterests,

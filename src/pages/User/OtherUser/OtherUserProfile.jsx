@@ -25,15 +25,17 @@ const OtherUserProfile = () => {
         return localStorage.getItem('currUserId') || null;
     });
 
+    const [notices, setNotices] = useState([]);
+
     const [noticeText, setNoticeText] = useState('');
     const [duration, setDuration] = useState(24);
     const [editingNoticeId, setEditingNoticeId] = useState(null);
     const [showEditModal, setShowEditModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-    const { user_id, userNotices, userSpreads, likedNotices, isLoading, likeNotice, getAllLikedNotices } = useNotices(googleUserData);
+    const { user_id, userNotices, userSpreads, likedNotices, isLoading, likeNotice, getAllLikedNotices, getNoticesByUser } = useNotices(googleUserData);
 
-    const { fetchUsersData, getUsersData } = useUserInfo(googleUserData);
+    const { getUsersData } = useUserInfo(googleUserData);
 
     const [spreadNotices, setSpreadNotices] = useState(userSpreads);
     const [likedNoticesData, setLikedNoticesData] = useState([]);
@@ -55,11 +57,11 @@ const OtherUserProfile = () => {
             try {
                 const allUsers = await getUsersData();
 
-                console.log('allUsers:', allUsers.documents);
+                // console.log('allUsers:', allUsers.documents);
 
                 const currUser = allUsers.documents.find((user) => user.username === otherUsername);
 
-                console.log('currUser:', currUser);
+                // console.log('currUser:', currUser);
 
                 setCurrUserId(currUser.$id);
 
@@ -70,15 +72,29 @@ const OtherUserProfile = () => {
         getCurrUser();
     }, [otherUsername])
 
-
     useEffect(() => {
-        if (currUserId) {
-            console.log('currUserId:', currUserId);
-        } else {
-            console.log('Couldnt find currUserId');
-        }
-    }, [currUserId])
+        const fetchUserNotices = async () => {
+            try {
+                const usrNotices = await getNoticesByUser(currUserId);
 
+                console.log('usrNotices - OtherUserProfile', usrNotices);
+
+                setNotices(usrNotices);
+
+                return usrNotices;
+            } catch (error) {
+                console.error('Error fetchUserNotices - OtherUserProfile');
+
+            }
+        }
+
+        fetchUserNotices();
+
+    }, [otherUsername, currUserId])
+
+    // useEffect(() => {
+    //     console.log('notices - OtherUserProfile', notices);
+    // })
 
 
     const handleLike = async (notice) => {
@@ -105,14 +121,52 @@ const OtherUserProfile = () => {
 
     return (
         <>
-
             <Profile
                 username={otherUsername}
                 avatarUrl={avatarUrl}
             />
 
-
-
+            <Tabs
+                defaultActiveKey="notices"
+                id="justify-tab-example"
+                justify
+            >
+                <Tab
+                    eventKey='notices'
+                    title="Notices"
+                >
+                    <Notices
+                        notices={notices}
+                        // handleEditNotice={handleEditNotice}
+                        // handleDeleteNotice={handleDeleteNotice}
+                        eventKey='my-notices'
+                    />
+                </Tab>
+                <Tab
+                    eventKey='spreads'
+                    title="Spreads"
+                >
+                    SPREADS TAB
+                    {/* <Notices
+                        notices={spreadNotices}
+                        username={username}
+                        likedNotices={likedNotices}
+                        handleLike={handleLike}
+                    /> */}
+                </Tab>
+                <Tab
+                    eventKey='likes'
+                    title="Likes"
+                >
+                    LIKES TAB
+                    {/* <Notices
+                        notices={likedNoticesData}
+                        username={username}
+                        likedNotices={likedNotices}
+                        handleLike={handleLike}
+                    /> */}
+                </Tab>
+            </Tabs>
 
         </>
     )
