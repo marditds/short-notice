@@ -47,12 +47,17 @@ const UserFeed = () => {
 
     const [selectedTags, setSelectedTags] = useState({});
     const { googleUserData, username } = useUserContext();
+
     const { user_id, getInterests, getFeedNotices, addSpreads, reportNotice, likeNotice, likedNotices } = useNotices(googleUserData);
 
-    const { getUsersData, fetchUsersData } = useUserInfo(googleUserData);
+    const { fetchUsersData } = useUserInfo(googleUserData);
+
     const [feedNotices, setFeedNotices] = useState([]);
 
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoadingNotices, setIsLoadingNotices] = useState(false);
+    const [isLoadingUsers, setIsLoadingUsers] = useState(false);
+
+
 
     // User's interets (tags)
     useEffect(() => {
@@ -91,12 +96,13 @@ const UserFeed = () => {
     }, [user_id, tagCategories]);
 
 
-    // Notices based on interests
+    // User's interests
     useEffect(() => {
 
-        setIsLoading(true);
+        const fetchFeedData = async () => {
 
-        const fetchFeedNotices = async () => {
+            setIsLoadingNotices(true);
+            setIsLoadingUsers(true);
 
             try {
 
@@ -108,43 +114,22 @@ const UserFeed = () => {
 
                 setFeedNotices(filteredNotices);
 
+                await fetchUsersData(filteredNotices, setFeedNotices, avatarUtil);
 
             } catch (error) {
                 console.error('Error fetching feed notices:', error);
             } finally {
-                setIsLoading(false);
+                // setIsLoading(false);
+                setIsLoadingNotices(false);
+                setIsLoadingUsers(false);
             }
 
         };
 
-        fetchFeedNotices();
+        fetchFeedData();
 
     }, [selectedTags])
 
-
-    // All users info
-    useEffect(() => {
-
-        const fetchUsersData = async () => {
-            try {
-                const allUsersData = await getUsersData();
-                // console.log('This is allUsersData', allUsersData);
-                setUsersData(allUsersData);
-            } catch (error) {
-                console.error('Error getting users data', error);
-
-            }
-        };
-
-        fetchUsersData();
-
-    }, []);
-
-
-    // Feed notices
-    useEffect(() => {
-        fetchUsersData(feedNotices, setFeedNotices, avatarUtil)
-    }, [feedNotices])
 
 
 
@@ -187,38 +172,31 @@ const UserFeed = () => {
         }
     }
 
+    // Render loading state while data is being fetched
+    if (isLoadingNotices || isLoadingUsers) {
+        return <div><Loading size={24} />Loading feed...</div>;
+    }
 
     return (
         <div>
 
+            <h2>Select a tag to see related notices:</h2>
+
+            <NoticeTags
+                tagCategories={tagCategories}
+                handleTagSelect={handleTagSelect}
+                selectedTags={selectedTags}
+            />
 
 
-            {!isLoading ?
-                <>
-                    <h2>Select a tag to see related notices:</h2>
-
-                    <NoticeTags
-                        tagCategories={tagCategories}
-                        handleTagSelect={handleTagSelect}
-                        selectedTags={selectedTags}
-                    />
-                </>
-                :
-                <div><Loading size={24} />Loaidng {username}'s tags</div>
-            }
-
-            {!isLoading ?
-                <Notices
-                    notices={feedNotices}
-                    username={username}
-                    handleCreateSpread={handleCreateSpread}
-                    likedNotices={likedNotices}
-                    handleLike={handleLike}
-                    handleReport={handleReport}
-                /> :
-                <div><Loading size={24} />Loaidng {username}'s feed</div>
-
-            }
+            <Notices
+                notices={feedNotices}
+                username={username}
+                handleCreateSpread={handleCreateSpread}
+                likedNotices={likedNotices}
+                handleLike={handleLike}
+                handleReport={handleReport}
+            />
 
         </div>
     )

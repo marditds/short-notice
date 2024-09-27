@@ -46,22 +46,12 @@ const UserProfile = () => {
     // Fetch liked notices
     useEffect(() => {
         const fetchLikedNotices = async () => {
-            const allLikedNotices = await getAllLikedNotices();
+            const allLikedNotices = await getAllLikedNotices(user_id);
 
             setLikedNoticesData(allLikedNotices);
         };
         fetchLikedNotices();
     }, [user_id]);
-
-
-    // useEffect(() => {
-    //     const fetchLikedNotices = async () => {
-    //         const allLikedNotices = await getAllLikedNotices();
-    //         setLikedNoticesData(allLikedNotices);
-    //     };
-    //     fetchLikedNotices();
-    // }, [getAllLikedNotices]);
-
 
 
     const handleEditNotice = (noticeId, currentText) => {
@@ -105,7 +95,7 @@ const UserProfile = () => {
 
     const handleLike = async (notice) => {
         await likeNotice(notice.$id, notice.user_id);
-        const updatedLikedNotices = await getAllLikedNotices();
+        const updatedLikedNotices = await getAllLikedNotices(user_id);
         setLikedNoticesData(updatedLikedNotices);
     }
 

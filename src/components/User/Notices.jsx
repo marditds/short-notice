@@ -108,11 +108,11 @@ export const Notices = ({ notices,
                                                 disabled={username === notice.username}
                                                 onClick={() => handleLike(notice)}
                                             >
-                                                {/* {likedNotices[notice.$id] ? ( */}
-                                                <BsHandThumbsUpFill size={19} />
-                                                {/* ) : ( */}
-                                                {/* <BsHandThumbsUp size={19} /> */}
-                                                {/* )} */}
+                                                {likedNotices && likedNotices[notice.$id] ? (
+                                                    <BsHandThumbsUpFill size={19} />
+                                                ) : (
+                                                    <BsHandThumbsUp size={19} />
+                                                )}
                                             </Button>
                                             <Button
                                                 onClick={() => handleCreateSpread(notice)}

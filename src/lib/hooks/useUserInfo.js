@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { updateUser, deleteUser, deleteAllNotices, getUsersDocument } from '../context/dbhandler';
 import { useUserContext } from '../context/UserContext';
 import { UserId } from '../../components/User/UserId';
@@ -51,7 +51,7 @@ const useUserInfo = (data) => {
         }
     }
 
-    const getUsersData = async () => {
+    const getUsersData = useCallback(async () => {
         try {
             const response = await getUsersDocument();
             return response;
@@ -59,7 +59,7 @@ const useUserInfo = (data) => {
             console.error('Error getting users data:', error);
 
         }
-    }
+    }, [data]);
 
     const fetchUsersData = async (notices, setNotices, getAvatarUrl) => {
         try {

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { createNotice, getUserNotices, updateNotice, deleteNotice, getAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSpreads, getUserSpreads, removeSpread, createReport, createLike, removeLike, getUserLikes, getAllLikedNotices as fetchAllLikedNotices } from '../../lib/context/dbhandler';
 import { UserId } from '../../components/User/UserId.jsx';
 
@@ -86,7 +86,7 @@ const useNotices = (googleUserData) => {
     useEffect(() => {
         const fetchUserLikes = async () => {
             try {
-                const userLikes = await getUserLikes(user_id);
+                const userLikes = await getUserLikes(user_id || other_user_id);
 
                 const likedNoticesMap = {};
                 userLikes.forEach(like => {
@@ -189,14 +189,14 @@ const useNotices = (googleUserData) => {
         }
     };
 
-    const getNoticesByUser = async (user_id) => {
+    const getNoticesByUser = useCallback(async (user_id) => {
         try {
             const response = await getUserNotices(user_id);
             return response;
         } catch (error) {
             console.error('Error getNoticesByUser - useNotices');
         }
-    }
+    }, [googleUserData]);
 
     const updateInterests = async (user_id, selectedTags) => {
         try {
@@ -270,7 +270,7 @@ const useNotices = (googleUserData) => {
         }
     };
 
-    const getAllLikedNotices = async () => {
+    const getAllLikedNotices = async (user_id) => {
         try {
 
             const userLikes = await getUserLikes(user_id);
