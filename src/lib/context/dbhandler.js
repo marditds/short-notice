@@ -471,7 +471,28 @@ export const updateUserInterests = async (userId, selectedTags) => {
     }
 };
 
-export const createSpreads = async (notice_id, author_id, user_id) => {
+export const createReport = async (notice_id, author_id, reason, user_id) => {
+    try {
+        const response = await databases.createDocument(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_REPORTS_COLLECTION,
+            ID.unique(),
+            {
+                notice_id: notice_id,
+                author_id: author_id,
+                reason: reason,
+                user_id: user_id
+            }
+        );
+        console.log('Report created successfully:', response);
+        return response;
+    } catch (error) {
+        console.error('Error adding to spreads:', error);
+        throw error;
+    }
+}
+
+export const createSpread = async (notice_id, author_id, user_id) => {
     try {
         const response = await databases.createDocument(
             import.meta.env.VITE_DATABASE,
@@ -491,40 +512,6 @@ export const createSpreads = async (notice_id, author_id, user_id) => {
     }
 };
 
-export const getUserSpreads = async (user_id) => {
-    try {
-        const response = await databases.listDocuments(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_SPREADS_COLLECTION,
-            [
-                Query.equal('user_id', user_id),
-            ]
-        )
-        return response.documents;
-    } catch (error) {
-        console.error('Error fetching spreads:', error);
-    }
-}
-
-export const getAllSpreadNotices = async (spreadNoticeIds) => {
-    try {
-        if (spreadNoticeIds.length === 0) {
-            return []; // Return empty array if no spread
-        }
-
-        const allSpreadNotices = await databases.listDocuments(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_NOTICES_COLLECTION,
-            [Query.equal('$id', spreadNoticeIds)]
-        );
-        return allSpreadNotices.documents;
-    } catch (error) {
-        console.error('Error fetching all spread notices:', error);
-        return [];
-    }
-};
-
-
 export const removeSpread = async (spread_id) => {
     try {
         const response = await databases.deleteDocument(
@@ -536,27 +523,6 @@ export const removeSpread = async (spread_id) => {
         return response;
     } catch (error) {
         console.error('Error removing spread:', error);
-        throw error;
-    }
-}
-
-export const createReport = async (notice_id, author_id, reason, user_id) => {
-    try {
-        const response = await databases.createDocument(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_REPORTS_COLLECTION,
-            ID.unique(),
-            {
-                notice_id: notice_id,
-                author_id: author_id,
-                reason: reason,
-                user_id: user_id
-            }
-        );
-        console.log('Report created successfully:', response);
-        return response;
-    } catch (error) {
-        console.error('Error adding to spreads:', error);
         throw error;
     }
 }
@@ -628,6 +594,38 @@ export const getAllLikedNotices = async (likedNoticeIds) => {
     }
 };
 
+export const getUserSpreads = async (user_id) => {
+    try {
+        const response = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_SPREADS_COLLECTION,
+            [
+                Query.equal('user_id', user_id),
+            ]
+        )
+        return response.documents;
+    } catch (error) {
+        console.error('Error fetching spreads:', error);
+    }
+}
+
+export const getAllSpreadNotices = async (spreadNoticeIds) => {
+    try {
+        if (spreadNoticeIds.length === 0) {
+            return []; // Return empty array if no spread
+        }
+
+        const allSpreadNotices = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_NOTICES_COLLECTION,
+            [Query.equal('$id', spreadNoticeIds)]
+        );
+        return allSpreadNotices.documents;
+    } catch (error) {
+        console.error('Error fetching all spread notices:', error);
+        return [];
+    }
+};
 
 
 export const account = new Account(client);

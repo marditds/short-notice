@@ -52,7 +52,7 @@ const UserFeed = () => {
         user_id,
         getInterests,
         getFeedNotices,
-        addSpreads,
+        spreadNotice,
         reportNotice,
         likeNotice,
         likedNotices,
@@ -65,7 +65,6 @@ const UserFeed = () => {
 
     const [isLoadingNotices, setIsLoadingNotices] = useState(false);
     const [isLoadingUsers, setIsLoadingUsers] = useState(false);
-
 
 
     // User's interets (tags)
@@ -125,6 +124,11 @@ const UserFeed = () => {
 
                 await fetchUsersData(filteredNotices, setFeedNotices, avatarUtil);
 
+                console.log('likedNotices:', likedNotices);
+
+                console.log('spreadNotices:', spreadNotices);
+
+
             } catch (error) {
                 console.error('Error fetching feed notices:', error);
             } finally {
@@ -138,8 +142,6 @@ const UserFeed = () => {
         fetchFeedData();
 
     }, [selectedTags])
-
-
 
 
     const handleTagSelect = (categoryName, tagIndex, tag, isSelected) => {
@@ -156,7 +158,7 @@ const UserFeed = () => {
 
     const handleSpread = async (notice) => {
         try {
-            await addSpreads(notice.$id, notice.user_id, user_id);
+            await spreadNotice(notice.$id, notice.user_id, user_id);
         } catch (error) {
             console.error('Error creating spread entry:', error);
         }
@@ -201,10 +203,10 @@ const UserFeed = () => {
             <Notices
                 notices={feedNotices}
                 user_id={user_id}
-                handleSpread={handleSpread}
                 likedNotices={likedNotices}
                 spreadNotices={spreadNotices}
                 handleLike={handleLike}
+                handleSpread={handleSpread}
                 handleReport={handleReport}
             />
 

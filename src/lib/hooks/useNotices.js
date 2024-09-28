@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { createNotice, getUserNotices, updateNotice, deleteNotice, getAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSpreads, getUserSpreads, removeSpread, createReport, createLike, removeLike, getUserLikes, getAllLikedNotices as fetchAllLikedNotices, getAllSpreadNotices as fetchAllSpreadNotices } from '../../lib/context/dbhandler';
+import { createNotice, getUserNotices, updateNotice, deleteNotice, getAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSpread, getUserSpreads, removeSpread, createReport, createLike, removeLike, getUserLikes, getAllLikedNotices as fetchAllLikedNotices, getAllSpreadNotices as fetchAllSpreadNotices } from '../../lib/context/dbhandler';
 import { UserId } from '../../components/User/UserId.jsx';
 
 const useNotices = (googleUserData) => {
@@ -57,32 +57,66 @@ const useNotices = (googleUserData) => {
     }, [googleUserData]);
 
     // Fetch User Spreads
-    useEffect(() => {
-        const fetchUserSpreads = async () => {
-            if (user_id) {
-                const spreads = await getUserSpreads(user_id);
+    // useEffect(() => {
+    //     const fetchUserSpreads = async () => {
+    //         if (user_id) {
+    //             const spreads = await getUserSpreads(user_id);
 
-                // console.log('Spreads', spreads);
+    //             // console.log('Spreads', spreads);
 
-                const allNotices = await getAllNotices();
+    //             const allNotices = await getAllNotices();
 
-                // console.log('allNotices', allNotices);
+    //             // console.log('allNotices', allNotices);
 
-                const matchedNotices = compareNoticesWithSpreads(allNotices, spreads);
-                setSpreadNotices(matchedNotices);
-            }
-        };
+    //             const matchedNotices = compareNoticesWithSpreads(allNotices, spreads);
+    //             setSpreadNotices(matchedNotices);
+    //         }
+    //     };
 
-        fetchUserSpreads();
-    }, [user_id]);
+    //     fetchUserSpreads();
+    // }, [user_id]);
 
-    const compareNoticesWithSpreads = (notices, spreads) => {
-        return notices.filter(notice =>
-            spreads.some(spread => spread.notice_id === notice.$id)
-        );
-    };
+    // const compareNoticesWithSpreads = (notices, spreads) => {
+    //     return notices.filter(notice =>
+    //         spreads.some(spread => spread.notice_id === notice.$id)
+    //     );
+    // };
 
     // Fetch User Likes
+
+
+    useEffect(() => {
+        const fetchUserSpreads = async () => {
+            try {
+                const userSpreads = await getUserSpreads(user_id);
+
+                const spreadNoticesMap = {};
+                userSpreads.forEach(spread => {
+                    spreadNoticesMap[spread.notice_id] = spread.$id;
+                });
+                setSpreadNotices(spreadNoticesMap);
+            } catch (error) {
+                console.error('Error fetching user spreads:', error);
+            }
+            // if (user_id) {
+            //     const spreads = await getUserSpreads(user_id);
+
+            //     // console.log('Spreads', spreads);
+
+            //     const allNotices = await getAllNotices();
+
+            //     // console.log('allNotices', allNotices);
+
+            //     const matchedNotices = compareNoticesWithSpreads(allNotices, spreads);
+            //     setSpreadNotices(matchedNotices);
+            // }
+        };
+
+        if (user_id) {
+            fetchUserSpreads();
+        }
+    }, [user_id]);
+
     useEffect(() => {
         const fetchUserLikes = async () => {
             try {
@@ -226,7 +260,7 @@ const useNotices = (googleUserData) => {
         }
     }
 
-    const addSpreads = async (notice_id, author_id) => {
+    const spreadNotice = async (notice_id, author_id) => {
         try {
             if (spreadNotices[notice_id]) {
                 await removeSpread(spreadNotices[notice_id]);
@@ -236,7 +270,7 @@ const useNotices = (googleUserData) => {
                     return updatedSpreads;
                 });
             } else {
-                const newSpread = await createSpreads(notice_id, author_id, user_id);
+                const newSpread = await createSpread(notice_id, author_id, user_id);
                 setSpreadNotices((prevSpread) => ({
                     ...prevSpread,
                     [notice_id]: newSpread.$id,
@@ -318,7 +352,7 @@ const useNotices = (googleUserData) => {
         getInterests,
         setRemovingNoticeId,
         updateInterests,
-        addSpreads,
+        spreadNotice,
         getAllLikedNotices,
         getAllSpreadNotices,
         reportNotice,

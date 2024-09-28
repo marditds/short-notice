@@ -23,7 +23,24 @@ const UserProfile = () => {
     const [showEditModal, setShowEditModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-    const { user_id, userNotices, spreadNotices, likedNotices, isLoading, isAddingNotice, removingNoticeId, isRemovingNotice, addNotice, editNotice, removeNotice, setRemovingNoticeId, likeNotice, addSpreads, getAllLikedNotices, getAllSpreadNotices } = useNotices(googleUserData);
+    const {
+        user_id,
+        userNotices,
+        spreadNotices,
+        likedNotices,
+        isLoading,
+        isAddingNotice,
+        removingNoticeId,
+        isRemovingNotice,
+        addNotice,
+        editNotice,
+        removeNotice,
+        setRemovingNoticeId,
+        likeNotice,
+        spreadNotice,
+        getAllLikedNotices,
+        getAllSpreadNotices
+    } = useNotices(googleUserData);
 
     const { fetchUsersData } = useUserInfo(googleUserData);
 
@@ -111,7 +128,7 @@ const UserProfile = () => {
 
     const handleSpread = async (notice) => {
         try {
-            await addSpreads(notice.$id, notice.user_id, user_id);
+            await spreadNotice(notice.$id, notice.user_id, user_id);
         } catch (error) {
             console.error('Error creating spread entry:', error);
         }

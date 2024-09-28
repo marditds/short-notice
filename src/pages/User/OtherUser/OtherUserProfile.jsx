@@ -33,13 +33,12 @@ const OtherUserProfile = () => {
     const [showEditModal, setShowEditModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-    const { user_id, userNotices,
+    const { user_id,
         likedNotices,
         spreadNotices,
         isLoading,
         likeNotice,
-        addSpreads,
-        setLikedNotices,
+        spreadNotice,
         getAllLikedNotices,
         getAllSpreadNotices,
         getNoticesByUser
@@ -154,7 +153,7 @@ const OtherUserProfile = () => {
 
     const handleSpread = async (notice) => {
         try {
-            await addSpreads(notice.$id, notice.user_id);
+            await spreadNotice(notice.$id, notice.user_id);
         } catch (error) {
             console.error('Error creating spread entry:', error);
         }
