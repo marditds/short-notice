@@ -23,19 +23,19 @@ const UserProfile = () => {
     const [showEditModal, setShowEditModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-    const { user_id, userNotices, userSpreads, likedNotices, isLoading, isAddingNotice, removingNoticeId, isRemovingNotice, addNotice, editNotice, removeNotice, setRemovingNoticeId, likeNotice, getAllLikedNotices } = useNotices(googleUserData);
+    const { user_id, userNotices, spreadNotices, likedNotices, isLoading, isAddingNotice, removingNoticeId, isRemovingNotice, addNotice, editNotice, removeNotice, setRemovingNoticeId, likeNotice, addSpreads, getAllLikedNotices, getAllSpreadNotices } = useNotices(googleUserData);
 
     const { fetchUsersData } = useUserInfo(googleUserData);
 
-    const [spreadNotices, setSpreadNotices] = useState(userSpreads);
+    const [spreadNoticesData, setSpreadNoticesData] = useState([]);
     const [likedNoticesData, setLikedNoticesData] = useState([]);
 
     const { avatarUrl } = useUserAvatar(user_id);
 
 
     useEffect(() => {
-        fetchUsersData(userSpreads, setSpreadNotices, avatarUtil);
-    }, [userSpreads])
+        fetchUsersData(spreadNoticesData, setSpreadNoticesData, avatarUtil);
+    }, [spreadNoticesData])
 
 
     useEffect(() => {
@@ -52,6 +52,16 @@ const UserProfile = () => {
         };
         fetchLikedNotices();
     }, [user_id]);
+
+    // Fetch spread notices 
+    useEffect(() => {
+        const fetchSpreadNotices = async () => {
+            const allSpreadNotices = await getAllSpreadNotices(user_id);
+
+            setSpreadNoticesData(allSpreadNotices);
+        };
+        fetchSpreadNotices();
+    }, [user_id])
 
 
     const handleEditNotice = (noticeId, currentText) => {
@@ -98,6 +108,14 @@ const UserProfile = () => {
         const updatedLikedNotices = await getAllLikedNotices(user_id);
         setLikedNoticesData(updatedLikedNotices);
     }
+
+    const handleSpread = async (notice) => {
+        try {
+            await addSpreads(notice.$id, notice.user_id, user_id);
+        } catch (error) {
+            console.error('Error creating spread entry:', error);
+        }
+    };
 
 
     const timerSpacing = 'mx-2';
@@ -146,10 +164,12 @@ const UserProfile = () => {
                     title="Spreads"
                 >
                     <Notices
-                        notices={spreadNotices}
+                        notices={spreadNoticesData}
                         username={username}
                         likedNotices={likedNotices}
+                        spreadNotices={spreadNotices}
                         handleLike={handleLike}
+                        handleSpread={handleSpread}
                     />
                 </Tab>
                 <Tab
@@ -160,7 +180,9 @@ const UserProfile = () => {
                         notices={likedNoticesData}
                         username={username}
                         likedNotices={likedNotices}
+                        spreadNotices={spreadNotices}
                         handleLike={handleLike}
+                        handleSpread={handleSpread}
                     />
                 </Tab>
             </Tabs>

@@ -34,10 +34,11 @@ const OtherUserProfile = () => {
     const [showDeleteModal, setShowDeleteModal] = useState(false);
 
     const { user_id, userNotices,
-        userSpreads,
         likedNotices,
+        spreadNotices,
         isLoading,
         likeNotice,
+        addSpreads,
         setLikedNotices,
         getAllLikedNotices,
         getAllSpreadNotices,
@@ -151,6 +152,13 @@ const OtherUserProfile = () => {
         }
     }
 
+    const handleSpread = async (notice) => {
+        try {
+            await addSpreads(notice.$id, notice.user_id);
+        } catch (error) {
+            console.error('Error creating spread entry:', error);
+        }
+    };
 
     const timerSpacing = 'mx-2';
     const timerDisplay = 'd-flex';
@@ -187,7 +195,9 @@ const OtherUserProfile = () => {
                     <Notices
                         notices={notices}
                         handleLike={handleLike}
+                        handleSpread={handleSpread}
                         likedNotices={likedNotices}
+                        spreadNotices={spreadNotices}
                         eventKey='my-notices'
                     />
                 </Tab>
@@ -201,7 +211,9 @@ const OtherUserProfile = () => {
                         notices={spreadNoticesData}
                         user_id={user_id}
                         likedNotices={likedNotices}
+                        spreadNotices={spreadNotices}
                         handleLike={handleLike}
+                        handleSpread={handleSpread}
                     />
                 </Tab>
 
@@ -215,7 +227,9 @@ const OtherUserProfile = () => {
                             notices={likedNoticesData}
                             user_id={user_id}
                             likedNotices={likedNotices}
+                            spreadNotices={spreadNotices}
                             handleLike={handleLike}
+                            handleSpread={handleSpread}
                         />
                         : 'No likes yet'}
                 </Tab>

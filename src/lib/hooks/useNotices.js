@@ -5,7 +5,7 @@ import { UserId } from '../../components/User/UserId.jsx';
 const useNotices = (googleUserData) => {
     const [user_id, setUserId] = useState(null);
     const [userNotices, setUserNotices] = useState([]);
-    const [userSpreads, setUserSpreads] = useState([]);
+    const [spreadNotices, setSpreadNotices] = useState([]);
     const [likedNotices, setLikedNotices] = useState({});
     const [isLoading, setIsLoading] = useState(true);
     const [isAddingNotice, setIsAddingNotice] = useState(false);
@@ -69,7 +69,7 @@ const useNotices = (googleUserData) => {
                 // console.log('allNotices', allNotices);
 
                 const matchedNotices = compareNoticesWithSpreads(allNotices, spreads);
-                setUserSpreads(matchedNotices);
+                setSpreadNotices(matchedNotices);
             }
         };
 
@@ -217,33 +217,33 @@ const useNotices = (googleUserData) => {
         }
     }
 
-    const addSpreads = async (notice_id, author_id) => {
-        try {
-            if (userSpreads[notice_id]) {
-                await removeSpread(userSpreads[notice_id]);
-                setUserSpreads((prevSpreads) => {
-                    const updatedSpreads = { ...prevSpreads };
-                    delete updatedSpreads[notice_id];
-                    return updatedSpreads;
-                });
-            } else {
-                const newSpread = await createSpreads(notice_id, author_id, user_id);
-                setUserSpreads((prevSpread) => ({
-                    ...prevSpread,
-                    [notice_id]: newSpread.$id,
-                }));
-            }
-        } catch (error) {
-            console.error('Error toggling spreads:', error);
-        }
-    }
-
     const reportNotice = async (notice_id, author_id, reason, user_id) => {
         try {
             const response = await createReport(notice_id, author_id, reason, user_id);
             console.log('Reporting!', response);
         } catch (error) {
             console.error('Not reporting:', error);
+        }
+    }
+
+    const addSpreads = async (notice_id, author_id) => {
+        try {
+            if (spreadNotices[notice_id]) {
+                await removeSpread(spreadNotices[notice_id]);
+                setSpreadNotices((prevSpreads) => {
+                    const updatedSpreads = { ...prevSpreads };
+                    delete updatedSpreads[notice_id];
+                    return updatedSpreads;
+                });
+            } else {
+                const newSpread = await createSpreads(notice_id, author_id, user_id);
+                setSpreadNotices((prevSpread) => ({
+                    ...prevSpread,
+                    [notice_id]: newSpread.$id,
+                }));
+            }
+        } catch (error) {
+            console.error('Error toggling spreads:', error);
         }
     }
 
@@ -304,7 +304,7 @@ const useNotices = (googleUserData) => {
     return {
         user_id,
         userNotices,
-        userSpreads,
+        spreadNotices,
         likedNotices,
         isLoading,
         isAddingNotice,

@@ -4,22 +4,25 @@ import { formatDateToLocal, calculateCountdown } from '../../lib/utils/dateUtils
 import { Row, Col } from 'react-bootstrap';
 import { CgTrash } from 'react-icons/cg';
 import { AiFillEdit } from 'react-icons/ai';
-import { RiMegaphoneLine } from 'react-icons/ri';
+import { RiMegaphoneLine, RiMegaphoneFill } from 'react-icons/ri';
 import { BsHandThumbsUp, BsHandThumbsUpFill, BsExclamationTriangle } from 'react-icons/bs';
 import { Button } from 'react-bootstrap';
 import defaultAvatar from '../../assets/default.png';;
 
 
 
-export const Notices = ({ notices,
+export const Notices = ({
+    notices,
     handleEditNotice,
     handleDeleteNotice,
-    handleCreateSpread, handleReport,
+    handleSpread,
+    handleReport,
     handleLike,
     eventKey,
     username,
     user_id,
-    likedNotices
+    likedNotices,
+    spreadNotices
 }) => {
 
     const location = useLocation();
@@ -127,13 +130,18 @@ export const Notices = ({ notices,
                                                 )}
                                             </Button>
                                             <Button
-                                                onClick={() => handleCreateSpread(notice)}
+                                                onClick={() => handleSpread(notice)}
                                                 className='notice__reaction-btn'
                                                 disabled={user_id === notice.user_id}
                                             >
-                                                <RiMegaphoneLine
-                                                    size={19}
-                                                />
+                                                {spreadNotices && spreadNotices[notice.$id] ? (
+                                                    <RiMegaphoneFill
+                                                        className='notice__reaction-btn-fill'
+                                                        size={19}
+                                                    />
+                                                ) : (
+                                                    <RiMegaphoneLine size={19} />
+                                                )}
                                             </Button>
                                             <Button
                                                 onClick={() => handleReport(notice)}

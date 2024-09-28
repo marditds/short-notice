@@ -55,7 +55,8 @@ const UserFeed = () => {
         addSpreads,
         reportNotice,
         likeNotice,
-        likedNotices
+        likedNotices,
+        spreadNotices,
     } = useNotices(googleUserData);
 
     const { fetchUsersData } = useUserInfo(googleUserData);
@@ -153,7 +154,7 @@ const UserFeed = () => {
     };
 
 
-    const handleCreateSpread = async (notice) => {
+    const handleSpread = async (notice) => {
         try {
             await addSpreads(notice.$id, notice.user_id, user_id);
         } catch (error) {
@@ -199,11 +200,10 @@ const UserFeed = () => {
 
             <Notices
                 notices={feedNotices}
-                // username={username}
                 user_id={user_id}
-
-                handleCreateSpread={handleCreateSpread}
+                handleSpread={handleSpread}
                 likedNotices={likedNotices}
+                spreadNotices={spreadNotices}
                 handleLike={handleLike}
                 handleReport={handleReport}
             />
