@@ -48,7 +48,15 @@ const UserFeed = () => {
     const [selectedTags, setSelectedTags] = useState({});
     const { googleUserData, username } = useUserContext();
 
-    const { user_id, getInterests, getFeedNotices, addSpreads, reportNotice, likeNotice, likedNotices } = useNotices(googleUserData);
+    const {
+        user_id,
+        getInterests,
+        getFeedNotices,
+        addSpreads,
+        reportNotice,
+        likeNotice,
+        likedNotices
+    } = useNotices(googleUserData);
 
     const { fetchUsersData } = useUserInfo(googleUserData);
 
@@ -191,7 +199,9 @@ const UserFeed = () => {
 
             <Notices
                 notices={feedNotices}
-                username={username}
+                // username={username}
+                user_id={user_id}
+
                 handleCreateSpread={handleCreateSpread}
                 likedNotices={likedNotices}
                 handleLike={handleLike}

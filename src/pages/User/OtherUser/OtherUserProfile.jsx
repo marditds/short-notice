@@ -37,9 +37,10 @@ const OtherUserProfile = () => {
         likedNotices,
         isLoading,
         likeNotice,
+        setLikedNotices,
         getAllLikedNotices,
         getNoticesByUser
-    } = useNotices(currUserId);
+    } = useNotices(googleUserData);
 
     const { fetchUsersData, getUsersData } = useUserInfo(googleUserData);
 
@@ -113,6 +114,9 @@ const OtherUserProfile = () => {
 
             console.log(`allLikedNotices by ${otherUsername}`, allLikedNotices);
 
+            console.log('likedNotices:', likedNotices);
+
+            console.log('username:', username);
 
             setLikedNoticesData(allLikedNotices);
         };
@@ -121,8 +125,8 @@ const OtherUserProfile = () => {
 
     const handleLike = async (notice) => {
         await likeNotice(notice.$id, notice.user_id);
-        const updatedLikedNotices = await getAllLikedNotices();
-        setLikedNoticesData(updatedLikedNotices);
+        // const updatedLikedNotices = await getAllLikedNotices(user_id);
+        // setLikedNotices(updatedLikedNotices);
     }
 
 
@@ -153,22 +157,24 @@ const OtherUserProfile = () => {
                 id="justify-tab-example"
                 justify
             >
+                {/* NOTICES TAB */}
                 <Tab
                     eventKey='notices'
                     title="Notices"
                 >
                     <Notices
                         notices={notices}
-                        // handleEditNotice={handleEditNotice}
-                        // handleDeleteNotice={handleDeleteNotice}
+                        handleLike={handleLike}
+                        likedNotices={likedNotices}
                         eventKey='my-notices'
                     />
                 </Tab>
+
+                {/* SPREADS TAB */}
                 <Tab
                     eventKey='spreads'
                     title="Spreads"
                 >
-                    SPREADS TAB
                     {/* <Notices
                         notices={spreadNotices}
                         username={username}
@@ -176,16 +182,17 @@ const OtherUserProfile = () => {
                         handleLike={handleLike}
                     /> */}
                 </Tab>
+
+                {/* LIKES TAB */}
                 <Tab
                     eventKey='likes'
                     title="Likes"
                 >
-                    {/* LIKES TAB */}
-
                     {likedNoticesData.length !== 0 ?
                         <Notices
                             notices={likedNoticesData}
-                            username={username}
+                            user_id={user_id}
+                            // username={username}
                             likedNotices={likedNotices}
                             handleLike={handleLike}
                         />

@@ -18,6 +18,7 @@ export const Notices = ({ notices,
     handleLike,
     eventKey,
     username,
+    user_id,
     likedNotices
 }) => {
 
@@ -105,7 +106,7 @@ export const Notices = ({ notices,
                                         >
                                             <Button
                                                 className='notice__reaction-btn'
-                                                disabled={username === notice.username}
+                                                disabled={user_id === notice.user_id}
                                                 onClick={() => handleLike(notice)}
                                             >
                                                 {likedNotices && likedNotices[notice.$id] ? (
@@ -117,7 +118,7 @@ export const Notices = ({ notices,
                                             <Button
                                                 onClick={() => handleCreateSpread(notice)}
                                                 className='notice__reaction-btn'
-                                                disabled={username === notice.username}
+                                                disabled={user_id === notice.user_id}
                                             >
                                                 <RiMegaphoneLine
                                                     size={19}
@@ -126,7 +127,7 @@ export const Notices = ({ notices,
                                             <Button
                                                 onClick={() => handleReport(notice)}
                                                 className='notice__reaction-btn'
-                                                disabled={username === notice.username}
+                                                disabled={user_id === notice.user_id}
                                             >
                                                 <BsExclamationTriangle
                                                     size={19}

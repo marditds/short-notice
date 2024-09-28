@@ -86,7 +86,7 @@ const useNotices = (googleUserData) => {
     useEffect(() => {
         const fetchUserLikes = async () => {
             try {
-                const userLikes = await getUserLikes(user_id || other_user_id);
+                const userLikes = await getUserLikes(user_id);
 
                 const likedNoticesMap = {};
                 userLikes.forEach(like => {
@@ -308,7 +308,7 @@ const useNotices = (googleUserData) => {
         getAllLikedNotices,
         reportNotice,
         likeNotice,
-
+        setLikedNotices
     };
 };
 
