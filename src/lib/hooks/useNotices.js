@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { createNotice, getUserNotices, updateNotice, deleteNotice, getAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSpreads, getUserSpreads, removeSpread, createReport, createLike, removeLike, getUserLikes, getAllLikedNotices as fetchAllLikedNotices } from '../../lib/context/dbhandler';
+import { createNotice, getUserNotices, updateNotice, deleteNotice, getAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSpreads, getUserSpreads, removeSpread, createReport, createLike, removeLike, getUserLikes, getAllLikedNotices as fetchAllLikedNotices, getAllSpreadNotices as fetchAllSpreadNotices } from '../../lib/context/dbhandler';
 import { UserId } from '../../components/User/UserId.jsx';
 
 const useNotices = (googleUserData) => {
@@ -285,6 +285,20 @@ const useNotices = (googleUserData) => {
         }
     };
 
+    const getAllSpreadNotices = async (user_id) => {
+        try {
+
+            const userSpreads = await getUserSpreads(user_id);
+
+            const spreadNoticeIds = userSpreads.map(like => like.notice_id);
+
+            return await fetchAllSpreadNotices(spreadNoticeIds);
+
+        } catch (error) {
+            console.error('Error fetching all spread notices:', error);
+            return [];
+        }
+    };
 
 
     return {
@@ -306,6 +320,7 @@ const useNotices = (googleUserData) => {
         updateInterests,
         addSpreads,
         getAllLikedNotices,
+        getAllSpreadNotices,
         reportNotice,
         likeNotice,
         setLikedNotices

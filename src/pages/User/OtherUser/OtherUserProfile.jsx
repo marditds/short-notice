@@ -33,23 +33,25 @@ const OtherUserProfile = () => {
     const [showEditModal, setShowEditModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-    const { user_id, userNotices, userSpreads,
+    const { user_id, userNotices,
+        userSpreads,
         likedNotices,
         isLoading,
         likeNotice,
         setLikedNotices,
         getAllLikedNotices,
+        getAllSpreadNotices,
         getNoticesByUser
     } = useNotices(googleUserData);
 
     const { fetchUsersData, getUsersData } = useUserInfo(googleUserData);
 
-    const [spreadNotices, setSpreadNotices] = useState(userSpreads);
+    const [spreadNoticesData, setSpreadNoticesData] = useState([]);
     const [likedNoticesData, setLikedNoticesData] = useState([]);
 
     const { avatarUrl } = useUserAvatar(currUserId);
 
-    // Get Current User
+    // Get Other User
     useEffect(() => {
         const getCurrUser = async () => {
             try {
@@ -77,7 +79,7 @@ const OtherUserProfile = () => {
     }, [otherUsername, getUsersData])
 
 
-    // Fetch User Notices
+    // Fetch notices for other user
     useEffect(() => {
         const fetchUserNotices = async () => {
 
@@ -86,7 +88,7 @@ const OtherUserProfile = () => {
             try {
                 const usrNotices = await getNoticesByUser(currUserId);
 
-                console.log('usrNotices - OtherUserProfile', usrNotices);
+                // console.log('usrNotices - OtherUserProfile', usrNotices);
 
                 setNotices(usrNotices);
                 return usrNotices;
@@ -103,30 +105,50 @@ const OtherUserProfile = () => {
     }, [currUserId, getNoticesByUser])
 
     useEffect(() => {
+        fetchUsersData(spreadNoticesData, setSpreadNoticesData, avatarUtil);
+    }, [spreadNoticesData])
+
+    useEffect(() => {
         fetchUsersData(likedNoticesData, setLikedNoticesData, avatarUtil);
     }, [likedNoticesData])
 
 
-    // Fetch liked notices
+    // Fetch other user likes
     useEffect(() => {
         const fetchLikedNotices = async () => {
             const allLikedNotices = await getAllLikedNotices(currUserId);
 
-            console.log(`allLikedNotices by ${otherUsername}`, allLikedNotices);
+            // console.log(`allLikedNotices by ${otherUsername}`, allLikedNotices);
 
-            console.log('likedNotices:', likedNotices);
+            // console.log('likedNotices:', likedNotices);
 
-            console.log('username:', username);
+            // console.log('username:', username);
 
             setLikedNoticesData(allLikedNotices);
         };
         fetchLikedNotices();
     }, [currUserId]);
 
+    //Fetch other user spreads
+    useEffect(() => {
+        const fetchSpreadNotices = async () => {
+            const allSpreadNotices = await getAllSpreadNotices(currUserId);
+
+            console.log(`allSpreadNotices by ${otherUsername}`, allSpreadNotices);
+
+            console.log('username:', username);
+
+            setSpreadNoticesData(allSpreadNotices);
+        };
+        fetchSpreadNotices();
+    }, [currUserId]);
+
     const handleLike = async (notice) => {
-        await likeNotice(notice.$id, notice.user_id);
-        // const updatedLikedNotices = await getAllLikedNotices(user_id);
-        // setLikedNotices(updatedLikedNotices);
+        try {
+            await likeNotice(notice.$id, notice.user_id);
+        } catch (error) {
+            console.error('Could not like notice');
+        }
     }
 
 
@@ -175,12 +197,12 @@ const OtherUserProfile = () => {
                     eventKey='spreads'
                     title="Spreads"
                 >
-                    {/* <Notices
-                        notices={spreadNotices}
-                        username={username}
+                    <Notices
+                        notices={spreadNoticesData}
+                        user_id={user_id}
                         likedNotices={likedNotices}
                         handleLike={handleLike}
-                    /> */}
+                    />
                 </Tab>
 
                 {/* LIKES TAB */}
@@ -192,7 +214,6 @@ const OtherUserProfile = () => {
                         <Notices
                             notices={likedNoticesData}
                             user_id={user_id}
-                            // username={username}
                             likedNotices={likedNotices}
                             handleLike={handleLike}
                         />

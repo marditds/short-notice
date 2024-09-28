@@ -84,20 +84,28 @@ export const Notices = ({ notices,
                                 </div>
                                 :
                                 <div className='d-flex flex-column justify-content-end h-100'>
-                                    <Link to={`../${notice.username}`}>
-                                        <div className='d-flex align-items-center mt-auto'>
-                                            <p className='w-100 my-0 text-end'
-                                                style={{ marginRight: '12px' }}>
+                                    {/* <Link to={`../${notice.username}`}> */}
+                                    <div className='d-flex justify-content-end align-items-center mt-auto'>
+
+                                        <p
+                                            className='w-100 my-0 text-end notice__username'
+                                        >
+                                            <Link to={`../${notice.username}`}
+                                                className=' text-decoration-none'>
                                                 <strong>{notice.username}</strong>
-                                            </p>
+                                            </Link>
+                                        </p>
+
+                                        <Link to={`../${notice.username}`}>
                                             <img
                                                 src={notice.avatarUrl || defaultAvatar}
                                                 alt="Profile"
                                                 style={{ borderRadius: '50%', width: 50, height: 50, marginRight: '12px' }}
                                                 className='d-flex ms-auto'
                                             />
-                                        </div>
-                                    </Link>
+                                        </Link>
+                                    </div>
+                                    {/* </Link> */}
                                     <div className='d-grid'>
 
 
@@ -110,7 +118,10 @@ export const Notices = ({ notices,
                                                 onClick={() => handleLike(notice)}
                                             >
                                                 {likedNotices && likedNotices[notice.$id] ? (
-                                                    <BsHandThumbsUpFill size={19} />
+                                                    <BsHandThumbsUpFill
+                                                        className='notice__reaction-btn-fill'
+                                                        size={19}
+                                                    />
                                                 ) : (
                                                     <BsHandThumbsUp size={19} />
                                                 )}
