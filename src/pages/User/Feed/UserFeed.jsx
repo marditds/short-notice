@@ -167,21 +167,23 @@ const UserFeed = () => {
 
     const handleLike = async (notice) => {
         try {
-            await likeNotice(notice.$id, notice.user_id)
+            await likeNotice(notice.$id, notice.user_id, user_id)
         } catch (error) {
             console.error('Could not like notice');
         }
     }
 
-
-    const handleReport = async (notice) => {
+    const handleReport = async (notice, reason) => {
         try {
-            await reportNotice(notice.$id, notice.user_id, reason, user_id);
-            console.log('Notice REPORTED!');
+            await reportNotice(notice.$id, notice.user_id, reason, user_id)
         } catch (error) {
             console.error('Could not report notice');
         }
     }
+
+
+
+
 
     // Render loading state while data is being fetched
     if (isLoadingNotices || isLoadingUsers) {

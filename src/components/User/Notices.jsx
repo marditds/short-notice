@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { formatDateToLocal, calculateCountdown } from '../../lib/utils/dateUtils';
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col, Modal, Form } from 'react-bootstrap';
 import { CgTrash } from 'react-icons/cg';
 import { AiFillEdit } from 'react-icons/ai';
 import { RiMegaphoneLine, RiMegaphoneFill } from 'react-icons/ri';
@@ -29,6 +29,28 @@ export const Notices = ({
 
     const [countdowns, setCountdowns] = useState([]);
 
+    const reportCategories = [
+        { name: "Hate speech", key: "HATE" },
+        { name: "Harassment or bullying", key: "BULLY" },
+        { name: "Violence or harmful behavior", key: "VIOL" },
+        { name: "Misinformation or false information", key: "MISINFO" },
+        { name: "Nudity or sexual content", key: "SEX" },
+        { name: "Spam or misleading content", key: "SPAM" },
+        { name: "Intellectual property violations", key: "COPYRIGHT" },
+        { name: "Self-harm or suicide", key: "SELF" },
+        { name: "Terrorism or extremism", key: "TERROR" },
+        { name: "Scams or fraud", key: "SCAM" },
+        { name: "Impersonation or fake accounts", key: "FAKE" },
+        { name: "Graphic or violent content", key: "GRPHIC" },
+        { name: "Child exploitation", key: "CHILD" },
+        { name: "Privacy violation", key: "PRIV" },
+        { name: "Animal abuse", key: "ANIM" }
+    ];
+    const [showReportModal, setShowReportModal] = useState(false);
+    const [reportingNoticeId, setReprotingNoticeId] = useState(null);
+    const [reportReason, setReportReason] = useState(null);
+    const [showReportConfirmation, setShowReportConfirmation] = useState(false);
+
 
     useEffect(() => {
 
@@ -40,6 +62,47 @@ export const Notices = ({
         return () => clearInterval(intervalId);
     }, [notices]);
 
+    const handleReportNotice = (noticeId) => {
+        setReprotingNoticeId(noticeId);
+        setShowReportModal(true);
+        setShowReportConfirmation(false);
+    }
+
+    const handleReportSubmission = async () => {
+
+        console.log('reportReason', reportReason);
+
+        console.log('reportingNoticeId', reportingNoticeId);
+
+        if (reportReason && reportingNoticeId) {
+            try {
+                // Find the author_id of the notice being reported
+                const notice = notices.find(notice => notice.$id === reportingNoticeId);
+
+                console.log('notice', notice);
+
+                console.log('notice id', notice.$id);
+
+                console.log('notice user id', notice.user_id);
+
+
+                if (notice) {
+                    await handleReport(notice.$id, notice.user_id, reportReason, user_id);  // Call the reportNotice function
+                    setShowReportConfirmation(true);
+                    setTimeout(() => {
+                        setShowReportModal(false);
+                    }, 2000);
+                }
+            } catch (error) {
+                console.error("Error reporting notice:", error);
+            }
+        }
+    };
+
+    const handleCloseReportModal = () => {
+        setShowReportModal(false);
+        setReportReason(null);
+    }
 
 
     return (
@@ -144,7 +207,7 @@ export const Notices = ({
                                                 )}
                                             </Button>
                                             <Button
-                                                onClick={() => handleReport(notice)}
+                                                onClick={() => handleReportNotice(notice.$id)}
                                                 className='notice__reaction-btn'
                                                 disabled={user_id === notice.user_id}
                                             >
@@ -167,6 +230,48 @@ export const Notices = ({
 
                 </div>
             ))}
+
+            <Modal show={showReportModal} onHide={handleCloseReportModal}>
+                <Modal.Header>
+                    <Modal.Title>Report Notice</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {showReportConfirmation ? (
+                        <p>Your report has been successfully submitted!</p>
+                    ) : (
+                        <Form>
+                            <Form.Group className='mb-3' controlId='reportNotice'>
+                                <Form.Label>Reason:</Form.Label>
+                                {reportCategories.map((category) => (
+                                    <Form.Check
+                                        key={category.key}
+                                        type='radio'
+                                        label={category.name}
+                                        id={category.name}
+                                        name='reportReason'
+                                        onChange={() => setReportReason(category.key)}
+                                    />
+                                ))}
+                            </Form.Group>
+                        </Form>
+                    )}
+                </Modal.Body>
+                <Modal.Footer>
+                    {showReportConfirmation ? null : (
+                        <>
+                            <Button onClick={handleCloseReportModal}>
+                                Cancel
+                            </Button>
+                            <Button onClick={handleReportSubmission}
+                            // disabled={!reportReason}
+                            >
+                                Report
+                            </Button>
+                        </>
+                    )}
+                </Modal.Footer>
+            </Modal>
+
 
         </>
     );

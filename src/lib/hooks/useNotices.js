@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { createNotice, getUserNotices, updateNotice, deleteNotice, getAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSpread, getUserSpreads, removeSpread, createReport, createLike, removeLike, getUserLikes, getAllLikedNotices as fetchAllLikedNotices, getAllSpreadNotices as fetchAllSpreadNotices } from '../../lib/context/dbhandler';
+import { createNotice, getUserNotices, updateNotice, deleteNotice, getFilteredNotices, updateUserInterests, getUserInterests, createSpread, getUserSpreads, removeSpread, createReport, createLike, removeLike, getUserLikes, getAllLikedNotices as fetchAllLikedNotices, getAllSpreadNotices as fetchAllSpreadNotices } from '../../lib/context/dbhandler';
 import { UserId } from '../../components/User/UserId.jsx';
 
 const useNotices = (googleUserData) => {
@@ -239,15 +239,6 @@ const useNotices = (googleUserData) => {
         }
     }
 
-    const reportNotice = async (notice_id, author_id, reason, user_id) => {
-        try {
-            const response = await createReport(notice_id, author_id, reason, user_id);
-            console.log('Reporting!', response);
-        } catch (error) {
-            console.error('Not reporting:', error);
-        }
-    }
-
     const spreadNotice = async (notice_id, author_id) => {
         try {
             if (spreadNotices[notice_id]) {
@@ -317,6 +308,16 @@ const useNotices = (googleUserData) => {
         } catch (error) {
             console.error('Error fetching all spread notices:', error);
             return [];
+        }
+    };
+
+    const reportNotice = async (notice_id, author_id, reason) => {
+        try {
+            await createReport(notice_id, author_id, reason, user_id);
+            console.log('Notice reported successfully!');
+        } catch (error) {
+            console.error('Error reporting notice:', error);
+            throw error;
         }
     };
 

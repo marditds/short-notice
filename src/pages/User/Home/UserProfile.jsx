@@ -38,6 +38,7 @@ const UserProfile = () => {
         setRemovingNoticeId,
         likeNotice,
         spreadNotice,
+        reportNotice,
         getAllLikedNotices,
         getAllSpreadNotices
     } = useNotices(googleUserData);
@@ -121,9 +122,11 @@ const UserProfile = () => {
     }
 
     const handleLike = async (notice) => {
-        await likeNotice(notice.$id, notice.user_id);
-        const updatedLikedNotices = await getAllLikedNotices(user_id);
-        setLikedNoticesData(updatedLikedNotices);
+        try {
+            await likeNotice(notice.$id, notice.user_id);
+        } catch (error) {
+            console.error('Error creating like entry:', error);
+        }
     }
 
     const handleSpread = async (notice) => {
@@ -133,6 +136,14 @@ const UserProfile = () => {
             console.error('Error creating spread entry:', error);
         }
     };
+
+    const handleReport = async (notice, reason) => {
+        try {
+            await reportNotice(notice.$id, notice.user_id, reason, user_id)
+        } catch (error) {
+            console.error('Could not report notice');
+        }
+    }
 
 
     const timerSpacing = 'mx-2';
@@ -187,6 +198,7 @@ const UserProfile = () => {
                         spreadNotices={spreadNotices}
                         handleLike={handleLike}
                         handleSpread={handleSpread}
+                        handleReport={handleReport}
                     />
                 </Tab>
                 <Tab
@@ -200,6 +212,7 @@ const UserProfile = () => {
                         spreadNotices={spreadNotices}
                         handleLike={handleLike}
                         handleSpread={handleSpread}
+                        handleReport={handleReport}
                     />
                 </Tab>
             </Tabs>
