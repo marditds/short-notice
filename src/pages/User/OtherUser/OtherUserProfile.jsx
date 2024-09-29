@@ -39,6 +39,7 @@ const OtherUserProfile = () => {
         isLoading,
         likeNotice,
         spreadNotice,
+        reportNotice,
         getAllLikedNotices,
         getAllSpreadNotices,
         getNoticesByUser
@@ -159,6 +160,15 @@ const OtherUserProfile = () => {
         }
     };
 
+    const handleReport = async (notice_id, author_id, reason) => {
+        try {
+            await reportNotice(notice_id, author_id, reason);
+            return 'Report success';
+        } catch (error) {
+            console.error('Could not report notice');
+        }
+    }
+
     const timerSpacing = 'mx-2';
     const timerDisplay = 'd-flex';
     const classname = `${timerDisplay} ${timerSpacing}`;
@@ -193,10 +203,11 @@ const OtherUserProfile = () => {
                 >
                     <Notices
                         notices={notices}
-                        handleLike={handleLike}
-                        handleSpread={handleSpread}
                         likedNotices={likedNotices}
                         spreadNotices={spreadNotices}
+                        handleLike={handleLike}
+                        handleSpread={handleSpread}
+                        handleReport={handleReport}
                         eventKey='my-notices'
                     />
                 </Tab>
@@ -213,6 +224,7 @@ const OtherUserProfile = () => {
                         spreadNotices={spreadNotices}
                         handleLike={handleLike}
                         handleSpread={handleSpread}
+                        handleReport={handleReport}
                     />
                 </Tab>
 
@@ -229,6 +241,7 @@ const OtherUserProfile = () => {
                             spreadNotices={spreadNotices}
                             handleLike={handleLike}
                             handleSpread={handleSpread}
+                            handleReport={handleReport}
                         />
                         : 'No likes yet'}
                 </Tab>
