@@ -98,18 +98,6 @@ const useNotices = (googleUserData) => {
             } catch (error) {
                 console.error('Error fetching user spreads:', error);
             }
-            // if (user_id) {
-            //     const spreads = await getUserSpreads(user_id);
-
-            //     // console.log('Spreads', spreads);
-
-            //     const allNotices = await getAllNotices();
-
-            //     // console.log('allNotices', allNotices);
-
-            //     const matchedNotices = compareNoticesWithSpreads(allNotices, spreads);
-            //     setSpreadNotices(matchedNotices);
-            // }
         };
 
         if (user_id) {
@@ -284,19 +272,17 @@ const useNotices = (googleUserData) => {
     const likeNotice = async (notice_id, author_id) => {
         try {
             if (likedNotices[notice_id]) {
-                // Remove like if already liked
                 await removeLike(likedNotices[notice_id]);
                 setLikedNotices((prevLikes) => {
                     const updatedLikes = { ...prevLikes };
-                    delete updatedLikes[notice_id]; // Remove from liked notices
+                    delete updatedLikes[notice_id];
                     return updatedLikes;
                 });
             } else {
-                // Create a new like if not liked yet
                 const newLike = await createLike(notice_id, author_id, user_id);
                 setLikedNotices((prevLikes) => ({
                     ...prevLikes,
-                    [notice_id]: newLike.$id, // Add the new like
+                    [notice_id]: newLike.$id,
                 }));
             }
         } catch (error) {
