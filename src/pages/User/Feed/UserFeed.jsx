@@ -173,9 +173,10 @@ const UserFeed = () => {
         }
     }
 
-    const handleReport = async (notice, reason) => {
+    const handleReport = async (notice_id, author_id, reason) => {
         try {
-            await reportNotice(notice.$id, notice.user_id, reason, user_id)
+            await reportNotice(notice_id, author_id, reason);
+            return 'Report success';
         } catch (error) {
             console.error('Could not report notice');
         }

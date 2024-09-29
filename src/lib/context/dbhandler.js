@@ -23,7 +23,11 @@ export const notices = await databases.listDocuments(
 
 export const uploadAvatar = async (file) => {
     try {
-        const response = await storage.createFile(import.meta.env.VITE_AVATAR_BUCKET, ID.unique(), file);
+        const response = await storage.createFile(
+            import.meta.env.VITE_AVATAR_BUCKET,
+            ID.unique(),
+            file
+        );
         const fileId = response.$id;
         return fileId;
     } catch (error) {
@@ -612,7 +616,7 @@ export const createReport = async (notice_id, author_id, reason, user_id) => {
     try {
         const response = await databases.createDocument(
             import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_REPORTS_COLLECTION,
+            import.meta.env.VITE_REPORTSE_COLLECTION,
             ID.unique(),
             {
                 notice_id: notice_id,
@@ -621,7 +625,7 @@ export const createReport = async (notice_id, author_id, reason, user_id) => {
                 user_id: user_id
             }
         );
-        console.log('Report created successfully:', response);
+        console.log('Report created successfully');
         return response;
     } catch (error) {
         console.error('Error adding to reports:', error);

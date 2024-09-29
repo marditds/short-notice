@@ -70,24 +70,14 @@ export const Notices = ({
 
     const handleReportSubmission = async () => {
 
-        console.log('reportReason', reportReason);
-
-        console.log('reportingNoticeId', reportingNoticeId);
-
         if (reportReason && reportingNoticeId) {
             try {
-                // Find the author_id of the notice being reported
+
                 const notice = notices.find(notice => notice.$id === reportingNoticeId);
 
-                console.log('notice', notice);
-
-                console.log('notice id', notice.$id);
-
-                console.log('notice user id', notice.user_id);
-
-
                 if (notice) {
-                    await handleReport(notice.$id, notice.user_id, reportReason, user_id);  // Call the reportNotice function
+                    const res = await handleReport(notice.$id, notice.user_id, reportReason);
+
                     setShowReportConfirmation(true);
                     setTimeout(() => {
                         setShowReportModal(false);

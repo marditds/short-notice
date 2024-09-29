@@ -187,6 +187,7 @@ const UserProfile = () => {
                         eventKey='my-notices'
                     />
                 </Tab>
+                {/* SPREADS */}
                 <Tab
                     eventKey='my-spreads'
                     title="Spreads"
@@ -201,6 +202,8 @@ const UserProfile = () => {
                         handleReport={handleReport}
                     />
                 </Tab>
+
+                {/* LIKES */}
                 <Tab
                     eventKey='my-likes'
                     title="Likes"
