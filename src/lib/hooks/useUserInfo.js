@@ -8,7 +8,8 @@ const useUserInfo = (data) => {
     const { setUsername } = useUserContext();
     const [userId, setUserId] = useState(null);
 
-    const [following, setFollowing] = useState({})
+    const [following, setFollowing] = useState({});
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const fetchUserId = async () => {
@@ -20,17 +21,28 @@ const useUserInfo = (data) => {
         fetchUserId();
     }, [data]);
 
+
     // Fetch user following
     useEffect(() => {
         const fetchUserFollowing = async () => {
+
             try {
+                setIsLoading(true);
                 const userFollowing = await getUserFollowingsById(userId);
 
                 console.log('userFollowing', userFollowing);
 
-                setFollowing(userFollowing);
+                const followingObject = userFollowing.reduce((acc, follow) => {
+                    acc[follow.otherUser_id] = follow.$id;
+                    return acc;
+                }, {});
+
+                setFollowing(followingObject);
             } catch (error) {
                 console.error('Error fetching user following:', error);
+                setFollowing({});
+            } finally {
+                setIsLoading(false);
             }
         }
         fetchUserFollowing();
@@ -102,36 +114,32 @@ const useUserInfo = (data) => {
 
     const followUser = async (otherUser_id) => {
         try {
-            if (following[otherUser_id]) {
-                await removeFollow(following[otherUser_id]);
-                setFollowing((prevFollowing) => {
+            const result = await createFollow(userId, otherUser_id);
+
+            setFollowing((prevFollowing) => {
+                if (result.unfollowed) {
                     const updatedFollowing = { ...prevFollowing };
                     delete updatedFollowing[otherUser_id];
                     return updatedFollowing;
-                })
-            } else {
-                const newFollowing = await createFollow(userId, otherUser_id);
-                setFollowing((prevFollowing) => ({
-                    ...prevFollowing,
-                    [otherUser_id]: newFollowing.$id
-                }))
-            }
+                } else {
+                    return {
+                        ...prevFollowing,
+                        [otherUser_id]: result.id
+                    };
+                }
+            });
+
         } catch (error) {
             console.error('Follow failed.', error);
         }
-        // try {
-        //     await createFollow(userId, otherUser_id);
-        //     console.log('Follow successful.');
-        // } catch (error) {
-        //     console.error('Follow failed.', error);
-        // }
-    }
 
+    }
 
 
 
     return {
         following,
+        isLoading,
         handleUpdateUser,
         handleDeleteUser,
         getUsersData,

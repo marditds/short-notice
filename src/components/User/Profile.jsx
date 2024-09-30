@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { Row, Col, Button } from 'react-bootstrap';
 import defaultAvatar from '../../assets/default.png';
 
-export const Profile = ({ username, avatarUrl, handleFollow, currUserId, followingCount, followersCount }) => {
+export const Profile = ({ username, avatarUrl, handleFollow, currUserId, followingCount, followersCount, isFollowing }) => {
 
     const location = useLocation();
 
@@ -37,7 +37,7 @@ export const Profile = ({ username, avatarUrl, handleFollow, currUserId, followi
                                 maxHeight: 'fit-content', maxWidth: 'fit-content'
                             }}
                         >
-                            Follow
+                            {isFollowing ? 'Following' : 'Follow'}
                         </Button>
                         <Button style={{
                             maxHeight: 'fit-content', maxWidth: 'fit-content', marginLeft: 'auto'

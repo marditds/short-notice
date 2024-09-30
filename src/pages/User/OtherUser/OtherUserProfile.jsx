@@ -37,7 +37,7 @@ const OtherUserProfile = () => {
         user_id,
         likedNotices,
         spreadNotices,
-        isLoading,
+        isLoading: noticesLoading,
         likeNotice,
         spreadNotice,
         reportNotice,
@@ -48,6 +48,7 @@ const OtherUserProfile = () => {
 
     const {
         following,
+        isLoading: userInfoLoading,
         fetchUsersData,
         getUsersData,
         followUser,
@@ -56,14 +57,19 @@ const OtherUserProfile = () => {
 
     const [spreadNoticesData, setSpreadNoticesData] = useState([]);
     const [likedNoticesData, setLikedNoticesData] = useState([]);
+    const [isFollowing, setIsFollowing] = useState(false);
+    const [isLoadingProfile, setIsLoadingProfile] = useState(true);
 
-    // const [following, setFollowing] = useState([]);
+
 
     const { avatarUrl } = useUserAvatar(currUserId);
 
     // Get Other User
     useEffect(() => {
         const getCurrUser = async () => {
+
+            setIsLoadingProfile(true);
+
             try {
                 const allUsers = await getUsersData();
 
@@ -83,6 +89,8 @@ const OtherUserProfile = () => {
 
             } catch (error) {
                 console.error(error);
+            } finally {
+                setIsLoadingProfile(false);
             }
         }
         getCurrUser();
@@ -153,15 +161,6 @@ const OtherUserProfile = () => {
         fetchSpreadNotices();
     }, [currUserId]);
 
-    // Fetch Following List
-    useEffect(() => {
-        try {
-            console.log('following:', following);
-
-        } catch (error) {
-            console.error('Error fetching following:', error);
-        }
-    }, [user_id])
 
     const handleLike = async (notice) => {
         try {
@@ -188,9 +187,20 @@ const OtherUserProfile = () => {
         }
     }
 
+    // Update following status
+    useEffect(() => {
+        if (currUserId && following) {
+            setIsFollowing(!!following[currUserId]);
+        }
+    }, [currUserId, following]);
+
+
+
     const handleFollow = async (currUserId) => {
+        if (!currUserId) return;
         try {
             await followUser(currUserId);
+            setIsFollowing(prevState => !prevState);
         } catch (error) {
             console.error('Failed to follow/unfollow user:', error);
         }
@@ -207,7 +217,7 @@ const OtherUserProfile = () => {
     }, [otherUsername, username, navigate]);
 
 
-    if (isLoading) {
+    if (noticesLoading || userInfoLoading) {
         return <div><Loading />Loading {otherUsername}'s profile</div>;
     }
 
@@ -217,7 +227,8 @@ const OtherUserProfile = () => {
                 username={otherUsername}
                 avatarUrl={avatarUrl}
                 currUserId={currUserId}
-                followersCount={following.length}
+                followersCount={following ? Object.keys(following).length : 0}
+                isFollowing={isFollowing}
                 handleFollow={handleFollow}
             />
 

@@ -163,7 +163,7 @@ const UserProfile = () => {
             <Profile
                 username={username}
                 avatarUrl={avatarUrl}
-                followingCount={following.length}
+                followingCount={following && Object.keys(following).length}
             />
 
             <ComposeNotice

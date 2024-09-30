@@ -36,22 +36,6 @@ export const uploadAvatar = async (file) => {
     }
 };
 
-// export const updateAvatar = async (fileId, newName) => {
-//     try {
-//         const response = await storage.updateFile(
-//             import.meta.env.VITE_AVATAR_BUCKET,
-//             fileId,
-//             newName
-//         );
-
-//         console.log('File updated successfully:', response);
-//         return response;
-//     } catch (error) {
-//         console.error('Error updating file in storage:', error);
-//         throw error;
-//     }
-// };
-
 export const deleteAvatarFromStrg = async (fileId) => {
     try {
         const response = await storage.deleteFile(import.meta.env.VITE_AVATAR_BUCKET, fileId);
@@ -632,24 +616,39 @@ export const createReport = async (notice_id, author_id, reason, user_id) => {
 }
 
 export const createFollow = async (user_id, otherUser_id) => {
-
-    console.log('user_id', user_id);
-    console.log('currUserId', otherUser_id);
-
     try {
-        const response = await databases.createDocument(
+        // Check if follow relationship already exists
+        const followRecords = await databases.listDocuments(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_FOLLOWING_COLLECTION,
-            ID.unique(),
-            {
-                user_id,
-                otherUser_id
-            }
-        )
-        console.log('Follow success');
-        return response;
+            [
+                Query.equal('user_id', user_id)
+            ]
+        );
+
+        const existingFollow = followRecords.documents.find(
+            (follow) => follow.otherUser_id === otherUser_id
+        );
+
+        if (existingFollow) {
+            // If the follow relationship exists, unfollow by deleting the document 
+            await removeFollow(existingFollow.$id);
+            console.log('Unfollowed successfully');
+            return { unfollowed: true };
+        } else {
+            // Otherwise, create a new follow entry
+            const response = await databases.createDocument(
+                import.meta.env.VITE_DATABASE,
+                import.meta.env.VITE_FOLLOWING_COLLECTION,
+                ID.unique(),
+                { user_id, otherUser_id }
+            );
+            console.log('Followed successfully');
+            return { followed: true, id: response.$id };
+        }
     } catch (error) {
-        console.error('Follow failed', error);
+        console.error('Error following/unfollowing user:', error);
+        throw error;
     }
 }
 
