@@ -19,7 +19,7 @@ const useNotices = (googleUserData) => {
                 try {
                     const id = await UserId(googleUserData);
 
-                    console.log('TYPE OF USER ID:', typeof (id));
+                    // console.log('TYPE OF USER ID:', typeof (id));
 
                     setUserId(id);
 
@@ -306,7 +306,7 @@ const useNotices = (googleUserData) => {
             return await fetchAllSpreadNotices(spreadNoticeIds);
 
         } catch (error) {
-            console.error('Error fetching all spread notices:', error);
+            // console.error('Error fetching all spread notices:', error);
             return [];
         }
     };

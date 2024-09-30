@@ -43,7 +43,7 @@ const UserProfile = () => {
         getAllSpreadNotices
     } = useNotices(googleUserData);
 
-    const { fetchUsersData } = useUserInfo(googleUserData);
+    const { fetchUsersData, following } = useUserInfo(googleUserData);
 
     const [spreadNoticesData, setSpreadNoticesData] = useState([]);
     const [likedNoticesData, setLikedNoticesData] = useState([]);
@@ -79,6 +79,7 @@ const UserProfile = () => {
             setSpreadNoticesData(allSpreadNotices);
         };
         fetchSpreadNotices();
+
     }, [user_id])
 
 
@@ -162,6 +163,7 @@ const UserProfile = () => {
             <Profile
                 username={username}
                 avatarUrl={avatarUrl}
+                followingCount={following.length}
             />
 
             <ComposeNotice

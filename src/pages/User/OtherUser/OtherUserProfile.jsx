@@ -47,17 +47,17 @@ const OtherUserProfile = () => {
     } = useNotices(googleUserData);
 
     const {
+        following,
         fetchUsersData,
         getUsersData,
         followUser,
-        unfollowUser,
-        getAllFollowingsByUser
+        // getAllFollowingsByUser
     } = useUserInfo(googleUserData);
 
     const [spreadNoticesData, setSpreadNoticesData] = useState([]);
     const [likedNoticesData, setLikedNoticesData] = useState([]);
 
-    const [following, setFollowing] = useState([]);
+    // const [following, setFollowing] = useState([]);
 
     const { avatarUrl } = useUserAvatar(currUserId);
 
@@ -155,17 +155,13 @@ const OtherUserProfile = () => {
 
     // Fetch Following List
     useEffect(() => {
-        const fetchAllFollowingsByUser = async () => {
+        try {
+            console.log('following:', following);
 
-            const followingByUser = await getAllFollowingsByUser(user_id);
-            console.log('getAllFollowingsByUser', followingByUser);
-
-            setFollowing(followingByUser);
-        };
-
-        fetchAllFollowingsByUser();
-    }, [currUserId, user_id])
-
+        } catch (error) {
+            console.error('Error fetching following:', error);
+        }
+    }, [user_id])
 
     const handleLike = async (notice) => {
         try {
@@ -193,26 +189,10 @@ const OtherUserProfile = () => {
     }
 
     const handleFollow = async (currUserId) => {
-
-        const currUsrInFllngLst = following.find((user) => user.$id === currUserId);
-
-        console.log();
-
-
-        if (currUsrInFllngLst) {
-            try {
-                await unfollowUser(currUserId);
-                console.log('Unfollow unsuccessful');
-            } catch (error) {
-                console.error('Unfollow unsuccessful:', error);
-            }
-        }
-
         try {
             await followUser(currUserId);
-            console.log(username + ' followed ' + otherUsername + ' successfully!');
         } catch (error) {
-            console.error('Failed to follow user:', error);
+            console.error('Failed to follow/unfollow user:', error);
         }
     }
 
@@ -237,6 +217,7 @@ const OtherUserProfile = () => {
                 username={otherUsername}
                 avatarUrl={avatarUrl}
                 currUserId={currUserId}
+                followersCount={following.length}
                 handleFollow={handleFollow}
             />
 

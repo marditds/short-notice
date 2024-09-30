@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { Row, Col, Button } from 'react-bootstrap';
 import defaultAvatar from '../../assets/default.png';
 
-export const Profile = ({ username, avatarUrl, handleFollow, currUserId }) => {
+export const Profile = ({ username, avatarUrl, handleFollow, currUserId, followingCount, followersCount }) => {
 
     const location = useLocation();
 
@@ -11,9 +11,13 @@ export const Profile = ({ username, avatarUrl, handleFollow, currUserId }) => {
         <Row className='user-profile'>
             <Col className='d-grid'>
                 <strong style={{ lineHeight: '12pt' }}>Followers</strong>
-                <p className='mb-0' style={{ fontSize: '24px' }}>103</p>
+                <p className='mb-0' style={{ fontSize: '24px' }}>
+                    {followersCount}
+                </p>
                 <strong style={{ lineHeight: '12pt' }}>Following</strong>
-                <p className='mb-0' style={{ fontSize: '24px' }}>153</p>
+                <p className='mb-0' style={{ fontSize: '24px' }}>
+                    {followingCount}
+                </p>
 
             </Col>
 

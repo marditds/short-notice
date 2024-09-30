@@ -554,7 +554,7 @@ export const getUserLikes = async (user_id) => {
         );
         return response.documents;
     } catch (error) {
-        console.error('Error fetching user likes:', error);
+        // console.error('Error fetching user likes:', error);
         return [];
     }
 };
@@ -588,7 +588,7 @@ export const getUserSpreads = async (user_id) => {
         )
         return response.documents;
     } catch (error) {
-        console.error('Error fetching spreads:', error);
+        // console.error('Error fetching spreads:', error);
     }
 }
 
@@ -670,7 +670,7 @@ export const removeFollow = async (following_id) => {
     }
 }
 
-export const getAllFollowingsByUser = async (user_id) => {
+export const getUserFollowingsById = async (user_id) => {
 
     console.log('user_id:', user_id);
 
@@ -682,7 +682,7 @@ export const getAllFollowingsByUser = async (user_id) => {
                 Query.equal('user_id', user_id),
             ]
         )
-        console.log('Successfully got following document.');
+        console.log('Successfully got following document.', response.documents);
         return response.documents;
     } catch (error) {
         console.error('Could not get following document', error);

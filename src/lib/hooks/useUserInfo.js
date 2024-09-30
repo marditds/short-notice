@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { updateUser, deleteUser, deleteAllNotices, getUsersDocument, createFollow, removeFollow, getAllFollowingsByUser as fetchAllFollowingsByUser } from '../context/dbhandler';
+import { updateUser, deleteUser, deleteAllNotices, getUsersDocument, createFollow, removeFollow, getUserFollowingsById } from '../context/dbhandler';
 import { useUserContext } from '../context/UserContext';
 import { UserId } from '../../components/User/UserId';
 
@@ -7,6 +7,8 @@ const useUserInfo = (data) => {
 
     const { setUsername } = useUserContext();
     const [userId, setUserId] = useState(null);
+
+    const [following, setFollowing] = useState({})
 
     useEffect(() => {
         const fetchUserId = async () => {
@@ -17,6 +19,22 @@ const useUserInfo = (data) => {
         };
         fetchUserId();
     }, [data]);
+
+    // Fetch user following
+    useEffect(() => {
+        const fetchUserFollowing = async () => {
+            try {
+                const userFollowing = await getUserFollowingsById(userId);
+
+                console.log('userFollowing', userFollowing);
+
+                setFollowing(userFollowing);
+            } catch (error) {
+                console.error('Error fetching user following:', error);
+            }
+        }
+        fetchUserFollowing();
+    }, [userId])
 
     const handleUpdateUser = async (username) => {
 
@@ -84,44 +102,41 @@ const useUserInfo = (data) => {
 
     const followUser = async (otherUser_id) => {
         try {
-            await createFollow(userId, otherUser_id);
-            console.log('Follow successful.');
+            if (following[otherUser_id]) {
+                await removeFollow(following[otherUser_id]);
+                setFollowing((prevFollowing) => {
+                    const updatedFollowing = { ...prevFollowing };
+                    delete updatedFollowing[otherUser_id];
+                    return updatedFollowing;
+                })
+            } else {
+                const newFollowing = await createFollow(userId, otherUser_id);
+                setFollowing((prevFollowing) => ({
+                    ...prevFollowing,
+                    [otherUser_id]: newFollowing.$id
+                }))
+            }
         } catch (error) {
             console.error('Follow failed.', error);
         }
+        // try {
+        //     await createFollow(userId, otherUser_id);
+        //     console.log('Follow successful.');
+        // } catch (error) {
+        //     console.error('Follow failed.', error);
+        // }
     }
 
-    const unfollowUser = async (following_id) => {
-        try {
-            const response = removeFollow(following_id);
-            console.log('Unfollow success.');
-            return response;
-        } catch (error) {
-            console.error('Unfollow failed:', error);
-        }
-    }
 
-    const getAllFollowingsByUser = async () => {
-        try {
-            const response = await fetchAllFollowingsByUser(userId);
 
-            console.log('Fetched getting followig list:', response);
-            return response;
-
-        } catch (error) {
-            console.error('Could not get following list', error);
-
-        }
-    }
 
     return {
+        following,
         handleUpdateUser,
         handleDeleteUser,
         getUsersData,
         fetchUsersData,
-        followUser,
-        unfollowUser,
-        getAllFollowingsByUser
+        followUser
     }
 }
 
