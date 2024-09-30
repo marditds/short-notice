@@ -610,8 +610,6 @@ export const getAllSpreadNotices = async (spreadNoticeIds) => {
     }
 };
 
-
-
 export const createReport = async (notice_id, author_id, reason, user_id) => {
     try {
         const response = await databases.createDocument(
@@ -633,6 +631,63 @@ export const createReport = async (notice_id, author_id, reason, user_id) => {
     }
 }
 
+export const createFollow = async (user_id, otherUser_id) => {
+
+    console.log('user_id', user_id);
+    console.log('currUserId', otherUser_id);
+
+    try {
+        const response = await databases.createDocument(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_FOLLOWING_COLLECTION,
+            ID.unique(),
+            {
+                user_id,
+                otherUser_id
+            }
+        )
+        console.log('Follow success');
+        return response;
+    } catch (error) {
+        console.error('Follow failed', error);
+    }
+}
+
+export const removeFollow = async (following_id) => {
+
+    console.log('following_id', following_id);
+
+    try {
+        const response = await databases.deleteDocument(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_FOLLOWING_COLLECTION,
+            following_id
+        )
+        console.log('Follow removed successfully');
+        return response;
+    } catch (error) {
+        console.error('Follow removal failed', error);
+    }
+}
+
+export const getAllFollowingsByUser = async (user_id) => {
+
+    console.log('user_id:', user_id);
+
+    try {
+        const response = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_FOLLOWING_COLLECTION,
+            [
+                Query.equal('user_id', user_id),
+            ]
+        )
+        console.log('Successfully got following document.');
+        return response.documents;
+    } catch (error) {
+        console.error('Could not get following document', error);
+    }
+}
 
 export const account = new Account(client);
 export { ID } from 'appwrite';

@@ -7,11 +7,6 @@ body {
     color: var(--main-text-color) !important;
 }
 
-.userhome__body--profile--tools,
-.user-profile {
-    padding-bottom: 12px;
-}
-
 .userhome__body--profile--tools--dropdown>button {
     padding: 0;
     background-color: var(--main-bg-color) !important;

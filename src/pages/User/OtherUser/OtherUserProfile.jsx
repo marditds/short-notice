@@ -33,7 +33,8 @@ const OtherUserProfile = () => {
     const [showEditModal, setShowEditModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-    const { user_id,
+    const {
+        user_id,
         likedNotices,
         spreadNotices,
         isLoading,
@@ -45,10 +46,18 @@ const OtherUserProfile = () => {
         getNoticesByUser
     } = useNotices(googleUserData);
 
-    const { fetchUsersData, getUsersData } = useUserInfo(googleUserData);
+    const {
+        fetchUsersData,
+        getUsersData,
+        followUser,
+        unfollowUser,
+        getAllFollowingsByUser
+    } = useUserInfo(googleUserData);
 
     const [spreadNoticesData, setSpreadNoticesData] = useState([]);
     const [likedNoticesData, setLikedNoticesData] = useState([]);
+
+    const [following, setFollowing] = useState([]);
 
     const { avatarUrl } = useUserAvatar(currUserId);
 
@@ -135,14 +144,28 @@ const OtherUserProfile = () => {
         const fetchSpreadNotices = async () => {
             const allSpreadNotices = await getAllSpreadNotices(currUserId);
 
-            console.log(`allSpreadNotices by ${otherUsername}`, allSpreadNotices);
+            // console.log(`allSpreadNotices by ${otherUsername}`, allSpreadNotices);
 
-            console.log('username:', username);
+            // console.log('username:', username);
 
             setSpreadNoticesData(allSpreadNotices);
         };
         fetchSpreadNotices();
     }, [currUserId]);
+
+    // Fetch Following List
+    useEffect(() => {
+        const fetchAllFollowingsByUser = async () => {
+
+            const followingByUser = await getAllFollowingsByUser(user_id);
+            console.log('getAllFollowingsByUser', followingByUser);
+
+            setFollowing(followingByUser);
+        };
+
+        fetchAllFollowingsByUser();
+    }, [currUserId, user_id])
+
 
     const handleLike = async (notice) => {
         try {
@@ -169,6 +192,30 @@ const OtherUserProfile = () => {
         }
     }
 
+    const handleFollow = async (currUserId) => {
+
+        const currUsrInFllngLst = following.find((user) => user.$id === currUserId);
+
+        console.log();
+
+
+        if (currUsrInFllngLst) {
+            try {
+                await unfollowUser(currUserId);
+                console.log('Unfollow unsuccessful');
+            } catch (error) {
+                console.error('Unfollow unsuccessful:', error);
+            }
+        }
+
+        try {
+            await followUser(currUserId);
+            console.log(username + ' followed ' + otherUsername + ' successfully!');
+        } catch (error) {
+            console.error('Failed to follow user:', error);
+        }
+    }
+
     const timerSpacing = 'mx-2';
     const timerDisplay = 'd-flex';
     const classname = `${timerDisplay} ${timerSpacing}`;
@@ -189,6 +236,8 @@ const OtherUserProfile = () => {
             <Profile
                 username={otherUsername}
                 avatarUrl={avatarUrl}
+                currUserId={currUserId}
+                handleFollow={handleFollow}
             />
 
             <Tabs

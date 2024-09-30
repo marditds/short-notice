@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { updateUser, deleteUser, deleteAllNotices, getUsersDocument } from '../context/dbhandler';
+import { updateUser, deleteUser, deleteAllNotices, getUsersDocument, createFollow, removeFollow, getAllFollowingsByUser as fetchAllFollowingsByUser } from '../context/dbhandler';
 import { useUserContext } from '../context/UserContext';
 import { UserId } from '../../components/User/UserId';
 
@@ -82,12 +82,46 @@ const useUserInfo = (data) => {
         }
     };
 
+    const followUser = async (otherUser_id) => {
+        try {
+            await createFollow(userId, otherUser_id);
+            console.log('Follow successful.');
+        } catch (error) {
+            console.error('Follow failed.', error);
+        }
+    }
+
+    const unfollowUser = async (following_id) => {
+        try {
+            const response = removeFollow(following_id);
+            console.log('Unfollow success.');
+            return response;
+        } catch (error) {
+            console.error('Unfollow failed:', error);
+        }
+    }
+
+    const getAllFollowingsByUser = async () => {
+        try {
+            const response = await fetchAllFollowingsByUser(userId);
+
+            console.log('Fetched getting followig list:', response);
+            return response;
+
+        } catch (error) {
+            console.error('Could not get following list', error);
+
+        }
+    }
 
     return {
         handleUpdateUser,
         handleDeleteUser,
         getUsersData,
-        fetchUsersData
+        fetchUsersData,
+        followUser,
+        unfollowUser,
+        getAllFollowingsByUser
     }
 }
 

@@ -1,3 +1,7 @@
+.user-profile {
+    padding: 12px 0px;
+}
+
 .user-profile__form-control,
 .user-profile__timer-select {
     border-width: 1.5px;
