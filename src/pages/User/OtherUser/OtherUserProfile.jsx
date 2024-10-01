@@ -52,11 +52,14 @@ const OtherUserProfile = () => {
         fetchUsersData,
         getUsersData,
         followUser,
+        getUserFollowersById
         // getAllFollowingsByUser
     } = useUserInfo(googleUserData);
 
     const [spreadNoticesData, setSpreadNoticesData] = useState([]);
     const [likedNoticesData, setLikedNoticesData] = useState([]);
+
+    const [followersCount, setFollowersCount] = useState(0);
     const [isFollowing, setIsFollowing] = useState(false);
     const [isLoadingProfile, setIsLoadingProfile] = useState(true);
 
@@ -194,6 +197,32 @@ const OtherUserProfile = () => {
         }
     }, [currUserId, following]);
 
+    // Get followers count
+    // useEffect(() => {
+    //     const followers = Object.keys(following).filter((follower) => follower === currUserId);
+
+    //     setFollowersCount(followers.length);
+
+    //     console.log('Object.keys(following):', Object.keys(following));
+    //     console.log('follower.length:', followers.length);
+
+
+    // }, [currUserId, followersCount])
+
+    useEffect(() => {
+        const fetchUserFollowersById = async () => {
+            try {
+                const response = await getUserFollowersById(currUserId);
+
+                console.log('getUserFollowersById - length', response.length);
+                setFollowersCount(response.length);
+
+            } catch (error) {
+                console.error('Failed to fetch user followers:', error);
+            }
+        }
+        fetchUserFollowersById();
+    }, [currUserId])
 
 
     const handleFollow = async (currUserId) => {
@@ -217,7 +246,7 @@ const OtherUserProfile = () => {
     }, [otherUsername, username, navigate]);
 
 
-    if (noticesLoading || userInfoLoading) {
+    if (noticesLoading || userInfoLoading || isLoadingProfile) {
         return <div><Loading />Loading {otherUsername}'s profile</div>;
     }
 
@@ -227,7 +256,8 @@ const OtherUserProfile = () => {
                 username={otherUsername}
                 avatarUrl={avatarUrl}
                 currUserId={currUserId}
-                followersCount={following ? Object.keys(following).length : 0}
+                // followersCount={following ? Object.keys(following).length : 0}
+                followersCount={followersCount}
                 isFollowing={isFollowing}
                 handleFollow={handleFollow}
             />

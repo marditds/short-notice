@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { updateUser, deleteUser, deleteAllNotices, getUsersDocument, createFollow, removeFollow, getUserFollowingsById } from '../context/dbhandler';
+import { updateUser, deleteUser, deleteAllNotices, getUsersDocument, createFollow, removeFollow, getUserFollowingsById, getUserFollowersById as fetchUserFollowersById } from '../context/dbhandler';
 import { useUserContext } from '../context/UserContext';
 import { UserId } from '../../components/User/UserId';
 
@@ -9,6 +9,7 @@ const useUserInfo = (data) => {
     const [userId, setUserId] = useState(null);
 
     const [following, setFollowing] = useState({});
+
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
@@ -36,6 +37,8 @@ const useUserInfo = (data) => {
                     acc[follow.otherUser_id] = follow.$id;
                     return acc;
                 }, {});
+
+                console.log('followingObject', followingObject);
 
                 setFollowing(followingObject);
             } catch (error) {
@@ -135,6 +138,17 @@ const useUserInfo = (data) => {
 
     }
 
+    const getUserFollowersById = async (otherUser_id) => {
+        try {
+            const response = await fetchUserFollowersById(otherUser_id);
+            console.log('Successfully fetched user followers:', response);
+            return response;
+        } catch (error) {
+            console.error('Failed to fetch user followers:', error);
+
+        }
+    }
+
 
 
     return {
@@ -144,7 +158,8 @@ const useUserInfo = (data) => {
         handleDeleteUser,
         getUsersData,
         fetchUsersData,
-        followUser
+        followUser,
+        getUserFollowersById
     }
 }
 
