@@ -52,14 +52,15 @@ const OtherUserProfile = () => {
         fetchUsersData,
         getUsersData,
         followUser,
-        getOtherUserFollowersById
-        // getAllFollowingsByUser
+        getOtherUserFollowersById,
+        getOtherUserFollowingsById
     } = useUserInfo(googleUserData);
 
     const [spreadNoticesData, setSpreadNoticesData] = useState([]);
     const [likedNoticesData, setLikedNoticesData] = useState([]);
 
     const [followersCount, setFollowersCount] = useState(0);
+    const [followingsCount, setFollowingsCount] = useState(0);
     const [isFollowing, setIsFollowing] = useState(false);
     const [isLoadingProfile, setIsLoadingProfile] = useState(true);
 
@@ -193,22 +194,12 @@ const OtherUserProfile = () => {
     // Update following status
     useEffect(() => {
         if (currUserId && following) {
-            setIsFollowing(!!following[currUserId]);
+            setIsFollowing(!following[currUserId]);
         }
     }, [currUserId, following]);
 
-    // Get followers count
-    // useEffect(() => {
-    //     const followers = Object.keys(following).filter((follower) => follower === currUserId);
 
-    //     setFollowersCount(followers.length);
-
-    //     console.log('Object.keys(following):', Object.keys(following));
-    //     console.log('follower.length:', followers.length);
-
-
-    // }, [currUserId, followersCount])
-
+    // Fetch other user's followers
     useEffect(() => {
         const fetchOtherUserFollowersById = async () => {
             try {
@@ -222,6 +213,22 @@ const OtherUserProfile = () => {
             }
         }
         fetchOtherUserFollowersById();
+    }, [currUserId])
+
+    // Fetch accounts follwed by other user
+    useEffect(() => {
+        const fetchOtherUserFollowingsById = async () => {
+            try {
+                const response = await getOtherUserFollowingsById(currUserId);
+
+                console.log('getOtherUserFollowingsById - length', response.length);
+                setFollowingsCount(response.length);
+
+            } catch (error) {
+                console.error('Failed to fetch user followers:', error);
+            }
+        }
+        fetchOtherUserFollowingsById();
     }, [currUserId])
 
 
@@ -258,6 +265,7 @@ const OtherUserProfile = () => {
                 currUserId={currUserId}
                 // followersCount={following ? Object.keys(following).length : 0}
                 followersCount={followersCount}
+                followingCount={followingsCount}
                 isFollowing={isFollowing}
                 handleFollow={handleFollow}
             />

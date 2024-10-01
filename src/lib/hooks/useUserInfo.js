@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { updateUser, deleteUser, deleteAllNotices, getUsersDocument, createFollow, removeFollow, getUserFollowingsById as fetchUserFollowingsById, getOtherUserFollowersById as fetchOtherUserFollowersById } from '../context/dbhandler';
+import { updateUser, deleteUser, deleteAllNotices, getUsersDocument, createFollow, removeFollow, getUserFollowingsById as fetchUserFollowingsById, getUserFollowersById as fetchUserFollowersById, getOtherUserFollowersById as fetchOtherUserFollowersById, getOtherUserFollowingsById as fetchOtherUserFollowingsById } from '../context/dbhandler';
 import { useUserContext } from '../context/UserContext';
 import { UserId } from '../../components/User/UserId';
 
@@ -8,7 +8,7 @@ const useUserInfo = (data) => {
     const { setUsername } = useUserContext();
     const [userId, setUserId] = useState(null);
 
-    // const [following, setFollowing] = useState({});
+    const [following, setFollowing] = useState({});
 
     // const [isLoading, setIsLoading] = useState(true);
 
@@ -23,33 +23,6 @@ const useUserInfo = (data) => {
     }, [data]);
 
 
-    // Fetch user following
-    // useEffect(() => {
-    //     const fetchUserFollowing = async () => {
-
-    //         try {
-    //             setIsLoading(true);
-    //             const userFollowing = await getUserFollowingsById(userId);
-
-    //             console.log('userFollowing', userFollowing);
-
-    //             const followingObject = userFollowing.reduce((acc, follow) => {
-    //                 acc[follow.otherUser_id] = follow.$id;
-    //                 return acc;
-    //             }, {});
-
-    //             console.log('followingObject', followingObject);
-
-    //             setFollowing(followingObject);
-    //         } catch (error) {
-    //             console.error('Error fetching user following:', error);
-    //             setFollowing({});
-    //         } finally {
-    //             setIsLoading(false);
-    //         }
-    //     }
-    //     fetchUserFollowing();
-    // }, [userId])
 
     const handleUpdateUser = async (username) => {
 
@@ -149,7 +122,6 @@ const useUserInfo = (data) => {
         }
     }
 
-
     const getOtherUserFollowersById = async (otherUser_id) => {
         try {
             const response = await fetchOtherUserFollowersById(otherUser_id);
@@ -161,10 +133,34 @@ const useUserInfo = (data) => {
         }
     }
 
+    const getUserFollowersById = async (otherUser_id) => {
+        try {
+            const response = await fetchUserFollowersById(otherUser_id);
+            console.log('Successfully fetched user followers:', response);
+            return response;
+        } catch (error) {
+            console.error('Failed to fetch user followers:', error);
+
+        }
+    }
+
+    const getOtherUserFollowingsById = async (user_id) => {
+        try {
+            const response = await fetchOtherUserFollowingsById(user_id);
+            console.log('Successfully fetched user followers:', response);
+            return response;
+        } catch (error) {
+            console.error('Failed to fetch user followers:', error);
+
+        }
+    }
+
+
+
 
 
     return {
-        // following,
+        following,
         // isLoading,
         handleUpdateUser,
         handleDeleteUser,
@@ -172,6 +168,8 @@ const useUserInfo = (data) => {
         fetchUsersData,
         followUser,
         getUserFollowingsById,
+        getUserFollowersById,
+        getOtherUserFollowingsById,
         getOtherUserFollowersById
     }
 }
