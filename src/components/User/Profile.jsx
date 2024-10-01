@@ -45,7 +45,7 @@ export const Profile = ({ username, avatarUrl, handleFollow, currUserId, followi
                             Block
                         </Button>
                         <Button style={{
-                            maxHeight: 'fit-content', maxWidth: 'fit-content'
+                            maxHeight: 'fit-content', maxWidth: 'fit-content', marginLeft: 'auto'
                         }}>
                             Report
                         </Button>

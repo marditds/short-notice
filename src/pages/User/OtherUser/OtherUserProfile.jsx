@@ -59,6 +59,8 @@ const OtherUserProfile = () => {
     const [spreadNoticesData, setSpreadNoticesData] = useState([]);
     const [likedNoticesData, setLikedNoticesData] = useState([]);
 
+
+
     const [followersCount, setFollowersCount] = useState(0);
     const [followingsCount, setFollowingsCount] = useState(0);
     const [isFollowing, setIsFollowing] = useState(false);
@@ -191,29 +193,40 @@ const OtherUserProfile = () => {
         }
     }
 
-    // Update following status
-    useEffect(() => {
-        if (currUserId && following) {
-            setIsFollowing(!following[currUserId]);
-        }
-    }, [currUserId, following]);
+
+    // Update the following status check
+
 
 
     // Fetch other user's followers
     useEffect(() => {
         const fetchOtherUserFollowersById = async () => {
+
+            if (!currUserId) return;
+
             try {
                 const response = await getOtherUserFollowersById(currUserId);
 
+                console.log('getUserFollowersById', response);
+
                 console.log('getUserFollowersById - length', response.length);
+
                 setFollowersCount(response.length);
+
+                const matchUserWithFollower = response.find((user) => user.user_id === user_id);
+
+                console.log('matchUserWithFollower', matchUserWithFollower);
+
+                if (matchUserWithFollower) {
+                    setIsFollowing(true);
+                }
 
             } catch (error) {
                 console.error('Failed to fetch user followers:', error);
             }
         }
         fetchOtherUserFollowersById();
-    }, [currUserId])
+    }, [currUserId, user_id])
 
     // Fetch accounts follwed by other user
     useEffect(() => {
@@ -233,7 +246,6 @@ const OtherUserProfile = () => {
 
 
     const handleFollow = async (currUserId) => {
-        if (!currUserId) return;
         try {
             await followUser(currUserId);
             setIsFollowing(prevState => !prevState);

@@ -144,7 +144,7 @@ const useUserInfo = (data) => {
         }
     }
 
-    const getOtherUserFollowingsById = async (user_id) => {
+    const getOtherUserFollowingsById = useCallback(async (user_id) => {
         try {
             const response = await fetchOtherUserFollowingsById(user_id);
             console.log('Successfully fetched user followers:', response);
@@ -153,8 +153,7 @@ const useUserInfo = (data) => {
             console.error('Failed to fetch user followers:', error);
 
         }
-    }
-
+    }, [data])
 
 
 
