@@ -48,11 +48,11 @@ const OtherUserProfile = () => {
 
     const {
         following,
-        isLoading: userInfoLoading,
+        // isLoading: userInfoLoading,
         fetchUsersData,
         getUsersData,
         followUser,
-        getUserFollowersById
+        getOtherUserFollowersById
         // getAllFollowingsByUser
     } = useUserInfo(googleUserData);
 
@@ -210,9 +210,9 @@ const OtherUserProfile = () => {
     // }, [currUserId, followersCount])
 
     useEffect(() => {
-        const fetchUserFollowersById = async () => {
+        const fetchOtherUserFollowersById = async () => {
             try {
-                const response = await getUserFollowersById(currUserId);
+                const response = await getOtherUserFollowersById(currUserId);
 
                 console.log('getUserFollowersById - length', response.length);
                 setFollowersCount(response.length);
@@ -221,7 +221,7 @@ const OtherUserProfile = () => {
                 console.error('Failed to fetch user followers:', error);
             }
         }
-        fetchUserFollowersById();
+        fetchOtherUserFollowersById();
     }, [currUserId])
 
 
@@ -246,7 +246,7 @@ const OtherUserProfile = () => {
     }, [otherUsername, username, navigate]);
 
 
-    if (noticesLoading || userInfoLoading || isLoadingProfile) {
+    if (noticesLoading) {
         return <div><Loading />Loading {otherUsername}'s profile</div>;
     }
 

@@ -43,10 +43,16 @@ const UserProfile = () => {
         getAllSpreadNotices
     } = useNotices(googleUserData);
 
-    const { fetchUsersData, following } = useUserInfo(googleUserData);
+    const {
+        fetchUsersData,
+        following,
+        getUserFollowingsById
+    } = useUserInfo(googleUserData);
 
     const [spreadNoticesData, setSpreadNoticesData] = useState([]);
     const [likedNoticesData, setLikedNoticesData] = useState([]);
+
+    const [followingCount, setFollowingCount] = useState(0);
 
     const { avatarUrl } = useUserAvatar(user_id);
 
@@ -82,6 +88,21 @@ const UserProfile = () => {
 
     }, [user_id])
 
+    // Fetch accounts followed by user
+    useEffect(() => {
+        const fetchUserFollowingsById = async () => {
+            try {
+                const response = await getUserFollowingsById(user_id);
+
+                console.log('getUserFollowingsById - length', response.length);
+                setFollowingCount(response.length);
+
+            } catch (error) {
+                console.error('Failed to fetch user followers:', error);
+            }
+        }
+        fetchUserFollowingsById();
+    }, [user_id])
 
     const handleEditNotice = (noticeId, currentText) => {
         setEditingNoticeId(noticeId);
@@ -163,7 +184,8 @@ const UserProfile = () => {
             <Profile
                 username={username}
                 avatarUrl={avatarUrl}
-                followingCount={following && Object.keys(following).length}
+                // followingCount={following && Object.keys(following).length}
+                followingCount={followingCount}
             />
 
             <ComposeNotice

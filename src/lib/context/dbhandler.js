@@ -688,7 +688,7 @@ export const getUserFollowingsById = async (user_id) => {
     }
 }
 
-export const getUserFollowersById = async (otherUser_id) => {
+export const getOtherUserFollowersById = async (otherUser_id) => {
 
     console.log('otherUser_id:', otherUser_id);
 
