@@ -194,10 +194,6 @@ const OtherUserProfile = () => {
     }
 
 
-    // Update the following status check
-
-
-
     // Fetch other user's followers
     useEffect(() => {
         const fetchOtherUserFollowersById = async () => {
@@ -275,7 +271,6 @@ const OtherUserProfile = () => {
                 username={otherUsername}
                 avatarUrl={avatarUrl}
                 currUserId={currUserId}
-                // followersCount={following ? Object.keys(following).length : 0}
                 followersCount={followersCount}
                 followingCount={followingsCount}
                 isFollowing={isFollowing}
@@ -284,8 +279,9 @@ const OtherUserProfile = () => {
 
             <Tabs
                 defaultActiveKey="notices"
-                id="justify-tab-example"
+                id="notices-tabs"
                 justify
+                className='user-profile__notice-tab'
             >
                 {/* NOTICES TAB */}
                 <Tab

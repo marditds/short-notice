@@ -32,6 +32,8 @@ export const Profile = ({ username, avatarUrl, handleFollow, currUserId, followi
                 {location.pathname !== '/user/profile' &&
                     <>
                         <Button
+                            className={`user-profile__interaction-btn
+                                ${isFollowing ? 'following' : ''}`}
                             onClick={() => handleFollow(currUserId)}
                             style={{
                                 maxHeight: 'fit-content', maxWidth: 'fit-content'
@@ -39,14 +41,18 @@ export const Profile = ({ username, avatarUrl, handleFollow, currUserId, followi
                         >
                             {isFollowing ? 'Following' : 'Follow'}
                         </Button>
-                        <Button style={{
-                            maxHeight: 'fit-content', maxWidth: 'fit-content', marginLeft: 'auto'
-                        }}>
+                        <Button
+                            className='user-profile__interaction-btn'
+                            style={{
+                                maxHeight: 'fit-content', maxWidth: 'fit-content', marginLeft: 'auto'
+                            }}>
                             Block
                         </Button>
-                        <Button style={{
-                            maxHeight: 'fit-content', maxWidth: 'fit-content', marginLeft: 'auto'
-                        }}>
+                        <Button
+                            className='user-profile__interaction-btn'
+                            style={{
+                                maxHeight: 'fit-content', maxWidth: 'fit-content', marginLeft: 'auto'
+                            }}>
                             Report
                         </Button>
                     </>

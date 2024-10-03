@@ -220,6 +220,7 @@ const UserProfile = () => {
                 defaultActiveKey="my-notices"
                 id="justify-tab-example"
                 justify
+                className='user-profile__notice-tab'
             >
                 <Tab
                     eventKey='my-notices'
