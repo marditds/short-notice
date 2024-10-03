@@ -8,7 +8,11 @@ export const Tools = ({ googleLogout, setIsLoggedIn, setGoogleUserData }) => {
 
 
     return (
-        <div className='userhome__body--profile--tools w-100 d-flex'>
+        <div className='userhome__body--profile--tools 
+        w-100 
+        d-flex 
+        fixed-top
+        '>
             <DropdownButton
                 drop='down'
                 id="dropdown-basic-button"

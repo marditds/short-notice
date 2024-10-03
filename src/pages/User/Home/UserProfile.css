@@ -1,5 +1,5 @@
 .user-profile {
-    padding: 12px 0px;
+    padding: 54px 45px 12px 45px;
 }
 
 .user-profile__interaction-btn {
@@ -154,9 +154,9 @@
     filter: sepia(1) hue-rotate(100deg) saturate(6) brightness(0.7);
 }
 
-/* .user-profile__notice-tab {
-    border-bottom: solid white !important;
-} */
+.user-profile__notice-tab {
+    margin-top: 198px;
+}
 
 .user-profile__notice-tab>li>button {
     color: var(--main-text-color);

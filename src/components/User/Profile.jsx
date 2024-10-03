@@ -8,7 +8,7 @@ export const Profile = ({ username, avatarUrl, handleFollow, currUserId, followi
     const location = useLocation();
 
     return (
-        <Row className='user-profile'>
+        <Row className='user-profile fixed-top'>
             <Col className='d-grid'>
                 <strong style={{ lineHeight: '12pt' }}>Followers</strong>
                 <p className='mb-0' style={{ fontSize: '24px' }}>
