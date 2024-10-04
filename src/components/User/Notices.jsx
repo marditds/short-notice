@@ -140,27 +140,33 @@ export const Notices = ({
                                 </div>
                                 :
                                 <div className='d-flex flex-column justify-content-end h-100'>
-                                    {/* <Link to={`../${notice.username}`}> */}
-                                    <div className='d-flex justify-content-end align-items-center mt-auto'>
 
-                                        <p
-                                            className='w-100 my-0 text-end notice__username'
-                                        >
-                                            <Link to={`../${notice.username}`}
-                                                className=' text-decoration-none'>
-                                                <strong>{notice.username}</strong>
-                                            </Link>
-                                        </p>
+                                    {
+                                        location.pathname !== `/user/${notice.username}` && eventKey === 'notices'
+                                            ?
+                                            null
+                                            :
+                                            <div className='d-flex justify-content-end align-items-center mt-auto'>
 
-                                        <Link to={`../${notice.username}`}>
-                                            <img
-                                                src={notice.avatarUrl || defaultAvatar}
-                                                alt="Profile"
-                                                style={{ borderRadius: '50%', width: 50, height: 50, marginRight: '12px' }}
-                                                className='d-flex ms-auto'
-                                            />
-                                        </Link>
-                                    </div>
+                                                <p
+                                                    className='w-100 my-0 text-end notice__username'
+                                                >
+                                                    <Link to={`../${notice.username}`}
+                                                        className=' text-decoration-none'>
+                                                        <strong>{notice.username}</strong>
+                                                    </Link>
+                                                </p>
+
+                                                <Link to={`../${notice.username}`}>
+                                                    <img
+                                                        src={notice.avatarUrl || defaultAvatar}
+                                                        alt="Profile"
+                                                        style={{ borderRadius: '50%', width: 50, height: 50, marginRight: '12px' }}
+                                                        className='d-flex ms-auto'
+                                                    />
+                                                </Link>
+                                            </div>
+                                    }
                                     {/* </Link> */}
                                     <div className='d-grid'>
 

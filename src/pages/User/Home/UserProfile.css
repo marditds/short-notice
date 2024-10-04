@@ -1,14 +1,32 @@
 .user-profile {
+    /* margin: 54px 0 0px 0; */
     padding: 54px 45px 12px 45px;
+    height: 198px;
+
+    background: rgb(23, 199, 105);
+    background: -moz-linear-gradient(0deg, rgba(23, 199, 105, 0.65) 0%, rgba(0, 0, 0, 0.8) 27%, rgba(0, 0, 0, 0.9) 48%, rgba(0, 0, 0, 1) 78%);
+    background: -webkit-linear-gradient(0deg, rgba(23, 199, 105, 0.65) 0%, rgba(0, 0, 0, 0.8) 27%, rgba(0, 0, 0, 0.9) 48%, rgba(0, 0, 0, 1) 78%);
+    background: linear-gradient(0deg, rgba(23, 199, 105, 0.65) 0%, rgba(0, 0, 0, 0.8) 27%, rgba(0, 0, 0, 0.9) 48%, rgba(0, 0, 0, 1) 78%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#17c769", endColorstr="#000000", GradientType=1);
+    backdrop-filter: blur(1.25px);
+
 }
 
 .user-profile__interaction-btn {
     background-color: var(--main-bg-color);
+    /* background-color: transparent; */
     border-color: var(--main-accent-color);
 }
 
 .user-profile__interaction-btn.following {
     color: var(--main-bg-color);
+
+    /* background: rgb(23, 199, 105);
+    background: -moz-radial-gradient(circle, rgba(23, 199, 105, 0.65) 0%, rgba(0, 0, 0, 0.8) 97%, rgba(0, 0, 0, 0.9) 98%, rgba(0, 0, 0, 1) 100%);
+    background: -webkit-radial-gradient(circle, rgba(23, 199, 105, 0.65) 0%, rgba(0, 0, 0, 0.8) 97%, rgba(0, 0, 0, 0.9) 98%, rgba(0, 0, 0, 1) 100%);
+    background: radial-gradient(circle, rgba(23, 199, 105, 0.65) 0%, rgba(0, 0, 0, 0.8) 97%, rgba(0, 0, 0, 0.9) 98%, rgba(0, 0, 0, 1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#17c769", endColorstr="#000000", GradientType=1); */
+
     background-color: var(--main-accent-color);
 }
 
@@ -156,6 +174,12 @@
 
 .user-profile__notice-tab {
     margin-top: 198px;
+    max-width: 1320px !important;
+    margin: 198px auto 0 auto;
+}
+
+.user-profile__notice-tab+div {
+    margin: 240px auto 0 auto;
 }
 
 .user-profile__notice-tab>li>button {

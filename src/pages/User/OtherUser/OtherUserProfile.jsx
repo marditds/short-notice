@@ -281,7 +281,9 @@ const OtherUserProfile = () => {
                 defaultActiveKey="notices"
                 id="notices-tabs"
                 justify
-                className='user-profile__notice-tab'
+                className='user-profile__notice-tab 
+                fixed-top
+                '
             >
                 {/* NOTICES TAB */}
                 <Tab
@@ -295,7 +297,7 @@ const OtherUserProfile = () => {
                         handleLike={handleLike}
                         handleSpread={handleSpread}
                         handleReport={handleReport}
-                        eventKey='my-notices'
+                        eventKey='notices'
                     />
                 </Tab>
 
