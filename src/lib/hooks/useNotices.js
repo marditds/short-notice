@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { createNotice, getUserNotices, updateNotice, deleteNotice, getFilteredNotices, updateUserInterests, getUserInterests, createSpread, getUserSpreads, removeSpread, createReport, createLike, removeLike, getUserLikes, getAllLikedNotices as fetchAllLikedNotices, getAllSpreadNotices as fetchAllSpreadNotices } from '../../lib/context/dbhandler';
+import { createNotice, getUserNotices, updateNotice, deleteNotice, deleteAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSpread, getUserSpreads, removeSpread, createReport, createLike, removeLike, getUserLikes, getAllLikedNotices as fetchAllLikedNotices, getAllSpreadNotices as fetchAllSpreadNotices } from '../../lib/context/dbhandler';
 import { UserId } from '../../components/User/UserId.jsx';
 
 const useNotices = (googleUserData) => {
@@ -200,6 +200,15 @@ const useNotices = (googleUserData) => {
 
     };
 
+    const removeAllNoticesByUser = async (user_id) => {
+        try {
+            const response = await deleteAllNotices(user_id);
+            return response;
+        } catch (error) {
+            console.error('Error deleting all notices:', error);
+        }
+    }
+
     const getFeedNotices = async (selectedTags) => {
         try {
             // console.log('selected tags', selectedTags);
@@ -344,7 +353,8 @@ const useNotices = (googleUserData) => {
         getAllSpreadNotices,
         reportNotice,
         likeNotice,
-        setLikedNotices
+        setLikedNotices,
+        removeAllNoticesByUser
     };
 };
 
