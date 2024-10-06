@@ -4,9 +4,9 @@
     height: 198px;
 
     background: rgb(0, 0, 0);
-    background: -moz-linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.6965161064425771) 55%, rgba(23, 199, 105, 0.34637605042016806) 100%);
-    background: -webkit-linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.6965161064425771) 55%, rgba(23, 199, 105, 0.34637605042016806) 100%);
-    background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.6965161064425771) 55%, rgba(23, 199, 105, 0.34637605042016806) 100%);
+    background: -moz-linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.29) 16%, rgba(0, 0, 0, 0.5788690476190477) 43%, rgba(0, 0, 0, 0.58) 66%, rgba(23, 199, 105, 0.58) 100%);
+    background: -webkit-linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.29) 16%, rgba(0, 0, 0, 0.5788690476190477) 43%, rgba(0, 0, 0, 0.58) 66%, rgba(23, 199, 105, 0.58) 100%);
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.29) 16%, rgba(0, 0, 0, 0.5788690476190477) 43%, rgba(0, 0, 0, 0.58) 66%, rgba(23, 199, 105, 0.58) 100%);
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#000000", endColorstr="#17c769", GradientType=1);
 
 
