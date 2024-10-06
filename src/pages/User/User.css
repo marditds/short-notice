@@ -14,12 +14,13 @@ body {
 
 .userhome__body--profile--tools--dropdown>button {
     padding: 0;
-    background-color: var(--main-bg-color) !important;
+    /* background-color: var(--main-bg-color) !important; */
+    background-color: transparent !important;
     border-radius: 0;
     border-top: 0 !important;
     border-bottom: 0 !important;
-    border-left: 2px solid var(--main-bg-color) !important;
-    border-right: 2px solid var(--main-bg-color) !important;
+    border-left: 2px solid transparent !important;
+    border-right: 2px solid transparent !important;
     transition: none;
 }
 
@@ -37,7 +38,8 @@ body {
     padding: 0;
     margin-top: -2px;
     color: var(--main-text-color) !important;
-    background-color: var(--main-bg-color) !important;
+    background-color: transparent !important;
+    backdrop-filter: blur(22px);
     border-color: var(--main-bg-color) !important;
     border-radius: 0 0 7px 7px;
     border-top: 0;
