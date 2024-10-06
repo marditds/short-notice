@@ -39,6 +39,10 @@
     background-color: var(--main-accent-color-hover) !important;
 }
 
+.user-profile__interaction-btn:focus {
+    box-shadow: none !important;
+}
+
 .user-profile__form {
     margin-top: 198px;
 }
@@ -151,6 +155,11 @@
     transition: 0.3s !important;
 }
 
+.user-profile__notify-btn:focus {
+    background-color: var(--main-accent-color-hover) !important;
+    box-shadow: none !important;
+}
+
 .user-profile__notify-btn:disabled {
     color: black;
 }
@@ -220,6 +229,8 @@
 .notice__reaction-btn {
     background-color: transparent !important;
     border-color: transparent !important;
+    box-shadow: none !important;
+
 }
 
 .notice__edit-btn>svg,
@@ -230,7 +241,9 @@
 
 .notice__edit-btn:hover>svg,
 .notice__delete-btn:hover>svg,
-.notice__reaction-btn:hover>svg {
+.notice__reaction-btn:hover>svg,
+.notice__edit-btn:focus>svg,
+.notice__delete-btn:focus>svg {
     color: var(--main-accent-color) !important;
     filter: drop-shadow(0px 0px 5px var(--main-accent-color)) !important;
 }
@@ -276,13 +289,15 @@
 
 .notice__edit--modal-btn {
     background-color: var(--main-accent-color) !important;
-    color: black;
+    color: black !important;
     border: transparent;
 }
 
 .notice__edit--modal-btn:hover,
-.notice__edit--modal-btn:active {
+.notice__edit--modal-btn:focus {
     background-color: var(--main-accent-color-hover) !important;
-    color: black;
+    color: black !important;
     border: transparent;
+    box-shadow: none !important;
+
 }

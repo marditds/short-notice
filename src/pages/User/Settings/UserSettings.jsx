@@ -27,15 +27,15 @@ const UserSettings = () => {
         <Container fluid className='settings'>
             <Stack gap={5}>
                 <Avatar />
-
+                <hr />
                 <Info />
-
+                <hr />
                 <Interests />
-
+                <hr />
                 <DeleteAllNotices />
-
+                <hr />
                 <Visibility />
-
+                <hr />
                 <DeleteAccount />
             </Stack>
         </Container>
