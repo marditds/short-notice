@@ -33,10 +33,11 @@
 }
 
 .user-profile__interaction-btn:hover,
-.user-profile__interaction-btn:active {
-    /* .user-profile__interaction-btn:focus { */
+.user-profile__interaction-btn:active,
+.user-profile__interaction-btn:focus {
     border-color: var(--main-accent-color-hover) !important;
     background-color: var(--main-accent-color-hover) !important;
+    box-shadow: none !important;
 }
 
 .user-profile__interaction-btn:focus {
@@ -243,7 +244,8 @@
 .notice__delete-btn:hover>svg,
 .notice__reaction-btn:hover>svg,
 .notice__edit-btn:focus>svg,
-.notice__delete-btn:focus>svg {
+.notice__delete-btn:focus>svg,
+.notice__reaction-btn:focus>svg {
     color: var(--main-accent-color) !important;
     filter: drop-shadow(0px 0px 5px var(--main-accent-color)) !important;
 }

@@ -21,7 +21,14 @@ body {
     border-bottom: 0 !important;
     border-left: 2px solid transparent !important;
     border-right: 2px solid transparent !important;
-    transition: none;
+    transition: 0.3s;
+    box-shadow: none !important;
+}
+
+.userhome__body--profile--tools--dropdown>button:hover,
+.userhome__body--profile--tools--dropdown>button:active,
+.userhome__body--profile--tools--dropdown>button:focus {
+    color: var(--main-accent-color-hover);
 }
 
 .userhome__body--profile--tools--dropdown>button::after {
