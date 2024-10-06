@@ -282,7 +282,7 @@ const OtherUserProfile = () => {
                 id="notices-tabs"
                 justify
                 className='user-profile__notice-tab 
-                fixed-top
+                fixed-bottom
                 '
             >
                 {/* NOTICES TAB */}

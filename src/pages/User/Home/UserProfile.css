@@ -37,6 +37,14 @@
     background-color: var(--main-accent-color-hover) !important;
 }
 
+.user-profile__form {
+    margin-top: 198px;
+}
+
+.user-profile__form+ul+div {
+    margin: 0px auto 42px 0px;
+}
+
 .user-profile__form-control,
 .user-profile__timer-select {
     border-width: 1.5px;
@@ -179,7 +187,7 @@
 }
 
 .user-profile__notice-tab+div {
-    margin: 240px auto 0 auto;
+    margin: 198px auto 42px auto;
 }
 
 .user-profile__notice-tab>li>button {
