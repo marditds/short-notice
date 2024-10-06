@@ -266,31 +266,50 @@ const UserProfile = () => {
                 </Tab>
             </Tabs>
 
-
-            <Modal show={showEditModal} onHide={handleCloseEditModal}>
-                <Modal.Header>
+            {/* <div className='position-fixed'> */}
+            <Modal
+                show={showEditModal}
+                onHide={handleCloseEditModal}
+                className='notice__edit--modal'
+            >
+                <Modal.Header
+                    className='notice__edit--modal-header'
+                >
                     <Modal.Title>Edit Notice</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>
+                <Modal.Body
+                    className='notice__edit--modal-body'
+                >
                     <Form>
                         <Form.Group className='mb-3' controlId='editNotice'>
-                            <Form.Label>Notice Text</Form.Label>
+                            <Form.Label>Your Notice Text</Form.Label>
                             <Form.Control
                                 as='textarea'
                                 rows={3}
                                 value={noticeText}
                                 onChange={(e) => setNoticeText(e.target.value)}
+                                className='notice__edit--modal-form-control'
                             />
                         </Form.Group>
                     </Form>
                 </Modal.Body>
-                <Modal.Footer>
-                    <Button onClick={handleCloseEditModal}>
+                <Modal.Footer
+                    className='notice__edit--modal-footer'
+                >
+                    <Button
+                        onClick={handleCloseEditModal}
+                        className='notice__edit--modal-btn'
+                    >
                         Cancel
                     </Button>
-                    <Button onClick={handleSaveEdit}>Save</Button>
+                    <Button
+                        onClick={handleSaveEdit}
+                        className='notice__edit--modal-btn'
+                    >
+                        Save</Button>
                 </Modal.Footer>
             </Modal>
+            {/* </div> */}
 
 
             <Modal show={showDeleteModal} onHide={handleCloseDeleteModal}>

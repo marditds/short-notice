@@ -46,7 +46,8 @@
 }
 
 .user-profile__form-control,
-.user-profile__timer-select {
+.user-profile__timer-select,
+.notice__edit--modal-form-control {
     border-width: 1.5px;
     border-color: transparent;
     border-style: groove;
@@ -54,13 +55,15 @@
 }
 
 .user-profile__form-control:focus,
-.user-profile__timer-select:focus {
+.user-profile__timer-select:focus,
+.notice__edit--modal-form-control:focus {
     border-color: var(--main-accent-color);
     border-width: 1.5px;
     box-shadow: none !important;
 }
 
-.user-profile__form-control::selection {
+.user-profile__form-control::selection,
+.notice__edit--modal-form-control::selection {
     background-color: var(--main-accent-color) !important;
 }
 
@@ -232,4 +235,50 @@
 
 .notice__reaction-btn-fill {
     color: var(--main-accent-color) !important;
+}
+
+
+.notice__edit--modal {
+    /* position: relative; */
+    padding: 0 !important;
+    /* height: 100vh !important; */
+}
+
+.notice__edit--modal>div {
+    /* position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); */
+}
+
+.notice__edit--modal>div>div {
+    border-color: var(--main-accent-color);
+    border-width: 0.5px;
+    background-color: var(--main-bg-color);
+}
+
+.notice__edit--modal>div>div {
+    border-color: var(--main-accent-color);
+    border-width: 0.5px;
+    background-color: var(--main-bg-color);
+}
+
+.notice__edit--modal-header,
+.notice__edit--modal-body,
+.notice__edit--modal-footer {
+    color: var(--main-text-color);
+    border: 0px;
+}
+
+.notice__edit--modal-btn {
+    background-color: var(--main-accent-color) !important;
+    color: black;
+    border: transparent;
+}
+
+.notice__edit--modal-btn:hover,
+.notice__edit--modal-btn:active {
+    background-color: var(--main-accent-color-hover) !important;
+    color: black;
+    border: transparent;
 }
