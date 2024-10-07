@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { Row, Col, Button, Modal } from 'react-bootstrap';
+import { getAvatarUrl } from '../../lib/utils/avatarUtils.js';
 import defaultAvatar from '../../assets/default.png';
 import { SlClose } from "react-icons/sl";
 
@@ -104,6 +105,7 @@ export const Profile = ({ username, avatarUrl, handleFollow, currUserId, followi
                                     to={`/user/${followingAccount.username}`}
                                 >
                                     {followingAccount.username}
+                                    <img src={getAvatarUrl(followingAccount.avatar) || defaultAvatar} />
                                 </Link>
                             </div>
                         )
