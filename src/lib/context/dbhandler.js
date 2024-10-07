@@ -681,7 +681,7 @@ export const getUserFollowingsById = async (user_id) => {
                 Query.equal('user_id', user_id),
             ]
         )
-        console.log('Successfully got following document.', response.documents);
+        // console.log('Successfully got following document.', response.documents);
         return response.documents;
     } catch (error) {
         console.error('Could not get following document', error);
@@ -697,7 +697,7 @@ export const getUserFollowersById = async (otherUser_id) => {
                 Query.equal('otherUser_id', otherUser_id),
             ]
         )
-        console.log('Successfully got following document.', response.documents);
+        // console.log('Successfully got following document.', response.documents);
         return response.documents;
     } catch (error) {
         console.error('Error getting other user following:', error);

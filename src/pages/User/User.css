@@ -28,7 +28,7 @@ body {
 .userhome__body--profile--tools--dropdown>button:hover,
 .userhome__body--profile--tools--dropdown>button:active,
 .userhome__body--profile--tools--dropdown>button:focus {
-    color: var(--main-accent-color-hover);
+    color: var(--main-accent-color-hover) !important;
 }
 
 .userhome__body--profile--tools--dropdown>button::after {

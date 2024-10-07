@@ -44,6 +44,7 @@ const UserProfile = () => {
     } = useNotices(googleUserData);
 
     const {
+        getUsersData,
         fetchUsersData,
         following,
         getUserFollowersById,
@@ -90,14 +91,27 @@ const UserProfile = () => {
 
     }, [user_id])
 
+
     // Fetch accounts followed by user
     useEffect(() => {
         const fetchUserFollowingsById = async () => {
             try {
-                const response = await getUserFollowingsById(user_id);
+                const allUsers = await getUsersData();
+                console.log('allUsers:', allUsers.documents);
 
-                console.log('getUserFollowingsById - length', response.length);
-                setFollowingCount(response.length);
+                const followedByUserIds = await getUserFollowingsById(user_id);
+                console.log('followedByUserIds:', followedByUserIds);
+
+
+                const accountsFollowedByUser = allUsers.documents.filter((user) =>
+                    followedByUserIds.some(followed => user.$id === followed.otherUser_id)
+                );
+
+                console.log('accountsFollowedByUser:', accountsFollowedByUser);
+
+                // console.log('getUserFollowingsById - length', response.length);
+                setFollowingCount(followedByUserIds.length);
+
 
             } catch (error) {
                 console.error('Failed to fetch user followers:', error);
@@ -112,7 +126,7 @@ const UserProfile = () => {
             try {
                 const response = await getUserFollowersById(user_id);
 
-                console.log('getUserFollowersById - length', response.length);
+                // console.log('getUserFollowersById - length', response.length);
                 setFollowersCount(response.length);
 
             } catch (error) {
@@ -202,7 +216,6 @@ const UserProfile = () => {
             <Profile
                 username={username}
                 avatarUrl={avatarUrl}
-                // followingCount={following && Object.keys(following).length}
                 followingCount={followingCount}
                 followersCount={followersCount}
             />

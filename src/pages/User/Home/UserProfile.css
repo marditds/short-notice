@@ -1,5 +1,7 @@
 .user-profile {
     /* margin: 54px 0 0px 0; */
+    max-width: 1320px !important;
+    margin: 0 auto;
     padding: 54px 45px 12px 45px;
     height: 198px;
 

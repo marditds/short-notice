@@ -114,7 +114,7 @@ const useUserInfo = (data) => {
     const getUserFollowingsById = async (otherUser_id) => {
         try {
             const response = await fetchUserFollowingsById(otherUser_id);
-            console.log('Successfully fetched user followers:', response);
+            // console.log('Successfully fetched user followers:', response);
             return response;
         } catch (error) {
             console.error('Failed to fetch user followers:', error);
@@ -136,7 +136,7 @@ const useUserInfo = (data) => {
     const getUserFollowersById = async (otherUser_id) => {
         try {
             const response = await fetchUserFollowersById(otherUser_id);
-            console.log('Successfully fetched user followers:', response);
+            // console.log('Successfully fetched user followers:', response);
             return response;
         } catch (error) {
             console.error('Failed to fetch user followers:', error);
