@@ -44,21 +44,24 @@ const UserProfile = () => {
     } = useNotices(googleUserData);
 
     const {
+        followingCount,
+        followingAccounts,
         getUsersData,
         fetchUsersData,
         following,
         getUserFollowersById,
-        getUserFollowingsById
+        getUserFollowingsById,
+        fetchAccountsFollowedByUser
     } = useUserInfo(googleUserData);
 
     const [spreadNoticesData, setSpreadNoticesData] = useState([]);
     const [likedNoticesData, setLikedNoticesData] = useState([]);
 
-    const [followersCount, setFollowersCount] = useState(0);
-    const [followingCount, setFollowingCount] = useState(0);
+    const [followersCount, setFollowersCount] = useState(null);
+    // const [followingCount, setFollowingCount] = useState(null);
 
-    const [followingAccounts, setFollowingAccounts] = useState([]);
-    const [followers, setFollowers] = useState([]);
+    // const [followingAccounts, setFollowingAccounts] = useState([]);
+    const [followersAccounts, setFollowersAccounts] = useState([]);
 
 
     const { avatarUrl } = useUserAvatar(user_id);
@@ -98,42 +101,30 @@ const UserProfile = () => {
 
     // Fetch accounts followed by user
     useEffect(() => {
-        const fetchUserFollowingsById = async () => {
-            try {
-                const allUsers = await getUsersData();
-                console.log('allUsers:', allUsers.documents);
 
-                const followedByUserIds = await getUserFollowingsById(user_id);
-                console.log('followedByUserIds:', followedByUserIds);
+        fetchAccountsFollowedByUser(user_id);
 
-
-                const accountsFollowedByUser = allUsers.documents.filter((user) =>
-                    followedByUserIds.some(followed => user.$id === followed.otherUser_id)
-                );
-
-                console.log('accountsFollowedByUser:', accountsFollowedByUser);
-
-                setFollowingAccounts(accountsFollowedByUser);
-
-                // console.log('getUserFollowingsById - length', response.length);
-                setFollowingCount(followedByUserIds.length);
-
-
-            } catch (error) {
-                console.error('Failed to fetch user followers:', error);
-            }
-        }
-        fetchUserFollowingsById();
     }, [user_id])
 
     // Fetch accounts following the user 
     useEffect(() => {
         const fetchUserFollowersById = async () => {
             try {
-                const response = await getUserFollowersById(user_id);
+                const allUsers = await getUsersData();
+                console.log('allUsers:', allUsers.documents);
 
-                // console.log('getUserFollowersById - length', response.length);
-                setFollowersCount(response.length);
+                const followersUserIds = await getUserFollowersById(user_id);
+                console.log('followersUserIds', followersUserIds);
+
+                const accountsFollowingTheUser = allUsers.documents.filter((user) =>
+                    followersUserIds.some(followed => user.$id === followed.user_id)
+                );
+
+                console.log('accountsFollowingTheUser:', accountsFollowingTheUser);
+
+                setFollowersAccounts(accountsFollowingTheUser);
+
+                setFollowersCount(followersUserIds.length);
 
             } catch (error) {
                 console.error('Failed to fetch user followers:', error);
@@ -225,6 +216,7 @@ const UserProfile = () => {
                 followingCount={followingCount}
                 followersCount={followersCount}
                 followingAccounts={followingAccounts}
+                followersAccounts={followersAccounts}
             />
 
             <ComposeNotice

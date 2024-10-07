@@ -4,12 +4,22 @@ import { Row, Col, Button, Modal } from 'react-bootstrap';
 import { getAvatarUrl } from '../../lib/utils/avatarUtils.js';
 import defaultAvatar from '../../assets/default.png';
 import { SlClose } from "react-icons/sl";
+import { Loading } from '../Loading/Loading.jsx';
 
 export const Profile = ({ username, avatarUrl, handleFollow, currUserId, followingCount, followersCount, isFollowing, followingAccounts, followersAccounts }) => {
 
     const location = useLocation();
 
+    const [showFollowersModal, setShowFollowersModal] = useState(false);
     const [showFollowingModal, setShowFollowingModal] = useState(false);
+
+    const handleShowFollowersModal = () => {
+        setShowFollowersModal(true);
+    }
+
+    const handleCloseFollowersModal = () => {
+        setShowFollowersModal(false);
+    }
 
     const handleShowFollowingModal = () => {
         setShowFollowingModal(true);
@@ -24,19 +34,45 @@ export const Profile = ({ username, avatarUrl, handleFollow, currUserId, followi
             <Row className='user-profile fixed-top'>
                 <Col className='d-grid'>
 
-                    <strong style={{ lineHeight: '12pt' }}>Followers</strong>
-                    <p className='mb-0' style={{ fontSize: '24px' }}>
-                        {followersCount}
-                    </p>
+                    <Button onClick={handleShowFollowersModal}>
+                        {followersCount === null ?
+                            null
+                            :
+                            <strong style={{ lineHeight: '12pt' }}>
+                                Followers
+                            </strong>
+                        }
+                    </Button>
+
+                    <Button onClick={handleShowFollowersModal}>
+                        {followersCount === null ?
+                            <Loading />
+                            :
+                            followersCount
+                        }
+                    </Button>
+
+
 
                     <Button onClick={handleShowFollowingModal}>
-                        <strong style={{ lineHeight: '12pt' }}>
-                            Following
-                        </strong>
-                        {/* <p className='mb-0' style={{ fontSize: '24px' }}> */}
-                        {followingCount}
-                        {/* </p> */}
+                        {followingCount === null ?
+                            null
+                            :
+                            <strong style={{ lineHeight: '12pt' }}>
+                                Following
+                            </strong>
+                        }
                     </Button>
+
+                    <Button onClick={handleShowFollowingModal}>
+                        {followingCount === null ?
+                            <Loading />
+                            :
+                            followingCount
+                        }
+                    </Button>
+
+
                 </Col>
 
                 <Col className='w-100 d-grid justify-content-center gap-2'>
@@ -78,6 +114,42 @@ export const Profile = ({ username, avatarUrl, handleFollow, currUserId, followi
                 </Col>
             </Row>
 
+            {/* Followers Modal */}
+            <Modal
+                show={showFollowersModal}
+                onHide={handleCloseFollowersModal}
+                className='user-profile__following--modal'
+            >
+                <Modal.Header
+                    className='user-profile__following--modal-header w-100'
+                >
+                    <Modal.Title>Following</Modal.Title>
+                    <Button
+                        onClick={handleCloseFollowersModal}
+                    >
+                        <SlClose size={24} className='ms-auto' />
+                    </Button>
+                </Modal.Header>
+                <Modal.Body
+                    className='user-profile__following--modal-body'
+                >
+                    THESE ARE FOLLOWING {username}
+                    {followersAccounts && followersAccounts.map((followerAccount) => {
+                        return (
+                            <div key={followerAccount.$id}>
+                                <Link
+                                    to={`/user/${followerAccount.username}`}
+                                >
+                                    {followerAccount.username}
+                                    <img src={getAvatarUrl(followerAccount.avatar) || defaultAvatar} />
+                                </Link>
+                            </div>
+                        )
+                    })}
+                </Modal.Body>
+            </Modal>
+
+            {/* Following Modal */}
             <Modal
                 show={showFollowingModal}
                 onHide={handleCloseFollowingModal}
@@ -87,7 +159,6 @@ export const Profile = ({ username, avatarUrl, handleFollow, currUserId, followi
                     className='user-profile__following--modal-header w-100'
                 >
                     <Modal.Title>Following</Modal.Title>
-
                     <Button
                         onClick={handleCloseFollowingModal}
                     >

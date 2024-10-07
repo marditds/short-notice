@@ -8,7 +8,6 @@ import useUserInfo from '../../../lib/hooks/useUserInfo.js';
 import { getAvatarUrl as avatarUtil } from '../../../lib/utils/avatarUtils.js';
 import useUserAvatar from '../../../lib/hooks/useUserAvatar.js';
 import useNotices from '../../../lib/hooks/useNotices.js';
-import { ComposeNotice } from '../../../components/User/ComposeNotice.jsx';
 import { Loading } from '../../../components/Loading/Loading.jsx';
 
 
@@ -27,12 +26,6 @@ const OtherUserProfile = () => {
 
     const [notices, setNotices] = useState([]);
 
-    const [noticeText, setNoticeText] = useState('');
-    const [duration, setDuration] = useState(24);
-    const [editingNoticeId, setEditingNoticeId] = useState(null);
-    const [showEditModal, setShowEditModal] = useState(false);
-    const [showDeleteModal, setShowDeleteModal] = useState(false);
-
     const {
         user_id,
         likedNotices,
@@ -47,24 +40,26 @@ const OtherUserProfile = () => {
     } = useNotices(googleUserData);
 
     const {
-        following,
-        // isLoading: userInfoLoading,
+        followingCount,
+        followingAccounts,
         fetchUsersData,
         getUsersData,
         followUser,
         getOtherUserFollowersById,
-        getOtherUserFollowingsById,
-        getUserFollowingsById
+        getUserFollowingsById,
+        fetchAccountsFollowedByUser
     } = useUserInfo(googleUserData);
 
     const [spreadNoticesData, setSpreadNoticesData] = useState([]);
     const [likedNoticesData, setLikedNoticesData] = useState([]);
 
-    const [followersCount, setFollowersCount] = useState(0);
-    const [followingsCount, setFollowingsCount] = useState(0);
+    const [followersCount, setFollowersCount] = useState(null);
+    // const [followingCount, setFollowingCount] = useState(null);
 
-    const [followingAccounts, setFollowingAccounts] = useState([]);
+    // const [followingAccounts, setFollowingAccounts] = useState([]);
     const [followersAccounts, setFollowersAccounts] = useState([]);
+
+    const [loadingForFollowing, setLoadingForFollowing] = useState(false);
 
     const [isFollowing, setIsFollowing] = useState(false);
     const [isLoadingProfile, setIsLoadingProfile] = useState(true);
@@ -197,24 +192,33 @@ const OtherUserProfile = () => {
     }
 
 
-    // Fetch other user's followers
+    // Fetch accounts following the other user
     useEffect(() => {
         const fetchOtherUserFollowersById = async () => {
 
             if (!currUserId) return;
 
             try {
-                const response = await getOtherUserFollowersById(currUserId);
+                const allUsers = await getUsersData();
+                console.log('allUsers:', allUsers.documents);
 
-                console.log('getUserFollowersById', response);
+                const otherUserFollowersById = await getOtherUserFollowersById(currUserId);
 
-                console.log('getUserFollowersById - length', response.length);
+                console.log('otherUserFollowersById', otherUserFollowersById);
 
-                setFollowersCount(response.length);
+                const accountsFollowingTheOtherUser = allUsers.documents.filter((user) =>
+                    otherUserFollowersById.some(followed => user.$id === followed.user_id)
+                );
 
-                const matchUserWithFollower = response.find((user) => user.user_id === user_id);
+                console.log('accountsFollowingTheOtherUser', accountsFollowingTheOtherUser);
 
-                console.log('matchUserWithFollower', matchUserWithFollower);
+
+                setFollowersAccounts(accountsFollowingTheOtherUser);
+
+                setFollowersCount(accountsFollowingTheOtherUser.length);
+
+                // Set the button to 'Following' if user follows the other user
+                const matchUserWithFollower = otherUserFollowersById.find((user) => user.user_id === user_id);
 
                 if (matchUserWithFollower) {
                     setIsFollowing(true);
@@ -229,31 +233,7 @@ const OtherUserProfile = () => {
 
     // Fetch accounts follwed by other user
     useEffect(() => {
-        const fetchOtherUserFollowingsById = async () => {
-            try {
-                const allUsers = await getUsersData();
-                console.log('allUsers:', allUsers.documents);
-
-                const followedByUserIds = await getUserFollowingsById(currUserId);
-                console.log('followedByUserIds:', followedByUserIds);
-
-
-                const accountsFollowedByUser = allUsers.documents.filter((user) =>
-                    followedByUserIds.some(followed => user.$id === followed.otherUser_id)
-                );
-
-                console.log('accountsFollowedByUser:', accountsFollowedByUser);
-
-                setFollowingAccounts(accountsFollowedByUser);
-
-                setFollowingsCount(followedByUserIds.length);
-
-
-            } catch (error) {
-                console.error('Failed to fetch user followers:', error);
-            }
-        }
-        fetchOtherUserFollowingsById();
+        fetchAccountsFollowedByUser(currUserId);
     }, [currUserId])
 
 
@@ -283,16 +263,19 @@ const OtherUserProfile = () => {
 
     return (
         <>
+
             <Profile
                 username={otherUsername}
                 avatarUrl={avatarUrl}
                 currUserId={currUserId}
                 followingAccounts={followingAccounts}
+                followersAccounts={followersAccounts}
                 followersCount={followersCount}
-                followingCount={followingsCount}
+                followingCount={followingCount}
                 isFollowing={isFollowing}
                 handleFollow={handleFollow}
             />
+
 
             <Tabs
                 defaultActiveKey="notices"
