@@ -44,25 +44,17 @@ const UserProfile = () => {
     } = useNotices(googleUserData);
 
     const {
+        followersCount,
         followingCount,
+        followersAccounts,
         followingAccounts,
-        getUsersData,
         fetchUsersData,
-        following,
-        getUserFollowersById,
-        getUserFollowingsById,
+        fetchAccountsFollowingTheUser,
         fetchAccountsFollowedByUser
     } = useUserInfo(googleUserData);
 
     const [spreadNoticesData, setSpreadNoticesData] = useState([]);
     const [likedNoticesData, setLikedNoticesData] = useState([]);
-
-    const [followersCount, setFollowersCount] = useState(null);
-    // const [followingCount, setFollowingCount] = useState(null);
-
-    // const [followingAccounts, setFollowingAccounts] = useState([]);
-    const [followersAccounts, setFollowersAccounts] = useState([]);
-
 
     const { avatarUrl } = useUserAvatar(user_id);
 
@@ -101,36 +93,12 @@ const UserProfile = () => {
 
     // Fetch accounts followed by user
     useEffect(() => {
-
         fetchAccountsFollowedByUser(user_id);
-
     }, [user_id])
 
     // Fetch accounts following the user 
     useEffect(() => {
-        const fetchUserFollowersById = async () => {
-            try {
-                const allUsers = await getUsersData();
-                console.log('allUsers:', allUsers.documents);
-
-                const followersUserIds = await getUserFollowersById(user_id);
-                console.log('followersUserIds', followersUserIds);
-
-                const accountsFollowingTheUser = allUsers.documents.filter((user) =>
-                    followersUserIds.some(followed => user.$id === followed.user_id)
-                );
-
-                console.log('accountsFollowingTheUser:', accountsFollowingTheUser);
-
-                setFollowersAccounts(accountsFollowingTheUser);
-
-                setFollowersCount(followersUserIds.length);
-
-            } catch (error) {
-                console.error('Failed to fetch user followers:', error);
-            }
-        }
-        fetchUserFollowersById();
+        fetchAccountsFollowingTheUser(user_id);
     }, [user_id])
 
     const handleEditNotice = (noticeId, currentText) => {

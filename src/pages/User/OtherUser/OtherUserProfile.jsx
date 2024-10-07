@@ -40,39 +40,27 @@ const OtherUserProfile = () => {
     } = useNotices(googleUserData);
 
     const {
+        isFollowing,
+        followersCount,
         followingCount,
+        followersAccounts,
         followingAccounts,
         fetchUsersData,
         getUsersData,
         followUser,
-        getOtherUserFollowersById,
-        getUserFollowingsById,
+        setIsFollowing,
+        fetchAccountsFollowingTheUser,
         fetchAccountsFollowedByUser
     } = useUserInfo(googleUserData);
 
     const [spreadNoticesData, setSpreadNoticesData] = useState([]);
     const [likedNoticesData, setLikedNoticesData] = useState([]);
 
-    const [followersCount, setFollowersCount] = useState(null);
-    // const [followingCount, setFollowingCount] = useState(null);
-
-    // const [followingAccounts, setFollowingAccounts] = useState([]);
-    const [followersAccounts, setFollowersAccounts] = useState([]);
-
-    const [loadingForFollowing, setLoadingForFollowing] = useState(false);
-
-    const [isFollowing, setIsFollowing] = useState(false);
-    const [isLoadingProfile, setIsLoadingProfile] = useState(true);
-
-
-
     const { avatarUrl } = useUserAvatar(currUserId);
 
     // Get Other User
     useEffect(() => {
         const getCurrUser = async () => {
-
-            setIsLoadingProfile(true);
 
             try {
                 const allUsers = await getUsersData();
@@ -89,12 +77,8 @@ const OtherUserProfile = () => {
                     console.error(`User with username "${otherUsername}" not found.`);
                 }
 
-                // setCurrUserId(currUser.$id);
-
             } catch (error) {
                 console.error(error);
-            } finally {
-                setIsLoadingProfile(false);
             }
         }
         getCurrUser();
@@ -194,44 +178,10 @@ const OtherUserProfile = () => {
 
     // Fetch accounts following the other user
     useEffect(() => {
-        const fetchOtherUserFollowersById = async () => {
+        fetchAccountsFollowingTheUser(currUserId, user_id);
+    }, [currUserId])
 
-            if (!currUserId) return;
-
-            try {
-                const allUsers = await getUsersData();
-                console.log('allUsers:', allUsers.documents);
-
-                const otherUserFollowersById = await getOtherUserFollowersById(currUserId);
-
-                console.log('otherUserFollowersById', otherUserFollowersById);
-
-                const accountsFollowingTheOtherUser = allUsers.documents.filter((user) =>
-                    otherUserFollowersById.some(followed => user.$id === followed.user_id)
-                );
-
-                console.log('accountsFollowingTheOtherUser', accountsFollowingTheOtherUser);
-
-
-                setFollowersAccounts(accountsFollowingTheOtherUser);
-
-                setFollowersCount(accountsFollowingTheOtherUser.length);
-
-                // Set the button to 'Following' if user follows the other user
-                const matchUserWithFollower = otherUserFollowersById.find((user) => user.user_id === user_id);
-
-                if (matchUserWithFollower) {
-                    setIsFollowing(true);
-                }
-
-            } catch (error) {
-                console.error('Failed to fetch user followers:', error);
-            }
-        }
-        fetchOtherUserFollowersById();
-    }, [currUserId, user_id])
-
-    // Fetch accounts follwed by other user
+    // Fetch accounts followed by other user
     useEffect(() => {
         fetchAccountsFollowedByUser(currUserId);
     }, [currUserId])

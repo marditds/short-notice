@@ -34,41 +34,54 @@ export const Profile = ({ username, avatarUrl, handleFollow, currUserId, followi
             <Row className='user-profile fixed-top'>
                 <Col className='d-grid'>
 
-                    <Button onClick={handleShowFollowersModal}>
+                    <Button
+                        onClick={handleShowFollowersModal}
+                        className='user-profile__follow-numbers-text'
+                    >
                         {followersCount === null ?
                             null
                             :
-                            <strong style={{ lineHeight: '12pt' }}>
-                                Followers
-                            </strong>
+                            'Followers'
                         }
                     </Button>
 
-                    <Button onClick={handleShowFollowersModal}>
+                    <Button
+                        onClick={handleShowFollowersModal}
+                        className='user-profile__follow-numbers-number'
+                    >
                         {followersCount === null ?
                             <Loading />
                             :
-                            followersCount
+                            <strong>
+                                {followersCount}
+                            </strong>
+
                         }
                     </Button>
 
 
 
-                    <Button onClick={handleShowFollowingModal}>
+                    <Button
+                        onClick={handleShowFollowingModal}
+                        className='user-profile__follow-numbers-text'
+                    >
                         {followingCount === null ?
                             null
                             :
-                            <strong style={{ lineHeight: '12pt' }}>
-                                Following
-                            </strong>
+                            'Following'
                         }
                     </Button>
 
-                    <Button onClick={handleShowFollowingModal}>
+                    <Button
+                        onClick={handleShowFollowingModal}
+                        className='user-profile__follow-numbers-number'
+                    >
                         {followingCount === null ?
                             <Loading />
                             :
-                            followingCount
+                            <strong>
+                                {followingCount}
+                            </strong>
                         }
                     </Button>
 

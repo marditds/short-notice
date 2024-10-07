@@ -704,25 +704,6 @@ export const getUserFollowersById = async (otherUser_id) => {
     }
 }
 
-export const getOtherUserFollowersById = async (otherUser_id) => {
-
-    console.log('otherUser_id:', otherUser_id);
-
-    try {
-        const response = await databases.listDocuments(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_FOLLOWING_COLLECTION,
-            [
-                Query.equal('otherUser_id', otherUser_id),
-            ]
-        )
-        console.log('Successfully got following document.', response.documents);
-        return response.documents;
-    } catch (error) {
-        console.error('Could not get following document', error);
-    }
-}
-
 export const getOtherUserFollowingsById = async (user_id) => {
     try {
         const response = await databases.listDocuments(

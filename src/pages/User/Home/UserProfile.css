@@ -16,6 +16,38 @@
 
 }
 
+.user-profile__follow-numbers-text,
+.user-profile__follow-numbers-text:hover,
+.user-profile__follow-numbers-text:focus,
+.user-profile__follow-numbers-text:active,
+.user-profile__follow-numbers-number,
+.user-profile__follow-numbers-number:hover,
+.user-profile__follow-numbers-number:focus,
+.user-profile__follow-numbers-number:active {
+    max-width: fit-content;
+    background-color: transparent !important;
+    border: 0px;
+    padding-block: 0;
+}
+
+.user-profile__follow-numbers-number {
+    font-size: 20pt;
+}
+
+.user-profile__follow-numbers-text:hover,
+.user-profile__follow-numbers-text:hover+button {
+    color: var(--main-accent-color-hover);
+}
+
+/* .user-profile__follow-numbers-text:has(+ .user-profile__follow-numbers-number:hover) {
+    color: #ff6b6b;
+} */
+
+.user-profile__follow-numbers-number:hover,
+.user-profile__follow-numbers-text:has(+ .user-profile__follow-numbers-number:hover) {
+    color: var(--main-accent-color-hover) !important;
+}
+
 .user-profile__interaction-btn {
     background-color: var(--main-bg-color);
     /* background-color: transparent; */
