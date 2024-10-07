@@ -57,6 +57,10 @@ const UserProfile = () => {
     const [followersCount, setFollowersCount] = useState(0);
     const [followingCount, setFollowingCount] = useState(0);
 
+    const [followingAccounts, setFollowingAccounts] = useState([]);
+    const [followers, setFollowers] = useState([]);
+
+
     const { avatarUrl } = useUserAvatar(user_id);
 
 
@@ -108,6 +112,8 @@ const UserProfile = () => {
                 );
 
                 console.log('accountsFollowedByUser:', accountsFollowedByUser);
+
+                setFollowingAccounts(accountsFollowedByUser);
 
                 // console.log('getUserFollowingsById - length', response.length);
                 setFollowingCount(followedByUserIds.length);
@@ -218,6 +224,7 @@ const UserProfile = () => {
                 avatarUrl={avatarUrl}
                 followingCount={followingCount}
                 followersCount={followersCount}
+                followingAccounts={followingAccounts}
             />
 
             <ComposeNotice

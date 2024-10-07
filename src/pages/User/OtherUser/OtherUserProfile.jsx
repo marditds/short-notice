@@ -53,16 +53,19 @@ const OtherUserProfile = () => {
         getUsersData,
         followUser,
         getOtherUserFollowersById,
-        getOtherUserFollowingsById
+        getOtherUserFollowingsById,
+        getUserFollowingsById
     } = useUserInfo(googleUserData);
 
     const [spreadNoticesData, setSpreadNoticesData] = useState([]);
     const [likedNoticesData, setLikedNoticesData] = useState([]);
 
-
-
     const [followersCount, setFollowersCount] = useState(0);
     const [followingsCount, setFollowingsCount] = useState(0);
+
+    const [followingAccounts, setFollowingAccounts] = useState([]);
+    const [followersAccounts, setFollowersAccounts] = useState([]);
+
     const [isFollowing, setIsFollowing] = useState(false);
     const [isLoadingProfile, setIsLoadingProfile] = useState(true);
 
@@ -228,10 +231,23 @@ const OtherUserProfile = () => {
     useEffect(() => {
         const fetchOtherUserFollowingsById = async () => {
             try {
-                const response = await getOtherUserFollowingsById(currUserId);
+                const allUsers = await getUsersData();
+                console.log('allUsers:', allUsers.documents);
 
-                console.log('getOtherUserFollowingsById - length', response.length);
-                setFollowingsCount(response.length);
+                const followedByUserIds = await getUserFollowingsById(currUserId);
+                console.log('followedByUserIds:', followedByUserIds);
+
+
+                const accountsFollowedByUser = allUsers.documents.filter((user) =>
+                    followedByUserIds.some(followed => user.$id === followed.otherUser_id)
+                );
+
+                console.log('accountsFollowedByUser:', accountsFollowedByUser);
+
+                setFollowingAccounts(accountsFollowedByUser);
+
+                setFollowingsCount(followedByUserIds.length);
+
 
             } catch (error) {
                 console.error('Failed to fetch user followers:', error);
@@ -271,6 +287,7 @@ const OtherUserProfile = () => {
                 username={otherUsername}
                 avatarUrl={avatarUrl}
                 currUserId={currUserId}
+                followingAccounts={followingAccounts}
                 followersCount={followersCount}
                 followingCount={followingsCount}
                 isFollowing={isFollowing}

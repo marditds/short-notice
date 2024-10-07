@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import { Row, Col, Button, Modal } from 'react-bootstrap';
 import defaultAvatar from '../../assets/default.png';
 import { SlClose } from "react-icons/sl";
 
-export const Profile = ({ username, avatarUrl, handleFollow, currUserId, followingCount, followersCount, isFollowing, followings, followers }) => {
+export const Profile = ({ username, avatarUrl, handleFollow, currUserId, followingCount, followersCount, isFollowing, followingAccounts, followersAccounts }) => {
 
     const location = useLocation();
 
@@ -97,7 +97,17 @@ export const Profile = ({ username, avatarUrl, handleFollow, currUserId, followi
                     className='user-profile__following--modal-body'
                 >
                     THESE ARE FOLLOWED BY {username}
-                    {followings}
+                    {followingAccounts && followingAccounts.map((followingAccount) => {
+                        return (
+                            <div key={followingAccount.$id}>
+                                <Link
+                                    to={`/user/${followingAccount.username}`}
+                                >
+                                    {followingAccount.username}
+                                </Link>
+                            </div>
+                        )
+                    })}
                 </Modal.Body>
             </Modal>
 
