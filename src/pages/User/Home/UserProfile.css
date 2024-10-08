@@ -5,14 +5,14 @@
     padding: 54px 45px 12px 45px;
     height: 198px;
 
-    background: rgb(0, 0, 0);
+    /* background: rgb(0, 0, 0);
     background: -moz-linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.29) 16%, rgba(0, 0, 0, 0.5788690476190477) 43%, rgba(0, 0, 0, 0.58) 66%, rgba(23, 199, 105, 0.58) 100%);
     background: -webkit-linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.29) 16%, rgba(0, 0, 0, 0.5788690476190477) 43%, rgba(0, 0, 0, 0.58) 66%, rgba(23, 199, 105, 0.58) 100%);
     background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.29) 16%, rgba(0, 0, 0, 0.5788690476190477) 43%, rgba(0, 0, 0, 0.58) 66%, rgba(23, 199, 105, 0.58) 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#000000", endColorstr="#17c769", GradientType=1);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#000000", endColorstr="#17c769", GradientType=1); */
 
 
-    backdrop-filter: blur(1.5px);
+    backdrop-filter: blur(4px);
 
 }
 
@@ -38,10 +38,6 @@
 .user-profile__follow-numbers-text:hover+button {
     color: var(--main-accent-color-hover);
 }
-
-/* .user-profile__follow-numbers-text:has(+ .user-profile__follow-numbers-number:hover) {
-    color: #ff6b6b;
-} */
 
 .user-profile__follow-numbers-number:hover,
 .user-profile__follow-numbers-text:has(+ .user-profile__follow-numbers-number:hover) {
@@ -134,7 +130,8 @@
 
 .user-profile__tags-accordion>div>h2>button,
 .user-profile__tags-accordion>div {
-    background-color: var(--main-bg-color) !important;
+    background-color: var(--main-bg-color) 0.5 !important;
+
     color: var(--main-text-color) !important;
     border-radius: 0 !important;
     box-shadow: none !important;
@@ -143,7 +140,7 @@
 }
 
 .user-profile__tags-accordion>div>h2>button {
-    background-color: var(--main-bg-color) !important;
+    background-color: var(--main-bg-color) 0.5 !important;
     padding-inline: 5px !important;
     padding-block: 10px !important;
 }
