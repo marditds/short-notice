@@ -103,7 +103,7 @@ export const Profile = ({ username, avatarUrl, handleFollow, currUserId, followi
                                 ${isFollowing ? 'following' : ''}`}
                                 onClick={() => handleFollow(currUserId)}
                                 style={{
-                                    maxHeight: 'fit-content', maxWidth: 'fit-content'
+                                    height: 'fit-content', width: 'fit-content', marginLeft: 'auto'
                                 }}
                             >
                                 {isFollowingLoading ? <Loading /> :
@@ -115,14 +115,14 @@ export const Profile = ({ username, avatarUrl, handleFollow, currUserId, followi
                             <Button
                                 className='user-profile__interaction-btn'
                                 style={{
-                                    maxHeight: 'fit-content', maxWidth: 'fit-content', marginLeft: 'auto'
+                                    height: 'fit-content', width: 'fit-content', marginLeft: 'auto'
                                 }}>
                                 Block
                             </Button>
                             <Button
                                 className='user-profile__interaction-btn'
                                 style={{
-                                    maxHeight: 'fit-content', maxWidth: 'fit-content', marginLeft: 'auto'
+                                    height: 'fit-content', width: 'fit-content', marginLeft: 'auto'
                                 }}>
                                 Report
                             </Button>
