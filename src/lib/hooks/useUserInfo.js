@@ -17,6 +17,8 @@ const useUserInfo = (data) => {
     const [followersAccounts, setFollowersAccounts] = useState([]);
     const [followingAccounts, setFollowingAccounts] = useState([]);
 
+    const [isFollowingLoading, setIsFollowingLoading] = useState(false);
+
     const [isFollowing, setIsFollowing] = useState(false);
 
 
@@ -157,6 +159,9 @@ const useUserInfo = (data) => {
 
     const fetchAccountsFollowingTheUser = async (otherUser_id, user_id) => {
         try {
+            setIsFollowingLoading(true);
+
+
             const allUsers = await getUsersData();
             // console.log('allUsers:', allUsers.documents);
 
@@ -174,15 +179,24 @@ const useUserInfo = (data) => {
 
             setFollowersCount(accountsFollowingTheUser.length);
 
-            const matchUserWithFollower = userFollowersById.find((user) => user.user_id === user_id);
+
 
             // Set the button to 'Following' if user follows the other user 
-            if (matchUserWithFollower) {
-                setIsFollowing(true);
+            if (userFollowersById && user_id) {
+
+                const matchUserWithFollower = userFollowersById.find((user) => user.user_id === user_id);
+
+                console.log('matchUserWithFollower', matchUserWithFollower);
+
+                setIsFollowing(!!matchUserWithFollower);
+                setIsFollowingLoading(false);
             }
 
         } catch (error) {
             console.error('Failed to fetch user followers:', error);
+        }
+        finally {
+            setIsFollowingLoading(false);
         }
     }
 
@@ -211,6 +225,7 @@ const useUserInfo = (data) => {
 
 
     return {
+        isFollowingLoading,
         following,
         isFollowing,
         followersCount,

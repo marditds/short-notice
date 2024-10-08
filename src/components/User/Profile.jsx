@@ -6,7 +6,7 @@ import defaultAvatar from '../../assets/default.png';
 import { SlClose } from "react-icons/sl";
 import { Loading } from '../Loading/Loading.jsx';
 
-export const Profile = ({ username, avatarUrl, handleFollow, currUserId, followingCount, followersCount, isFollowing, followingAccounts, followersAccounts }) => {
+export const Profile = ({ username, avatarUrl, handleFollow, currUserId, followingCount, followersCount, isFollowing, followingAccounts, followersAccounts, isFollowingLoading }) => {
 
     const location = useLocation();
 
@@ -106,7 +106,11 @@ export const Profile = ({ username, avatarUrl, handleFollow, currUserId, followi
                                     maxHeight: 'fit-content', maxWidth: 'fit-content'
                                 }}
                             >
-                                {isFollowing ? 'Following' : 'Follow'}
+                                {isFollowingLoading ? <Loading /> :
+                                    <>
+                                        {isFollowing ? 'Following' : 'Follow'}
+                                    </>
+                                }
                             </Button>
                             <Button
                                 className='user-profile__interaction-btn'

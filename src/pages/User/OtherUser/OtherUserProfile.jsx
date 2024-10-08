@@ -40,6 +40,7 @@ const OtherUserProfile = () => {
     } = useNotices(googleUserData);
 
     const {
+        isFollowingLoading,
         isFollowing,
         followersCount,
         followingCount,
@@ -178,8 +179,10 @@ const OtherUserProfile = () => {
 
     // Fetch accounts following the other user
     useEffect(() => {
-        fetchAccountsFollowingTheUser(currUserId, user_id);
-    }, [currUserId])
+        if (currUserId && user_id) {
+            fetchAccountsFollowingTheUser(currUserId, user_id);
+        }
+    }, [currUserId, user_id])
 
     // Fetch accounts followed by other user
     useEffect(() => {
@@ -223,6 +226,7 @@ const OtherUserProfile = () => {
                 followersCount={followersCount}
                 followingCount={followingCount}
                 isFollowing={isFollowing}
+                isFollowingLoading={isFollowingLoading}
                 handleFollow={handleFollow}
             />
 
