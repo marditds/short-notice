@@ -37,6 +37,7 @@ const UserSettings = () => {
                 <Visibility />
                 <hr />
                 <DeleteAccount />
+                <hr />
             </Stack>
         </Container>
     )

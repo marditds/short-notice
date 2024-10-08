@@ -68,8 +68,10 @@
     color: black
 }
 
-.settings__update-interests-btn {
+.settings__update-interests-btn,
+.settings__delete-account-btn {
     max-width: fit-content;
+    margin-bottom: 16px;
 }
 
 .settings__delete-account-btn,

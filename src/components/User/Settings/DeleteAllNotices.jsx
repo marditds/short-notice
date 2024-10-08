@@ -38,7 +38,7 @@ export const DeleteAllNotices = () => {
                     <h4>Delete All Notices:</h4>
                     <p>WARNING: Deleting your notices will result in the loss of all data, which cannot be recovered. Please proceed with caution.</p>
                 </Col>
-                <Col>
+                <Col className='d-grid align-content-end'>
                     <Button
                         onClick={handleShowModal}
                         className='settings__delete-account-btn'

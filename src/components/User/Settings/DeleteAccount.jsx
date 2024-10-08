@@ -81,7 +81,7 @@ export const DeleteAccount = () => {
                     <h4>Delete Account:</h4>
                     <p>WARNING: Deleting your account will result in the loss of all data, which cannot be recovered. Please proceed with caution.</p>
                 </Col>
-                <Col>
+                <Col className='d-grid align-content-end'>
                     <Button
                         onClick={handleShowModal}
                         className='settings__delete-account-btn'

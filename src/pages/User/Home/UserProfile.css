@@ -84,17 +84,31 @@
 }
 
 .user-profile__form-control,
+.user-profile__form-control::placeholder {
+    background-color: rgb(0, 0, 0, 0.2);
+    color: var(--main-text-color);
+    transition: 0.3s;
+}
+
+.user-profile__form-control,
 .user-profile__timer-select,
 .notice__edit--modal-form-control {
     border-width: 1.5px;
-    border-color: transparent;
+    /* border-color: transparent; */
     border-style: groove;
 
 }
 
+.user-profile__form-control:focus::placeholder {
+    color: var(--main-accent-color-hover) !important;
+}
+
+
 .user-profile__form-control:focus,
 .user-profile__timer-select:focus,
 .notice__edit--modal-form-control:focus {
+    color: var(--main-text-color);
+    background-color: rgb(0, 0, 0, 0.2);
     border-color: var(--main-accent-color);
     border-width: 1.5px;
     box-shadow: none !important;
