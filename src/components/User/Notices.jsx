@@ -4,6 +4,7 @@ import { formatDateToLocal, calculateCountdown } from '../../lib/utils/dateUtils
 import { Row, Col, Modal, Form } from 'react-bootstrap';
 import { CgTrash } from 'react-icons/cg';
 import { AiFillEdit } from 'react-icons/ai';
+import { BsReply } from "react-icons/bs";
 import { RiMegaphoneLine, RiMegaphoneFill } from 'react-icons/ri';
 import { BsHandThumbsUp, BsHandThumbsUpFill, BsExclamationTriangle } from 'react-icons/bs';
 import { Button } from 'react-bootstrap';
@@ -18,6 +19,7 @@ export const Notices = ({
     handleSpread,
     handleReport,
     handleLike,
+    handleReact,
     eventKey,
     username,
     user_id,
@@ -28,6 +30,13 @@ export const Notices = ({
     const location = useLocation();
 
     const [countdowns, setCountdowns] = useState([]);
+
+    const [showReactModal, setShowReactModal] = useState(false);
+    const [reactingNoticeId, setReactingNoticeId] = useState(null);
+    const [noticeUsername, setNoticeUsername] = useState(null);
+    const [noticeAvatarUrl, setNoticeAvatarUrl] = useState(null);
+    const [noticeText, setNoticeText] = useState(null);
+
 
     const reportCategories = [
         { name: "Hate speech", key: "HATE" },
@@ -62,6 +71,27 @@ export const Notices = ({
         return () => clearInterval(intervalId);
     }, [notices]);
 
+
+    // Replying to a notice
+    const handleReactNotice = (noticeId, noticeUsername, noticeAvatarUrl, noticeText) => {
+        setReactingNoticeId(noticeId);
+        setShowReactModal(true);
+        setNoticeText(noticeText);
+        setNoticeUsername(noticeUsername);
+        setNoticeAvatarUrl(noticeAvatarUrl);
+        console.log('handleReactNotice', noticeId);
+
+    }
+
+    const handleReactSubmission = async () => {
+        console.log('REACTING');
+    };
+
+    const handleCloseReactModal = () => {
+        setShowReactModal(false);
+    }
+
+    // Repoting Notice
     const handleReportNotice = (noticeId) => {
         setReprotingNoticeId(noticeId);
         setShowReportModal(true);
@@ -169,8 +199,6 @@ export const Notices = ({
                                     }
                                     {/* </Link> */}
                                     <div className='d-grid'>
-
-
                                         <div
                                             className='d-flex justify-content-end'
                                         >
@@ -203,6 +231,16 @@ export const Notices = ({
                                                 )}
                                             </Button>
                                             <Button
+                                                onClick={() => handleReactNotice(notice.$id, notice.username, notice.avatarUrl, notice.text)}
+                                                // onClick={() => setShowReactModal(true)}
+                                                className='notice__reaction-btn'
+                                                disabled={user_id === notice.user_id}
+                                            >
+                                                <BsReply
+                                                    size={23}
+                                                />
+                                            </Button>
+                                            <Button
                                                 onClick={() => handleReportNotice(notice.$id)}
                                                 className='notice__reaction-btn'
                                                 disabled={user_id === notice.user_id}
@@ -226,6 +264,40 @@ export const Notices = ({
 
                 </div>
             ))}
+
+            <Modal show={showReactModal} onHide={handleCloseReactModal}>
+                <Modal.Body>
+                    <Modal.Header className='d-grid'>
+                        <span>
+                            <BsReply />
+                            <strong>{noticeUsername}</strong>
+                            <img
+                                src={noticeAvatarUrl || defaultAvatar}
+                                alt="Profile"
+                                style={{ borderRadius: '50%', width: 50, height: 50, marginRight: '12px' }}
+                                className='d-flex ms-auto'
+                            />
+                        </span>
+
+                        <br />
+                        {noticeText}
+                    </Modal.Header>
+                    <Form>
+                        <Form.Group className='mb-3' controlId='reportNotice'>
+                            <Form.Control as="textarea" rows={3} />
+                        </Form.Group>
+                    </Form>
+
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button onClick={handleCloseReactModal}>
+                        Cancel
+                    </Button>
+                    <Button onClick={handleReactSubmission}>
+                        Send
+                    </Button>
+                </Modal.Footer>
+            </Modal>
 
             <Modal show={showReportModal} onHide={handleCloseReportModal}>
                 <Modal.Header>

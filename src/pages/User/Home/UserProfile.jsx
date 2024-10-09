@@ -208,6 +208,7 @@ const UserProfile = () => {
                 >
                     <Notices
                         notices={userNotices}
+                        username={username}
                         handleEditNotice={handleEditNotice}
                         handleDeleteNotice={handleDeleteNotice}
                         eventKey='my-notices'
