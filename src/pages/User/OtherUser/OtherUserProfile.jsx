@@ -36,7 +36,8 @@ const OtherUserProfile = () => {
         reportNotice,
         getAllLikedNotices,
         getAllSpreadNotices,
-        getNoticesByUser
+        getNoticesByUser,
+        sendReaction
     } = useNotices(googleUserData);
 
     const {
@@ -176,6 +177,15 @@ const OtherUserProfile = () => {
         }
     }
 
+    const handleReact = async (currUserId, content, notice_id) => {
+        try {
+            await sendReaction(currUserId, content, notice_id);
+            console.log('Success handleReact.');
+        } catch (error) {
+            console.error('Failed handleReact:', error);
+        }
+    }
+
 
     // Fetch accounts following the other user
     useEffect(() => {
@@ -251,6 +261,7 @@ const OtherUserProfile = () => {
                         handleLike={handleLike}
                         handleSpread={handleSpread}
                         handleReport={handleReport}
+                        handleReact={handleReact}
                         eventKey='notices'
                     />
                 </Tab>
@@ -268,6 +279,7 @@ const OtherUserProfile = () => {
                         handleLike={handleLike}
                         handleSpread={handleSpread}
                         handleReport={handleReport}
+                        handleReact={handleReact}
                     />
                 </Tab>
 
@@ -285,6 +297,7 @@ const OtherUserProfile = () => {
                             handleLike={handleLike}
                             handleSpread={handleSpread}
                             handleReport={handleReport}
+                            handleReact={handleReact}
                         />
                         : 'No likes yet'}
                 </Tab>

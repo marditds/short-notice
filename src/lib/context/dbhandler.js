@@ -720,5 +720,26 @@ export const getOtherUserFollowingsById = async (user_id) => {
     }
 }
 
+export const createReaction = async (sender_id, recipient_id, content, timestamp, notice_id) => {
+    try {
+        const response = await databases.createDocument(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_REACTIONS_COLLECTION,
+            ID.unique(),
+            {
+                sender_id,
+                recipient_id,
+                content,
+                timestamp,
+                notice_id
+            }
+        )
+        console.log('Reaction created successfuly:', response);
+        return response;
+    } catch (error) {
+        console.error('Error creating reaction:', error);
+    }
+}
+
 export const account = new Account(client);
 export { ID } from 'appwrite';

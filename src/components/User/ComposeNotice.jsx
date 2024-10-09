@@ -64,8 +64,8 @@ export const ComposeNotice = ({ noticeText, setNoticeText, duration, setDuration
         }
     };
 
-    // const hours = Array.from({ length: 7 }, (_, i) => (i + 1) * 24);
-    const hours = [3, 5, 10, 15, 20, 48, 72]
+    const hours = Array.from({ length: 7 }, (_, i) => (i + 1) * 24);
+    // const hours = [3, 5, 10, 15, 20, 48, 72]
 
 
     const handleTagSelect = (categoryGroup, tagIndex, tag, isSelected) => {
@@ -103,7 +103,7 @@ export const ComposeNotice = ({ noticeText, setNoticeText, duration, setDuration
                     </Form.Label> */}
                 <Form.Control
                     as="textarea"
-                    rows={3}
+                    rows={5}
                     value={noticeText}
                     onChange={onTextareaChange}
                     className="user-profile__form-control"

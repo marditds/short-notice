@@ -39,6 +39,7 @@ const UserProfile = () => {
         likeNotice,
         spreadNotice,
         reportNotice,
+        sendReaction,
         getAllLikedNotices,
         getAllSpreadNotices
     } = useNotices(googleUserData);
@@ -167,6 +168,16 @@ const UserProfile = () => {
     }
 
 
+    const handleReact = async (currUserId, content, notice_id) => {
+        try {
+            const res = await sendReaction(currUserId, content, notice_id);
+            console.log('Success handleReact.', res);
+            return res;
+        } catch (error) {
+            console.error('Failed handleReact:', error);
+        }
+    }
+
     const timerSpacing = 'mx-2';
     const timerDisplay = 'd-flex';
     const classname = `${timerDisplay} ${timerSpacing}`;
@@ -227,6 +238,7 @@ const UserProfile = () => {
                         handleLike={handleLike}
                         handleSpread={handleSpread}
                         handleReport={handleReport}
+                        handleReact={handleReact}
                     />
                 </Tab>
 
@@ -243,6 +255,8 @@ const UserProfile = () => {
                         handleLike={handleLike}
                         handleSpread={handleSpread}
                         handleReport={handleReport}
+                        handleReact={handleReact}
+
                     />
                 </Tab>
             </Tabs>

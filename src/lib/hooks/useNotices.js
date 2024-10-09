@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { createNotice, getUserNotices, updateNotice, deleteNotice, deleteAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSpread, getUserSpreads, removeSpread, createReport, createLike, removeLike, getUserLikes, getAllLikedNotices as fetchAllLikedNotices, getAllSpreadNotices as fetchAllSpreadNotices } from '../../lib/context/dbhandler';
+import { createNotice, getUserNotices, updateNotice, deleteNotice, deleteAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSpread, getUserSpreads, removeSpread, createReport, createLike, removeLike, getUserLikes, getAllLikedNotices as fetchAllLikedNotices, getAllSpreadNotices as fetchAllSpreadNotices, createReaction } from '../../lib/context/dbhandler';
 import { UserId } from '../../components/User/UserId.jsx';
 
 const useNotices = (googleUserData) => {
@@ -330,6 +330,19 @@ const useNotices = (googleUserData) => {
         }
     };
 
+    const sendReaction = async (otherUser_id, content, notice_id) => {
+
+        const now = new Date();
+
+        try {
+            const response = createReaction(user_id, otherUser_id, content, now, notice_id);
+            console.log('Success sending reaction');
+            return response;
+        } catch (error) {
+            console.error('Failed to send reaction:', error);
+        }
+    }
+
 
     return {
         user_id,
@@ -354,7 +367,8 @@ const useNotices = (googleUserData) => {
         reportNotice,
         likeNotice,
         setLikedNotices,
-        removeAllNoticesByUser
+        removeAllNoticesByUser,
+        sendReaction
     };
 };
 

@@ -36,6 +36,7 @@ export const Notices = ({
     const [noticeUsername, setNoticeUsername] = useState(null);
     const [noticeAvatarUrl, setNoticeAvatarUrl] = useState(null);
     const [noticeText, setNoticeText] = useState(null);
+    const [reactionText, setReactionText] = useState('');
 
 
     const reportCategories = [
@@ -83,8 +84,26 @@ export const Notices = ({
 
     }
 
+    const onReactionTextChange = (e) => {
+        setReactionText(e.target.value);
+    }
+
     const handleReactSubmission = async () => {
-        console.log('REACTING');
+        if (reactingNoticeId) {
+            try {
+
+                const notice = notices.find(notice => notice.$id === reactingNoticeId);
+
+                if (notice) {
+                    const res = await handleReact(notice.user_id, reactionText, notice.$id);
+                    console.log('handleReactSubmission', res);
+                    setShowReactModal(false);
+                    setReactionText('');
+                }
+            } catch (error) {
+                console.error("Error reporting notice:", error);
+            }
+        }
     };
 
     const handleCloseReactModal = () => {
@@ -268,23 +287,42 @@ export const Notices = ({
             <Modal show={showReactModal} onHide={handleCloseReactModal}>
                 <Modal.Body>
                     <Modal.Header className='d-grid'>
-                        <span>
-                            <BsReply />
-                            <strong>{noticeUsername}</strong>
-                            <img
-                                src={noticeAvatarUrl || defaultAvatar}
-                                alt="Profile"
-                                style={{ borderRadius: '50%', width: 50, height: 50, marginRight: '12px' }}
-                                className='d-flex ms-auto'
-                            />
-                        </span>
+                        <Row className='align-items-center'>
+                            <Col className='d-flex justify-content-between flex-column'
+                            >
+                                <p className='mb-0'>{noticeText}</p>
+                            </Col>
+                            <Col>
+                                <div className='d-flex flex-column justify-content-end h-100'>
 
-                        <br />
-                        {noticeText}
+                                    <div className='d-flex justify-content-end align-items-center mt-auto'>
+
+                                        <p
+                                            className='w-100 my-0 me-2 text-end notice__username'
+                                        >
+                                            <strong>{noticeUsername}</strong>
+                                        </p>
+                                        <img
+                                            src={noticeAvatarUrl || defaultAvatar}
+                                            alt="Profile"
+                                            style={{ borderRadius: '50%', width: 50, height: 50, marginLeft: '0px' }}
+                                            className='d-flex ms-auto'
+                                        />
+                                    </div>
+                                </div>
+                            </Col>
+                        </Row>
                     </Modal.Header>
                     <Form>
                         <Form.Group className='mb-3' controlId='reportNotice'>
-                            <Form.Control as="textarea" rows={3} />
+                            <Form.Control
+                                as="textarea"
+                                rows={3}
+                                value={reactionText}
+                                onChange={onReactionTextChange}
+                                className="user-profile__form-control"
+                                placeholder=''
+                            />
                         </Form.Group>
                     </Form>
 
