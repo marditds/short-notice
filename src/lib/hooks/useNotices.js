@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { createNotice, getUserNotices, updateNotice, deleteNotice, deleteAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSpread, getUserSpreads, removeSpread, createReport, createLike, removeLike, getUserLikes, getAllLikedNotices as fetchAllLikedNotices, getAllSpreadNotices as fetchAllSpreadNotices, createReaction, getAllReactionsBySenderId as fetchAllReactionsBySenderId, getAllReactions as fetchAllReactions, getAllReactionsByRecipientId as fetchAllReactionsByRecipientId } from '../../lib/context/dbhandler';
+import { createNotice, getUserNotices, updateNotice, deleteNotice, deleteAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSpread, getUserSpreads, removeSpread, createReport, createLike, removeLike, getUserLikes, getAllLikedNotices as fetchAllLikedNotices, getAllSpreadNotices as fetchAllSpreadNotices, createReaction, getAllReactionsBySenderId as fetchAllReactionsBySenderId, getAllReactions as fetchAllReactions, getAllReactionsByRecipientId as fetchAllReactionsByRecipientId, getNoticeByNoticeId as fetchNoticeByNoticeId } from '../../lib/context/dbhandler';
 import { UserId } from '../../components/User/UserId.jsx';
 
 const useNotices = (googleUserData) => {
@@ -229,6 +229,18 @@ const useNotices = (googleUserData) => {
         }
     }, [googleUserData]);
 
+    const getNoticeByNoticeId = async (notice_id) => {
+        try {
+            const res = fetchNoticeByNoticeId(notice_id);
+
+            console.log('Success fetching notices by notice_id', res);
+            return res;
+
+        } catch (error) {
+            console.error('Error fetching notices by notice_id', error);
+        }
+    }
+
     const updateInterests = async (user_id, selectedTags) => {
         try {
             const interests = await updateUserInterests(user_id, selectedTags);
@@ -390,6 +402,7 @@ const useNotices = (googleUserData) => {
         removeNotice,
         getFeedNotices,
         getNoticesByUser,
+        getNoticeByNoticeId,
         getInterests,
         setRemovingNoticeId,
         updateInterests,

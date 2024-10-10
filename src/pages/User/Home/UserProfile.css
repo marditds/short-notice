@@ -144,9 +144,10 @@
 }
 
 .user-profile__tags-accordion>div>h2>button,
-.user-profile__tags-accordion>div {
+.user-profile__tags-accordion>div,
+.user-profile__notices-accordion>div>h2>button,
+.user-profile__notices-accordion>div {
     background-color: var(--main-bg-color) 0.5 !important;
-
     color: var(--main-text-color) !important;
     border-radius: 0 !important;
     box-shadow: none !important;

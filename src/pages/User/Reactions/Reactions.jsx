@@ -25,10 +25,14 @@ const Reactions = () => {
 
 
     useEffect(() => {
-        const fetchAllReactionsBySenderId = async () => {
+        const fetchAllReactionsToNotice = async () => {
             try {
                 const allUsers = await getUsersData();
                 // console.log('allUsers', allUsers);
+
+                const allReactions = await getAllReactions();
+                console.log('allReactions', allReactions);
+
 
                 const res = await getAllReactionsBySenderId(user_id);
                 // console.log('res', res);
@@ -45,7 +49,7 @@ const Reactions = () => {
                 console.error('Error gettig reactions:', error);
             }
         }
-        fetchAllReactionsBySenderId();
+        fetchAllReactionsToNotice();
     }, [user_id])
 
     const handleShowModal = (recipientId) => {

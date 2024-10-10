@@ -292,6 +292,22 @@ export const getNoticeByTagname = async (tagnames) => {
     }
 };
 
+export const getNoticeByNoticeId = async (notice_id) => {
+    try {
+        const response = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_NOTICES_COLLECTION,
+            [
+                Query.equal('$id', notice_id),
+            ]
+        );
+        return response.documents;
+    } catch (error) {
+        console.error('Error getting notices by notice_id:', error);
+        return [];
+    }
+};
+
 export const getAllNotices = async () => {
     try {
         const response = await databases.listDocuments(
