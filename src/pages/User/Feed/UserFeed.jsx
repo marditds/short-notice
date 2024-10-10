@@ -55,6 +55,7 @@ const UserFeed = () => {
         spreadNotice,
         reportNotice,
         likeNotice,
+        sendReaction,
         likedNotices,
         spreadNotices,
     } = useNotices(googleUserData);
@@ -182,8 +183,14 @@ const UserFeed = () => {
         }
     }
 
-
-
+    const handleReact = async (currUserId, content, notice_id) => {
+        try {
+            await sendReaction(currUserId, content, notice_id);
+            console.log('Success handleReact.');
+        } catch (error) {
+            console.error('Failed handleReact:', error);
+        }
+    }
 
 
     // Render loading state while data is being fetched
@@ -211,6 +218,7 @@ const UserFeed = () => {
                 handleLike={handleLike}
                 handleSpread={handleSpread}
                 handleReport={handleReport}
+                handleReact={handleReact}
             />
 
         </div>

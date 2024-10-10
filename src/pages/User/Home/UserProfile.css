@@ -303,47 +303,43 @@
 
 
 .notice__edit--modal {
-    /* position: relative; */
     padding: 0 !important;
-    /* height: 100vh !important; */
 }
 
-.notice__edit--modal>div {
-    /* position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%); */
-}
-
-.notice__edit--modal>div>div {
+.notice__edit--modal>div>div,
+.notice__react--modal>div>div {
     border-color: var(--main-accent-color);
     border-width: 0.5px;
     background-color: var(--main-bg-color);
     border-radius: 8px !important;
-
-}
-
-.notice__edit--modal>div>div {
     border-color: var(--main-accent-color);
     border-width: 0.5px;
     background-color: var(--main-bg-color);
+
 }
+
 
 .notice__edit--modal-header,
 .notice__edit--modal-body,
-.notice__edit--modal-footer {
+.notice__edit--modal-footer,
+.notice__react--modal-header,
+.notice__react--modal-body,
+.notice__react--modal-footer {
     color: var(--main-text-color);
-    border: 0px;
+    border: 0px !important;
 }
 
-.notice__edit--modal-btn {
+.notice__edit--modal-btn,
+.notice__react--modal-btn {
     background-color: var(--main-accent-color) !important;
     color: black !important;
     border: transparent;
 }
 
 .notice__edit--modal-btn:hover,
-.notice__edit--modal-btn:focus {
+.notice__edit--modal-btn:focus,
+.notice__react--modal-btn:hover,
+.notice__react--modal-btn:focus {
     background-color: var(--main-accent-color-hover) !important;
     color: black !important;
     border: transparent;

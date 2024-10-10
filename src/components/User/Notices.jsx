@@ -284,35 +284,42 @@ export const Notices = ({
                 </div>
             ))}
 
-            <Modal show={showReactModal} onHide={handleCloseReactModal}>
-                <Modal.Body>
-                    <Modal.Header className='d-grid'>
-                        <Row className='align-items-center'>
-                            <Col className='d-flex justify-content-between flex-column'
-                            >
-                                <p className='mb-0'>{noticeText}</p>
-                            </Col>
-                            <Col>
-                                <div className='d-flex flex-column justify-content-end h-100'>
+            <Modal
+                show={showReactModal}
+                onHide={handleCloseReactModal}
+                className='notice__react--modal'
+            >
+                <Modal.Header className='d-grid notice__react--modal-header pb-0 pt-4'>
+                    <Row className='align-items-center px-2'>
+                        <Col className='d-flex justify-content-between flex-column col-md-8'
+                        >
+                            <p className='mb-0'>{noticeText}</p>
+                        </Col>
+                        <Col>
+                            <div className='d-flex flex-column justify-content-end h-100'>
 
-                                    <div className='d-flex justify-content-end align-items-center mt-auto'>
+                                <div className='d-flex justify-content-end align-items-center mt-auto'>
 
-                                        <p
-                                            className='w-100 my-0 me-2 text-end notice__username'
-                                        >
-                                            <strong>{noticeUsername}</strong>
-                                        </p>
-                                        <img
-                                            src={noticeAvatarUrl || defaultAvatar}
-                                            alt="Profile"
-                                            style={{ borderRadius: '50%', width: 50, height: 50, marginLeft: '0px' }}
-                                            className='d-flex ms-auto'
-                                        />
-                                    </div>
+                                    <p
+                                        className='w-100 my-0 me-2 text-end notice__username'
+                                    >
+                                        <strong>{noticeUsername}</strong>
+                                    </p>
+                                    <img
+                                        src={noticeAvatarUrl || defaultAvatar}
+                                        alt="Profile"
+                                        style={{ borderRadius: '50%', width: 50, height: 50, marginLeft: '0px' }}
+                                        className='d-flex ms-auto'
+                                    />
                                 </div>
-                            </Col>
-                        </Row>
-                    </Modal.Header>
+                            </div>
+                        </Col>
+                    </Row>
+                </Modal.Header>
+
+                <Modal.Body
+                    className='notice__react--modal-body'
+                >
                     <Form>
                         <Form.Group className='mb-3' controlId='reportNotice'>
                             <Form.Control
@@ -327,11 +334,20 @@ export const Notices = ({
                     </Form>
 
                 </Modal.Body>
-                <Modal.Footer>
-                    <Button onClick={handleCloseReactModal}>
+                <Modal.Footer
+                    className='notice__react--modal-footer pt-0'
+                >
+                    <Button
+                        onClick={handleCloseReactModal}
+                        className='notice__react--modal-btn'
+                    >
                         Cancel
                     </Button>
-                    <Button onClick={handleReactSubmission}>
+                    <Button
+                        onClick={handleReactSubmission}
+                        className='notice__react--modal-btn'
+                        disabled={reactionText === '' ? true : false}
+                    >
                         Send
                     </Button>
                 </Modal.Footer>
