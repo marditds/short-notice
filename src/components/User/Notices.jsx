@@ -8,7 +8,9 @@ import { BsReply } from "react-icons/bs";
 import { RiMegaphoneLine, RiMegaphoneFill } from 'react-icons/ri';
 import { BsHandThumbsUp, BsHandThumbsUpFill, BsExclamationTriangle } from 'react-icons/bs';
 import { Button } from 'react-bootstrap';
-import defaultAvatar from '../../assets/default.png';;
+import defaultAvatar from '../../assets/default.png';
+import { Loading } from '../Loading/Loading';
+
 
 
 
@@ -37,6 +39,7 @@ export const Notices = ({
     const [noticeAvatarUrl, setNoticeAvatarUrl] = useState(null);
     const [noticeText, setNoticeText] = useState(null);
     const [reactionText, setReactionText] = useState('');
+    const [isSendingReactionLoading, setIsSendingReactionLoading] = useState(false);
 
 
     const reportCategories = [
@@ -89,6 +92,7 @@ export const Notices = ({
     }
 
     const handleReactSubmission = async () => {
+        setIsSendingReactionLoading(true);
         if (reactingNoticeId) {
             try {
 
@@ -102,6 +106,8 @@ export const Notices = ({
                 }
             } catch (error) {
                 console.error("Error reporting notice:", error);
+            } finally {
+                setIsSendingReactionLoading(false);
             }
         }
     };
@@ -348,7 +354,7 @@ export const Notices = ({
                         className='notice__react--modal-btn'
                         disabled={reactionText === '' ? true : false}
                     >
-                        Send
+                        {isSendingReactionLoading ? <Loading /> : 'Send'}
                     </Button>
                 </Modal.Footer>
             </Modal>

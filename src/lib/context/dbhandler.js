@@ -741,5 +741,50 @@ export const createReaction = async (sender_id, recipient_id, content, timestamp
     }
 }
 
+export const getAllReactions = async () => {
+    try {
+        const response = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_REACTIONS_COLLECTION
+        )
+        console.log('Successfully got ALL reactions.:', response);
+        return response;
+    } catch (error) {
+        console.error('Error getting ALL reactions:', error);
+    }
+}
+
+export const getAllReactionsBySenderId = async (sender_id) => {
+    try {
+        const response = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_REACTIONS_COLLECTION,
+            [
+                Query.equal('sender_id', sender_id),
+            ]
+        )
+        console.log('Successfully got reactions by sender doc.:', response);
+        return response;
+    } catch (error) {
+        console.error('Error getting reactions by sender:', error);
+    }
+}
+
+export const getAllReactionsByRecipientId = async (recipient_id) => {
+    try {
+        const response = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_REACTIONS_COLLECTION,
+            [
+                Query.equal('recipient_id', recipient_id),
+            ]
+        )
+        console.log('Successfully got reactions by recipient_id doc.:', response);
+        return response;
+    } catch (error) {
+        console.error('Error getting reactions by recipient_id:', error);
+    }
+}
+
 export const account = new Account(client);
 export { ID } from 'appwrite';

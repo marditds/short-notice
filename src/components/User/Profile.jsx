@@ -96,7 +96,7 @@ export const Profile = ({ username, avatarUrl, handleFollow, currUserId, followi
                 <Col
                     className='d-grid gap-0 align-content-between justify-content-end'
                 >
-                    {location.pathname !== '/user/profile' &&
+                    {location.pathname !== '/user/profile' ?
                         <>
                             <Button
                                 className={`user-profile__interaction-btn
@@ -125,6 +125,16 @@ export const Profile = ({ username, avatarUrl, handleFollow, currUserId, followi
                                     height: 'fit-content', width: 'fit-content', marginLeft: 'auto'
                                 }}>
                                 Report
+                            </Button>
+                        </>
+                        :
+                        <>
+                            <Button
+                                className='user-profile__follow-numbers-text'
+                                as={Link}
+                                to='/user/reactions'
+                            >
+                                Reactions
                             </Button>
                         </>
                     }

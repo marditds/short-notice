@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { createNotice, getUserNotices, updateNotice, deleteNotice, deleteAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSpread, getUserSpreads, removeSpread, createReport, createLike, removeLike, getUserLikes, getAllLikedNotices as fetchAllLikedNotices, getAllSpreadNotices as fetchAllSpreadNotices, createReaction } from '../../lib/context/dbhandler';
+import { createNotice, getUserNotices, updateNotice, deleteNotice, deleteAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSpread, getUserSpreads, removeSpread, createReport, createLike, removeLike, getUserLikes, getAllLikedNotices as fetchAllLikedNotices, getAllSpreadNotices as fetchAllSpreadNotices, createReaction, getAllReactionsBySenderId as fetchAllReactionsBySenderId, getAllReactions as fetchAllReactions } from '../../lib/context/dbhandler';
 import { UserId } from '../../components/User/UserId.jsx';
 
 const useNotices = (googleUserData) => {
@@ -343,6 +343,28 @@ const useNotices = (googleUserData) => {
         }
     }
 
+    const getAllReactions = async () => {
+        try {
+            const response = await fetchAllReactions();
+
+            console.log('fetchAllReactions', response);
+
+            return response;
+        } catch (error) {
+            console.error('Error - fetchAllReactions', error);
+        }
+    }
+
+    const getAllReactionsBySenderId = async (user_id) => {
+        try {
+            const response = await fetchAllReactionsBySenderId(user_id);
+            console.log('getAllReactionsBySenderId', response);
+            return response;
+        } catch (error) {
+            console.error('ERRO - getAllReactionsBySenderId', error);
+        }
+    }
+
 
     return {
         user_id,
@@ -368,7 +390,9 @@ const useNotices = (googleUserData) => {
         likeNotice,
         setLikedNotices,
         removeAllNoticesByUser,
-        sendReaction
+        sendReaction,
+        getAllReactions,
+        getAllReactionsBySenderId
     };
 };
 
