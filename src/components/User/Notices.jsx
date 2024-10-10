@@ -10,6 +10,7 @@ import { BsHandThumbsUp, BsHandThumbsUpFill, BsExclamationTriangle } from 'react
 import { Button } from 'react-bootstrap';
 import defaultAvatar from '../../assets/default.png';
 import { Loading } from '../Loading/Loading';
+import Reactions from '../../pages/User/Reactions/Reactions';
 
 
 
@@ -26,7 +27,8 @@ export const Notices = ({
     username,
     user_id,
     likedNotices,
-    spreadNotices
+    spreadNotices,
+    reactions
 }) => {
 
     const location = useLocation();
@@ -177,19 +179,19 @@ export const Notices = ({
                                         <div
                                             className='d-flex flex-column justify-content-end h-100'>
                                             <span className='d-flex ms-auto mt-auto'>
-                                                <Button
+                                                <div
                                                     className='ms-auto notice__edit-btn'
                                                     onClick={() => handleEditNotice(notice.$id, notice.text)}
                                                 >
                                                     <AiFillEdit size={20} />
-                                                </Button>
-                                                <Button
+                                                </div>
+                                                <div
                                                     className='ms-2 notice__delete-btn'
                                                     onClick={() => handleDeleteNotice(notice.$id)}
                                                 >
                                                     <CgTrash size={20} />
 
-                                                </Button>
+                                                </div>
                                             </span>
                                             <small className='text-end  notice__create-date'
                                                 style={{ marginRight: '12px' }}>
@@ -230,7 +232,7 @@ export const Notices = ({
                                                 <div
                                                     className='d-flex justify-content-end'
                                                 >
-                                                    <Button
+                                                    <div
                                                         className='notice__reaction-btn'
                                                         disabled={user_id === notice.user_id}
                                                         onClick={() => handleLike(notice)}
@@ -243,8 +245,8 @@ export const Notices = ({
                                                         ) : (
                                                             <BsHandThumbsUp size={19} />
                                                         )}
-                                                    </Button>
-                                                    <Button
+                                                    </div>
+                                                    <div
                                                         onClick={() => handleSpread(notice)}
                                                         className='notice__reaction-btn'
                                                         disabled={user_id === notice.user_id}
@@ -257,8 +259,8 @@ export const Notices = ({
                                                         ) : (
                                                             <RiMegaphoneLine size={19} />
                                                         )}
-                                                    </Button>
-                                                    <Button
+                                                    </div>
+                                                    <div
                                                         onClick={() => handleReactNotice(notice.$id, notice.username, notice.avatarUrl, notice.text)}
                                                         // onClick={() => setShowReactModal(true)}
                                                         className='notice__reaction-btn'
@@ -267,8 +269,8 @@ export const Notices = ({
                                                         <BsReply
                                                             size={23}
                                                         />
-                                                    </Button>
-                                                    <Button
+                                                    </div>
+                                                    <div
                                                         onClick={() => handleReportNotice(notice.$id)}
                                                         className='notice__reaction-btn'
                                                         disabled={user_id === notice.user_id}
@@ -276,7 +278,7 @@ export const Notices = ({
                                                         <BsExclamationTriangle
                                                             size={19}
                                                         />
-                                                    </Button>
+                                                    </div>
                                                 </div>
 
                                                 <small style={{ marginRight: '12px' }} className='text-end mt-auto notice__create-date'>
@@ -290,7 +292,17 @@ export const Notices = ({
                             </Row>
                         </Accordion.Header>
                         <Accordion.Body className='d-flex justify-content-around w-100'>
-
+                            {/* {notice.$id} */}
+                            {
+                                reactions.map((reaction) => {
+                                    return (reaction.notice_id === notice.$id &&
+                                        <div key={reaction.$id}>
+                                            {reaction.content}
+                                        </div>)
+                                }
+                                )
+                            }
+                            {/* <Reactions /> */}
                         </Accordion.Body>
                     </Accordion.Item>
                 ))}

@@ -802,5 +802,21 @@ export const getAllReactionsByRecipientId = async (recipient_id) => {
     }
 }
 
+export const getAllReactionsByNoticeId = async (notice_id) => {
+    try {
+        const response = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_REACTIONS_COLLECTION,
+            [
+                Query.equal('notice_id', notice_id),
+            ]
+        )
+        console.log('Successfully got reactions by notice_id doc.:', response);
+        return response;
+    } catch (error) {
+        console.error('Error getting reactions by notice_id:', error);
+    }
+}
+
 export const account = new Account(client);
 export { ID } from 'appwrite';

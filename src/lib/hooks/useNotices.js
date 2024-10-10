@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { createNotice, getUserNotices, updateNotice, deleteNotice, deleteAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSpread, getUserSpreads, removeSpread, createReport, createLike, removeLike, getUserLikes, getAllLikedNotices as fetchAllLikedNotices, getAllSpreadNotices as fetchAllSpreadNotices, createReaction, getAllReactionsBySenderId as fetchAllReactionsBySenderId, getAllReactions as fetchAllReactions, getAllReactionsByRecipientId as fetchAllReactionsByRecipientId, getNoticeByNoticeId as fetchNoticeByNoticeId } from '../../lib/context/dbhandler';
+import { createNotice, getUserNotices, updateNotice, deleteNotice, deleteAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSpread, getUserSpreads, removeSpread, createReport, createLike, removeLike, getUserLikes, getAllLikedNotices as fetchAllLikedNotices, getAllSpreadNotices as fetchAllSpreadNotices, createReaction, getAllReactionsBySenderId as fetchAllReactionsBySenderId, getAllReactions as fetchAllReactions, getAllReactionsByRecipientId as fetchAllReactionsByRecipientId, getNoticeByNoticeId as fetchNoticeByNoticeId, getAllReactionsByNoticeId as fetchAllReactionsByNoticeId } from '../../lib/context/dbhandler';
 import { UserId } from '../../components/User/UserId.jsx';
 
 const useNotices = (googleUserData) => {
@@ -7,6 +7,7 @@ const useNotices = (googleUserData) => {
     const [userNotices, setUserNotices] = useState([]);
     const [spreadNotices, setSpreadNotices] = useState([]);
     const [likedNotices, setLikedNotices] = useState({});
+    const [reactions, setReactions] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isAddingNotice, setIsAddingNotice] = useState(false);
     const [isRemovingNotice, setIsRemovingNotice] = useState(false);
@@ -56,35 +57,7 @@ const useNotices = (googleUserData) => {
 
     }, [googleUserData]);
 
-    // Fetch User Spreads
-    // useEffect(() => {
-    //     const fetchUserSpreads = async () => {
-    //         if (user_id) {
-    //             const spreads = await getUserSpreads(user_id);
-
-    //             // console.log('Spreads', spreads);
-
-    //             const allNotices = await getAllNotices();
-
-    //             // console.log('allNotices', allNotices);
-
-    //             const matchedNotices = compareNoticesWithSpreads(allNotices, spreads);
-    //             setSpreadNotices(matchedNotices);
-    //         }
-    //     };
-
-    //     fetchUserSpreads();
-    // }, [user_id]);
-
-    // const compareNoticesWithSpreads = (notices, spreads) => {
-    //     return notices.filter(notice =>
-    //         spreads.some(spread => spread.notice_id === notice.$id)
-    //     );
-    // };
-
     // Fetch User Likes
-
-
     useEffect(() => {
         const fetchUserSpreads = async () => {
             try {
@@ -105,6 +78,7 @@ const useNotices = (googleUserData) => {
         }
     }, [user_id]);
 
+    // Fetch User Spreads
     useEffect(() => {
         const fetchUserLikes = async () => {
             try {
@@ -125,6 +99,25 @@ const useNotices = (googleUserData) => {
         }
     }, [user_id]);
 
+    // Fetch Reactions to User Notices
+    useEffect(() => {
+        const fetchAllReactionsPerNotice = async () => {
+            try {
+
+                const reactionsForRecipient = await getAllReactionsByRecipientId(user_id);
+
+                console.log('reactionsForRecipient', reactionsForRecipient.documents);
+
+                setReactions(reactionsForRecipient.documents);
+
+
+
+            } catch (error) {
+                console.error('Error - fetchAllReactionsToNotice', error);
+            }
+        }
+        fetchAllReactionsPerNotice();
+    }, [user_id])
 
 
     const addNotice = async (text, duration, selectedTags) => {
@@ -380,10 +373,20 @@ const useNotices = (googleUserData) => {
     const getAllReactionsByRecipientId = async (recipient_id) => {
         try {
             const response = await fetchAllReactionsByRecipientId(recipient_id);
-            console.log('getAllReactionsBySenderId', response);
+            // console.log('getAllReactionsByRecipientId', response);
             return response;
         } catch (error) {
-            console.error('ERRO - getAllReactionsBySenderId', error);
+            console.error('ERROR - getAllReactionsByRecipientId', error);
+        }
+    }
+
+    const getAllReactionsByNoticeId = async (notice_id) => {
+        try {
+            const response = await fetchAllReactionsByNoticeId(notice_id);
+            console.log('getAllReactionsByNoticeId', response);
+            return response;
+        } catch (error) {
+            console.error('ERROR - getAllReactionsByNoticeId', error);
         }
     }
 
@@ -397,6 +400,7 @@ const useNotices = (googleUserData) => {
         isAddingNotice,
         isRemovingNotice,
         removingNoticeId,
+        reactions,
         addNotice,
         editNotice,
         removeNotice,
@@ -416,7 +420,8 @@ const useNotices = (googleUserData) => {
         sendReaction,
         getAllReactions,
         getAllReactionsBySenderId,
-        getAllReactionsByRecipientId
+        getAllReactionsByRecipientId,
+        getAllReactionsByNoticeId
     };
 };
 

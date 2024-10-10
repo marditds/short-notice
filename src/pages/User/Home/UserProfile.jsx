@@ -32,6 +32,7 @@ const UserProfile = () => {
         isAddingNotice,
         removingNoticeId,
         isRemovingNotice,
+        reactions,
         addNotice,
         editNotice,
         removeNotice,
@@ -41,7 +42,9 @@ const UserProfile = () => {
         reportNotice,
         sendReaction,
         getAllLikedNotices,
-        getAllSpreadNotices
+        getAllSpreadNotices,
+        getAllReactionsByRecipientId,
+        getAllReactionsByNoticeId
     } = useNotices(googleUserData);
 
     const {
@@ -49,6 +52,7 @@ const UserProfile = () => {
         followingCount,
         followersAccounts,
         followingAccounts,
+        getUsersData,
         fetchUsersData,
         fetchAccountsFollowingTheUser,
         fetchAccountsFollowedByUser
@@ -58,6 +62,7 @@ const UserProfile = () => {
     const [likedNoticesData, setLikedNoticesData] = useState([]);
 
     const { avatarUrl } = useUserAvatar(user_id);
+
 
 
     useEffect(() => {
@@ -90,6 +95,9 @@ const UserProfile = () => {
         fetchSpreadNotices();
 
     }, [user_id])
+
+    //Fetch reactions to notices
+
 
 
     // Fetch accounts followed by user
@@ -223,6 +231,7 @@ const UserProfile = () => {
                         handleEditNotice={handleEditNotice}
                         handleDeleteNotice={handleDeleteNotice}
                         eventKey='my-notices'
+                        reactions={reactions}
                     />
                 </Tab>
                 {/* SPREADS */}
@@ -239,6 +248,7 @@ const UserProfile = () => {
                         handleSpread={handleSpread}
                         handleReport={handleReport}
                         handleReact={handleReact}
+                        reactions={reactions}
                     />
                 </Tab>
 
@@ -256,7 +266,7 @@ const UserProfile = () => {
                         handleSpread={handleSpread}
                         handleReport={handleReport}
                         handleReact={handleReact}
-
+                        reactions={reactions}
                     />
                 </Tab>
             </Tabs>

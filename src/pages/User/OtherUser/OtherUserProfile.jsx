@@ -258,6 +258,7 @@ const OtherUserProfile = () => {
                         notices={notices}
                         likedNotices={likedNotices}
                         spreadNotices={spreadNotices}
+                        reactions={reactions}
                         handleLike={handleLike}
                         handleSpread={handleSpread}
                         handleReport={handleReport}
