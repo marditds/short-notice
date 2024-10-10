@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { createNotice, getUserNotices, updateNotice, deleteNotice, deleteAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSpread, getUserSpreads, removeSpread, createReport, createLike, removeLike, getUserLikes, getAllLikedNotices as fetchAllLikedNotices, getAllSpreadNotices as fetchAllSpreadNotices, createReaction, getAllReactionsBySenderId as fetchAllReactionsBySenderId, getAllReactions as fetchAllReactions } from '../../lib/context/dbhandler';
+import { createNotice, getUserNotices, updateNotice, deleteNotice, deleteAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSpread, getUserSpreads, removeSpread, createReport, createLike, removeLike, getUserLikes, getAllLikedNotices as fetchAllLikedNotices, getAllSpreadNotices as fetchAllSpreadNotices, createReaction, getAllReactionsBySenderId as fetchAllReactionsBySenderId, getAllReactions as fetchAllReactions, getAllReactionsByRecipientId as fetchAllReactionsByRecipientId } from '../../lib/context/dbhandler';
 import { UserId } from '../../components/User/UserId.jsx';
 
 const useNotices = (googleUserData) => {
@@ -365,6 +365,16 @@ const useNotices = (googleUserData) => {
         }
     }
 
+    const getAllReactionsByRecipientId = async (recipient_id) => {
+        try {
+            const response = await fetchAllReactionsByRecipientId(recipient_id);
+            console.log('getAllReactionsBySenderId', response);
+            return response;
+        } catch (error) {
+            console.error('ERRO - getAllReactionsBySenderId', error);
+        }
+    }
+
 
     return {
         user_id,
@@ -392,7 +402,8 @@ const useNotices = (googleUserData) => {
         removeAllNoticesByUser,
         sendReaction,
         getAllReactions,
-        getAllReactionsBySenderId
+        getAllReactionsBySenderId,
+        getAllReactionsByRecipientId
     };
 };
 
