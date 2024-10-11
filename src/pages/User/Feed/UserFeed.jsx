@@ -50,7 +50,7 @@ const UserFeed = () => {
 
     const {
         user_id,
-        reactions,
+        noticesReactions,
         getInterests,
         getFeedNotices,
         spreadNotice,
@@ -59,7 +59,8 @@ const UserFeed = () => {
         sendReaction,
         likedNotices,
         spreadNotices,
-        getAllReactionsByRecipientId
+        setNoticesReactions,
+        fetchReactionsForNotices
     } = useNotices(googleUserData);
 
     const { fetchUsersData } = useUserInfo(googleUserData);
@@ -158,15 +159,15 @@ const UserFeed = () => {
 
     };
 
-    //Fetch reactions to notices
+    //Fetch reactions to feed notices 
     useEffect(() => {
         try {
-            getAllReactionsByRecipientId(user_id);
+            fetchReactionsForNotices(feedNotices, setNoticesReactions);
         } catch (error) {
             console.error(error);
-
         }
-    }, [user_id])
+
+    }, [feedNotices])
 
 
     const handleSpread = async (notice) => {
@@ -227,7 +228,7 @@ const UserFeed = () => {
                 user_id={user_id}
                 likedNotices={likedNotices}
                 spreadNotices={spreadNotices}
-                reactions={reactions}
+                reactions={noticesReactions}
                 handleLike={handleLike}
                 handleSpread={handleSpread}
                 handleReport={handleReport}

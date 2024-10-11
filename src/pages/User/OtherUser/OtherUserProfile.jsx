@@ -24,23 +24,25 @@ const OtherUserProfile = () => {
         return localStorage.getItem('currUserId') || null;
     });
 
-    const [notices, setNotices] = useState([]);
-
     const {
         user_id,
         likedNotices,
         spreadNotices,
         isLoading: noticesLoading,
-        reactions,
+        noticesReactions,
+        spreadReactions,
+        likedReactions,
         likeNotice,
         spreadNotice,
         reportNotice,
         getAllLikedNotices,
         getAllSpreadNotices,
-        getNoticesByUser,
+        fetchUserNotices,
         sendReaction,
-        fetchReactions,
-        getAllReactionsByRecipientId
+        fetchReactionsForNotices,
+        setNoticesReactions,
+        setSpreadReactions,
+        setLikedReactions
     } = useNotices(googleUserData);
 
     const {
@@ -58,11 +60,11 @@ const OtherUserProfile = () => {
         fetchAccountsFollowedByUser
     } = useUserInfo(googleUserData);
 
+    const [notices, setNotices] = useState([]);
     const [spreadNoticesData, setSpreadNoticesData] = useState([]);
     const [likedNoticesData, setLikedNoticesData] = useState([]);
 
-    const [spreadReactions, setSpreadReactions] = useState([]);
-    const [likedReactions, setLikedReactions] = useState([]);
+
 
     const { avatarUrl } = useUserAvatar(currUserId);
 
@@ -94,33 +96,15 @@ const OtherUserProfile = () => {
 
     // Fetch notices for other user
     useEffect(() => {
-        const fetchUserNotices = async () => {
+        fetchUserNotices(currUserId, setNotices);
+    }, [currUserId])
 
-            if (!currUserId) return;
-
-            try {
-                const usrNotices = await getNoticesByUser(currUserId);
-
-                // console.log('usrNotices - OtherUserProfile', usrNotices);
-
-                setNotices(usrNotices);
-                return usrNotices;
-
-
-            } catch (error) {
-                console.error('Error fetchUserNotices - OtherUserProfile');
-
-            }
-        }
-
-        fetchUserNotices();
-
-    }, [currUserId, getNoticesByUser])
-
+    // Fetch users' data for spreads 
     useEffect(() => {
         fetchUsersData(spreadNoticesData, setSpreadNoticesData, avatarUtil);
     }, [spreadNoticesData])
 
+    // Fetch users' data for likes  
     useEffect(() => {
         fetchUsersData(likedNoticesData, setLikedNoticesData, avatarUtil);
     }, [likedNoticesData])
@@ -129,12 +113,6 @@ const OtherUserProfile = () => {
     useEffect(() => {
         const fetchLikedNotices = async () => {
             const allLikedNotices = await getAllLikedNotices(currUserId);
-
-            // console.log(`allLikedNotices by ${otherUsername}`, allLikedNotices);
-
-            // console.log('likedNotices:', likedNotices);
-
-            // console.log('username:', username);
 
             setLikedNoticesData(allLikedNotices);
         };
@@ -146,48 +124,37 @@ const OtherUserProfile = () => {
         const fetchSpreadNotices = async () => {
             const allSpreadNotices = await getAllSpreadNotices(currUserId);
 
-            // console.log(`allSpreadNotices by ${otherUsername}`, allSpreadNotices);
-
-            // console.log('username:', username);
-
             setSpreadNoticesData(allSpreadNotices);
         };
         fetchSpreadNotices();
     }, [currUserId]);
 
-    //Fetch reactions to notices
+    // Reactions For Notices tab
     useEffect(() => {
-        try {
-            fetchReactions(notices);
-        } catch (error) {
-            console.error(error);
+        fetchReactionsForNotices(notices, setNoticesReactions);
+    }, [notices]);
+
+    // Reactions For Spreads tab
+    useEffect(() => {
+        fetchReactionsForNotices(spreadNoticesData, setSpreadReactions);
+    }, [spreadNoticesData]);
+
+    // Reactions For Likes tab
+    useEffect(() => {
+        fetchReactionsForNotices(likedNoticesData, setLikedReactions);
+    }, [likedNoticesData]);
+
+    // Fetch accounts following the other user
+    useEffect(() => {
+        if (currUserId && user_id) {
+            fetchAccountsFollowingTheUser(currUserId, user_id);
         }
-    }, [notices])
+    }, [currUserId, user_id])
 
-    //Fetch reactions to spread notices
+    // Fetch accounts followed by other user
     useEffect(() => {
-        try {
-            fetchReactions(spreadNoticesData);
-        } catch (error) {
-            console.error(error);
-        }
-
-    }, [spreadNoticesData])
-
-    useEffect(() => {
-        console.log('spreadReactions', spreadReactions);
-    }, [spreadReactions])
-
-    //Fetch reactions to liked notices 
-    useEffect(() => {
-        try {
-            fetchReactions(likedNoticesData);
-        } catch (error) {
-            console.error(error);
-        }
-
-    }, [likedNoticesData])
-
+        fetchAccountsFollowedByUser(currUserId);
+    }, [currUserId])
 
     const handleLike = async (notice) => {
         try {
@@ -222,20 +189,6 @@ const OtherUserProfile = () => {
             console.error('Failed handleReact:', error);
         }
     }
-
-
-    // Fetch accounts following the other user
-    useEffect(() => {
-        if (currUserId && user_id) {
-            fetchAccountsFollowingTheUser(currUserId, user_id);
-        }
-    }, [currUserId, user_id])
-
-    // Fetch accounts followed by other user
-    useEffect(() => {
-        fetchAccountsFollowedByUser(currUserId);
-    }, [currUserId])
-
 
     const handleFollow = async (currUserId) => {
         try {
@@ -295,7 +248,7 @@ const OtherUserProfile = () => {
                         notices={notices}
                         likedNotices={likedNotices}
                         spreadNotices={spreadNotices}
-                        reactions={reactions}
+                        reactions={noticesReactions}
                         handleLike={handleLike}
                         handleSpread={handleSpread}
                         handleReport={handleReport}
@@ -314,7 +267,7 @@ const OtherUserProfile = () => {
                         user_id={user_id}
                         likedNotices={likedNotices}
                         spreadNotices={spreadNotices}
-                        reactions={reactions}
+                        reactions={spreadReactions}
                         handleLike={handleLike}
                         handleSpread={handleSpread}
                         handleReport={handleReport}
@@ -333,7 +286,7 @@ const OtherUserProfile = () => {
                             user_id={user_id}
                             likedNotices={likedNotices}
                             spreadNotices={spreadNotices}
-                            reactions={reactions}
+                            reactions={likedReactions}
                             handleLike={handleLike}
                             handleSpread={handleSpread}
                             handleReport={handleReport}

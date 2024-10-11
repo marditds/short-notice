@@ -303,7 +303,7 @@ export const Notices = ({
                                 ))
                             } */}
                             {
-                                reactions.map((reaction) => {
+                                reactions?.map((reaction) => {
                                     return (reaction.notice_id === notice.$id &&
                                         <div key={reaction.$id}>
                                             {reaction.content}

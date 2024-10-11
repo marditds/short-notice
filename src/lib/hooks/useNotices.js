@@ -7,7 +7,9 @@ const useNotices = (googleUserData) => {
     const [userNotices, setUserNotices] = useState([]);
     const [spreadNotices, setSpreadNotices] = useState([]);
     const [likedNotices, setLikedNotices] = useState({});
-    const [reactions, setReactions] = useState([]);
+    const [noticesReactions, setNoticesReactions] = useState([]);
+    const [spreadReactions, setSpreadReactions] = useState([]);
+    const [likedReactions, setLikedReactions] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isAddingNotice, setIsAddingNotice] = useState(false);
     const [isRemovingNotice, setIsRemovingNotice] = useState(false);
@@ -98,25 +100,6 @@ const useNotices = (googleUserData) => {
             fetchUserLikes();
         }
     }, [user_id]);
-
-    // Fetch Reactions to User Notices
-    // useEffect(() => {
-    //     const fetchAllReactionsPerNotice = async () => {
-    //         try {
-
-    //             const reactionsForRecipient = await getAllReactionsByRecipientId(user_id);
-
-    //             console.log('reactionsForRecipient', reactionsForRecipient.documents);
-
-    //             setReactions(reactionsForRecipient.documents);
-
-
-    //         } catch (error) {
-    //             console.error('Error - fetchAllReactionsToNotice', error);
-    //         }
-    //     }
-    //     fetchAllReactionsPerNotice();
-    // }, [user_id])
 
 
     const addNotice = async (text, duration, selectedTags) => {
@@ -220,6 +203,22 @@ const useNotices = (googleUserData) => {
             console.error('Error getNoticesByUser - useNotices');
         }
     }, [googleUserData]);
+
+    // In UserProfile.jsx and OtherUserProfile.jsx
+    const fetchUserNotices = async (id, setNotices) => {
+        if (!id) return;
+
+        try {
+            const usrNotices = await getNoticesByUser(id);
+
+            setNotices(usrNotices);
+            return usrNotices;
+
+        } catch (error) {
+            console.error('Error fetchUserNotices - useNotices');
+
+        }
+    }
 
     const getNoticeByNoticeId = async (notice_id) => {
         try {
@@ -393,7 +392,7 @@ const useNotices = (googleUserData) => {
     }
 
     // Fetch reactions for each notice when usrNtcs changes
-    const fetchReactions = async (usrNtcs) => {
+    const fetchReactionsForNotices = async (usrNtcs, setReactionsState) => {
         if (usrNtcs.length > 0) {
             const allReactions = [];
 
@@ -412,14 +411,10 @@ const useNotices = (googleUserData) => {
             }
             console.log('allReactions', allReactions);
 
-            setReactions(allReactions);  // Now setReactions will always get an array
+            setReactionsState(allReactions);  // Now setReactions will always get an  
         }
     };
 
-    // This useEffect runs whenever reactions changes
-    useEffect(() => {
-        console.log('reactions', reactions);
-    }, [reactions])
 
 
 
@@ -432,11 +427,14 @@ const useNotices = (googleUserData) => {
         isAddingNotice,
         isRemovingNotice,
         removingNoticeId,
-        reactions,
+        noticesReactions,
+        spreadReactions,
+        likedReactions,
         addNotice,
         editNotice,
         removeNotice,
         getFeedNotices,
+        fetchUserNotices,
         getNoticesByUser,
         getNoticeByNoticeId,
         getInterests,
@@ -450,7 +448,10 @@ const useNotices = (googleUserData) => {
         setLikedNotices,
         removeAllNoticesByUser,
         sendReaction,
-        fetchReactions
+        fetchReactionsForNotices,
+        setNoticesReactions,
+        setSpreadReactions,
+        setLikedReactions
         // getAllReactions,
         // getAllReactionsBySenderId,
         // getAllReactionsByRecipientId,

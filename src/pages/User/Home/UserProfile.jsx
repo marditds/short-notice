@@ -25,14 +25,16 @@ const UserProfile = () => {
 
     const {
         user_id,
-        userNotices,
+        // userNotices,
         spreadNotices,
         likedNotices,
         isLoading,
         isAddingNotice,
         removingNoticeId,
         isRemovingNotice,
-        reactions,
+        noticesReactions,
+        spreadReactions,
+        likedReactions,
         addNotice,
         editNotice,
         removeNotice,
@@ -41,11 +43,13 @@ const UserProfile = () => {
         spreadNotice,
         reportNotice,
         sendReaction,
+        fetchUserNotices,
         getAllLikedNotices,
         getAllSpreadNotices,
-        fetchReactions,
-        getAllReactionsByRecipientId,
-        getAllReactionsByNoticeId
+        fetchReactionsForNotices,
+        setNoticesReactions,
+        setSpreadReactions,
+        setLikedReactions
     } = useNotices(googleUserData);
 
     const {
@@ -53,28 +57,32 @@ const UserProfile = () => {
         followingCount,
         followersAccounts,
         followingAccounts,
-        getUsersData,
         fetchUsersData,
         fetchAccountsFollowingTheUser,
         fetchAccountsFollowedByUser
     } = useUserInfo(googleUserData);
 
+    const [notices, setNotices] = useState([]);
     const [spreadNoticesData, setSpreadNoticesData] = useState([]);
     const [likedNoticesData, setLikedNoticesData] = useState([]);
 
     const { avatarUrl } = useUserAvatar(user_id);
 
 
+    // Fetch notices for user
+    useEffect(() => {
+        fetchUserNotices(user_id, setNotices);
+    }, [user_id])
 
+    // Fetch users' data for spreads
     useEffect(() => {
         fetchUsersData(spreadNoticesData, setSpreadNoticesData, avatarUtil);
     }, [spreadNoticesData])
 
-
+    // Fetch users' data for likes 
     useEffect(() => {
         fetchUsersData(likedNoticesData, setLikedNoticesData, avatarUtil);
     }, [likedNoticesData])
-
 
     // Fetch liked notices
     useEffect(() => {
@@ -97,15 +105,20 @@ const UserProfile = () => {
 
     }, [user_id])
 
-    // Fetch reactions to notices
+    // Reactions For Notices tab
     useEffect(() => {
-        try {
-            fetchReactions(userNotices);
-        } catch (error) {
-            console.error(error);
-        }
-    }, [userNotices])
+        fetchReactionsForNotices(notices, setNoticesReactions);
+    }, [notices]);
 
+    // Reactions For Spreads tab
+    useEffect(() => {
+        fetchReactionsForNotices(spreadNoticesData, setSpreadReactions);
+    }, [spreadNoticesData]);
+
+    // Reactions For Likes tab
+    useEffect(() => {
+        fetchReactionsForNotices(likedNoticesData, setLikedReactions);
+    }, [likedNoticesData]);
 
     // Fetch accounts followed by user
     useEffect(() => {
@@ -172,7 +185,6 @@ const UserProfile = () => {
         }
     };
 
-
     const handleReport = async (notice_id, author_id, reason) => {
         try {
             await reportNotice(notice_id, author_id, reason);
@@ -182,10 +194,9 @@ const UserProfile = () => {
         }
     }
 
-
-    const handleReact = async (currUserId, content, notice_id) => {
+    const handleReact = async (user_id, content, notice_id) => {
         try {
-            const res = await sendReaction(currUserId, content, notice_id);
+            const res = await sendReaction(user_id, content, notice_id);
             console.log('Success handleReact.', res);
             return res;
         } catch (error) {
@@ -233,12 +244,12 @@ const UserProfile = () => {
                     title="My Notices"
                 >
                     <Notices
-                        notices={userNotices}
+                        notices={notices}
                         username={username}
                         handleEditNotice={handleEditNotice}
                         handleDeleteNotice={handleDeleteNotice}
                         eventKey='my-notices'
-                        reactions={reactions}
+                        reactions={noticesReactions}
                     />
                 </Tab>
                 {/* SPREADS */}
@@ -255,7 +266,7 @@ const UserProfile = () => {
                         handleSpread={handleSpread}
                         handleReport={handleReport}
                         handleReact={handleReact}
-                        reactions={reactions}
+                        reactions={spreadReactions}
                     />
                 </Tab>
 
@@ -273,7 +284,7 @@ const UserProfile = () => {
                         handleSpread={handleSpread}
                         handleReport={handleReport}
                         handleReact={handleReact}
-                        reactions={reactions}
+                        reactions={likedReactions}
                     />
                 </Tab>
             </Tabs>
