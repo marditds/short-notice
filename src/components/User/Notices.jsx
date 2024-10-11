@@ -293,6 +293,15 @@ export const Notices = ({
                         </Accordion.Header>
                         <Accordion.Body className='d-flex justify-content-around w-100'>
                             {/* {notice.$id} */}
+                            {/* {reactions
+                                .filter(reaction => reaction.notice_id === notice.$id)
+                                .map(reaction => (
+                                    <div key={reaction.$id}>
+                                        <strong>{reaction.sender_id}:</strong> 
+                                        {reaction.content}
+                                    </div>
+                                ))
+                            } */}
                             {
                                 reactions.map((reaction) => {
                                     return (reaction.notice_id === notice.$id &&

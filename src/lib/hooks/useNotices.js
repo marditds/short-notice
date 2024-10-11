@@ -374,7 +374,7 @@ const useNotices = (googleUserData) => {
             const response = await fetchAllReactionsByRecipientId(recipient_id);
             // console.log('getAllReactionsByRecipientId', response);
 
-            setReactions(response.documents);
+            // setReactions(response.documents);
 
             return response;
         } catch (error) {
@@ -382,7 +382,7 @@ const useNotices = (googleUserData) => {
         }
     }
 
-    const getAllReactionsByNoticeId = async (notice_id) => {
+    const getReactionsForNotice = async (notice_id) => {
         try {
             const response = await fetchAllReactionsByNoticeId(notice_id);
             console.log('getAllReactionsByNoticeId', response);
@@ -391,6 +391,36 @@ const useNotices = (googleUserData) => {
             console.error('ERROR - getAllReactionsByNoticeId', error);
         }
     }
+
+    // Fetch reactions for each notice when usrNtcs changes
+    const fetchReactions = async (usrNtcs) => {
+        if (usrNtcs.length > 0) {
+            const allReactions = [];
+
+            console.log('userNotices', usrNtcs);
+
+            for (const notice of usrNtcs) {
+                const res = await fetchAllReactionsByNoticeId(notice.$id);
+
+                console.log('res', res);
+
+                const noticeReactions = res.documents || [];
+
+                if (noticeReactions) {  // Ensure this is an array
+                    allReactions.push(...noticeReactions);  // Use spread only on iterable arrays
+                }
+            }
+            console.log('allReactions', allReactions);
+
+            setReactions(allReactions);  // Now setReactions will always get an array
+        }
+    };
+
+    // This useEffect runs whenever reactions changes
+    useEffect(() => {
+        console.log('reactions', reactions);
+    }, [reactions])
+
 
 
     return {
@@ -420,10 +450,11 @@ const useNotices = (googleUserData) => {
         setLikedNotices,
         removeAllNoticesByUser,
         sendReaction,
-        getAllReactions,
-        getAllReactionsBySenderId,
-        getAllReactionsByRecipientId,
-        getAllReactionsByNoticeId
+        fetchReactions
+        // getAllReactions,
+        // getAllReactionsBySenderId,
+        // getAllReactionsByRecipientId,
+        // getReactionsForNotice
     };
 };
 

@@ -43,6 +43,7 @@ const UserProfile = () => {
         sendReaction,
         getAllLikedNotices,
         getAllSpreadNotices,
+        fetchReactions,
         getAllReactionsByRecipientId,
         getAllReactionsByNoticeId
     } = useNotices(googleUserData);
@@ -96,15 +97,14 @@ const UserProfile = () => {
 
     }, [user_id])
 
-    //Fetch reactions to notices
+    // Fetch reactions to notices
     useEffect(() => {
         try {
-            getAllReactionsByRecipientId(user_id);
+            fetchReactions(userNotices);
         } catch (error) {
             console.error(error);
-
         }
-    }, [user_id])
+    }, [userNotices])
 
 
     // Fetch accounts followed by user

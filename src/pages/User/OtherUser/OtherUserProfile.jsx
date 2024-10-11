@@ -39,6 +39,7 @@ const OtherUserProfile = () => {
         getAllSpreadNotices,
         getNoticesByUser,
         sendReaction,
+        fetchReactions,
         getAllReactionsByRecipientId
     } = useNotices(googleUserData);
 
@@ -59,6 +60,9 @@ const OtherUserProfile = () => {
 
     const [spreadNoticesData, setSpreadNoticesData] = useState([]);
     const [likedNoticesData, setLikedNoticesData] = useState([]);
+
+    const [spreadReactions, setSpreadReactions] = useState([]);
+    const [likedReactions, setLikedReactions] = useState([]);
 
     const { avatarUrl } = useUserAvatar(currUserId);
 
@@ -154,12 +158,35 @@ const OtherUserProfile = () => {
     //Fetch reactions to notices
     useEffect(() => {
         try {
-            getAllReactionsByRecipientId(currUserId);
+            fetchReactions(notices);
         } catch (error) {
             console.error(error);
-
         }
-    }, [currUserId])
+    }, [notices])
+
+    //Fetch reactions to spread notices
+    useEffect(() => {
+        try {
+            fetchReactions(spreadNoticesData);
+        } catch (error) {
+            console.error(error);
+        }
+
+    }, [spreadNoticesData])
+
+    useEffect(() => {
+        console.log('spreadReactions', spreadReactions);
+    }, [spreadReactions])
+
+    //Fetch reactions to liked notices 
+    useEffect(() => {
+        try {
+            fetchReactions(likedNoticesData);
+        } catch (error) {
+            console.error(error);
+        }
+
+    }, [likedNoticesData])
 
 
     const handleLike = async (notice) => {

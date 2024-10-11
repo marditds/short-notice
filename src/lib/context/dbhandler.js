@@ -811,7 +811,7 @@ export const getAllReactionsByNoticeId = async (notice_id) => {
                 Query.equal('notice_id', notice_id),
             ]
         )
-        console.log('Successfully got reactions by notice_id doc.:', response);
+        // console.log('Successfully got reactions by notice_id doc.:', response);
         return response;
     } catch (error) {
         console.error('Error getting reactions by notice_id:', error);
