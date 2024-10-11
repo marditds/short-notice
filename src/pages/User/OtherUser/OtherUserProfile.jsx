@@ -31,13 +31,15 @@ const OtherUserProfile = () => {
         likedNotices,
         spreadNotices,
         isLoading: noticesLoading,
+        reactions,
         likeNotice,
         spreadNotice,
         reportNotice,
         getAllLikedNotices,
         getAllSpreadNotices,
         getNoticesByUser,
-        sendReaction
+        sendReaction,
+        getAllReactionsByRecipientId
     } = useNotices(googleUserData);
 
     const {
@@ -86,7 +88,6 @@ const OtherUserProfile = () => {
         getCurrUser();
     }, [otherUsername, getUsersData])
 
-
     // Fetch notices for other user
     useEffect(() => {
         const fetchUserNotices = async () => {
@@ -120,7 +121,6 @@ const OtherUserProfile = () => {
         fetchUsersData(likedNoticesData, setLikedNoticesData, avatarUtil);
     }, [likedNoticesData])
 
-
     // Fetch other user likes
     useEffect(() => {
         const fetchLikedNotices = async () => {
@@ -150,6 +150,16 @@ const OtherUserProfile = () => {
         };
         fetchSpreadNotices();
     }, [currUserId]);
+
+    //Fetch reactions to notices
+    useEffect(() => {
+        try {
+            getAllReactionsByRecipientId(currUserId);
+        } catch (error) {
+            console.error(error);
+
+        }
+    }, [currUserId])
 
 
     const handleLike = async (notice) => {
@@ -277,6 +287,7 @@ const OtherUserProfile = () => {
                         user_id={user_id}
                         likedNotices={likedNotices}
                         spreadNotices={spreadNotices}
+                        reactions={reactions}
                         handleLike={handleLike}
                         handleSpread={handleSpread}
                         handleReport={handleReport}
@@ -295,6 +306,7 @@ const OtherUserProfile = () => {
                             user_id={user_id}
                             likedNotices={likedNotices}
                             spreadNotices={spreadNotices}
+                            reactions={reactions}
                             handleLike={handleLike}
                             handleSpread={handleSpread}
                             handleReport={handleReport}

@@ -100,24 +100,23 @@ const useNotices = (googleUserData) => {
     }, [user_id]);
 
     // Fetch Reactions to User Notices
-    useEffect(() => {
-        const fetchAllReactionsPerNotice = async () => {
-            try {
+    // useEffect(() => {
+    //     const fetchAllReactionsPerNotice = async () => {
+    //         try {
 
-                const reactionsForRecipient = await getAllReactionsByRecipientId(user_id);
+    //             const reactionsForRecipient = await getAllReactionsByRecipientId(user_id);
 
-                console.log('reactionsForRecipient', reactionsForRecipient.documents);
+    //             console.log('reactionsForRecipient', reactionsForRecipient.documents);
 
-                setReactions(reactionsForRecipient.documents);
+    //             setReactions(reactionsForRecipient.documents);
 
 
-
-            } catch (error) {
-                console.error('Error - fetchAllReactionsToNotice', error);
-            }
-        }
-        fetchAllReactionsPerNotice();
-    }, [user_id])
+    //         } catch (error) {
+    //             console.error('Error - fetchAllReactionsToNotice', error);
+    //         }
+    //     }
+    //     fetchAllReactionsPerNotice();
+    // }, [user_id])
 
 
     const addNotice = async (text, duration, selectedTags) => {
@@ -374,6 +373,9 @@ const useNotices = (googleUserData) => {
         try {
             const response = await fetchAllReactionsByRecipientId(recipient_id);
             // console.log('getAllReactionsByRecipientId', response);
+
+            setReactions(response.documents);
+
             return response;
         } catch (error) {
             console.error('ERROR - getAllReactionsByRecipientId', error);

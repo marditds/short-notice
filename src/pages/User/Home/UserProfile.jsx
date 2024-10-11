@@ -97,7 +97,14 @@ const UserProfile = () => {
     }, [user_id])
 
     //Fetch reactions to notices
+    useEffect(() => {
+        try {
+            getAllReactionsByRecipientId(user_id);
+        } catch (error) {
+            console.error(error);
 
+        }
+    }, [user_id])
 
 
     // Fetch accounts followed by user
