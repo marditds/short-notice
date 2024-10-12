@@ -157,22 +157,22 @@ export const Notices = ({
             <Accordion defaultActiveKey={['0']} className='user-profile__notices-accordion'>
                 {notices.map((notice, idx) => (
                     <Accordion.Item eventKey={idx} key={notice.$id}>
-                        <Accordion.Header className='d-flex w-100'>
+                        <Accordion.Header className='d-flex justify-content-center'>
                             {/* <FaAngleDown size={20} className='me-3' /> */}
-                            <Row className='w-100'>
+                            <Row className='w-100 m-auto'>
                                 <Col className='col-md-9 d-flex justify-content-between flex-column'
                                 >
-                                    <p className='mb-0' style={{ marginLeft: '12px' }}>{notice.text}</p>
+                                    <p className='mb-0'>{notice.text}</p>
 
                                     <small className='me-auto'>
                                         <span
-                                            style={{ color: 'gray', marginLeft: '12px' }}
+                                            style={{ color: 'gray' }}
                                         >
                                             Expires In:
                                         </span>  {countdowns[idx] || calculateCountdown(notice.expiresAt)}
                                     </small>
                                 </Col>
-                                <Col>
+                                <Col className=''>
 
                                     {location.pathname === '/user/profile' && eventKey === 'my-notices' ?
 
@@ -193,8 +193,9 @@ export const Notices = ({
 
                                                 </div>
                                             </span>
-                                            <small className='text-end  notice__create-date'
-                                                style={{ marginRight: '12px' }}>
+                                            <small
+                                                className='text-end notice__create-date'
+                                            >
                                                 {formatDateToLocal(notice.timestamp)}
                                             </small>
                                         </div>
@@ -221,7 +222,7 @@ export const Notices = ({
                                                             <img
                                                                 src={notice.avatarUrl || defaultAvatar}
                                                                 alt="Profile"
-                                                                style={{ borderRadius: '50%', width: 50, height: 50, marginRight: '12px' }}
+                                                                style={{ borderRadius: '50%', width: 50, height: 50 }}
                                                                 className='d-flex ms-auto'
                                                             />
                                                         </Link>
@@ -229,89 +230,82 @@ export const Notices = ({
                                             }
                                             {/* </Link> */}
                                             <div className='d-grid'>
-                                                <div
-                                                    className='d-flex justify-content-end'
-                                                >
+                                                {user_id === notice.user_id ?
+                                                    <div style={{ height: '23.5px' }}></div>
+                                                    :
                                                     <div
-                                                        className='notice__reaction-btn'
-                                                        disabled={user_id === notice.user_id}
-                                                        onClick={() => handleLike(notice)}
+                                                        className='d-flex justify-content-end align-items-center'
+                                                        style={{ height: '35px' }}
                                                     >
-                                                        {likedNotices && likedNotices[notice.$id] ? (
-                                                            <BsHandThumbsUpFill
-                                                                className='notice__reaction-btn-fill'
+                                                        <div
+                                                            className='notice__reaction-bt ms-2'
+                                                            onClick={() => handleLike(notice)}
+                                                        >
+                                                            {likedNotices && likedNotices[notice.$id] ? (
+                                                                <BsHandThumbsUpFill
+                                                                    className='notice__reaction-btn-fill'
+                                                                    size={19}
+                                                                />
+                                                            ) : (
+                                                                <BsHandThumbsUp size={19} />
+                                                            )}
+                                                        </div>
+                                                        <div
+                                                            onClick={() => handleSpread(notice)}
+                                                            className='notice__reaction-btn ms-2'
+                                                            disabled={user_id === notice.user_id}
+                                                        >
+                                                            {spreadNotices && spreadNotices[notice.$id] ? (
+                                                                <RiMegaphoneFill
+                                                                    className='notice__reaction-btn-fill'
+                                                                    size={19}
+                                                                />
+                                                            ) : (
+                                                                <RiMegaphoneLine size={19} />
+                                                            )}
+                                                        </div>
+                                                        <div
+                                                            onClick={() => handleReactNotice(notice.$id, notice.username, notice.avatarUrl, notice.text)}
+                                                            // onClick={() => setShowReactModal(true)}
+                                                            className='notice__reaction-btn ms-2'
+                                                            disabled={user_id === notice.user_id}
+                                                        >
+                                                            <BsReply
+                                                                size={23}
+                                                            />
+                                                        </div>
+                                                        <div
+                                                            onClick={() => handleReportNotice(notice.$id)}
+                                                            className='notice__reaction-btn ms-2'
+                                                            disabled={user_id === notice.user_id}
+                                                        >
+                                                            <BsExclamationTriangle
                                                                 size={19}
                                                             />
-                                                        ) : (
-                                                            <BsHandThumbsUp size={19} />
-                                                        )}
+                                                        </div>
                                                     </div>
-                                                    <div
-                                                        onClick={() => handleSpread(notice)}
-                                                        className='notice__reaction-btn'
-                                                        disabled={user_id === notice.user_id}
-                                                    >
-                                                        {spreadNotices && spreadNotices[notice.$id] ? (
-                                                            <RiMegaphoneFill
-                                                                className='notice__reaction-btn-fill'
-                                                                size={19}
-                                                            />
-                                                        ) : (
-                                                            <RiMegaphoneLine size={19} />
-                                                        )}
-                                                    </div>
-                                                    <div
-                                                        onClick={() => handleReactNotice(notice.$id, notice.username, notice.avatarUrl, notice.text)}
-                                                        // onClick={() => setShowReactModal(true)}
-                                                        className='notice__reaction-btn'
-                                                        disabled={user_id === notice.user_id}
-                                                    >
-                                                        <BsReply
-                                                            size={23}
-                                                        />
-                                                    </div>
-                                                    <div
-                                                        onClick={() => handleReportNotice(notice.$id)}
-                                                        className='notice__reaction-btn'
-                                                        disabled={user_id === notice.user_id}
-                                                    >
-                                                        <BsExclamationTriangle
-                                                            size={19}
-                                                        />
-                                                    </div>
-                                                </div>
-
-                                                <small style={{ marginRight: '12px' }} className='text-end mt-auto notice__create-date'>
+                                                }
+                                                <small className='text-end mt-auto notice__create-date'>
                                                     {formatDateToLocal(notice.timestamp)}
                                                 </small>
                                             </div>
                                         </div>
                                     }
                                 </Col>
-
                             </Row>
                         </Accordion.Header>
                         <Accordion.Body className='d-flex justify-content-around w-100'>
-                            {/* {notice.$id} */}
-                            {/* {reactions
-                                .filter(reaction => reaction.notice_id === notice.$id)
-                                .map(reaction => (
-                                    <div key={reaction.$id}>
-                                        <strong>{reaction.sender_id}:</strong> 
-                                        {reaction.content}
-                                    </div>
-                                ))
-                            } */}
-                            {
-                                reactions?.map((reaction) => {
-                                    return (reaction.notice_id === notice.$id &&
-                                        <div key={reaction.$id}>
-                                            {reaction.content}
-                                        </div>)
+                            <Row className='d-grid gap-3'>
+                                {
+                                    reactions?.map((reaction) => {
+                                        return (reaction.notice_id === notice.$id &&
+                                            <Col key={reaction.$id}>
+                                                {reaction.content}
+                                            </Col>)
+                                    }
+                                    )
                                 }
-                                )
-                            }
-                            {/* <Reactions /> */}
+                            </Row>
                         </Accordion.Body>
                     </Accordion.Item>
                 ))}

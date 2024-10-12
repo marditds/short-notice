@@ -161,8 +161,9 @@
     padding-block: 10px !important;
 }
 
+.user-profile__notices-accordion>div>h2>button::after,
 .user-profile__tags-accordion>div>h2>button::after {
-    display: none;
+    display: none !important;
 }
 
 .user-profile__tags-accordion>div>h2>button:hover {
@@ -280,6 +281,12 @@
     border-color: transparent !important;
     box-shadow: none !important;
 
+}
+
+.notice__reaction-btn.disabled>svg,
+.notice__reaction-btn:hover.disabled>svg {
+    cursor: not-allowed;
+    color: var(--main-text-muted) !important;
 }
 
 .notice__edit-btn>svg,
