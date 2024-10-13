@@ -15,6 +15,9 @@ const useNotices = (googleUserData) => {
     const [isRemovingNotice, setIsRemovingNotice] = useState(false);
     const [removingNoticeId, setRemovingNoticeId] = useState(null);
 
+    // const [offset, setOffset] = useState(0);  
+    // const [limit] = useState(10);  
+
     // Fetch User Notces
     useEffect(() => {
         const fetchUserNotices = async () => {
@@ -184,11 +187,21 @@ const useNotices = (googleUserData) => {
         }
     }
 
-    const getFeedNotices = async (selectedTags) => {
-        try {
-            // console.log('selected tags', selectedTags);
+    // const loadMoreNotices = async () => {
+    //     try {
+    //         const newNotices = await getFilteredNotices(selectedTags, limit, offset);
+    //         setUserNotices((prevNotices) => [...prevNotices, ...newNotices]);
+    //         setOffset((prevOffset) => prevOffset + limit); // Update offset
+    //     } catch (error) {
+    //         console.error('Error loading more notices:', error);
+    //     }
+    // };
 
-            const notices = await getFilteredNotices(selectedTags);
+    const getFeedNotices = async (selectedTags, limit, offset) => {
+        try {
+            console.log('selected tags', selectedTags);
+
+            const notices = await getFilteredNotices(selectedTags, limit, offset);
             return notices;
         } catch (error) {
             console.error('Error fetching filtered notices:', error);
@@ -434,6 +447,7 @@ const useNotices = (googleUserData) => {
         editNotice,
         removeNotice,
         getFeedNotices,
+        // loadMoreNotices,
         fetchUserNotices,
         getNoticesByUser,
         getNoticeByNoticeId,
@@ -451,7 +465,7 @@ const useNotices = (googleUserData) => {
         fetchReactionsForNotices,
         setNoticesReactions,
         setSpreadReactions,
-        setLikedReactions
+        setLikedReactions,
         // getAllReactions,
         // getAllReactionsBySenderId,
         // getAllReactionsByRecipientId,

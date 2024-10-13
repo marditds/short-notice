@@ -5,6 +5,7 @@ import useUserInfo from '../../../lib/hooks/useUserInfo';
 import { getAvatarUrl as avatarUtil } from '../../../lib/utils/avatarUtils';
 import { NoticeTags } from '../../../components/User/NoticeTags';
 import { Notices } from '../../../components/User/Notices';
+import { Button } from 'react-bootstrap';
 import { Loading } from '../../../components/Loading/Loading';
 
 const UserFeed = () => {
@@ -70,6 +71,9 @@ const UserFeed = () => {
     const [isLoadingNotices, setIsLoadingNotices] = useState(false);
     const [isLoadingUsers, setIsLoadingUsers] = useState(false);
 
+    const [limit] = useState(10); // Number of notices per page
+    const [offset, setOffset] = useState(0); // For pagination
+    const [hasMore, setHasMore] = useState(true); // To track if more notices are available
 
     // User's interets (tags)
     useEffect(() => {
@@ -120,17 +124,26 @@ const UserFeed = () => {
 
                 // console.log('Selected Tags:', selectedTags);
 
-                const filteredNotices = await getFeedNotices(selectedTags);
+                const filteredNotices = await getFeedNotices(selectedTags, limit, offset);
 
-                // console.log('Filtered notices:', filteredNotices);
+                console.log('Filtered notices length:', filteredNotices.length);
+                console.log('Filtered notices:', filteredNotices);
 
+                // Check if there are more notices to load
+                if (filteredNotices.length < limit) {
+                    setHasMore(false);
+                }
+                // Append new notices to the current feed
                 setFeedNotices(filteredNotices);
+
+                // setFeedNotices(filteredNotices);
+
 
                 await fetchUsersData(filteredNotices, setFeedNotices, avatarUtil);
 
-                console.log('likedNotices:', likedNotices);
+                // console.log('likedNotices:', likedNotices);
 
-                console.log('spreadNotices:', spreadNotices);
+                // console.log('spreadNotices:', spreadNotices);
 
 
             } catch (error) {
@@ -145,7 +158,7 @@ const UserFeed = () => {
 
         fetchFeedData();
 
-    }, [selectedTags])
+    }, [selectedTags, offset])
 
 
     const handleTagSelect = (categoryName, tagIndex, tag, isSelected) => {
@@ -234,6 +247,18 @@ const UserFeed = () => {
                 handleReport={handleReport}
                 handleReact={handleReact}
             />
+
+            {/* Load More Button */}
+            {/* {hasMore && ( */}
+            <div className="d-flex justify-content-center mt-4">
+                <Button onClick={() => setOffset(offset + limit)}>
+                    Load More
+                </Button>
+            </div>
+            {/* )} */}
+
+            {/* Show a loading spinner if fetching more notices */}
+            {isLoadingNotices && <Loading size={24} />}
 
         </div>
     )

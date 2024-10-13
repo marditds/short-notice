@@ -1,18 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { formatDateToLocal, calculateCountdown } from '../../lib/utils/dateUtils';
-import { Row, Col, Modal, Form, Accordion } from 'react-bootstrap';
+import { Row, Col, Modal, Form, Accordion, Button } from 'react-bootstrap';
 import { CgTrash } from 'react-icons/cg';
 import { AiFillEdit } from 'react-icons/ai';
 import { BsReply } from "react-icons/bs";
 import { RiMegaphoneLine, RiMegaphoneFill } from 'react-icons/ri';
 import { BsHandThumbsUp, BsHandThumbsUpFill, BsExclamationTriangle } from 'react-icons/bs';
-import { Button } from 'react-bootstrap';
 import defaultAvatar from '../../assets/default.png';
 import { Loading } from '../Loading/Loading';
-import Reactions from '../../pages/User/Reactions/Reactions';
-
-
 
 
 export const Notices = ({
@@ -42,7 +38,7 @@ export const Notices = ({
     const [noticeText, setNoticeText] = useState(null);
     const [reactionText, setReactionText] = useState('');
     const [isSendingReactionLoading, setIsSendingReactionLoading] = useState(false);
-
+    const [displayCount, setDisplayCount] = useState(10);
 
     const reportCategories = [
         { name: "Hate speech", key: "HATE" },
@@ -151,10 +147,14 @@ export const Notices = ({
         setReportReason(null);
     }
 
+    // const loadMoreNotices = () => {
+    //     setDisplayCount(prevCount => prevCount + 10);
+    // };
 
     return (
         <>
             <Accordion defaultActiveKey={['0']} className='user-profile__notices-accordion'>
+                {/* {notices.slice(0, displayCount).map((notice, idx) => ( */}
                 {notices.map((notice, idx) => (
                     <Accordion.Item eventKey={idx} key={notice.$id}>
                         <Accordion.Header className='d-flex justify-content-center'>
@@ -172,7 +172,7 @@ export const Notices = ({
                                         </span>  {countdowns[idx] || calculateCountdown(notice.expiresAt)}
                                     </small>
                                 </Col>
-                                <Col className=''>
+                                <Col className='col-md-3'>
 
                                     {location.pathname === '/user/profile' && eventKey === 'my-notices' ?
 
@@ -308,10 +308,17 @@ export const Notices = ({
                             </Row>
                         </Accordion.Body>
                     </Accordion.Item>
-                ))}
+                ))
+                }
             </Accordion>
 
-
+            {/* {displayCount < notices.length && (
+                <div className="d-flex justify-content-center mt-4">
+                    <Button onClick={loadMoreNotices}>
+                        Load More
+                    </Button>
+                </div>
+            )} */}
 
 
             {/* {notices.map((notice, idx) => (

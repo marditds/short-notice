@@ -323,7 +323,7 @@ export const getAllNotices = async () => {
     }
 }
 
-export const getFilteredNotices = async (selectedTags) => {
+export const getFilteredNotices = async (selectedTags, limit, offset) => {
     try {
         if (typeof selectedTags !== 'object' || selectedTags === null) {
             throw new Error('selectedTags must be an object');
@@ -340,7 +340,13 @@ export const getFilteredNotices = async (selectedTags) => {
             notices = await databases.listDocuments(
                 import.meta.env.VITE_DATABASE,
                 import.meta.env.VITE_NOTICES_COLLECTION,
-                [queryList[0]]
+                [
+                    queryList[0],
+                    Query.equal('user_id', user_id),
+                    Query.limit(limit),
+                    Query.offset(offset), // This is the key for pagination
+                    Query.orderDesc('timestamp'),
+                ]
             );
         } else {
             notices = await databases.listDocuments(
@@ -348,6 +354,8 @@ export const getFilteredNotices = async (selectedTags) => {
                 import.meta.env.VITE_NOTICES_COLLECTION,
                 [
                     Query.or(queryList),
+                    Query.limit(limit),
+                    Query.offset(offset),
                     Query.orderDesc('timestamp')
                 ]
             );
