@@ -361,6 +361,8 @@ export const getFilteredNotices = async (selectedTags, limit, offset) => {
             );
         }
 
+        // console.log('notices.documents', notices.documents);
+
         return notices.documents;
 
 

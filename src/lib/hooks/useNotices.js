@@ -187,21 +187,13 @@ const useNotices = (googleUserData) => {
         }
     }
 
-    // const loadMoreNotices = async () => {
-    //     try {
-    //         const newNotices = await getFilteredNotices(selectedTags, limit, offset);
-    //         setUserNotices((prevNotices) => [...prevNotices, ...newNotices]);
-    //         setOffset((prevOffset) => prevOffset + limit); // Update offset
-    //     } catch (error) {
-    //         console.error('Error loading more notices:', error);
-    //     }
-    // };
-
     const getFeedNotices = async (selectedTags, limit, offset) => {
         try {
-            console.log('selected tags', selectedTags);
+            // console.log('selected tags', selectedTags);
 
             const notices = await getFilteredNotices(selectedTags, limit, offset);
+            console.log('notices - getFeedNotices', notices);
+
             return notices;
         } catch (error) {
             console.error('Error fetching filtered notices:', error);
@@ -409,12 +401,12 @@ const useNotices = (googleUserData) => {
         if (usrNtcs.length > 0) {
             const allReactions = [];
 
-            console.log('userNotices', usrNtcs);
+            // console.log('userNotices', usrNtcs);
 
             for (const notice of usrNtcs) {
                 const res = await fetchAllReactionsByNoticeId(notice.$id);
 
-                console.log('res', res);
+                // console.log('res', res);
 
                 const noticeReactions = res.documents || [];
 
@@ -422,7 +414,7 @@ const useNotices = (googleUserData) => {
                     allReactions.push(...noticeReactions);  // Use spread only on iterable arrays
                 }
             }
-            console.log('allReactions', allReactions);
+            // console.log('allReactions', allReactions);
 
             setReactionsState(allReactions);  // Now setReactions will always get an  
         }

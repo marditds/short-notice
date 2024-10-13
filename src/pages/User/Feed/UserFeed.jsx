@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useUserContext } from '../../../lib/context/UserContext';
 import useNotices from '../../../lib/hooks/useNotices';
 import useUserInfo from '../../../lib/hooks/useUserInfo';
@@ -72,8 +72,10 @@ const UserFeed = () => {
     const [isLoadingUsers, setIsLoadingUsers] = useState(false);
 
     const [limit] = useState(10); // Number of notices per page
-    const [offset, setOffset] = useState(0); // For pagination
-    const [hasMore, setHasMore] = useState(true); // To track if more notices are available
+    const [offset, setOffset] = useState(0); // For pagination 
+    const [hasMoreNotices, setHasMoreNotices] = useState(true);
+
+    const [isLoadingMore, setIsLoadingMore] = useState(false);
 
     // User's interets (tags)
     useEffect(() => {
@@ -112,39 +114,46 @@ const UserFeed = () => {
     }, [user_id, tagCategories]);
 
 
-    // User's interests
+    // Fetch User's feed  
     useEffect(() => {
-
         const fetchFeedData = async () => {
 
             setIsLoadingNotices(true);
             setIsLoadingUsers(true);
-
+            setIsLoadingMore(true);
             try {
 
                 // console.log('Selected Tags:', selectedTags);
 
-                const filteredNotices = await getFeedNotices(selectedTags, limit, offset);
+                const res = await getFeedNotices(selectedTags, limit, offset);
+
+                console.log('selectedTags', selectedTags);
+                console.log('limit - 1', limit);
+                console.log('offset - 1', offset);
+
+                console.log('res.documents', res);
+
+                const filteredNotices = res || [];
+
+                // Append new notices to the current feed
+                // setFeedNotices(prevNotices => [...prevNotices, ...filteredNotices]);
 
                 console.log('Filtered notices length:', filteredNotices.length);
                 console.log('Filtered notices:', filteredNotices);
 
-                // Check if there are more notices to load
-                if (filteredNotices.length < limit) {
-                    setHasMore(false);
-                }
-                // Append new notices to the current feed
-                setFeedNotices(filteredNotices);
-
-                // setFeedNotices(filteredNotices);
-
-
                 await fetchUsersData(filteredNotices, setFeedNotices, avatarUtil);
 
+                if (filteredNotices.length < limit) {
+                    setHasMoreNotices(false);
+                } else {
+                    setHasMoreNotices(true);
+                }
                 // console.log('likedNotices:', likedNotices);
 
                 // console.log('spreadNotices:', spreadNotices);
 
+                console.log('limit - 2', limit);
+                console.log('offset - 2', offset);
 
             } catch (error) {
                 console.error('Error fetching feed notices:', error);
@@ -152,13 +161,16 @@ const UserFeed = () => {
                 // setIsLoading(false);
                 setIsLoadingNotices(false);
                 setIsLoadingUsers(false);
+                setIsLoadingMore(false);
             }
 
         };
-
         fetchFeedData();
+    }, [selectedTags, offset]);
 
-    }, [selectedTags, offset])
+    useEffect(() => {
+        console.log('feedNotices', feedNotices);
+    }, [feedNotices])
 
 
     const handleTagSelect = (categoryName, tagIndex, tag, isSelected) => {
@@ -220,12 +232,14 @@ const UserFeed = () => {
 
 
     // Render loading state while data is being fetched
-    if (isLoadingNotices || isLoadingUsers) {
+    if ((isLoadingNotices || isLoadingUsers) && feedNotices.length === 0) {
         return <div><Loading size={24} />Loading feed...</div>;
     }
 
     return (
         <div>
+
+
 
             <h2>Select a tag to see related notices:</h2>
 
@@ -249,16 +263,28 @@ const UserFeed = () => {
             />
 
             {/* Load More Button */}
-            {/* {hasMore && ( */}
             <div className="d-flex justify-content-center mt-4">
-                <Button onClick={() => setOffset(offset + limit)}>
-                    Load More
-                </Button>
+
+                <div className="d-flex justify-content-center mt-4">
+                    {hasMoreNotices ?
+                        <Button
+                            onClick={() => setOffset(offset + limit)}
+                            disabled={isLoadingMore || !hasMoreNotices} // Disable if already loading or no more notices
+                        >
+                            {isLoadingMore ?
+                                <><Loading size={24} /> Loading...</>
+                                : 'Load More'}
+                        </Button>
+                        : 'No more notices'}
+                </div>
+
+
             </div>
-            {/* )} */}
+
+
 
             {/* Show a loading spinner if fetching more notices */}
-            {isLoadingNotices && <Loading size={24} />}
+            {/* {isLoadingMore && <>Loading more notices <Loading size={24} /> </>} */}
 
         </div>
     )

@@ -93,7 +93,7 @@ const useUserInfo = (data) => {
                 })
             );
             if (JSON.stringify(updatedNotices) !== JSON.stringify(notices)) {
-                setNotices(updatedNotices);
+                setNotices(prevNotices => [...prevNotices, ...updatedNotices]);
             }
         } catch (error) {
             console.error('Error getting users data:', error);
