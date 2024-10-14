@@ -76,13 +76,19 @@ const UserProfile = () => {
 
     // Fetch users' data for spreads
     useEffect(() => {
-        fetchUsersData(spreadNoticesData, setSpreadNoticesData, avatarUtil);
-    }, [spreadNoticesData])
+        const fetchSpreadNotices = async () => {
+
+            const allSpreadNotices = await getAllSpreadNotices(user_id);
+
+            fetchUsersData(allSpreadNotices, setSpreadNoticesData, avatarUtil);
+        };
+        fetchSpreadNotices();
+    }, [user_id])
 
     // Fetch users' data for likes 
-    useEffect(() => {
-        fetchUsersData(likedNoticesData, setLikedNoticesData, avatarUtil);
-    }, [likedNoticesData])
+    // useEffect(() => {
+    //     fetchUsersData(likedNoticesData, setLikedNoticesData, avatarUtil);
+    // }, [likedNoticesData])
 
     // Fetch liked notices
     useEffect(() => {
@@ -95,15 +101,14 @@ const UserProfile = () => {
     }, [user_id]);
 
     // Fetch spread notices 
-    useEffect(() => {
-        const fetchSpreadNotices = async () => {
-            const allSpreadNotices = await getAllSpreadNotices(user_id);
+    // useEffect(() => {
+    //     const fetchSpreadNotices = async () => {
+    //         const allSpreadNotices = await getAllSpreadNotices(user_id);
 
-            setSpreadNoticesData(allSpreadNotices);
-        };
-        fetchSpreadNotices();
+    //     };
+    //     fetchSpreadNotices();
 
-    }, [user_id])
+    // }, [user_id])
 
     // Reactions For Notices tab
     useEffect(() => {
@@ -116,9 +121,9 @@ const UserProfile = () => {
     }, [spreadNoticesData]);
 
     // Reactions For Likes tab
-    useEffect(() => {
-        fetchReactionsForNotices(likedNoticesData, setLikedReactions);
-    }, [likedNoticesData]);
+    // useEffect(() => {
+    //     fetchReactionsForNotices(likedNoticesData, setLikedReactions);
+    // }, [likedNoticesData]);
 
     // Fetch accounts followed by user
     useEffect(() => {
@@ -224,6 +229,7 @@ const UserProfile = () => {
                 followersAccounts={followersAccounts}
             />
 
+
             <ComposeNotice
                 duration={duration}
                 isAddingNotice={isAddingNotice}
@@ -252,7 +258,7 @@ const UserProfile = () => {
                         reactions={noticesReactions}
                     />
                 </Tab>
-                {/* SPREADS */}
+
                 <Tab
                     eventKey='my-spreads'
                     title="Spreads"
@@ -270,12 +276,12 @@ const UserProfile = () => {
                     />
                 </Tab>
 
-                {/* LIKES */}
+
                 <Tab
                     eventKey='my-likes'
                     title="Likes"
                 >
-                    <Notices
+                    {/* <Notices
                         notices={likedNoticesData}
                         username={username}
                         likedNotices={likedNotices}
@@ -285,7 +291,7 @@ const UserProfile = () => {
                         handleReport={handleReport}
                         handleReact={handleReact}
                         reactions={likedReactions}
-                    />
+                    /> */}
                 </Tab>
             </Tabs>
 

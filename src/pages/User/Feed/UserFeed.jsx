@@ -71,8 +71,8 @@ const UserFeed = () => {
     const [isLoadingNotices, setIsLoadingNotices] = useState(false);
     const [isLoadingUsers, setIsLoadingUsers] = useState(false);
 
-    const [limit] = useState(10); // Number of notices per page
-    const [offset, setOffset] = useState(0); // For pagination 
+    const [limit] = useState(10);
+    const [offset, setOffset] = useState(0);
     const [hasMoreNotices, setHasMoreNotices] = useState(true);
 
     const [isLoadingMore, setIsLoadingMore] = useState(false);
@@ -122,24 +122,9 @@ const UserFeed = () => {
             setIsLoadingUsers(true);
             setIsLoadingMore(true);
             try {
-
-                // console.log('Selected Tags:', selectedTags);
-
                 const res = await getFeedNotices(selectedTags, limit, offset);
 
-                console.log('selectedTags', selectedTags);
-                console.log('limit - 1', limit);
-                console.log('offset - 1', offset);
-
-                console.log('res.documents', res);
-
                 const filteredNotices = res || [];
-
-                // Append new notices to the current feed
-                // setFeedNotices(prevNotices => [...prevNotices, ...filteredNotices]);
-
-                console.log('Filtered notices length:', filteredNotices.length);
-                console.log('Filtered notices:', filteredNotices);
 
                 await fetchUsersData(filteredNotices, setFeedNotices, avatarUtil);
 
@@ -148,17 +133,10 @@ const UserFeed = () => {
                 } else {
                     setHasMoreNotices(true);
                 }
-                // console.log('likedNotices:', likedNotices);
-
-                // console.log('spreadNotices:', spreadNotices);
-
-                console.log('limit - 2', limit);
-                console.log('offset - 2', offset);
 
             } catch (error) {
                 console.error('Error fetching feed notices:', error);
             } finally {
-                // setIsLoading(false);
                 setIsLoadingNotices(false);
                 setIsLoadingUsers(false);
                 setIsLoadingMore(false);
@@ -167,10 +145,6 @@ const UserFeed = () => {
         };
         fetchFeedData();
     }, [selectedTags, offset]);
-
-    useEffect(() => {
-        console.log('feedNotices', feedNotices);
-    }, [feedNotices])
 
 
     const handleTagSelect = (categoryName, tagIndex, tag, isSelected) => {
