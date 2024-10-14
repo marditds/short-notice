@@ -74,7 +74,7 @@ const UserProfile = () => {
         fetchUserNotices(user_id, setNotices);
     }, [user_id])
 
-    // Fetch users' data for spreads
+    // Fetch spreads and users' data for spreads tab
     useEffect(() => {
         const fetchSpreadNotices = async () => {
 
@@ -85,30 +85,16 @@ const UserProfile = () => {
         fetchSpreadNotices();
     }, [user_id])
 
-    // Fetch users' data for likes 
-    // useEffect(() => {
-    //     fetchUsersData(likedNoticesData, setLikedNoticesData, avatarUtil);
-    // }, [likedNoticesData])
-
-    // Fetch liked notices
+    // Fetch likes and users' data for likes tab 
     useEffect(() => {
         const fetchLikedNotices = async () => {
+
             const allLikedNotices = await getAllLikedNotices(user_id);
 
-            setLikedNoticesData(allLikedNotices);
+            fetchUsersData(allLikedNotices, setLikedNoticesData, avatarUtil);
         };
         fetchLikedNotices();
-    }, [user_id]);
-
-    // Fetch spread notices 
-    // useEffect(() => {
-    //     const fetchSpreadNotices = async () => {
-    //         const allSpreadNotices = await getAllSpreadNotices(user_id);
-
-    //     };
-    //     fetchSpreadNotices();
-
-    // }, [user_id])
+    }, [user_id])
 
     // Reactions For Notices tab
     useEffect(() => {
@@ -121,9 +107,9 @@ const UserProfile = () => {
     }, [spreadNoticesData]);
 
     // Reactions For Likes tab
-    // useEffect(() => {
-    //     fetchReactionsForNotices(likedNoticesData, setLikedReactions);
-    // }, [likedNoticesData]);
+    useEffect(() => {
+        fetchReactionsForNotices(likedNoticesData, setLikedReactions);
+    }, [likedNoticesData]);
 
     // Fetch accounts followed by user
     useEffect(() => {
@@ -281,7 +267,7 @@ const UserProfile = () => {
                     eventKey='my-likes'
                     title="Likes"
                 >
-                    {/* <Notices
+                    <Notices
                         notices={likedNoticesData}
                         username={username}
                         likedNotices={likedNotices}
@@ -291,7 +277,7 @@ const UserProfile = () => {
                         handleReport={handleReport}
                         handleReact={handleReact}
                         reactions={likedReactions}
-                    /> */}
+                    />
                 </Tab>
             </Tabs>
 
