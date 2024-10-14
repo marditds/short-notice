@@ -165,8 +165,9 @@ const useNotices = (googleUserData) => {
         setRemovingNoticeId(noticeId);
 
         try {
-            await deleteNotice(noticeId);
+            const removedNotice = await deleteNotice(noticeId);
             setUserNotices((prevNotices) => prevNotices.filter((notice) => notice.$id !== noticeId));
+            return removedNotice;
         } catch (error) {
             if (error.code === 404) {
                 console.log('Notice already deleted or does not exist:', noticeId);

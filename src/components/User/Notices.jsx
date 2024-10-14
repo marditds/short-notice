@@ -153,7 +153,10 @@ export const Notices = ({
 
     return (
         <>
-            <Accordion defaultActiveKey={['0']} className='user-profile__notices-accordion'>
+            <Accordion defaultActiveKey={['0']}
+                className='user-profile__notices-accordion'
+                key={notices.length}
+            >
                 {/* {notices.slice(0, displayCount).map((notice, idx) => ( */}
                 {notices.map((notice, idx) => (
                     <Accordion.Item eventKey={idx} key={notice?.$id}>

@@ -97,6 +97,7 @@ const UserProfile = () => {
         fetchNotices();
     }, [user_id, offset])
 
+    // Display notice in UI immediately after it is added
     const handleNoticeAdded = (newNotice) => {
         setNotices(prevNotices => [newNotice, ...prevNotices]);
     };
@@ -171,6 +172,7 @@ const UserProfile = () => {
     const handleDelete = async () => {
         if (removingNoticeId) {
             await removeNotice(removingNoticeId);
+            setNotices(prevNotices => prevNotices.filter(notice => notice.$id !== removingNoticeId));
             setRemovingNoticeId(null);
             setShowDeleteModal(false);
         }
