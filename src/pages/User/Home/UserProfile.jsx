@@ -80,7 +80,7 @@ const UserProfile = () => {
 
             const allSpreadNotices = await getAllSpreadNotices(user_id);
 
-            fetchUsersData(allSpreadNotices, setSpreadNoticesData, avatarUtil);
+            await fetchUsersData(allSpreadNotices, setSpreadNoticesData, avatarUtil);
         };
         fetchSpreadNotices();
     }, [user_id])
@@ -91,7 +91,7 @@ const UserProfile = () => {
 
             const allLikedNotices = await getAllLikedNotices(user_id);
 
-            fetchUsersData(allLikedNotices, setLikedNoticesData, avatarUtil);
+            await fetchUsersData(allLikedNotices, setLikedNoticesData, avatarUtil);
         };
         fetchLikedNotices();
     }, [user_id])

@@ -99,35 +99,25 @@ const OtherUserProfile = () => {
         fetchUserNotices(currUserId, setNotices);
     }, [currUserId])
 
-    // Fetch users' data for spreads 
-    useEffect(() => {
-        fetchUsersData(spreadNoticesData, setSpreadNoticesData, avatarUtil);
-    }, [spreadNoticesData])
-
-    // Fetch users' data for likes  
-    useEffect(() => {
-        fetchUsersData(likedNoticesData, setLikedNoticesData, avatarUtil);
-    }, [likedNoticesData])
-
-    // Fetch other user likes
-    useEffect(() => {
-        const fetchLikedNotices = async () => {
-            const allLikedNotices = await getAllLikedNotices(currUserId);
-
-            setLikedNoticesData(allLikedNotices);
-        };
-        fetchLikedNotices();
-    }, [currUserId]);
-
-    //Fetch other user spreads
+    // Fetch spreads and users' data for spreads tab 
     useEffect(() => {
         const fetchSpreadNotices = async () => {
             const allSpreadNotices = await getAllSpreadNotices(currUserId);
 
-            setSpreadNoticesData(allSpreadNotices);
+            fetchUsersData(allSpreadNotices, setSpreadNoticesData, avatarUtil);
         };
         fetchSpreadNotices();
-    }, [currUserId]);
+    }, [currUserId])
+
+    // Fetch likes and users' data for likes tab  
+    useEffect(() => {
+        const fetchLikedNotices = async () => {
+            const allLikedNotices = await getAllLikedNotices(currUserId);
+
+            await fetchUsersData(allLikedNotices, setLikedNoticesData, avatarUtil);
+        };
+        fetchLikedNotices();
+    }, [currUserId])
 
     // Reactions For Notices tab
     useEffect(() => {
