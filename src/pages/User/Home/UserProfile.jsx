@@ -97,16 +97,9 @@ const UserProfile = () => {
         fetchNotices();
     }, [user_id, offset])
 
-    // useEffect(() => {
-
-    //     console.log('notices.length', notices.length);
-
-    //     if (notices.length < limit) {
-    //         setHasMoreNotices(false);
-    //     } else {
-    //         setHasMoreNotices(true);
-    //     }
-    // }, [notices])
+    const handleNoticeAdded = (newNotice) => {
+        setNotices(prevNotices => [newNotice, ...prevNotices]);
+    };
 
     // Fetch spreads and users' data for spreads tab
     useEffect(() => {
@@ -257,6 +250,7 @@ const UserProfile = () => {
                 setNoticeText={setNoticeText}
                 setDuration={setDuration}
                 addNotice={addNotice}
+                onNoticeAdded={handleNoticeAdded}
             />
 
             <Tabs

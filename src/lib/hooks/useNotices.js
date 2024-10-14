@@ -137,6 +137,8 @@ const useNotices = (googleUserData) => {
             try {
                 const createdNotice = await createNotice(newNotice);
                 setUserNotices((prevNotices) => [createdNotice, ...prevNotices]);
+                return createdNotice;
+
             } catch (error) {
                 console.error('Error adding notice:', error);
             } finally {

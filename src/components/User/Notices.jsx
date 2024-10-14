@@ -156,20 +156,20 @@ export const Notices = ({
             <Accordion defaultActiveKey={['0']} className='user-profile__notices-accordion'>
                 {/* {notices.slice(0, displayCount).map((notice, idx) => ( */}
                 {notices.map((notice, idx) => (
-                    <Accordion.Item eventKey={idx} key={notice.$id}>
+                    <Accordion.Item eventKey={idx} key={notice?.$id}>
                         <Accordion.Header className='d-flex justify-content-center'>
                             {/* <FaAngleDown size={20} className='me-3' /> */}
                             <Row className='w-100 m-auto'>
                                 <Col className='col-md-9 d-flex justify-content-between flex-column'
                                 >
-                                    <p className='mb-0'>{notice.text}</p>
+                                    <p className='mb-0'>{notice?.text}</p>
 
                                     <small className='me-auto'>
                                         <span
                                             style={{ color: 'gray' }}
                                         >
                                             Expires In:
-                                        </span>  {countdowns[idx] || calculateCountdown(notice.expiresAt)}
+                                        </span>  {countdowns[idx] || calculateCountdown(notice?.expiresAt)}
                                     </small>
                                 </Col>
                                 <Col className='col-md-3'>
@@ -196,7 +196,7 @@ export const Notices = ({
                                             <small
                                                 className='text-end notice__create-date'
                                             >
-                                                {formatDateToLocal(notice.timestamp)}
+                                                {formatDateToLocal(notice?.timestamp)}
                                             </small>
                                         </div>
                                         :
@@ -214,7 +214,7 @@ export const Notices = ({
                                                         >
                                                             <Link to={`../${notice.username}`}
                                                                 className=' text-decoration-none'>
-                                                                <strong>{notice.username}</strong>
+                                                                <strong>{notice?.username}</strong>
                                                             </Link>
                                                         </p>
 
