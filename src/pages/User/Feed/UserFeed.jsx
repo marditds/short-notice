@@ -74,7 +74,6 @@ const UserFeed = () => {
     const [limit] = useState(10);
     const [offset, setOffset] = useState(0);
     const [hasMoreNotices, setHasMoreNotices] = useState(true);
-
     const [isLoadingMore, setIsLoadingMore] = useState(false);
 
     // User's interets (tags)
@@ -127,6 +126,7 @@ const UserFeed = () => {
                 const filteredNotices = res || [];
 
                 await fetchUsersData(filteredNotices, setFeedNotices, avatarUtil);
+
 
                 if (filteredNotices.length < limit) {
                     setHasMoreNotices(false);

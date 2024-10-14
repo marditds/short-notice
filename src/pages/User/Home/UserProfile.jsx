@@ -68,11 +68,45 @@ const UserProfile = () => {
 
     const { avatarUrl } = useUserAvatar(user_id);
 
+    const [limit] = useState(10);
+    const [offset, setOffset] = useState(0);
+    const [hasMoreNotices, setHasMoreNotices] = useState(true);
+    const [isLoadingMore, setIsLoadingMore] = useState(false);
+
 
     // Fetch notices for user
     useEffect(() => {
-        fetchUserNotices(user_id, setNotices);
-    }, [user_id])
+        const fetchNotices = async () => {
+            // fetchUserNotices(user_id, setNotices);
+            setIsLoadingMore(true);
+            try {
+                const usrNtcs = await fetchUserNotices(user_id, setNotices, limit, offset);
+
+                if (usrNtcs.length < limit) {
+                    setHasMoreNotices(false);
+                } else {
+                    setHasMoreNotices(true);
+                }
+
+            } catch (error) {
+                console.error('Error fetching notices - ', error);
+            } finally {
+                setIsLoadingMore(false);
+            }
+        };
+        fetchNotices();
+    }, [user_id, offset])
+
+    // useEffect(() => {
+
+    //     console.log('notices.length', notices.length);
+
+    //     if (notices.length < limit) {
+    //         setHasMoreNotices(false);
+    //     } else {
+    //         setHasMoreNotices(true);
+    //     }
+    // }, [notices])
 
     // Fetch spreads and users' data for spreads tab
     useEffect(() => {
@@ -243,6 +277,18 @@ const UserProfile = () => {
                         eventKey='my-notices'
                         reactions={noticesReactions}
                     />
+                    <div className="d-flex justify-content-center mt-4">
+                        {hasMoreNotices ?
+                            <Button
+                                onClick={() => setOffset(offset + limit)}
+                                disabled={isLoadingMore || !hasMoreNotices}
+                            >
+                                {isLoadingMore ?
+                                    <><Loading size={24} /> Loading...</>
+                                    : 'Load More'}
+                            </Button>
+                            : 'No more notices'}
+                    </div>
                 </Tab>
 
                 <Tab

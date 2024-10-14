@@ -245,6 +245,7 @@ const OtherUserProfile = () => {
                         handleReact={handleReact}
                         eventKey='notices'
                     />
+                    <Button>HAKOPOS</Button>
                 </Tab>
 
                 {/* SPREADS TAB */}

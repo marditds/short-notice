@@ -258,13 +258,15 @@ export const createNotice = async ({ user_id, text, timestamp, expiresAt, scienc
     }
 };
 
-export const getUserNotices = async (user_id) => {
+export const getUserNotices = async (user_id, limit, offset) => {
     try {
         const response = await databases.listDocuments(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_NOTICES_COLLECTION,
             [
                 Query.equal('user_id', user_id),
+                Query.limit(limit),
+                Query.offset(offset),
                 Query.orderDesc('timestamp'),
             ]
         );
@@ -344,7 +346,7 @@ export const getFilteredNotices = async (selectedTags, limit, offset) => {
                     queryList[0],
                     Query.equal('user_id', user_id),
                     Query.limit(limit),
-                    Query.offset(offset), // This is the key for pagination
+                    Query.offset(offset),
                     Query.orderDesc('timestamp'),
                 ]
             );

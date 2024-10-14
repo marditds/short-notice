@@ -200,9 +200,9 @@ const useNotices = (googleUserData) => {
         }
     };
 
-    const getNoticesByUser = useCallback(async (user_id) => {
+    const getNoticesByUser = useCallback(async (user_id, limit, offset) => {
         try {
-            const response = await getUserNotices(user_id);
+            const response = await getUserNotices(user_id, limit, offset);
             return response;
         } catch (error) {
             console.error('Error getNoticesByUser - useNotices');
@@ -210,13 +210,19 @@ const useNotices = (googleUserData) => {
     }, [googleUserData]);
 
     // In UserProfile.jsx and OtherUserProfile.jsx
-    const fetchUserNotices = async (id, setNotices) => {
+    const fetchUserNotices = async (id, setNotices, limit, offset) => {
         if (!id) return;
 
         try {
-            const usrNotices = await getNoticesByUser(id);
+            const usrNotices = await getNoticesByUser(id, limit, offset);
 
-            setNotices(usrNotices);
+            // setNotices(usrNotices);
+            setNotices(prevNotices => {
+                // If offset is 0, replace all notices, otherwise append new notices
+                return offset === 0 ? usrNotices : [...prevNotices, ...usrNotices];
+            });
+
+
             return usrNotices;
 
         } catch (error) {
@@ -439,7 +445,6 @@ const useNotices = (googleUserData) => {
         editNotice,
         removeNotice,
         getFeedNotices,
-        // loadMoreNotices,
         fetchUserNotices,
         getNoticesByUser,
         getNoticeByNoticeId,
@@ -457,11 +462,7 @@ const useNotices = (googleUserData) => {
         fetchReactionsForNotices,
         setNoticesReactions,
         setSpreadReactions,
-        setLikedReactions,
-        // getAllReactions,
-        // getAllReactionsBySenderId,
-        // getAllReactionsByRecipientId,
-        // getReactionsForNotice
+        setLikedReactions
     };
 };
 
