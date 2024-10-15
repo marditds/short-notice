@@ -155,11 +155,11 @@ export const Notices = ({
         <>
             <Accordion defaultActiveKey={['0']}
                 className='user-profile__notices-accordion'
-                key={notices.length}
+
             >
                 {/* {notices.slice(0, displayCount).map((notice, idx) => ( */}
                 {notices.map((notice, idx) => (
-                    <Accordion.Item eventKey={idx} key={notice?.$id}>
+                    <Accordion.Item eventKey={notice?.$id} key={notice?.$id}>
                         <Accordion.Header className='d-flex justify-content-center'>
                             {/* <FaAngleDown size={20} className='me-3' /> */}
                             <Row className='w-100 m-auto'>

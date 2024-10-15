@@ -155,14 +155,40 @@ const UserProfile = () => {
         setShowEditModal(true);
     };
 
-    const handleSaveEdit = () => {
+    const handleSaveEdit = async () => {
         if (editingNoticeId && noticeText.trim()) {
-            editNotice(editingNoticeId, noticeText);
-            setEditingNoticeId(null);
-            setNoticeText('');
-            setShowEditModal(false);
+            const noticeToUpdate = notices.find(notice => notice.$id === editingNoticeId);
+            let updatedNotice = null;
+            if (noticeToUpdate) {
+                updatedNotice = {
+                    ...noticeToUpdate,
+                    text: noticeText
+                };
+
+
+                const updtdntc = await editNotice(editingNoticeId, updatedNotice.text);
+
+                console.log('editingNoticeId', editingNoticeId);
+
+                console.log('updtdntc.text', updtdntc.text);
+
+                setNotices(prevNotices =>
+                    prevNotices.map((notice) =>
+                        notice.$id === editingNoticeId ?
+                            { ...notice, text: updtdntc.text } : notice)
+                );
+
+                setEditingNoticeId(null);
+                setNoticeText('');
+                setShowEditModal(false);
+            }
+
         }
     };
+
+    useEffect(() => {
+        console.log('notices', notices);
+    }, [notices])
 
     const handleDeleteNotice = (noticeId) => {
         setRemovingNoticeId(noticeId);

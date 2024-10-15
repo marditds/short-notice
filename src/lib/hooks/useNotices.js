@@ -148,12 +148,16 @@ const useNotices = (googleUserData) => {
     };
 
     const editNotice = async (noticeId, newText) => {
-        await updateNotice(noticeId, newText);
+
+        const updtNtc = await updateNotice(noticeId, newText);
         setUserNotices((prevNotices) =>
             prevNotices.map((notice) =>
                 notice.$id === noticeId ? { ...notice, text: newText } : notice
             )
         );
+        console.log('updtNtc', updtNtc);
+
+        return updtNtc;
     };
 
     const removeNotice = async (noticeId) => {
@@ -413,7 +417,7 @@ const useNotices = (googleUserData) => {
             // console.log('userNotices', usrNtcs);
 
             for (const notice of usrNtcs) {
-                const res = await fetchAllReactionsByNoticeId(notice.$id);
+                const res = await fetchAllReactionsByNoticeId(notice?.$id);
 
                 // console.log('res', res);
 

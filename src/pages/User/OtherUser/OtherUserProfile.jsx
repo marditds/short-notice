@@ -64,9 +64,12 @@ const OtherUserProfile = () => {
     const [spreadNoticesData, setSpreadNoticesData] = useState([]);
     const [likedNoticesData, setLikedNoticesData] = useState([]);
 
-
-
     const { avatarUrl } = useUserAvatar(currUserId);
+
+    const [limit] = useState(10);
+    const [offset, setOffset] = useState(0);
+    const [hasMoreNotices, setHasMoreNotices] = useState(true);
+    const [isLoadingMore, setIsLoadingMore] = useState(false);
 
     // Get Other User
     useEffect(() => {
@@ -96,15 +99,31 @@ const OtherUserProfile = () => {
 
     // Fetch notices for other user
     useEffect(() => {
-        fetchUserNotices(currUserId, setNotices);
-    }, [currUserId])
+        const fetchNotices = async () => {
+            setIsLoadingMore(true);
+            try {
+                const usrNtcs = await fetchUserNotices(currUserId, setNotices, limit, offset);
+
+                if (usrNtcs.length < limit) {
+                    setHasMoreNotices(false);
+                } else {
+                    setHasMoreNotices(true);
+                }
+            } catch (error) {
+                console.error('Error fetching notices - ', error);
+            } finally {
+                setIsLoadingMore(false);
+            }
+        };
+        fetchNotices();
+    }, [currUserId, offset])
 
     // Fetch spreads and users' data for spreads tab 
     useEffect(() => {
         const fetchSpreadNotices = async () => {
             const allSpreadNotices = await getAllSpreadNotices(currUserId);
 
-            fetchUsersData(allSpreadNotices, setSpreadNoticesData, avatarUtil);
+            await fetchUsersData(allSpreadNotices, setSpreadNoticesData, avatarUtil);
         };
         fetchSpreadNotices();
     }, [currUserId])
@@ -112,6 +131,7 @@ const OtherUserProfile = () => {
     // Fetch likes and users' data for likes tab  
     useEffect(() => {
         const fetchLikedNotices = async () => {
+
             const allLikedNotices = await getAllLikedNotices(currUserId);
 
             await fetchUsersData(allLikedNotices, setLikedNoticesData, avatarUtil);
@@ -234,18 +254,33 @@ const OtherUserProfile = () => {
                     eventKey='notices'
                     title="Notices"
                 >
-                    <Notices
-                        notices={notices}
-                        likedNotices={likedNotices}
-                        spreadNotices={spreadNotices}
-                        reactions={noticesReactions}
-                        handleLike={handleLike}
-                        handleSpread={handleSpread}
-                        handleReport={handleReport}
-                        handleReact={handleReact}
-                        eventKey='notices'
-                    />
-                    <Button>HAKOPOS</Button>
+                    {notices.length !== 0 ?
+                        <>
+                            <Notices
+                                notices={notices}
+                                likedNotices={likedNotices}
+                                spreadNotices={spreadNotices}
+                                reactions={noticesReactions}
+                                handleLike={handleLike}
+                                handleSpread={handleSpread}
+                                handleReport={handleReport}
+                                handleReact={handleReact}
+                                eventKey='notices'
+                            />
+                            <div className="d-flex justify-content-center mt-4">
+                                {hasMoreNotices ?
+                                    <Button
+                                        onClick={() => setOffset(offset + limit)}
+                                        disabled={isLoadingMore || !hasMoreNotices}
+                                    >
+                                        {isLoadingMore ?
+                                            <><Loading size={24} /> Loading...</>
+                                            : 'Load More'}
+                                    </Button>
+                                    : 'No more notices'}
+                            </div>
+                        </>
+                        : 'No notices yet'}
                 </Tab>
 
                 {/* SPREADS TAB */}
@@ -253,17 +288,19 @@ const OtherUserProfile = () => {
                     eventKey='spreads'
                     title="Spreads"
                 >
-                    <Notices
-                        notices={spreadNoticesData}
-                        user_id={user_id}
-                        likedNotices={likedNotices}
-                        spreadNotices={spreadNotices}
-                        reactions={spreadReactions}
-                        handleLike={handleLike}
-                        handleSpread={handleSpread}
-                        handleReport={handleReport}
-                        handleReact={handleReact}
-                    />
+                    {spreadNoticesData.length !== 0 ?
+                        <Notices
+                            notices={spreadNoticesData}
+                            user_id={user_id}
+                            likedNotices={likedNotices}
+                            spreadNotices={spreadNotices}
+                            reactions={spreadReactions}
+                            handleLike={handleLike}
+                            handleSpread={handleSpread}
+                            handleReport={handleReport}
+                            handleReact={handleReact}
+                        />
+                        : 'No spreadas yet'}
                 </Tab>
 
                 {/* LIKES TAB */}

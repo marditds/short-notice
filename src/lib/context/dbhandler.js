@@ -384,6 +384,7 @@ export const updateNotice = async (noticeId, newText) => {
             }
         );
         console.log('Notice updated successfully:', response);
+        return response;
     } catch (error) {
         console.error('Error updating notice:', error);
     }
