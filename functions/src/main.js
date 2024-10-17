@@ -9,9 +9,11 @@ const users = new Users(client);
 
 const newUser = await users.create(
   ID.unique(), // userId
-  'my@mail.com', // email (optional)
-  '+13102548866', // phone (optional)
-  'Hakopos' // name (optional)
+  {
+    email: 'my@mail.com', // email (optional)
+    phone: '+13102548866', // phone (optional)
+    name: 'Hakopos' // name (optional)
+  }
 );
 
 // This Appwrite function will be executed every time your function is triggered
