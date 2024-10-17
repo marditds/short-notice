@@ -11,7 +11,6 @@ const newUser = await users.create(
   ID.unique(), // userId
   'my@mail.com', // email (optional)
   '+13102548866', // phone (optional)
-  '',
   'Hakopos' // name (optional)
 );
 
