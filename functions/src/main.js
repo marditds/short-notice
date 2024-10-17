@@ -30,7 +30,7 @@ export default async ({ req, res, log, error }) => {
     //   'Hakopos' // name (optional)
     // );
 
-    log(`User created successfully: ${newUser.$id}`);
+    // log(`User created successfully: ${newUser.$id}`);
 
     const response = await users.list();
     // Log messages and errors to the Appwrite Console
