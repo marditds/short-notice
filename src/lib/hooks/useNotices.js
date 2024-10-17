@@ -25,8 +25,6 @@ const useNotices = (googleUserData) => {
                 try {
                     const id = await UserId(googleUserData);
 
-                    // console.log('TYPE OF USER ID:', typeof (id));
-
                     setUserId(id);
 
                     if (id) {
@@ -170,7 +168,7 @@ const useNotices = (googleUserData) => {
 
         try {
             const removedNotice = await deleteNotice(noticeId);
-            setUserNotices((prevNotices) => prevNotices.filter((notice) => notice.$id !== noticeId));
+            // setUserNotices((prevNotices) => prevNotices.filter((notice) => notice.$id !== noticeId));
             return removedNotice;
         } catch (error) {
             if (error.code === 404) {
