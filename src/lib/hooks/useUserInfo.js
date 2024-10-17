@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { updateUser, deleteUser, deleteAllNotices, getUsersDocument, createFollow, removeFollow, getUserFollowingsById as fetchUserFollowingsById, getUserFollowersById as fetchUserFollowersById, getOtherUserFollowingsById as fetchOtherUserFollowingsById } from '../context/dbhandler';
+// import { authenticatedUsers } from '../../../functions/src/main';
 import { useUserContext } from '../context/UserContext';
 import { UserId } from '../../components/User/UserId';
 
@@ -34,7 +35,16 @@ const useUserInfo = (data) => {
         fetchUserId();
     }, [data]);
 
+    // const authedUsers = async () => {
+    //     try {
+    //         const res = await authenticatedUsers();
+    //         console.log('authedUsers', res);
 
+    //     } catch (error) {
+    //         console.error('Error - authedUsers', error);
+
+    //     }
+    // }
 
     const handleUpdateUser = async (username) => {
 
@@ -243,7 +253,8 @@ const useUserInfo = (data) => {
         getUserFollowersById,
         getOtherUserFollowingsById,
         fetchAccountsFollowingTheUser,
-        fetchAccountsFollowedByUser
+        fetchAccountsFollowedByUser,
+        // authedUsers
     }
 }
 

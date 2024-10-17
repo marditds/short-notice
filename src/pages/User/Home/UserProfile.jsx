@@ -349,6 +349,8 @@ const UserProfile = () => {
                 </Tab>
             </Tabs>
 
+            <Button>Logging authed users</Button>
+
             {/* <div className='position-fixed'> */}
             <Modal
                 show={showEditModal}
