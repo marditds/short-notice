@@ -26,7 +26,7 @@ export default async ({ req, res, log, error }) => {
       ID.unique(), // userId
       'my@mail.com', // email (optional)
       '+13102548866', // phone (optional)
-      '', // password (optional)
+      'FreshAir55', // password (optional)
       'Hakopos' // name (optional)
     );
 
