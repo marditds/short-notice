@@ -13,8 +13,8 @@ export default async ({ req, res, log, error }) => {
   // For this example, we're using the Users service
 
   const client = new Client()
-    .setEndpoint(import.meta.env.VITE_ENDPOINT)
-    .setProject(import.meta.env.VITE_PROJECT)
+    .setEndpoint(process.env.VITE_ENDPOINT)
+    .setProject(process.env.VITE_PROJECT)
   // .setKey(req.headers['x-appwrite-key'] ?? import.meta.env.VITE_SHORT_NOTICE_API_KEYS);
 
   const users = new Users(client);
