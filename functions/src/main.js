@@ -22,13 +22,13 @@ export default async ({ req, res, log, error }) => {
 
   try {
 
-    const newUser = await users.create(
-      ID.unique(), // userId
-      'my@mail.com', // email (optional)
-      '+13102548866', // phone (optional)
-      '',
-      'Hakopos' // name (optional)
-    );
+    // const newUser = await users.create(
+    //   ID.unique(), // userId
+    //   'my@mail.com', // email (optional)
+    //   '+13102548866', // phone (optional)
+    //   '',
+    //   'Hakopos' // name (optional)
+    // );
 
     log(`User created successfully: ${newUser.$id}`);
 
