@@ -3,7 +3,7 @@ import { Client, Users, ID } from 'node-appwrite';
 const client = new Client()
   .setEndpoint(process.env.VITE_ENDPOINT)
   .setProject(process.env.VITE_PROJECT)
-  .setKey(req.headers['x-appwrite-key'] ?? process.env.VITE_SHORT_NOTICE_API_KEYS);
+  .setKey(process.env.VITE_SHORT_NOTICE_API_KEYS);
 
 const users = new Users(client);
 
@@ -43,6 +43,7 @@ export default async ({ req, res, log, error }) => {
     const response = await users.list();
     // Log messages and errors to the Appwrite Console
     // These logs won't be seen by your end users
+
     log(`Total users: ${response.length}`);
   } catch (err) {
     error("Could not list users: " + err.message);
