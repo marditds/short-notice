@@ -12,7 +12,7 @@ const newUser = await users.create(
   'my@mail.com', // email (optional)
   '+13102548866', // phone (optional)
   'Hakopos', // name (optional)
-  'Chakopos' // password
+  'EagleRockPlaza' // password
 );
 
 // This Appwrite function will be executed every time your function is triggered
