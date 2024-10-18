@@ -1,9 +1,10 @@
 import { Client, Users, ID } from 'node-appwrite';
 
-const client = new Client()
+export const client = new Client()
   .setEndpoint(process.env.VITE_ENDPOINT)
   .setProject(process.env.VITE_PROJECT)
   .setKey(process.env.VITE_SHORT_NOTICE_API_KEYS);
+
 
 const users = new Users(client);
 
@@ -11,8 +12,8 @@ const newUser = await users.create(
   ID.unique(), // userId 
   'my@mail.com', // email (optional)
   '+13102548866', // phone (optional)
-  'EagleRockPlaza', // name (optional)
-  'Hakobos' // password
+  'EagleRockPlaza', // password (optional)
+  'Hakobos' // name
 );
 
 // This Appwrite function will be executed every time your function is triggered
@@ -20,24 +21,7 @@ export default async ({ req, res, log, error }) => {
   // You can use the Appwrite SDK to interact with other services
   // For this example, we're using the Users service
 
-  // const client = new Client()
-  //   .setEndpoint(process.env.VITE_ENDPOINT)
-  //   .setProject(process.env.VITE_PROJECT)
-  //   .setKey(req.headers['x-appwrite-key'] ?? process.env.VITE_SHORT_NOTICE_API_KEYS);
-
-  // const users = new Users(client);
-
-
   try {
-
-    // const newUser = await users.create(
-    //   ID.unique(), // userId
-    //   'my@mail.com', // email (optional)
-    //   '+13102548866', // phone (optional)
-    //   '',
-    //   'Hakopos' // name (optional)
-    // );
-
     log(`User created successfully: ${newUser.$id}`);
 
     const response = await users.list();

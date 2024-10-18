@@ -5,8 +5,9 @@ import CreateUsername from './pages/CreateUsername/CreateUsername.jsx';
 import { jwtDecode } from "jwt-decode";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
-import { createUser, getUserByEmail } from './lib/context/dbhandler.js';
+import { createUser, getUserByEmail, account } from './lib/context/dbhandler.js';
 import { useUserContext } from './lib/context/UserContext';
+import { OAuthProvider, ID } from 'appwrite';
 
 function App() {
 
@@ -33,6 +34,19 @@ function App() {
     }
   }, [navigate]);
 
+  useEffect(() => {
+    const userAuthentication = async () => {
+      try {
+        await account.createOAuth2Session(
+          OAuthProvider.Google,
+          'http://localhost:5173/user/feed'
+        );
+      } catch (error) {
+        console.error('Failed to authenticate:', error);
+      }
+    };
+    userAuthentication();
+  }, [hasUsername])
 
 
   const checkUsernameInDatabase = async (email) => {
@@ -94,11 +108,24 @@ function App() {
     if (googleUserData?.email && googleUserData?.given_name && username) {
       try {
 
+        // console.log('Email:', googleUserData.email);
+        // console.log('ID:', ID.unique());
+
+        // let newUsr = await account.create(
+        //   ID.unique(),
+        //   googleUserData.email,
+        //   'TmbkaberiArum55',
+        //   username.toLowerCase()
+        // );
+
+
         await createUser({
           email: googleUserData.email,
           given_name: googleUserData.given_name,
           username: username.toLowerCase()
         });
+
+
 
         localStorage.setItem('username', username.toLowerCase());
 

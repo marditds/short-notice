@@ -1,10 +1,14 @@
 import { Client, Storage, Account, Databases, ID, Query } from 'appwrite';
 
-const client = new Client();
-
-client
+const client = new Client()
     .setEndpoint(import.meta.env.VITE_ENDPOINT)
     .setProject(import.meta.env.VITE_PROJECT);
+
+export const account = new Account(client);
+
+console.log('account - dbhandler.js', account);
+
+export default client;
 
 const storage = new Storage(client);
 export const databases = new Databases(client);
@@ -831,5 +835,4 @@ export const getAllReactionsByNoticeId = async (notice_id) => {
     }
 }
 
-export const account = new Account(client);
 export { ID } from 'appwrite';
