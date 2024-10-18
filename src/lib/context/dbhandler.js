@@ -201,7 +201,6 @@ export const createUser = async ({ id, email, given_name, username }) => {
 export const registerAuthUser = async (id, email, username) => {
     try {
         const newUsr = await account.create(
-            // ID.unique(),
             id,
             email,
             'TmbkaberdiArum55',
@@ -231,10 +230,12 @@ export const updateUser = async ({ userId, username }) => {
     }
 };
 
-export const updateAuthUser = async (userId, name) => {
+export const updateAuthUser = async (name) => {
     try {
-        await account.updatePrefs(userId, { name: name });
-        console.log('Auth username updated successfully');
+        // await account.updatePrefs(userId, { name: name });
+        const newAuthUsrnm = await account.updateName(name);
+
+        console.log('Auth username updated successfully', newAuthUsrnm);
     } catch (error) {
         console.error('Error updating auth username:', error);
     }

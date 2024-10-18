@@ -1,5 +1,4 @@
 import { useState, useEffect, useCallback } from 'react';
-import { ID } from 'appwrite';
 import { account, registerAuthUser, updateUser, updateAuthUser, deleteUser, deleteAllNotices, getUsersDocument, createFollow, removeFollow, getUserFollowingsById as fetchUserFollowingsById, getUserFollowersById as fetchUserFollowersById, getOtherUserFollowingsById as fetchOtherUserFollowingsById } from '../context/dbhandler';
 // import { authenticatedUsers } from '../../../functions/src/main';
 import { useUserContext } from '../context/UserContext';
@@ -7,7 +6,7 @@ import { UserId } from '../../components/User/UserId';
 
 const useUserInfo = (data) => {
 
-    const { setUsername, setRegisterdUsername } = useUserContext();
+    const { setUsername } = useUserContext();
     const [userId, setUserId] = useState(null);
 
 
@@ -50,6 +49,15 @@ const useUserInfo = (data) => {
         }
     }
 
+    const removeSession = async () => {
+        try {
+            const userSession = await account.deleteSession('current');
+            console.log('Session removed successfully:', userSession);
+        } catch (error) {
+            console.error('Error removing the session:', error);
+        }
+    }
+
     const handleUpdateUser = async (username) => {
 
         if (!userId) {
@@ -58,12 +66,18 @@ const useUserInfo = (data) => {
         }
 
         try {
+            const session = await account.get();
+            if (!session) {
+                console.error('User is not authenticated.');
+                return;
+            }
+
             await updateUser({ userId, username });
 
-            await updateAuthUser(userId, username);
+            await updateAuthUser(username);
 
             setUsername(username);
-            setRegisterdUsername(username);
+            // setRegisterdUsername(username);
 
             console.log('Username updated successfully.');
 
@@ -252,6 +266,7 @@ const useUserInfo = (data) => {
         // isLoading,
         registerUser,
         createSession,
+        removeSession,
         handleUpdateUser,
         handleDeleteUser,
         getUsersData,

@@ -31,44 +31,39 @@ function App() {
       const decoded = jwtDecode(storedToken);
       setGoogleUserData(decoded);
       setIsLoggedIn(preVal => true);
+      console.log('Logged in successfully - 1st useEffect');
+
       checkUsernameInDatabase(decoded.email);
     } else {
       navigate('/');
     }
   }, [navigate]);
 
-  // useEffect(() => {
-  //   const userAuthentication = async () => {
-  //     try {
-  //       await account.createOAuth2Session(
-  //         OAuthProvider.Google,
-  //         'http://localhost:5173/user/feed'
-  //       );
-  //     } catch (error) {
-  //       console.error('Failed to authenticate:', error);
-  //     }
-  //   };
-  //   userAuthentication();
-  // }, [hasUsername])
+  useEffect(() => {
+    const startSession = async () => {
+      if (googleUserData.email !== undefined) {
+        try {
+          let newUsrSession = await createSession(googleUserData?.email)
+          console.log('newUsrSession - startSession:', newUsrSession);
+        } catch (error) {
+          console.error('Error starting session:', error);
+        }
+      }
+    }
+    startSession();
+
+  }, [googleUserData])
 
 
   const checkUsernameInDatabase = async (email) => {
-
-    // console.log('checkUsernameInDatabase 1:', username);
-
     try {
       const user = await getUserByEmail(email);
 
       if (user && user.username) {
-
-        // console.log('checkUsernameInDatabase 2:', user.username);
-
         setUsername(user.username);
         setRegisteredUsername(user.username);
         localStorage.setItem('username', user.username);
         setHasUsername(true);
-
-        // console.log('checkUsernameInDatabase 3:', user.username);
 
       } else {
         setHasUsername(false);
@@ -92,8 +87,9 @@ function App() {
 
   const onSuccess = (credentialResponse) => {
     const decoded = jwtDecode(credentialResponse?.credential);
-    console.log('Logged in successfully.');
+    console.log('Logged in successfully. - useEffect 2');
     setGoogleUserData(preData => decoded);
+
     setIsLoggedIn(preVal => true);
 
     const accessToken = credentialResponse?.credential;
@@ -113,7 +109,6 @@ function App() {
       const usrID = ID.unique();
 
       console.log('usrID', usrID);
-
 
       try {
         let newUsr = await registerUser(

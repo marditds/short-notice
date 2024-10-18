@@ -4,7 +4,7 @@ import { Dropdown, DropdownButton } from 'react-bootstrap';
 import { PiDotsThreeOutlineVertical } from "react-icons/pi";
 
 
-export const Tools = ({ googleLogout, setIsLoggedIn, setGoogleUserData }) => {
+export const Tools = ({ googleLogout, removeSession, setIsLoggedIn, setGoogleUserData }) => {
 
 
     return (
@@ -46,8 +46,9 @@ export const Tools = ({ googleLogout, setIsLoggedIn, setGoogleUserData }) => {
                     to='/'
                     onClick={
                         () => {
+                            removeSession();
                             googleLogout();
-                            setIsLoggedIn(preVal => false)
+                            setIsLoggedIn(preVal => false);
                             setGoogleUserData(null);
                             localStorage.removeItem('accessToken');
                             console.log('Logged out successfully.');
