@@ -7,7 +7,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import { createUser, getUserByEmail, account } from './lib/context/dbhandler.js';
 import { useUserContext } from './lib/context/UserContext';
-import { OAuthProvider, ID } from 'appwrite';
+import { ID } from 'appwrite';
+import useUserInfo from './lib/hooks/useUserInfo.js';
 
 function App() {
 
@@ -15,11 +16,13 @@ function App() {
     googleUserData, setGoogleUserData,
     isLoggedIn, setIsLoggedIn,
     username, setUsername,
+    registeredUsername, setRegisteredUsername,
     hasUsername, setHasUsername,
   } = useUserContext();
 
   const navigate = useNavigate();
 
+  const { registerUser, createSession } = useUserInfo(googleUserData);
 
   useEffect(() => {
     const storedToken = localStorage.getItem('accessToken');
@@ -34,19 +37,19 @@ function App() {
     }
   }, [navigate]);
 
-  useEffect(() => {
-    const userAuthentication = async () => {
-      try {
-        await account.createOAuth2Session(
-          OAuthProvider.Google,
-          'http://localhost:5173/user/feed'
-        );
-      } catch (error) {
-        console.error('Failed to authenticate:', error);
-      }
-    };
-    userAuthentication();
-  }, [hasUsername])
+  // useEffect(() => {
+  //   const userAuthentication = async () => {
+  //     try {
+  //       await account.createOAuth2Session(
+  //         OAuthProvider.Google,
+  //         'http://localhost:5173/user/feed'
+  //       );
+  //     } catch (error) {
+  //       console.error('Failed to authenticate:', error);
+  //     }
+  //   };
+  //   userAuthentication();
+  // }, [hasUsername])
 
 
   const checkUsernameInDatabase = async (email) => {
@@ -61,6 +64,7 @@ function App() {
         // console.log('checkUsernameInDatabase 2:', user.username);
 
         setUsername(user.username);
+        setRegisteredUsername(user.username);
         localStorage.setItem('username', user.username);
         setHasUsername(true);
 
@@ -106,26 +110,28 @@ function App() {
     console.log('setUser 1:', username);
 
     if (googleUserData?.email && googleUserData?.given_name && username) {
+      const usrID = ID.unique();
+
+      console.log('usrID', usrID);
+
+
       try {
+        let newUsr = await registerUser(
+          usrID,
+          googleUserData.email,
+          username.toLowerCase()
+        );
+        console.log('newUsr - App.jsx:', newUsr);
 
-        // console.log('Email:', googleUserData.email);
-        // console.log('ID:', ID.unique());
-
-        // let newUsr = await account.create(
-        //   ID.unique(),
-        //   googleUserData.email,
-        //   'TmbkaberiArum55',
-        //   username.toLowerCase()
-        // );
-
+        let newUsrSession = await createSession(googleUserData.email)
+        console.log('newUsrSession - App.jsx:', newUsrSession);
 
         await createUser({
+          id: usrID,
           email: googleUserData.email,
           given_name: googleUserData.given_name,
           username: username.toLowerCase()
         });
-
-
 
         localStorage.setItem('username', username.toLowerCase());
 
@@ -155,6 +161,7 @@ function App() {
               googleUserData, setGoogleUserData,
               isLoggedIn, setIsLoggedIn,
               username, setUsername,
+              registeredUsername, setRegisteredUsername,
               hasUsername, setHasUsername
             }}
           />

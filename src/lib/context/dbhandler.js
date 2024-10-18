@@ -160,7 +160,7 @@ const checkUsernameExists = async (username) => {
     }
 };
 
-export const createUser = async ({ email, given_name, username }) => {
+export const createUser = async ({ id, email, given_name, username }) => {
     try {
 
         const existingUser = await databases.listDocuments(
@@ -184,7 +184,7 @@ export const createUser = async ({ email, given_name, username }) => {
         const response = await databases.createDocument(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_USERS_COLLECTION,
-            ID.unique(),
+            id,
             {
                 email,
                 given_name,
@@ -198,6 +198,24 @@ export const createUser = async ({ email, given_name, username }) => {
     }
 };
 
+export const registerAuthUser = async (id, email, username) => {
+    try {
+        const newUsr = await account.create(
+            // ID.unique(),
+            id,
+            email,
+            'TmbkaberdiArum55',
+            username.toLowerCase()
+        );
+
+        console.log('newUsr - dbhandler.js:', newUsr);
+
+        return newUsr;
+    } catch (error) {
+        console.error('Error registering user:', error);
+    }
+}
+
 export const updateUser = async ({ userId, username }) => {
     try {
         await databases.updateDocument(
@@ -210,6 +228,15 @@ export const updateUser = async ({ userId, username }) => {
     } catch (error) {
         console.error('Error updating the username:', error);
 
+    }
+};
+
+export const updateAuthUser = async (userId, name) => {
+    try {
+        await account.updatePrefs(userId, { name: name });
+        console.log('Auth username updated successfully');
+    } catch (error) {
+        console.error('Error updating auth username:', error);
     }
 };
 

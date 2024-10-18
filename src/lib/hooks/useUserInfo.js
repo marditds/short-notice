@@ -1,29 +1,24 @@
 import { useState, useEffect, useCallback } from 'react';
-import { updateUser, deleteUser, deleteAllNotices, getUsersDocument, createFollow, removeFollow, getUserFollowingsById as fetchUserFollowingsById, getUserFollowersById as fetchUserFollowersById, getOtherUserFollowingsById as fetchOtherUserFollowingsById } from '../context/dbhandler';
+import { ID } from 'appwrite';
+import { account, registerAuthUser, updateUser, updateAuthUser, deleteUser, deleteAllNotices, getUsersDocument, createFollow, removeFollow, getUserFollowingsById as fetchUserFollowingsById, getUserFollowersById as fetchUserFollowersById, getOtherUserFollowingsById as fetchOtherUserFollowingsById } from '../context/dbhandler';
 // import { authenticatedUsers } from '../../../functions/src/main';
 import { useUserContext } from '../context/UserContext';
 import { UserId } from '../../components/User/UserId';
 
 const useUserInfo = (data) => {
 
-    const { setUsername } = useUserContext();
+    const { setUsername, setRegisterdUsername } = useUserContext();
     const [userId, setUserId] = useState(null);
 
-    const [following, setFollowing] = useState({});
 
+    const [following, setFollowing] = useState({});
     const [followersCount, setFollowersCount] = useState(null);
     const [followingCount, setFollowingCount] = useState(null);
-
-
     const [followersAccounts, setFollowersAccounts] = useState([]);
     const [followingAccounts, setFollowingAccounts] = useState([]);
-
     const [isFollowingLoading, setIsFollowingLoading] = useState(false);
-
     const [isFollowing, setIsFollowing] = useState(false);
 
-
-    // const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const fetchUserId = async () => {
@@ -35,16 +30,25 @@ const useUserInfo = (data) => {
         fetchUserId();
     }, [data]);
 
-    // const authedUsers = async () => {
-    //     try {
-    //         const res = await authenticatedUsers();
-    //         console.log('authedUsers', res);
+    const registerUser = async (id, email, username) => {
+        try {
+            const newAuthUsr = await registerAuthUser(id, email, username);
+            console.log('newAuthUsr - useUserInfo:', newAuthUsr);
 
-    //     } catch (error) {
-    //         console.error('Error - authedUsers', error);
+            return newAuthUsr;
+        } catch (error) {
+            console.error('Error registering user:', error);
+        }
+    }
 
-    //     }
-    // }
+    const createSession = async (email) => {
+        try {
+            const userSession = await account.createEmailPasswordSession(email, 'TmbkaberdiArum55');
+            return userSession;
+        } catch (error) {
+            console.error('Error creating session:', error);
+        }
+    }
 
     const handleUpdateUser = async (username) => {
 
@@ -56,7 +60,10 @@ const useUserInfo = (data) => {
         try {
             await updateUser({ userId, username });
 
+            await updateAuthUser(userId, username);
+
             setUsername(username);
+            setRegisterdUsername(username);
 
             console.log('Username updated successfully.');
 
@@ -243,6 +250,8 @@ const useUserInfo = (data) => {
         followersAccounts,
         followingAccounts,
         // isLoading,
+        registerUser,
+        createSession,
         handleUpdateUser,
         handleDeleteUser,
         getUsersData,
