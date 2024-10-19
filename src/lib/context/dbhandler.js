@@ -235,7 +235,6 @@ export const updateUser = async ({ userId, username }) => {
 
 export const updateAuthUser = async (name) => {
     try {
-        // await account.updatePrefs(userId, { name: name });
         const authUsrnm = await account.updateName(name);
 
         console.log('Auth username updated successfully', authUsrnm);
@@ -259,8 +258,18 @@ export const deleteUser = async (userId) => {
 
 export const deleteAuthUser = async (userId) => {
     try {
-        const authUsr = account.delete(userId);
-        console.log('Auth user deleted successfully.', authUsr);
+        const res = await fetch('/api/delete-account', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ userId: userId })
+        });
+        if (res.ok) {
+            console.log("Auth user deleted successfully");
+        } else {
+            console.error("Failed to delete atuh user");
+        }
     } catch (error) {
         console.error('Error deleting auth user:', error);
     }

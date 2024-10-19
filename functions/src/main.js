@@ -8,13 +8,23 @@ export const client = new Client()
 
 const users = new Users(client);
 
-// const newUser = await users.create(
-//   ID.unique(), // userId 
-//   'my@mail.com', // email (optional)
-//   '+13102548866', // phone (optional)
-//   'EagleRockPlaza', // password (optional)
-//   'Hakobos' // name
-// );
+export const deleteUser = async (userId) => {
+  try {
+    await users.delete(userId);
+  } catch (error) {
+    console.error('Error deleting auth user:', error);
+  }
+}
+
+app.post('/api/delete-account', async (req, res) => {
+  const { userId } = req.body;
+  try {
+    await deleteUser(userId); // Call function to delete the user
+    res.status(200).send('User deleted successfully');
+  } catch (error) {
+    res.status(500).send('Failed to delete user');
+  }
+});
 
 // This Appwrite function will be executed every time your function is triggered
 export default async ({ req, res, log, error }) => {
@@ -22,7 +32,7 @@ export default async ({ req, res, log, error }) => {
   // For this example, we're using the Users service
 
   try {
-    log(`User created successfully: ${newUser.$id}`);
+    // log(`User created successfully: ${newUser.$id}`);
 
     const response = await users.list();
     // Log messages and errors to the Appwrite Console
@@ -48,19 +58,3 @@ export default async ({ req, res, log, error }) => {
   });
 };
 
-
-// export const authenticatedUsers = async () => {
-//   try {
-//     const result = await users.create(
-//       ID.unique(), // userId
-//       'email@example.com', // email (optional)
-//       '+12065550100', // phone (optional)
-//       '', // password (optional)
-//       'Hakopos' // name (optional)
-//     );
-//     console.log('result', result);
-//     return result;
-//   } catch (error) {
-//     console.error('Error - ', error);
-//   }
-// }
