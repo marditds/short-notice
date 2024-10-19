@@ -70,12 +70,14 @@ module.exports = async function (req, res) {
   const users = new Users(client);
 
   const { userId } = JSON.parse(req.payload);  // Extract the userId from the payload
-  try {
-    // Delete the user
-    await users.delete(userId);
-    res.json({ success: true, message: 'User deleted successfully' });
-  } catch (error) {
-    console.error('Error deleting user:', error);
-    res.json({ success: false, message: 'Failed to delete user' });
+  if (req.path === '/api/delete-account') {
+    try {
+      // Delete the user
+      await users.delete(userId);
+      res.json({ success: true, message: 'User deleted successfully' });
+    } catch (error) {
+      console.error('Error deleting user:', error);
+      res.json({ success: false, message: 'Failed to delete user' });
+    }
   }
 };
