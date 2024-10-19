@@ -43,15 +43,14 @@ function App() {
     const startSession = async () => {
       if (googleUserData.email !== undefined) {
         try {
-          let newUsrSession = await createSession(googleUserData?.email)
-          console.log('newUsrSession - startSession:', newUsrSession);
+          let newLoginSession = await createSession(googleUserData?.email)
+          console.log('newUsrSession - startSession:', newLoginSession);
         } catch (error) {
           console.error('Error starting session:', error);
         }
       }
     }
     startSession();
-
   }, [googleUserData])
 
 

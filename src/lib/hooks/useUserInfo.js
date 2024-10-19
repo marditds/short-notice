@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { account, registerAuthUser, updateUser, updateAuthUser, deleteUser, deleteAllNotices, getUsersDocument, createFollow, removeFollow, getUserFollowingsById as fetchUserFollowingsById, getUserFollowersById as fetchUserFollowersById, getOtherUserFollowingsById as fetchOtherUserFollowingsById } from '../context/dbhandler';
+import { account, registerAuthUser, updateUser, updateAuthUser, deleteUser, deleteAuthUser, createUserSession, deleteUserSession, deleteAllNotices, getUsersDocument, createFollow, removeFollow, getUserFollowingsById as fetchUserFollowingsById, getUserFollowersById as fetchUserFollowersById, getOtherUserFollowingsById as fetchOtherUserFollowingsById } from '../context/dbhandler';
 // import { authenticatedUsers } from '../../../functions/src/main';
 import { useUserContext } from '../context/UserContext';
 import { UserId } from '../../components/User/UserId';
@@ -42,8 +42,8 @@ const useUserInfo = (data) => {
 
     const createSession = async (email) => {
         try {
-            const userSession = await account.createEmailPasswordSession(email, 'TmbkaberdiArum55');
-            return userSession;
+            const usrSession = await createUserSession(email);
+            return usrSession;
         } catch (error) {
             console.error('Error creating session:', error);
         }
@@ -51,10 +51,10 @@ const useUserInfo = (data) => {
 
     const removeSession = async () => {
         try {
-            const userSession = await account.deleteSession('current');
-            console.log('Session removed successfully:', userSession);
+            const usrSession = await deleteUserSession();
+            return usrSession;
         } catch (error) {
-            console.error('Error removing the session:', error);
+            console.error('Error removing session:', error);
         }
     }
 
@@ -66,11 +66,6 @@ const useUserInfo = (data) => {
         }
 
         try {
-            const session = await account.get();
-            if (!session) {
-                console.error('User is not authenticated.');
-                return;
-            }
 
             await updateUser({ userId, username });
 
@@ -89,8 +84,8 @@ const useUserInfo = (data) => {
 
     const handleDeleteUser = async () => {
         try {
-            await deleteAllNotices(userId)
-
+            await deleteAllNotices(userId);
+            await deleteAuthUser(userId);
             await deleteUser(userId);
             console.log('User deleted successfully.');
 

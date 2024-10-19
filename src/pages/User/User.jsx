@@ -18,6 +18,11 @@ const User = () => {
 
     const { removeSession } = useUserInfo(googleUserData);
 
+    useEffect(() => {
+        console.log('googleUserData:', googleUserData);
+
+    }, [googleUserData])
+
 
     if (isLoading) {
         // console.log('Rendering loading state');

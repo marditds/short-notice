@@ -1,4 +1,4 @@
-import { Client, Storage, Account, Databases, ID, Query } from 'appwrite';
+import { Client, Storage, Account, Databases, ID, Query, Permission, Role } from 'appwrite';
 
 const client = new Client()
     .setEndpoint(import.meta.env.VITE_ENDPOINT)
@@ -189,7 +189,10 @@ export const createUser = async ({ id, email, given_name, username }) => {
                 email,
                 given_name,
                 username: username.toLowerCase()
-            }
+            },
+            // [
+            //     Permission.create(Role.users())
+            // ]
         );
         console.log('Document created successfully:', response);
     } catch (error) {
@@ -233,9 +236,9 @@ export const updateUser = async ({ userId, username }) => {
 export const updateAuthUser = async (name) => {
     try {
         // await account.updatePrefs(userId, { name: name });
-        const newAuthUsrnm = await account.updateName(name);
+        const authUsrnm = await account.updateName(name);
 
-        console.log('Auth username updated successfully', newAuthUsrnm);
+        console.log('Auth username updated successfully', authUsrnm);
     } catch (error) {
         console.error('Error updating auth username:', error);
     }
@@ -253,6 +256,34 @@ export const deleteUser = async (userId) => {
         console.error('Error deleting user:', error);
     }
 };
+
+export const deleteAuthUser = async (userId) => {
+    try {
+        const authUsr = account.delete(userId);
+        console.log('Auth user deleted successfully.', authUsr);
+    } catch (error) {
+        console.error('Error deleting auth user:', error);
+    }
+}
+
+export const createUserSession = async (email) => {
+    try {
+        const userSession = await account.createEmailPasswordSession(email, 'TmbkaberdiArum55');
+        console.log('Session created successfully:', userSession);
+        return userSession;
+    } catch (error) {
+        console.error('Error creating session:', error);
+    }
+}
+
+export const deleteUserSession = async () => {
+    try {
+        const userSession = await account.deleteSession('current');
+        console.log('Session delete successfully:', userSession);
+    } catch (error) {
+        console.error('Error deleting the session:', error);
+    }
+}
 
 export const createNotice = async ({ user_id, text, timestamp, expiresAt, science, technology, engineering, math, literature, history, philosophy, music, medicine, economics, law, polSci, sports
 }) => {

@@ -6,7 +6,6 @@ import { PiDotsThreeOutlineVertical } from "react-icons/pi";
 
 export const Tools = ({ googleLogout, removeSession, setIsLoggedIn, setGoogleUserData }) => {
 
-
     return (
         <div className='userhome__body--profile--tools 
         w-100 
@@ -45,8 +44,8 @@ export const Tools = ({ googleLogout, removeSession, setIsLoggedIn, setGoogleUse
                     as={Link}
                     to='/'
                     onClick={
-                        () => {
-                            removeSession();
+                        async () => {
+                            await removeSession();
                             googleLogout();
                             setIsLoggedIn(preVal => false);
                             setGoogleUserData(null);
