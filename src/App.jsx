@@ -22,7 +22,7 @@ function App() {
 
   const navigate = useNavigate();
 
-  const { registerUser, createSession } = useUserInfo(googleUserData);
+  const { registerUser, createSession, checkingIdInAuth, checkingEmailInAuth } = useUserInfo(googleUserData);
 
   useEffect(() => {
     const storedToken = localStorage.getItem('accessToken');
@@ -44,7 +44,7 @@ function App() {
       if (googleUserData.email !== undefined) {
         try {
           let newLoginSession = await createSession(googleUserData?.email)
-          console.log('newUsrSession - startSession:', newLoginSession);
+          console.log('newLoginSession - startSession:', newLoginSession);
         } catch (error) {
           console.error('Error starting session:', error);
         }
@@ -84,9 +84,10 @@ function App() {
     }
   }, [isLoggedIn, hasUsername, navigate]);
 
+  // Triggered for returning users 
   const onSuccess = (credentialResponse) => {
     const decoded = jwtDecode(credentialResponse?.credential);
-    console.log('Logged in successfully. - useEffect 2');
+    console.log('Logged in successfully. - onSuccess');
     setGoogleUserData(preData => decoded);
 
     setIsLoggedIn(preVal => true);
@@ -105,23 +106,51 @@ function App() {
     console.log('setUser 1:', username);
 
     if (googleUserData?.email && googleUserData?.given_name && username) {
-      const usrID = ID.unique();
 
-      console.log('usrID', usrID);
+      const usrEmail = await checkingEmailInAuth();
 
-      try {
-        let newUsr = await registerUser(
-          usrID,
-          googleUserData.email,
-          username.toLowerCase()
-        );
-        console.log('newUsr - App.jsx:', newUsr);
+      if (usrEmail !== googleUserData.email) {
+        const usrID = ID.unique();
+        console.log('usrID', usrID);
 
-        let newUsrSession = await createSession(googleUserData.email)
-        console.log('newUsrSession - App.jsx:', newUsrSession);
+        try {
+          // Add user to Auth
+          let newUsr = await registerUser(
+            usrID,
+            googleUserData.email,
+            username.toLowerCase()
+          );
+          console.log('newUsr - App.jsx:', newUsr);
 
+          let newUsrSession = await createSession(googleUserData.email)
+          console.log('newUsrSession - App.jsx:', newUsrSession);
+
+          // Add user to collection
+          await createUser({
+            id: usrID,
+            email: googleUserData.email,
+            given_name: googleUserData.given_name,
+            username: username.toLowerCase()
+          });
+
+          localStorage.setItem('username', username.toLowerCase());
+
+          setHasUsername(true);
+
+          setTimeout(() => {
+            navigate('/user/profile');
+          }, 1000);
+
+        } catch (error) {
+          console.error('Error creating user:', error);
+        }
+      } else {
+        const authId = await checkingIdInAuth();
+        console.log('authId', authId);
+
+        // Add user to collection
         await createUser({
-          id: usrID,
+          id: authId,
           email: googleUserData.email,
           given_name: googleUserData.given_name,
           username: username.toLowerCase()
@@ -130,14 +159,8 @@ function App() {
         localStorage.setItem('username', username.toLowerCase());
 
         setHasUsername(true);
-
-        setTimeout(() => {
-          navigate('/user/profile');
-        }, 1000);
-
-      } catch (error) {
-        console.error('Error creating user:', error);
       }
+
     }
     console.log('setUser 2:', username);
 

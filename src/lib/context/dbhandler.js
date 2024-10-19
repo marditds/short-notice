@@ -203,6 +203,10 @@ export const createUser = async ({ id, email, given_name, username }) => {
 
 export const registerAuthUser = async (id, email, username) => {
     try {
+        // const result = await account.listIdentities(
+        //     [Query.equal('email', email)] // queries (optional)
+        // );
+
         const newUsr = await account.create(
             id,
             email,
@@ -242,6 +246,26 @@ export const updateAuthUser = async (name) => {
         console.error('Error updating auth username:', error);
     }
 };
+
+export const checkIdExistsInAuth = async () => {
+    try {
+        const authId = await account.get();
+        console.log('authId:', authId.$id);
+        return authId.$id;
+    } catch (error) {
+        console.error('Error checking authId:', error);
+    }
+}
+
+export const checkEmailExistsInAuth = async () => {
+    try {
+        const authEmail = await account.get();
+        console.log('authEmail:', authEmail.email);
+        return authEmail.email;
+    } catch (error) {
+        console.error('Error checking authEmail:', error);
+    }
+}
 
 export const deleteUser = async (userId) => {
     try {

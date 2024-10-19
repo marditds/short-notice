@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { account, registerAuthUser, updateUser, updateAuthUser, deleteUser, deleteAuthUser, createUserSession, deleteUserSession, deleteAllNotices, getUsersDocument, createFollow, removeFollow, getUserFollowingsById as fetchUserFollowingsById, getUserFollowersById as fetchUserFollowersById, getOtherUserFollowingsById as fetchOtherUserFollowingsById } from '../context/dbhandler';
+import { account, checkIdExistsInAuth, checkEmailExistsInAuth, registerAuthUser, updateUser, updateAuthUser, deleteUser, createUserSession, deleteUserSession, deleteAllNotices, getUsersDocument, createFollow, removeFollow, getUserFollowingsById as fetchUserFollowingsById, getUserFollowersById as fetchUserFollowersById, getOtherUserFollowingsById as fetchOtherUserFollowingsById } from '../context/dbhandler';
 import { useUserContext } from '../context/UserContext';
 import { UserId } from '../../components/User/UserId';
 
@@ -84,13 +84,31 @@ const useUserInfo = (data) => {
     const handleDeleteUser = async () => {
         try {
             await deleteAllNotices(userId);
-            await deleteAuthUser(userId);
             await deleteUser(userId);
+            await deleteUserSession();
             console.log('User deleted successfully.');
 
         } catch (error) {
             console.error('Error deleting user:', error);
 
+        }
+    }
+
+    const checkingIdInAuth = async () => {
+        try {
+            const res = checkIdExistsInAuth();
+            return res;
+        } catch (error) {
+            console.error('Error checkingIdInAuth:', res);
+        }
+    }
+
+    const checkingEmailInAuth = async () => {
+        try {
+            const res = checkEmailExistsInAuth();
+            return res;
+        } catch (error) {
+            console.error('Error checkingEmailInAuth:', res);
         }
     }
 
@@ -258,6 +276,8 @@ const useUserInfo = (data) => {
         followersAccounts,
         followingAccounts,
         // isLoading,
+        checkingIdInAuth,
+        checkingEmailInAuth,
         registerUser,
         createSession,
         removeSession,

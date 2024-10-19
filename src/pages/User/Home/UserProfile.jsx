@@ -10,6 +10,8 @@ import useNotices from '../../../lib/hooks/useNotices.js';
 import { ComposeNotice } from '../../../components/User/ComposeNotice';
 import { Loading } from '../../../components/Loading/Loading.jsx';
 import './UserProfile.css';
+import { account } from '../../../lib/context/dbhandler.js';
+import { Query } from 'appwrite';
 
 
 
@@ -59,7 +61,8 @@ const UserProfile = () => {
         followingAccounts,
         fetchUsersData,
         fetchAccountsFollowingTheUser,
-        fetchAccountsFollowedByUser
+        fetchAccountsFollowedByUser,
+        listIdentities
     } = useUserInfo(googleUserData);
 
     const [notices, setNotices] = useState([]);
@@ -72,6 +75,19 @@ const UserProfile = () => {
     const [offset, setOffset] = useState(0);
     const [hasMoreNotices, setHasMoreNotices] = useState(true);
     const [isLoadingMore, setIsLoadingMore] = useState(false);
+
+    // useEffect(() => {
+    //     const listing = async () => {
+    //         try {
+    //             const res = listIdentities();
+    //             console.log('listing:', res);
+    //         } catch (error) {
+    //             console.error('Error listing:', error);
+    //         }
+    //     }
+    //     console.log('googleUserData', googleUserData.email);
+    //     listing();
+    // }, [googleUserData])
 
 
     // Fetch notices for user
