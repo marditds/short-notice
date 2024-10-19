@@ -30,7 +30,10 @@ export const uploadAvatar = async (file) => {
         const response = await storage.createFile(
             import.meta.env.VITE_AVATAR_BUCKET,
             ID.unique(),
-            file
+            file,
+            [
+                Permission.write(Role.users())
+            ]
         );
         const fileId = response.$id;
         return fileId;
@@ -42,7 +45,13 @@ export const uploadAvatar = async (file) => {
 
 export const deleteAvatarFromStrg = async (fileId) => {
     try {
-        const response = await storage.deleteFile(import.meta.env.VITE_AVATAR_BUCKET, fileId);
+        const response = await storage.deleteFile(
+            import.meta.env.VITE_AVATAR_BUCKET,
+            fileId,
+            [
+                Permission.delete(Role.users())
+            ]
+        );
         console.log('Avatar deleted successfully:', response);
     } catch (error) {
         console.error('Error deleting avatar:', error);
@@ -55,7 +64,12 @@ export const updateAvatar = async (userId, profilePictureId) => {
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_USERS_COLLECTION,
             userId,
-            { avatar: profilePictureId }
+            {
+                avatar: profilePictureId
+            },
+            [
+                Permission.update(Role.users())
+            ]
         );
         console.log('User profile updated successfully');
     } catch (error) {
@@ -71,7 +85,12 @@ export const deleteAvatarFromDoc = async (userId) => {
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_USERS_COLLECTION,
             userId,
-            { avatar: '' }
+            {
+                avatar: ''
+            },
+            [
+                Permission.delete(Role.users())
+            ]
         );
         console.log('User profile avatar set to null successfully');
     } catch (error) {
@@ -166,7 +185,10 @@ export const createUser = async ({ id, email, given_name, username }) => {
         const existingUser = await databases.listDocuments(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_USERS_COLLECTION,
-            [Query.equal('email', email)]
+            [Query.equal('email', email)],
+            [
+                Permission.write(Role.users())
+            ]
         );
 
         const usernameExists = await checkUsernameExists(username);
@@ -190,9 +212,7 @@ export const createUser = async ({ id, email, given_name, username }) => {
                 given_name,
                 username: username.toLowerCase()
             },
-            // [
-            //     Permission.create(Role.users())
-            // ]
+
         );
         console.log('Document created successfully:', response);
     } catch (error) {
@@ -228,7 +248,12 @@ export const updateUser = async ({ userId, username }) => {
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_USERS_COLLECTION,
             userId,
-            { username: username }
+            {
+                username: username
+            },
+            [
+                Permission.update(Role.users())
+            ]
         );
         console.log('Username successfully updated.');
     } catch (error) {
@@ -272,7 +297,10 @@ export const deleteUser = async (userId) => {
         const response = await databases.deleteDocument(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_USERS_COLLECTION,
-            userId
+            userId,
+            [
+                Permission.delete(Role.users())
+            ]
         );
         console.log('User deleted successfully:', response);
     } catch (error) {
@@ -318,6 +346,17 @@ export const deleteUserSession = async () => {
     }
 }
 
+export const getSessionDetails = async () => {
+    try {
+        const sessDets = account.getSession('current');
+        console.log('sessDets:', sessDets);
+        return sessDets;
+    } catch (error) {
+        console.error('Error getting session details:', error);
+
+    }
+}
+
 export const createNotice = async ({ user_id, text, timestamp, expiresAt, science, technology, engineering, math, literature, history, philosophy, music, medicine, economics, law, polSci, sports
 }) => {
 
@@ -345,7 +384,10 @@ export const createNotice = async ({ user_id, text, timestamp, expiresAt, scienc
                 law: law || false,
                 polSci: polSci || false,
                 sports: sports || false
-            }
+            },
+            [
+                Permission.write(Role.users())
+            ]
         );
         console.log('Notice created succesfully:', response);
         return response;
@@ -477,7 +519,10 @@ export const updateNotice = async (noticeId, newText) => {
             noticeId,
             {
                 text: newText
-            }
+            },
+            [
+                Permission.update(Role.users())
+            ]
         );
         console.log('Notice updated successfully:', response);
         return response;
@@ -492,7 +537,10 @@ export const deleteNotice = async (noticeId) => {
         const response = await databases.deleteDocument(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_NOTICES_COLLECTION,
-            noticeId
+            noticeId,
+            [
+                Permission.delete(Role.users())
+            ]
         );
         console.log('Notice deleted successfully:', response);
     } catch (error) {
@@ -509,7 +557,10 @@ export const deleteAllNotices = async (userId) => {
         const notices = await databases.listDocuments(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_NOTICES_COLLECTION,
-            [Query.equal('user_id', userId)]
+            [Query.equal('user_id', userId)],
+            [
+                Permission.delete(Role.users())
+            ]
         );
 
         for (const notice of notices.documents) {
@@ -561,7 +612,10 @@ export const updateUserInterests = async (userId, selectedTags) => {
                 import.meta.env.VITE_DATABASE,
                 import.meta.env.VITE_INTERESTS_COLLECTION,
                 userId,
-                interestsData
+                interestsData,
+                [
+                    Permission.update(Role.users())
+                ]
             );
         } catch (updateError) {
             if (updateError.code === 404) {
@@ -569,7 +623,10 @@ export const updateUserInterests = async (userId, selectedTags) => {
                     import.meta.env.VITE_DATABASE,
                     import.meta.env.VITE_INTERESTS_COLLECTION,
                     userId,
-                    interestsData
+                    interestsData,
+                    [
+                        Permission.write(Role.users())
+                    ]
                 );
             } else {
                 throw updateError;
@@ -594,7 +651,10 @@ export const createSpread = async (notice_id, author_id, user_id) => {
                 notice_id: notice_id,
                 author_id: author_id,
                 user_id: user_id
-            }
+            },
+            [
+                Permission.write(Role.users())
+            ]
         );
         console.log('Spread entry created successfully:', response);
         return response;
@@ -609,7 +669,10 @@ export const removeSpread = async (spread_id) => {
         const response = await databases.deleteDocument(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_SPREADS_COLLECTION,
-            spread_id
+            spread_id,
+            [
+                Permission.delete(Role.users())
+            ]
         );
         console.log('Spread removed successfully:', response);
         return response;
@@ -629,7 +692,10 @@ export const createLike = async (notice_id, author_id, user_id) => {
                 notice_id: notice_id,
                 author_id: author_id,
                 user_id: user_id
-            }
+            },
+            [
+                Permission.write(Role.users())
+            ]
         );
         console.log('Like created successfully:', response);
         return response;
@@ -644,7 +710,10 @@ export const removeLike = async (like_id) => {
         const response = await databases.deleteDocument(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_LIKES_COLLECTION,
-            like_id
+            like_id,
+            [
+                Permission.delete(Role.users())
+            ]
         );
         console.log('Like removed successfully:', response);
         return response;
@@ -730,7 +799,10 @@ export const createReport = async (notice_id, author_id, reason, user_id) => {
                 author_id: author_id,
                 reason: reason,
                 user_id: user_id
-            }
+            },
+            [
+                Permission.write(Role.users())
+            ]
         );
         console.log('Report created successfully');
         return response;
@@ -748,6 +820,9 @@ export const createFollow = async (user_id, otherUser_id) => {
             import.meta.env.VITE_FOLLOWING_COLLECTION,
             [
                 Query.equal('user_id', user_id)
+            ],
+            [
+                Permission.write(Role.users())
             ]
         );
 
@@ -785,7 +860,10 @@ export const removeFollow = async (following_id) => {
         const response = await databases.deleteDocument(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_FOLLOWING_COLLECTION,
-            following_id
+            following_id,
+            [
+                Permission.delete(Role.users())
+            ]
         )
         console.log('Follow removed successfully');
         return response;
@@ -857,7 +935,10 @@ export const createReaction = async (sender_id, recipient_id, content, timestamp
                 content,
                 timestamp,
                 notice_id
-            }
+            },
+            [
+                Permission.write(Role.users())
+            ]
         )
         console.log('Reaction created successfuly:', response);
         return response;
