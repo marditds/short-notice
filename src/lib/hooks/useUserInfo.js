@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
 import { account, registerAuthUser, updateUser, updateAuthUser, deleteUser, deleteAuthUser, createUserSession, deleteUserSession, deleteAllNotices, getUsersDocument, createFollow, removeFollow, getUserFollowingsById as fetchUserFollowingsById, getUserFollowersById as fetchUserFollowersById, getOtherUserFollowingsById as fetchOtherUserFollowingsById } from '../context/dbhandler';
-// import { authenticatedUsers } from '../../../functions/src/main';
 import { useUserContext } from '../context/UserContext';
 import { UserId } from '../../components/User/UserId';
 
