@@ -8,13 +8,13 @@ export const client = new Client()
 
 const users = new Users(client);
 
-const newUser = await users.create(
-  ID.unique(), // userId 
-  'my@mail.com', // email (optional)
-  '+13102548866', // phone (optional)
-  'EagleRockPlaza', // password (optional)
-  'Hakobos' // name
-);
+// const newUser = await users.create(
+//   ID.unique(), // userId 
+//   'my@mail.com', // email (optional)
+//   '+13102548866', // phone (optional)
+//   'EagleRockPlaza', // password (optional)
+//   'Hakobos' // name
+// );
 
 // This Appwrite function will be executed every time your function is triggered
 export default async ({ req, res, log, error }) => {
