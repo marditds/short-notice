@@ -59,6 +59,8 @@ function App() {
     const sessionDetails = getSessionDetails();
     if (!sessionDetails) {
       startSession();
+    } else {
+      console.log('Session already in progress for ', googleUserData.email);
     }
   }, [googleUserData])
 
