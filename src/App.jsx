@@ -22,7 +22,13 @@ function App() {
 
   const navigate = useNavigate();
 
-  const { registerUser, createSession, checkingIdInAuth, checkingEmailInAuth } = useUserInfo(googleUserData);
+  const {
+    registerUser,
+    createSession,
+    getSessionDetails,
+    checkingIdInAuth,
+    checkingEmailInAuth
+  } = useUserInfo(googleUserData);
 
   useEffect(() => {
     const storedToken = localStorage.getItem('accessToken');
@@ -50,7 +56,10 @@ function App() {
         }
       }
     }
-    startSession();
+    const sessionDetails = getSessionDetails();
+    if (!sessionDetails) {
+      startSession();
+    }
   }, [googleUserData])
 
 

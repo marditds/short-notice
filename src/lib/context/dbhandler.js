@@ -32,7 +32,9 @@ export const uploadAvatar = async (file) => {
             ID.unique(),
             file,
             [
-                Permission.write(Role.users())
+                Permission.write(Role.users()),
+                Permission.write(Role.guests())
+
             ]
         );
         const fileId = response.$id;
@@ -49,7 +51,8 @@ export const deleteAvatarFromStrg = async (fileId) => {
             import.meta.env.VITE_AVATAR_BUCKET,
             fileId,
             [
-                Permission.delete(Role.users())
+                Permission.delete(Role.users()),
+                Permission.delete(Role.guests())
             ]
         );
         console.log('Avatar deleted successfully:', response);
@@ -68,7 +71,8 @@ export const updateAvatar = async (userId, profilePictureId) => {
                 avatar: profilePictureId
             },
             [
-                Permission.update(Role.users())
+                Permission.update(Role.users()),
+                Permission.update(Role.guests())
             ]
         );
         console.log('User profile updated successfully');
@@ -89,7 +93,8 @@ export const deleteAvatarFromDoc = async (userId) => {
                 avatar: ''
             },
             [
-                Permission.delete(Role.users())
+                Permission.delete(Role.users()),
+                Permission.delete(Role.guests())
             ]
         );
         console.log('User profile avatar set to null successfully');
@@ -187,7 +192,8 @@ export const createUser = async ({ id, email, given_name, username }) => {
             import.meta.env.VITE_USERS_COLLECTION,
             [Query.equal('email', email)],
             [
-                Permission.write(Role.users())
+                Permission.write(Role.users()),
+                Permission.write(Role.guests())
             ]
         );
 
@@ -252,7 +258,8 @@ export const updateUser = async ({ userId, username }) => {
                 username: username
             },
             [
-                Permission.update(Role.users())
+                Permission.update(Role.users()),
+                Permission.update(Role.guests())
             ]
         );
         console.log('Username successfully updated.');
@@ -299,7 +306,8 @@ export const deleteUser = async (userId) => {
             import.meta.env.VITE_USERS_COLLECTION,
             userId,
             [
-                Permission.delete(Role.users())
+                Permission.delete(Role.users()),
+                Permission.delete(Role.guests())
             ]
         );
         console.log('User deleted successfully:', response);
@@ -386,7 +394,8 @@ export const createNotice = async ({ user_id, text, timestamp, expiresAt, scienc
                 sports: sports || false
             },
             [
-                Permission.write(Role.users())
+                Permission.write(Role.users()),
+                Permission.write(Role.guests())
             ]
         );
         console.log('Notice created succesfully:', response);
@@ -521,7 +530,8 @@ export const updateNotice = async (noticeId, newText) => {
                 text: newText
             },
             [
-                Permission.update(Role.users())
+                Permission.update(Role.users()),
+                Permission.update(Role.guests())
             ]
         );
         console.log('Notice updated successfully:', response);
@@ -539,7 +549,8 @@ export const deleteNotice = async (noticeId) => {
             import.meta.env.VITE_NOTICES_COLLECTION,
             noticeId,
             [
-                Permission.delete(Role.users())
+                Permission.delete(Role.users()),
+                Permission.delete(Role.guests())
             ]
         );
         console.log('Notice deleted successfully:', response);
@@ -559,7 +570,8 @@ export const deleteAllNotices = async (userId) => {
             import.meta.env.VITE_NOTICES_COLLECTION,
             [Query.equal('user_id', userId)],
             [
-                Permission.delete(Role.users())
+                Permission.delete(Role.users()),
+                Permission.delete(Role.guests())
             ]
         );
 
@@ -614,7 +626,8 @@ export const updateUserInterests = async (userId, selectedTags) => {
                 userId,
                 interestsData,
                 [
-                    Permission.update(Role.users())
+                    Permission.update(Role.users()),
+                    Permission.update(Role.guests())
                 ]
             );
         } catch (updateError) {
@@ -625,7 +638,7 @@ export const updateUserInterests = async (userId, selectedTags) => {
                     userId,
                     interestsData,
                     [
-                        Permission.write(Role.users())
+                        Permission.write(Role.users()), Permission.write(Role.guests())
                     ]
                 );
             } else {
@@ -653,7 +666,8 @@ export const createSpread = async (notice_id, author_id, user_id) => {
                 user_id: user_id
             },
             [
-                Permission.write(Role.users())
+                Permission.write(Role.users()),
+                Permission.write(Role.guests())
             ]
         );
         console.log('Spread entry created successfully:', response);
@@ -671,7 +685,8 @@ export const removeSpread = async (spread_id) => {
             import.meta.env.VITE_SPREADS_COLLECTION,
             spread_id,
             [
-                Permission.delete(Role.users())
+                Permission.delete(Role.users()),
+                Permission.delete(Role.guests())
             ]
         );
         console.log('Spread removed successfully:', response);
@@ -694,7 +709,8 @@ export const createLike = async (notice_id, author_id, user_id) => {
                 user_id: user_id
             },
             [
-                Permission.write(Role.users())
+                Permission.write(Role.users()),
+                Permission.write(Role.guests())
             ]
         );
         console.log('Like created successfully:', response);
@@ -712,7 +728,8 @@ export const removeLike = async (like_id) => {
             import.meta.env.VITE_LIKES_COLLECTION,
             like_id,
             [
-                Permission.delete(Role.users())
+                Permission.delete(Role.users()),
+                Permission.delete(Role.guests())
             ]
         );
         console.log('Like removed successfully:', response);
@@ -801,7 +818,8 @@ export const createReport = async (notice_id, author_id, reason, user_id) => {
                 user_id: user_id
             },
             [
-                Permission.write(Role.users())
+                Permission.write(Role.users()),
+                Permission.write(Role.guests())
             ]
         );
         console.log('Report created successfully');
@@ -822,7 +840,8 @@ export const createFollow = async (user_id, otherUser_id) => {
                 Query.equal('user_id', user_id)
             ],
             [
-                Permission.write(Role.users())
+                Permission.write(Role.users()),
+                Permission.write(Role.guests())
             ]
         );
 
@@ -862,7 +881,8 @@ export const removeFollow = async (following_id) => {
             import.meta.env.VITE_FOLLOWING_COLLECTION,
             following_id,
             [
-                Permission.delete(Role.users())
+                Permission.delete(Role.users()),
+                Permission.delete(Role.guests())
             ]
         )
         console.log('Follow removed successfully');
@@ -937,7 +957,8 @@ export const createReaction = async (sender_id, recipient_id, content, timestamp
                 notice_id
             },
             [
-                Permission.write(Role.users())
+                Permission.write(Role.users()),
+                Permission.write(Role.guests())
             ]
         )
         console.log('Reaction created successfuly:', response);

@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { account, checkIdExistsInAuth, checkEmailExistsInAuth, registerAuthUser, updateUser, updateAuthUser, deleteUser, createUserSession, deleteUserSession, deleteAllNotices, getUsersDocument, createFollow, removeFollow, getUserFollowingsById as fetchUserFollowingsById, getUserFollowersById as fetchUserFollowersById, getOtherUserFollowingsById as fetchOtherUserFollowingsById } from '../context/dbhandler';
+import { account, checkIdExistsInAuth, checkEmailExistsInAuth, registerAuthUser, updateUser, updateAuthUser, deleteUser, createUserSession, deleteUserSession, getSessionDetails as fetchSessionDetails, deleteAllNotices, getUsersDocument, createFollow, removeFollow, getUserFo1llowingsById as fetchUserFollowingsById, getUserFollowersById as fetchUserFollowersById, getOtherUserFollowingsById as fetchOtherUserFollowingsById } from '../context/dbhandler';
 import { useUserContext } from '../context/UserContext';
 import { UserId } from '../../components/User/UserId';
 
@@ -45,6 +45,17 @@ const useUserInfo = (data) => {
             return usrSession;
         } catch (error) {
             console.error('Error creating session:', error);
+        }
+    }
+
+    const getSessionDetails = async () => {
+        try {
+            const sessionDetails = fetchSessionDetails();
+            console.log('sessionDetails', sessionDetails);
+            return sessionDetails;
+        } catch (error) {
+            console.error('Error gettin session details:', error);
+
         }
     }
 
@@ -276,6 +287,7 @@ const useUserInfo = (data) => {
         followersAccounts,
         followingAccounts,
         // isLoading,
+        getSessionDetails,
         checkingIdInAuth,
         checkingEmailInAuth,
         registerUser,
