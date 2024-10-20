@@ -98,7 +98,7 @@ const UserProfile = () => {
             try {
                 const usrNtcs = await fetchUserNotices(user_id, setNotices, limit, offset);
 
-                if (usrNtcs.length < limit) {
+                if (usrNtcs?.length < limit) {
                     setHasMoreNotices(false);
                 } else {
                     setHasMoreNotices(true);

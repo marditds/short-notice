@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { account, checkIdExistsInAuth, checkEmailExistsInAuth, registerAuthUser, updateUser, updateAuthUser, deleteUser, createUserSession, deleteUserSession, getSessionDetails as fetchSessionDetails, deleteAllNotices, getUsersDocument, createFollow, removeFollow, getUserFo1llowingsById as fetchUserFollowingsById, getUserFollowersById as fetchUserFollowersById, getOtherUserFollowingsById as fetchOtherUserFollowingsById } from '../context/dbhandler';
+import { account, checkIdExistsInAuth, checkEmailExistsInAuth, registerAuthUser, updateUser, updateAuthUser, deleteUser, deleteAllNotices, getUsersDocument, createFollow, removeFollow, getUserFollowingsById as fetchUserFollowingsById, getUserFollowersById as fetchUserFollowersById, getOtherUserFollowingsById as fetchOtherUserFollowingsById } from '../context/dbhandler';
 import { useUserContext } from '../context/UserContext';
 import { UserId } from '../../components/User/UserId';
 
@@ -39,34 +39,34 @@ const useUserInfo = (data) => {
         }
     }
 
-    const createSession = async (email) => {
-        try {
-            const usrSession = await createUserSession(email);
-            return usrSession;
-        } catch (error) {
-            console.error('Error creating session:', error);
-        }
-    }
+    // const createSession = async (email) => {
+    //     try {
+    //         const usrSession = await createUserSession(email);
+    //         return usrSession;
+    //     } catch (error) {
+    //         console.error('Error creating session:', error);
+    //     }
+    // }
 
-    const getSessionDetails = async () => {
-        try {
-            const sessionDetails = fetchSessionDetails();
-            console.log('sessionDetails', sessionDetails);
-            return sessionDetails;
-        } catch (error) {
-            console.error('Error gettin session details:', error);
+    // const getSessionDetails = async () => {
+    //     try {
+    //         const sessionDetails = await fetchSessionDetails();
+    //         console.log('sessionDetails', sessionDetails);
+    //         return sessionDetails;
+    //     } catch (error) {
+    //         console.error('Error gettin session details:', error);
 
-        }
-    }
+    //     }
+    // }
 
-    const removeSession = async () => {
-        try {
-            const usrSession = await deleteUserSession();
-            return usrSession;
-        } catch (error) {
-            console.error('Error removing session:', error);
-        }
-    }
+    // const removeSession = async () => {
+    //     try {
+    //         const usrSession = await deleteUserSession();
+    //         return usrSession;
+    //     } catch (error) {
+    //         console.error('Error removing session:', error);
+    //     }
+    // }
 
     const handleUpdateUser = async (username) => {
 
@@ -287,12 +287,12 @@ const useUserInfo = (data) => {
         followersAccounts,
         followingAccounts,
         // isLoading,
-        getSessionDetails,
         checkingIdInAuth,
         checkingEmailInAuth,
         registerUser,
-        createSession,
-        removeSession,
+        // createSession,
+        // removeSession,
+        // getSessionDetails, 
         handleUpdateUser,
         handleDeleteUser,
         getUsersData,

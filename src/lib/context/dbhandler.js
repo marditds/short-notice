@@ -291,7 +291,7 @@ export const checkIdExistsInAuth = async () => {
 
 export const checkEmailExistsInAuth = async () => {
     try {
-        const authEmail = await account.get();
+        const authEmail = await account?.get();
         console.log('authEmail:', authEmail.email);
         return authEmail.email;
     } catch (error) {
@@ -335,35 +335,35 @@ export const deleteAuthUser = async (userId) => {
     }
 }
 
-export const createUserSession = async (email) => {
-    try {
-        const userSession = await account.createEmailPasswordSession(email, 'TmbkaberdiArum55');
-        console.log('Session created successfully:', userSession);
-        return userSession;
-    } catch (error) {
-        console.error('Error creating session:', error);
-    }
-}
+// export const createUserSession = async (email) => {
+//     try {
+//         const userSession = await account.createEmailPasswordSession(email, 'TmbkaberdiArum55');
+//         console.log('Session created successfully:', userSession);
+//         return userSession;
+//     } catch (error) {
+//         console.error('Error creating session:', error);
+//     }
+// }
 
-export const deleteUserSession = async () => {
-    try {
-        const userSession = await account.deleteSession('current');
-        console.log('Session delete successfully:', userSession);
-    } catch (error) {
-        console.error('Error deleting the session:', error);
-    }
-}
+// export const deleteUserSession = async () => {
+//     try {
+//         const userSession = await account.deleteSession('current');
+//         console.log('Session delete successfully:', userSession);
+//     } catch (error) {
+//         console.error('Error deleting the session:', error);
+//     }
+// }
 
-export const getSessionDetails = async () => {
-    try {
-        const sessDets = account.getSession('current');
-        console.log('sessDets:', sessDets);
-        return sessDets;
-    } catch (error) {
-        console.error('Error getting session details:', error);
+// export const getSessionDetails = async () => {
+//     try {
+//         const sessDets = await account?.getSession('current');
+//         console.log('sessDets:', sessDets);
+//         return sessDets;
+//     } catch (error) {
+//         console.error('Error getting session details:', error);
 
-    }
-}
+//     }
+// }
 
 export const createNotice = async ({ user_id, text, timestamp, expiresAt, science, technology, engineering, math, literature, history, philosophy, music, medicine, economics, law, polSci, sports
 }) => {

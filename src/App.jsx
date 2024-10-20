@@ -45,24 +45,11 @@ function App() {
     }
   }, [navigate]);
 
-  useEffect(() => {
-    const startSession = async () => {
-      if (googleUserData.email !== undefined) {
-        try {
-          let newLoginSession = await createSession(googleUserData?.email)
-          console.log('newLoginSession - startSession:', newLoginSession);
-        } catch (error) {
-          console.error('Error starting session:', error);
-        }
-      }
-    }
-    const sessionDetails = getSessionDetails();
-    if (!sessionDetails) {
-      startSession();
-    } else {
-      console.log('Session already in progress for ', googleUserData.email);
-    }
-  }, [googleUserData])
+
+  // useEffect(() => {
+
+
+  // }, [googleUserData])
 
 
   const checkUsernameInDatabase = async (email) => {
@@ -95,6 +82,18 @@ function App() {
     }
   }, [isLoggedIn, hasUsername, navigate]);
 
+
+  // const startSession = async () => {
+  //   if (googleUserData.email !== undefined) {
+  //     try {
+  //       let newLoginSession = await createSession(googleUserData?.email)
+  //       console.log('newLoginSession - startSession:', newLoginSession);
+  //     } catch (error) {
+  //       console.error('Error starting session:', error);
+  //     }
+  //   }
+  // }
+
   // Triggered for returning users 
   const onSuccess = (credentialResponse) => {
     const decoded = jwtDecode(credentialResponse?.credential);
@@ -102,6 +101,18 @@ function App() {
     setGoogleUserData(preData => decoded);
 
     setIsLoggedIn(preVal => true);
+
+    // if (decoded) {
+    //   console.log('deciding on session');
+    //   const sessionDetails = await getSessionDetails();
+    //   console.log('stiil deciding on session');
+    //   if (!sessionDetails) {
+    //     console.log('session not found so starting a new session');
+    //     await startSession();
+    //   } else {
+    //     console.log('Session already in progress for ', googleUserData.email);
+    //   }
+    // }
 
     const accessToken = credentialResponse?.credential;
     console.log('Access Token:', accessToken);
