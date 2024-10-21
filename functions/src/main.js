@@ -38,7 +38,7 @@ export default async ({ req, res, log, error }) => {
 
     log(`Response from Appwrite: ${JSON.stringify(response)}`);
 
-    log(`response.users: ${JSON.stringify(response.users)}`);
+    log(`response.users: ${JSON.stringify(response.users[0])}`);
 
 
     // return res.json({
