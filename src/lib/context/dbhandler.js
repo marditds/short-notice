@@ -260,7 +260,7 @@ export const updateUser = async ({ userId, username }) => {
                 username: username
             },
             [
-                Permission.update(Role.users()),
+                // Permission.update(Role.users()),
                 Permission.update(Role.guests())
             ]
         );
@@ -314,7 +314,7 @@ export const checkEmailExistsInAuth = async (email) => {
         if (response.status === 'completed') {
             try {
                 const result = JSON.parse(response.responseBody);
-                return result.emailExists;
+                return result;
             } catch (parseError) {
                 console.error('Error parsing response:', parseError);
                 return false;

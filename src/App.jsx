@@ -126,11 +126,11 @@ function App() {
 
       console.log('this email will be sent - App.jsx:', googleUserData.email);
 
-      const emailExists = await checkingEmailInAuth(googleUserData.email);
+      const usrData = await checkingEmailInAuth(googleUserData.email);
 
-      console.log('emailExists', emailExists);
+      console.log('usrData.email', usrData.email);
 
-      if (!emailExists) {
+      if (usrData.email !== googleUserData.email) {
         console.log('running if');
 
         const usrID = ID.unique();
@@ -167,12 +167,12 @@ function App() {
       } else {
         console.log('running else');
 
-        const authId = await checkingIdInAuth();
-        console.log('authId', authId);
+        // const authId = await checkingIdInAuth();
+        console.log('usrData.$id', usrData.$id);
 
         // Add user to collection
         await createUser({
-          id: authId,
+          id: usrData.$id,
           email: googleUserData.email,
           given_name: googleUserData.given_name,
           username: username.toLowerCase()
