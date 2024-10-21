@@ -24,18 +24,21 @@ export default async ({ req, res, log, error }) => {
     if (!email) {
       throw new Error('Email not provided.');
     }
-
+    context.log(`Checking email: ${email}`)
     log(`Checking email: ${email}`);
     // Query users by email
     const response = await users.list([`email=${email}`]);
 
     log(`Response from Appwrite: ${JSON.stringify(response)}`);
+    context.log(`Response from Appwrite: ${JSON.stringify(response)}`);
+
 
     const result = {
       emailExists: response.total > 0
     };
 
     log(`result: ${result}`)
+    context.log(`result: ${result}`)
 
     // log(`Email check result for ${email}: ${result.emailExists}`);
     return res.json(result);
