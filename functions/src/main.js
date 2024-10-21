@@ -36,7 +36,13 @@ export default async ({ req, res, log, error }) => {
     // const response = await users.list([`email=${data.email}`]);
     const response = await users.list([Query.equal('email', data.email)]);
 
+    const userSessions = await users.listSessions(response.users[0].$id);
+
+
     log(`Response from Appwrite: ${JSON.stringify(response)}`);
+
+    console.log(`User sessions: ${JSON.stringify(userSessions)}`);
+
 
     // log(`response.users: ${JSON.stringify(response.users[0])}`);
 
