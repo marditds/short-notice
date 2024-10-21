@@ -1,4 +1,4 @@
-import { Client, Storage, Account, Databases, ID, Query, Permission, Role, Functions } from 'appwrite';
+import { Client, Storage, Account, Databases, ID, Query, Permission, Role, Functions, ExecutionMethod } from 'appwrite';
 
 const client = new Client()
     .setEndpoint(import.meta.env.VITE_ENDPOINT)
@@ -298,20 +298,40 @@ export const checkEmailExistsInAuth = async (email) => {
         console.log('type of email', typeof (email));
 
         const payload = JSON.stringify({ email: email });
+        console.log('Payload being sent:');
+        console.log(payload);
 
         const response = await functions.createExecution(
-            '67108546002578d06d3c',
+            '67108546002578d06d3c',  // your function ID
+            // JSON.stringify({ email }),
             payload,
-            false
+            false,  // async parameter
+            '/',    // path parameter
+            ExecutionMethod.POST  // method parameter
         );
 
         console.log('Function response:', response);
+        console.log('Execution details:', {
+            functionId: '67108546002578d06d3c',
+            executionId: execution.$id,
+            status: execution.status,
+            responseCode: execution.responseCode,
+            stdout: execution.stdout,
+            stderr: execution.stderr
+        });
 
-        if (response.response) {
-            const result = JSON.parse(response.response);
-            return result.emailExists; // Returns the emailExists boolean
+
+
+        if (response.status === 'completed') {
+            if (response.response) {
+                const result = JSON.parse(response.response);
+                return result.emailExists; // Returns the emailExists boolean
+            } else {
+                throw new Error("Empty response from Appwrite function.");
+            }
         } else {
-            throw new Error("Empty response from Appwrite function.");
+            console.error('Function execution failed:', execution.stderr);
+            return false;
         }
     } catch (error) {
         console.error('Error checking email existence in Auth:', error);

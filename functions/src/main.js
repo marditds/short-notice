@@ -20,7 +20,8 @@ export default async ({ req, res, log, error }) => {
     }
 
     // Extract email from request body (assuming it's passed in the request payload)
-    const data = typeof req.payload === 'string' ? JSON.parse(req.payload) : req.payload;
+    const data = JSON.parse(req.payload);
+    log('Parsed payload: ' + JSON.stringify(data));
 
     if (!data.email) {
       throw new Error('Email not provided.');
@@ -32,9 +33,15 @@ export default async ({ req, res, log, error }) => {
     log(`Response from Appwrite: ${JSON.stringify(response)}`);
 
 
-    return res.json({
-      emailExists: response.total > 0
-    });
+    // return res.json({
+    //   emailExists: response.total > 0
+    // });
+    const result = {
+      emailExists: response.total > 0,
+      success: true
+    };
+    log('Sending response: ' + JSON.stringify(result));
+    return res.json(result);
 
     // log(`result: ${result}`)
     // log(`Email check result for ${email}: ${result.emailExists}`);
