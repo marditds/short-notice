@@ -11,7 +11,7 @@ export default async ({ req, res, log, error }) => {
   const users = new Users(client);
 
   try {
-    context.log(`Checking payload: ${payload}`)
+    log(`Checking payload: ${payload}`)
     // Check if payload is present
     if (!req.payload) {
       throw new Error('Request payload is missing.');
@@ -25,13 +25,11 @@ export default async ({ req, res, log, error }) => {
     if (!email) {
       throw new Error('Email not provided.');
     }
-    context.log(`Checking email: ${email}`)
-    log(`Checking email: ${email}`);
+    log(`Checking email: ${email}`)
     // Query users by email
     const response = await users.list([`email=${email}`]);
 
     log(`Response from Appwrite: ${JSON.stringify(response)}`);
-    context.log(`Response from Appwrite: ${JSON.stringify(response)}`);
 
 
     const result = {
@@ -39,7 +37,6 @@ export default async ({ req, res, log, error }) => {
     };
 
     log(`result: ${result}`)
-    context.log(`result: ${result}`)
 
     // log(`Email check result for ${email}: ${result.emailExists}`);
     return res.json(result);
