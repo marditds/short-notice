@@ -295,6 +295,7 @@ export const checkEmailExistsInAuth = async (email) => {
     try {
         // Trigger the cloud function with the user's email
         console.log('this email will be sent - dbhandler:', email);
+        console.log('type of email', typeof (email));
 
         const response = await functions.createExecution(
             '67108546002578d06d3c',
