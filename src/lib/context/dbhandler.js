@@ -302,7 +302,7 @@ export const checkEmailExistsInAuth = async (email) => {
         console.log(payload);
 
         const response = await functions.createExecution(
-            '67108546002578d06d3c',  // your function ID
+            import.meta.env.VITE_USER_AUTH_FUNCTION_ID,  // your function ID
             payload
         );
 
@@ -365,15 +365,15 @@ export const deleteAuthUser = async (userId) => {
     }
 }
 
-// export const createUserSession = async (email) => {
-//     try {
-//         const userSession = await account.createEmailPasswordSession(email, 'TmbkaberdiArum55');
-//         console.log('Session created successfully:', userSession);
-//         return userSession;
-//     } catch (error) {
-//         console.error('Error creating session:', error);
-//     }
-// }
+export const createUserSession = async (email) => {
+    try {
+        const userSession = await account.createEmailPasswordSession(email, 'TmbkaberdiArum55');
+        console.log('Session created successfully:', userSession);
+        return userSession;
+    } catch (error) {
+        console.error('Error creating session:', error);
+    }
+}
 
 // export const deleteUserSession = async () => {
 //     try {
