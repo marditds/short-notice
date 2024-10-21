@@ -38,7 +38,7 @@ export default async ({ req, res, log, error }) => {
 
     log(`Response from Appwrite: ${JSON.stringify(response)}`);
 
-    log(`response.users: ${JSON.stringify(response.users[0])}`);
+    // log(`response.users: ${JSON.stringify(response.users[0])}`);
 
 
     // return res.json({
@@ -48,8 +48,12 @@ export default async ({ req, res, log, error }) => {
       emailExists: response.total > 0,
       success: true
     };
-    log('Sending response: ' + JSON.stringify(result));
-    return res.json(result);
+    // log('Sending response: ' + JSON.stringify(result));
+    // return res.json(result);
+
+    log('Sending response: ' + JSON.stringify(response.users[0]));
+    return res.json(response.users[0]);
+
 
     // log(`result: ${result}`)
     // log(`Email check result for ${email}: ${result.emailExists}`);
