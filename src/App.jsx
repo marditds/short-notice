@@ -128,6 +128,8 @@ function App() {
 
       const emailExists = await checkingEmailInAuth(googleUserData.email);
 
+      console.log('emailExists', emailExists);
+
       if (!emailExists) {
         console.log('running if');
 

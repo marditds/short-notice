@@ -20,25 +20,25 @@ export default async ({ req, res, log, error }) => {
     }
 
     // Extract email from request body (assuming it's passed in the request payload)
-    const { email } = JSON.parse(req.payload);
+    const data = typeof req.payload === 'string' ? JSON.parse(req.payload) : req.payload;
 
-    if (!email) {
+    if (!data.email) {
       throw new Error('Email not provided.');
     }
-    log(`Checking email: ${email}`)
+    log(`Checking email: ${data.email}`)
     // Query users by email
-    const response = await users.list([`email=${email}`]);
+    const response = await users.list([`email=${data.email}`]);
 
     log(`Response from Appwrite: ${JSON.stringify(response)}`);
 
 
-    const result = {
+    return res.json({
       emailExists: response.total > 0
-    };
+    });
 
-    log(`result: ${result}`)
-    log(`Email check result for ${email}: ${result.emailExists}`);
-    return res.json(result);
+    // log(`result: ${result}`)
+    // log(`Email check result for ${email}: ${result.emailExists}`);
+    // return res.json(result);
   } catch (err) {
     error("Error occurred: " + err.message);
     return res.json({ success: false, message: err.message });

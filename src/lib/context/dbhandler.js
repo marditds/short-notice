@@ -297,10 +297,16 @@ export const checkEmailExistsInAuth = async (email) => {
         console.log('this email will be sent - dbhandler:', email);
         console.log('type of email', typeof (email));
 
+        const payload = JSON.stringify({ email: email });
+
         const response = await functions.createExecution(
             '67108546002578d06d3c',
-            JSON.stringify({ email })
+            payload,
+            false
         );
+
+        console.log('Function response:', response);
+
         if (response.response) {
             const result = JSON.parse(response.response);
             return result.emailExists; // Returns the emailExists boolean

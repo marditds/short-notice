@@ -118,7 +118,7 @@ const useUserInfo = (data) => {
         try {
             console.log('this email will be sent - useserInfo:', email);
 
-            const res = checkEmailInAuthFromServer(email);
+            const res = await checkEmailInAuthFromServer(email);
             return res;
         } catch (error) {
             console.error('Error checkingEmailInAuth:', res);
