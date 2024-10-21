@@ -38,6 +38,8 @@ export default async ({ req, res, log, error }) => {
 
     log(`Response from Appwrite: ${JSON.stringify(response)}`);
 
+    log(`response.users: ${JSON.stringify(response.users)}`);
+
 
     // return res.json({
     //   emailExists: response.total > 0

@@ -313,7 +313,7 @@ export const checkEmailExistsInAuth = async (email) => {
 
         if (response.status === 'completed') {
             try {
-                const result = JSON.parse(response.response || response.stdout);
+                const result = JSON.parse(response.responseBody);
                 return result.emailExists;
             } catch (parseError) {
                 console.error('Error parsing response:', parseError);
