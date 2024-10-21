@@ -22,8 +22,10 @@ export default async ({ req, res, log, error }) => {
       log(req.payload)
     }
 
-    // Extract email from request body (assuming it's passed in the request payload)
+    // Extract email from request body 
     const data = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
+    log('Not-parsed data:');
+    log(data);
     log('Parsed data: ' + JSON.stringify(data));
 
     if (!data.email) {
