@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { account, checkIdExistsInAuth, checkEmailExistsInAuth, registerAuthUser, updateUser, updateAuthUser, deleteUser, deleteAllNotices, getUsersDocument, createFollow, removeFollow, getUserFollowingsById as fetchUserFollowingsById, getUserFollowersById as fetchUserFollowersById, getOtherUserFollowingsById as fetchOtherUserFollowingsById } from '../context/dbhandler';
+import { checkIdExistsInAuth, checkEmailExistsInAuth as checkEmailInAuthFromServer, registerAuthUser, updateUser, updateAuthUser, deleteUser, deleteAllNotices, getUsersDocument, createFollow, removeFollow, getUserFollowingsById as fetchUserFollowingsById, getUserFollowersById as fetchUserFollowersById, getOtherUserFollowingsById as fetchOtherUserFollowingsById } from '../context/dbhandler';
 import { useUserContext } from '../context/UserContext';
 import { UserId } from '../../components/User/UserId';
 
@@ -114,9 +114,9 @@ const useUserInfo = (data) => {
         }
     }
 
-    const checkingEmailInAuth = async () => {
+    const checkingEmailInAuth = async (email) => {
         try {
-            const res = checkEmailExistsInAuth();
+            const res = checkEmailInAuthFromServer(email);
             return res;
         } catch (error) {
             console.error('Error checkingEmailInAuth:', res);

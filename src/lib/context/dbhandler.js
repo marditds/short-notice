@@ -1,4 +1,4 @@
-import { Client, Storage, Account, Databases, ID, Query, Permission, Role } from 'appwrite';
+import { Client, Storage, Account, Databases, ID, Query, Permission, Role, Functions } from 'appwrite';
 
 const client = new Client()
     .setEndpoint(import.meta.env.VITE_ENDPOINT)
@@ -7,6 +7,8 @@ const client = new Client()
 export const account = new Account(client);
 
 console.log('account - dbhandler.js', account);
+
+const functions = new Functions(client);
 
 export default client;
 
@@ -289,15 +291,16 @@ export const checkIdExistsInAuth = async () => {
     }
 }
 
-export const checkEmailExistsInAuth = async () => {
+export const checkEmailExistsInAuth = async (email) => {
     try {
-        const authEmail = await account?.get();
-        console.log('authEmail:', authEmail.email);
-        return authEmail.email;
+        // Trigger the cloud function with the user's email
+        const response = await functions.createExecution('67108546002578d06d3c', JSON.stringify({ email }));
+        return JSON.parse(response.response).emailExists; // Assuming the cloud function returns `emailExists`
     } catch (error) {
-        console.error('Error checking authEmail:', error);
+        console.error('Error checking email existence in Auth:', error);
+        return false;
     }
-}
+};
 
 export const deleteUser = async (userId) => {
     try {
@@ -364,6 +367,17 @@ export const deleteAuthUser = async (userId) => {
 
 //     }
 // }
+
+const createGoogleSession = async () => {
+    try {
+        let createSession = await account.createOAuth2Session(
+            'google'
+        )
+        console.log('createSession - App.jsx:', createSession);
+    } catch (error) {
+        console.error('Error creating session:', error);
+    }
+}
 
 export const createNotice = async ({ user_id, text, timestamp, expiresAt, science, technology, engineering, math, literature, history, philosophy, music, medicine, economics, law, polSci, sports
 }) => {

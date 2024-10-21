@@ -7,7 +7,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import { createUser, getUserByEmail, account } from './lib/context/dbhandler.js';
 import { useUserContext } from './lib/context/UserContext';
-import { ID } from 'appwrite';
+import { ID, OAuthProvider } from 'appwrite';
 import useUserInfo from './lib/hooks/useUserInfo.js';
 
 function App() {
@@ -24,8 +24,8 @@ function App() {
 
   const {
     registerUser,
-    createSession,
-    getSessionDetails,
+    // createSession,
+    // getSessionDetails,
     checkingIdInAuth,
     checkingEmailInAuth
   } = useUserInfo(googleUserData);
@@ -44,12 +44,6 @@ function App() {
       navigate('/');
     }
   }, [navigate]);
-
-
-  // useEffect(() => {
-
-
-  // }, [googleUserData])
 
 
   const checkUsernameInDatabase = async (email) => {
@@ -95,6 +89,7 @@ function App() {
   // }
 
   // Triggered for returning users 
+
   const onSuccess = (credentialResponse) => {
     const decoded = jwtDecode(credentialResponse?.credential);
     console.log('Logged in successfully. - onSuccess');
@@ -129,9 +124,9 @@ function App() {
 
     if (googleUserData?.email && googleUserData?.given_name && username) {
 
-      const usrEmail = await checkingEmailInAuth();
+      const emailExists = await checkingEmailInAuth(googleUserData.email);
 
-      if (usrEmail !== googleUserData.email) {
+      if (!emailExists) {
         const usrID = ID.unique();
         console.log('usrID', usrID);
 
@@ -143,9 +138,6 @@ function App() {
             username.toLowerCase()
           );
           console.log('newUsr - App.jsx:', newUsr);
-
-          let newUsrSession = await createSession(googleUserData.email)
-          console.log('newUsrSession - App.jsx:', newUsrSession);
 
           // Add user to collection
           await createUser({

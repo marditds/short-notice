@@ -1,30 +1,85 @@
-import { Client, Users, ID } from 'node-appwrite';
+import { Client, Users } from 'node-appwrite';
 
-export const client = new Client()
-  .setEndpoint(process.env.VITE_ENDPOINT)
-  .setProject(process.env.VITE_PROJECT)
-  .setKey(process.env.VITE_SHORT_NOTICE_API_KEYS);
+// This Appwrite function will be executed every time your function is triggered
+export default async ({ req, res, log, error }) => {
+  // Initialize the Appwrite client
+  const client = new Client()
+    .setEndpoint(process.env.APPWRITE_FUNCTION_ENDPOINT) // Appwrite endpoint
+    .setProject(process.env.APPWRITE_FUNCTION_PROJECT_ID) // Project ID
+    .setKey(process.env.APPWRITE_FUNCTION_API_KEY); // API Key for privileged access
 
+  const users = new Users(client);
 
-const users = new Users(client);
-
-export const deleteUser = async (userId) => {
   try {
-    await users.delete(userId);
-  } catch (error) {
-    console.error('Error deleting auth user:', error);
-  }
-}
+    // Extract email from request body (assuming it's passed in the request payload)
+    const { email } = JSON.parse(req.payload);
 
-app.post('/api/delete-account', async (req, res) => {
-  const { userId } = req.body;
-  try {
-    await deleteUser(userId); // Call function to delete the user
-    res.status(200).send('User deleted successfully');
-  } catch (error) {
-    res.status(500).send('Failed to delete user');
+    if (!email) {
+      throw new Error('Email not provided.');
+    }
+
+    // Query users by email
+    const response = await users.list([`email=${email}`]);
+
+    if (response.total > 0) {
+      log(`Email exists: ${email}`);
+      return res.json({ emailExists: true });
+    } else {
+      log(`Email does not exist: ${email}`);
+      return res.json({ emailExists: false });
+    }
+  } catch (err) {
+    error("Error occurred: " + err.message);
+    return res.json({ success: false, message: err.message });
   }
-});
+};
+
+
+// ____________________________________________________
+// import { Client, Users, ID } from 'node-appwrite';
+
+// export const client = new Client()
+//   .setEndpoint(process.env.VITE_ENDPOINT)
+//   .setProject(process.env.VITE_PROJECT)
+//   .setKey(process.env.VITE_SHORT_NOTICE_API_KEYS);
+
+
+// const users = new Users(client);
+
+// export const deleteUser = async (userId) => {
+//   try {
+//     await users.delete(userId);
+//   } catch (error) {
+//     console.error('Error deleting auth user:', error);
+//   }
+// }
+
+// app.post('/api/delete-account', async (req, res) => {
+//   const { userId } = req.body;
+//   try {
+//     await deleteUser(userId);
+//     res.status(200).send('User deleted successfully');
+//   } catch (error) {
+//     res.status(500).send('Failed to delete user');
+//   }
+// });
+
+// export const checkEmailExistsInAuth = async (email) => {
+//   try {
+//     const response = await users.list([`email=${email}`]);
+
+//     if (response.total > 0) {
+//       console.log('Email exists in Auth:', email);
+//       return true;
+//     } else {
+//       console.log('Email does not exist in Auth:', email);
+//       return false;
+//     }
+//   } catch (error) {
+//     console.error('Error checking email:', error);
+//     throw error;
+//   }
+// };
 
 // This Appwrite function will be executed every time your function is triggered
 // export default async ({ req, res, log, error }) => {
@@ -38,9 +93,9 @@ app.post('/api/delete-account', async (req, res) => {
 // Log messages and errors to the Appwrite Console
 // These logs won't be seen by your end users
 
-//   log(`Total users: ${response.length}`);
+// log(`Total users: ${response.length}`);
 // } catch (err) {
-//   error("Could not list users: " + err.message);
+// error("Could not list users: " + err.message);
 // }
 
 // The req object contains the request data
