@@ -4,9 +4,9 @@ import { Client, Users } from 'node-appwrite';
 export default async ({ req, res, log, error }) => {
   // Initialize the Appwrite client
   const client = new Client()
-    .setEndpoint(process.env.APPWRITE_FUNCTION_ENDPOINT) // Appwrite endpoint
-    .setProject(process.env.APPWRITE_FUNCTION_PROJECT_ID) // Project ID
-    .setKey(process.env.APPWRITE_FUNCTION_API_KEY); // API Key for privileged access
+    .setEndpoint(process.env.VITE_ENDPOINT) // Appwrite endpoint
+    .setProject(process.env.VITE_PROJECT) // Project ID
+    .setKey(process.env.VITE_SHORT_NOTICE_API_KEYS); // API Key for privileged access
 
   const users = new Users(client);
 
