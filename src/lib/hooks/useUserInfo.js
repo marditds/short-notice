@@ -116,6 +116,8 @@ const useUserInfo = (data) => {
 
     const checkingEmailInAuth = async (email) => {
         try {
+            console.log('this email will be sent - useserInfo:', email);
+
             const res = checkEmailInAuthFromServer(email);
             return res;
         } catch (error) {

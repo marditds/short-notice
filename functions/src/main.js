@@ -11,6 +11,13 @@ export default async ({ req, res, log, error }) => {
   const users = new Users(client);
 
   try {
+    // Check if payload is present
+    if (!req.payload) {
+      throw new Error('Request payload is missing.');
+    } else {
+      log(req.payload)
+    }
+
     // Extract email from request body (assuming it's passed in the request payload)
     const { email } = JSON.parse(req.payload);
 
@@ -18,14 +25,19 @@ export default async ({ req, res, log, error }) => {
       throw new Error('Email not provided.');
     }
 
+    log(`Checking email: ${email}`);
     // Query users by email
     const response = await users.list([`email=${email}`]);
+
+    log(`Response from Appwrite: ${JSON.stringify(response)}`);
 
     const result = {
       emailExists: response.total > 0
     };
 
-    log(`Email check result for ${email}: ${result.emailExists}`);
+    log(`result: ${result}`)
+
+    // log(`Email check result for ${email}: ${result.emailExists}`);
     return res.json(result);
     // if (response.total > 0) {
     //   log(`Email exists: ${email}`);

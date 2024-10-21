@@ -124,6 +124,8 @@ function App() {
 
     if (googleUserData?.email && googleUserData?.given_name && username) {
 
+      console.log('this email will be sent - App.jsx:', googleUserData.email);
+
       const emailExists = await checkingEmailInAuth(googleUserData.email);
 
       if (!emailExists) {
