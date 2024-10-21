@@ -303,7 +303,6 @@ export const checkEmailExistsInAuth = async (email) => {
 
         const response = await functions.createExecution(
             '67108546002578d06d3c',  // your function ID
-            // JSON.stringify({ email }),
             payload,
             false,  // async parameter
             '/',    // path parameter
@@ -311,16 +310,9 @@ export const checkEmailExistsInAuth = async (email) => {
         );
 
         console.log('Function response:', response);
-        console.log('Execution details:', {
-            functionId: '67108546002578d06d3c',
-            executionId: execution.$id,
-            status: execution.status,
-            responseCode: execution.responseCode,
-            stdout: execution.stdout,
-            stderr: execution.stderr
-        });
-
-
+        console.log('Response status:', response.status);
+        console.log('Response status code:', response.responseStatusCode);
+        console.log('Response Body:', response.responseBody);
 
         if (response.status === 'completed') {
             if (response.response) {

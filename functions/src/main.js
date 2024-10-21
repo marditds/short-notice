@@ -11,7 +11,10 @@ export default async ({ req, res, log, error }) => {
   const users = new Users(client);
 
   try {
-    log(`Checking payload: ${req.payload}`)
+    log('Request method: ' + req.method);
+    log('Request headers: ' + JSON.stringify(req.headers));
+    log('Raw body: ' + req.body);
+    log('Raw payload: ' + req.payload);
     // Check if payload is present
     if (!req.payload) {
       throw new Error('Request payload is missing.');
