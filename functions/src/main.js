@@ -16,15 +16,15 @@ export default async ({ req, res, log, error }) => {
     log('Raw body: ' + req.body);
     log('Raw payload: ' + req.payload);
     // Check if payload is present
-    if (!req.payload) {
-      throw new Error('Request payload is missing.');
+    if (!req.body) {
+      throw new Error('Request body is missing.');
     } else {
       log(req.payload)
     }
 
     // Extract email from request body (assuming it's passed in the request payload)
-    const data = JSON.parse(req.payload);
-    log('Parsed payload: ' + JSON.stringify(data));
+    const data = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
+    log('Parsed data: ' + JSON.stringify(data));
 
     if (!data.email) {
       throw new Error('Email not provided.');

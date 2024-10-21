@@ -303,10 +303,7 @@ export const checkEmailExistsInAuth = async (email) => {
 
         const response = await functions.createExecution(
             '67108546002578d06d3c',  // your function ID
-            payload,
-            false,  // async parameter
-            '/',    // path parameter
-            ExecutionMethod.POST  // method parameter
+            payload
         );
 
         console.log('Function response:', response);
@@ -315,11 +312,12 @@ export const checkEmailExistsInAuth = async (email) => {
         console.log('Response Body:', response.responseBody);
 
         if (response.status === 'completed') {
-            if (response.response) {
-                const result = JSON.parse(response.response);
-                return result.emailExists; // Returns the emailExists boolean
-            } else {
-                throw new Error("Empty response from Appwrite function.");
+            try {
+                const result = JSON.parse(response.response || response.stdout);
+                return result.emailExists;
+            } catch (parseError) {
+                console.error('Error parsing response:', parseError);
+                return false;
             }
         } else {
             console.error('Function execution failed:', execution.stderr);
