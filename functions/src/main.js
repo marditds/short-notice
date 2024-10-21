@@ -37,16 +37,8 @@ export default async ({ req, res, log, error }) => {
     };
 
     log(`result: ${result}`)
-
-    // log(`Email check result for ${email}: ${result.emailExists}`);
+    log(`Email check result for ${email}: ${result.emailExists}`);
     return res.json(result);
-    // if (response.total > 0) {
-    //   log(`Email exists: ${email}`);
-    //   return res.json({ emailExists: true });
-    // } else {
-    //   log(`Email does not exist: ${email}`);
-    //   return res.json({ emailExists: false });
-    // }
   } catch (err) {
     error("Error occurred: " + err.message);
     return res.json({ success: false, message: err.message });

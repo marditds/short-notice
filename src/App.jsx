@@ -129,6 +129,8 @@ function App() {
       const emailExists = await checkingEmailInAuth(googleUserData.email);
 
       if (!emailExists) {
+        console.log('running if');
+
         const usrID = ID.unique();
         console.log('usrID', usrID);
 
@@ -161,6 +163,8 @@ function App() {
           console.error('Error creating user:', error);
         }
       } else {
+        console.log('running else');
+
         const authId = await checkingIdInAuth();
         console.log('authId', authId);
 
