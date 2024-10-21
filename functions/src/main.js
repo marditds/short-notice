@@ -1,4 +1,4 @@
-import { Client, Users } from 'node-appwrite';
+import { Client, Users, Query } from 'node-appwrite';
 
 // This Appwrite function will be executed every time your function is triggered
 export default async ({ req, res, log, error }) => {
@@ -31,7 +31,8 @@ export default async ({ req, res, log, error }) => {
     }
     log(`Checking email: ${data.email}`)
     // Query users by email
-    const response = await users.list([`email=${data.email}`]);
+    // const response = await users.list([`email=${data.email}`]);
+    const response = await users.list([Query.equal('email', data.email)]);
 
     log(`Response from Appwrite: ${JSON.stringify(response)}`);
 
