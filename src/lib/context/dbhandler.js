@@ -295,7 +295,12 @@ export const checkEmailExistsInAuth = async (email) => {
     try {
         // Trigger the cloud function with the user's email
         const response = await functions.createExecution('67108546002578d06d3c', JSON.stringify({ email }));
-        return JSON.parse(response.response).emailExists; // Assuming the cloud function returns `emailExists`
+        if (response.response) {
+            const result = JSON.parse(response.response);
+            return result.emailExists; // Returns the emailExists boolean
+        } else {
+            throw new Error("Empty response from Appwrite function.");
+        }
     } catch (error) {
         console.error('Error checking email existence in Auth:', error);
         return false;

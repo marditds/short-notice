@@ -21,13 +21,19 @@ export default async ({ req, res, log, error }) => {
     // Query users by email
     const response = await users.list([`email=${email}`]);
 
-    if (response.total > 0) {
-      log(`Email exists: ${email}`);
-      return res.json({ emailExists: true });
-    } else {
-      log(`Email does not exist: ${email}`);
-      return res.json({ emailExists: false });
-    }
+    const result = {
+      emailExists: response.total > 0
+    };
+
+    log(`Email check result for ${email}: ${result.emailExists}`);
+    return res.json(result);
+    // if (response.total > 0) {
+    //   log(`Email exists: ${email}`);
+    //   return res.json({ emailExists: true });
+    // } else {
+    //   log(`Email does not exist: ${email}`);
+    //   return res.json({ emailExists: false });
+    // }
   } catch (err) {
     error("Error occurred: " + err.message);
     return res.json({ success: false, message: err.message });
