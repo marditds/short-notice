@@ -384,16 +384,49 @@ export const createUserSession = async (email) => {
 //     }
 // }
 
-// export const getSessionDetails = async () => {
-//     try {
-//         const sessDets = await account?.getSession('current');
-//         console.log('sessDets:', sessDets);
-//         return sessDets;
-//     } catch (error) {
-//         console.error('Error getting session details:', error);
+export const getSessionDetails = async (email) => {
+    try {
+        console.log('this email will be sent - dbhandler:', email);
+        console.log('type of email', typeof (email));
 
-//     }
-// }
+        const payload = JSON.stringify({ email: email });
+        console.log('Payload being sent:');
+        console.log(payload);
+
+        const exec = await functions.createExecution(
+            import.meta.env.VITE_USER_AUTH_FUNCTION_ID,  // your function ID
+            payload
+        )
+
+        console.log('Function response:', exec);
+        console.log('Response status:', exec.status);
+        console.log('Response status code:', exec.responseStatusCode);
+        console.log('Response Body:', exec.responseBody);
+
+        if (exec.status === 'completed') {
+            try {
+                const result = JSON.parse(exec.responseBody);
+                console.log(result);
+                return;
+                // return result;
+            } catch (parseError) {
+                console.error('Error parsing response:', parseError);
+                return false;
+            }
+        } else {
+            console.error('Function execution failed:', execution.stderr);
+            return false;
+        }
+
+
+        // const sessDets = await account?.getSession('current');
+        // console.log('sessDets:', sessDets);
+        // return sessDets;
+    } catch (error) {
+        console.error('Error getting session details:', error);
+
+    }
+}
 
 const createGoogleSession = async () => {
     try {
