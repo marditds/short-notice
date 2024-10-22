@@ -33,7 +33,7 @@ export default async ({ req, res, log, error }) => {
     log(`BEFORE: userSessions for ${response.users[0].email}: ${JSON.stringify(userSessions)}`);
 
     if (userSessions.total === 0) {
-      await users.createSession('6715e0480026cc73df2e');
+      userSessions = await users.createSession('6715e0480026cc73df2e');
     } else {
       log(`DURING CHECK: userSessions for ${response.users[0].email}: ${JSON.stringify(userSessions)}`);
     }
@@ -46,11 +46,11 @@ export default async ({ req, res, log, error }) => {
   }
 
   // The req object contains the request data
-  if (req.path === "/ping") {
-    // Use res object to respond with text(), json(), or binary()
-    // Don't forget to return a response!
-    return res.text("Pong");
-  }
+  // if (req.path === "/ping") {
+  // Use res object to respond with text(), json(), or binary()
+  // Don't forget to return a response!
+  //   return res.text("Pong");
+  // }
 
   return res.json({
     motto: "Build like a team of hundreds_",
