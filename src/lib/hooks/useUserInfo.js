@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { checkIdExistsInAuth, checkEmailExistsInAuth as checkEmailInAuthFromServer, registerAuthUser, updateUser, updateAuthUser, deleteUser, deleteAllNotices, getUsersDocument, createFollow, removeFollow, getUserFollowingsById as fetchUserFollowingsById, getUserFollowersById as fetchUserFollowersById, getOtherUserFollowingsById as fetchOtherUserFollowingsById } from '../context/dbhandler';
+import { checkIdExistsInAuth, checkEmailExistsInAuth as checkEmailInAuthFromServer, registerAuthUser, getSessionDetails as fetchSessionDetails, updateUser, updateAuthUser, deleteUser, deleteAllNotices, getUsersDocument, createFollow, removeFollow, getUserFollowingsById as fetchUserFollowingsById, getUserFollowersById as fetchUserFollowersById, getOtherUserFollowingsById as fetchOtherUserFollowingsById } from '../context/dbhandler';
 import { useUserContext } from '../context/UserContext';
 import { UserId } from '../../components/User/UserId';
 
@@ -48,16 +48,16 @@ const useUserInfo = (data) => {
     //     }
     // }
 
-    // const getSessionDetails = async () => {
-    //     try {
-    //         const sessionDetails = await fetchSessionDetails();
-    //         console.log('sessionDetails', sessionDetails);
-    //         return sessionDetails;
-    //     } catch (error) {
-    //         console.error('Error gettin session details:', error);
+    const getSessionDetails = async () => {
+        try {
+            const sessionDetails = await fetchSessionDetails();
+            console.log('sessionDetails', sessionDetails);
+            return sessionDetails;
+        } catch (error) {
+            console.error('Error gettin session details:', error);
 
-    //     }
-    // }
+        }
+    }
 
     // const removeSession = async () => {
     //     try {
@@ -294,7 +294,7 @@ const useUserInfo = (data) => {
         registerUser,
         // createSession,
         // removeSession,
-        // getSessionDetails, 
+        getSessionDetails,
         handleUpdateUser,
         handleDeleteUser,
         getUsersData,

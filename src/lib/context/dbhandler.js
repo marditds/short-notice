@@ -394,7 +394,7 @@ export const getSessionDetails = async (email) => {
         console.log(payload);
 
         const exec = await functions.createExecution(
-            import.meta.env.VITE_USER_AUTH_FUNCTION_ID,  // your function ID
+            import.meta.env.VITE_USER_SESSION_FUNCTION_ID,  // your function ID
             payload
         )
 
@@ -407,7 +407,7 @@ export const getSessionDetails = async (email) => {
             try {
                 const result = JSON.parse(exec.responseBody);
                 console.log(result);
-                return;
+                return result;
                 // return result;
             } catch (parseError) {
                 console.error('Error parsing response:', parseError);

@@ -45,7 +45,7 @@ export const Tools = ({ googleLogout, removeSession, setIsLoggedIn, setGoogleUse
                     to='/'
                     onClick={
                         async () => {
-                            await removeSession();
+                            // await removeSession();
                             googleLogout();
                             setIsLoggedIn(preVal => false);
                             setGoogleUserData(null);

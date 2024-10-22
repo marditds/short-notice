@@ -13,6 +13,11 @@ export default async ({ req, res, log, error }) => {
   const users = new Users(client);
 
   try {
+    log('Request method: ' + req.method);
+    log('Request headers: ' + JSON.stringify(req.headers));
+    log('Raw body: ' + req.body);
+    log('Raw payload: ' + req.payload);
+
     if (!req.body) {
       throw new Error('Request body is missing.');
     }

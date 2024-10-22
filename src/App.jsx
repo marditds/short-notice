@@ -25,7 +25,7 @@ function App() {
   const {
     registerUser,
     // createSession,
-    // getSessionDetails,
+    getSessionDetails,
     checkingIdInAuth,
     checkingEmailInAuth
   } = useUserInfo(googleUserData);
@@ -90,12 +90,13 @@ function App() {
 
   // Triggered for returning users 
 
-  const onSuccess = (credentialResponse) => {
+  const onSuccess = async (credentialResponse) => {
     const decoded = jwtDecode(credentialResponse?.credential);
     console.log('Logged in successfully. - onSuccess');
     setGoogleUserData(preData => decoded);
 
     setIsLoggedIn(preVal => true);
+
 
     // if (decoded) {
     //   console.log('deciding on session');
@@ -109,8 +110,13 @@ function App() {
     //   }
     // }
 
+
     const accessToken = credentialResponse?.credential;
     console.log('Access Token:', accessToken);
+
+    console.log(decoded.email);
+
+    await getSessionDetails(decoded.email);
 
     localStorage.setItem('accessToken', accessToken);
 

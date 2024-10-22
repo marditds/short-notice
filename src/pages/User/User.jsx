@@ -16,7 +16,7 @@ const User = () => {
         googleUserData,
         isLoading } = useUserContext();
 
-    const { removeSession } = useUserInfo(googleUserData);
+    // const { removeSession } = useUserInfo(googleUserData);
 
     useEffect(() => {
         console.log('googleUserData:', googleUserData);
@@ -38,7 +38,7 @@ const User = () => {
     return (
         <Container className='userhome__body'>
             <Tools
-                removeSession={removeSession}
+                // removeSession={removeSession}
                 googleLogout={googleLogout}
                 setGoogleUserData={setGoogleUserData}
                 setIsLoggedIn={setIsLoggedIn}
