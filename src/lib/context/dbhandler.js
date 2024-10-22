@@ -259,10 +259,10 @@ export const updateUser = async ({ userId, username }) => {
             {
                 username: username
             },
-            [
-                // Permission.update(Role.users()),
-                Permission.update(Role.guests())
-            ]
+            // [
+            // Permission.update(Role.users(userId)),
+            // Permission.update(Role.guests())
+            // ]
         );
         console.log('Username successfully updated.');
     } catch (error) {
