@@ -12,6 +12,8 @@ export default async ({ req, res, log, error }) => {
 
   const users = new Users(client);
 
+  let userSessions = null;
+
   try {
     log('Request method: ' + req.method);
     log('Request headers: ' + JSON.stringify(req.headers));
@@ -30,7 +32,7 @@ export default async ({ req, res, log, error }) => {
 
     const response = await users.list([Query.equal('email', data.email)]);
 
-    let userSessions = await users.listSessions(response.users[0].$id);
+    userSessions = await users.listSessions(response.users[0].$id);
     // let userSessions = await users.listSessions('6715e0480026cc73df2e');
 
     // Log messages and errors to the Appwrite Console

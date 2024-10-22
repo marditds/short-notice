@@ -48,9 +48,9 @@ const useUserInfo = (data) => {
     //     }
     // }
 
-    const getSessionDetails = async () => {
+    const getSessionDetails = async (email) => {
         try {
-            const sessionDetails = await fetchSessionDetails();
+            const sessionDetails = await fetchSessionDetails(email);
             console.log('sessionDetails', sessionDetails);
             return sessionDetails;
         } catch (error) {
