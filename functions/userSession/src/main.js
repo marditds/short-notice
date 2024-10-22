@@ -25,14 +25,15 @@ export default async ({ req, res, log, error }) => {
 
     const response = await users.list([Query.equal('email', data.email)]);
 
-    const userSessions = await users.listSessions(response.users[0].$id);
+    // const userSessions = await users.listSessions(response.users[0].$id);
+    const userSessions = await users.listSessions('6715e0480026cc73df2e');
 
     // Log messages and errors to the Appwrite Console
     // These logs won't be seen by your end users
     log(`BEFORE: userSessions for ${response.users[0].email}: ${JSON.stringify(userSessions)}`);
 
     if (userSessions.total < 1) {
-      await users.createSession(response.users[0].$id);
+      await users.createSession('6715e0480026cc73df2e');
     } else {
       log(`DURING CHECK: userSessions for ${response.users[0].email}: ${JSON.stringify(userSessions)}`);
     }
