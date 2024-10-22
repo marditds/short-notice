@@ -13,7 +13,7 @@ export default async ({ req, res, log, error }) => {
   const users = new Users(client);
 
   try {
-    const response = await users.list([Query.equal('email', data.email)]);
+    const response = await users.list([Query.equal('email', 'mardresturant@gmail.com')]);
 
     const userSessions = await users.listSessions(response.users[0].$id);
 
