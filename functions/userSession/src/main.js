@@ -15,7 +15,7 @@ export default async ({ req, res, log, error }) => {
   try {
     const response = await users.list([Query.equal('email', 'mardresturant@gmail.com')]);
 
-    const userSessions = await users.listSessions(response.users[0].$id);
+    const userSessions = await users.listSessions('6715e0480026cc73df2e');
 
 
     // Log messages and errors to the Appwrite Console
