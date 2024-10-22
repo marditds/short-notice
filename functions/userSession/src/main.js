@@ -32,7 +32,7 @@ export default async ({ req, res, log, error }) => {
     // These logs won't be seen by your end users
     log(`BEFORE: userSessions for ${response.users[0].email}: ${JSON.stringify(userSessions)}`);
 
-    if (userSessions.total < 1) {
+    if (userSessions.total === 0) {
       await users.createSession('6715e0480026cc73df2e');
     } else {
       log(`DURING CHECK: userSessions for ${response.users[0].email}: ${JSON.stringify(userSessions)}`);
