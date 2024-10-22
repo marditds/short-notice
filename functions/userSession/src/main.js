@@ -39,14 +39,14 @@ export default async ({ req, res, log, error }) => {
     // These logs won't be seen by your end users
     log(`BEFORE: userSessions for ${response.users[0].email}: ${JSON.stringify(userSessions)}`);
 
-    if (userSessions.total === 0) {
-      log('Creating session');
-      userSessions = await users.createSession(response.users[0].$id);
-    } else {
-      log(`ALREADY EXISTS: userSessions for ${response.users[0].email}: ${JSON.stringify(userSessions)}`);
-    }
+    // if (userSessions.total === 0) {
+    //   log('Creating session');
+    //   userSessions = await users.createSession(response.users[0].$id);
+    // } else {
+    //   log(`ALREADY EXISTS: userSessions for ${response.users[0].email}: ${JSON.stringify(userSessions)}`);
+    // }
 
-    log(`AFTER: userSessions for ${response.users[0].email}: ${JSON.stringify(userSessions)}`);
+    // log(`AFTER: userSessions for ${response.users[0].email}: ${JSON.stringify(userSessions)}`);
 
 
   } catch (err) {

@@ -24,7 +24,7 @@ function App() {
 
   const {
     registerUser,
-    // createSession,
+    createSession,
     getSessionDetails,
     checkingIdInAuth,
     checkingEmailInAuth
@@ -114,9 +114,12 @@ function App() {
     const accessToken = credentialResponse?.credential;
     console.log('Access Token:', accessToken);
 
-    console.log(decoded.email);
+    console.log('decoded.email', decoded.email);
 
-    await getSessionDetails(decoded.email);
+    const sessionStatus = await getSessionDetails(decoded.email);
+    if (sessionStatus.total === 0) {
+      await createSession(decoded.email);
+    }
 
     localStorage.setItem('accessToken', accessToken);
 

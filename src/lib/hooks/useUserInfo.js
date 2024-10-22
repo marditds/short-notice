@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { checkIdExistsInAuth, checkEmailExistsInAuth as checkEmailInAuthFromServer, registerAuthUser, getSessionDetails as fetchSessionDetails, updateUser, updateAuthUser, deleteUser, deleteAllNotices, getUsersDocument, createFollow, removeFollow, getUserFollowingsById as fetchUserFollowingsById, getUserFollowersById as fetchUserFollowersById, getOtherUserFollowingsById as fetchOtherUserFollowingsById } from '../context/dbhandler';
+import { checkIdExistsInAuth, checkEmailExistsInAuth as checkEmailInAuthFromServer, registerAuthUser, createUserSession, getSessionDetails as fetchSessionDetails, updateUser, updateAuthUser, deleteUser, deleteAllNotices, getUsersDocument, createFollow, removeFollow, getUserFollowingsById as fetchUserFollowingsById, getUserFollowersById as fetchUserFollowersById, getOtherUserFollowingsById as fetchOtherUserFollowingsById } from '../context/dbhandler';
 import { useUserContext } from '../context/UserContext';
 import { UserId } from '../../components/User/UserId';
 
@@ -39,14 +39,14 @@ const useUserInfo = (data) => {
         }
     }
 
-    // const createSession = async (email) => {
-    //     try {
-    //         const usrSession = await createUserSession(email);
-    //         return usrSession;
-    //     } catch (error) {
-    //         console.error('Error creating session:', error);
-    //     }
-    // }
+    const createSession = async (email) => {
+        try {
+            const usrSession = await createUserSession(email);
+            return usrSession;
+        } catch (error) {
+            console.error('Error creating session:', error);
+        }
+    }
 
     const getSessionDetails = async (email) => {
         try {
@@ -292,7 +292,7 @@ const useUserInfo = (data) => {
         checkingIdInAuth,
         checkingEmailInAuth,
         registerUser,
-        // createSession,
+        createSession,
         // removeSession,
         getSessionDetails,
         handleUpdateUser,
