@@ -193,10 +193,10 @@ export const createUser = async ({ id, email, given_name, username }) => {
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_USERS_COLLECTION,
             [Query.equal('email', email)],
-            [
-                Permission.write(Role.users()),
-                Permission.write(Role.guests())
-            ]
+            // [
+            //     Permission.write(Role.users()),
+            //     Permission.write(Role.guests())
+            // ]
         );
 
         const usernameExists = await checkUsernameExists(username);
@@ -335,10 +335,10 @@ export const deleteUser = async (userId) => {
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_USERS_COLLECTION,
             userId,
-            [
-                Permission.delete(Role.users()),
-                Permission.delete(Role.guests())
-            ]
+            // [
+            //     Permission.delete(Role.users()),
+            //     Permission.delete(Role.guests())
+            // ]
         );
         console.log('User deleted successfully:', response);
     } catch (error) {
@@ -375,14 +375,14 @@ export const createUserSession = async (email) => {
     }
 }
 
-// export const deleteUserSession = async () => {
-//     try {
-//         const userSession = await account.deleteSession('current');
-//         console.log('Session delete successfully:', userSession);
-//     } catch (error) {
-//         console.error('Error deleting the session:', error);
-//     }
-// }
+export const deleteUserSession = async () => {
+    try {
+        const userSession = await account.deleteSession('current');
+        console.log('Session delete successfully:', userSession);
+    } catch (error) {
+        console.error('Error deleting the session:', error);
+    }
+}
 
 export const getSessionDetails = async (email) => {
     try {
@@ -467,10 +467,10 @@ export const createNotice = async ({ user_id, text, timestamp, expiresAt, scienc
                 polSci: polSci || false,
                 sports: sports || false
             },
-            [
-                Permission.write(Role.users()),
-                Permission.write(Role.guests())
-            ]
+            // [
+            //     Permission.write(Role.users()),
+            //     Permission.write(Role.guests())
+            // ]
         );
         console.log('Notice created succesfully:', response);
         return response;

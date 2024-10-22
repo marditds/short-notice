@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { checkIdExistsInAuth, checkEmailExistsInAuth as checkEmailInAuthFromServer, registerAuthUser, createUserSession, getSessionDetails as fetchSessionDetails, updateUser, updateAuthUser, deleteUser, deleteAllNotices, getUsersDocument, createFollow, removeFollow, getUserFollowingsById as fetchUserFollowingsById, getUserFollowersById as fetchUserFollowersById, getOtherUserFollowingsById as fetchOtherUserFollowingsById } from '../context/dbhandler';
+import { checkIdExistsInAuth, checkEmailExistsInAuth as checkEmailInAuthFromServer, registerAuthUser, createUserSession, getSessionDetails as fetchSessionDetails, deleteUserSession, updateUser, updateAuthUser, deleteUser, deleteAllNotices, getUsersDocument, createFollow, removeFollow, getUserFollowingsById as fetchUserFollowingsById, getUserFollowersById as fetchUserFollowersById, getOtherUserFollowingsById as fetchOtherUserFollowingsById } from '../context/dbhandler';
 import { useUserContext } from '../context/UserContext';
 import { UserId } from '../../components/User/UserId';
 
@@ -59,14 +59,14 @@ const useUserInfo = (data) => {
         }
     }
 
-    // const removeSession = async () => {
-    //     try {
-    //         const usrSession = await deleteUserSession();
-    //         return usrSession;
-    //     } catch (error) {
-    //         console.error('Error removing session:', error);
-    //     }
-    // }
+    const removeSession = async () => {
+        try {
+            const usrSession = await deleteUserSession();
+            return usrSession;
+        } catch (error) {
+            console.error('Error removing session:', error);
+        }
+    }
 
     const handleUpdateUser = async (username) => {
 
@@ -293,7 +293,7 @@ const useUserInfo = (data) => {
         checkingEmailInAuth,
         registerUser,
         createSession,
-        // removeSession,
+        removeSession,
         getSessionDetails,
         handleUpdateUser,
         handleDeleteUser,

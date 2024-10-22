@@ -97,7 +97,6 @@ function App() {
 
     setIsLoggedIn(preVal => true);
 
-
     // if (decoded) {
     //   console.log('deciding on session');
     //   const sessionDetails = await getSessionDetails();
@@ -110,7 +109,6 @@ function App() {
     //   }
     // }
 
-
     const accessToken = credentialResponse?.credential;
     console.log('Access Token:', accessToken);
 
@@ -119,6 +117,8 @@ function App() {
     const sessionStatus = await getSessionDetails(decoded.email);
     if (sessionStatus.total === 0) {
       await createSession(decoded.email);
+    } else {
+      console.log('Session already in progress.');
     }
 
     localStorage.setItem('accessToken', accessToken);
