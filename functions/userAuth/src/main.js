@@ -11,6 +11,7 @@ export default async ({ req, res, log, error }) => {
   const users = new Users(client);
 
   try {
+    log('NEW LOG FOR TESTING');
     log('Request method: ' + req.method);
     log('Request headers: ' + JSON.stringify(req.headers));
     log('Raw body: ' + req.body);
