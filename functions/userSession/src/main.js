@@ -13,14 +13,33 @@ export default async ({ req, res, log, error }) => {
   const users = new Users(client);
 
   try {
-    const response = await users.list([Query.equal('email', 'mardresturant@gmail.com')]);
+    if (!req.body) {
+      throw new Error('Request body is missing.');
+    }
 
-    const userSessions = await users.listSessions('6715e0480026cc73df2e');
+    const data = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
 
+    if (!data.email) {
+      throw new Error('Email not provided.');
+    }
+
+    const response = await users.list([Query.equal('email', data.email)]);
+
+    const userSessions = await users.listSessions(response.users[0].$id);
 
     // Log messages and errors to the Appwrite Console
     // These logs won't be seen by your end users
-    log(`userSessions for ${response.users[0].email}: ${JSON.stringify(userSessions)}`);
+    log(`BEFORE: userSessions for ${response.users[0].email}: ${JSON.stringify(userSessions)}`);
+
+    if (userSessions.total < 1) {
+      await users.createSession(response.users[0].$id);
+    } else {
+      log(`DURING CHECK: userSessions for ${response.users[0].email}: ${JSON.stringify(userSessions)}`);
+    }
+
+    log(`AFTER: userSessions for ${response.users[0].email}: ${JSON.stringify(userSessions)}`);
+
+
   } catch (err) {
     error("Could not list users: " + err.message);
   }
