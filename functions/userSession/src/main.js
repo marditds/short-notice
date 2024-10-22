@@ -1,4 +1,4 @@
-import { Client, Users } from 'node-appwrite';
+import { Client, Users, Query } from 'node-appwrite';
 
 // This Appwrite function will be executed every time your function is triggered
 export default async ({ req, res, log, error }) => {
@@ -7,15 +7,21 @@ export default async ({ req, res, log, error }) => {
   const client = new Client()
     .setEndpoint(process.env.APPWRITE_FUNCTION_API_ENDPOINT)
     .setProject(process.env.APPWRITE_FUNCTION_PROJECT_ID)
-    .setKey(req.headers['x-appwrite-key'] ?? '');
+    .setKey(process.env.VITE_SHORT_NOTICE_API_KEYS);
+
+
   const users = new Users(client);
 
   try {
-    const response = await users.list();
+    const response = await users.list([Query.equal('email', data.email)]);
+
+    const userSessions = await users.listSessions(response.users[0].$id);
+
+
     // Log messages and errors to the Appwrite Console
     // These logs won't be seen by your end users
-    log(`Total users: ${response.total}`);
-  } catch(err) {
+    log(`userSessions for ${response.users[0].email}: ${userSessions}`);
+  } catch (err) {
     error("Could not list users: " + err.message);
   }
 
