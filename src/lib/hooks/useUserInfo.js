@@ -226,7 +226,7 @@ const useUserInfo = (data) => {
             console.log('userFollowersById', userFollowersById);
 
             const accountsFollowingTheUser = allUsers.documents.filter((user) =>
-                userFollowersById.some(followed => user.$id === followed.user_id)
+                userFollowersById?.some(followed => user.$id === followed.user_id)
             );
 
             console.log('accountsFollowingTheUser', accountsFollowingTheUser);
@@ -263,7 +263,7 @@ const useUserInfo = (data) => {
             const followedByUserIds = await getUserFollowingsById(id);
 
             const accountsFollowedByUser = allUsers.documents.filter((user) =>
-                followedByUserIds.some(followed => user.$id === followed.otherUser_id)
+                followedByUserIds?.some(followed => user.$id === followed.otherUser_id)
             );
 
             setFollowingAccounts(accountsFollowedByUser);

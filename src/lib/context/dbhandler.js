@@ -618,10 +618,10 @@ export const updateNotice = async (noticeId, newText) => {
             {
                 text: newText
             },
-            [
-                Permission.update(Role.users()),
-                Permission.update(Role.guests())
-            ]
+            // [
+            //     Permission.update(Role.users()),
+            //     Permission.update(Role.guests())
+            // ]
         );
         console.log('Notice updated successfully:', response);
         return response;
@@ -1045,10 +1045,10 @@ export const createReaction = async (sender_id, recipient_id, content, timestamp
                 timestamp,
                 notice_id
             },
-            [
-                Permission.write(Role.users()),
-                Permission.write(Role.guests())
-            ]
+            // [
+            //     Permission.write(Role.users()),
+            //     Permission.write(Role.guests())
+            // ]
         )
         console.log('Reaction created successfuly:', response);
         return response;
