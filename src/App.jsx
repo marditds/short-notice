@@ -170,6 +170,18 @@ function App() {
           );
           console.log('newUsr - App.jsx:', newUsr);
 
+          // Check for session
+          const sessionStatus = await getSessionDetails();
+          console.log('sessionStatus', sessionStatus);
+
+          // Create session for the newly registered user
+          if (!sessionStatus || sessionStatus === undefined) {
+            console.log('Creating a session.');
+            await createSession(googleUserData.email);
+          } else {
+            console.log('Session already in progress.');
+          }
+
           // Add user to collection
           await createUser({
             id: usrID,

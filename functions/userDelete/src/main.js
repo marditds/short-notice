@@ -23,15 +23,16 @@ export default async ({ req, res, log, error }) => {
 
     const data = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
 
-    if (!data.email) {
-      throw new Error('Email not provided.');
+    if (!data.$id) {
+      throw new Error('ID not provided.');
     }
 
-    const response = await users.list(
-      [Query.equal('email', data.email)]
-    );
+    // const response = await users.list(
+    // [Query.equal('email', data.email)]
+    // );
 
-    await users.delete(response.users[0].$id);
+    // await users.delete(response.users[0].$id);
+    await users.delete(data.$id);
     // Log messages and errors to the Appwrite Console
     // These logs won't be seen by your end users
     log(`User deleted successfully.`);
