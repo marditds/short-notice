@@ -353,12 +353,12 @@ export const deleteAuthUser = async (userId) => {
         console.log(payload);
 
         const res = await functions.createExecution(
-            VITE_USER_DELETE_FUNCTION_ID,
+            import.meta.env.VITE_USER_DELETE_FUNCTION_ID,
             payload
         )
         if (res.status === 'completed') {
             try {
-                const result = JSON.parse(exec.responseBody);
+                const result = JSON.parse(res.responseBody);
                 console.log(result);
             } catch (parseError) {
                 console.error('Error parsing response:', parseError);
