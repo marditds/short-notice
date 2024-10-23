@@ -1,4 +1,4 @@
-import { Client, Users } from 'node-appwrite';
+import { Client, Users, Query } from 'node-appwrite';
 
 // This Appwrite function will be executed every time your function is triggered
 export default async ({ req, res, log, error }) => {
@@ -12,25 +12,33 @@ export default async ({ req, res, log, error }) => {
   const users = new Users(client);
 
   try {
-    const response = await users.list();
+    log('Request method: ' + req.method);
+    log('Request headers: ' + JSON.stringify(req.headers));
+    log('Raw body: ' + req.body);
+    log('Raw payload: ' + req.payload);
+
+    if (!req.body) {
+      throw new Error('Request body is missing.');
+    }
+
+    const data = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
+
+    if (!data.email) {
+      throw new Error('Email not provided.');
+    }
+
+    const response = await users.list(
+      [Query.equal['email', data.email]]
+    );
+
+    await users.delete(response.users[0].$id);
     // Log messages and errors to the Appwrite Console
     // These logs won't be seen by your end users
-    log(`Total users: ${response.users[0].name}`);
+    log(`User deleted successfully.`);
   } catch (err) {
-    error("Could not list users: " + err.message);
+    error("Could not delete user: " + err.message);
   }
 
-  // The req object contains the request data
-  if (req.path === "/ping") {
-    // Use res object to respond with text(), json(), or binary()
-    // Don't forget to return a response!
-    return res.text("Pong");
-  }
 
-  return res.json({
-    motto: "Build like a team of hundreds_",
-    learn: "https://appwrite.io/docs",
-    connect: "https://appwrite.io/discord",
-    getInspired: "https://builtwith.appwrite.io",
-  });
+  return res.json({ msg: 'User delete from Appwrite.' });
 };

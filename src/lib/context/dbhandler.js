@@ -347,15 +347,23 @@ export const deleteUser = async (userId) => {
 
 export const deleteAuthUser = async (userId) => {
     try {
-        const res = await fetch('/api/delete-account', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ userId: userId })
-        });
-        if (res.ok) {
-            console.log("Auth user deleted successfully");
+        console.log('this userId will be deleted - dbhandler:', userId);
+        const payload = JSON.stringify({ $id: userId });
+        console.log('Payload being sent:');
+        console.log(payload);
+
+        const res = await functions.createExecution(
+            VITE_USER_DELETE_FUNCTION_ID,
+            payload
+        )
+        if (res.status === 'completed') {
+            try {
+                const result = JSON.parse(exec.responseBody);
+                console.log(result);
+            } catch (parseError) {
+                console.error('Error parsing response:', parseError);
+                return false;
+            }
         } else {
             console.error("Failed to delete atuh user");
         }
@@ -443,16 +451,16 @@ export const getSessionDetails = async () => {
 //     }
 // }
 
-const createGoogleSession = async () => {
-    try {
-        let createSession = await account.createOAuth2Session(
-            'google'
-        )
-        console.log('createSession - App.jsx:', createSession);
-    } catch (error) {
-        console.error('Error creating session:', error);
-    }
-}
+// const createGoogleSession = async () => {
+//     try {
+//         let createSession = await account.createOAuth2Session(
+//             'google'
+//         )
+//         console.log('createSession - App.jsx:', createSession);
+//     } catch (error) {
+//         console.error('Error creating session:', error);
+//     }
+// }
 
 export const createNotice = async ({ user_id, text, timestamp, expiresAt, science, technology, engineering, math, literature, history, philosophy, music, medicine, economics, law, polSci, sports
 }) => {
