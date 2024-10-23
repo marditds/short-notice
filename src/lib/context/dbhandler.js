@@ -295,7 +295,6 @@ export const checkEmailExistsInAuth = async (email) => {
     try {
         // Trigger the cloud function with the user's email
         console.log('this email will be sent - dbhandler:', email);
-        console.log('type of email', typeof (email));
 
         const payload = JSON.stringify({ email: email });
         console.log('Payload being sent:');
@@ -376,57 +375,73 @@ export const createUserSession = async (email) => {
 }
 
 export const deleteUserSession = async () => {
+
+    const currentSession = await account.getSession('current');
+    console.log('currentSession', currentSession);
     try {
-        const userSession = await account.deleteSession('current');
-        console.log('Session delete successfully:', userSession);
+
+        if (currentSession) {
+            await account.deleteSession(currentSession.$id);
+            console.log('Session delete successfully');
+        }
     } catch (error) {
         console.error('Error deleting the session:', error);
     }
 }
 
-export const getSessionDetails = async (email) => {
+export const getSessionDetails = async () => {
     try {
-        console.log('this email will be sent - dbhandler:', email);
-        console.log('type of email', typeof (email));
-
-        const payload = JSON.stringify({ email: email });
-        console.log('Payload being sent:');
-        console.log(payload);
-
-        const exec = await functions.createExecution(
-            import.meta.env.VITE_USER_SESSION_FUNCTION_ID,  // your function ID
-            payload
-        )
-
-        console.log('Function response:', exec);
-        console.log('Response status:', exec.status);
-        console.log('Response status code:', exec.responseStatusCode);
-        console.log('Response Body:', exec.responseBody);
-
-        if (exec.status === 'completed') {
-            try {
-                const result = JSON.parse(exec.responseBody);
-                console.log(result);
-                return result;
-                // return result;
-            } catch (parseError) {
-                console.error('Error parsing response:', parseError);
-                return false;
-            }
-        } else {
-            console.error('Function execution failed:', execution.stderr);
-            return false;
-        }
-
-
-        // const sessDets = await account?.getSession('current');
-        // console.log('sessDets:', sessDets);
-        // return sessDets;
+        const sessDets = account.get();
+        console.log('sessDets:', sessDets);
+        return sessDets;
     } catch (error) {
-        console.error('Error getting session details:', error);
-
+        console.error('Error getting session details', error);
     }
 }
+
+// export const getSessionDetails = async (email) => {
+//     try {
+//         console.log('this email will be sent - dbhandler:', email);
+//         console.log('type of email', typeof (email));
+
+//         const payload = JSON.stringify({ email: email });
+//         console.log('Payload being sent:');
+//         console.log(payload);
+
+//         const exec = await functions.createExecution(
+//             import.meta.env.VITE_USER_SESSION_FUNCTION_ID,  // your function ID
+//             payload
+//         )
+
+//         console.log('Function response:', exec);
+//         console.log('Response status:', exec.status);
+//         console.log('Response status code:', exec.responseStatusCode);
+//         console.log('Response Body:', exec.responseBody);
+
+//         if (exec.status === 'completed') {
+//             try {
+//                 const result = JSON.parse(exec.responseBody);
+//                 console.log(result);
+//                 return result;
+//                 // return result;
+//             } catch (parseError) {
+//                 console.error('Error parsing response:', parseError);
+//                 return false;
+//             }
+//         } else {
+//             console.error('Function execution failed:', execution.stderr);
+//             return false;
+//         }
+
+
+//         // const sessDets = await account?.getSession('current');
+//         // console.log('sessDets:', sessDets);
+//         // return sessDets;
+//     } catch (error) {
+//         console.error('Error getting session details:', error);
+
+//     }
+// }
 
 const createGoogleSession = async () => {
     try {
@@ -699,10 +714,10 @@ export const updateUserInterests = async (userId, selectedTags) => {
                 import.meta.env.VITE_INTERESTS_COLLECTION,
                 userId,
                 interestsData,
-                [
-                    Permission.update(Role.users()),
-                    Permission.update(Role.guests())
-                ]
+                // [
+                //     Permission.update(Role.users()),
+                //     Permission.update(Role.guests())
+                // ]
             );
         } catch (updateError) {
             if (updateError.code === 404) {
@@ -711,9 +726,9 @@ export const updateUserInterests = async (userId, selectedTags) => {
                     import.meta.env.VITE_INTERESTS_COLLECTION,
                     userId,
                     interestsData,
-                    [
-                        Permission.write(Role.users()), Permission.write(Role.guests())
-                    ]
+                    // [
+                    //     Permission.write(Role.users()), Permission.write(Role.guests())
+                    // ]
                 );
             } else {
                 throw updateError;
@@ -739,10 +754,10 @@ export const createSpread = async (notice_id, author_id, user_id) => {
                 author_id: author_id,
                 user_id: user_id
             },
-            [
-                Permission.write(Role.users()),
-                Permission.write(Role.guests())
-            ]
+            // [
+            //     Permission.write(Role.users()),
+            //     Permission.write(Role.guests())
+            // ]
         );
         console.log('Spread entry created successfully:', response);
         return response;
@@ -758,10 +773,10 @@ export const removeSpread = async (spread_id) => {
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_SPREADS_COLLECTION,
             spread_id,
-            [
-                Permission.delete(Role.users()),
-                Permission.delete(Role.guests())
-            ]
+            // [
+            //     Permission.delete(Role.users()),
+            //     Permission.delete(Role.guests())
+            // ]
         );
         console.log('Spread removed successfully:', response);
         return response;
@@ -782,10 +797,10 @@ export const createLike = async (notice_id, author_id, user_id) => {
                 author_id: author_id,
                 user_id: user_id
             },
-            [
-                Permission.write(Role.users()),
-                Permission.write(Role.guests())
-            ]
+            // [
+            //     Permission.write(Role.users()),
+            //     Permission.write(Role.guests())
+            // ]
         );
         console.log('Like created successfully:', response);
         return response;
@@ -801,10 +816,10 @@ export const removeLike = async (like_id) => {
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_LIKES_COLLECTION,
             like_id,
-            [
-                Permission.delete(Role.users()),
-                Permission.delete(Role.guests())
-            ]
+            // [
+            //     Permission.delete(Role.users()),
+            //     Permission.delete(Role.guests())
+            // ]
         );
         console.log('Like removed successfully:', response);
         return response;
@@ -891,10 +906,10 @@ export const createReport = async (notice_id, author_id, reason, user_id) => {
                 reason: reason,
                 user_id: user_id
             },
-            [
-                Permission.write(Role.users()),
-                Permission.write(Role.guests())
-            ]
+            // [
+            //     Permission.write(Role.users()),
+            //     Permission.write(Role.guests())
+            // ]
         );
         console.log('Report created successfully');
         return response;

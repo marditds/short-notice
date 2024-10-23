@@ -32,17 +32,30 @@ function App() {
 
   useEffect(() => {
     const storedToken = localStorage.getItem('accessToken');
+    const mainSetUp = async () => {
+      if (storedToken) {
+        const decoded = jwtDecode(storedToken);
+        setGoogleUserData(decoded);
+        setIsLoggedIn(preVal => true);
+        console.log('Logged in successfully - 1st useEffect');
 
-    if (storedToken) {
-      const decoded = jwtDecode(storedToken);
-      setGoogleUserData(decoded);
-      setIsLoggedIn(preVal => true);
-      console.log('Logged in successfully - 1st useEffect');
+        await checkUsernameInDatabase(decoded.email);
 
-      checkUsernameInDatabase(decoded.email);
-    } else {
-      navigate('/');
+        const sessionStatus = await getSessionDetails();
+        console.log('sessionStatus', sessionStatus);
+
+        if (!sessionStatus || sessionStatus === undefined) {
+          console.log('Creating a session.');
+          await createSession(decoded.email);
+        } else {
+          console.log('Session already in progress.');
+        }
+
+      } else {
+        navigate('/');
+      }
     }
+    mainSetUp();
   }, [navigate]);
 
 
@@ -114,8 +127,11 @@ function App() {
 
     console.log('decoded.email', decoded.email);
 
-    const sessionStatus = await getSessionDetails(decoded.email);
-    if (sessionStatus.total === 0) {
+    const sessionStatus = await getSessionDetails();
+    console.log(sessionStatus);
+
+    if (!sessionStatus || sessionStatus === undefined) {
+      console.log('Creating a session.');
       await createSession(decoded.email);
     } else {
       console.log('Session already in progress.');

@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { Dropdown, DropdownButton } from 'react-bootstrap';
 import { PiDotsThreeOutlineVertical } from "react-icons/pi";
 
-
 export const Tools = ({ googleLogout, removeSession, setIsLoggedIn, setGoogleUserData }) => {
 
     return (
