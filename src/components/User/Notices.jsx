@@ -147,9 +147,6 @@ export const Notices = ({
         setReportReason(null);
     }
 
-    // const loadMoreNotices = () => {
-    //     setDisplayCount(prevCount => prevCount + 10);
-    // };
 
     return (
         <>
@@ -241,7 +238,7 @@ export const Notices = ({
                                                         style={{ height: '35px' }}
                                                     >
                                                         <div
-                                                            className='notice__reaction-bt ms-2'
+                                                            className='notice__reaction-btn ms-2'
                                                             onClick={() => handleLike(notice)}
                                                         >
                                                             {likedNotices && likedNotices[notice.$id] ? (
