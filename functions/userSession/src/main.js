@@ -30,7 +30,9 @@ export default async ({ req, res, log, error }) => {
       throw new Error('Email not provided.');
     }
 
-    const response = await users.list([Query.equal('email', data.email)]);
+    const response = await users.list(
+      [Query.equal('email', data.email)]
+    );
 
     userSessions = await users.listSessions(response.users[0].$id);
 

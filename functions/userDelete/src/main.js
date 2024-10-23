@@ -28,7 +28,7 @@ export default async ({ req, res, log, error }) => {
     }
 
     const response = await users.list(
-      [Query.equal['email', data.email]]
+      [Query.equal('email', data.email)]
     );
 
     await users.delete(response.users[0].$id);
