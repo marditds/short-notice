@@ -33,32 +33,16 @@ export default async ({ req, res, log, error }) => {
     const response = await users.list([Query.equal('email', data.email)]);
 
     userSessions = await users.listSessions(response.users[0].$id);
-    // let userSessions = await users.listSessions('6715e0480026cc73df2e');
 
     // Log messages and errors to the Appwrite Console
     // These logs won't be seen by your end users
     log(`BEFORE: userSessions for ${response.users[0].email}: ${JSON.stringify(userSessions)}`);
-
-    // if (userSessions.total === 0) {
-    //   log('Creating session');
-    //   userSessions = await users.createSession(response.users[0].$id);
-    // } else {
-    //   log(`ALREADY EXISTS: userSessions for ${response.users[0].email}: ${JSON.stringify(userSessions)}`);
-    // }
-
-    // log(`AFTER: userSessions for ${response.users[0].email}: ${JSON.stringify(userSessions)}`);
 
 
   } catch (err) {
     error("Could not list users: " + err.message);
   }
 
-  // The req object contains the request data
-  // if (req.path === "/ping") {
-  // Use res object to respond with text(), json(), or binary()
-  // Don't forget to return a response!
-  //   return res.text("Pong");
-  // }
 
   return res.json(userSessions);
 };
