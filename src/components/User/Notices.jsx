@@ -38,7 +38,10 @@ export const Notices = ({
     const [noticeText, setNoticeText] = useState(null);
     const [reactionText, setReactionText] = useState('');
     const [isSendingReactionLoading, setIsSendingReactionLoading] = useState(false);
-    const [displayCount, setDisplayCount] = useState(10);
+
+    const [activeKey, setActiveKey] = useState(null);
+    const [loadingReactions, setLoadingReactions] = useState({});
+    const [loadedReactions, setLoadedReactions] = useState({});
 
     const reportCategories = [
         { name: "Hate speech", key: "HATE" },
@@ -147,17 +150,36 @@ export const Notices = ({
         setReportReason(null);
     }
 
+    const handleAccordionToggle = (noticeId) => {
+        if (!loadedReactions[noticeId]) {
+            setLoadingReactions((prev) => ({ ...prev, [noticeId]: true }));
+            // Simulate fetching reactions (replace with your actual API call)
+            setTimeout(() => {
+                const reactionsForNotice = reactions[noticeId] || [];
+                setLoadedReactions((prev) => ({
+                    ...prev,
+                    [noticeId]: reactionsForNotice.length ? reactionsForNotice : "No reactions for this notice",
+                }));
+                setLoadingReactions((prev) => ({ ...prev, [noticeId]: false }));
+            }, 1000); // Simulate delay in loading
+        }
+        setActiveKey(noticeId);
+    };
 
     return (
         <>
-            <Accordion defaultActiveKey={['0']}
+            <Accordion
+                defaultActiveKey={['0']}
                 className='user-profile__notices-accordion'
-
+                activeKey={activeKey}
             >
                 {/* {notices.slice(0, displayCount).map((notice, idx) => ( */}
                 {notices.map((notice, idx) => (
                     <Accordion.Item eventKey={notice?.$id} key={notice?.$id}>
-                        <Accordion.Header className='d-flex justify-content-center'>
+                        <Accordion.Header
+                            className='d-flex justify-content-center'
+                            onClick={() => handleAccordionToggle(notice.$id)}
+                        >
                             {/* <FaAngleDown size={20} className='me-3' /> */}
                             <Row className='w-100 m-auto'>
                                 <Col className='col-md-9 d-flex justify-content-between flex-column'
@@ -296,7 +318,29 @@ export const Notices = ({
                         </Accordion.Header>
                         <Accordion.Body className='d-flex justify-content-around w-100'>
                             <Row className='d-grid gap-3'>
-                                {
+
+                                {loadingReactions[notice.$id] ? (
+                                    <Col className='text-center'>
+                                        <Loading /> {/* Display Loading component */}
+                                    </Col>
+                                ) : (
+                                    <>
+                                        {loadedReactions[notice.$id] && loadedReactions[notice.$id].length > 0 ? (
+                                            loadedReactions[notice.$id].map((reaction) => (
+                                                <Col key={reaction.$id}>
+                                                    {reaction.content} {/* Display reaction content */}
+                                                </Col>
+                                            ))
+                                        ) : (
+                                            <Col className='text-center'>
+                                                No reactions for this notice {/* Display message if no reactions */}
+                                            </Col>
+                                        )}
+                                    </>
+                                )}
+
+
+                                {/* {
                                     reactions?.map((reaction) => {
                                         return (reaction.notice_id === notice.$id &&
                                             <Col key={reaction.$id}>
@@ -304,7 +348,7 @@ export const Notices = ({
                                             </Col>)
                                     }
                                     )
-                                }
+                                } */}
                             </Row>
                         </Accordion.Body>
                     </Accordion.Item>
@@ -312,13 +356,7 @@ export const Notices = ({
                 }
             </Accordion>
 
-            {/* {displayCount < notices.length && (
-                <div className="d-flex justify-content-center mt-4">
-                    <Button onClick={loadMoreNotices}>
-                        Load More
-                    </Button>
-                </div>
-            )} */}
+
 
 
             {/* {notices.map((notice, idx) => (
