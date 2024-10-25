@@ -24,7 +24,8 @@ export const Notices = ({
     user_id,
     likedNotices,
     spreadNotices,
-    reactions
+    reactions,
+    getReactionsForNotice
 }) => {
     const location = useLocation();
 
@@ -168,14 +169,26 @@ export const Notices = ({
         if (!loadedReactions[noticeId] && !loadingStates[noticeId]) {
             setLoadingStates(prev => ({ ...prev, [noticeId]: true }));
 
+            try {
+                // Fetch reactions only for one specific notice
+                const noticeReactions = await getReactionsForNotice(noticeId);
+
+                setLoadedReactions(prev => ({
+                    ...prev,
+                    [noticeId]: noticeReactions?.documents || []
+                }));
+
+            } catch (error) {
+                console.error('Error loading reactions:', error);
+            } finally {
+                setLoadingStates(prev => ({ ...prev, [noticeId]: false }));
+            }
+
             // Filter reactions for this specific notice
             const noticeReactions = reactions.filter(reaction => reaction.notice_id === noticeId);
 
-            // Simulate network delay (remove in production)
-            // await new Promise(resolve => setTimeout(resolve, 500));
-
-            setLoadedReactions(prev => ({ ...prev, [noticeId]: noticeReactions }));
-            setLoadingStates(prev => ({ ...prev, [noticeId]: false }));
+            // setLoadedReactions(prev => ({ ...prev, [noticeId]: noticeReactions }));
+            // setLoadingStates(prev => ({ ...prev, [noticeId]: false }));
         }
     };
 

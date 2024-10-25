@@ -48,6 +48,7 @@ const UserProfile = () => {
         fetchUserNotices,
         getAllLikedNotices,
         getAllSpreadNotices,
+        getReactionsForNotice,
         fetchReactionsForNotices,
         setNoticesReactions,
         setSpreadReactions,
@@ -314,6 +315,7 @@ const UserProfile = () => {
                         handleDeleteNotice={handleDeleteNotice}
                         eventKey='my-notices'
                         reactions={noticesReactions}
+                        getReactionsForNotice={getReactionsForNotice}
                     />
                     <div className="d-flex justify-content-center mt-4">
                         {hasMoreNotices ?
@@ -343,6 +345,8 @@ const UserProfile = () => {
                         handleReport={handleReport}
                         handleReact={handleReact}
                         reactions={spreadReactions}
+                        getReactionsForNotice={getReactionsForNotice}
+
                     />
                 </Tab>
 
@@ -361,6 +365,8 @@ const UserProfile = () => {
                         handleReport={handleReport}
                         handleReact={handleReact}
                         reactions={likedReactions}
+                        getReactionsForNotice={getReactionsForNotice}
+
                     />
                 </Tab>
             </Tabs>

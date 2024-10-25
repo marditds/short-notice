@@ -472,6 +472,7 @@ const useNotices = (googleUserData) => {
         setLikedNotices,
         removeAllNoticesByUser,
         sendReaction,
+        getReactionsForNotice,
         fetchReactionsForNotices,
         setNoticesReactions,
         setSpreadReactions,
