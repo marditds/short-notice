@@ -38,10 +38,9 @@ export const Notices = ({
     const [reactionText, setReactionText] = useState('');
     const [isSendingReactionLoading, setIsSendingReactionLoading] = useState(false);
 
-    const [activeKey, setActiveKey] = useState(null);
-    const [loadingReactions, setLoadingReactions] = useState({});
     const [loadingStates, setLoadingStates] = useState({});
     const [loadedReactions, setLoadedReactions] = useState({});
+    const [activeNoticeId, setActiveNoticeId] = useState(null);
 
     const reportCategories = [
         { name: "Hate speech", key: "HATE" },
@@ -151,6 +150,20 @@ export const Notices = ({
     }
 
     const handleAccordionToggle = async (noticeId) => {
+        // If closing the accordion
+        if (activeNoticeId === noticeId) {
+            setActiveNoticeId(null);
+            // Clean up loaded reactions for this notice
+            setLoadedReactions(prev => {
+                const newState = { ...prev };
+                delete newState[noticeId];
+                return newState;
+            });
+            return;
+        }
+
+        setActiveNoticeId(noticeId);
+
         // If reactions aren't loaded and not currently loading
         if (!loadedReactions[noticeId] && !loadingStates[noticeId]) {
             setLoadingStates(prev => ({ ...prev, [noticeId]: true }));
@@ -159,7 +172,7 @@ export const Notices = ({
             const noticeReactions = reactions.filter(reaction => reaction.notice_id === noticeId);
 
             // Simulate network delay (remove in production)
-            await new Promise(resolve => setTimeout(resolve, 500));
+            // await new Promise(resolve => setTimeout(resolve, 500));
 
             setLoadedReactions(prev => ({ ...prev, [noticeId]: noticeReactions }));
             setLoadingStates(prev => ({ ...prev, [noticeId]: false }));
@@ -169,9 +182,10 @@ export const Notices = ({
     return (
         <>
             <Accordion
-                defaultActiveKey={['0']}
+                // defaultActiveKey={['0']}
                 className='user-profile__notices-accordion'
-                onSelect={(eventKey) => eventKey && handleAccordionToggle(eventKey)}
+                activeKey={activeNoticeId}
+                onSelect={handleAccordionToggle}
             >
                 {/* {notices.slice(0, displayCount).map((notice, idx) => ( */}
                 {notices.map((notice, idx) => (
