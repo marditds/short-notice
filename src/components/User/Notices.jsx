@@ -26,7 +26,6 @@ export const Notices = ({
     spreadNotices,
     reactions
 }) => {
-
     const location = useLocation();
 
     const [countdowns, setCountdowns] = useState([]);
@@ -41,6 +40,7 @@ export const Notices = ({
 
     const [activeKey, setActiveKey] = useState(null);
     const [loadingReactions, setLoadingReactions] = useState({});
+    const [loadingStates, setLoadingStates] = useState({});
     const [loadedReactions, setLoadedReactions] = useState({});
 
     const reportCategories = [
@@ -150,20 +150,20 @@ export const Notices = ({
         setReportReason(null);
     }
 
-    const handleAccordionToggle = (noticeId) => {
-        if (!loadedReactions[noticeId]) {
-            setLoadingReactions((prev) => ({ ...prev, [noticeId]: true }));
-            // Simulate fetching reactions (replace with your actual API call)
-            setTimeout(() => {
-                const reactionsForNotice = reactions[noticeId] || [];
-                setLoadedReactions((prev) => ({
-                    ...prev,
-                    [noticeId]: reactionsForNotice.length ? reactionsForNotice : "No reactions for this notice",
-                }));
-                setLoadingReactions((prev) => ({ ...prev, [noticeId]: false }));
-            }, 1000); // Simulate delay in loading
+    const handleAccordionToggle = async (noticeId) => {
+        // If reactions aren't loaded and not currently loading
+        if (!loadedReactions[noticeId] && !loadingStates[noticeId]) {
+            setLoadingStates(prev => ({ ...prev, [noticeId]: true }));
+
+            // Filter reactions for this specific notice
+            const noticeReactions = reactions.filter(reaction => reaction.notice_id === noticeId);
+
+            // Simulate network delay (remove in production)
+            await new Promise(resolve => setTimeout(resolve, 500));
+
+            setLoadedReactions(prev => ({ ...prev, [noticeId]: noticeReactions }));
+            setLoadingStates(prev => ({ ...prev, [noticeId]: false }));
         }
-        setActiveKey(noticeId);
     };
 
     return (
@@ -171,7 +171,7 @@ export const Notices = ({
             <Accordion
                 defaultActiveKey={['0']}
                 className='user-profile__notices-accordion'
-                activeKey={activeKey}
+                onSelect={(eventKey) => eventKey && handleAccordionToggle(eventKey)}
             >
                 {/* {notices.slice(0, displayCount).map((notice, idx) => ( */}
                 {notices.map((notice, idx) => (
@@ -319,26 +319,23 @@ export const Notices = ({
                         <Accordion.Body className='d-flex justify-content-around w-100'>
                             <Row className='d-grid gap-3'>
 
-                                {loadingReactions[notice.$id] ? (
-                                    <Col className='text-center'>
-                                        <Loading /> {/* Display Loading component */}
+                                {loadingStates[notice.$id] ? (
+                                    <Col className="text-center py-3">
+                                        <Loading size={24} />
+                                        <Loading size={24} />
+                                        <Loading size={24} />
                                     </Col>
+                                ) : loadedReactions[notice.$id]?.length > 0 ? (
+                                    loadedReactions[notice.$id].map((reaction) => (
+                                        <Col key={reaction.$id}>
+                                            {reaction.content}
+                                        </Col>
+                                    ))
                                 ) : (
-                                    <>
-                                        {loadedReactions[notice.$id] && loadedReactions[notice.$id].length > 0 ? (
-                                            loadedReactions[notice.$id].map((reaction) => (
-                                                <Col key={reaction.$id}>
-                                                    {reaction.content} {/* Display reaction content */}
-                                                </Col>
-                                            ))
-                                        ) : (
-                                            <Col className='text-center'>
-                                                No reactions for this notice {/* Display message if no reactions */}
-                                            </Col>
-                                        )}
-                                    </>
+                                    <Col className="text-center text-muted py-3">
+                                        No reactions for this notice
+                                    </Col>
                                 )}
-
 
                                 {/* {
                                     reactions?.map((reaction) => {
