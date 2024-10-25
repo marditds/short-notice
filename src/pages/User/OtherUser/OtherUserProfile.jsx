@@ -140,19 +140,19 @@ const OtherUserProfile = () => {
     }, [currUserId])
 
     // Reactions For Notices tab
-    useEffect(() => {
-        fetchReactionsForNotices(notices, setNoticesReactions);
-    }, [notices]);
+    // useEffect(() => {
+    //     fetchReactionsForNotices(notices, setNoticesReactions);
+    // }, [notices]);
 
     // Reactions For Spreads tab
-    useEffect(() => {
-        fetchReactionsForNotices(spreadNoticesData, setSpreadReactions);
-    }, [spreadNoticesData]);
+    // useEffect(() => {
+    //     fetchReactionsForNotices(spreadNoticesData, setSpreadReactions);
+    // }, [spreadNoticesData]);
 
     // Reactions For Likes tab
-    useEffect(() => {
-        fetchReactionsForNotices(likedNoticesData, setLikedReactions);
-    }, [likedNoticesData]);
+    // useEffect(() => {
+    //     fetchReactionsForNotices(likedNoticesData, setLikedReactions);
+    // }, [likedNoticesData]);
 
     // Fetch accounts following the other user
     useEffect(() => {
@@ -260,7 +260,7 @@ const OtherUserProfile = () => {
                                 notices={notices}
                                 likedNotices={likedNotices}
                                 spreadNotices={spreadNotices}
-                                reactions={noticesReactions}
+                                // reactions={noticesReactions}
                                 handleLike={handleLike}
                                 handleSpread={handleSpread}
                                 handleReport={handleReport}
@@ -294,7 +294,7 @@ const OtherUserProfile = () => {
                             user_id={user_id}
                             likedNotices={likedNotices}
                             spreadNotices={spreadNotices}
-                            reactions={spreadReactions}
+                            // reactions={spreadReactions}
                             handleLike={handleLike}
                             handleSpread={handleSpread}
                             handleReport={handleReport}
@@ -314,7 +314,7 @@ const OtherUserProfile = () => {
                             user_id={user_id}
                             likedNotices={likedNotices}
                             spreadNotices={spreadNotices}
-                            reactions={likedReactions}
+                            // reactions={likedReactions}
                             handleLike={handleLike}
                             handleSpread={handleSpread}
                             handleReport={handleReport}

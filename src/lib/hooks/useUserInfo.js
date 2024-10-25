@@ -150,7 +150,13 @@ const useUserInfo = (data) => {
                 })
             );
             if (JSON.stringify(updatedNotices) !== JSON.stringify(notices)) {
-                setNotices(prevNotices => [...prevNotices, ...updatedNotices]);
+                setNotices(prevNotices => {
+                    // Filter out duplicates before appending
+                    const nonDuplicateNotices = updatedNotices.filter(newNotice =>
+                        !prevNotices.some(existingNotice => existingNotice.$id === newNotice.$id)
+                    );
+                    return [...prevNotices, ...nonDuplicateNotices];
+                });
             }
         } catch (error) {
             console.error('Error getting users data:', error);

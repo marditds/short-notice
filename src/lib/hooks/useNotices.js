@@ -222,11 +222,19 @@ const useNotices = (googleUserData) => {
             const usrNotices = await getNoticesByUser(id, limit, offset);
 
             // setNotices(usrNotices);
-            setNotices(prevNotices => {
-                // If offset is 0, replace all notices, otherwise append new notices
-                return offset === 0 ? usrNotices : [...prevNotices, ...usrNotices];
-            });
+            // setNotices(prevNotices => {
+            // If offset is 0, replace all notices, otherwise append new notices
+            // return offset === 0 ? usrNotices : [...prevNotices, ...usrNotices];
+            // });
 
+            setNotices(prevNotices => {
+                // Filter out duplicates before appending
+                const newNotices = usrNotices.filter(notice =>
+                    !prevNotices.some(existingNotice => existingNotice.$id === notice.$id)
+                );
+
+                return [...prevNotices, ...newNotices];
+            });
 
             return usrNotices;
 
