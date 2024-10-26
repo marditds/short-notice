@@ -6,7 +6,12 @@ import { Loading } from '../../Loading/Loading';
 
 export const Info = () => {
 
-    const { googleUserData, username, setUsername } = useUserContext();
+    const { googleUserData,
+        username,
+        setUsername,
+        registeredUserame,
+        setRegisteredUsername } = useUserContext();
+
     const { handleUpdateUser } = useUserInfo(googleUserData);
 
     const [currUsername, setCurrUsername] = useState(username);
@@ -29,6 +34,7 @@ export const Info = () => {
                 await handleUpdateUser(localUsername);
                 setCurrUsername(localUsername);
                 setUsername(localUsername);
+                setRegisteredUsername(localUsername)
             }
         } catch (error) {
             console.error('Username cannot be empty.');

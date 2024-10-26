@@ -215,7 +215,7 @@ const UserFeed = () => {
 
 
 
-            <h2>Select a tag to see related notices:</h2>
+            <h2 style={{ marginTop: '30px' }}>Select a tag to see related notices:</h2>
 
             <NoticeTags
                 tagCategories={tagCategories}

@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { updateUser, deleteUser, deleteAllNotices, getUsersDocument, createFollow, removeFollow, getUserFollowingsById as fetchUserFollowingsById, getUserFollowersById as fetchUserFollowersById, getOtherUserFollowingsById as fetchOtherUserFollowingsById } from '../context/dbhandler';
+import { checkIdExistsInAuth, checkEmailExistsInAuth as checkEmailInAuthFromServer, registerAuthUser, deleteAuthUser, createUserSession, getSessionDetails as fetchSessionDetails, deleteUserSession, updateUser, updateAuthUser, deleteUser, deleteAllNotices, getUsersDocument, createFollow, removeFollow, getUserFollowingsById as fetchUserFollowingsById, getUserFollowersById as fetchUserFollowersById, getOtherUserFollowingsById as fetchOtherUserFollowingsById } from '../context/dbhandler';
 import { useUserContext } from '../context/UserContext';
 import { UserId } from '../../components/User/UserId';
 
@@ -8,21 +8,15 @@ const useUserInfo = (data) => {
     const { setUsername } = useUserContext();
     const [userId, setUserId] = useState(null);
 
-    const [following, setFollowing] = useState({});
 
+    const [following, setFollowing] = useState({});
     const [followersCount, setFollowersCount] = useState(null);
     const [followingCount, setFollowingCount] = useState(null);
-
-
     const [followersAccounts, setFollowersAccounts] = useState([]);
     const [followingAccounts, setFollowingAccounts] = useState([]);
-
     const [isFollowingLoading, setIsFollowingLoading] = useState(false);
-
     const [isFollowing, setIsFollowing] = useState(false);
 
-
-    // const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const fetchUserId = async () => {
@@ -34,7 +28,45 @@ const useUserInfo = (data) => {
         fetchUserId();
     }, [data]);
 
+    const registerUser = async (id, email, username) => {
+        try {
+            const newAuthUsr = await registerAuthUser(id, email, username);
+            console.log('newAuthUsr - useUserInfo:', newAuthUsr);
 
+            return newAuthUsr;
+        } catch (error) {
+            console.error('Error registering user:', error);
+        }
+    }
+
+    const createSession = async (email) => {
+        try {
+            const usrSession = await createUserSession(email);
+            return usrSession;
+        } catch (error) {
+            console.error('Error creating session:', error);
+        }
+    }
+
+    const getSessionDetails = async () => {
+        try {
+            const sessionDetails = await fetchSessionDetails();
+            console.log('sessionDetails', sessionDetails);
+            return sessionDetails;
+        } catch (error) {
+            console.error('Error gettin session details:', error);
+
+        }
+    }
+
+    const removeSession = async () => {
+        try {
+            const usrSession = await deleteUserSession();
+            return usrSession;
+        } catch (error) {
+            console.error('Error removing session:', error);
+        }
+    }
 
     const handleUpdateUser = async (username) => {
 
@@ -44,9 +76,13 @@ const useUserInfo = (data) => {
         }
 
         try {
+
             await updateUser({ userId, username });
 
+            await updateAuthUser(username);
+
             setUsername(username);
+            // setRegisterdUsername(username);
 
             console.log('Username updated successfully.');
 
@@ -58,14 +94,35 @@ const useUserInfo = (data) => {
 
     const handleDeleteUser = async () => {
         try {
-            await deleteAllNotices(userId)
-
+            await deleteAllNotices(userId);
             await deleteUser(userId);
+            await deleteAuthUser(userId);
+            // await deleteUserSession();
             console.log('User deleted successfully.');
 
         } catch (error) {
             console.error('Error deleting user:', error);
 
+        }
+    }
+
+    const checkingIdInAuth = async () => {
+        try {
+            const res = checkIdExistsInAuth();
+            return res;
+        } catch (error) {
+            console.error('Error checkingIdInAuth:', res);
+        }
+    }
+
+    const checkingEmailInAuth = async (email) => {
+        try {
+            console.log('this email will be sent - useserInfo:', email);
+
+            const res = await checkEmailInAuthFromServer(email);
+            return res;
+        } catch (error) {
+            console.error('Error checkingEmailInAuth:', res);
         }
     }
 
@@ -93,7 +150,13 @@ const useUserInfo = (data) => {
                 })
             );
             if (JSON.stringify(updatedNotices) !== JSON.stringify(notices)) {
-                setNotices(prevNotices => [...prevNotices, ...updatedNotices]);
+                setNotices(prevNotices => {
+                    // Filter out duplicates before appending
+                    const nonDuplicateNotices = updatedNotices.filter(newNotice =>
+                        !prevNotices.some(existingNotice => existingNotice.$id === newNotice.$id)
+                    );
+                    return [...prevNotices, ...nonDuplicateNotices];
+                });
             }
         } catch (error) {
             console.error('Error getting users data:', error);
@@ -170,7 +233,7 @@ const useUserInfo = (data) => {
             console.log('userFollowersById', userFollowersById);
 
             const accountsFollowingTheUser = allUsers.documents.filter((user) =>
-                userFollowersById.some(followed => user.$id === followed.user_id)
+                userFollowersById?.some(followed => user.$id === followed.user_id)
             );
 
             console.log('accountsFollowingTheUser', accountsFollowingTheUser);
@@ -207,7 +270,7 @@ const useUserInfo = (data) => {
             const followedByUserIds = await getUserFollowingsById(id);
 
             const accountsFollowedByUser = allUsers.documents.filter((user) =>
-                followedByUserIds.some(followed => user.$id === followed.otherUser_id)
+                followedByUserIds?.some(followed => user.$id === followed.otherUser_id)
             );
 
             setFollowingAccounts(accountsFollowedByUser);
@@ -233,6 +296,12 @@ const useUserInfo = (data) => {
         followersAccounts,
         followingAccounts,
         // isLoading,
+        checkingIdInAuth,
+        checkingEmailInAuth,
+        registerUser,
+        createSession,
+        removeSession,
+        getSessionDetails,
         handleUpdateUser,
         handleDeleteUser,
         getUsersData,
@@ -243,7 +312,8 @@ const useUserInfo = (data) => {
         getUserFollowersById,
         getOtherUserFollowingsById,
         fetchAccountsFollowingTheUser,
-        fetchAccountsFollowedByUser
+        fetchAccountsFollowedByUser,
+        // authedUsers
     }
 }
 

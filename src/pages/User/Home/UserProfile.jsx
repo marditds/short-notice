@@ -10,6 +10,8 @@ import useNotices from '../../../lib/hooks/useNotices.js';
 import { ComposeNotice } from '../../../components/User/ComposeNotice';
 import { Loading } from '../../../components/Loading/Loading.jsx';
 import './UserProfile.css';
+import { account } from '../../../lib/context/dbhandler.js';
+import { Query } from 'appwrite';
 
 
 
@@ -46,6 +48,7 @@ const UserProfile = () => {
         fetchUserNotices,
         getAllLikedNotices,
         getAllSpreadNotices,
+        getReactionsForNotice,
         fetchReactionsForNotices,
         setNoticesReactions,
         setSpreadReactions,
@@ -59,7 +62,8 @@ const UserProfile = () => {
         followingAccounts,
         fetchUsersData,
         fetchAccountsFollowingTheUser,
-        fetchAccountsFollowedByUser
+        fetchAccountsFollowedByUser,
+        listIdentities
     } = useUserInfo(googleUserData);
 
     const [notices, setNotices] = useState([]);
@@ -73,6 +77,19 @@ const UserProfile = () => {
     const [hasMoreNotices, setHasMoreNotices] = useState(true);
     const [isLoadingMore, setIsLoadingMore] = useState(false);
 
+    // useEffect(() => {
+    //     const listing = async () => {
+    //         try {
+    //             const res = listIdentities();
+    //             console.log('listing:', res);
+    //         } catch (error) {
+    //             console.error('Error listing:', error);
+    //         }
+    //     }
+    //     console.log('googleUserData', googleUserData.email);
+    //     listing();
+    // }, [googleUserData])
+
 
     // Fetch notices for user
     useEffect(() => {
@@ -82,7 +99,7 @@ const UserProfile = () => {
             try {
                 const usrNtcs = await fetchUserNotices(user_id, setNotices, limit, offset);
 
-                if (usrNtcs.length < limit) {
+                if (usrNtcs?.length < limit) {
                     setHasMoreNotices(false);
                 } else {
                     setHasMoreNotices(true);
@@ -298,6 +315,7 @@ const UserProfile = () => {
                         handleDeleteNotice={handleDeleteNotice}
                         eventKey='my-notices'
                         reactions={noticesReactions}
+                        getReactionsForNotice={getReactionsForNotice}
                     />
                     <div className="d-flex justify-content-center mt-4">
                         {hasMoreNotices ?
@@ -327,6 +345,8 @@ const UserProfile = () => {
                         handleReport={handleReport}
                         handleReact={handleReact}
                         reactions={spreadReactions}
+                        getReactionsForNotice={getReactionsForNotice}
+
                     />
                 </Tab>
 
@@ -345,9 +365,13 @@ const UserProfile = () => {
                         handleReport={handleReport}
                         handleReact={handleReact}
                         reactions={likedReactions}
+                        getReactionsForNotice={getReactionsForNotice}
+
                     />
                 </Tab>
             </Tabs>
+
+            <Button>Logging authed users</Button>
 
             {/* <div className='position-fixed'> */}
             <Modal

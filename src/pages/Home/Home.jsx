@@ -5,9 +5,7 @@ import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import './Home.css';
 
-
 const Home = ({ onSuccess }) => {
-
 
     return (
         <div className='home__body d-flex flex-column min-vh-100'>

@@ -1,10 +1,16 @@
-import { Client, Storage, Account, Databases, ID, Query } from 'appwrite';
+import { Client, Storage, Account, Databases, ID, Query, Permission, Role, Functions, ExecutionMethod } from 'appwrite';
 
-const client = new Client();
-
-client
+const client = new Client()
     .setEndpoint(import.meta.env.VITE_ENDPOINT)
     .setProject(import.meta.env.VITE_PROJECT);
+
+export const account = new Account(client);
+
+console.log('account - dbhandler.js', account);
+
+const functions = new Functions(client);
+
+export default client;
 
 const storage = new Storage(client);
 export const databases = new Databases(client);
@@ -26,7 +32,12 @@ export const uploadAvatar = async (file) => {
         const response = await storage.createFile(
             import.meta.env.VITE_AVATAR_BUCKET,
             ID.unique(),
-            file
+            file,
+            [
+                Permission.write(Role.users()),
+                Permission.write(Role.guests())
+
+            ]
         );
         const fileId = response.$id;
         return fileId;
@@ -38,7 +49,14 @@ export const uploadAvatar = async (file) => {
 
 export const deleteAvatarFromStrg = async (fileId) => {
     try {
-        const response = await storage.deleteFile(import.meta.env.VITE_AVATAR_BUCKET, fileId);
+        const response = await storage.deleteFile(
+            import.meta.env.VITE_AVATAR_BUCKET,
+            fileId,
+            [
+                Permission.delete(Role.users()),
+                Permission.delete(Role.guests())
+            ]
+        );
         console.log('Avatar deleted successfully:', response);
     } catch (error) {
         console.error('Error deleting avatar:', error);
@@ -51,7 +69,13 @@ export const updateAvatar = async (userId, profilePictureId) => {
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_USERS_COLLECTION,
             userId,
-            { avatar: profilePictureId }
+            {
+                avatar: profilePictureId
+            },
+            [
+                Permission.update(Role.users()),
+                Permission.update(Role.guests())
+            ]
         );
         console.log('User profile updated successfully');
     } catch (error) {
@@ -67,7 +91,13 @@ export const deleteAvatarFromDoc = async (userId) => {
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_USERS_COLLECTION,
             userId,
-            { avatar: '' }
+            {
+                avatar: ''
+            },
+            [
+                Permission.delete(Role.users()),
+                Permission.delete(Role.guests())
+            ]
         );
         console.log('User profile avatar set to null successfully');
     } catch (error) {
@@ -156,13 +186,17 @@ const checkUsernameExists = async (username) => {
     }
 };
 
-export const createUser = async ({ email, given_name, username }) => {
+export const createUser = async ({ id, email, given_name, username }) => {
     try {
 
         const existingUser = await databases.listDocuments(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_USERS_COLLECTION,
-            [Query.equal('email', email)]
+            [Query.equal('email', email)],
+            // [
+            //     Permission.write(Role.users()),
+            //     Permission.write(Role.guests())
+            // ]
         );
 
         const usernameExists = await checkUsernameExists(username);
@@ -180,12 +214,13 @@ export const createUser = async ({ email, given_name, username }) => {
         const response = await databases.createDocument(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_USERS_COLLECTION,
-            ID.unique(),
+            id,
             {
                 email,
                 given_name,
                 username: username.toLowerCase()
-            }
+            },
+
         );
         console.log('Document created successfully:', response);
     } catch (error) {
@@ -194,13 +229,40 @@ export const createUser = async ({ email, given_name, username }) => {
     }
 };
 
+export const registerAuthUser = async (id, email, username) => {
+    try {
+        // const result = await account.listIdentities(
+        //     [Query.equal('email', email)] // queries (optional)
+        // );
+
+        const newUsr = await account.create(
+            id,
+            email,
+            'TmbkaberdiArum55',
+            username.toLowerCase()
+        );
+
+        console.log('newUsr - dbhandler.js:', newUsr);
+
+        return newUsr;
+    } catch (error) {
+        console.error('Error registering user:', error);
+    }
+}
+
 export const updateUser = async ({ userId, username }) => {
     try {
         await databases.updateDocument(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_USERS_COLLECTION,
             userId,
-            { username: username }
+            {
+                username: username
+            },
+            // [
+            // Permission.update(Role.users(userId)),
+            // Permission.update(Role.guests())
+            // ]
         );
         console.log('Username successfully updated.');
     } catch (error) {
@@ -209,18 +271,196 @@ export const updateUser = async ({ userId, username }) => {
     }
 };
 
+export const updateAuthUser = async (name) => {
+    try {
+        const authUsrnm = await account.updateName(name);
+
+        console.log('Auth username updated successfully', authUsrnm);
+    } catch (error) {
+        console.error('Error updating auth username:', error);
+    }
+};
+
+export const checkIdExistsInAuth = async () => {
+    try {
+        const authId = await account.get();
+        console.log('authId:', authId.$id);
+        return authId.$id;
+    } catch (error) {
+        console.error('Error checking authId:', error);
+    }
+}
+
+export const checkEmailExistsInAuth = async (email) => {
+    try {
+        // Trigger the cloud function with the user's email
+        console.log('this email will be sent - dbhandler:', email);
+
+        const payload = JSON.stringify({ email: email });
+        console.log('Payload being sent:');
+        console.log(payload);
+
+        const response = await functions.createExecution(
+            import.meta.env.VITE_USER_AUTH_FUNCTION_ID,  // your function ID
+            payload
+        );
+
+        console.log('Function response:', response);
+        console.log('Response status:', response.status);
+        console.log('Response status code:', response.responseStatusCode);
+        console.log('Response Body:', response.responseBody);
+
+        if (response.status === 'completed') {
+            try {
+                const result = JSON.parse(response.responseBody);
+                return result;
+            } catch (parseError) {
+                console.error('Error parsing response:', parseError);
+                return false;
+            }
+        } else {
+            console.error('Function execution failed:', execution.stderr);
+            return false;
+        }
+    } catch (error) {
+        console.error('Error checking email existence in Auth:', error);
+        return false;
+    }
+};
+
 export const deleteUser = async (userId) => {
     try {
         const response = await databases.deleteDocument(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_USERS_COLLECTION,
-            userId
+            userId,
+            // [
+            //     Permission.delete(Role.users()),
+            //     Permission.delete(Role.guests())
+            // ]
         );
         console.log('User deleted successfully:', response);
     } catch (error) {
         console.error('Error deleting user:', error);
     }
 };
+
+export const deleteAuthUser = async (userId) => {
+    try {
+        console.log('this userId will be deleted - dbhandler:', userId);
+        const payload = JSON.stringify({ $id: userId });
+        console.log('Payload being sent:');
+        console.log(payload);
+
+        const res = await functions.createExecution(
+            import.meta.env.VITE_USER_DELETE_FUNCTION_ID,
+            payload
+        )
+        if (res.status === 'completed') {
+            try {
+                const result = JSON.parse(res.responseBody);
+                console.log(result);
+            } catch (parseError) {
+                console.error('Error parsing response:', parseError);
+                return false;
+            }
+        } else {
+            console.error("Failed to delete atuh user");
+        }
+    } catch (error) {
+        console.error('Error deleting auth user:', error);
+    }
+}
+
+export const createUserSession = async (email) => {
+    try {
+        const userSession = await account.createEmailPasswordSession(email, 'TmbkaberdiArum55');
+        console.log('Session created successfully:', userSession);
+        return userSession;
+    } catch (error) {
+        console.error('Error creating session:', error);
+    }
+}
+
+export const deleteUserSession = async () => {
+
+    const currentSession = await account.getSession('current');
+    console.log('currentSession', currentSession);
+    try {
+
+        if (currentSession) {
+            await account.deleteSession(currentSession.$id);
+            console.log('Session delete successfully');
+        }
+    } catch (error) {
+        console.error('Error deleting the session:', error);
+    }
+}
+
+export const getSessionDetails = async () => {
+    try {
+        const sessDets = account.get();
+        console.log('sessDets:', sessDets);
+        return sessDets;
+    } catch (error) {
+        console.error('Error getting session details', error);
+    }
+}
+
+// export const getSessionDetails = async (email) => {
+//     try {
+//         console.log('this email will be sent - dbhandler:', email);
+//         console.log('type of email', typeof (email));
+
+//         const payload = JSON.stringify({ email: email });
+//         console.log('Payload being sent:');
+//         console.log(payload);
+
+//         const exec = await functions.createExecution(
+//             import.meta.env.VITE_USER_SESSION_FUNCTION_ID,  // your function ID
+//             payload
+//         )
+
+//         console.log('Function response:', exec);
+//         console.log('Response status:', exec.status);
+//         console.log('Response status code:', exec.responseStatusCode);
+//         console.log('Response Body:', exec.responseBody);
+
+//         if (exec.status === 'completed') {
+//             try {
+//                 const result = JSON.parse(exec.responseBody);
+//                 console.log(result);
+//                 return result;
+//                 // return result;
+//             } catch (parseError) {
+//                 console.error('Error parsing response:', parseError);
+//                 return false;
+//             }
+//         } else {
+//             console.error('Function execution failed:', execution.stderr);
+//             return false;
+//         }
+
+
+//         // const sessDets = await account?.getSession('current');
+//         // console.log('sessDets:', sessDets);
+//         // return sessDets;
+//     } catch (error) {
+//         console.error('Error getting session details:', error);
+
+//     }
+// }
+
+// const createGoogleSession = async () => {
+//     try {
+//         let createSession = await account.createOAuth2Session(
+//             'google'
+//         )
+//         console.log('createSession - App.jsx:', createSession);
+//     } catch (error) {
+//         console.error('Error creating session:', error);
+//     }
+// }
 
 export const createNotice = async ({ user_id, text, timestamp, expiresAt, science, technology, engineering, math, literature, history, philosophy, music, medicine, economics, law, polSci, sports
 }) => {
@@ -249,7 +489,11 @@ export const createNotice = async ({ user_id, text, timestamp, expiresAt, scienc
                 law: law || false,
                 polSci: polSci || false,
                 sports: sports || false
-            }
+            },
+            // [
+            //     Permission.write(Role.users()),
+            //     Permission.write(Role.guests())
+            // ]
         );
         console.log('Notice created succesfully:', response);
         return response;
@@ -381,7 +625,11 @@ export const updateNotice = async (noticeId, newText) => {
             noticeId,
             {
                 text: newText
-            }
+            },
+            // [
+            //     Permission.update(Role.users()),
+            //     Permission.update(Role.guests())
+            // ]
         );
         console.log('Notice updated successfully:', response);
         return response;
@@ -396,7 +644,11 @@ export const deleteNotice = async (noticeId) => {
         const response = await databases.deleteDocument(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_NOTICES_COLLECTION,
-            noticeId
+            noticeId,
+            [
+                Permission.delete(Role.users()),
+                Permission.delete(Role.guests())
+            ]
         );
         console.log('Notice deleted successfully:', response);
     } catch (error) {
@@ -413,7 +665,11 @@ export const deleteAllNotices = async (userId) => {
         const notices = await databases.listDocuments(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_NOTICES_COLLECTION,
-            [Query.equal('user_id', userId)]
+            [Query.equal('user_id', userId)],
+            [
+                Permission.delete(Role.users()),
+                Permission.delete(Role.guests())
+            ]
         );
 
         for (const notice of notices.documents) {
@@ -465,7 +721,11 @@ export const updateUserInterests = async (userId, selectedTags) => {
                 import.meta.env.VITE_DATABASE,
                 import.meta.env.VITE_INTERESTS_COLLECTION,
                 userId,
-                interestsData
+                interestsData,
+                // [
+                //     Permission.update(Role.users()),
+                //     Permission.update(Role.guests())
+                // ]
             );
         } catch (updateError) {
             if (updateError.code === 404) {
@@ -473,7 +733,10 @@ export const updateUserInterests = async (userId, selectedTags) => {
                     import.meta.env.VITE_DATABASE,
                     import.meta.env.VITE_INTERESTS_COLLECTION,
                     userId,
-                    interestsData
+                    interestsData,
+                    // [
+                    //     Permission.write(Role.users()), Permission.write(Role.guests())
+                    // ]
                 );
             } else {
                 throw updateError;
@@ -498,7 +761,11 @@ export const createSpread = async (notice_id, author_id, user_id) => {
                 notice_id: notice_id,
                 author_id: author_id,
                 user_id: user_id
-            }
+            },
+            // [
+            //     Permission.write(Role.users()),
+            //     Permission.write(Role.guests())
+            // ]
         );
         console.log('Spread entry created successfully:', response);
         return response;
@@ -513,7 +780,11 @@ export const removeSpread = async (spread_id) => {
         const response = await databases.deleteDocument(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_SPREADS_COLLECTION,
-            spread_id
+            spread_id,
+            // [
+            //     Permission.delete(Role.users()),
+            //     Permission.delete(Role.guests())
+            // ]
         );
         console.log('Spread removed successfully:', response);
         return response;
@@ -533,7 +804,11 @@ export const createLike = async (notice_id, author_id, user_id) => {
                 notice_id: notice_id,
                 author_id: author_id,
                 user_id: user_id
-            }
+            },
+            // [
+            //     Permission.write(Role.users()),
+            //     Permission.write(Role.guests())
+            // ]
         );
         console.log('Like created successfully:', response);
         return response;
@@ -548,7 +823,11 @@ export const removeLike = async (like_id) => {
         const response = await databases.deleteDocument(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_LIKES_COLLECTION,
-            like_id
+            like_id,
+            // [
+            //     Permission.delete(Role.users()),
+            //     Permission.delete(Role.guests())
+            // ]
         );
         console.log('Like removed successfully:', response);
         return response;
@@ -634,7 +913,11 @@ export const createReport = async (notice_id, author_id, reason, user_id) => {
                 author_id: author_id,
                 reason: reason,
                 user_id: user_id
-            }
+            },
+            // [
+            //     Permission.write(Role.users()),
+            //     Permission.write(Role.guests())
+            // ]
         );
         console.log('Report created successfully');
         return response;
@@ -652,6 +935,10 @@ export const createFollow = async (user_id, otherUser_id) => {
             import.meta.env.VITE_FOLLOWING_COLLECTION,
             [
                 Query.equal('user_id', user_id)
+            ],
+            [
+                Permission.write(Role.users()),
+                Permission.write(Role.guests())
             ]
         );
 
@@ -689,7 +976,11 @@ export const removeFollow = async (following_id) => {
         const response = await databases.deleteDocument(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_FOLLOWING_COLLECTION,
-            following_id
+            following_id,
+            [
+                Permission.delete(Role.users()),
+                Permission.delete(Role.guests())
+            ]
         )
         console.log('Follow removed successfully');
         return response;
@@ -761,7 +1052,11 @@ export const createReaction = async (sender_id, recipient_id, content, timestamp
                 content,
                 timestamp,
                 notice_id
-            }
+            },
+            // [
+            //     Permission.write(Role.users()),
+            //     Permission.write(Role.guests())
+            // ]
         )
         console.log('Reaction created successfuly:', response);
         return response;
@@ -831,5 +1126,4 @@ export const getAllReactionsByNoticeId = async (notice_id) => {
     }
 }
 
-export const account = new Account(client);
 export { ID } from 'appwrite';

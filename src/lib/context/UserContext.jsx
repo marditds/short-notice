@@ -7,6 +7,7 @@ export const UserProvider = ({ children }) => {
     const [googleUserData, setGoogleUserData] = useState([]);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [username, setUsername] = useState('');
+    const [registeredUsername, setRegisteredUsername] = useState('');
     const [hasUsername, setHasUsername] = useState(false);
 
 
@@ -17,6 +18,7 @@ export const UserProvider = ({ children }) => {
                 googleUserData, setGoogleUserData,
                 isLoggedIn, setIsLoggedIn,
                 username, setUsername,
+                registeredUsername, setRegisteredUsername,
                 hasUsername, setHasUsername
             }}>
             {children}

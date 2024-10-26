@@ -39,6 +39,7 @@ const OtherUserProfile = () => {
         getAllSpreadNotices,
         fetchUserNotices,
         sendReaction,
+        getReactionsForNotice,
         fetchReactionsForNotices,
         setNoticesReactions,
         setSpreadReactions,
@@ -104,7 +105,7 @@ const OtherUserProfile = () => {
             try {
                 const usrNtcs = await fetchUserNotices(currUserId, setNotices, limit, offset);
 
-                if (usrNtcs.length < limit) {
+                if (usrNtcs?.length < limit) {
                     setHasMoreNotices(false);
                 } else {
                     setHasMoreNotices(true);
@@ -265,6 +266,7 @@ const OtherUserProfile = () => {
                                 handleSpread={handleSpread}
                                 handleReport={handleReport}
                                 handleReact={handleReact}
+                                getReactionsForNotice={getReactionsForNotice}
                                 eventKey='notices'
                             />
                             <div className="d-flex justify-content-center mt-4">
@@ -299,6 +301,7 @@ const OtherUserProfile = () => {
                             handleSpread={handleSpread}
                             handleReport={handleReport}
                             handleReact={handleReact}
+                            getReactionsForNotice={getReactionsForNotice}
                         />
                         : 'No spreadas yet'}
                 </Tab>
@@ -319,6 +322,7 @@ const OtherUserProfile = () => {
                             handleSpread={handleSpread}
                             handleReport={handleReport}
                             handleReact={handleReact}
+                            getReactionsForNotice={getReactionsForNotice}
                         />
                         : 'No likes yet'}
                 </Tab>

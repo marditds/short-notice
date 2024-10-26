@@ -24,9 +24,9 @@ export const Notices = ({
     user_id,
     likedNotices,
     spreadNotices,
-    reactions
+    reactions,
+    getReactionsForNotice
 }) => {
-
     const location = useLocation();
 
     const [countdowns, setCountdowns] = useState([]);
@@ -38,7 +38,10 @@ export const Notices = ({
     const [noticeText, setNoticeText] = useState(null);
     const [reactionText, setReactionText] = useState('');
     const [isSendingReactionLoading, setIsSendingReactionLoading] = useState(false);
-    const [displayCount, setDisplayCount] = useState(10);
+
+    const [loadingStates, setLoadingStates] = useState({});
+    const [loadedReactions, setLoadedReactions] = useState({});
+    const [activeNoticeId, setActiveNoticeId] = useState(null);
 
     const reportCategories = [
         { name: "Hate speech", key: "HATE" },
@@ -147,20 +150,63 @@ export const Notices = ({
         setReportReason(null);
     }
 
-    // const loadMoreNotices = () => {
-    //     setDisplayCount(prevCount => prevCount + 10);
-    // };
+    const handleAccordionToggle = async (noticeId) => {
+        // If closing the accordion
+        if (activeNoticeId === noticeId) {
+            setActiveNoticeId(null);
+            // Clean up loaded reactions for this notice
+            setLoadedReactions(prev => {
+                const newState = { ...prev };
+                delete newState[noticeId];
+                return newState;
+            });
+            return;
+        }
+
+        setActiveNoticeId(noticeId);
+
+        // If reactions aren't loaded and not currently loading
+        if (!loadedReactions[noticeId] && !loadingStates[noticeId]) {
+            setLoadingStates(prev => ({ ...prev, [noticeId]: true }));
+
+            try {
+                // Fetch reactions only for one specific notice
+                const noticeReactions = await getReactionsForNotice(noticeId);
+
+                setLoadedReactions(prev => ({
+                    ...prev,
+                    [noticeId]: noticeReactions?.documents || []
+                }));
+
+            } catch (error) {
+                console.error('Error loading reactions:', error);
+            } finally {
+                setLoadingStates(prev => ({ ...prev, [noticeId]: false }));
+            }
+
+            // Filter reactions for this specific notice
+            const noticeReactions = reactions.filter(reaction => reaction.notice_id === noticeId);
+
+            // setLoadedReactions(prev => ({ ...prev, [noticeId]: noticeReactions }));
+            // setLoadingStates(prev => ({ ...prev, [noticeId]: false }));
+        }
+    };
 
     return (
         <>
-            <Accordion defaultActiveKey={['0']}
+            <Accordion
+                // defaultActiveKey={['0']}
                 className='user-profile__notices-accordion'
-
+                activeKey={activeNoticeId}
+                onSelect={handleAccordionToggle}
             >
                 {/* {notices.slice(0, displayCount).map((notice, idx) => ( */}
                 {notices.map((notice, idx) => (
                     <Accordion.Item eventKey={notice?.$id} key={notice?.$id}>
-                        <Accordion.Header className='d-flex justify-content-center'>
+                        <Accordion.Header
+                            className='d-flex justify-content-center'
+                            onClick={() => handleAccordionToggle(notice.$id)}
+                        >
                             {/* <FaAngleDown size={20} className='me-3' /> */}
                             <Row className='w-100 m-auto'>
                                 <Col className='col-md-9 d-flex justify-content-between flex-column'
@@ -241,7 +287,7 @@ export const Notices = ({
                                                         style={{ height: '35px' }}
                                                     >
                                                         <div
-                                                            className='notice__reaction-bt ms-2'
+                                                            className='notice__reaction-btn ms-2'
                                                             onClick={() => handleLike(notice)}
                                                         >
                                                             {likedNotices && likedNotices[notice.$id] ? (
@@ -299,7 +345,26 @@ export const Notices = ({
                         </Accordion.Header>
                         <Accordion.Body className='d-flex justify-content-around w-100'>
                             <Row className='d-grid gap-3'>
-                                {
+
+                                {loadingStates[notice.$id] ? (
+                                    <Col className="text-center py-3">
+                                        <Loading size={24} />
+                                        <Loading size={24} />
+                                        <Loading size={24} />
+                                    </Col>
+                                ) : loadedReactions[notice.$id]?.length > 0 ? (
+                                    loadedReactions[notice.$id].map((reaction) => (
+                                        <Col key={reaction.$id}>
+                                            {reaction.content}
+                                        </Col>
+                                    ))
+                                ) : (
+                                    <Col className="text-center text-muted py-3">
+                                        No reactions for this notice
+                                    </Col>
+                                )}
+
+                                {/* {
                                     reactions?.map((reaction) => {
                                         return (reaction.notice_id === notice.$id &&
                                             <Col key={reaction.$id}>
@@ -307,7 +372,7 @@ export const Notices = ({
                                             </Col>)
                                     }
                                     )
-                                }
+                                } */}
                             </Row>
                         </Accordion.Body>
                     </Accordion.Item>
@@ -315,13 +380,7 @@ export const Notices = ({
                 }
             </Accordion>
 
-            {/* {displayCount < notices.length && (
-                <div className="d-flex justify-content-center mt-4">
-                    <Button onClick={loadMoreNotices}>
-                        Load More
-                    </Button>
-                </div>
-            )} */}
+
 
 
             {/* {notices.map((notice, idx) => (

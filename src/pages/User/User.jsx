@@ -4,12 +4,24 @@ import { Container } from 'react-bootstrap';
 import { Tools } from '../../components/User/Tools';
 import { googleLogout } from '@react-oauth/google';
 import { useUserContext } from '../../lib/context/UserContext';
+import useUserInfo from '../../lib/hooks/useUserInfo';
 import { Loading } from '../../components/Loading/Loading';
 import './User.css';
 
 const User = () => {
-    const { setGoogleUserData, setIsLoggedIn, username, googleUserData, isLoading } = useUserContext();
 
+    const { setGoogleUserData,
+        setIsLoggedIn,
+        username,
+        googleUserData,
+        isLoading } = useUserContext();
+
+    const { removeSession } = useUserInfo(googleUserData);
+
+    useEffect(() => {
+        console.log('googleUserData:', googleUserData);
+
+    }, [googleUserData])
 
 
     if (isLoading) {
@@ -26,6 +38,7 @@ const User = () => {
     return (
         <Container className='userhome__body'>
             <Tools
+                removeSession={removeSession}
                 googleLogout={googleLogout}
                 setGoogleUserData={setGoogleUserData}
                 setIsLoggedIn={setIsLoggedIn}
