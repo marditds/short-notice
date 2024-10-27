@@ -129,7 +129,7 @@ export const getUserById = async (userId) => {
         );
         return response;
     } catch (error) {
-        console.error('Error fetching user by ID:', error);
+        // console.error('Error fetching user by ID:', error);
         throw error;
     }
 };
@@ -171,6 +171,27 @@ export const getUserByUsername = async (username) => {
         return null;
     }
 };
+
+export const getAllUsersByString = async (str) => {
+    try {
+        const userList = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_USERS_COLLECTION,
+            [
+                Query.contains('username', [str]),
+            ]
+        );
+
+        if (userList.total > 0) {
+            return userList.documents[0];
+        }
+
+        return null;
+    } catch (error) {
+        console.error('Error fetching user by string:', error);
+        return null;
+    }
+}
 
 const checkUsernameExists = async (username) => {
     try {

@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { checkIdExistsInAuth, checkEmailExistsInAuth as checkEmailInAuthFromServer, registerAuthUser, deleteAuthUser, createUserSession, getSessionDetails as fetchSessionDetails, deleteUserSession, updateUser, updateAuthUser, deleteUser, deleteAllNotices, getUsersDocument, createFollow, removeFollow, getUserFollowingsById as fetchUserFollowingsById, getUserFollowersById as fetchUserFollowersById, getOtherUserFollowingsById as fetchOtherUserFollowingsById } from '../context/dbhandler';
+import { checkIdExistsInAuth, checkEmailExistsInAuth as checkEmailInAuthFromServer, registerAuthUser, deleteAuthUser, createUserSession, getSessionDetails as fetchSessionDetails, deleteUserSession, updateUser, updateAuthUser, deleteUser, getUserByUsername as fetchUserByUsername, getAllUsersByString as fetchAllUsersByString, deleteAllNotices, getUsersDocument, createFollow, removeFollow, getUserFollowingsById as fetchUserFollowingsById, getUserFollowersById as fetchUserFollowersById, getOtherUserFollowingsById as fetchOtherUserFollowingsById } from '../context/dbhandler';
 import { useUserContext } from '../context/UserContext';
 import { UserId } from '../../components/User/UserId';
 
@@ -124,6 +124,28 @@ const useUserInfo = (data) => {
         } catch (error) {
             console.error('Error checkingEmailInAuth:', res);
         }
+    }
+
+    const getUserByUsername = async (username) => {
+        try {
+            const usrnm = await fetchUserByUsername(username);
+            console.log('username found:', usrnm);
+            return usrnm;
+        } catch (error) {
+            console.error('Error getting user by username:', error);
+        }
+
+    }
+
+    const getAllUsersByString = async (username) => {
+        try {
+            const usrnm = await fetchAllUsersByString(username);
+            console.log('username found:', usrnm);
+            return usrnm;
+        } catch (error) {
+            console.error('Error getting user by username:', error);
+        }
+
     }
 
     const getUsersData = useCallback(async () => {
@@ -301,6 +323,8 @@ const useUserInfo = (data) => {
         registerUser,
         createSession,
         removeSession,
+        getUserByUsername,
+        getAllUsersByString,
         getSessionDetails,
         handleUpdateUser,
         handleDeleteUser,

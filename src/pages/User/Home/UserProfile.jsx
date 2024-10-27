@@ -64,7 +64,7 @@ const UserProfile = () => {
         fetchAccountsFollowingTheUser,
         fetchAccountsFollowedByUser,
         listIdentities
-    } = useUserInfo(googleUserData);
+    } = useUserInfo();
 
     const [notices, setNotices] = useState([]);
     const [spreadNoticesData, setSpreadNoticesData] = useState([]);

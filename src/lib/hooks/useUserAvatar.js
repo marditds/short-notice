@@ -8,6 +8,7 @@ const useUserAvatar = (userId) => {
     const [isUploading, setIsUploading] = useState(false);
 
     useEffect(() => {
+        console.time('avatar-fetch');
         const fetchUserAvatar = async () => {
 
             if (userId === null) {
@@ -32,17 +33,34 @@ const useUserAvatar = (userId) => {
                     if (retries > 0) {
                         console.log(`Retrying fetch... (${retries} attempts left)`);
                         setTimeout(() => retryFetch(retries - 1, delay), delay);
-                    } else {
-                        console.error('Error fetching user profile picture:', error);
-                        setAvatarUrl('');
                     }
+                    // else {
+                    //     console.error('Error fetching user profile picture:', error);
+                    //     setAvatarUrl('');
+                    // }
                 }
             };
             retryFetch();
         };
 
         fetchUserAvatar();
+        fetchUserAvatar().finally(() => console.timeEnd('avatar-fetch'));
     }, [userId]);
+
+    const getUserAvatarById = async (userId) => {
+        try {
+            const user = await getUserById(userId);
+            console.log('user,', user);
+
+            const url = getAvatarUrl(user.avatar);
+            console.log('url,', url);
+
+            return url;
+
+        } catch (error) {
+            console.error('Error getting user avatar:', error);
+        }
+    }
 
     const handleAvatarUpload = async (e) => {
 
@@ -78,7 +96,6 @@ const useUserAvatar = (userId) => {
         }
     };
 
-
     const handleDeleteAvatarFromDoc = async () => {
         try {
             const response = await deleteAvatarFromDoc(userId);
@@ -87,7 +104,6 @@ const useUserAvatar = (userId) => {
             console.error('Error deleting avatar from doc:', error);
         }
     }
-
 
     const extractFileIdFromUrl = (url) => {
         const parts = url.split('/');
@@ -99,6 +115,7 @@ const useUserAvatar = (userId) => {
         avatarUrl,
         setAvatarUrl,
         isUploading,
+        getUserAvatarById,
         handleAvatarUpload,
         handleDeleteAvatarFromStrg,
         handleDeleteAvatarFromDoc,
