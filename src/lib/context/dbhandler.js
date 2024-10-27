@@ -178,12 +178,12 @@ export const getAllUsersByString = async (str) => {
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_USERS_COLLECTION,
             [
-                Query.contains('username', [str]),
+                Query.contains('username', str),
             ]
         );
 
         if (userList.total > 0) {
-            return userList.documents[0];
+            return userList.documents;
         }
 
         return null;
