@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { uploadAvatar, deleteAvatarFromStrg, updateAvatar, deleteAvatarFromDoc, getUserById } from '../context/dbhandler';
+import { uploadAvatar, deleteAvatarFromStrg, updateAvatar, deleteAvatarFromDoc, getUserById, getUserByUsername, getAllUsersByString } from '../context/dbhandler';
 import { getAvatarUrl } from '../utils/avatarUtils';
 
 const useUserAvatar = (userId) => {
@@ -56,6 +56,21 @@ const useUserAvatar = (userId) => {
             console.log('url,', url);
 
             return url;
+
+        } catch (error) {
+            console.error('Error getting user avatar:', error);
+        }
+    }
+
+    const getUserAvatarByString = async (str) => {
+        try {
+            const users = await getAllUsersByString(str);
+            console.log('users,', users);
+
+            // const url = getAvatarUrl(user.avatar);
+            // console.log('url,', url);
+
+            // return url;
 
         } catch (error) {
             console.error('Error getting user avatar:', error);
