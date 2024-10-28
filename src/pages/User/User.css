@@ -40,6 +40,19 @@ body {
 .userhome__body--search-results-modal-footer>button {
     background-color: var(--main-accent-color);
     color: var(--main-bg-color);
+    border: none;
+}
+
+.userhome__body--search-results-modal-footer>button:hover,
+.userhome__body--search-results-modal-footer>button:focus {
+    background-color: var(--main-accent-color-hover);
+    color: var(--main-bg-color);
+    box-shadow: none;
+}
+
+.userhome__body--search-results-modal-footer>button:active {
+    background-color: var(--main-accent-color-hover) !important;
+    color: var(--main-bg-color) !important;
 }
 
 .userhome__body--profile--tools {

@@ -68,7 +68,7 @@ export const UserSearch = () => {
                 style={{ zIndex: '9999999' }}
                 className='userhome__body--search-results-modal'
             >
-                <Modal.Header closeButton>
+                <Modal.Header>
                     <Modal.Title>Showing results for "{searchUsername}"</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
