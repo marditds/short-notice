@@ -37,6 +37,11 @@ body {
 .userhome__body--search-results-profiles>a {
     color: var(--main-text-color) !important;
     text-decoration: none;
+    transition: 0.3s;
+}
+
+.userhome__body--search-results-profiles:hover>a {
+    color: var(--main-accent-color-hover) !important;
 }
 
 .userhome__body--search-results-profiles>a>img {
