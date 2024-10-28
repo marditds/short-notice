@@ -5,6 +5,7 @@ import defaultAvatar from '../../../assets/default.png';
 import { useUserContext } from '../../../lib/context/UserContext';
 import useUserAvatar from '../../../lib/hooks/useUserAvatar';
 import { UserId } from '../UserId';
+import { getAvatarUrl } from '../../../lib/utils/avatarUtils';
 
 
 export const Avatar = () => {
@@ -35,9 +36,11 @@ export const Avatar = () => {
 
     const handleFileChange = async (e) => {
         const file = e.target.files[0];
+
         if (!file) return;
 
         if (avatarUrl) {
+
             const fileId = extractFileIdFromUrl(avatarUrl);
             await handleDeleteAvatarFromStrg(fileId);
             await handleAvatarUpload(e);
@@ -75,7 +78,12 @@ export const Avatar = () => {
                 <img
                     src={avatarUrl ? avatarUrl : defaultAvatar}
                     alt="Profile"
-                    style={{ borderRadius: '50%', width: 100, height: 100 }}
+                    style={{
+                        borderRadius: '50%',
+                        width: '50%',
+                        height: '50%',
+                        objectFit: 'cover'
+                    }}
                     className='me-5'
                 />
                 <Form>

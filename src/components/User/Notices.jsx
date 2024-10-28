@@ -262,7 +262,7 @@ export const Notices = ({
                                                             className='w-100 my-0 text-end notice__username'
                                                         >
                                                             <Link to={`../${notice.username}`}
-                                                                className=' text-decoration-none'>
+                                                                className='text-decoration-none'>
                                                                 <strong>{notice?.username}</strong>
                                                             </Link>
                                                         </p>

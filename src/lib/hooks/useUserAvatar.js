@@ -93,6 +93,7 @@ const useUserAvatar = (userId) => {
                 const url = `${import.meta.env.VITE_ENDPOINT}/storage/buckets/${import.meta.env.VITE_AVATAR_BUCKET}/files/${fileId}/view?project=${import.meta.env.VITE_PROJECT}&mode=admin`;
 
                 setAvatarUrl(url);
+
             } catch (error) {
                 console.error('Profile picture upload failed:', error);
             } finally {

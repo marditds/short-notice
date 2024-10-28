@@ -33,11 +33,11 @@ export const uploadAvatar = async (file) => {
             import.meta.env.VITE_AVATAR_BUCKET,
             ID.unique(),
             file,
-            [
-                Permission.write(Role.users()),
-                Permission.write(Role.guests())
+            // [
+            //     Permission.write(Role.users()),
+            //     Permission.write(Role.guests())
 
-            ]
+            // ]
         );
         const fileId = response.$id;
         return fileId;
@@ -52,10 +52,10 @@ export const deleteAvatarFromStrg = async (fileId) => {
         const response = await storage.deleteFile(
             import.meta.env.VITE_AVATAR_BUCKET,
             fileId,
-            [
-                Permission.delete(Role.users()),
-                Permission.delete(Role.guests())
-            ]
+            // [
+            //     Permission.delete(Role.users()),
+            //     Permission.delete(Role.guests())
+            // ]
         );
         console.log('Avatar deleted successfully:', response);
     } catch (error) {
@@ -72,10 +72,10 @@ export const updateAvatar = async (userId, profilePictureId) => {
             {
                 avatar: profilePictureId
             },
-            [
-                Permission.update(Role.users()),
-                Permission.update(Role.guests())
-            ]
+            // [
+            //     Permission.update(Role.users()),
+            //     Permission.update(Role.guests())
+            // ]
         );
         console.log('User profile updated successfully');
     } catch (error) {
@@ -94,10 +94,10 @@ export const deleteAvatarFromDoc = async (userId) => {
             {
                 avatar: ''
             },
-            [
-                Permission.delete(Role.users()),
-                Permission.delete(Role.guests())
-            ]
+            // [
+            //     Permission.delete(Role.users()),
+            //     Permission.delete(Role.guests())
+            // ]
         );
         console.log('User profile avatar set to null successfully');
     } catch (error) {

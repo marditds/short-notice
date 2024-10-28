@@ -18,7 +18,7 @@ body {
 }
 
 .userhome__body--search-results-profiles {
-    padding-inline: 8px;
+    padding-inline: 12px;
     padding-block: 8px;
     border: 1px solid var(--main-accent-color);
     border-radius: 7px;
@@ -29,12 +29,23 @@ body {
 
 .userhome__body--search-results-profiles:hover {
     border-color: var(--main-accent-color-hover);
-    background-color: var(--main-accent-color-hover);
+    /* background-color: var(--main-accent-color-hover); */
+    color: var(--main-bg-color) !important;
+    transition: 0.3s;
 }
 
 .userhome__body--search-results-profiles>a {
     color: var(--main-text-color) !important;
     text-decoration: none;
+}
+
+.userhome__body--search-results-profiles>a>img {
+    color: var(--main-text-color) !important;
+    text-decoration: none;
+}
+
+.userhome__body--search-results-profiles:hover>a>img {
+    filter: sepia(1) hue-rotate(100deg) saturate(6) brightness(0.7);
 }
 
 .userhome__body--search-results-modal-footer>button {
