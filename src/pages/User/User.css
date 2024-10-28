@@ -7,7 +7,17 @@ body {
     color: var(--main-text-color) !important;
 }
 
-.userhome__body--search-results {
+.userhome__body--search-results-modal>div>div {
+    background-color: var(--main-bg-color) !important;
+    border: 1px solid var(--main-accent-color);
+}
+
+.userhome__body--search-results-modal>div>div>div {
+    color: var(--main-text-color) !important;
+    border-block: none;
+}
+
+.userhome__body--search-results-profiles {
     padding-inline: 8px;
     padding-block: 8px;
     border: 1px solid var(--main-accent-color);
@@ -15,6 +25,21 @@ body {
     background-color: transparent;
     cursor: pointer;
     transition: 0.3s;
+}
+
+.userhome__body--search-results-profiles:hover {
+    border-color: var(--main-accent-color-hover);
+    background-color: var(--main-accent-color-hover);
+}
+
+.userhome__body--search-results-profiles>a {
+    color: var(--main-text-color) !important;
+    text-decoration: none;
+}
+
+.userhome__body--search-results-modal-footer>button {
+    background-color: var(--main-accent-color);
+    color: var(--main-bg-color);
 }
 
 .userhome__body--profile--tools {

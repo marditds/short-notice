@@ -62,24 +62,29 @@ export const UserSearch = () => {
                 </Form.Group>
             </Form>
 
-            <Modal show={show} onHide={handleCloseSeachUsersModal} style={{ zIndex: '9999999' }}>
+            <Modal
+                show={show}
+                onHide={handleCloseSeachUsersModal}
+                style={{ zIndex: '9999999' }}
+                className='userhome__body--search-results-modal'
+            >
                 <Modal.Header closeButton>
-                    <Modal.Title>Showing results for {searchUsername}</Modal.Title>
+                    <Modal.Title>Showing results for "{searchUsername}"</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Stack
                         gap={3}
                         direction='horizontal'
-                        className=' flex-wrap'>
+                        className=' flex-wrap justify-content-start'>
                         {/* <Row className='gx-4'> */}
                         {isResultLoading ?
-                            <div><Loading color={'black'} /></div>
+                            <div><Loading color={'white'} /></div>
                             :
                             (
                                 usersResult ? usersResult.map((user) =>
                                     <div
                                         key={user.$id}
-                                        className='userhome__body--search-results'
+                                        className='userhome__body--search-results-profiles'
                                     >
                                         {/* <Col
                                         key={user.$id}
@@ -103,12 +108,9 @@ export const UserSearch = () => {
                         {/* </Row> */}
                     </Stack>
                 </Modal.Body>
-                <Modal.Footer>
+                <Modal.Footer className='userhome__body--search-results-modal-footer'>
                     <Button variant="secondary" onClick={handleCloseSeachUsersModal}>
                         Close
-                    </Button>
-                    <Button variant="primary" onClick={handleCloseSeachUsersModal}>
-                        Save Changes
                     </Button>
                 </Modal.Footer>
             </Modal>
