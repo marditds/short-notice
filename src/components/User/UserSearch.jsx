@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import useUserInfo from '../../lib/hooks/useUserInfo';
 import { getAvatarUrl as avatartUrl } from '../../lib/utils/avatarUtils';
 import defaultAvatar from '../../assets/default.png';
-import { Button, Form, Modal, Stack } from 'react-bootstrap';
+import { Button, Form, Modal, Stack, Row, Col } from 'react-bootstrap';
 import { CgSearch } from "react-icons/cg";
 import { Loading } from '../Loading/Loading';
 
@@ -67,26 +67,40 @@ export const UserSearch = () => {
                     <Modal.Title>Showing results for {searchUsername}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Stack>
+                    <Stack
+                        gap={3}
+                        direction='horizontal'
+                        className=' flex-wrap'>
+                        {/* <Row className='gx-4'> */}
                         {isResultLoading ?
                             <div><Loading color={'black'} /></div>
                             :
                             (
                                 usersResult ? usersResult.map((user) =>
-                                    <div key={user.$id} className='d-flex align-items-center'>
-                                        <Link to={`../user/${user.username}`}>
+                                    <div
+                                        key={user.$id}
+                                        className='userhome__body--search-results'
+                                    >
+                                        {/* <Col
+                                        key={user.$id}
+                                        className='userhome__body--search-results 
+'
+                                    > */}
+                                        <Link to={`../user/${user.username}`} className='w-100 d-flex align-items-center justify-content-end'>
                                             {user?.username}
                                             < img src={avatartUrl(user.avatar) || defaultAvatar}
                                                 alt="Profile"
-                                                style={{ borderRadius: '50%', width: 50, height: 50, marginLeft: '0px' }}
+                                                style={{ borderRadius: '50%', width: 50, height: 50, marginLeft: '12px' }}
                                                 className='d-flex'
                                             />
                                         </Link>
+                                        {/* </Col> */}
                                     </div>
                                 )
                                     :
                                     'No user found')
                         }
+                        {/* </Row> */}
                     </Stack>
                 </Modal.Body>
                 <Modal.Footer>
