@@ -228,7 +228,6 @@ const useNotices = (googleUserData) => {
             // });
 
             setNotices(prevNotices => {
-                // Filter out duplicates before appending
                 const newNotices = usrNotices.filter(notice =>
                     !prevNotices.some(existingNotice => existingNotice.$id === notice.$id)
                 );
@@ -317,14 +316,14 @@ const useNotices = (googleUserData) => {
         }
     };
 
-    const getAllLikedNotices = async (user_id) => {
+    const getAllLikedNotices = async (user_id, limit, offset) => {
         try {
 
             const userLikes = await getUserLikes(user_id);
 
             const likedNoticeIds = userLikes.map(like => like.notice_id);
 
-            return await fetchAllLikedNotices(likedNoticeIds);
+            return await fetchAllLikedNotices(likedNoticeIds, limit, offset);
 
         } catch (error) {
             console.error('Error fetching all liked notices:', error);
@@ -332,14 +331,14 @@ const useNotices = (googleUserData) => {
         }
     };
 
-    const getAllSpreadNotices = async (user_id) => {
+    const getAllSpreadNotices = async (user_id, limit, offset) => {
         try {
 
             const userSpreads = await getUserSpreads(user_id);
 
             const spreadNoticeIds = userSpreads.map(like => like.notice_id);
 
-            return await fetchAllSpreadNotices(spreadNoticeIds);
+            return await fetchAllSpreadNotices(spreadNoticeIds, limit, offset);
 
         } catch (error) {
             // console.error('Error fetching all spread notices:', error);

@@ -72,24 +72,23 @@ const UserProfile = () => {
 
     const { avatarUrl } = useUserAvatar(user_id);
 
+    // Notices Tab
     const [limit] = useState(10);
     const [offset, setOffset] = useState(0);
     const [hasMoreNotices, setHasMoreNotices] = useState(true);
     const [isLoadingMore, setIsLoadingMore] = useState(false);
 
-    // useEffect(() => {
-    //     const listing = async () => {
-    //         try {
-    //             const res = listIdentities();
-    //             console.log('listing:', res);
-    //         } catch (error) {
-    //             console.error('Error listing:', error);
-    //         }
-    //     }
-    //     console.log('googleUserData', googleUserData.email);
-    //     listing();
-    // }, [googleUserData])
+    // Spreads Tab
+    const [limitSpreads] = useState(10);
+    const [offsetSpreads, setOffsetSpreadas] = useState(0);
+    const [hasMoreSpreads, setHasMoreSpreads] = useState(true);
+    const [isLoadingMoreSpreads, setIsLoadingMoreSpreads] = useState(false);
 
+    // Likes Tab
+    const [limitLikes] = useState(10);
+    const [offsetLikes, setOffsetSLikes] = useState(0);
+    const [hasMoreLikes, setHasMoreLikes] = useState(true);
+    const [isLoadingMoreLikes, setIsLoadingMoreLikes] = useState(false);
 
     // Fetch notices for user
     useEffect(() => {
@@ -122,24 +121,37 @@ const UserProfile = () => {
     // Fetch spreads and users' data for spreads tab
     useEffect(() => {
         const fetchSpreadNotices = async () => {
+            setIsLoadingMoreSpreads(true);
+            try {
+                const allSpreadNotices = await getAllSpreadNotices(user_id, limitSpreads, offsetSpreads);
 
-            const allSpreadNotices = await getAllSpreadNotices(user_id);
+                await fetchUsersData(allSpreadNotices, setSpreadNoticesData, avatarUtil);
+            } catch (error) {
+                console.error('Error fetching spreads - ', error);
+            } finally {
+                setIsLoadingMoreSpreads(false);
+            }
 
-            await fetchUsersData(allSpreadNotices, setSpreadNoticesData, avatarUtil);
         };
         fetchSpreadNotices();
-    }, [user_id])
+    }, [user_id, offsetSpreads])
 
     // Fetch likes and users' data for likes tab 
     useEffect(() => {
         const fetchLikedNotices = async () => {
+            setIsLoadingMoreLikes(true);
+            try {
+                const allLikedNotices = await getAllLikedNotices(user_id, limitLikes, offsetLikes);
 
-            const allLikedNotices = await getAllLikedNotices(user_id);
+                await fetchUsersData(allLikedNotices, setLikedNoticesData, avatarUtil);
+            } catch (error) {
 
-            await fetchUsersData(allLikedNotices, setLikedNoticesData, avatarUtil);
+            } finally {
+                setIsLoadingMoreLikes(false);
+            }
         };
         fetchLikedNotices();
-    }, [user_id])
+    }, [user_id, offsetLikes])
 
     // Reactions For Notices tab
     useEffect(() => {
@@ -348,6 +360,18 @@ const UserProfile = () => {
                         getReactionsForNotice={getReactionsForNotice}
 
                     />
+                    <div className="d-flex justify-content-center mt-4">
+                        {hasMoreSpreads ?
+                            <Button
+                                onClick={() => setOffset(offset + limit)}
+                                disabled={isLoadingMoreSpreads || !hasMoreSpreads}
+                            >
+                                {isLoadingMoreSpreads ?
+                                    <><Loading size={24} /> Loading...</>
+                                    : 'Load More'}
+                            </Button>
+                            : 'No more spreads'}
+                    </div>
                 </Tab>
 
 
@@ -368,6 +392,18 @@ const UserProfile = () => {
                         getReactionsForNotice={getReactionsForNotice}
 
                     />
+                    <div className="d-flex justify-content-center mt-4">
+                        {hasMoreLikes ?
+                            <Button
+                                onClick={() => setOffset(offset + limit)}
+                                disabled={isLoadingMoreLikes || !hasMoreLikes}
+                            >
+                                {isLoadingMoreLikes ?
+                                    <><Loading size={24} /> Loading...</>
+                                    : 'Load More'}
+                            </Button>
+                            : 'No more likes'}
+                    </div>
                 </Tab>
             </Tabs>
 

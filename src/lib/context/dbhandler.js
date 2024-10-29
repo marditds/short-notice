@@ -859,13 +859,15 @@ export const removeLike = async (like_id) => {
         throw error;
     }
 }
-
+// The like icon
 export const getUserLikes = async (user_id) => {
     try {
         const response = await databases.listDocuments(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_LIKES_COLLECTION,
-            [Query.equal('user_id', user_id)] // Get all likes for this user
+            [
+                Query.equal('user_id', user_id)
+            ]
         );
         return response.documents;
     } catch (error) {
@@ -874,7 +876,8 @@ export const getUserLikes = async (user_id) => {
     }
 };
 
-export const getAllLikedNotices = async (likedNoticeIds) => {
+// The full notice
+export const getAllLikedNotices = async (likedNoticeIds, limit, offset) => {
     try {
         if (likedNoticeIds.length === 0) {
             return []; // Return empty array if no likes
@@ -883,7 +886,11 @@ export const getAllLikedNotices = async (likedNoticeIds) => {
         const allLikedNotices = await databases.listDocuments(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_NOTICES_COLLECTION,
-            [Query.equal('$id', likedNoticeIds)]
+            [
+                Query.equal('$id', likedNoticeIds),
+                Query.limit(limit),
+                Query.offset(offset)
+            ]
         );
         return allLikedNotices.documents;
     } catch (error) {
@@ -892,13 +899,14 @@ export const getAllLikedNotices = async (likedNoticeIds) => {
     }
 };
 
+// The spread icon
 export const getUserSpreads = async (user_id) => {
     try {
         const response = await databases.listDocuments(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_SPREADS_COLLECTION,
             [
-                Query.equal('user_id', user_id),
+                Query.equal('user_id', user_id)
             ]
         )
         return response.documents;
@@ -907,7 +915,8 @@ export const getUserSpreads = async (user_id) => {
     }
 }
 
-export const getAllSpreadNotices = async (spreadNoticeIds) => {
+// The full notice
+export const getAllSpreadNotices = async (spreadNoticeIds, limit, offset) => {
     try {
         if (spreadNoticeIds.length === 0) {
             return []; // Return empty array if no spread
@@ -916,7 +925,11 @@ export const getAllSpreadNotices = async (spreadNoticeIds) => {
         const allSpreadNotices = await databases.listDocuments(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_NOTICES_COLLECTION,
-            [Query.equal('$id', spreadNoticeIds)]
+            [
+                Query.equal('$id', spreadNoticeIds),
+                Query.limit(limit),
+                Query.offset(offset)
+            ]
         );
         return allSpreadNotices.documents;
     } catch (error) {
