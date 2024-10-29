@@ -61,6 +61,7 @@ const UserFeed = () => {
         likedNotices,
         spreadNotices,
         setNoticesReactions,
+        getReactionsForNotice,
         fetchReactionsForNotices
     } = useNotices(googleUserData);
 
@@ -236,6 +237,7 @@ const UserFeed = () => {
                 handleSpread={handleSpread}
                 handleReport={handleReport}
                 handleReact={handleReact}
+                getReactionsForNotice={getReactionsForNotice}
             />
 
             {/* Load More Button */}
