@@ -12,21 +12,41 @@ export const UserSearch = () => {
     const { getAllUsersByString } = useUserInfo();
 
     const [searchUsername, setSearchUsername] = useState('');
-    const [usersResult, setUsersResult] = useState(null);
+    const [usersResult, setUsersResult] = useState([]);
     const [show, setShow] = useState(false);
     const [isResultLoading, setIsResultLoading] = useState(false);
+
+    const [limit] = useState(7);
+    const [offset, setOffset] = useState(0);
+    const [hasMoreProfiles, setHasMoreProfiles] = useState(true);
+    const [isLoadingMore, setIsLoadingMore] = useState(false);
 
     const onUserSearchChange = (e) => {
         setSearchUsername(e.target.value);
     };
 
-    const handleShowSearchUsersModal = async () => {
+    const fetchSearchResults = async () => {
+        setIsResultLoading(true);
         try {
-            setIsResultLoading(true);
-            setShow(true);
+            console.log('limit:', limit);
+            console.log('offset:', offset);
 
-            const users = await getAllUsersByString(searchUsername);
-            setUsersResult(users);
+            const users = await getAllUsersByString(searchUsername, limit, offset);
+
+            setUsersResult(prevUsers => {
+                // Filter out duplicates before appending
+                const moreResults = users.filter(user =>
+                    !prevUsers.some(loadedUser => loadedUser.$id === user.$id)
+                );
+
+                return [...prevUsers, ...moreResults];
+            });
+
+            if (users?.length < limit) {
+                setHasMoreProfiles(false);
+            } else {
+                setHasMoreProfiles(true);
+            }
 
             console.log('users:', users);
 
@@ -35,6 +55,11 @@ export const UserSearch = () => {
         } finally {
             setIsResultLoading(false);
         }
+    }
+
+    const handleShowSearchUsersModal = async () => {
+        setShow(true);
+        fetchSearchResults();
     };
 
     const handleCloseSeachUsersModal = () => setShow(false);
@@ -75,13 +100,13 @@ export const UserSearch = () => {
                     <Stack
                         gap={3}
                         direction='horizontal'
-                        className=' flex-wrap justify-content-start'>
+                        className='d-flex flex-wrap justify-content-start'>
                         {/* <Row className='gx-4'> */}
                         {isResultLoading ?
                             <div><Loading color={'white'} /></div>
                             :
                             (
-                                usersResult ? usersResult.map((user) =>
+                                usersResult ? usersResult?.map((user) =>
                                     <div
                                         key={user.$id}
                                         className='userhome__body--search-results-profiles'
@@ -107,6 +132,19 @@ export const UserSearch = () => {
                         }
                         {/* </Row> */}
                     </Stack>
+                    {hasMoreProfiles ?
+                        <Button
+                            onClick={() => setOffset(offset + limit)}
+                            disabled={isResultLoading || !hasMoreProfiles}
+                        >
+                            {isResultLoading ?
+                                <><Loading size={24} /> Loading...</>
+                                : 'Load More Profiles'}
+                        </Button>
+                        :
+                        'No more profiles'
+                    }
+
                 </Modal.Body>
                 <Modal.Footer className='userhome__body--search-results-modal-footer'>
                     <Button variant="secondary" onClick={handleCloseSeachUsersModal}>

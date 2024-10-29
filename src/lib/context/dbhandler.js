@@ -172,13 +172,15 @@ export const getUserByUsername = async (username) => {
     }
 };
 
-export const getAllUsersByString = async (str) => {
+export const getAllUsersByString = async (str, limit, offset) => {
     try {
         const userList = await databases.listDocuments(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_USERS_COLLECTION,
             [
                 Query.contains('username', str),
+                Query.limit(limit),
+                Query.offset(offset)
             ]
         );
 

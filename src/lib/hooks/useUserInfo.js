@@ -137,9 +137,9 @@ const useUserInfo = (data) => {
 
     }
 
-    const getAllUsersByString = async (username) => {
+    const getAllUsersByString = async (username, limit, offset) => {
         try {
-            const usrnm = await fetchAllUsersByString(username);
+            const usrnm = await fetchAllUsersByString(username, limit, offset);
             console.log('username found:', usrnm);
             return usrnm;
         } catch (error) {

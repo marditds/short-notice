@@ -121,6 +121,8 @@ const UserFeed = () => {
             setIsLoadingUsers(true);
             setIsLoadingMore(true);
             try {
+                console.log('limit:', limit);
+                console.log('offset:', offset);
                 const res = await getFeedNotices(selectedTags, limit, offset);
 
                 const filteredNotices = res || [];
