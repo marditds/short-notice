@@ -67,10 +67,23 @@ const OtherUserProfile = () => {
 
     const { avatarUrl } = useUserAvatar(currUserId);
 
+    // Notices Tab
     const [limit] = useState(10);
     const [offset, setOffset] = useState(0);
     const [hasMoreNotices, setHasMoreNotices] = useState(true);
     const [isLoadingMore, setIsLoadingMore] = useState(false);
+
+    // Spreads Tab
+    const [limitSpreads] = useState(10);
+    const [offsetSpreads, setOffsetSpreads] = useState(0);
+    const [hasMoreSpreads, setHasMoreSpreads] = useState(true);
+    const [isLoadingMoreSpreads, setIsLoadingMoreSpreads] = useState(false);
+
+    // Likes Tab
+    const [limitLikes] = useState(10);
+    const [offsetLikes, setOffsetLikes] = useState(0);
+    const [hasMoreLikes, setHasMoreLikes] = useState(true);
+    const [isLoadingMoreLikes, setIsLoadingMoreLikes] = useState(false);
 
     // Get Other User
     useEffect(() => {
@@ -122,23 +135,49 @@ const OtherUserProfile = () => {
     // Fetch spreads and users' data for spreads tab 
     useEffect(() => {
         const fetchSpreadNotices = async () => {
-            const allSpreadNotices = await getAllSpreadNotices(currUserId);
+            setIsLoadingMoreSpreads(true);
+            try {
+                const allSpreadNotices = await getAllSpreadNotices(currUserId);
 
-            await fetchUsersData(allSpreadNotices, setSpreadNoticesData, avatarUtil);
+                if (allSpreadNotices?.length < limit) {
+                    setHasMoreSpreads(false);
+                } else {
+                    setHasMoreSpreads(true);
+                }
+
+                await fetchUsersData(allSpreadNotices, setSpreadNoticesData, avatarUtil);
+            } catch (error) {
+                console.error('Error fetching spreads - ', error);
+            } finally {
+                setIsLoadingMoreSpreads(false);
+            }
+
         };
         fetchSpreadNotices();
-    }, [currUserId])
+    }, [currUserId, offsetSpreads])
 
     // Fetch likes and users' data for likes tab  
     useEffect(() => {
         const fetchLikedNotices = async () => {
+            setIsLoadingMoreLikes(true);
+            try {
+                const allLikedNotices = await getAllLikedNotices(currUserId);
 
-            const allLikedNotices = await getAllLikedNotices(currUserId);
+                if (allLikedNotices?.length < limit) {
+                    setHasMoreLikes(false);
+                } else {
+                    setHasMoreLikes(true);
+                }
 
-            await fetchUsersData(allLikedNotices, setLikedNoticesData, avatarUtil);
+                await fetchUsersData(allLikedNotices, setLikedNoticesData, avatarUtil);
+            } catch (error) {
+                console.error('Error fetching likes - ', error);
+            } finally {
+                setIsLoadingMoreLikes(false);
+            }
         };
         fetchLikedNotices();
-    }, [currUserId])
+    }, [currUserId, offsetLikes])
 
     // Reactions For Notices tab
     useEffect(() => {
@@ -291,18 +330,32 @@ const OtherUserProfile = () => {
                     title="Spreads"
                 >
                     {spreadNoticesData.length !== 0 ?
-                        <Notices
-                            notices={spreadNoticesData}
-                            user_id={user_id}
-                            likedNotices={likedNotices}
-                            spreadNotices={spreadNotices}
-                            reactions={spreadReactions}
-                            handleLike={handleLike}
-                            handleSpread={handleSpread}
-                            handleReport={handleReport}
-                            handleReact={handleReact}
-                            getReactionsForNotice={getReactionsForNotice}
-                        />
+                        <>
+                            <Notices
+                                notices={spreadNoticesData}
+                                user_id={user_id}
+                                likedNotices={likedNotices}
+                                spreadNotices={spreadNotices}
+                                reactions={spreadReactions}
+                                handleLike={handleLike}
+                                handleSpread={handleSpread}
+                                handleReport={handleReport}
+                                handleReact={handleReact}
+                                getReactionsForNotice={getReactionsForNotice}
+                            />
+                            <div className="d-flex justify-content-center mt-4">
+                                {hasMoreSpreads ?
+                                    <Button
+                                        onClick={() => setOffsetSpreads(offset + limit)}
+                                        disabled={isLoadingMoreSpreads || !hasMoreSpreads}
+                                    >
+                                        {isLoadingMoreSpreads ?
+                                            <><Loading size={24} /> Loading...</>
+                                            : 'Load More'}
+                                    </Button>
+                                    : 'No more spreads'}
+                            </div>
+                        </>
                         : 'No spreadas yet'}
                 </Tab>
 
@@ -312,18 +365,32 @@ const OtherUserProfile = () => {
                     title="Likes"
                 >
                     {likedNoticesData.length !== 0 ?
-                        <Notices
-                            notices={likedNoticesData}
-                            user_id={user_id}
-                            likedNotices={likedNotices}
-                            spreadNotices={spreadNotices}
-                            reactions={likedReactions}
-                            handleLike={handleLike}
-                            handleSpread={handleSpread}
-                            handleReport={handleReport}
-                            handleReact={handleReact}
-                            getReactionsForNotice={getReactionsForNotice}
-                        />
+                        <>
+                            <Notices
+                                notices={likedNoticesData}
+                                user_id={user_id}
+                                likedNotices={likedNotices}
+                                spreadNotices={spreadNotices}
+                                reactions={likedReactions}
+                                handleLike={handleLike}
+                                handleSpread={handleSpread}
+                                handleReport={handleReport}
+                                handleReact={handleReact}
+                                getReactionsForNotice={getReactionsForNotice}
+                            />
+                            <div className="d-flex justify-content-center mt-4">
+                                {hasMoreLikes ?
+                                    <Button
+                                        onClick={() => setOffsetLikes(offset + limit)}
+                                        disabled={isLoadingMoreLikes || !hasMoreLikes}
+                                    >
+                                        {isLoadingMoreLikes ?
+                                            <><Loading size={24} /> Loading...</>
+                                            : 'Load More'}
+                                    </Button>
+                                    : 'No more likes'}
+                            </div>
+                        </>
                         : 'No likes yet'}
                 </Tab>
             </Tabs>
