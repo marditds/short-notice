@@ -137,9 +137,9 @@ const OtherUserProfile = () => {
         const fetchSpreadNotices = async () => {
             setIsLoadingMoreSpreads(true);
             try {
-                const allSpreadNotices = await getAllSpreadNotices(currUserId);
+                const allSpreadNotices = await getAllSpreadNotices(currUserId, limitSpreads, offsetSpreads);
 
-                if (allSpreadNotices?.length < limit) {
+                if (allSpreadNotices?.length < limitSpreads) {
                     setHasMoreSpreads(false);
                 } else {
                     setHasMoreSpreads(true);
@@ -161,9 +161,9 @@ const OtherUserProfile = () => {
         const fetchLikedNotices = async () => {
             setIsLoadingMoreLikes(true);
             try {
-                const allLikedNotices = await getAllLikedNotices(currUserId);
+                const allLikedNotices = await getAllLikedNotices(currUserId, limitLikes, offsetLikes);
 
-                if (allLikedNotices?.length < limit) {
+                if (allLikedNotices?.length < limitLikes) {
                     setHasMoreLikes(false);
                 } else {
                     setHasMoreLikes(true);
