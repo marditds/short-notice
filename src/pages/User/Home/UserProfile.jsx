@@ -62,8 +62,7 @@ const UserProfile = () => {
         followingAccounts,
         fetchUsersData,
         fetchAccountsFollowingTheUser,
-        fetchAccountsFollowedByUser,
-        listIdentities
+        fetchAccountsFollowedByUser
     } = useUserInfo();
 
     const [notices, setNotices] = useState([]);
@@ -86,7 +85,7 @@ const UserProfile = () => {
 
     // Likes Tab
     const [limitLikes] = useState(10);
-    const [offsetLikes, setOffsetSLikes] = useState(0);
+    const [offsetLikes, setOffsetLikes] = useState(0);
     const [hasMoreLikes, setHasMoreLikes] = useState(true);
     const [isLoadingMoreLikes, setIsLoadingMoreLikes] = useState(false);
 
@@ -125,6 +124,12 @@ const UserProfile = () => {
             try {
                 const allSpreadNotices = await getAllSpreadNotices(user_id, limitSpreads, offsetSpreads);
 
+                if (allSpreadNotices?.length < limit) {
+                    setHasMoreSpreads(false);
+                } else {
+                    setHasMoreSpreads(true);
+                }
+
                 await fetchUsersData(allSpreadNotices, setSpreadNoticesData, avatarUtil);
             } catch (error) {
                 console.error('Error fetching spreads - ', error);
@@ -143,9 +148,15 @@ const UserProfile = () => {
             try {
                 const allLikedNotices = await getAllLikedNotices(user_id, limitLikes, offsetLikes);
 
+                if (allLikedNotices?.length < limit) {
+                    setHasMoreLikes(false);
+                } else {
+                    setHasMoreLikes(true);
+                }
+
                 await fetchUsersData(allLikedNotices, setLikedNoticesData, avatarUtil);
             } catch (error) {
-
+                console.error('Error fetching likes - ', error);
             } finally {
                 setIsLoadingMoreLikes(false);
             }
@@ -363,7 +374,7 @@ const UserProfile = () => {
                     <div className="d-flex justify-content-center mt-4">
                         {hasMoreSpreads ?
                             <Button
-                                onClick={() => setOffset(offset + limit)}
+                                onClick={() => setOffsetSpreadas(offset + limit)}
                                 disabled={isLoadingMoreSpreads || !hasMoreSpreads}
                             >
                                 {isLoadingMoreSpreads ?
@@ -395,7 +406,7 @@ const UserProfile = () => {
                     <div className="d-flex justify-content-center mt-4">
                         {hasMoreLikes ?
                             <Button
-                                onClick={() => setOffset(offset + limit)}
+                                onClick={() => setOffsetLikes(offset + limit)}
                                 disabled={isLoadingMoreLikes || !hasMoreLikes}
                             >
                                 {isLoadingMoreLikes ?
