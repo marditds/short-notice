@@ -27,7 +27,10 @@ export const UserSearch = () => {
 
 
     const fetchSearchResults = async () => {
-        setIsResultLoading(true);
+        if (offset === 0) {
+            setIsResultLoading(true);
+        }
+        setIsLoadingMore(true);
         try {
             console.log('limit:', limit);
             console.log('offset:', offset);
@@ -51,6 +54,7 @@ export const UserSearch = () => {
                 setHasMoreProfiles(false);
             } else {
                 setHasMoreProfiles(true);
+                setOffset(offset + limit);
             }
 
             console.log('users:', users);
@@ -59,6 +63,7 @@ export const UserSearch = () => {
             console.error('Error listing users:', error);
         } finally {
             setIsResultLoading(false);
+            setIsLoadingMore(false);
         }
     }
 
@@ -66,6 +71,10 @@ export const UserSearch = () => {
         setShow(true);
         fetchSearchResults();
     };
+
+    const handleLoadMoreProfiles = () => {
+        fetchSearchResults();
+    }
 
     const handleCloseSeachUsersModal = () => {
         setShow(false)
@@ -143,14 +152,10 @@ export const UserSearch = () => {
                     </Stack>
                     {hasMoreProfiles ?
                         <Button
-                            onClick={() => {
-                                setOffset(offset + limit),
-                                    fetchSearchResults()
-                            }
-                            }
-                            disabled={isResultLoading || !hasMoreProfiles}
+                            onClick={handleLoadMoreProfiles}
+                            disabled={isLoadingMore || !hasMoreProfiles}
                         >
-                            {isResultLoading ?
+                            {isLoadingMore ?
                                 <><Loading size={24} /> Loading...</>
                                 : 'Load More Profiles'}
                         </Button>
