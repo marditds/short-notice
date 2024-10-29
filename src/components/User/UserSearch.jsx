@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import useUserInfo from '../../lib/hooks/useUserInfo';
 import { getAvatarUrl as avatartUrl } from '../../lib/utils/avatarUtils';
@@ -25,6 +25,7 @@ export const UserSearch = () => {
         setSearchUsername(e.target.value);
     };
 
+
     const fetchSearchResults = async () => {
         setIsResultLoading(true);
         try {
@@ -33,14 +34,18 @@ export const UserSearch = () => {
 
             const users = await getAllUsersByString(searchUsername, limit, offset);
 
-            setUsersResult(prevUsers => {
-                // Filter out duplicates before appending
-                const moreResults = users.filter(user =>
-                    !prevUsers.some(loadedUser => loadedUser.$id === user.$id)
-                );
+            if (users) {
+                setUsersResult(prevUsers => {
+                    const moreUsers = users?.filter(user =>
+                        !prevUsers.some(loadedUser => loadedUser.$id === user.$id)
+                    );
 
-                return [...prevUsers, ...moreResults];
-            });
+                    return [...prevUsers, ...moreUsers];
+                });
+            } else {
+                return 'No results';
+            }
+
 
             if (users?.length < limit) {
                 setHasMoreProfiles(false);
@@ -62,7 +67,11 @@ export const UserSearch = () => {
         fetchSearchResults();
     };
 
-    const handleCloseSeachUsersModal = () => setShow(false);
+    const handleCloseSeachUsersModal = () => {
+        setShow(false)
+        setOffset(preVal => preVal = 0);
+        setUsersResult([]);
+    };
 
     return (
         <>
@@ -134,7 +143,11 @@ export const UserSearch = () => {
                     </Stack>
                     {hasMoreProfiles ?
                         <Button
-                            onClick={() => setOffset(offset + limit)}
+                            onClick={() => {
+                                setOffset(offset + limit),
+                                    fetchSearchResults()
+                            }
+                            }
                             disabled={isResultLoading || !hasMoreProfiles}
                         >
                             {isResultLoading ?
