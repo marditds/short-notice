@@ -611,7 +611,7 @@ export const getFilteredNotices = async (selectedTags, limit, offset) => {
                 import.meta.env.VITE_NOTICES_COLLECTION,
                 [
                     queryList[0],
-                    Query.equal('user_id', user_id),
+                    // Query.equal('user_id', user_id),
                     Query.limit(limit),
                     Query.offset(offset),
                     Query.orderDesc('timestamp'),
