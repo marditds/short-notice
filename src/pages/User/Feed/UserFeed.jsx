@@ -4,7 +4,7 @@ import useNotices from '../../../lib/hooks/useNotices';
 import useUserInfo from '../../../lib/hooks/useUserInfo';
 import { getAvatarUrl as avatarUtil } from '../../../lib/utils/avatarUtils';
 import { Notices } from '../../../components/User/Notices';
-import { Button } from 'react-bootstrap';
+import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { Loading } from '../../../components/Loading/Loading';
 import { FaCircleExclamation } from "react-icons/fa6";
 
@@ -47,6 +47,7 @@ const UserFeed = () => {
     ]);
 
     const [selectedTags, setSelectedTags] = useState({});
+    const [isTagSelected, setIsTagSelected] = useState(false);
     const { googleUserData } = useUserContext();
 
     const {
@@ -84,11 +85,6 @@ const UserFeed = () => {
                 try {
                     const userInterests = await getInterests(user_id);
 
-                    console.log('these are user interests:', Object.keys(userInterests).length);
-
-
-
-
                     if (userInterests) {
                         setSelectedTags(userInterests);
                     }
@@ -119,6 +115,29 @@ const UserFeed = () => {
             setIsLoadingUsers(true);
             setIsLoadingMore(true);
             try {
+                let falseVal = Object.values(selectedTags).filter((tag) => tag === false);
+                // console.log('trueVal', trueVal.indexOf(false, 0));
+                // console.log('these are selectedTags:', Object.values(selectedTags));
+
+                function indexOfAll(array, value) {
+                    const indices = [];
+                    for (let i = 0; i < array.length; i++) {
+                        if (array[i] === value) {
+                            indices.push(i);
+                        }
+                    }
+                    return indices;
+                }
+
+                const indices = indexOfAll(falseVal, false);
+                console.log('indices', indices.length);
+
+                if (indices.length < 13) {
+                    setIsTagSelected(true);
+                } else {
+                    setIsTagSelected(false);
+                }
+
                 console.log('limit:', limit);
                 console.log('offset:', offset);
                 const res = await getFeedNotices(selectedTags, limit, offset);
@@ -126,7 +145,6 @@ const UserFeed = () => {
                 const filteredNotices = res || [];
 
                 await fetchUsersData(filteredNotices, setFeedNotices, avatarUtil);
-
 
                 if (filteredNotices.length < limit) {
                     setHasMoreNotices(false);
@@ -159,6 +177,7 @@ const UserFeed = () => {
     // };
 
     //Fetch reactions to feed notices 
+
     useEffect(() => {
         try {
             fetchReactionsForNotices(feedNotices, setNoticesReactions);
@@ -214,9 +233,24 @@ const UserFeed = () => {
         <div>
 
 
-            {/* {selectedTags.length  */}
-            {/* <h2 style={{ marginTop: '30px' }}><FaCircleExclamation /> To view notices in your feed, set your interests in your profile's <a href='../user/settings'>settings</a>.</h2> */}
-}
+            <h2 style={{ marginTop: '30px' }}>
+
+                {!isTagSelected ?
+                    <span>
+                        <FaCircleExclamation /> To view notices in your feed, set your interests in your profile <a href='../user/settings'>settings</a>.
+                    </span>
+                    :
+                    <OverlayTrigger
+                        placement="right"
+                        overlay={<Tooltip>{'To view notices in your feed, set your interests in your profile settings.'}</Tooltip>}>
+                        <Button>
+                            <FaCircleExclamation />
+                        </Button>
+                    </OverlayTrigger>
+                }
+            </h2>
+
+
             <Notices
                 notices={feedNotices}
                 user_id={user_id}
