@@ -1,12 +1,12 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useUserContext } from '../../../lib/context/UserContext';
 import useNotices from '../../../lib/hooks/useNotices';
 import useUserInfo from '../../../lib/hooks/useUserInfo';
 import { getAvatarUrl as avatarUtil } from '../../../lib/utils/avatarUtils';
-import { NoticeTags } from '../../../components/User/NoticeTags';
 import { Notices } from '../../../components/User/Notices';
 import { Button } from 'react-bootstrap';
 import { Loading } from '../../../components/Loading/Loading';
+import { FaCircleExclamation } from "react-icons/fa6";
 
 const UserFeed = () => {
 
@@ -47,7 +47,7 @@ const UserFeed = () => {
     ]);
 
     const [selectedTags, setSelectedTags] = useState({});
-    const { googleUserData, username } = useUserContext();
+    const { googleUserData } = useUserContext();
 
     const {
         user_id,
@@ -77,35 +77,32 @@ const UserFeed = () => {
     const [hasMoreNotices, setHasMoreNotices] = useState(true);
     const [isLoadingMore, setIsLoadingMore] = useState(false);
 
-    // User's interets (tags)
+    // Fetch User's interests  
     useEffect(() => {
         const fetchUserInterests = async () => {
             if (user_id) {
                 try {
                     const userInterests = await getInterests(user_id);
 
-                    // console.log('these are user interests:', userInterests);
+                    console.log('these are user interests:', Object.keys(userInterests).length);
+
+
+
 
                     if (userInterests) {
-                        const newSelectedTags = {};
-                        tagCategories.forEach(category => {
-                            category.tags.forEach(tag => {
-                                newSelectedTags[tag.key] = userInterests[tag.key] || false;
-                            });
-                        });
-                        setSelectedTags(newSelectedTags);
+                        setSelectedTags(userInterests);
                     }
                 } catch (error) {
                     console.error('Error fetching user interests:', error);
-                    if (error.code === 404) {
-                        const newSelectedTags = {};
-                        tagCategories.forEach(category => {
-                            category.tags.forEach(tag => {
-                                newSelectedTags[tag.key] = false;
-                            });
-                        });
-                        setSelectedTags(newSelectedTags);
-                    }
+                    // if (error.code === 404) {
+                    //     const newSelectedTags = {};
+                    //     tagCategories.forEach(category => {
+                    //         category.tags.forEach(tag => {
+                    //             newSelectedTags[tag.key] = false;
+                    //         });
+                    //     });
+                    //     setSelectedTags(newSelectedTags);
+                    // }
                 }
             }
         };
@@ -150,16 +147,16 @@ const UserFeed = () => {
     }, [selectedTags, offset]);
 
 
-    const handleTagSelect = (categoryName, tagIndex, tag, isSelected) => {
+    // const handleTagSelect = (categoryName, tagIndex, tag, isSelected) => {
 
-        console.log('Tag:', tag.key);
+    //     console.log('Tag:', tag.key);
 
-        setSelectedTags(prevTags => ({
-            ...prevTags,
-            [tag.key]: !prevTags[tag.key]
-        }));
+    //     setSelectedTags(prevTags => ({
+    //         ...prevTags,
+    //         [tag.key]: !prevTags[tag.key]
+    //     }));
 
-    };
+    // };
 
     //Fetch reactions to feed notices 
     useEffect(() => {
@@ -217,16 +214,9 @@ const UserFeed = () => {
         <div>
 
 
-
-            <h2 style={{ marginTop: '30px' }}>Select a tag to see related notices:</h2>
-
-            <NoticeTags
-                tagCategories={tagCategories}
-                handleTagSelect={handleTagSelect}
-                selectedTags={selectedTags}
-            />
-
-
+            {/* {selectedTags.length  */}
+            {/* <h2 style={{ marginTop: '30px' }}><FaCircleExclamation /> To view notices in your feed, set your interests in your profile's <a href='../user/settings'>settings</a>.</h2> */}
+}
             <Notices
                 notices={feedNotices}
                 user_id={user_id}
@@ -256,13 +246,7 @@ const UserFeed = () => {
                         : 'No more notices'}
                 </div>
 
-
             </div>
-
-
-
-            {/* Show a loading spinner if fetching more notices */}
-            {/* {isLoadingMore && <>Loading more notices <Loading size={24} /> </>} */}
 
         </div>
     )
