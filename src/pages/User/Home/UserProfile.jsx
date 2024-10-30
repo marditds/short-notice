@@ -97,6 +97,8 @@ const UserProfile = () => {
             try {
                 const usrNtcs = await fetchUserNotices(user_id, setNotices, limit, offset);
 
+                console.log('usrNtcs', usrNtcs);
+
                 if (usrNtcs?.length < limit) {
                     setHasMoreNotices(false);
                 } else {
@@ -418,7 +420,6 @@ const UserProfile = () => {
                 </Tab>
             </Tabs>
 
-            <Button>Logging authed users</Button>
 
             {/* <div className='position-fixed'> */}
             <Modal

@@ -20,19 +20,22 @@ const useNotices = (googleUserData) => {
 
     // Fetch User Notces
     useEffect(() => {
-        const fetchUserNotices = async () => {
+        const obtainUserById = async () => {
             if (googleUserData) {
                 try {
                     const id = await UserId(googleUserData);
 
                     setUserId(id);
 
-                    if (id) {
-                        const notices = await getUserNotices(id);
-                        setUserNotices(notices);
-                    }
+                    // if (id) {
+                    //     const notices = await getUserNotices(id);
+                    //     setUserNotices(notices);
+
+                    //     console.log('UserNotices', notices);
+
+                    // }
                 } catch (error) {
-                    console.error('Error fetching user notices:', error);
+                    console.error('Error obtaining user by id:', error);
                 } finally {
                     setIsLoading(false);
                 }
@@ -41,7 +44,7 @@ const useNotices = (googleUserData) => {
             }
         };
 
-        fetchUserNotices();
+        obtainUserById();
 
         const checkExpiredNotices = setInterval(() => {
             const now = new Date();
@@ -235,7 +238,20 @@ const useNotices = (googleUserData) => {
                 return [...prevNotices, ...newNotices];
             });
 
+            // const now = new Date();
+            // setNotices(prevNotices =>
+            //     prevNotices.filter(notice => {
+            //         if (notice.expiresAt && new Date(notice.expiresAt) <= now) {
+            //             deleteNotice(notice.$id); // Call your delete function here
+            //             return false; // Exclude expired notice from state
+            //         }
+            //         return true; // Keep non-expired notices in state
+            //     })
+            // );
+
             return usrNotices;
+
+            return () => clearInterval(checkExpiredNotices);
 
         } catch (error) {
             console.error('Error fetchUserNotices - useNotices');

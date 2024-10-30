@@ -242,7 +242,7 @@ const UserFeed = () => {
                     :
                     <OverlayTrigger
                         placement="right"
-                        overlay={<Tooltip>{'To view notices in your feed, set your interests in your profile settings.'}</Tooltip>}>
+                        overlay={<Tooltip>{'Update you interests in your profile settings.'}</Tooltip>}>
                         <Button>
                             <FaCircleExclamation />
                         </Button>
