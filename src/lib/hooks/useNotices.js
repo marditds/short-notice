@@ -238,16 +238,16 @@ const useNotices = (googleUserData) => {
                 return [...prevNotices, ...newNotices];
             });
 
-            // const now = new Date();
-            // setNotices(prevNotices =>
-            //     prevNotices.filter(notice => {
-            //         if (notice.expiresAt && new Date(notice.expiresAt) <= now) {
-            //             deleteNotice(notice.$id); // Call your delete function here
-            //             return false; // Exclude expired notice from state
-            //         }
-            //         return true; // Keep non-expired notices in state
-            //     })
-            // );
+            const now = new Date();
+            setNotices(prevNotices =>
+                prevNotices.filter(notice => {
+                    if (notice.expiresAt && new Date(notice.expiresAt) <= now) {
+                        deleteNotice(notice.$id); // Call your delete function here
+                        return false; // Exclude expired notice from state
+                    }
+                    return true; // Keep non-expired notices in state
+                })
+            );
 
             return usrNotices;
 
