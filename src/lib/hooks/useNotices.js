@@ -225,16 +225,47 @@ const useNotices = (googleUserData) => {
                 return [...prevNotices, ...newNotices];
             });
 
-            const now = new Date();
+            const now = new Date().getTime();
+
             setNotices(prevNotices =>
                 prevNotices.filter(notice => {
-                    if (notice.expiresAt && new Date(notice.expiresAt) <= now) {
-                        deleteNotice(notice.$id); // Call your delete function here
-                        return false; // Exclude expired notice from state
+                    if (notice.expiresAt) {
+                        const expiresAtDate = new Date(notice.expiresAt);
+                        expiresAtDate.setHours(expiresAtDate.getHours() + 7); // Adjust for the 7-hour difference
+
+                        if (expiresAtDate <= now) {
+                            deleteNotice(notice.$id); // Call your delete function here
+                            return false; // Exclude expired notice from state
+                        }
                     }
                     return true; // Keep non-expired notices in state
                 })
             );
+
+            // setNotices(prevNotices =>
+            //     prevNotices.filter(notice => {
+            //         if (notice.expiresAt) {
+            //             const expirationTime = new Date(notice.expiresAt).getTime();
+
+            //             // Ensure the notice is deleted *only* if it's fully past expiration time
+            //             if (now >= expirationTime) {
+            //                 deleteNotice(notice.$id); // Call your delete function here
+            //                 return false; // Exclude expired notice from state
+            //             }
+            //         }
+            //         return true; // Keep non-expired notices in state
+            //     })
+            // );
+
+            // setNotices(prevNotices =>
+            //     prevNotices.filter(notice => {
+            //         if (notice.expiresAt && new Date(notice.expiresAt) <= now) {
+            //             deleteNotice(notice.$id); // Call your delete function here
+            //             return false; // Exclude expired notice from state
+            //         }
+            //         return true; // Keep non-expired notices in state
+            //     })
+            // );
 
             return usrNotices;
 
