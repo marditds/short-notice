@@ -234,11 +234,11 @@ const useNotices = (googleUserData) => {
                         expiresAtDate.setHours(expiresAtDate.getHours() + 7); // Adjust for the 7-hour difference
 
                         if (expiresAtDate <= now) {
-                            deleteNotice(notice.$id); // Call your delete function here
-                            return false; // Exclude expired notice from state
+                             deleteNotice(notice.$id);
+                            return false;
                         }
                     }
-                    return true; // Keep non-expired notices in state
+                    return true;
                 })
             );
 
@@ -247,23 +247,23 @@ const useNotices = (googleUserData) => {
             //         if (notice.expiresAt) {
             //             const expirationTime = new Date(notice.expiresAt).getTime();
 
-            //             // Ensure the notice is deleted *only* if it's fully past expiration time
+            //           
             //             if (now >= expirationTime) {
-            //                 deleteNotice(notice.$id); // Call your delete function here
-            //                 return false; // Exclude expired notice from state
+            //                 deleteNotice(notice.$id); 
+            //                 return false; 
             //             }
             //         }
-            //         return true; // Keep non-expired notices in state
+            //         return true;
             //     })
             // );
 
             // setNotices(prevNotices =>
             //     prevNotices.filter(notice => {
             //         if (notice.expiresAt && new Date(notice.expiresAt) <= now) {
-            //             deleteNotice(notice.$id); // Call your delete function here
-            //             return false; // Exclude expired notice from state
+            //             deleteNotice(notice.$id);
+            //             return false; 
             //         }
-            //         return true; // Keep non-expired notices in state
+            //         return true; 
             //     })
             // );
 
