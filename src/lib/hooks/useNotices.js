@@ -27,13 +27,6 @@ const useNotices = (googleUserData) => {
 
                     setUserId(id);
 
-                    // if (id) {
-                    //     const notices = await getUserNotices(id);
-                    //     setUserNotices(notices);
-
-                    //     console.log('UserNotices', notices);
-
-                    // }
                 } catch (error) {
                     console.error('Error obtaining user by id:', error);
                 } finally {
@@ -224,12 +217,6 @@ const useNotices = (googleUserData) => {
         try {
             const usrNotices = await getNoticesByUser(id, limit, offset);
 
-            // setNotices(usrNotices);
-            // setNotices(prevNotices => {
-            // If offset is 0, replace all notices, otherwise append new notices
-            // return offset === 0 ? usrNotices : [...prevNotices, ...usrNotices];
-            // });
-
             setNotices(prevNotices => {
                 const newNotices = usrNotices.filter(notice =>
                     !prevNotices.some(existingNotice => existingNotice.$id === notice.$id)
@@ -251,7 +238,6 @@ const useNotices = (googleUserData) => {
 
             return usrNotices;
 
-            return () => clearInterval(checkExpiredNotices);
 
         } catch (error) {
             console.error('Error fetchUserNotices - useNotices');
