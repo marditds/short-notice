@@ -61,9 +61,9 @@ const UserFeed = () => {
         sendReaction,
         likedNotices,
         spreadNotices,
-        setNoticesReactions,
-        getReactionsForNotice,
-        fetchReactionsForNotices
+        getReactionsForNotice
+        // fetchReactionsForNotices,
+        // setNoticesReactions
     } = useNotices(googleUserData);
 
     const { fetchUsersData } = useUserInfo(googleUserData);
@@ -176,16 +176,15 @@ const UserFeed = () => {
 
     // };
 
-    //Fetch reactions to feed notices 
+    //Fetch reactions to feed notices  
+    // useEffect(() => {
+    //     try {
+    //         fetchReactionsForNotices(feedNotices, setNoticesReactions);
+    //     } catch (error) {
+    //         console.error(error);
+    //     }
 
-    useEffect(() => {
-        try {
-            fetchReactionsForNotices(feedNotices, setNoticesReactions);
-        } catch (error) {
-            console.error(error);
-        }
-
-    }, [feedNotices])
+    // }, [feedNotices])
 
 
     const handleSpread = async (notice) => {
@@ -256,7 +255,7 @@ const UserFeed = () => {
                 user_id={user_id}
                 likedNotices={likedNotices}
                 spreadNotices={spreadNotices}
-                reactions={noticesReactions}
+                // reactions={noticesReactions}
                 handleLike={handleLike}
                 handleSpread={handleSpread}
                 handleReport={handleReport}

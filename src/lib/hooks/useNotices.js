@@ -234,7 +234,7 @@ const useNotices = (googleUserData) => {
                         expiresAtDate.setHours(expiresAtDate.getHours() + 7); // Adjust for the 7-hour difference
 
                         if (expiresAtDate <= now) {
-                             deleteNotice(notice.$id);
+                            deleteNotice(notice.$id);
                             return false;
                         }
                     }
@@ -437,6 +437,7 @@ const useNotices = (googleUserData) => {
         }
     }
 
+    // Get reactions from DB
     const getReactionsForNotice = async (notice_id) => {
         try {
             const response = await fetchAllReactionsByNoticeId(notice_id);
@@ -447,29 +448,30 @@ const useNotices = (googleUserData) => {
         }
     }
 
-    // Fetch reactions for each notice when usrNtcs changes
-    const fetchReactionsForNotices = async (usrNtcs, setReactionsState) => {
-        if (usrNtcs.length > 0) {
-            const allReactions = [];
 
-            // console.log('userNotices', usrNtcs);
+    // const fetchReactionsForNotices = async (usrNtcs, setReactionsState) => {
+    //     if (usrNtcs.length > 0) {
+    //         const allReactions = [];
 
-            for (const notice of usrNtcs) {
-                const res = await fetchAllReactionsByNoticeId(notice?.$id);
+    //         // console.log('userNotices', usrNtcs);
 
-                // console.log('res', res);
+    //         for (const notice of usrNtcs) {
+    //             const res = await fetchAllReactionsByNoticeId(notice?.$id);
 
-                const noticeReactions = res.documents || [];
+    //             console.log('res', res);
 
-                if (noticeReactions) {  // Ensure this is an array
-                    allReactions.push(...noticeReactions);  // Use spread only on iterable arrays
-                }
-            }
-            // console.log('allReactions', allReactions);
+    //             const noticeReactions = res.documents || [];
 
-            setReactionsState(allReactions);  // Now setReactions will always get an  
-        }
-    };
+    //             if (noticeReactions) {
+    //                 allReactions.push(...noticeReactions);
+    //             }
+    //         }
+    //         console.log(eval(`allReactions for ${setReactionsState}`, allReactions))
+    //         // console.log(`allReactions for ${(setReactionsState)}`, allReactions);
+
+    //         setReactionsState(allReactions);
+    //     }
+    // };
 
 
 
@@ -505,7 +507,7 @@ const useNotices = (googleUserData) => {
         removeAllNoticesByUser,
         sendReaction,
         getReactionsForNotice,
-        fetchReactionsForNotices,
+        // fetchReactionsForNotices,
         setNoticesReactions,
         setSpreadReactions,
         setLikedReactions

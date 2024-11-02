@@ -170,8 +170,10 @@ export const Notices = ({
             setLoadingStates(prev => ({ ...prev, [noticeId]: true }));
 
             try {
-                // Fetch reactions only for one specific notice
+                // Get reactions from DB only for one specific notice
                 const noticeReactions = await getReactionsForNotice(noticeId);
+
+                console.log('noticeReactions', noticeReactions);
 
                 setLoadedReactions(prev => ({
                     ...prev,
@@ -185,7 +187,7 @@ export const Notices = ({
             }
 
             // Filter reactions for this specific notice
-            const noticeReactions = reactions.filter(reaction => reaction.notice_id === noticeId);
+            // const noticeReactions = reactions.filter(reaction => reaction.notice_id === noticeId);
 
             // setLoadedReactions(prev => ({ ...prev, [noticeId]: noticeReactions }));
             // setLoadingStates(prev => ({ ...prev, [noticeId]: false }));

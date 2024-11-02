@@ -10,10 +10,6 @@ import useNotices from '../../../lib/hooks/useNotices.js';
 import { ComposeNotice } from '../../../components/User/ComposeNotice';
 import { Loading } from '../../../components/Loading/Loading.jsx';
 import './UserProfile.css';
-import { account } from '../../../lib/context/dbhandler.js';
-import { Query } from 'appwrite';
-
-
 
 
 const UserProfile = () => {
@@ -34,9 +30,9 @@ const UserProfile = () => {
         isAddingNotice,
         removingNoticeId,
         isRemovingNotice,
-        noticesReactions,
-        spreadReactions,
-        likedReactions,
+        // noticesReactions,
+        // spreadReactions,
+        // likedReactions,
         addNotice,
         editNotice,
         removeNotice,
@@ -49,10 +45,10 @@ const UserProfile = () => {
         getAllLikedNotices,
         getAllSpreadNotices,
         getReactionsForNotice,
-        fetchReactionsForNotices,
-        setNoticesReactions,
-        setSpreadReactions,
-        setLikedReactions
+        // fetchReactionsForNotices,
+        // setNoticesReactions,
+        // setSpreadReactions,
+        // setLikedReactions
     } = useNotices(googleUserData);
 
     const {
@@ -167,19 +163,19 @@ const UserProfile = () => {
     }, [user_id, offsetLikes])
 
     // Reactions For Notices tab
-    useEffect(() => {
-        fetchReactionsForNotices(notices, setNoticesReactions);
-    }, [notices]);
+    // useEffect(() => {
+    //     fetchReactionsForNotices(notices, setNoticesReactions);
+    // }, [notices]);
 
     // Reactions For Spreads tab
-    useEffect(() => {
-        fetchReactionsForNotices(spreadNoticesData, setSpreadReactions);
-    }, [spreadNoticesData]);
+    // useEffect(() => {
+    //     fetchReactionsForNotices(spreadNoticesData, setSpreadReactions);
+    // }, [spreadNoticesData]);
 
     // Reactions For Likes tab
-    useEffect(() => {
-        fetchReactionsForNotices(likedNoticesData, setLikedReactions);
-    }, [likedNoticesData]);
+    // useEffect(() => {
+    //     fetchReactionsForNotices(likedNoticesData, setLikedReactions);
+    // }, [likedNoticesData]);
 
     // Fetch accounts followed by user
     useEffect(() => {
@@ -339,7 +335,7 @@ const UserProfile = () => {
                         handleEditNotice={handleEditNotice}
                         handleDeleteNotice={handleDeleteNotice}
                         eventKey='my-notices'
-                        reactions={noticesReactions}
+                        // reactions={noticesReactions}
                         getReactionsForNotice={getReactionsForNotice}
                     />
                     <div className="d-flex justify-content-center mt-4">
@@ -369,7 +365,7 @@ const UserProfile = () => {
                         handleSpread={handleSpread}
                         handleReport={handleReport}
                         handleReact={handleReact}
-                        reactions={spreadReactions}
+                        // reactions={spreadReactions}
                         getReactionsForNotice={getReactionsForNotice}
 
                     />
@@ -401,7 +397,7 @@ const UserProfile = () => {
                         handleSpread={handleSpread}
                         handleReport={handleReport}
                         handleReact={handleReact}
-                        reactions={likedReactions}
+                        // reactions={likedReactions}
                         getReactionsForNotice={getReactionsForNotice}
 
                     />
