@@ -17,7 +17,9 @@ function App() {
     isLoggedIn, setIsLoggedIn,
     username, setUsername,
     registeredUsername, setRegisteredUsername,
-    hasUsername, setHasUsername,
+    accountType, setAccountType,
+    hasAccountType, setHasAccountType,
+    hasUsername, setHasUsername
   } = useUserContext();
 
   const navigate = useNavigate();
@@ -37,7 +39,9 @@ function App() {
         const decoded = jwtDecode(storedToken);
         setGoogleUserData(decoded);
         setIsLoggedIn(preVal => true);
+        // setHasAccountType(preVal => true);
         console.log('Logged in successfully - 1st useEffect');
+
 
         await checkUsernameInDatabase(decoded.email);
 
@@ -79,7 +83,7 @@ function App() {
   };
 
   useEffect(() => {
-    if (isLoggedIn && hasUsername) {
+    if (isLoggedIn && hasUsername && hasAccountType) {
       const currentPath = window.location.pathname;
       if (currentPath === '/' || currentPath === '/user') {
         navigate('/user/feed');
@@ -87,7 +91,7 @@ function App() {
         navigate(currentPath);
       }
     }
-  }, [isLoggedIn, hasUsername, navigate]);
+  }, [isLoggedIn, hasUsername, hasAccountType, navigate]);
 
 
   // const startSession = async () => {
@@ -110,18 +114,6 @@ function App() {
 
     setIsLoggedIn(preVal => true);
 
-    // if (decoded) {
-    //   console.log('deciding on session');
-    //   const sessionDetails = await getSessionDetails();
-    //   console.log('stiil deciding on session');
-    //   if (!sessionDetails) {
-    //     console.log('session not found so starting a new session');
-    //     await startSession();
-    //   } else {
-    //     console.log('Session already in progress for ', googleUserData.email);
-    //   }
-    // }
-
     const accessToken = credentialResponse?.credential;
     console.log('Access Token:', accessToken);
 
@@ -134,12 +126,25 @@ function App() {
       console.log('Creating a session.');
       await createSession(decoded.email);
     } else {
-      console.log('Session already in progress.');
+      console.log('Session already in progress. LOL');
     }
 
     localStorage.setItem('accessToken', accessToken);
 
     checkUsernameInDatabase(decoded.email);
+
+    // if (decoded) {
+    //   console.log('deciding on session');
+    //   const sessionDetails = await getSessionDetails();
+    //   console.log('stiil deciding on session');
+    //   if (!sessionDetails) {
+    //     console.log('session not found so starting a new session');
+    //     await startSession();
+    //   } else {
+    //     console.log('Session already in progress for ', googleUserData.email);
+    //   }
+    // }
+
   };
 
 
@@ -188,11 +193,12 @@ function App() {
             email: googleUserData.email,
             given_name: googleUserData.given_name,
             username: username.toLowerCase(),
-            // accountType: accountType
+            accountType: accountType
           });
 
           localStorage.setItem('username', username.toLowerCase());
 
+          setHasAccountType(true);
           setHasUsername(true);
 
           setTimeout(() => {
@@ -214,13 +220,15 @@ function App() {
           email: googleUserData.email,
           given_name: googleUserData.given_name,
           username: username.toLowerCase(),
-          // accountType: accountType
+          accountType: accountType
 
         });
 
         localStorage.setItem('username', username.toLowerCase());
 
+        setHasAccountType(true);
         setHasUsername(true);
+
       }
 
     }
@@ -234,14 +242,16 @@ function App() {
   return (
     <>
       {isLoggedIn ? (
-        !hasUsername ? (
+        hasUsername ? (
           <Outlet
             context={{
               googleUserData, setGoogleUserData,
               isLoggedIn, setIsLoggedIn,
               username, setUsername,
               registeredUsername, setRegisteredUsername,
-              hasUsername, setHasUsername
+              hasUsername, setHasUsername,
+              accountType, setAccountType,
+              hasAccountType, setHasAccountType
             }}
           />
         ) : (

@@ -209,7 +209,7 @@ const checkUsernameExists = async (username) => {
     }
 };
 
-export const createUser = async ({ id, email, given_name, username }) => {
+export const createUser = async ({ id, email, given_name, username, accountType }) => {
     try {
 
         const existingUser = await databases.listDocuments(
@@ -242,7 +242,7 @@ export const createUser = async ({ id, email, given_name, username }) => {
                 email,
                 given_name,
                 username: username.toLowerCase(),
-                // accoutType
+                accountType
             },
 
         );
