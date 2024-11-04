@@ -1,13 +1,13 @@
-import { useEffect, useCallback } from 'react';
+import { useEffect } from 'react';
 import { useNavigate, Outlet } from 'react-router-dom';
 import Home from './pages/Home/Home';
 import CreateUsername from './pages/CreateUsername/CreateUsername.jsx';
 import { jwtDecode } from "jwt-decode";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
-import { createUser, getUserByEmail, account } from './lib/context/dbhandler.js';
+import { createUser, getUserByEmail } from './lib/context/dbhandler.js';
 import { useUserContext } from './lib/context/UserContext';
-import { ID, OAuthProvider } from 'appwrite';
+import { ID } from 'appwrite';
 import useUserInfo from './lib/hooks/useUserInfo.js';
 
 function App() {
@@ -187,7 +187,8 @@ function App() {
             id: usrID,
             email: googleUserData.email,
             given_name: googleUserData.given_name,
-            username: username.toLowerCase()
+            username: username.toLowerCase(),
+            // accountType: accountType
           });
 
           localStorage.setItem('username', username.toLowerCase());
@@ -212,7 +213,9 @@ function App() {
           id: usrData.$id,
           email: googleUserData.email,
           given_name: googleUserData.given_name,
-          username: username.toLowerCase()
+          username: username.toLowerCase(),
+          // accountType: accountType
+
         });
 
         localStorage.setItem('username', username.toLowerCase());
@@ -231,7 +234,7 @@ function App() {
   return (
     <>
       {isLoggedIn ? (
-        hasUsername ? (
+        !hasUsername ? (
           <Outlet
             context={{
               googleUserData, setGoogleUserData,

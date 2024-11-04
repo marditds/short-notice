@@ -9,6 +9,8 @@ export const UserProvider = ({ children }) => {
     const [username, setUsername] = useState('');
     const [registeredUsername, setRegisteredUsername] = useState('');
     const [hasUsername, setHasUsername] = useState(false);
+    const [accountType, setAccountType] = useState('');
+    const [hasAccountType, setHasAccountType] = useState(false);
 
 
 
@@ -19,7 +21,9 @@ export const UserProvider = ({ children }) => {
                 isLoggedIn, setIsLoggedIn,
                 username, setUsername,
                 registeredUsername, setRegisteredUsername,
-                hasUsername, setHasUsername
+                hasUsername, setHasUsername,
+                accountType, setAccountType,
+                hasAccountType, setHasAccountType
             }}>
             {children}
         </UserContext.Provider>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { googleLogout } from '@react-oauth/google';
-import { Container, Form, Button, Alert } from 'react-bootstrap';
+import { Container, Form, Button, Alert, } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useUserContext } from '../../lib/context/UserContext';
 import { getUserByUsername } from '../../lib/context/dbhandler';
@@ -12,7 +12,17 @@ const CreateUsername = ({ setUser }) => {
     const navigate = useNavigate();
 
 
-    const { username, setUsername, setHasUsername, setGoogleUserData, setIsLoggedIn } = useUserContext();
+    const {
+        username,
+        setUsername,
+        setHasUsername,
+        setGoogleUserData,
+        setIsLoggedIn,
+        accountType,
+        setAccountType,
+        hasAccountType,
+        setHasAccountType
+    } = useUserContext();
 
     const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
 
@@ -78,6 +88,33 @@ const CreateUsername = ({ setUser }) => {
     return (
         <Container>
             <Form>
+
+                <Form.Group className='mb-3' controlId='accountType'>
+                    <Form.Label>Select Account Type:</Form.Label>
+                    <Form.Check
+                        type='radio'
+                        label={'Personal'}
+                        id={'Personal'}
+                        name='accountType'
+                        onChange={() => setAccountType('personal')}
+                    />
+                    <Form.Check
+                        type='radio'
+                        label={'Professional'}
+                        id={'Professional'}
+                        name='accountType'
+                        onChange={() => setAccountType('professional')}
+                        disabled
+                    />
+                    <Form.Check
+                        type='radio'
+                        label={'Business'}
+                        id={'Business'}
+                        name='accountType'
+                        onChange={() => setAccountType('business')}
+                    />
+
+                </Form.Group>
 
                 <Form.Group className='mb-3' controlId='user__username--field'>
                     <Form.Label>Please enter your username:</Form.Label>

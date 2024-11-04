@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, Navigate } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
 import { Tools } from '../../components/User/Tools';
 import { googleLogout } from '@react-oauth/google';

@@ -241,7 +241,8 @@ export const createUser = async ({ id, email, given_name, username }) => {
             {
                 email,
                 given_name,
-                username: username.toLowerCase()
+                username: username.toLowerCase(),
+                // accoutType
             },
 
         );
