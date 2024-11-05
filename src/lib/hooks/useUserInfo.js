@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { checkIdExistsInAuth, checkEmailExistsInAuth as checkEmailInAuthFromServer, registerAuthUser, deleteAuthUser, createUserSession, getSessionDetails as fetchSessionDetails, deleteUserSession, updateUser, updateAuthUser, deleteUser, getUserByUsername as fetchUserByUsername, getAllUsersByString as fetchAllUsersByString, deleteAllNotices, getUsersDocument, createFollow, removeFollow, getUserFollowingsById as fetchUserFollowingsById, getUserFollowersById as fetchUserFollowersById, getOtherUserFollowingsById as fetchOtherUserFollowingsById } from '../context/dbhandler';
+import { checkIdExistsInAuth, checkEmailExistsInAuth as checkEmailInAuthFromServer, registerAuthUser, getUserById, deleteAuthUser, createUserSession, getSessionDetails as fetchSessionDetails, deleteUserSession, updateUser, updateAuthUser, deleteUser, getUserByUsername as fetchUserByUsername, getAllUsersByString as fetchAllUsersByString, deleteAllNotices, getUsersDocument, createFollow, removeFollow, getUserFollowingsById as fetchUserFollowingsById, getUserFollowersById as fetchUserFollowersById, getOtherUserFollowingsById as fetchOtherUserFollowingsById } from '../context/dbhandler';
 import { useUserContext } from '../context/UserContext';
 import { UserId } from '../../components/User/UserId';
 
@@ -305,6 +305,18 @@ const useUserInfo = (data) => {
         }
     }
 
+    const getUserAccountByUserId = async (userId) => {
+        try {
+            const accntType = await getUserById(userId);
+
+            console.log('accntType: ', accntType);
+
+            return accntType;
+        } catch (error) {
+            console.error('Error getting user account type', error);
+        }
+    }
+
 
 
 
@@ -337,6 +349,7 @@ const useUserInfo = (data) => {
         getOtherUserFollowingsById,
         fetchAccountsFollowingTheUser,
         fetchAccountsFollowedByUser,
+        getUserAccountByUserId
         // authedUsers
     }
 }

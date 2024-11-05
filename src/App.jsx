@@ -83,7 +83,7 @@ function App() {
   };
 
   useEffect(() => {
-    if (isLoggedIn && hasUsername && hasAccountType) {
+    if (isLoggedIn && hasUsername) {
       const currentPath = window.location.pathname;
       if (currentPath === '/' || currentPath === '/user') {
         navigate('/user/feed');
@@ -91,7 +91,7 @@ function App() {
         navigate(currentPath);
       }
     }
-  }, [isLoggedIn, hasUsername, hasAccountType, navigate]);
+  }, [isLoggedIn, hasUsername, navigate]);
 
 
   // const startSession = async () => {

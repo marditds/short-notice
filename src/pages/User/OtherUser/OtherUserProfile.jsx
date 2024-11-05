@@ -30,8 +30,8 @@ const OtherUserProfile = () => {
         spreadNotices,
         isLoading: noticesLoading,
         noticesReactions,
-        spreadReactions,
-        likedReactions,
+        // spreadReactions,
+        // likedReactions,
         likeNotice,
         spreadNotice,
         reportNotice,
@@ -39,11 +39,11 @@ const OtherUserProfile = () => {
         getAllSpreadNotices,
         fetchUserNotices,
         sendReaction,
-        getReactionsForNotice,
-        fetchReactionsForNotices,
-        setNoticesReactions,
-        setSpreadReactions,
-        setLikedReactions
+        getReactionsForNotice
+        // fetchReactionsForNotices,
+        // setNoticesReactions,
+        // setSpreadReactions,
+        // setLikedReactions
     } = useNotices(googleUserData);
 
     const {
@@ -58,8 +58,11 @@ const OtherUserProfile = () => {
         followUser,
         setIsFollowing,
         fetchAccountsFollowingTheUser,
-        fetchAccountsFollowedByUser
+        fetchAccountsFollowedByUser,
+        getUserAccountByUserId
     } = useUserInfo(googleUserData);
+
+    const [accountType, setAccountType] = useState(null);
 
     const [notices, setNotices] = useState([]);
     const [spreadNoticesData, setSpreadNoticesData] = useState([]);
@@ -96,10 +99,12 @@ const OtherUserProfile = () => {
 
                 const currUser = allUsers.documents.find((user) => user.username === otherUsername);
 
-                // console.log('currUser:', currUser);
+                console.log('currUser:', currUser);
                 if (currUser) {
                     // Only update if different to prevent unnecessary re-renders
                     setCurrUserId((prevId) => (prevId !== currUser.$id ? currUser.$id : prevId));
+
+                    setAccountType(currUser.accountType)
                 } else {
                     console.error(`User with username "${otherUsername}" not found.`);
                 }
@@ -110,6 +115,11 @@ const OtherUserProfile = () => {
         }
         getCurrUser();
     }, [otherUsername, getUsersData])
+
+    useEffect(() => {
+        console.log('acountType:', accountType);
+
+    }, [accountType])
 
     // Fetch notices for other user
     useEffect(() => {
@@ -264,9 +274,13 @@ const OtherUserProfile = () => {
         return <div><Loading />Loading {otherUsername}'s profile</div>;
     }
 
+    // if (accountType === 'business') {
+    //     return <div className='mt-5'>ENTER PASSWORD</div>
+    // }
+
+
     return (
         <>
-
             <Profile
                 username={otherUsername}
                 avatarUrl={avatarUrl}
