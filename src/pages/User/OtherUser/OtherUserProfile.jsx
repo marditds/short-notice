@@ -8,6 +8,7 @@ import useUserInfo from '../../../lib/hooks/useUserInfo.js';
 import { getAvatarUrl as avatarUtil } from '../../../lib/utils/avatarUtils.js';
 import useUserAvatar from '../../../lib/hooks/useUserAvatar.js';
 import useNotices from '../../../lib/hooks/useNotices.js';
+import { Passcode } from '../../../components/User/Passcode.jsx';
 import { Loading } from '../../../components/Loading/Loading.jsx';
 
 
@@ -63,6 +64,7 @@ const OtherUserProfile = () => {
     } = useUserInfo(googleUserData);
 
     const [accountType, setAccountType] = useState(null);
+    const [passcode, setPasscode] = useState('');
 
     const [notices, setNotices] = useState([]);
     const [spreadNoticesData, setSpreadNoticesData] = useState([]);
@@ -274,9 +276,12 @@ const OtherUserProfile = () => {
         return <div><Loading />Loading {otherUsername}'s profile</div>;
     }
 
-    // if (accountType === 'business') {
-    //     return <div className='mt-5'>ENTER PASSWORD</div>
-    // }
+    if (accountType === 'business') {
+        return <Passcode
+            passcode={passcode}
+            setPasscode={setPasscode}
+        />
+    }
 
 
     return (
