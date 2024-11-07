@@ -486,7 +486,7 @@ export const getSessionDetails = async () => {
 //     }
 // }
 
-export const createNotice = async ({ user_id, text, timestamp, expiresAt, science, technology, engineering, math, literature, history, philosophy, music, medicine, economics, law, polSci, sports
+export const createNotice = async ({ user_id, text, timestamp, expiresAt, noticeType, science, technology, engineering, math, literature, history, philosophy, music, medicine, economics, law, polSci, sports
 }) => {
 
     try {
@@ -500,6 +500,7 @@ export const createNotice = async ({ user_id, text, timestamp, expiresAt, scienc
                 text,
                 timestamp,
                 expiresAt,
+                noticeType,
                 science: science || false,
                 technology: technology || false,
                 engineering: engineering || false,
@@ -612,7 +613,7 @@ export const getFilteredNotices = async (selectedTags, limit, offset) => {
                 import.meta.env.VITE_NOTICES_COLLECTION,
                 [
                     queryList[0],
-                    // Query.equal('user_id', user_id),
+                    Query.notEqual('noticeType', ['business']),
                     Query.limit(limit),
                     Query.offset(offset),
                     Query.orderDesc('timestamp'),
@@ -623,6 +624,7 @@ export const getFilteredNotices = async (selectedTags, limit, offset) => {
                 import.meta.env.VITE_DATABASE,
                 import.meta.env.VITE_NOTICES_COLLECTION,
                 [
+                    Query.notEqual('noticeType', ['business']),
                     Query.or(queryList),
                     Query.limit(limit),
                     Query.offset(offset),

@@ -99,7 +99,7 @@ const useNotices = (googleUserData) => {
     }, [user_id]);
 
 
-    const addNotice = async (text, duration, selectedTags) => {
+    const addNotice = async (text, duration, noticeType, selectedTags) => {
 
         if (user_id) {
 
@@ -111,6 +111,7 @@ const useNotices = (googleUserData) => {
                 text,
                 timestamp: now.toISOString(),
                 expiresAt: expiresAt.toISOString(),
+                noticeType: noticeType,
 
                 science: selectedTags['science'] || false,
                 technology: selectedTags['technology'] || false,

@@ -15,6 +15,8 @@ import './UserProfile.css';
 const UserProfile = () => {
 
     const { googleUserData, username } = useUserContext();
+
+    const [accountType, setAccountType] = useState(null);
     const [noticeText, setNoticeText] = useState('');
     const [duration, setDuration] = useState(24);
     const [editingNoticeId, setEditingNoticeId] = useState(null);
@@ -56,6 +58,7 @@ const UserProfile = () => {
         followingCount,
         followersAccounts,
         followingAccounts,
+        getUserByUsername,
         fetchUsersData,
         fetchAccountsFollowingTheUser,
         fetchAccountsFollowedByUser
@@ -84,6 +87,19 @@ const UserProfile = () => {
     const [offsetLikes, setOffsetLikes] = useState(0);
     const [hasMoreLikes, setHasMoreLikes] = useState(true);
     const [isLoadingMoreLikes, setIsLoadingMoreLikes] = useState(false);
+
+    // Fetch User By Userame
+    useEffect(() => {
+        const fetchUserByUserame = async () => {
+            try {
+                const usr = await getUserByUsername(username);
+                setAccountType(usr.accountType);
+            } catch (error) {
+                console.log('Error creating notice', error);
+            }
+        }
+        fetchUserByUserame();
+    }, [username])
 
     // Fetch notices for user
     useEffect(() => {
@@ -317,6 +333,7 @@ const UserProfile = () => {
                 setDuration={setDuration}
                 addNotice={addNotice}
                 onNoticeAdded={handleNoticeAdded}
+                noticeType={accountType}
             />
 
             <Tabs

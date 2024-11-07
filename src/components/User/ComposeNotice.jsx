@@ -4,7 +4,7 @@ import { NoticeTags } from './NoticeTags';
 import { Loading } from '../Loading/Loading';
 import { FaAngleDown } from "react-icons/fa6";
 
-export const ComposeNotice = ({ noticeText, setNoticeText, duration, setDuration, addNotice, isAddingNotice, onNoticeAdded }) => {
+export const ComposeNotice = ({ noticeText, setNoticeText, duration, noticeType, setDuration, addNotice, isAddingNotice, onNoticeAdded }) => {
 
     const [tagCategories, setTagCategories] = useState([
         {
@@ -52,7 +52,7 @@ export const ComposeNotice = ({ noticeText, setNoticeText, duration, setDuration
     const handleNotify = async () => {
         if (noticeText.trim()) {
 
-            const newNotice = await addNotice(noticeText, duration, selectedTags);
+            const newNotice = await addNotice(noticeText, duration, noticeType, selectedTags);
             onNoticeAdded(newNotice);
             setNoticeText('');
             setSelectedTags({});
