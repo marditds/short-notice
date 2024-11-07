@@ -324,7 +324,6 @@ const OtherUserProfile = () => {
 
     return (
         <>
-            {/* {accountTypeCheck === true && */}
             <>
                 <Profile
                     username={otherUsername}
@@ -338,7 +337,6 @@ const OtherUserProfile = () => {
                     isFollowingLoading={isFollowingLoading}
                     handleFollow={handleFollow}
                 />
-
 
                 <Tabs
                     defaultActiveKey="notices"
@@ -454,7 +452,6 @@ const OtherUserProfile = () => {
                     </Tab>
                 </Tabs>
             </>
-            {/* } */}
         </>
     )
 }

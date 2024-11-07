@@ -150,7 +150,7 @@ export const Profile = ({ username, avatarUrl, handleFollow, currUserId, followi
                 <Modal.Header
                     className='user-profile__following--modal-header w-100'
                 >
-                    <Modal.Title>Following</Modal.Title>
+                    <Modal.Title>{`Follower(s)`}</Modal.Title>
                     <Button
                         onClick={handleCloseFollowersModal}
                     >
