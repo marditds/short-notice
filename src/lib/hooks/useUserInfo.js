@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { checkIdExistsInAuth, checkEmailExistsInAuth as checkEmailInAuthFromServer, registerAuthUser, getUserById, deleteAuthUser, createUserSession, getSessionDetails as fetchSessionDetails, deleteUserSession, updateUser, updateAuthUser, deleteUser, getUserByUsername as fetchUserByUsername, getAllUsersByString as fetchAllUsersByString, deleteAllNotices, getUsersDocument, createFollow, removeFollow, getUserFollowingsById as fetchUserFollowingsById, getUserFollowersById as fetchUserFollowersById, getOtherUserFollowingsById as fetchOtherUserFollowingsById } from '../context/dbhandler';
+import { checkIdExistsInAuth, checkEmailExistsInAuth as checkEmailInAuthFromServer, registerAuthUser, getUserById, deleteAuthUser, createUserSession, getSessionDetails as fetchSessionDetails, deleteUserSession, updateUser, updateAuthUser, deleteUser, getUserByUsername as fetchUserByUsername, getAllUsersByString as fetchAllUsersByString, deleteAllNotices, getUsersDocument, createFollow, removeFollow, getUserFollowingsById as fetchUserFollowingsById, getUserFollowersById as fetchUserFollowersById, getOtherUserFollowingsById as fetchOtherUserFollowingsById, createPassocde, getPassocdeByBusincessId as fetchPassocdeByBusincessId } from '../context/dbhandler';
 import { useUserContext } from '../context/UserContext';
 import { UserId } from '../../components/User/UserId';
 
@@ -317,7 +317,23 @@ const useUserInfo = (data) => {
         }
     }
 
+    const makePasscode = async (userId, passcode, accountType) => {
+        try {
+            const res = await createPassocde(userId, passcode, accountType);
+            return res;
+        } catch (error) {
+            console.error('Error making passcode:', error);
+        }
+    }
 
+    const getPassocdeByBusincessId = async (userId) => {
+        try {
+            const res = await fetchPassocdeByBusincessId(userId);
+            return res.documents;
+        } catch (error) {
+            console.error('Error fetching passcode:', error);
+        }
+    }
 
 
 
@@ -349,7 +365,9 @@ const useUserInfo = (data) => {
         getOtherUserFollowingsById,
         fetchAccountsFollowingTheUser,
         fetchAccountsFollowedByUser,
-        getUserAccountByUserId
+        getUserAccountByUserId,
+        makePasscode,
+        getPassocdeByBusincessId
         // authedUsers
     }
 }

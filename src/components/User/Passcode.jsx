@@ -1,12 +1,11 @@
 import React from 'react';
 import { Row, Col, Form, Button } from "react-bootstrap";
 
-export const Passcode = ({ passcode, setPasscode, handlePasscode }) => {
+export const Passcode = ({ passcode, setPasscode, checkPasscode }) => {
 
     const onPasscodeChange = (e) => {
         setPasscode(e.target.value);
         console.log(e.target.value);
-
     }
 
     return (
@@ -25,7 +24,7 @@ export const Passcode = ({ passcode, setPasscode, handlePasscode }) => {
 
                 <Button
                     variant="primary"
-                    onClick={handlePasscode}
+                    onClick={checkPasscode}
                     disabled={!passcode}
                 >
                     Submit

@@ -60,10 +60,11 @@ const OtherUserProfile = () => {
         setIsFollowing,
         fetchAccountsFollowingTheUser,
         fetchAccountsFollowedByUser,
-        getUserAccountByUserId
+        getPassocdeByBusincessId
     } = useUserInfo(googleUserData);
 
     const [accountType, setAccountType] = useState(null);
+    const [accountTypeCheck, setAccountTypeCheck] = useState(false);
     const [passcode, setPasscode] = useState('');
 
     const [notices, setNotices] = useState([]);
@@ -271,149 +272,189 @@ const OtherUserProfile = () => {
         }
     }, [otherUsername, username, navigate]);
 
+    // useEffect(() => {
+    //     const fetchUserPasscode = async () => {
+    //         const psscd = await getPassocdeByBusincessId(currUserId);
+    //         console.log('psscd', psscd[0].passcode);
+
+    //         if (psscd[0].passcode === passcode) {
+    //             setAccountTypeCheck(true);
+    //         }
+
+    //     }
+    //     fetchUserPasscode();
+    // }, [currUserId])
+
+    const checkPasscode = async () => {
+        try {
+            console.log('accountTypeCheck', accountTypeCheck);
+
+            const psscd = await getPassocdeByBusincessId(currUserId);
+
+            console.log('psscd', psscd[0].passcode);
+            localStorage.setItem('passcode', passcode);
+
+            console.log(localStorage.getItem('passcode'));
+
+            console.log('passcode', passcode);
+
+            if (psscd[0].passcode === passcode) {
+                setAccountTypeCheck(true);
+            }
+            console.log('accountTypeCheck', accountTypeCheck);
+
+        } catch (error) {
+            console.error('Error checking passcode:', error);
+        }
+    }
+
 
     if (noticesLoading) {
         return <div><Loading />Loading {otherUsername}'s profile</div>;
     }
 
-    if (accountType === 'business') {
+    if (accountType === 'business' && accountTypeCheck === false) {
         return <Passcode
             passcode={passcode}
             setPasscode={setPasscode}
+            checkPasscode={checkPasscode}
         />
     }
 
 
     return (
         <>
-            <Profile
-                username={otherUsername}
-                avatarUrl={avatarUrl}
-                currUserId={currUserId}
-                followingAccounts={followingAccounts}
-                followersAccounts={followersAccounts}
-                followersCount={followersCount}
-                followingCount={followingCount}
-                isFollowing={isFollowing}
-                isFollowingLoading={isFollowingLoading}
-                handleFollow={handleFollow}
-            />
+            {/* {accountTypeCheck === true && */}
+            <>
+                <Profile
+                    username={otherUsername}
+                    avatarUrl={avatarUrl}
+                    currUserId={currUserId}
+                    followingAccounts={followingAccounts}
+                    followersAccounts={followersAccounts}
+                    followersCount={followersCount}
+                    followingCount={followingCount}
+                    isFollowing={isFollowing}
+                    isFollowingLoading={isFollowingLoading}
+                    handleFollow={handleFollow}
+                />
 
 
-            <Tabs
-                defaultActiveKey="notices"
-                id="notices-tabs"
-                justify
-                className='user-profile__notice-tab 
+                <Tabs
+                    defaultActiveKey="notices"
+                    id="notices-tabs"
+                    justify
+                    className='user-profile__notice-tab 
                 fixed-bottom
                 '
-            >
-                {/* NOTICES TAB */}
-                <Tab
-                    eventKey='notices'
-                    title="Notices"
                 >
-                    {notices.length !== 0 ?
-                        <>
-                            <Notices
-                                notices={notices}
-                                likedNotices={likedNotices}
-                                spreadNotices={spreadNotices}
-                                reactions={noticesReactions}
-                                handleLike={handleLike}
-                                handleSpread={handleSpread}
-                                handleReport={handleReport}
-                                handleReact={handleReact}
-                                getReactionsForNotice={getReactionsForNotice}
-                                eventKey='notices'
-                            />
-                            <div className="d-flex justify-content-center mt-4">
-                                {hasMoreNotices ?
-                                    <Button
-                                        onClick={() => setOffset(offset + limit)}
-                                        disabled={isLoadingMore || !hasMoreNotices}
-                                    >
-                                        {isLoadingMore ?
-                                            <><Loading size={24} /> Loading...</>
-                                            : 'Load More'}
-                                    </Button>
-                                    : 'No more notices'}
-                            </div>
-                        </>
-                        : 'No notices yet'}
-                </Tab>
+                    {/* NOTICES TAB */}
+                    <Tab
+                        eventKey='notices'
+                        title="Notices"
+                    >
+                        {notices.length !== 0 ?
+                            <>
+                                <Notices
+                                    notices={notices}
+                                    likedNotices={likedNotices}
+                                    spreadNotices={spreadNotices}
+                                    reactions={noticesReactions}
+                                    handleLike={handleLike}
+                                    handleSpread={handleSpread}
+                                    handleReport={handleReport}
+                                    handleReact={handleReact}
+                                    getReactionsForNotice={getReactionsForNotice}
+                                    eventKey='notices'
+                                />
+                                <div className="d-flex justify-content-center mt-4">
+                                    {hasMoreNotices ?
+                                        <Button
+                                            onClick={() => setOffset(offset + limit)}
+                                            disabled={isLoadingMore || !hasMoreNotices}
+                                        >
+                                            {isLoadingMore ?
+                                                <><Loading size={24} /> Loading...</>
+                                                : 'Load More'}
+                                        </Button>
+                                        : 'No more notices'}
+                                </div>
+                            </>
+                            : 'No notices yet'}
+                    </Tab>
 
-                {/* SPREADS TAB */}
-                <Tab
-                    eventKey='spreads'
-                    title="Spreads"
-                >
-                    {spreadNoticesData.length !== 0 ?
-                        <>
-                            <Notices
-                                notices={spreadNoticesData}
-                                user_id={user_id}
-                                likedNotices={likedNotices}
-                                spreadNotices={spreadNotices}
-                                // reactions={spreadReactions}
-                                handleLike={handleLike}
-                                handleSpread={handleSpread}
-                                handleReport={handleReport}
-                                handleReact={handleReact}
-                                getReactionsForNotice={getReactionsForNotice}
-                            />
-                            <div className="d-flex justify-content-center mt-4">
-                                {hasMoreSpreads ?
-                                    <Button
-                                        onClick={() => setOffsetSpreads(offset + limit)}
-                                        disabled={isLoadingMoreSpreads || !hasMoreSpreads}
-                                    >
-                                        {isLoadingMoreSpreads ?
-                                            <><Loading size={24} /> Loading...</>
-                                            : 'Load More'}
-                                    </Button>
-                                    : 'No more spreads'}
-                            </div>
-                        </>
-                        : 'No spreadas yet'}
-                </Tab>
+                    {/* SPREADS TAB */}
+                    <Tab
+                        eventKey='spreads'
+                        title="Spreads"
+                    >
+                        {spreadNoticesData.length !== 0 ?
+                            <>
+                                <Notices
+                                    notices={spreadNoticesData}
+                                    user_id={user_id}
+                                    likedNotices={likedNotices}
+                                    spreadNotices={spreadNotices}
+                                    // reactions={spreadReactions}
+                                    handleLike={handleLike}
+                                    handleSpread={handleSpread}
+                                    handleReport={handleReport}
+                                    handleReact={handleReact}
+                                    getReactionsForNotice={getReactionsForNotice}
+                                />
+                                <div className="d-flex justify-content-center mt-4">
+                                    {hasMoreSpreads ?
+                                        <Button
+                                            onClick={() => setOffsetSpreads(offset + limit)}
+                                            disabled={isLoadingMoreSpreads || !hasMoreSpreads}
+                                        >
+                                            {isLoadingMoreSpreads ?
+                                                <><Loading size={24} /> Loading...</>
+                                                : 'Load More'}
+                                        </Button>
+                                        : 'No more spreads'}
+                                </div>
+                            </>
+                            : 'No spreadas yet'}
+                    </Tab>
 
-                {/* LIKES TAB */}
-                <Tab
-                    eventKey='likes'
-                    title="Likes"
-                >
-                    {likedNoticesData.length !== 0 ?
-                        <>
-                            <Notices
-                                notices={likedNoticesData}
-                                user_id={user_id}
-                                likedNotices={likedNotices}
-                                spreadNotices={spreadNotices}
-                                // reactions={likedReactions}
-                                handleLike={handleLike}
-                                handleSpread={handleSpread}
-                                handleReport={handleReport}
-                                handleReact={handleReact}
-                                getReactionsForNotice={getReactionsForNotice}
-                            />
-                            <div className="d-flex justify-content-center mt-4">
-                                {hasMoreLikes ?
-                                    <Button
-                                        onClick={() => setOffsetLikes(offset + limit)}
-                                        disabled={isLoadingMoreLikes || !hasMoreLikes}
-                                    >
-                                        {isLoadingMoreLikes ?
-                                            <><Loading size={24} /> Loading...</>
-                                            : 'Load More'}
-                                    </Button>
-                                    : 'No more likes'}
-                            </div>
-                        </>
-                        : 'No likes yet'}
-                </Tab>
-            </Tabs>
-
+                    {/* LIKES TAB */}
+                    <Tab
+                        eventKey='likes'
+                        title="Likes"
+                    >
+                        {likedNoticesData.length !== 0 ?
+                            <>
+                                <Notices
+                                    notices={likedNoticesData}
+                                    user_id={user_id}
+                                    likedNotices={likedNotices}
+                                    spreadNotices={spreadNotices}
+                                    // reactions={likedReactions}
+                                    handleLike={handleLike}
+                                    handleSpread={handleSpread}
+                                    handleReport={handleReport}
+                                    handleReact={handleReact}
+                                    getReactionsForNotice={getReactionsForNotice}
+                                />
+                                <div className="d-flex justify-content-center mt-4">
+                                    {hasMoreLikes ?
+                                        <Button
+                                            onClick={() => setOffsetLikes(offset + limit)}
+                                            disabled={isLoadingMoreLikes || !hasMoreLikes}
+                                        >
+                                            {isLoadingMoreLikes ?
+                                                <><Loading size={24} /> Loading...</>
+                                                : 'Load More'}
+                                        </Button>
+                                        : 'No more likes'}
+                                </div>
+                            </>
+                            : 'No likes yet'}
+                    </Tab>
+                </Tabs>
+            </>
+            {/* } */}
         </>
     )
 }

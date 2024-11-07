@@ -1163,4 +1163,39 @@ export const getAllReactionsByNoticeId = async (notice_id) => {
     }
 }
 
+export const createPassocde = async (userId, passcode, accountType) => {
+    try {
+        const response = await databases.createDocument(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_PASSCODES_COLLECTION,
+            ID.unique(),
+            {
+                userId,
+                passcode,
+                accountType
+            }
+        )
+        console.log('Passcode created successfuly:', response);
+        return response;
+    } catch (error) {
+        console.error('Error creating passcode:', error);
+    }
+}
+
+export const getPassocdeByBusincessId = async (user_id) => {
+    try {
+        const response = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_PASSCODES_COLLECTION,
+            [
+                Query.equal('user_id', user_id)
+            ]
+        )
+        console.log('Passcode gotten successfuly:', response);
+        return response;
+    } catch (error) {
+        console.error('Error getting passcode:', error);
+    }
+}
+
 export { ID } from 'appwrite';
