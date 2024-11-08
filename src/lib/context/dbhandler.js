@@ -613,7 +613,7 @@ export const getFilteredNotices = async (selectedTags, limit, offset) => {
                 import.meta.env.VITE_NOTICES_COLLECTION,
                 [
                     queryList[0],
-                    Query.notEqual('noticeType', ['business']),
+                    Query.notEqual('noticeType', ['organization']),
                     Query.limit(limit),
                     Query.offset(offset),
                     Query.orderDesc('timestamp'),
@@ -624,7 +624,7 @@ export const getFilteredNotices = async (selectedTags, limit, offset) => {
                 import.meta.env.VITE_DATABASE,
                 import.meta.env.VITE_NOTICES_COLLECTION,
                 [
-                    Query.notEqual('noticeType', ['business']),
+                    Query.notEqual('noticeType', ['organization']),
                     Query.or(queryList),
                     Query.limit(limit),
                     Query.offset(offset),

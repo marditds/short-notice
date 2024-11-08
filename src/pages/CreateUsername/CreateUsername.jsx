@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { googleLogout } from '@react-oauth/google';
-import { Container, Form, Button, Alert, } from 'react-bootstrap';
+import { Container, Stack, Form, Button, Alert, } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useUserContext } from '../../lib/context/UserContext';
 import { getUserByUsername } from '../../lib/context/dbhandler';
+import { AccountType } from '../../components/AccountType/AccountType';
+import './CreateUsername.css';
 
 import ReCAPTCHA from 'react-google-recaptcha';
 
@@ -86,68 +88,52 @@ const CreateUsername = ({ setUser }) => {
     };
 
     return (
-        <Container>
+        <Container className='
+        createUsername__container 
+        
+        '>
             <Form>
+                <Stack gap={3}>
 
-                <Form.Group className='mb-3' controlId='accountType'>
-                    <Form.Label>Select Account Type:</Form.Label>
-                    <Form.Check
-                        type='radio'
-                        label={'Personal'}
-                        id={'Personal'}
-                        name='accountType'
-                        onChange={() => setAccountType('personal')}
-                    />
-                    <Form.Check
-                        type='radio'
-                        label={'Professional'}
-                        id={'Professional'}
-                        name='accountType'
-                        onChange={() => setAccountType('professional')}
-                        disabled
-                    />
-                    <Form.Check
-                        type='radio'
-                        label={'Business'}
-                        id={'Business'}
-                        name='accountType'
-                        onChange={() => setAccountType('business')}
-                    />
+                    <AccountType setAccountType={setAccountType} />
 
-                </Form.Group>
+                    <Form.Group className='mb-3' controlId='user__username--field'>
+                        <Form.Label>Please enter your username:</Form.Label>
+                        <Form.Control type='username' placeholder='Enter your username' value={username || ''} onChange={onUsernameChange} />
+                        <Form.Text className='text-muted'>
+                            Your userame must be unique.
+                        </Form.Text>
+                    </Form.Group>
+                    {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
 
-                <Form.Group className='mb-3' controlId='user__username--field'>
-                    <Form.Label>Please enter your username:</Form.Label>
-                    <Form.Control type='username' placeholder='Enter your username' value={username || ''} onChange={onUsernameChange} />
-                    <Form.Text className='text-muted'>
-                        Your userame must be unique.
-                    </Form.Text>
-                </Form.Group>
-                {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
+                    <div className='mb-3'>
+                        <ReCAPTCHA
+                            sitekey={import.meta.env.VITE_CAPTCHA_SITE_KEY}
+                            onChange={onCaptchaChange}
+                        />
+                    </div>
 
-                <div className='mb-3'>
-                    <ReCAPTCHA
-                        sitekey={import.meta.env.VITE_CAPTCHA_SITE_KEY}
-                        onChange={onCaptchaChange}
-                    />
-                </div>
+                    <div>
+                        <Button
+                            onClick={handleDoneClick}
+                            disabled={!isCaptchaVerified || !username || username.trim() === ''}
+                        >
+                            Done
+                        </Button>
+                        <Button
+                            onClick={() => {
+                                googleLogout();
+                                setIsLoggedIn(preVal => false)
+                                setGoogleUserData(null);
+                                localStorage.removeItem('accessToken');
+                                console.log('Logged out successfully.');
+                                window.location.href = '/';
 
-                <Button
-                    onClick={handleDoneClick}
-                    disabled={!isCaptchaVerified || !username || username.trim() === ''}
-                >
-                    Done
-                </Button>
-                <Button
-                    onClick={() => {
-                        googleLogout();
-                        setIsLoggedIn(preVal => false)
-                        setGoogleUserData(null);
-                        localStorage.removeItem('accessToken');
-                        console.log('Logged out successfully.');
-                        window.location.href = '/';
-
-                    }}>Cancel</Button>
+                            }}>
+                            Cancel
+                        </Button>
+                    </div>
+                </Stack>
 
             </Form>
         </Container>

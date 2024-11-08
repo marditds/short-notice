@@ -88,7 +88,7 @@ const UserProfile = () => {
     const [hasMoreLikes, setHasMoreLikes] = useState(true);
     const [isLoadingMoreLikes, setIsLoadingMoreLikes] = useState(false);
 
-    // Fetch User By Userame
+    // Fetch User By Username
     useEffect(() => {
         const fetchUserByUserame = async () => {
             try {
@@ -329,11 +329,11 @@ const UserProfile = () => {
                 duration={duration}
                 isAddingNotice={isAddingNotice}
                 noticeText={noticeText}
+                noticeType={accountType}
                 setNoticeText={setNoticeText}
                 setDuration={setDuration}
                 addNotice={addNotice}
                 onNoticeAdded={handleNoticeAdded}
-                noticeType={accountType}
             />
 
             <Tabs

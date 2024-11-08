@@ -313,7 +313,7 @@ const OtherUserProfile = () => {
         return <div><Loading />Loading {otherUsername}'s profile</div>;
     }
 
-    if (accountType === 'business' && accountTypeCheck === false) {
+    if (accountType === 'organization' && accountTypeCheck === false) {
         return <Passcode
             passcode={passcode}
             setPasscode={setPasscode}
