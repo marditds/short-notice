@@ -97,7 +97,13 @@ const CreateUsername = ({ setUser }) => {
                     <AccountType setAccountType={setAccountType} />
 
                     <Form.Group className='mb-3' controlId='user__username--field'>
-                        <Form.Label>Please enter your username:</Form.Label>
+                        <Form.Label>
+                            {
+                                accountType === 'personal' ?
+                                    'Please enter your username' :
+                                    'Please enter your organization\'s name'
+                            }
+                        </Form.Label>
                         <Form.Control type='username' placeholder='Enter your username' value={username || ''} onChange={onUsernameChange} />
                         <Form.Text className='text-muted'>
                             Your userame must be unique.

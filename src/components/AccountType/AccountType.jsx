@@ -33,29 +33,32 @@ export const AccountType = ({ setAccountType }) => {
     ];
 
     return (
-        <Form.Group className='mb-3' controlId='accountType'>
-            <Form.Label>Select Account Type:</Form.Label>
-            <Row>
-                {accountTypes.map((accountType) => (
-                    <Col key={accountType.type} className='d-flex justify-content-center'>
-                        <label
-                            className={`d-flex flex-column justify-content-center align-items-center createUsername__accountType--radio ${selectedType === accountType.type ? 'selected' : ''}`}
-                            onClick={() => !accountType.disabled && handleSelection(accountType.type)}
-                        >
-                            {accountType.icon}
-                            <Form.Check
-                                type='radio'
-                                label={accountType.label}
-                                id={accountType.label}
-                                name='accountType'
-                                onChange={() => handleSelection(accountType.type)}
-                                className='createUsername__accountType--radio-input'
-                                disabled={accountType.disabled}
-                            />
-                        </label>
-                    </Col>
-                ))}
-            </Row>
-        </Form.Group>
+        <>
+            <Form.Group className='mb-3' controlId='accountType'>
+                <Form.Label>Select Account Type:</Form.Label>
+                <Row>
+                    {accountTypes.map((accountType) => (
+                        <Col key={accountType.type} className='d-flex justify-content-center'>
+                            <label
+                                className={`d-flex flex-column justify-content-center align-items-center createUsername__accountType--radio ${selectedType === accountType.type ? 'selected' : ''}`}
+                                onClick={() => !accountType.disabled && handleSelection(accountType.type)}
+                            >
+                                {accountType.icon}
+                                <Form.Check
+                                    type='radio'
+                                    label={accountType.label}
+                                    id={accountType.label}
+                                    name='accountType'
+                                    onChange={() => handleSelection(accountType.type)}
+                                    className='createUsername__accountType--radio-input'
+                                    disabled={accountType.disabled}
+                                />
+                            </label>
+                        </Col>
+                    ))}
+                </Row>
+
+            </Form.Group>
+        </>
     );
 };
