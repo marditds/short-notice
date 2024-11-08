@@ -22,7 +22,7 @@ export const AccountType = ({ setAccountType }) => {
                     className={`d-flex flex-column justify-content-center align-items-center createUsername__accountType--radio ${selectedType === 'personal' ? 'selected' : ''}`}
                     onClick={() => handleSelection('personal')}
                 >
-                    <BsFillPersonFill size={45} />
+                    <BsFillPersonFill size={45} style={{ transition: '0.3' }} color={selectedType === 'personal' ? '' : 'white'} />
                     <Form.Check
                         type='radio'
                         label={'Personal'}
@@ -53,7 +53,7 @@ export const AccountType = ({ setAccountType }) => {
                     className={`d-flex flex-column justify-content-center align-items-center createUsername__accountType--radio ${selectedType === 'organization' ? 'selected' : ''}`}
                     onClick={() => handleSelection('organization')}
                 >
-                    <BsBuildings size={45} />
+                    <BsBuildings size={45} style={{ transition: '0.3' }} color={selectedType === 'organization' ? '' : 'white'} />
                     <Form.Check
                         type='radio'
                         label={'Organization'}
