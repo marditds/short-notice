@@ -14,8 +14,10 @@
 
 .createUsername__accountType--radio {
     padding-block: 12px;
-    padding-inline: 20px;
-    border: 2px solid yellow !important;
+    padding-inline: 100px;
+    border: 1px solid yellow !important;
+    width: 160px;
+    height: 160px;
     border-radius: 6px;
     cursor: pointer;
     transition: 0.3s;
@@ -24,15 +26,29 @@
 
 }
 
+.createUsername__accountType--radio:hover,
+.createUsername__accountType--radio.selected {
+    background-color: blueviolet;
+}
+
 .createUsername__accountType--radio-input>input,
 .createUsername__accountType--radio-input>label {
     cursor: pointer !important;
-
 }
 
-.createUsername__accountType--radio:hover {
-    background-color: rgb(255, 255, 255, 0.25);
+.createUsername__accountType--radio:has(+ .createUsername__accountType--radio-input>input.clicked) {
+    background-color: blueviolet;
 }
+
+/* .user-profile__follow-numbers-text:has(+ .user-profile__follow-numbers-number:hover) {
+    color: var(--main-accent-color-hover) !important;
+} */
+
+.createUsername__accountType--radio-input>input:checked {
+    background-color: yellow;
+}
+
+
 
 
 /* .createUsername__accountType--radio::before {
