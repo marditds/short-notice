@@ -45,7 +45,7 @@
 } */
 
 .createUsername__accountType--radio-input>input:checked {
-    background-color: yellow;
+    background-color: blueviolet;
 }
 
 
