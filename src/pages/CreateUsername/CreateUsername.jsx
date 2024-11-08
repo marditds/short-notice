@@ -104,9 +104,23 @@ const CreateUsername = ({ setUser }) => {
                                     'Please enter your organization\'s name'
                             }
                         </Form.Label>
-                        <Form.Control type='username' placeholder='Enter your username' value={username || ''} onChange={onUsernameChange} />
+                        <Form.Control
+                            type='username'
+                            placeholder={
+                                accountType === 'personal' ?
+                                    'username' :
+                                    'organization\'s name'
+                            }
+                            value={username || ''}
+                            onChange={onUsernameChange}
+                        />
                         <Form.Text className='text-muted'>
-                            Your userame must be unique.
+                            {
+                                accountType === 'personal' ?
+                                    'Your userame must be unique.' :
+                                    'Your organization\'s name must be unique.'
+                            }
+
                         </Form.Text>
                     </Form.Group>
                     {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
