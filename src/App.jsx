@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate, Outlet } from 'react-router-dom';
 import Home from './pages/Home/Home';
-import CreateUsername from './pages/CreateUsername/CreateUsername.jsx';
+import CreateAccount from './pages/CreateAccount/CreateAccount.jsx';
 import { jwtDecode } from "jwt-decode";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
@@ -255,7 +255,7 @@ function App() {
             }}
           />
         ) : (
-          <CreateUsername
+          <CreateAccount
             username={username}
             setUsername={setUsername}
             setUser={setUser}

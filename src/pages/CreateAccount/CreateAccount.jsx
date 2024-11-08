@@ -4,12 +4,14 @@ import { Container, Stack, Form, Button, Alert, } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useUserContext } from '../../lib/context/UserContext';
 import { getUserByUsername } from '../../lib/context/dbhandler';
-import { AccountType } from '../../components/AccountType/AccountType';
-import './CreateUsername.css';
+import { AccountType } from '../../components/Setup/AccountType';
+import './CreateAccount.css';
 
 import ReCAPTCHA from 'react-google-recaptcha';
+import { CreateUsername } from '../../components/Setup/CreateUsername';
+import { SetPasscode } from '../../components/Setup/SetPasscode';
 
-const CreateUsername = ({ setUser }) => {
+const CreateAccount = ({ setUser }) => {
 
     const navigate = useNavigate();
 
@@ -29,6 +31,8 @@ const CreateUsername = ({ setUser }) => {
 
     const [errorMessage, setErrorMessage] = useState('');
 
+    const [passcode, setPasscode] = useState('');
+
     const onUsernameChange = (e) => {
         console.log('Input changed:', e.target.value);
 
@@ -36,6 +40,10 @@ const CreateUsername = ({ setUser }) => {
         setUsername(usrnm);
         setErrorMessage('');
     };
+
+    const onPasscodeChange = (e) => {
+        setPasscode(e.target.value);
+    }
 
 
     const handleDoneClick = async () => {
@@ -96,34 +104,13 @@ const CreateUsername = ({ setUser }) => {
 
                     <AccountType setAccountType={setAccountType} />
 
-                    <Form.Group className='mb-3' controlId='user__username--field'>
-                        <Form.Label>
-                            {
-                                accountType === 'personal' ?
-                                    'Please enter your username' :
-                                    'Please enter your organization\'s name'
-                            }
-                        </Form.Label>
-                        <Form.Control
-                            type='username'
-                            placeholder={
-                                accountType === 'personal' ?
-                                    'username' :
-                                    'organization\'s name'
-                            }
-                            value={username || ''}
-                            onChange={onUsernameChange}
-                        />
-                        <Form.Text className='text-muted'>
-                            {
-                                accountType === 'personal' ?
-                                    'Your userame must be unique.' :
-                                    'Your organization\'s name must be unique.'
-                            }
+                    <CreateUsername accountType={accountType} username={username} onUsernameChange={onUsernameChange} />
 
-                        </Form.Text>
-                    </Form.Group>
                     {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
+
+                    {accountType === 'organization' &&
+                        < SetPasscode passcode={passcode} onPasscodeChange={onPasscodeChange} />
+                    }
 
                     <div className='mb-3'>
                         <ReCAPTCHA
@@ -159,4 +146,4 @@ const CreateUsername = ({ setUser }) => {
     )
 };
 
-export default CreateUsername;
+export default CreateAccount;
