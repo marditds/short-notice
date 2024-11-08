@@ -13,7 +13,6 @@ const CreateUsername = ({ setUser }) => {
 
     const navigate = useNavigate();
 
-
     const {
         username,
         setUsername,

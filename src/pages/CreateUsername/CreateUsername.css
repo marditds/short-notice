@@ -4,13 +4,13 @@
     height: 100vh !important;
 }
 
-.createUsername__container>form {
-    /* position: absolute;
+/*.createUsername__container>form {
+     position: absolute;
     left: 50%;
     top: 50%;
     -webkit-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%); */
-}
+    transform: translate(-50%, -50%);
+} */
 
 .createUsername__accountType--radio {
     padding-block: 12px;
@@ -22,8 +22,6 @@
     cursor: pointer;
     transition: 0.3s;
     position: relative;
-    /* background: linear-gradient(20deg, rgba(172, 80, 242, 1) 15%, rgba(43, 171, 197, 1) 87%); */
-
 }
 
 .createUsername__accountType--radio:hover,
@@ -36,20 +34,21 @@
     cursor: pointer !important;
 }
 
-.createUsername__accountType--radio:has(+ .createUsername__accountType--radio-input>input.clicked) {
-    background-color: blueviolet;
+.createUsername__accountType--radio-input>label {
+    transition: 0.3s;
+    color: white;
 }
+
+.createUsername__accountType--radio-input>input:checked+label {
+    color: black !important;
+}
+
+
+
 
 /* .user-profile__follow-numbers-text:has(+ .user-profile__follow-numbers-number:hover) {
     color: var(--main-accent-color-hover) !important;
 } */
-
-.createUsername__accountType--radio-input>input:checked {
-    background-color: blueviolet;
-}
-
-
-
 
 /* .createUsername__accountType--radio::before {
     content: "";
