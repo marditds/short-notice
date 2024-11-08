@@ -10,6 +10,7 @@ import './CreateAccount.css';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { CreateUsername } from '../../components/Setup/CreateUsername';
 import { SetPasscode } from '../../components/Setup/SetPasscode';
+import useUserInfo from '../../lib/hooks/useUserInfo';
 
 const CreateAccount = ({ setUser }) => {
 
@@ -26,6 +27,8 @@ const CreateAccount = ({ setUser }) => {
         hasAccountType,
         setHasAccountType
     } = useUserContext();
+
+
 
     const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
 
@@ -72,6 +75,8 @@ const CreateAccount = ({ setUser }) => {
 
             await setUser();
 
+            // await makePasscode();
+
             if (username) {
                 setHasUsername(true);
 
@@ -108,9 +113,7 @@ const CreateAccount = ({ setUser }) => {
 
                     {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
 
-                    {accountType === 'organization' &&
-                        < SetPasscode passcode={passcode} onPasscodeChange={onPasscodeChange} />
-                    }
+                    < SetPasscode accountType={accountType} passcode={passcode} onPasscodeChange={onPasscodeChange} />
 
                     <div className='mb-3'>
                         <ReCAPTCHA
