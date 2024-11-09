@@ -319,6 +319,9 @@ const useUserInfo = (data) => {
 
     const makePasscode = async (userId, passcode, accountType) => {
         try {
+            console.log('usr id', userId);
+            console.log('passcode', passcode);
+            console.log('accountType', accountType);
             const res = await createPassocde(userId, passcode, accountType);
             return res;
         } catch (error) {

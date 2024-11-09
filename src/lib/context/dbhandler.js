@@ -1165,14 +1165,17 @@ export const getAllReactionsByNoticeId = async (notice_id) => {
     }
 }
 
-export const createPassocde = async (userId, passcode, accountType) => {
+export const createPassocde = async (user_id, passcode, accountType) => {
     try {
+        console.log('usr id', user_id);
+        console.log('passcode', passcode);
+        console.log('accountType', accountType);
         const response = await databases.createDocument(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_PASSCODES_COLLECTION,
             ID.unique(),
             {
-                userId,
+                user_id,
                 passcode,
                 accountType
             }

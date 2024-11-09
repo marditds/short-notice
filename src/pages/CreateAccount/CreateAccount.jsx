@@ -28,7 +28,7 @@ const CreateAccount = ({ setUser }) => {
         setHasAccountType
     } = useUserContext();
 
-
+    const { makePasscode } = useUserInfo();
 
     const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
 
@@ -45,7 +45,15 @@ const CreateAccount = ({ setUser }) => {
     };
 
     const onPasscodeChange = (e) => {
-        setPasscode(e.target.value);
+        const input = e.target.value;
+
+        if (/^\d{0,6}$/.test(input)) {
+            setPasscode(input);
+        }
+
+        if (input.length === 6) {
+            setErrorMessage('');
+        }
     }
 
 
@@ -73,9 +81,21 @@ const CreateAccount = ({ setUser }) => {
                 return;
             }
 
+            console.log('Going for setUser');
+
             await setUser();
 
-            // await makePasscode();
+            const usr = await getUserByUsername(username);
+
+            console.log('usr id', usr.$id);
+            console.log('passcode', passcode);
+            console.log('accountType', accountType);
+
+
+            if (accountType === 'organization' && passcode) {
+                await makePasscode(usr.$id, passcode, accountType);
+                console.log('Passcode stored successfully.');
+            }
 
             if (username) {
                 setHasUsername(true);
@@ -113,7 +133,7 @@ const CreateAccount = ({ setUser }) => {
 
                     {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
 
-                    < SetPasscode accountType={accountType} passcode={passcode} onPasscodeChange={onPasscodeChange} />
+                    <SetPasscode accountType={accountType} passcode={passcode} onPasscodeChange={onPasscodeChange} />
 
                     <div className='mb-3'>
                         <ReCAPTCHA
@@ -125,7 +145,7 @@ const CreateAccount = ({ setUser }) => {
                     <div>
                         <Button
                             onClick={handleDoneClick}
-                            disabled={!isCaptchaVerified || !username || username.trim() === ''}
+                            disabled={!isCaptchaVerified || !username || username.trim() === '' || (accountType === 'organization' && passcode.length !== 6)}
                         >
                             Done
                         </Button>

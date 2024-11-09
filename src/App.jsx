@@ -29,7 +29,7 @@ function App() {
     createSession,
     getSessionDetails,
     checkingIdInAuth,
-    checkingEmailInAuth
+    checkingEmailInAuth,
   } = useUserInfo(googleUserData);
 
   useEffect(() => {
@@ -242,7 +242,7 @@ function App() {
   return (
     <>
       {isLoggedIn ? (
-        !hasUsername ? (
+        hasUsername ? (
           <Outlet
             context={{
               googleUserData, setGoogleUserData,
