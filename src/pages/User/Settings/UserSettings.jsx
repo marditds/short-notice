@@ -33,8 +33,8 @@ const UserSettings = () => {
                 <hr />
                 <Info accountType={accountType} />
                 <hr />
-                <Passcode />
-                <hr />
+                {accountType === 'organization' && <><Passcode />
+                    <hr /> </>}
                 <Interests />
                 <hr />
                 <DeleteAllNotices />

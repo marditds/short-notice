@@ -11,7 +11,6 @@ export const Passcode = ({ accountType }) => {
 
     const [passcodeVal, setPasscodeVal] = useState();
     const [isUpdating, setIsUpdating] = useState(false);
-    const [errorMessage, setErrorMessage] = useState('');
 
     const handlePasscodeChange = (e) => {
         console.log(e.target.value);
@@ -19,12 +18,6 @@ export const Passcode = ({ accountType }) => {
 
         if (/^\d{0,6}$/.test(input)) {
             setPasscodeVal(input);
-        } else {
-            setErrorMessage('The passcode must cotain six digits.')
-        }
-
-        if (input.length === 6) {
-            setErrorMessage('');
         }
     }
 
@@ -53,7 +46,7 @@ export const Passcode = ({ accountType }) => {
                     onSubmit={handleUpdate}
                 >
                     <Form.Group
-                        controlId='usernameField'>
+                        controlId='passcodeField'>
                         <Form.Label>
                             Passcode:
                         </Form.Label>

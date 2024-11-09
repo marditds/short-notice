@@ -48,7 +48,7 @@ export const Info = ({ accountType }) => {
     return (
         <Row>
             <Col>
-                <h4>Update Organization's Name:</h4>
+                <h4>Update {usrnm}:</h4>
                 <p>Update your {usrnm}. The maximum number of characters for your {usrnm} is 16.</p>
             </Col>
             <Col className='d-flex'>

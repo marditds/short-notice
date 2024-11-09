@@ -69,6 +69,7 @@ function App() {
 
       if (user && user.username) {
         setUsername(user.username);
+        setAccountType(user.accountType);
         setRegisteredUsername(user.username);
         localStorage.setItem('username', user.username);
         setHasUsername(true);
