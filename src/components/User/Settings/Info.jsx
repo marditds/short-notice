@@ -9,7 +9,6 @@ export const Info = ({ accountType }) => {
     const { googleUserData,
         username,
         setUsername,
-        registeredUserame,
         setRegisteredUsername } = useUserContext();
 
     const { handleUpdateUser } = useUserInfo(googleUserData);

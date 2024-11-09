@@ -77,14 +77,16 @@ const useUserInfo = (data) => {
 
         try {
 
-            await updateUser({ userId, username });
+            console.log('userId', userId);
+
+            const res = await updateUser({ userId, username });
 
             await updateAuthUser(username);
 
             setUsername(username);
             // setRegisterdUsername(username);
 
-            console.log('Username updated successfully.');
+            console.log('Username updated successfully.', res);
 
         } catch (error) {
             console.error('Error updating the username:', error);
@@ -329,11 +331,14 @@ const useUserInfo = (data) => {
         }
     }
 
-    const editPasscode = async (userId, passcode) => {
+    const editPasscode = async (passcode) => {
         try {
             console.log('usr id', userId);
             console.log('passcode', passcode);
-            const res = await createPassocde(userId, passcode);
+            const res = await updatePassocde(userId, passcode);
+
+            console.log('Success passcode update:', res);
+
             return res;
         } catch (error) {
             console.error('Error editing passcode:', error);

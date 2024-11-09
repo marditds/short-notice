@@ -276,7 +276,7 @@ export const registerAuthUser = async (id, email, username) => {
 
 export const updateUser = async ({ userId, username }) => {
     try {
-        await databases.updateDocument(
+        const res = await databases.updateDocument(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_USERS_COLLECTION,
             userId,
@@ -289,6 +289,7 @@ export const updateUser = async ({ userId, username }) => {
             // ]
         );
         console.log('Username successfully updated.');
+        return res;
     } catch (error) {
         console.error('Error updating the username:', error);
 
@@ -1191,16 +1192,26 @@ export const updatePassocde = async (user_id, passcode) => {
     try {
         console.log('usr id', user_id);
         console.log('passcode', passcode);
-        const response = await databases.updateDocument(
+
+        const listResponse = await databases.listDocuments(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_PASSCODES_COLLECTION,
-            user_id,
-            {
-                passcode: passcode
-            },
-        )
-        console.log('Passcode updated successfuly:', response);
-        return response;
+            [Query.equal('user_id', user_id)]
+        );
+
+        const documentId = listResponse.documents[0].$id;
+
+        const updateResponse = await databases.updateDocument(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_PASSCODES_COLLECTION,
+            documentId,
+            { passcode: passcode }
+        );
+
+        console.log('Passcode updated successfully:', updateResponse);
+
+        return updateResponse;
+
     } catch (error) {
         console.error('Error updating passcode:', error);
     }

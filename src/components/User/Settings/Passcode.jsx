@@ -1,20 +1,45 @@
-import React from 'react';
-import { Form, Row, Col } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Form, Row, Col, Button } from 'react-bootstrap';
+import { useUserContext } from '../../../lib/context/UserContext';
 import useUserInfo from '../../../lib/hooks/useUserInfo';
+import { Loading } from '../../Loading/Loading';
 
 export const Passcode = ({ accountType }) => {
 
-    const { editPasscode } = useUserInfo();
+    const { googleUserData } = useUserContext();
+    const { editPasscode } = useUserInfo(googleUserData);
+
+    const [passcodeVal, setPasscodeVal] = useState();
+    const [isUpdating, setIsUpdating] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
 
     const handlePasscodeChange = (e) => {
         console.log(e.target.value);
+        const input = e.target.value;
 
+        if (/^\d{0,6}$/.test(input)) {
+            setPasscodeVal(input);
+        } else {
+            setErrorMessage('The passcode must cotain six digits.')
+        }
+
+        if (input.length === 6) {
+            setErrorMessage('');
+        }
     }
 
-    const handleSubmit = async () => {
+    const handleUpdate = async (e) => {
+        setIsUpdating(true);
+        e.preventDefault();
+        try {
+            console.log('Barev');
+            await editPasscode(passcodeVal);
+        } catch (error) {
+            console.error('Error updating passcode:', error);
+        } finally {
+            setIsUpdating(false);
+        }
 
-        // await editPasscode();
-        console.log('Barev');
     }
 
     return (
@@ -25,17 +50,17 @@ export const Passcode = ({ accountType }) => {
             </Col>
             <Col className='d-flex'>
                 <Form
-                    onSubmit={handleSubmit}
+                    onSubmit={handleUpdate}
                 >
-                    {/* <Form.Group
+                    <Form.Group
                         controlId='usernameField'>
                         <Form.Label>
                             Passcode:
                         </Form.Label>
                         <Form.Control
-                            type='username'
-                            placeholder='Enter your username'
-                            value={localUsername || ''}
+                            type='password'
+                            placeholder='Enter your passcode'
+                            value={passcodeVal || ''}
                             onChange={handlePasscodeChange}
                             style={{ maxWidth: '320px' }}
                             className='settings__username-field'
@@ -46,12 +71,12 @@ export const Passcode = ({ accountType }) => {
                     </Form.Group>
                     <Button
                         type='submit'
-                        disabled={isUpdating || localUsername === '' ? true : false}
+                        disabled={isUpdating || passcodeVal?.length !== 6}
                         className='settings__update-username-btn'
                     >
                         {isUpdating ? 'Updating...' : 'Update'}
                         {isUpdating && <Loading />}
-                    </Button> */}
+                    </Button>
                 </Form>
             </Col>
         </Row>
