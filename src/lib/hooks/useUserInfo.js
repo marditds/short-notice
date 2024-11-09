@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { checkIdExistsInAuth, checkEmailExistsInAuth as checkEmailInAuthFromServer, registerAuthUser, getUserById, deleteAuthUser, createUserSession, getSessionDetails as fetchSessionDetails, deleteUserSession, updateUser, updateAuthUser, deleteUser, getUserByUsername as fetchUserByUsername, getAllUsersByString as fetchAllUsersByString, deleteAllNotices, getUsersDocument, createFollow, removeFollow, getUserFollowingsById as fetchUserFollowingsById, getUserFollowersById as fetchUserFollowersById, getOtherUserFollowingsById as fetchOtherUserFollowingsById, createPassocde, getPassocdeByBusincessId as fetchPassocdeByBusincessId } from '../context/dbhandler';
+import { checkIdExistsInAuth, checkEmailExistsInAuth as checkEmailInAuthFromServer, registerAuthUser, getUserById, deleteAuthUser, createUserSession, getSessionDetails as fetchSessionDetails, deleteUserSession, updateUser, updateAuthUser, deleteUser, getUserByUsername as fetchUserByUsername, getAllUsersByString as fetchAllUsersByString, deleteAllNotices, getUsersDocument, createFollow, removeFollow, getUserFollowingsById as fetchUserFollowingsById, getUserFollowersById as fetchUserFollowersById, getOtherUserFollowingsById as fetchOtherUserFollowingsById, createPassocde, updatePassocde, getPassocdeByBusincessId as fetchPassocdeByBusincessId } from '../context/dbhandler';
 import { useUserContext } from '../context/UserContext';
 import { UserId } from '../../components/User/UserId';
 
@@ -329,6 +329,17 @@ const useUserInfo = (data) => {
         }
     }
 
+    const editPasscode = async (userId, passcode) => {
+        try {
+            console.log('usr id', userId);
+            console.log('passcode', passcode);
+            const res = await createPassocde(userId, passcode);
+            return res;
+        } catch (error) {
+            console.error('Error editing passcode:', error);
+        }
+    }
+
     const getPassocdeByBusincessId = async (userId) => {
         try {
             const res = await fetchPassocdeByBusincessId(userId);
@@ -370,6 +381,7 @@ const useUserInfo = (data) => {
         fetchAccountsFollowedByUser,
         getUserAccountByUserId,
         makePasscode,
+        editPasscode,
         getPassocdeByBusincessId
         // authedUsers
     }

@@ -1187,6 +1187,25 @@ export const createPassocde = async (user_id, passcode, accountType) => {
     }
 }
 
+export const updatePassocde = async (user_id, passcode) => {
+    try {
+        console.log('usr id', user_id);
+        console.log('passcode', passcode);
+        const response = await databases.updateDocument(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_PASSCODES_COLLECTION,
+            user_id,
+            {
+                passcode: passcode
+            },
+        )
+        console.log('Passcode updated successfuly:', response);
+        return response;
+    } catch (error) {
+        console.error('Error updating passcode:', error);
+    }
+}
+
 export const getPassocdeByBusincessId = async (user_id) => {
     try {
         const response = await databases.listDocuments(
