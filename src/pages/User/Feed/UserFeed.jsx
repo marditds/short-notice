@@ -66,7 +66,7 @@ const UserFeed = () => {
         // setNoticesReactions
     } = useNotices(googleUserData);
 
-    const { fetchUsersData } = useUserInfo(googleUserData);
+    const { fetchUsersData, getBlockedUsersByUser } = useUserInfo(googleUserData);
 
     const [feedNotices, setFeedNotices] = useState([]);
 
@@ -140,9 +140,15 @@ const UserFeed = () => {
 
                 console.log('limit:', limit);
                 console.log('offset:', offset);
-                const res = await getFeedNotices(selectedTags, limit, offset);
+                const notices = await getFeedNotices(selectedTags, limit, offset);
 
-                const filteredNotices = res || [];
+                const blockedUsers = await getBlockedUsersByUser(user_id);
+
+                const filtering = notices.filter((notice) =>
+                    !blockedUsers.some((user) => notice.user_id === user.blocked_id)
+                );
+
+                const filteredNotices = filtering || [];
 
                 await fetchUsersData(filteredNotices, setFeedNotices, avatarUtil);
 

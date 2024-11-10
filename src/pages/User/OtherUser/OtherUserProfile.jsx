@@ -54,6 +54,7 @@ const OtherUserProfile = () => {
         followingCount,
         followersAccounts,
         followingAccounts,
+        makeBlock,
         fetchUsersData,
         getUsersData,
         followUser,
@@ -262,6 +263,15 @@ const OtherUserProfile = () => {
         }
     }
 
+    const handleBlock = async (currUserId) => {
+        try {
+            await makeBlock(currUserId);
+            navigate('/user/feed');
+        } catch (error) {
+            console.error('Failed to block user:', error);
+        }
+    }
+
     const timerSpacing = 'mx-2';
     const timerDisplay = 'd-flex';
     const classname = `${timerDisplay} ${timerSpacing}`;
@@ -336,6 +346,7 @@ const OtherUserProfile = () => {
                     isFollowing={isFollowing}
                     isFollowingLoading={isFollowingLoading}
                     handleFollow={handleFollow}
+                    handleBlock={handleBlock}
                 />
 
                 <Tabs

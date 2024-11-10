@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { checkIdExistsInAuth, checkEmailExistsInAuth as checkEmailInAuthFromServer, registerAuthUser, getUserById, deleteAuthUser, createUserSession, getSessionDetails as fetchSessionDetails, deleteUserSession, updateUser, updateAuthUser, deleteUser, getUserByUsername as fetchUserByUsername, getAllUsersByString as fetchAllUsersByString, deleteAllNotices, getUsersDocument, createFollow, removeFollow, getUserFollowingsById as fetchUserFollowingsById, getUserFollowersById as fetchUserFollowersById, getOtherUserFollowingsById as fetchOtherUserFollowingsById, createPassocde, updatePassocde, getPassocdeByBusincessId as fetchPassocdeByBusincessId } from '../context/dbhandler';
+import { createBlock, getBlockedUsersByUser as fetchBlockedUsersByUser, checkIdExistsInAuth, checkEmailExistsInAuth as checkEmailInAuthFromServer, registerAuthUser, getUserById, deleteAuthUser, createUserSession, getSessionDetails as fetchSessionDetails, deleteUserSession, updateUser, updateAuthUser, deleteUser, getUserByUsername as fetchUserByUsername, getAllUsersByString as fetchAllUsersByString, deleteAllNotices, getUsersDocument, createFollow, removeFollow, getUserFollowingsById as fetchUserFollowingsById, getUserFollowersById as fetchUserFollowersById, getOtherUserFollowingsById as fetchOtherUserFollowingsById, createPassocde, updatePassocde, getPassocdeByBusincessId as fetchPassocdeByBusincessId } from '../context/dbhandler';
 import { useUserContext } from '../context/UserContext';
 import { UserId } from '../../components/User/UserId';
 
@@ -354,6 +354,30 @@ const useUserInfo = (data) => {
         }
     }
 
+    const makeBlock = async (currUser_id) => {
+        try {
+            console.log('userId', userId);
+            console.log('currUser_id', currUser_id);
+            const res = await createBlock(userId, currUser_id);
+            console.log('Blocked made successfully: ', res);
+            return res;
+        } catch (error) {
+            console.error('Error making block:', error);
+        }
+    }
+
+    const getBlockedUsersByUser = async (user_id) => {
+        try {
+            console.log('userId', user_id);
+
+            const res = await fetchBlockedUsersByUser(user_id);
+            console.log('Blocked listed successfully: ', res);
+            return res;
+        } catch (error) {
+            console.error('Error making block:', error);
+        }
+    }
+
 
 
     return {
@@ -365,6 +389,8 @@ const useUserInfo = (data) => {
         followersAccounts,
         followingAccounts,
         // isLoading,
+        makeBlock,
+        getBlockedUsersByUser,
         checkingIdInAuth,
         checkingEmailInAuth,
         registerUser,

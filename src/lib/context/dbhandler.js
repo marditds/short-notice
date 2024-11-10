@@ -1233,4 +1233,38 @@ export const getPassocdeByBusincessId = async (user_id) => {
     }
 }
 
+export const createBlock = async (user_id, currUser_id) => {
+    try {
+        const res = await databases.createDocument(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_BLOCKS_COLLECTION,
+            ID.unique(),
+            {
+                blocker_id: user_id,
+                blocked_id: currUser_id
+            }
+        )
+        console.log('User blocked successfully: ', res);
+        return res;
+    } catch (error) {
+        console.error('Error blocking user:', error);
+    }
+}
+
+export const getBlockedUsersByUser = async (blocker_id) => {
+    try {
+        const res = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_BLOCKS_COLLECTION,
+            [
+                Query.equal('blocker_id', blocker_id)
+            ]
+        )
+        console.log('Blocked users:', res);
+        return res.documents;
+    } catch (error) {
+        console.error('Error getting blocked users:', error);
+    }
+}
+
 export { ID } from 'appwrite';

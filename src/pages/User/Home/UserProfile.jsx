@@ -61,7 +61,8 @@ const UserProfile = () => {
         getUserByUsername,
         fetchUsersData,
         fetchAccountsFollowingTheUser,
-        fetchAccountsFollowedByUser
+        fetchAccountsFollowedByUser,
+        getBlockedUsersByUser
     } = useUserInfo();
 
     const [notices, setNotices] = useState([]);
@@ -100,6 +101,21 @@ const UserProfile = () => {
         }
         fetchUserByUserame();
     }, [username])
+
+    useEffect(() => {
+        const fetchBlockedUsersByUser = async () => {
+            try {
+                console.log('user_idsasasa,', user_id);
+
+                const res = await getBlockedUsersByUser(user_id);
+                console.log('Bloccked users:', res);
+
+            } catch (error) {
+                console.error('Error fetching blocked users', error);
+            }
+        }
+        fetchBlockedUsersByUser();
+    }, [user_id])
 
     // Fetch notices for user
     useEffect(() => {

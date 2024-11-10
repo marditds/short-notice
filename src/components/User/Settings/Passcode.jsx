@@ -4,7 +4,7 @@ import { useUserContext } from '../../../lib/context/UserContext';
 import useUserInfo from '../../../lib/hooks/useUserInfo';
 import { Loading } from '../../Loading/Loading';
 
-export const Passcode = ({ accountType }) => {
+export const Passcode = () => {
 
     const { googleUserData } = useUserContext();
     const { editPasscode } = useUserInfo(googleUserData);
@@ -32,7 +32,6 @@ export const Passcode = ({ accountType }) => {
         } finally {
             setIsUpdating(false);
         }
-
     }
 
     return (
