@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import useUserInfo from '../../lib/hooks/useUserInfo';
 import { getAvatarUrl as avatartUrl } from '../../lib/utils/avatarUtils';
 import defaultAvatar from '../../assets/default.png';
-import { Button, Form, Modal, Stack, Row, Col } from 'react-bootstrap';
+import { Button, Form, Modal, Stack } from 'react-bootstrap';
 import { CgSearch } from "react-icons/cg";
 import { Loading } from '../Loading/Loading';
 
-export const UserSearch = () => {
+export const UserSearch = ({ userId }) => {
 
-    const { getAllUsersByString } = useUserInfo();
+
+    const { getAllUsersByString, getBlockedUsersByUser } = useUserInfo();
 
     const [searchUsername, setSearchUsername] = useState('');
     const [usersResult, setUsersResult] = useState([]);
@@ -32,14 +33,24 @@ export const UserSearch = () => {
         }
         setIsLoadingMore(true);
         try {
+
+            console.log('userIdasasas:', userId);
             console.log('limit:', limit);
             console.log('offset:', offset);
 
             const users = await getAllUsersByString(searchUsername, limit, offset);
 
-            if (users) {
+            const blockedUsers = await getBlockedUsersByUser(userId);
+
+            const filteredUsers = users.filter((user) =>
+                !blockedUsers.some((blocked) => user.$id === blocked.blocked_id)
+            );
+
+            console.log('filteredUsers,', filteredUsers);
+
+            if (filteredUsers) {
                 setUsersResult(prevUsers => {
-                    const moreUsers = users?.filter(user =>
+                    const moreUsers = filteredUsers?.filter(user =>
                         !prevUsers.some(loadedUser => loadedUser.$id === user.$id)
                     );
 
@@ -49,8 +60,7 @@ export const UserSearch = () => {
                 return 'No results';
             }
 
-
-            if (users?.length < limit) {
+            if (filteredUsers?.length < limit) {
                 setHasMoreProfiles(false);
             } else {
                 setHasMoreProfiles(true);

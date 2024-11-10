@@ -381,6 +381,7 @@ const useUserInfo = (data) => {
 
 
     return {
+        userId,
         isFollowingLoading,
         following,
         isFollowing,

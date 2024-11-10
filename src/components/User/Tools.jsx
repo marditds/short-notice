@@ -4,7 +4,7 @@ import { Dropdown, DropdownButton } from 'react-bootstrap';
 import { PiDotsThreeOutlineVertical } from "react-icons/pi";
 import { UserSearch } from './UserSearch';
 
-export const Tools = ({ googleLogout, removeSession, setIsLoggedIn, setGoogleUserData }) => {
+export const Tools = ({ googleLogout, removeSession, setIsLoggedIn, setGoogleUserData, userId }) => {
 
 
     return (
@@ -14,7 +14,7 @@ export const Tools = ({ googleLogout, removeSession, setIsLoggedIn, setGoogleUse
         d-flex 
         fixed-top
         '>
-                <UserSearch />
+                <UserSearch userId={userId} />
 
                 <DropdownButton
                     drop='down'
