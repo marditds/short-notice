@@ -6,7 +6,7 @@ import defaultAvatar from '../../assets/default.png';
 import { SlClose } from "react-icons/sl";
 import { Loading } from '../Loading/Loading.jsx';
 
-export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUserId, followingCount, followersCount, isFollowing, followingAccounts, followersAccounts, isFollowingLoading }) => {
+export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUserId, followingCount, followersCount, isFollowing, followingAccounts, followersAccounts, isFollowingLoading, isBlocked }) => {
 
     const location = useLocation();
 
@@ -43,57 +43,59 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
             <Row className='user-profile fixed-top'>
                 <Col className='d-grid'>
 
-                    <Button
-                        onClick={handleShowFollowersModal}
-                        className='user-profile__follow-numbers-text'
-                    >
-                        {followersCount === null ?
-                            null
-                            :
-                            'Followers'
-                        }
-                    </Button>
+                    {
+                        isBlocked ?
+                            null :
+                            <>
+                                <Button
+                                    onClick={handleShowFollowersModal}
+                                    className='user-profile__follow-numbers-text'
+                                >
+                                    {followersCount === null ?
+                                        null
+                                        :
+                                        'Followers'
+                                    }
+                                </Button>
+                                <Button
+                                    onClick={handleShowFollowersModal}
+                                    className='user-profile__follow-numbers-number'
+                                >
+                                    {followersCount === null ?
+                                        <Loading />
+                                        :
+                                        <strong>
+                                            {followersCount}
+                                        </strong>
 
-                    <Button
-                        onClick={handleShowFollowersModal}
-                        className='user-profile__follow-numbers-number'
-                    >
-                        {followersCount === null ?
-                            <Loading />
-                            :
-                            <strong>
-                                {followersCount}
-                            </strong>
+                                    }
+                                </Button>
 
-                        }
-                    </Button>
+                                <Button
+                                    onClick={handleShowFollowingModal}
+                                    className='user-profile__follow-numbers-text'
+                                >
+                                    {followingCount === null ?
+                                        null
+                                        :
+                                        'Following'
+                                    }
+                                </Button>
+                                <Button
+                                    onClick={handleShowFollowingModal}
+                                    className='user-profile__follow-numbers-number'
+                                >
+                                    {followingCount === null ?
+                                        <Loading />
+                                        :
+                                        <strong>
+                                            {followingCount}
+                                        </strong>
+                                    }
+                                </Button>
 
-
-
-                    <Button
-                        onClick={handleShowFollowingModal}
-                        className='user-profile__follow-numbers-text'
-                    >
-                        {followingCount === null ?
-                            null
-                            :
-                            'Following'
-                        }
-                    </Button>
-
-                    <Button
-                        onClick={handleShowFollowingModal}
-                        className='user-profile__follow-numbers-number'
-                    >
-                        {followingCount === null ?
-                            <Loading />
-                            :
-                            <strong>
-                                {followingCount}
-                            </strong>
-                        }
-                    </Button>
-
+                            </>
+                    }
 
                 </Col>
 
@@ -103,24 +105,29 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                 </Col>
 
                 <Col
-                    className='d-grid gap-0 align-content-between justify-content-end'
+                    className='d-grid gap-0 align-content-stretch justify-content-end'
                 >
                     {location.pathname !== '/user/profile' ?
                         <>
-                            <Button
-                                className={`user-profile__interaction-btn
+                            {
+                                isBlocked ? null :
+                                    <Button
+                                        className={`user-profile__interaction-btn
                                 ${isFollowing ? 'following' : ''}`}
-                                onClick={() => handleFollow(currUserId)}
-                                style={{
-                                    height: 'fit-content', width: 'fit-content', marginLeft: 'auto'
-                                }}
-                            >
-                                {isFollowingLoading ? <Loading /> :
-                                    <>
-                                        {isFollowing ? 'Following' : 'Follow'}
-                                    </>
-                                }
-                            </Button>
+                                        onClick={() => handleFollow(currUserId)}
+                                        style={{
+                                            height: 'fit-content', width: 'fit-content', marginLeft: 'auto'
+                                        }}
+                                    >
+                                        {isFollowingLoading ? <Loading /> :
+                                            <>
+                                                {isFollowing ? 'Following' : 'Follow'}
+                                            </>
+                                        }
+                                    </Button>
+                            }
+
+
                             <Button
                                 onClick={handleShowBlockModal}
                                 className='user-profile__interaction-btn'
