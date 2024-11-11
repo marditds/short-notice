@@ -96,15 +96,16 @@ export const UserSearch = ({ userId }) => {
         <>
             <Button
                 onClick={handleShowSearchUsersModal}
-                className='ms-3'
+                className='ms-3 p-0'
                 disabled={searchUsername === '' ? true : false}
+                style={{ maxHeight: '36px' }}
             >
                 <CgSearch
                     size={24}
                 />
             </Button>
             <Form>
-                <Form.Group className="mb-3" controlId="userSearch">
+                <Form.Group controlId="userSearch">
                     <Form.Label className='visually-hidden'>Search Users</Form.Label>
                     <Form.Control
                         as="textarea"

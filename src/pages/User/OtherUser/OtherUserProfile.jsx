@@ -114,8 +114,6 @@ const OtherUserProfile = () => {
 
                 // const currUser = allUsers.documents.find((user) => user.username === otherUsername);
 
-                const user = await getUserByUsername(username);
-
                 const otherUser = await getUserByUsername(otherUsername);
 
                 console.log('otherUser:', otherUser);
@@ -124,8 +122,11 @@ const OtherUserProfile = () => {
 
                 console.log(`blckdLst by ${otherUser.username}:`, blckdLst);
 
-                // Checking if the other has blocked user 
+                // Checking if the other user has blocked user 
                 if (blckdLst.length !== 0) {
+
+                    const user = await getUserByUsername(username);
+
                     const blockedId = blckdLst.filter((blocked) => blocked.blocked_id === user.$id);
 
                     if (blockedId.length !== 0) {
@@ -133,9 +134,6 @@ const OtherUserProfile = () => {
                         setIsBlocked(true);
                     }
                 }
-
-                // Checks true if other user blocked user
-
 
                 if (otherUser) {
                     // Only update if different to prevent unnecessary re-renders
