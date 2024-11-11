@@ -114,15 +114,15 @@ const OtherUserProfile = () => {
 
                 // const currUser = allUsers.documents.find((user) => user.username === otherUsername);
 
-                const user = await getUserByUsername(username);
+                // const user = await getUserByUsername(username);
 
                 const currUser = await getUserByUsername(otherUsername);
+
+                console.log('currUser:', currUser);
 
                 const blckdLst = await getBlockedUsersByUser(currUser.$id);
 
                 console.log(`blckdLst by ${currUser.username}:`, blckdLst);
-
-                console.log('currUser:', currUser);
 
                 // Checking if the other user is blocked
                 const blockCheck = blckdLst.filter((user) => user.blocker_id === currUser.$id)
@@ -132,7 +132,6 @@ const OtherUserProfile = () => {
                 if (blockCheck.length !== 0) {
                     setIsBlocked(true);
                 }
-
 
                 if (currUser) {
                     // Only update if different to prevent unnecessary re-renders
@@ -152,7 +151,6 @@ const OtherUserProfile = () => {
 
     useEffect(() => {
         console.log('acountType:', accountType);
-
     }, [accountType])
 
     // Fetch notices for other user
@@ -190,6 +188,9 @@ const OtherUserProfile = () => {
             try {
                 const allSpreadNotices = await getAllSpreadNotices(currUserId, limitSpreads, offsetSpreads);
 
+                console.log('allSpreadNotices', allSpreadNotices);
+
+
                 if (allSpreadNotices?.length < limitSpreads) {
                     setHasMoreSpreads(false);
                 } else {
@@ -204,7 +205,12 @@ const OtherUserProfile = () => {
             }
 
         };
-        fetchSpreadNotices();
+        if (isBlocked === false) {
+            fetchSpreadNotices();
+        } else {
+            console.log('This user blocked you.');
+        }
+        // fetchSpreadNotices();
     }, [currUserId, offsetSpreads])
 
     // Fetch likes and users' data for likes tab  
@@ -227,7 +233,12 @@ const OtherUserProfile = () => {
                 setIsLoadingMoreLikes(false);
             }
         };
-        fetchLikedNotices();
+        if (isBlocked === false) {
+            fetchLikedNotices();
+        } else {
+            console.log('This user blocked you.');
+        }
+        // fetchLikedNotices();
     }, [currUserId, offsetLikes])
 
     // Reactions For Notices tab
@@ -245,14 +256,20 @@ const OtherUserProfile = () => {
 
     // Fetch accounts following the other user
     useEffect(() => {
-        if (currUserId && user_id) {
+        if (currUserId && user_id && (isBlocked === false)) {
             fetchAccountsFollowingTheUser(currUserId, user_id);
+        } else {
+            console.log('This user blocked you. - follow(ing/er)');
         }
     }, [currUserId, user_id])
 
     // Fetch accounts followed by other user
     useEffect(() => {
-        fetchAccountsFollowedByUser(currUserId);
+        if (currUserId && (isBlocked === false)) {
+            fetchAccountsFollowedByUser(currUserId);
+        } else {
+            console.log('This user blocked you. - follow(ing/er)');
+        }
     }, [currUserId])
 
     const handleLike = async (notice) => {
