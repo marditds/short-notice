@@ -146,14 +146,18 @@ const UserFeed = () => {
 
                 console.log('blockedUsers', blockedUsers);
 
-                const filtering = notices.filter((notice) =>
-                    !blockedUsers.some((user) => notice.user_id === user.blocked_id)
+                // Filtering out notices from accounts blocked by user
+                const filteringBlockedByUser = notices.filter((notice) =>
+                    !blockedUsers.some((user) => notice.user_id === user.blocker_id)
                 );
 
-                console.log('filtering', filtering);
+                console.log('filtering', filteringBlockedByUser);
+
+                // Need filtering out notices from accounts that blocked the user
+                // const filterBlockingTheUser = filteringBlockedByUser.filter(async (notice) => await getBlockedUsersByUser(notice.user_id));
 
 
-                const filteredNotices = filtering || [];
+                const filteredNotices = filteringBlockedByUser || [];
 
                 await fetchUsersData(filteredNotices, setFeedNotices, avatarUtil);
 

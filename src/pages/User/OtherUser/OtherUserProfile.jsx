@@ -114,30 +114,34 @@ const OtherUserProfile = () => {
 
                 // const currUser = allUsers.documents.find((user) => user.username === otherUsername);
 
-                // const user = await getUserByUsername(username);
+                const user = await getUserByUsername(username);
 
-                const currUser = await getUserByUsername(otherUsername);
+                const otherUser = await getUserByUsername(otherUsername);
 
-                console.log('currUser:', currUser);
+                console.log('otherUser:', otherUser);
 
-                const blckdLst = await getBlockedUsersByUser(currUser.$id);
+                const blckdLst = await getBlockedUsersByUser(otherUser.$id);
 
-                console.log(`blckdLst by ${currUser.username}:`, blckdLst);
+                console.log(`blckdLst by ${otherUser.username}:`, blckdLst);
 
-                // Checking if the other user is blocked
-                const blockCheck = blckdLst.filter((user) => user.blocker_id === currUser.$id)
+                // Checking if the other has blocked user 
+                if (blckdLst.length !== 0) {
+                    const blockedId = blckdLst.filter((blocked) => blocked.blocked_id === user.$id);
 
-                console.log('blockCheck', blockCheck);
-
-                if (blockCheck.length !== 0) {
-                    setIsBlocked(true);
+                    if (blockedId.length !== 0) {
+                        console.log('blockedId', blockedId);
+                        setIsBlocked(true);
+                    }
                 }
 
-                if (currUser) {
-                    // Only update if different to prevent unnecessary re-renders
-                    setCurrUserId((prevId) => (prevId !== currUser.$id ? currUser.$id : prevId));
+                // Checks true if other user blocked user
 
-                    setAccountType(currUser.accountType)
+
+                if (otherUser) {
+                    // Only update if different to prevent unnecessary re-renders
+                    setCurrUserId((prevId) => (prevId !== otherUser.$id ? otherUser.$id : prevId));
+
+                    setAccountType(otherUser.accountType)
                 } else {
                     console.error(`User with username "${otherUsername}" not found.`);
                 }
