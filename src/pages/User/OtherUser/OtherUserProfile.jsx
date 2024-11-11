@@ -162,7 +162,6 @@ const OtherUserProfile = () => {
 
                 console.log('usrNtcs', usrNtcs);
 
-
                 if (usrNtcs?.length < limit) {
                     setHasMoreNotices(false);
                 } else {
@@ -174,12 +173,21 @@ const OtherUserProfile = () => {
                 setIsLoadingMore(false);
             }
         };
+        // if (isBlocked === false) {
+        //     fetchNotices();
+        // } else {
+        //     console.log('This user blocked you.');
+        // }
+        callFunctionIfNotBlocked(fetchNotices);
+    }, [currUserId, offset])
+
+    const callFunctionIfNotBlocked = (functionName) => {
         if (isBlocked === false) {
-            fetchNotices();
+            functionName();
         } else {
             console.log('This user blocked you.');
         }
-    }, [currUserId, offset])
+    }
 
     // Fetch spreads and users' data for spreads tab 
     useEffect(() => {
@@ -205,12 +213,12 @@ const OtherUserProfile = () => {
             }
 
         };
-        if (isBlocked === false) {
-            fetchSpreadNotices();
-        } else {
-            console.log('This user blocked you.');
-        }
-        // fetchSpreadNotices();
+        // if (isBlocked === false) {
+        //     fetchSpreadNotices();
+        // } else {
+        //     console.log('This user blocked you.');
+        // }
+        callFunctionIfNotBlocked(fetchSpreadNotices);
     }, [currUserId, offsetSpreads])
 
     // Fetch likes and users' data for likes tab  
@@ -233,12 +241,12 @@ const OtherUserProfile = () => {
                 setIsLoadingMoreLikes(false);
             }
         };
-        if (isBlocked === false) {
-            fetchLikedNotices();
-        } else {
-            console.log('This user blocked you.');
-        }
-        // fetchLikedNotices();
+        // if (isBlocked === false) {
+        //     fetchLikedNotices();
+        // } else {
+        //     console.log('This user blocked you.');
+        // }
+        callFunctionIfNotBlocked(fetchLikedNotices);
     }, [currUserId, offsetLikes])
 
     // Reactions For Notices tab
