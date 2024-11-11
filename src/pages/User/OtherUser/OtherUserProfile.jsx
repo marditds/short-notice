@@ -55,8 +55,10 @@ const OtherUserProfile = () => {
         followersAccounts,
         followingAccounts,
         makeBlock,
+        getUserByUsername,
         fetchUsersData,
-        getUsersData,
+        getBlockedUsersByUser,
+        // getUsersData,
         followUser,
         setIsFollowing,
         fetchAccountsFollowingTheUser,
@@ -94,18 +96,44 @@ const OtherUserProfile = () => {
     const [hasMoreLikes, setHasMoreLikes] = useState(true);
     const [isLoadingMoreLikes, setIsLoadingMoreLikes] = useState(false);
 
+    // Check for username vs. otherUsername
+    useEffect(() => {
+        if (otherUsername === username) {
+            navigate('/user/profile');
+        }
+    }, [otherUsername, username, navigate]);
+
     // Get Other User
     useEffect(() => {
         const getCurrUser = async () => {
 
             try {
-                const allUsers = await getUsersData();
+                // const allUsers = await getUsersData();
 
                 // console.log('allUsers:', allUsers.documents);
 
-                const currUser = allUsers.documents.find((user) => user.username === otherUsername);
+                // const currUser = allUsers.documents.find((user) => user.username === otherUsername);
+
+                const user = await getUserByUsername(username);
+
+                const currUser = await getUserByUsername(otherUsername);
+
+                const blckdLst = await getBlockedUsersByUser(currUser.$id);
+
+                console.log(`blckdLst by ${currUser.username}:`, blckdLst);
 
                 console.log('currUser:', currUser);
+
+                // Checking if the other user is blocked
+                const blockCheck = blckdLst.filter((user) => user.blocker_id === currUser.$id)
+
+                console.log('blockCheck', blockCheck);
+
+                if (blockCheck.length !== 0) {
+                    setIsBlocked(true);
+                }
+
+
                 if (currUser) {
                     // Only update if different to prevent unnecessary re-renders
                     setCurrUserId((prevId) => (prevId !== currUser.$id ? currUser.$id : prevId));
@@ -120,7 +148,7 @@ const OtherUserProfile = () => {
             }
         }
         getCurrUser();
-    }, [otherUsername, getUsersData])
+    }, [username, otherUsername])
 
     useEffect(() => {
         console.log('acountType:', accountType);
@@ -134,6 +162,9 @@ const OtherUserProfile = () => {
             try {
                 const usrNtcs = await fetchUserNotices(currUserId, setNotices, limit, offset);
 
+                console.log('usrNtcs', usrNtcs);
+
+
                 if (usrNtcs?.length < limit) {
                     setHasMoreNotices(false);
                 } else {
@@ -145,7 +176,11 @@ const OtherUserProfile = () => {
                 setIsLoadingMore(false);
             }
         };
-        fetchNotices();
+        if (isBlocked === false) {
+            fetchNotices();
+        } else {
+            console.log('This user blocked you.');
+        }
     }, [currUserId, offset])
 
     // Fetch spreads and users' data for spreads tab 
@@ -276,11 +311,7 @@ const OtherUserProfile = () => {
     const timerDisplay = 'd-flex';
     const classname = `${timerDisplay} ${timerSpacing}`;
 
-    useEffect(() => {
-        if (otherUsername === username) {
-            navigate('/user/profile');
-        }
-    }, [otherUsername, username, navigate]);
+
 
     // useEffect(() => {
     //     const fetchUserPasscode = async () => {
@@ -339,6 +370,7 @@ const OtherUserProfile = () => {
                     username={otherUsername}
                     avatarUrl={avatarUrl}
                     currUserId={currUserId}
+                    isBlocked={isBlocked}
                     followingAccounts={followingAccounts}
                     followersAccounts={followersAccounts}
                     followersCount={followersCount}

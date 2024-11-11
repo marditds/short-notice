@@ -89,7 +89,7 @@ const UserProfile = () => {
     const [hasMoreLikes, setHasMoreLikes] = useState(true);
     const [isLoadingMoreLikes, setIsLoadingMoreLikes] = useState(false);
 
-    // Fetch User By Username
+    // Fetch account type by username
     useEffect(() => {
         const fetchUserByUserame = async () => {
             try {

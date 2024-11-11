@@ -144,9 +144,14 @@ const UserFeed = () => {
 
                 const blockedUsers = await getBlockedUsersByUser(user_id);
 
+                console.log('blockedUsers', blockedUsers);
+
                 const filtering = notices.filter((notice) =>
-                    !blockedUsers.some((user) => notice.user_id === user.blocked_id)
+                    !blockedUsers.some((user) => notice.user_id === user.blocker_id)
                 );
+
+                console.log('filtering', filtering);
+
 
                 const filteredNotices = filtering || [];
 
