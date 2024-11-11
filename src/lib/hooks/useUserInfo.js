@@ -16,6 +16,7 @@ const useUserInfo = (data) => {
     const [followingAccounts, setFollowingAccounts] = useState([]);
     const [isFollowingLoading, setIsFollowingLoading] = useState(false);
     const [isFollowing, setIsFollowing] = useState(false);
+    // const [isFollowingLoading, setIsFollowingLoading] = useState()
 
 
     useEffect(() => {
@@ -189,6 +190,8 @@ const useUserInfo = (data) => {
 
     const followUser = async (otherUser_id) => {
         try {
+            setIsFollowingLoading(true);
+
             const result = await createFollow(userId, otherUser_id);
 
             setFollowing((prevFollowing) => {
@@ -206,6 +209,8 @@ const useUserInfo = (data) => {
 
         } catch (error) {
             console.error('Follow failed.', error);
+        } finally {
+            setIsFollowingLoading(false);
         }
 
     }
@@ -248,7 +253,6 @@ const useUserInfo = (data) => {
         try {
             setIsFollowingLoading(true);
 
-
             const allUsers = await getUsersData();
             // console.log('allUsers:', allUsers.documents);
 
@@ -289,6 +293,8 @@ const useUserInfo = (data) => {
 
     const fetchAccountsFollowedByUser = async (id) => {
         try {
+            setIsFollowingLoading(true);
+
             const allUsers = await getUsersData();
 
             const followedByUserIds = await getUserFollowingsById(id);
@@ -304,6 +310,8 @@ const useUserInfo = (data) => {
 
         } catch (error) {
             console.error('Failed to fetch user followers:', error);
+        } finally {
+            setIsFollowingLoading(false);
         }
     }
 

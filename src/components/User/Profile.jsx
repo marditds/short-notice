@@ -41,6 +41,8 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
     return (
         <>
             <Row className='user-profile fixed-top'>
+
+                {/* Folllowes/Following Col */}
                 <Col className='d-grid'>
 
                     {
@@ -99,11 +101,13 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
 
                 </Col>
 
+                {/* Profile Picture Col */}
                 <Col className='w-100 d-grid justify-content-center gap-2'>
                     <img src={avatarUrl ? avatarUrl : defaultAvatar} alt="Profile" style={{ borderRadius: '50%', width: 100, height: 100 }} />
                     <p className='my-0 text-center'>{username}</p>
                 </Col>
 
+                {/* Follow/Block/Report Col */}
                 <Col
                     className='d-grid gap-0 align-content-stretch justify-content-end'
                 >
