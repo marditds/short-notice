@@ -71,6 +71,7 @@ const OtherUserProfile = () => {
     const [passcode, setPasscode] = useState('');
 
     const [isBlocked, setIsBlocked] = useState(false);
+    const [isOtherUserBlocked, setIsOtherUserBlocked] = useState(false);
 
     const [notices, setNotices] = useState([]);
     const [spreadNoticesData, setSpreadNoticesData] = useState([]);
@@ -120,22 +121,38 @@ const OtherUserProfile = () => {
 
                 console.log('otherUser:', otherUser);
 
-                const blckdLst = await getBlockedUsersByUser(otherUser.$id);
+                const user = await getUserByUsername(username);
 
-                console.log(`blckdLst by ${otherUser.username}:`, blckdLst);
+                console.log('user:', user);
+
+                const blckdByOtherUser = await getBlockedUsersByUser(otherUser.$id);
+
+                console.log(`blckdLst by ${otherUser.username}:`, blckdByOtherUser);
+
+                const blckdByUser = await getBlockedUsersByUser(user.$id);
+
+                console.log(`blckdLst by ${user.username}:`, blckdByUser);
 
                 // Checking if the other user has blocked user 
-                if (blckdLst.length !== 0) {
-
-                    const user = await getUserByUsername(username);
-
-                    const blockedId = blckdLst.filter((blocked) => blocked.blocked_id === user.$id);
+                if (blckdByOtherUser.length !== 0) {
+                    const blockedId = blckdByOtherUser.filter((blocked) => blocked.blocked_id === user.$id);
 
                     if (blockedId.length !== 0 || null) {
                         console.log('blockedId', blockedId);
                         setIsBlocked(true);
                     }
                 }
+
+                // Checking if user has blocked the other user 
+                if (blckdByUser.length !== 0) {
+                    const blockerId = blckdByUser.filter((blocker) => blocker.blocker_id === user.$id);
+
+                    if (blockerId.length !== 0 || null) {
+                        console.log('blockerId', blockerId);
+                        setIsOtherUserBlocked(true);
+                    }
+                }
+
 
                 if (otherUser) {
                     // Only update if different to prevent unnecessary re-renders
@@ -268,34 +285,34 @@ const OtherUserProfile = () => {
 
     // Fetch accounts following the other user
     useEffect(() => {
-        // const fetchFollowingTheUser = async () => {
-        //     try {
-        if (currUserId && user_id && (isBlocked === false)) {
-            fetchAccountsFollowingTheUser(currUserId, user_id);
-        } else {
-            console.log('This user blocked you. - follow(ing/er)');
+        const fetchFollowingTheUser = async () => {
+            try {
+                if (currUserId && user_id && (isBlocked === false)) {
+                    fetchAccountsFollowingTheUser(currUserId, user_id);
+                } else {
+                    console.log('This user blocked you. - follow(ing/er)');
+                }
+            } catch (error) {
+                console.error('Failed fetchFollowingTheUser:', error);
+            }
         }
-        //     } catch (error) {
-        //         console.error('Failed fetchFollowingTheUser:', error);
-        //     }
-        // }
-        // // fetchFollowingTheUser();
+        fetchFollowingTheUser();
     }, [currUserId, user_id])
 
     // Fetch accounts followed by other user
     useEffect(() => {
-        // const fetchFollowedByUser = async () => {
-        //     try {
-        if (currUserId && (isBlocked === false)) {
-            fetchAccountsFollowedByUser(currUserId);
-        } else {
-            console.log('This user blocked you. - follow(ing/er)');
+        const fetchFollowedByUser = async () => {
+            try {
+                if (currUserId && (isBlocked === false)) {
+                    fetchAccountsFollowedByUser(currUserId);
+                } else {
+                    console.log('This user blocked you. - follow(ing/er)');
+                }
+            } catch (error) {
+                console.error('Failed fetchFollowedByUser:', error);
+            }
         }
-        // } catch (error) {
-        //     console.error('Failed fetchFollowedByUser:', error);
-        // }
-        // }
-        // fetchFollowedByUser();
+        fetchFollowedByUser();
     }, [currUserId])
 
     const handleLike = async (notice) => {
@@ -405,6 +422,24 @@ const OtherUserProfile = () => {
         />
     }
 
+    // if (isBlocked) {
+    //     return (
+    //         <>
+    //             <Profile
+    //                 username={otherUsername}
+    //                 avatarUrl={avatarUrl}
+    //                 currUserId={currUserId}
+    //                 isBlocked={isBlocked}
+    //                 isOtherUserBlocked={isOtherUserBlocked}
+    //                 handleBlock={handleBlock}
+    //             />
+    //             <div style={{ color: 'white', marginTop: '198px' }}>
+    //                 You are not authorzied to view the notices shared by {otherUsername}.
+    //             </div>
+    //         </>
+    //     )
+    // }
+
 
     return (
         <>
@@ -414,6 +449,7 @@ const OtherUserProfile = () => {
                     avatarUrl={avatarUrl}
                     currUserId={currUserId}
                     isBlocked={isBlocked}
+                    isOtherUserBlocked={isOtherUserBlocked}
                     followingAccounts={followingAccounts}
                     followersAccounts={followersAccounts}
                     followersCount={followersCount}
@@ -424,10 +460,8 @@ const OtherUserProfile = () => {
                     handleFollow={handleFollow}
                     handleBlock={handleBlock}
                 />
-                {
-                    isBlocked ?
-                        <div style={{ color: 'white', marginTop: '198px' }}>You are not authorzied to view the notices shared by {otherUsername}.</div>
-                        :
+                <>
+                    {!isBlocked ?
                         <>
                             <Tabs
                                 defaultActiveKey="notices"
@@ -543,11 +577,8 @@ const OtherUserProfile = () => {
                                 </Tab>
                             </Tabs>
                         </>
-                }
-
-
-
-
+                        : null}
+                </>
             </>
         </>
     )

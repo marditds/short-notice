@@ -6,7 +6,7 @@ import defaultAvatar from '../../assets/default.png';
 import { SlClose } from "react-icons/sl";
 import { Loading } from '../Loading/Loading.jsx';
 
-export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUserId, followingCount, followersCount, isFollowing, followingAccounts, followersAccounts, isInitialFollowCheckLoading, isFollowingUserLoading, isBlocked }) => {
+export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUserId, followingCount, followersCount, isFollowing, followingAccounts, followersAccounts, isInitialFollowCheckLoading, isFollowingUserLoading, isBlocked, isOtherUserBlocked }) => {
 
     const location = useLocation();
 
@@ -120,19 +120,21 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                                             height: 'fit-content', width: 'fit-content', marginLeft: 'auto'
                                         }}
                                     >
-                                        {/* {isFollowingUserLoading ? <Loading /> :
+                                        {isFollowingUserLoading ? <Loading /> :
                                             <>
                                                 {isFollowing ? 'Following' : 'Follow'}
                                             </>
-                                        } */}
-
-                                        {isInitialFollowCheckLoading || isFollowingUserLoading ? (
-                                            <Loading />
+                                        }
+                                        {/* {isOtherUserBlocked ? (
+                                            'Blocked'
                                         ) : (
-                                            <>
-                                                {isFollowing ? 'Following' : 'Follow'}
-                                            </>
-                                        )}
+                                            isInitialFollowCheckLoading || isFollowingUserLoading ? (
+                                                <Loading />
+                                            ) : (
+                                                isFollowing ? 'Following' : 'Follow'
+                                            )
+                                        )} */}
+
                                     </Button>
                             }
 
@@ -142,8 +144,10 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                                 className='user-profile__interaction-btn'
                                 style={{
                                     height: 'fit-content', width: 'fit-content', marginLeft: 'auto'
-                                }}>
-                                Block
+                                }}
+                                disabled={isOtherUserBlocked ? true : false}
+                            >
+                                {isOtherUserBlocked ? 'Blocked' : 'Block'}
                             </Button>
                             <Button
                                 className='user-profile__interaction-btn'
@@ -165,6 +169,16 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                         </>
                     }
                 </Col>
+                {isBlocked &&
+                    <div style={{ color: 'white', textAlign: 'center' }}>
+                        You are not authorzied to view the notices shared by {username}.
+                    </div>
+                }
+                {isOtherUserBlocked &&
+                    <div style={{ color: 'white', textAlign: 'center' }}>
+                        You have blocked {username}. They cannot follow you and interact with your notices.
+                    </div>
+                }
             </Row>
 
             {/* Followers Modal */}
