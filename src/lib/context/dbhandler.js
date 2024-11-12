@@ -154,6 +154,8 @@ export const getUserByEmail = async (email) => {
 };
 
 export const getUserByUsername = async (username) => {
+    console.log('otherUsername', username);
+
     try {
         const userList = await databases.listDocuments(
             import.meta.env.VITE_DATABASE,
@@ -1264,6 +1266,22 @@ export const getBlockedUsersByUser = async (blocker_id) => {
         return res.documents;
     } catch (error) {
         console.error('Error getting blocked users:', error);
+    }
+}
+
+export const getUsersBlockingUser = async (blocked_id) => {
+    try {
+        const res = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_BLOCKS_COLLECTION,
+            [
+                Query.equal('blocked_id', blocked_id)
+            ]
+        )
+        console.log('These accounts blocked you:', res);
+        return res.documents;
+    } catch (error) {
+        console.error('Error getting users:', error);
     }
 }
 

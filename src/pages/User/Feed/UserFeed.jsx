@@ -66,7 +66,7 @@ const UserFeed = () => {
         // setNoticesReactions
     } = useNotices(googleUserData);
 
-    const { fetchUsersData, getBlockedUsersByUser } = useUserInfo(googleUserData);
+    const { fetchUsersData, getBlockedUsersByUser, getUsersBlockingUser } = useUserInfo(googleUserData);
 
     const [feedNotices, setFeedNotices] = useState([]);
 
@@ -142,22 +142,25 @@ const UserFeed = () => {
                 console.log('offset:', offset);
                 const notices = await getFeedNotices(selectedTags, limit, offset);
 
-                const blockedUsers = await getBlockedUsersByUser(user_id);
+                const blockedUsersByUser = await getBlockedUsersByUser(user_id);
 
-                console.log('blockedUsers', blockedUsers);
+                console.log('blockedUsersByUser', blockedUsersByUser);
 
                 // Filtering out notices from accounts blocked by user
-                const filteringBlockedByUser = notices.filter((notice) =>
-                    !blockedUsers.some((user) => notice.user_id === user.blocker_id)
+                const noticesFromAccountsNotBlockedByUser = notices.filter((notice) =>
+                    !blockedUsersByUser.some((user) => notice.user_id === user.blocked_id)
                 );
 
-                console.log('filtering', filteringBlockedByUser);
+                console.log('noticesFromAccountsNotBlockedByUser', noticesFromAccountsNotBlockedByUser);
 
-                // Need filtering out notices from accounts that blocked the user
-                // const filterBlockingTheUser = filteringBlockedByUser.filter(async (notice) => await getBlockedUsersByUser(notice.user_id));
+                const usersBlockingUser = await getUsersBlockingUser(user_id);
 
+                console.log('usersBlockingUser', usersBlockingUser);
 
-                const filteredNotices = filteringBlockedByUser || [];
+                // Filtering out notices from accounts blocking the user 
+                const noticesFromAccountNotBlockingTheUser = noticesFromAccountsNotBlockedByUser.filter((notice) => !usersBlockingUser.some((user) => notice.user_id === user.blocker_id));
+
+                const filteredNotices = noticesFromAccountNotBlockingTheUser || [];
 
                 await fetchUsersData(filteredNotices, setFeedNotices, avatarUtil);
 
@@ -174,7 +177,6 @@ const UserFeed = () => {
                 setIsLoadingUsers(false);
                 setIsLoadingMore(false);
             }
-
         };
         fetchFeedData();
     }, [selectedTags, offset]);

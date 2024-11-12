@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { createBlock, getBlockedUsersByUser as fetchBlockedUsersByUser, checkIdExistsInAuth, checkEmailExistsInAuth as checkEmailInAuthFromServer, registerAuthUser, getUserById, deleteAuthUser, createUserSession, getSessionDetails as fetchSessionDetails, deleteUserSession, updateUser, updateAuthUser, deleteUser, getUserByUsername as fetchUserByUsername, getAllUsersByString as fetchAllUsersByString, deleteAllNotices, getUsersDocument, createFollow, removeFollow, getUserFollowingsById as fetchUserFollowingsById, getUserFollowersById as fetchUserFollowersById, getOtherUserFollowingsById as fetchOtherUserFollowingsById, createPassocde, updatePassocde, getPassocdeByBusincessId as fetchPassocdeByBusincessId } from '../context/dbhandler';
+import { createBlock, getBlockedUsersByUser as fetchBlockedUsersByUser, getUsersBlockingUser as fetchUsersBlockingUser, checkIdExistsInAuth, checkEmailExistsInAuth as checkEmailInAuthFromServer, registerAuthUser, getUserById, deleteAuthUser, createUserSession, getSessionDetails as fetchSessionDetails, deleteUserSession, updateUser, updateAuthUser, deleteUser, getUserByUsername as fetchUserByUsername, getAllUsersByString as fetchAllUsersByString, deleteAllNotices, getUsersDocument, createFollow, removeFollow, getUserFollowingsById as fetchUserFollowingsById, getUserFollowersById as fetchUserFollowersById, getOtherUserFollowingsById as fetchOtherUserFollowingsById, createPassocde, updatePassocde, getPassocdeByBusincessId as fetchPassocdeByBusincessId } from '../context/dbhandler';
 import { useUserContext } from '../context/UserContext';
 import { UserId } from '../../components/User/UserId';
 
@@ -130,6 +130,8 @@ const useUserInfo = (data) => {
     }
 
     const getUserByUsername = async (username) => {
+        console.log('otherUsername', username);
+
         try {
             const usrnm = await fetchUserByUsername(username);
             console.log('username found:', usrnm);
@@ -370,7 +372,19 @@ const useUserInfo = (data) => {
             console.log('Blocked listed successfully: ', res);
             return res;
         } catch (error) {
-            console.error('Error making block:', error);
+            console.error('Error listing blocked:', error);
+        }
+    }
+
+    const getUsersBlockingUser = async (user_id) => {
+        try {
+            console.log('userId', user_id);
+
+            const res = await fetchUsersBlockingUser(user_id);
+            console.log('These accounts blocked you: ', res);
+            return res;
+        } catch (error) {
+            console.error('Error listing users:', error);
         }
     }
 
@@ -388,6 +402,7 @@ const useUserInfo = (data) => {
         followingAccounts,
         makeBlock,
         getBlockedUsersByUser,
+        getUsersBlockingUser,
         checkingIdInAuth,
         checkingEmailInAuth,
         registerUser,

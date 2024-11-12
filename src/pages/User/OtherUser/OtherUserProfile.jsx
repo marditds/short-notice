@@ -114,6 +114,8 @@ const OtherUserProfile = () => {
 
                 // const currUser = allUsers.documents.find((user) => user.username === otherUsername);
 
+                console.log('otherUsername', otherUsername);
+
                 const otherUser = await getUserByUsername(otherUsername);
 
                 console.log('otherUser:', otherUser);
@@ -129,7 +131,7 @@ const OtherUserProfile = () => {
 
                     const blockedId = blckdLst.filter((blocked) => blocked.blocked_id === user.$id);
 
-                    if (blockedId.length !== 0) {
+                    if (blockedId.length !== 0 || null) {
                         console.log('blockedId', blockedId);
                         setIsBlocked(true);
                     }
@@ -266,34 +268,34 @@ const OtherUserProfile = () => {
 
     // Fetch accounts following the other user
     useEffect(() => {
-        const fetchFollowingTheUser = async () => {
-            try {
-                if (currUserId && user_id && (isBlocked === false)) {
-                    await fetchAccountsFollowingTheUser(currUserId, user_id);
-                } else {
-                    console.log('This user blocked you. - follow(ing/er)');
-                }
-            } catch (error) {
-                console.error('Failed fetchFollowingTheUser:', error);
-            }
+        // const fetchFollowingTheUser = async () => {
+        //     try {
+        if (currUserId && user_id && (isBlocked === false)) {
+            fetchAccountsFollowingTheUser(currUserId, user_id);
+        } else {
+            console.log('This user blocked you. - follow(ing/er)');
         }
-        fetchFollowingTheUser();
+        //     } catch (error) {
+        //         console.error('Failed fetchFollowingTheUser:', error);
+        //     }
+        // }
+        // // fetchFollowingTheUser();
     }, [currUserId, user_id])
 
     // Fetch accounts followed by other user
     useEffect(() => {
-        const fetchFollowedByUser = async () => {
-            try {
-                if (currUserId && (isBlocked === false)) {
-                    await fetchAccountsFollowedByUser(currUserId);
-                } else {
-                    console.log('This user blocked you. - follow(ing/er)');
-                }
-            } catch (error) {
-                console.error('Failed fetchFollowedByUser:', error);
-            }
+        // const fetchFollowedByUser = async () => {
+        //     try {
+        if (currUserId && (isBlocked === false)) {
+            fetchAccountsFollowedByUser(currUserId);
+        } else {
+            console.log('This user blocked you. - follow(ing/er)');
         }
-        fetchFollowedByUser();
+        // } catch (error) {
+        //     console.error('Failed fetchFollowedByUser:', error);
+        // }
+        // }
+        // fetchFollowedByUser();
     }, [currUserId])
 
     const handleLike = async (notice) => {
