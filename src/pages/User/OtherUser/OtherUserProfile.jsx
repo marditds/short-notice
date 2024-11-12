@@ -135,20 +135,20 @@ const OtherUserProfile = () => {
 
                 // Checking if the other user has blocked user 
                 if (blckdByOtherUser.length !== 0) {
-                    const blockedId = blckdByOtherUser.filter((blocked) => blocked.blocked_id === user.$id);
+                    const blockdByOtherUser = blckdByOtherUser.filter((blocked) => blocked.blocked_id === user.$id);
 
-                    if (blockedId.length !== 0 || null) {
-                        console.log('blockedId', blockedId);
+                    if (blockdByOtherUser.length !== 0 || null) {
+                        console.log('blockedId', blockdByOtherUser);
                         setIsBlocked(true);
                     }
                 }
 
                 // Checking if user has blocked the other user 
                 if (blckdByUser.length !== 0) {
-                    const blockerId = blckdByUser.filter((blocked) => blocked.blocked_id === otherUser.$id);
+                    const blockdByUser = blckdByUser.filter((blocked) => blocked.blocked_id === otherUser.$id);
 
-                    if (blockerId.length !== 0 || null) {
-                        console.log('blockerId', blockerId);
+                    if (blockdByUser.length !== 0 || null) {
+                        console.log('blockerId', blockdByUser);
                         setIsOtherUserBlocked(true);
                     }
                 }
