@@ -395,9 +395,7 @@ const OtherUserProfile = () => {
             console.log('psscd', psscd[0].passcode);
             localStorage.setItem('passcode', passcode);
 
-            console.log(localStorage.getItem('passcode'));
-
-            console.log('passcode', passcode);
+            console.log('Stored passcode in localStorage:', localStorage.getItem('passcode'));
 
             if (psscd[0].passcode === passcode) {
                 setAccountTypeCheck(true);

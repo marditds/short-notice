@@ -12,6 +12,15 @@ export const Passcode = ({ passcode, setPasscode, checkPasscode }) => {
         }
     }
 
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            if (passcode.length === 6) {
+                checkPasscode();
+            }
+        }
+    };
+
     return (
         <div>
             <Form>
@@ -23,13 +32,14 @@ export const Passcode = ({ passcode, setPasscode, checkPasscode }) => {
                         type="password"
                         value={passcode}
                         onChange={onPasscodeChange}
+                        onKeyDown={handleKeyDown}
                     />
                 </Form.Group>
 
                 <Button
                     variant="primary"
                     onClick={checkPasscode}
-                    disabled={!passcode}
+                    disabled={passcode.length < 6}
                 >
                     Submit
                 </Button>
