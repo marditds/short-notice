@@ -208,6 +208,9 @@ const UserProfile = () => {
     // useEffect(() => {
     //     fetchReactionsForNotices(likedNoticesData, setLikedReactions);
     // }, [likedNoticesData]);
+    useEffect(() => {
+        console.log('Hello', username);
+    }, [username])
 
     // Fetch accounts followed by user
     useEffect(() => {

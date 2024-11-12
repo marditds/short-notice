@@ -6,7 +6,7 @@ import defaultAvatar from '../../assets/default.png';
 import { SlClose } from "react-icons/sl";
 import { Loading } from '../Loading/Loading.jsx';
 
-export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUserId, followingCount, followersCount, isFollowing, followingAccounts, followersAccounts, isFollowingLoading, isBlocked }) => {
+export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUserId, followingCount, followersCount, isFollowing, followingAccounts, followersAccounts, isInitialFollowCheckLoading, isFollowingUserLoading, isBlocked }) => {
 
     const location = useLocation();
 
@@ -44,7 +44,6 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
 
                 {/* Folllowes/Following Col */}
                 <Col className='d-grid'>
-
                     {
                         isBlocked ?
                             null :
@@ -95,10 +94,8 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                                         </strong>
                                     }
                                 </Button>
-
                             </>
                     }
-
                 </Col>
 
                 {/* Profile Picture Col */}
@@ -123,11 +120,19 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                                             height: 'fit-content', width: 'fit-content', marginLeft: 'auto'
                                         }}
                                     >
-                                        {isFollowingLoading ? <Loading /> :
+                                        {/* {isFollowingUserLoading ? <Loading /> :
                                             <>
                                                 {isFollowing ? 'Following' : 'Follow'}
                                             </>
-                                        }
+                                        } */}
+
+                                        {isInitialFollowCheckLoading || isFollowingUserLoading ? (
+                                            <Loading />
+                                        ) : (
+                                            <>
+                                                {isFollowing ? 'Following' : 'Follow'}
+                                            </>
+                                        )}
                                     </Button>
                             }
 

@@ -48,7 +48,8 @@ const OtherUserProfile = () => {
     } = useNotices(googleUserData);
 
     const {
-        isFollowingLoading,
+        isFollowingUserLoading,
+        isInitialFollowCheckLoading,
         isFollowing,
         followersCount,
         followingCount,
@@ -58,7 +59,6 @@ const OtherUserProfile = () => {
         getUserByUsername,
         fetchUsersData,
         getBlockedUsersByUser,
-        // getUsersData,
         followUser,
         setIsFollowing,
         fetchAccountsFollowingTheUser,
@@ -266,20 +266,34 @@ const OtherUserProfile = () => {
 
     // Fetch accounts following the other user
     useEffect(() => {
-        if (currUserId && user_id && (isBlocked === false)) {
-            fetchAccountsFollowingTheUser(currUserId, user_id);
-        } else {
-            console.log('This user blocked you. - follow(ing/er)');
+        const fetchFollowingTheUser = async () => {
+            try {
+                if (currUserId && user_id && (isBlocked === false)) {
+                    await fetchAccountsFollowingTheUser(currUserId, user_id);
+                } else {
+                    console.log('This user blocked you. - follow(ing/er)');
+                }
+            } catch (error) {
+                console.error('Failed fetchFollowingTheUser:', error);
+            }
         }
+        fetchFollowingTheUser();
     }, [currUserId, user_id])
 
     // Fetch accounts followed by other user
     useEffect(() => {
-        if (currUserId && (isBlocked === false)) {
-            fetchAccountsFollowedByUser(currUserId);
-        } else {
-            console.log('This user blocked you. - follow(ing/er)');
+        const fetchFollowedByUser = async () => {
+            try {
+                if (currUserId && (isBlocked === false)) {
+                    await fetchAccountsFollowedByUser(currUserId);
+                } else {
+                    console.log('This user blocked you. - follow(ing/er)');
+                }
+            } catch (error) {
+                console.error('Failed fetchFollowedByUser:', error);
+            }
         }
+        fetchFollowedByUser();
     }, [currUserId])
 
     const handleLike = async (notice) => {
@@ -403,7 +417,8 @@ const OtherUserProfile = () => {
                     followersCount={followersCount}
                     followingCount={followingCount}
                     isFollowing={isFollowing}
-                    isFollowingLoading={isFollowingLoading}
+                    isFollowingUserLoading={isFollowingUserLoading}
+                    isInitialFollowCheckLoading={isInitialFollowCheckLoading}
                     handleFollow={handleFollow}
                     handleBlock={handleBlock}
                 />

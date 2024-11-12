@@ -14,9 +14,9 @@ const useUserInfo = (data) => {
     const [followingCount, setFollowingCount] = useState(null);
     const [followersAccounts, setFollowersAccounts] = useState([]);
     const [followingAccounts, setFollowingAccounts] = useState([]);
-    const [isFollowingLoading, setIsFollowingLoading] = useState(false);
+    const [isFollowingUserLoading, setIsFollowingUserLoading] = useState(false);
+    const [isInitialFollowCheckLoading, setIsInitialFollowCheckLoading] = useState(true);
     const [isFollowing, setIsFollowing] = useState(false);
-    // const [isFollowingLoading, setIsFollowingLoading] = useState()
 
 
     useEffect(() => {
@@ -190,7 +190,7 @@ const useUserInfo = (data) => {
 
     const followUser = async (otherUser_id) => {
         try {
-            setIsFollowingLoading(true);
+            setIsFollowingUserLoading(true);
 
             const result = await createFollow(userId, otherUser_id);
 
@@ -206,13 +206,11 @@ const useUserInfo = (data) => {
                     };
                 }
             });
-
         } catch (error) {
             console.error('Follow failed.', error);
         } finally {
-            setIsFollowingLoading(false);
+            setIsFollowingUserLoading(false);
         }
-
     }
 
     const getUserFollowingsById = async (otherUser_id) => {
@@ -251,8 +249,7 @@ const useUserInfo = (data) => {
 
     const fetchAccountsFollowingTheUser = async (otherUser_id, user_id) => {
         try {
-            setIsFollowingLoading(true);
-
+            setIsInitialFollowCheckLoading(true);
             const allUsers = await getUsersData();
             // console.log('allUsers:', allUsers.documents);
 
@@ -270,8 +267,6 @@ const useUserInfo = (data) => {
 
             setFollowersCount(accountsFollowingTheUser.length);
 
-
-
             // Set the button to 'Following' if user follows the other user 
             if (userFollowersById && user_id) {
 
@@ -280,21 +275,17 @@ const useUserInfo = (data) => {
                 console.log('matchUserWithFollower', matchUserWithFollower);
 
                 setIsFollowing(!!matchUserWithFollower);
-                setIsFollowingLoading(false);
+                setIsInitialFollowCheckLoading(false);
+
             }
 
         } catch (error) {
             console.error('Failed to fetch user followers:', error);
         }
-        finally {
-            setIsFollowingLoading(false);
-        }
     }
 
     const fetchAccountsFollowedByUser = async (id) => {
         try {
-            setIsFollowingLoading(true);
-
             const allUsers = await getUsersData();
 
             const followedByUserIds = await getUserFollowingsById(id);
@@ -307,11 +298,8 @@ const useUserInfo = (data) => {
 
             setFollowingCount(accountsFollowedByUser.length);
 
-
         } catch (error) {
             console.error('Failed to fetch user followers:', error);
-        } finally {
-            setIsFollowingLoading(false);
         }
     }
 
@@ -390,14 +378,14 @@ const useUserInfo = (data) => {
 
     return {
         userId,
-        isFollowingLoading,
+        isFollowingUserLoading,
+        isInitialFollowCheckLoading,
         following,
         isFollowing,
         followersCount,
         followingCount,
         followersAccounts,
         followingAccounts,
-        // isLoading,
         makeBlock,
         getBlockedUsersByUser,
         checkingIdInAuth,
@@ -423,7 +411,6 @@ const useUserInfo = (data) => {
         makePasscode,
         editPasscode,
         getPassocdeByBusincessId
-        // authedUsers
     }
 }
 
