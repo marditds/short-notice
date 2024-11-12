@@ -4,8 +4,12 @@ import { Row, Col, Form, Button } from "react-bootstrap";
 export const Passcode = ({ passcode, setPasscode, checkPasscode }) => {
 
     const onPasscodeChange = (e) => {
-        setPasscode(e.target.value);
-        console.log(e.target.value);
+        const input = e.target.value;
+
+        if (/^\d{0,6}$/.test(input)) {
+            setPasscode(input);
+            console.log(input);
+        }
     }
 
     return (

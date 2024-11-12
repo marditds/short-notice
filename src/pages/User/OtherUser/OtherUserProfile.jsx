@@ -145,7 +145,7 @@ const OtherUserProfile = () => {
 
                 // Checking if user has blocked the other user 
                 if (blckdByUser.length !== 0) {
-                    const blockerId = blckdByUser.filter((blocker) => blocker.blocker_id === user.$id);
+                    const blockerId = blckdByUser.filter((blocked) => blocked.blocked_id === otherUser.$id);
 
                     if (blockerId.length !== 0 || null) {
                         console.log('blockerId', blockerId);
@@ -421,25 +421,6 @@ const OtherUserProfile = () => {
             checkPasscode={checkPasscode}
         />
     }
-
-    // if (isBlocked) {
-    //     return (
-    //         <>
-    //             <Profile
-    //                 username={otherUsername}
-    //                 avatarUrl={avatarUrl}
-    //                 currUserId={currUserId}
-    //                 isBlocked={isBlocked}
-    //                 isOtherUserBlocked={isOtherUserBlocked}
-    //                 handleBlock={handleBlock}
-    //             />
-    //             <div style={{ color: 'white', marginTop: '198px' }}>
-    //                 You are not authorzied to view the notices shared by {otherUsername}.
-    //             </div>
-    //         </>
-    //     )
-    // }
-
 
     return (
         <>
