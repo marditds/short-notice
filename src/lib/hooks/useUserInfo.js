@@ -393,11 +393,10 @@ const useUserInfo = (data) => {
         try {
             console.log('blocked_id', blocked_id);
 
-            const res = await removeBlockUsingBlockedId(blocked_id);
-            console.log('Block removed successfully:', res);
-            return res;
+            await removeBlockUsingBlockedId(blocked_id);
+            console.log('Block removed successfully.');
         } catch (error) {
-            console.error('Error removing block:', error);
+            console.error('Error deleting block:', error);
         }
     }
 

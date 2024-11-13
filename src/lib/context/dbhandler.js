@@ -1287,15 +1287,27 @@ export const getUsersBlockingUser = async (blocked_id) => {
 
 export const removeBlockUsingBlockedId = async (blocked_id) => {
     try {
-        const res = await databases.deleteDocument(
+        console.log('To be removed:', blocked_id);
+
+        const user = await databases.listDocuments(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_BLOCKS_COLLECTION,
             [
                 Query.equal('blocked_id', blocked_id)
             ]
+        );
+
+        console.log('Removing block for - 1:', user);
+        console.log('Removing block for - 2:', user.documents[0].$id);
+
+        await databases.deleteDocument(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_BLOCKS_COLLECTION,
+            user.documents[0].$id
         )
-        console.log('Block removed successfully:', res);
-        return res;
+
+        console.log('Block removed succesfully');
+
     } catch (error) {
         console.error('Error removing block:', error);
     }

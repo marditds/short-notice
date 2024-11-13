@@ -18,50 +18,64 @@ export const BlockedAccounts = () => {
 
     const [blockedUsers, setBlockedUsers] = useState(null);
     const [isListLoading, setIsListLoading] = useState(false);
+    const [isUnblockingLoading, setIsUnblockingLoading] = useState(false);
+
+    const fetchBlockedList = async () => {
+        try {
+            setIsListLoading(true);
+
+            const blckdLst = await getBlockedUsersByUser(userId);
+            console.log(`These are ${username}'s blocked list:`, blckdLst);
+
+            let blockedIdArr = [];
+
+            for (let i = 0; i < blckdLst.length; i++) {
+                blockedIdArr.push(blckdLst[i].blocked_id);
+            }
+
+            console.log('blockedIdArr', blockedIdArr);
+
+            let blockedUsers = [];
+
+            for (let i = 0; i < blockedIdArr.length; i++) {
+
+                const usr = await getUserAccountByUserId(blockedIdArr[i]);
+
+                console.log('usr', usr);
+
+                blockedUsers.push(usr);
+            }
+
+            console.log('blockedUsers', blockedUsers);
+
+            setBlockedUsers(blockedUsers);
+
+        } catch (error) {
+            console.error('Error fetching blocked list', error);
+        } finally {
+            setIsListLoading(false);
+        }
+    }
 
     useEffect(() => {
-        const fetchBlockedList = async () => {
-            try {
-                setIsListLoading(true);
-
-                const blckdLst = await getBlockedUsersByUser(userId);
-                console.log(`These are ${username}'s blocked list:`, blckdLst);
-
-                let blockedIdArr = [];
-
-                for (let i = 0; i < blckdLst.length; i++) {
-                    blockedIdArr.push(blckdLst[i].blocked_id);
-                }
-
-                console.log('blockedIdArr', blockedIdArr);
-
-                let blockedUsers = [];
-
-                for (let i = 0; i < blockedIdArr.length; i++) {
-
-                    const usr = await getUserAccountByUserId(blockedIdArr[i]);
-
-                    console.log('usr', usr);
-
-                    blockedUsers.push(usr);
-                }
-
-                console.log('blockedUsers', blockedUsers);
-
-                setBlockedUsers(blockedUsers);
-
-            } catch (error) {
-                console.error('Error fetching blocked list', error);
-            } finally {
-                setIsListLoading(false);
-            }
-        }
         fetchBlockedList();
     }, [userId])
 
-    const handleDelteBlock = () => {
-        console.log('removing block');
+    const handleDelteBlock = async (blocked_id) => {
+        try {
+            setIsUnblockingLoading(true);
 
+            console.log('removing block for:', blocked_id);
+
+            await deleteBlockUsingBlockedId(blocked_id);
+
+            await fetchBlockedList();
+
+        } catch (error) {
+            console.error('Error removing user from block:', error);
+        } finally {
+            setIsUnblockingLoading(false);
+        }
     }
 
 
@@ -86,7 +100,7 @@ export const BlockedAccounts = () => {
                                             className='d-flex'
                                         />
                                         <Button
-                                            onClick={handleDelteBlock}
+                                            onClick={async () => handleDelteBlock(user.$id)}
                                             className='p-0' style={{ marginLeft: '12px' }}
                                         >
                                             <SlClose size={24} />
