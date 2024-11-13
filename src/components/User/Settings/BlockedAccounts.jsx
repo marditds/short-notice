@@ -10,7 +10,11 @@ import { Loading } from '../../Loading/Loading';
 export const BlockedAccounts = () => {
 
     const { googleUserData, username } = useUserContext();
-    const { userId, getBlockedUsersByUser, getUserAccountByUserId } = useUserInfo(googleUserData);
+    const { userId,
+        getBlockedUsersByUser,
+        getUserAccountByUserId,
+        deleteBlockUsingBlockedId
+    } = useUserInfo(googleUserData);
 
     const [blockedUsers, setBlockedUsers] = useState(null);
     const [isListLoading, setIsListLoading] = useState(false);
@@ -55,6 +59,11 @@ export const BlockedAccounts = () => {
         fetchBlockedList();
     }, [userId])
 
+    const handleDelteBlock = () => {
+        console.log('removing block');
+
+    }
+
 
     return (
         <Row>
@@ -76,7 +85,10 @@ export const BlockedAccounts = () => {
                                             style={{ borderRadius: '50%', width: '50px', height: '50px', marginLeft: '12px' }}
                                             className='d-flex'
                                         />
-                                        <Button className='p-0' style={{ marginLeft: '12px' }}>
+                                        <Button
+                                            onClick={handleDelteBlock}
+                                            className='p-0' style={{ marginLeft: '12px' }}
+                                        >
                                             <SlClose size={24} />
                                         </Button>
 

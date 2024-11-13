@@ -1285,4 +1285,20 @@ export const getUsersBlockingUser = async (blocked_id) => {
     }
 }
 
+export const removeBlockUsingBlockedId = async (blocked_id) => {
+    try {
+        const res = await databases.deleteDocument(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_BLOCKS_COLLECTION,
+            [
+                Query.equal('blocked_id', blocked_id)
+            ]
+        )
+        console.log('Block removed successfully:', res);
+        return res;
+    } catch (error) {
+        console.error('Error removing block:', error);
+    }
+}
+
 export { ID } from 'appwrite';
