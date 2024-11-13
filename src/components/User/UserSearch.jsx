@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import useUserInfo from '../../lib/hooks/useUserInfo';
-import { getAvatarUrl as avatartUrl } from '../../lib/utils/avatarUtils';
+import { getAvatarUrl as avatarUrl } from '../../lib/utils/avatarUtils';
 import defaultAvatar from '../../assets/default.png';
 import { Button, Form, Modal, Stack } from 'react-bootstrap';
 import { CgSearch } from "react-icons/cg";
@@ -147,7 +147,7 @@ export const UserSearch = ({ userId }) => {
                                     > */}
                                         <Link to={`../user/${user.username}`} className='w-100 d-flex align-items-center justify-content-end'>
                                             {user?.username}
-                                            < img src={avatartUrl(user.avatar) || defaultAvatar}
+                                            < img src={avatarUrl(user.avatar) || defaultAvatar}
                                                 alt="Profile"
                                                 style={{ borderRadius: '50%', width: 50, height: 50, marginLeft: '12px' }}
                                                 className='d-flex'

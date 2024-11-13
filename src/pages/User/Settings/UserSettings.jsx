@@ -10,6 +10,7 @@ import { Stack, Container } from 'react-bootstrap';
 import { DeleteAccount } from '../../../components/User/Settings/DeleteAccount.jsx';
 import './UserSettings.css';
 import { Passcode } from '../../../components/User/Settings/Passcode.jsx';
+import { BlockedAccounts } from '../../../components/User/Settings/BlockedAccounts.jsx';
 
 const UserSettings = () => {
 
@@ -40,6 +41,8 @@ const UserSettings = () => {
                     </>
                 }
                 <Interests />
+                <hr />
+                <BlockedAccounts />
                 <hr />
                 <DeleteAllNotices />
                 <hr />

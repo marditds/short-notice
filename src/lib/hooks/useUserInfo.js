@@ -307,15 +307,16 @@ const useUserInfo = (data) => {
 
     const getUserAccountByUserId = async (userId) => {
         try {
-            const accntType = await getUserById(userId);
+            const accnt = await getUserById(userId);
 
-            console.log('accntType: ', accntType);
+            console.log('accnt: ', accnt);
 
-            return accntType;
+            return accnt;
         } catch (error) {
-            console.error('Error getting user account type', error);
+            console.error('Error getting user account ', error);
         }
     }
+
 
     const makePasscode = async (userId, passcode, accountType) => {
         try {

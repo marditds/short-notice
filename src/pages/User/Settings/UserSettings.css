@@ -74,6 +74,16 @@
     margin-bottom: 16px;
 }
 
+.settings__blocked-accounts-profiles {
+    padding-inline: 12px;
+    padding-block: 8px;
+    border: 1px solid var(--main-accent-color);
+    border-radius: 7px;
+    background-color: transparent;
+    /* cursor: pointer; */
+    transition: 0.3s;
+}
+
 .settings__delete-account-btn,
 .settings__delete-account-btn:focus {
     background-color: var(--main-caution-color) !important;
