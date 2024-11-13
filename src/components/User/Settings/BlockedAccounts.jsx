@@ -25,7 +25,7 @@ export const BlockedAccounts = () => {
             setIsListLoading(true);
 
             const blckdLst = await getBlockedUsersByUser(userId);
-            console.log(`These are ${username}'s blocked list:`, blckdLst);
+            console.log(`These are accounts blocked by${username}':`, blckdLst);
 
             let blockedIdArr = [];
 
