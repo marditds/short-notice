@@ -62,14 +62,14 @@ export const BlockedAccounts = () => {
                 <h4>Blocked Accounts:</h4>
                 <p>You can unblock the accounts by clicking on the 'X' button next to the username.</p>
             </Col>
-            <Col className='d-flex'>
+            <Col className='d-flex flex-wrap gap-2'>
                 {isListLoading ?
                     <div><Loading size={24} /></div> :
                     (
                         blockedUsers?.map((user) => {
                             return (
-                                <div key={user.$id} className='d-flex flex-wrap justify-content-start me-2 align-items-start'>
-                                    <div className='d-flex align-items-center settings__blocked-accounts-profiles'>
+                                <div key={user.$id} className='d-flex justify-content-start  align-items-start'>
+                                    <div className='d-flex w-100 align-items-center settings__blocked-accounts-profiles'>
                                         {user.username}
                                         < img src={avatarUrl(user.avatar) || defaultAvatar}
                                             alt="Profile"
