@@ -44,7 +44,10 @@ export const BlockedAccounts = () => {
                 console.log('usr', usr);
 
                 blockedUsers.push(usr);
+
             }
+
+            blockedUsers.sort((a, b) => a.username.localeCompare(b.username));
 
             console.log('blockedUsers', blockedUsers);
 
@@ -86,7 +89,7 @@ export const BlockedAccounts = () => {
                 <p>You can unblock the accounts by clicking on the 'X' button next to the username.</p>
             </Col>
             <Col className='d-flex flex-wrap gap-2'>
-                {isListLoading ?
+                {isListLoading || isUnblockingLoading ?
                     <div><Loading size={24} /></div> :
                     (
                         blockedUsers?.map((user) => {
@@ -112,7 +115,7 @@ export const BlockedAccounts = () => {
                         })
                     )
                 }
-
+                {blockedUsers?.length < 1 ? <div>Blocked accounts appear here.</div> : null}
             </Col>
         </Row>
     )
