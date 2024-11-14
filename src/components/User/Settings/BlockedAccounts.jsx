@@ -17,7 +17,7 @@ export const BlockedAccounts = () => {
     } = useUserInfo(googleUserData);
 
     const [blockedUsers, setBlockedUsers] = useState([]);
-    const [isListLoading, setIsListLoading] = useState(false);
+    const [isBlockListInitialRunLoading, setIsBlockListInitialRunLoading] = useState(false);
     const [isUnblockingLoading, setIsUnblockingLoading] = useState(false);
 
     const [limit] = useState(3);
@@ -26,10 +26,13 @@ export const BlockedAccounts = () => {
     const [isLoadingMore, setIsLoadingMore] = useState(false);
 
 
-    const fetchBlockedList = async () => {
+    const fetchBlockedList = async (reset = false) => {
         try {
-            setIsListLoading(true);
-
+            if (reset) {
+                setBlockedUsers([]);
+                setOffset(0);
+            }
+            setIsLoadingMore(true);
             console.log('limit:', limit);
             console.log('offset:', offset);
 
@@ -60,7 +63,6 @@ export const BlockedAccounts = () => {
 
             console.log('blockedUsers', blockedUsers);
 
-
             if (blockedUsers) {
                 setBlockedUsers(prevUsers => {
                     const moreUsers = blockedUsers?.filter(user =>
@@ -79,21 +81,37 @@ export const BlockedAccounts = () => {
                 setHasMoreBlockedProfiles(true);
                 setOffset(offset + limit);
             }
-            // setBlockedUsers(blockedUsers);
 
         } catch (error) {
             console.error('Error fetching blocked list', error);
-        } finally {
-            setIsListLoading(false);
+        }
+        finally {
+            setIsLoadingMore(false);
         }
     }
 
     useEffect(() => {
-        fetchBlockedList();
+        const blockListInitialRun = async () => {
+            try {
+                setIsBlockListInitialRunLoading(true);
+
+                await fetchBlockedList();
+            } catch (error) {
+                console.error('Error running initial run for block list:', error);
+
+            } finally {
+                setIsBlockListInitialRunLoading(false);
+            }
+        }
+        blockListInitialRun();
     }, [userId])
 
-    const handleLoadMoreProfiles = () => {
-        fetchBlockedList();
+    const handleLoadMoreProfiles = async () => {
+        try {
+            await fetchBlockedList();
+        } catch (error) {
+            console.error('Error running fetching function:', error);
+        }
     }
 
     const handleDelteBlock = async (blocked_id) => {
@@ -103,6 +121,8 @@ export const BlockedAccounts = () => {
             console.log('removing block for:', blocked_id);
 
             await deleteBlockUsingBlockedId(blocked_id);
+
+            setBlockedUsers(prevUsers => prevUsers.filter(user => user.$id !== blocked_id));
 
             await fetchBlockedList();
 
@@ -121,7 +141,7 @@ export const BlockedAccounts = () => {
                 <p>You can unblock the accounts by clicking on the 'X' button next to the username.</p>
             </Col>
             <Col className='d-flex flex-wrap gap-2'>
-                {isListLoading || isUnblockingLoading ?
+                {isBlockListInitialRunLoading || isUnblockingLoading ?
                     <div><Loading size={24} /></div> :
                     (
                         blockedUsers?.map((user) => {
@@ -147,18 +167,19 @@ export const BlockedAccounts = () => {
                         })
                     )
                 }
-                {hasMoreBlockedProfiles ?
-                    <Button
-                        onClick={handleLoadMoreProfiles}
-                        disabled={isLoadingMore || !hasMoreBlockedProfiles}
-                    >
-                        {isLoadingMore ?
-                            <><Loading size={24} /> Loading...</>
-                            : 'Load More Profiles'}
-                    </Button>
-                    :
-                    'No more profiles'
-                }
+                <div>
+                    {hasMoreBlockedProfiles ?
+                        <Button
+                            onClick={handleLoadMoreProfiles}
+                            disabled={isLoadingMore || !hasMoreBlockedProfiles}
+                        >
+                            {isLoadingMore ?
+                                <><Loading size={24} /> Loading...</>
+                                : 'Load More Profiles'}
+                        </Button>
+                        :
+                        'No more profiles'
+                    }</div>
                 {blockedUsers?.length < 1 ? <div>Blocked accounts appear here.</div> : null}
             </Col>
         </Row>
