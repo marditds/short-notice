@@ -6,6 +6,7 @@ import { getAvatarUrl as avatarUrl } from '../../../lib/utils/avatarUtils';
 import defaultAvatar from '../../../assets/default.png';
 import { SlClose } from "react-icons/sl";
 import { Loading } from '../../Loading/Loading';
+import { AiFillCloseCircle } from "react-icons/ai";
 
 export const BlockedAccounts = () => {
 
@@ -151,16 +152,26 @@ export const BlockedAccounts = () => {
                                         {user.username}
                                         < img src={avatarUrl(user.avatar) || defaultAvatar}
                                             alt="Profile"
-                                            style={{ borderRadius: '50%', width: '50px', height: '50px', marginLeft: '12px' }}
+                                            style={{
+                                                borderRadius: '50%',
+                                                width: '50px',
+                                                height: '50px',
+                                                marginLeft: '12px'
+                                            }}
                                             className='d-flex'
                                         />
                                         <Button
                                             onClick={async () => handleDelteBlock(user.$id)}
-                                            className='p-0' style={{ marginLeft: '12px' }}
+                                            className='p-0 d-flex align-items-center justify-content-center 
+                                            settings__unblocked-btn
+                                            '
+                                            style={{
+                                                marginLeft: '12px'
+                                            }}
                                         >
-                                            <SlClose size={24} />
-                                        </Button>
 
+                                            <AiFillCloseCircle size={24} color='var(--main-accent-color)' />
+                                        </Button>
                                     </div>
                                 </div>
                             )
@@ -171,6 +182,7 @@ export const BlockedAccounts = () => {
                     {hasMoreBlockedProfiles ?
                         <Button
                             onClick={handleLoadMoreProfiles}
+                            className='settings__load-blocked-btn'
                             disabled={isLoadingMore || !hasMoreBlockedProfiles}
                         >
                             {isLoadingMore ?
