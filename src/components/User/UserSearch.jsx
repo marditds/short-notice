@@ -60,7 +60,7 @@ export const UserSearch = ({ userId }) => {
                 return 'No results';
             }
 
-            if (filteredUsers?.length < limit) {
+            if (users?.length < limit) {
                 setHasMoreProfiles(false);
             } else {
                 setHasMoreProfiles(true);

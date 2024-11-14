@@ -11,20 +11,29 @@ export const BlockedAccounts = () => {
 
     const { googleUserData, username } = useUserContext();
     const { userId,
-        getBlockedUsersByUser,
+        getBlockedUsersByUserByBatch,
         getUserAccountByUserId,
         deleteBlockUsingBlockedId
     } = useUserInfo(googleUserData);
 
-    const [blockedUsers, setBlockedUsers] = useState(null);
+    const [blockedUsers, setBlockedUsers] = useState([]);
     const [isListLoading, setIsListLoading] = useState(false);
     const [isUnblockingLoading, setIsUnblockingLoading] = useState(false);
+
+    const [limit] = useState(3);
+    const [offset, setOffset] = useState(0);
+    const [hasMoreBlockedProfiles, setHasMoreBlockedProfiles] = useState(true);
+    const [isLoadingMore, setIsLoadingMore] = useState(false);
+
 
     const fetchBlockedList = async () => {
         try {
             setIsListLoading(true);
 
-            const blckdLst = await getBlockedUsersByUser(userId);
+            console.log('limit:', limit);
+            console.log('offset:', offset);
+
+            const blckdLst = await getBlockedUsersByUserByBatch(userId, limit, offset);
             console.log(`These are accounts blocked by${username}':`, blckdLst);
 
             let blockedIdArr = [];
@@ -51,7 +60,26 @@ export const BlockedAccounts = () => {
 
             console.log('blockedUsers', blockedUsers);
 
-            setBlockedUsers(blockedUsers);
+
+            if (blockedUsers) {
+                setBlockedUsers(prevUsers => {
+                    const moreUsers = blockedUsers?.filter(user =>
+                        !prevUsers?.some(loadedUser => loadedUser.$id === user.$id)
+                    );
+
+                    return [...prevUsers, ...moreUsers];
+                });
+            } else {
+                return 'No results';
+            }
+
+            if (blockedUsers?.length < limit) {
+                setHasMoreBlockedProfiles(false);
+            } else {
+                setHasMoreBlockedProfiles(true);
+                setOffset(offset + limit);
+            }
+            // setBlockedUsers(blockedUsers);
 
         } catch (error) {
             console.error('Error fetching blocked list', error);
@@ -63,6 +91,10 @@ export const BlockedAccounts = () => {
     useEffect(() => {
         fetchBlockedList();
     }, [userId])
+
+    const handleLoadMoreProfiles = () => {
+        fetchBlockedList();
+    }
 
     const handleDelteBlock = async (blocked_id) => {
         try {
@@ -114,6 +146,18 @@ export const BlockedAccounts = () => {
                             )
                         })
                     )
+                }
+                {hasMoreBlockedProfiles ?
+                    <Button
+                        onClick={handleLoadMoreProfiles}
+                        disabled={isLoadingMore || !hasMoreBlockedProfiles}
+                    >
+                        {isLoadingMore ?
+                            <><Loading size={24} /> Loading...</>
+                            : 'Load More Profiles'}
+                    </Button>
+                    :
+                    'No more profiles'
                 }
                 {blockedUsers?.length < 1 ? <div>Blocked accounts appear here.</div> : null}
             </Col>
