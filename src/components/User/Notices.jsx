@@ -171,8 +171,8 @@ export const Notices = ({
             setLoadedReactions(prev => ({
                 ...prev,
                 [noticeId]: [
-                    ...(prev[noticeId] || []), // Spread previous reactions if they exist
-                    ...(noticeReactions?.documents || []) // Append new reactions
+                    ...(prev[noticeId] || []),
+                    ...(noticeReactions?.documents || [])
                 ]
             }));
 
@@ -183,7 +183,7 @@ export const Notices = ({
             }));
 
             if (noticeReactions?.documents.length < limit) {
-                setHasMoreReactions(false);  // No more reactions to load
+                setHasMoreReactions(false);
             }
 
             setOffsets(prev => ({
@@ -201,10 +201,10 @@ export const Notices = ({
     }
 
     const handleAccordionToggle = async (noticeId) => {
-        // If closing the accordion
+
         if (activeNoticeId === noticeId) {
             setActiveNoticeId(null);
-            // Clean up loaded reactions for this notice
+
             setLoadedReactions(prev => {
                 const newState = { ...prev };
                 delete newState[noticeId];
@@ -416,17 +416,37 @@ export const Notices = ({
                                         <Loading size={24} />
                                     </Col>
                                 ) : loadedReactions[notice.$id]?.length > 0 ? (
-                                    loadedReactions[notice.$id].map((reaction) => (
-                                        <Col key={reaction.$id}>
-                                            {reaction.content}
-                                        </Col>
-                                    ))
+                                    <>
+                                        {loadedReactions[notice.$id].map((reaction) => (
+
+                                            <Col key={reaction.$id}>
+                                                {reaction.content}
+                                            </Col>
+                                        ))}
+                                        <div>
+                                            {hasMoreReactions ?
+                                                <Button
+                                                    onClick={() => handleLoadMoreReactions(notice.$id)}
+                                                    className='settings__load-blocked-btn'
+                                                    disabled={isLoadingMoreReactions || !hasMoreReactions}
+                                                >
+                                                    {isLoadingMoreReactions ?
+                                                        <><Loading size={24} /> Loading...</>
+                                                        : 'Load More Reactions'}
+                                                </Button>
+                                                :
+                                                <Col className="text-center text-muted py-3">
+                                                    No more reactions
+                                                </Col>
+                                            }
+                                        </div>
+                                    </>
                                 ) : (
                                     <Col className="text-center text-muted py-3">
                                         No reactions for this notice
                                     </Col>
                                 )}
-                                <div>
+                                {/* <div>
                                     {hasMoreReactions ?
                                         <Button
                                             onClick={() => handleLoadMoreReactions(notice.$id)}
@@ -439,7 +459,7 @@ export const Notices = ({
                                         </Button>
                                         :
                                         'No more reactions'
-                                    }</div>
+                                    }</div> */}
 
                                 {/* {
                                     reactions?.map((reaction) => {
