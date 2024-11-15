@@ -57,6 +57,7 @@ const OtherUserProfile = () => {
         followingAccounts,
         makeBlock,
         getUserByUsername,
+        getUserAccountByUserId,
         fetchUsersData,
         getBlockedUsersByUser,
         followUser,
@@ -467,6 +468,7 @@ const OtherUserProfile = () => {
                                                 handleReport={handleReport}
                                                 handleReact={handleReact}
                                                 getReactionsForNotice={getReactionsForNotice}
+                                                getUserAccountByUserId={getUserAccountByUserId}
                                                 eventKey='notices'
                                             />
                                             <div className="d-flex justify-content-center mt-4">
@@ -503,6 +505,7 @@ const OtherUserProfile = () => {
                                                 handleReport={handleReport}
                                                 handleReact={handleReact}
                                                 getReactionsForNotice={getReactionsForNotice}
+                                                getUserAccountByUserId={getUserAccountByUserId}
                                             />
                                             <div className="d-flex justify-content-center mt-4">
                                                 {hasMoreSpreads ?
@@ -538,6 +541,7 @@ const OtherUserProfile = () => {
                                                 handleReport={handleReport}
                                                 handleReact={handleReact}
                                                 getReactionsForNotice={getReactionsForNotice}
+                                                getUserAccountByUserId={getUserAccountByUserId}
                                             />
                                             <div className="d-flex justify-content-center mt-4">
                                                 {hasMoreLikes ?

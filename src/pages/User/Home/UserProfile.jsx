@@ -58,12 +58,13 @@ const UserProfile = () => {
         followingCount,
         followersAccounts,
         followingAccounts,
+        getUserAccountByUserId,
         getUserByUsername,
         fetchUsersData,
         fetchAccountsFollowingTheUser,
         fetchAccountsFollowedByUser,
         getBlockedUsersByUser
-    } = useUserInfo();
+    } = useUserInfo(googleUserData);
 
     const [notices, setNotices] = useState([]);
     const [spreadNoticesData, setSpreadNoticesData] = useState([]);
@@ -373,6 +374,7 @@ const UserProfile = () => {
                         eventKey='my-notices'
                         // reactions={noticesReactions}
                         getReactionsForNotice={getReactionsForNotice}
+                        getUserAccountByUserId={getUserAccountByUserId}
                     />
                     <div className="d-flex justify-content-center mt-4">
                         {hasMoreNotices ?
@@ -403,6 +405,7 @@ const UserProfile = () => {
                         handleReact={handleReact}
                         // reactions={spreadReactions}
                         getReactionsForNotice={getReactionsForNotice}
+                        getUserAccountByUserId={getUserAccountByUserId}
 
                     />
                     <div className="d-flex justify-content-center mt-4">
@@ -435,6 +438,7 @@ const UserProfile = () => {
                         handleReact={handleReact}
                         // reactions={likedReactions}
                         getReactionsForNotice={getReactionsForNotice}
+                        getUserAccountByUserId={getUserAccountByUserId}
 
                     />
                     <div className="d-flex justify-content-center mt-4">

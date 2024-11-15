@@ -20,7 +20,7 @@
 /* .settings__unblocked-btn, */
 .settings__delete-avatar-btn:focus,
 .settings__update-username-btn:focus,
-.settings__load-blocked-btn, :focus,
+.settings__load-blocked-btn:focus,
 .settings__update-interests-btn:focus {
     background-color: var(--main-accent-color) !important;
     color: black !important;

@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { createBlock, getBlockedUsersByUser as fetchBlockedUsersByUser, getBlockedUsersByUserByBatch as fetchBlockedUsersByUserByBatch, getUsersBlockingUser as fetchUsersBlockingUser, removeBlockUsingBlockedId, checkIdExistsInAuth, checkEmailExistsInAuth as checkEmailInAuthFromServer, registerAuthUser, getUserById, deleteAuthUser, createUserSession, getSessionDetails as fetchSessionDetails, deleteUserSession, updateUser, updateAuthUser, deleteUser, getUserByUsername as fetchUserByUsername, getAllUsersByString as fetchAllUsersByString, deleteAllNotices, getUsersDocument, createFollow, removeFollow, getUserFollowingsById as fetchUserFollowingsById, getUserFollowersById as fetchUserFollowersById, getOtherUserFollowingsById as fetchOtherUserFollowingsById, createPassocde, updatePassocde, getPassocdeByBusincessId as fetchPassocdeByBusincessId } from '../context/dbhandler';
+import { createBlock, getBlockedUsersByUser as fetchBlockedUsersByUser, getBlockedUsersByUserByBatch as fetchBlockedUsersByUserByBatch, getUsersBlockingUser as fetchUsersBlockingUser, removeBlockUsingBlockedId, checkIdExistsInAuth, checkEmailExistsInAuth as checkEmailInAuthFromServer, registerAuthUser, getUserById, getUserByIdQuery as fetchUserByIdQuery, deleteAuthUser, createUserSession, getSessionDetails as fetchSessionDetails, deleteUserSession, updateUser, updateAuthUser, deleteUser, getUserByUsername as fetchUserByUsername, getAllUsersByString as fetchAllUsersByString, deleteAllNotices, getUsersDocument, createFollow, removeFollow, getUserFollowingsById as fetchUserFollowingsById, getUserFollowersById as fetchUserFollowersById, getOtherUserFollowingsById as fetchOtherUserFollowingsById, createPassocde, updatePassocde, getPassocdeByBusincessId as fetchPassocdeByBusincessId } from '../context/dbhandler';
 import { useUserContext } from '../context/UserContext';
 import { UserId } from '../../components/User/UserId';
 
@@ -317,6 +317,15 @@ const useUserInfo = (data) => {
         }
     }
 
+    const getUserByIdQuery = async (userId) => {
+        try {
+            const user = await fetchUserByIdQuery(userId);
+            return user;
+        } catch (error) {
+            console.error('Error querying user by id:', error);
+        }
+    }
+
 
     const makePasscode = async (userId, passcode, accountType) => {
         try {
@@ -449,6 +458,7 @@ const useUserInfo = (data) => {
         fetchAccountsFollowingTheUser,
         fetchAccountsFollowedByUser,
         getUserAccountByUserId,
+        getUserByIdQuery,
         makePasscode,
         editPasscode,
         getPassocdeByBusincessId

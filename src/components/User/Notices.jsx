@@ -25,7 +25,8 @@ export const Notices = ({
     likedNotices,
     spreadNotices,
     reactions,
-    getReactionsForNotice
+    getReactionsForNotice,
+    getUserAccountByUserId
 }) => {
     const location = useLocation();
 
@@ -40,11 +41,11 @@ export const Notices = ({
     const [isSendingReactionLoading, setIsSendingReactionLoading] = useState(false);
 
     const [limit] = useState(5);
-    // const [offset, setOffset] = useState(0);
-    // const [hasMoreReactions, setHasMoreReactions] = useState(true);
     const [offsets, setOffsets] = useState({});
     const [hasMoreReactions, setHasMoreReactions] = useState({});
     const [isLoadingMoreReactions, setIsLoadingMoreReactions] = useState(false);
+
+    const [reactionUsers, setReactionUsers] = useState([]);
 
     const [loadingStates, setLoadingStates] = useState({});
     const [loadedReactions, setLoadedReactions] = useState({});
@@ -84,7 +85,7 @@ export const Notices = ({
     }, [notices]);
 
 
-    // Replying to a notice
+    // Reacting to a notice
     const handleReactNotice = (noticeId, noticeUsername, noticeAvatarUrl, noticeText) => {
         setReactingNoticeId(noticeId);
         setShowReactModal(true);
@@ -230,6 +231,20 @@ export const Notices = ({
             setLoadingStates(prev => ({ ...prev, [noticeId]: true }));
             try {
                 const initialReactions = await getReactionsForNotice(noticeId, limit, 0);
+
+                console.log('initialReactions', initialReactions);
+
+                const usersIds = initialReactions.documents.map((reaction) => reaction.sender_id);
+
+                console.log('usersIds', usersIds);
+
+                const users = await Promise.all(usersIds.map(async (userId) => await getUserAccountByUserId(userId)));
+
+                console.log('users', users);
+
+                setReactionUsers(users);
+
+                const fullReaction = [];
 
                 setLoadedReactions(prev => ({
                     ...prev,
@@ -417,8 +432,8 @@ export const Notices = ({
                                     </Col>
                                 ) : loadedReactions[notice.$id]?.length > 0 ? (
                                     <>
-                                        {loadedReactions[notice.$id].map((reaction) => (
 
+                                        {loadedReactions[notice.$id].map((reaction) => (
                                             <Col key={reaction.$id}>
                                                 {reaction.content}
                                             </Col>
@@ -446,30 +461,7 @@ export const Notices = ({
                                         No reactions for this notice
                                     </Col>
                                 )}
-                                {/* <div>
-                                    {hasMoreReactions ?
-                                        <Button
-                                            onClick={() => handleLoadMoreReactions(notice.$id)}
-                                            className='settings__load-blocked-btn'
-                                            disabled={isLoadingMoreReactions || !hasMoreReactions}
-                                        >
-                                            {isLoadingMoreReactions ?
-                                                <><Loading size={24} /> Loading...</>
-                                                : 'Load More Reactions'}
-                                        </Button>
-                                        :
-                                        'No more reactions'
-                                    }</div> */}
 
-                                {/* {
-                                    reactions?.map((reaction) => {
-                                        return (reaction.notice_id === notice.$id &&
-                                            <Col key={reaction.$id}>
-                                                {reaction.content}
-                                            </Col>)
-                                    }
-                                    )
-                                } */}
                             </Row>
                         </Accordion.Body>
                     </Accordion.Item>
@@ -477,8 +469,7 @@ export const Notices = ({
                 }
             </Accordion>
 
-            <Modal
-                show={showReactModal}
+            <Modal show={showReactModal}
                 onHide={handleCloseReactModal}
                 className='notice__react--modal'
             >

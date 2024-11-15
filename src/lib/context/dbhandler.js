@@ -134,6 +134,20 @@ export const getUserById = async (userId) => {
     }
 };
 
+export const getUserByIdQuery = async (userId) => {
+    try {
+        const response = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_USERS_COLLECTION,
+            [Query.equal('$id', userId)]
+        );
+        return response;
+    } catch (error) {
+        // console.error('Error fetching user by ID:', error);
+        throw error;
+    }
+};
+
 export const getUserByEmail = async (email) => {
     try {
         const userList = await databases.listDocuments(
