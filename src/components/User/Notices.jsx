@@ -46,6 +46,7 @@ export const Notices = ({
     const [isLoadingMoreReactions, setIsLoadingMoreReactions] = useState(false);
 
     const [reactionUsers, setReactionUsers] = useState([]);
+    const [reactionUserMap, setReactionUserMap] = useState({});
 
     const [loadingStates, setLoadingStates] = useState({});
     const [loadedReactions, setLoadedReactions] = useState({});
@@ -169,6 +170,21 @@ export const Notices = ({
 
             console.log('noticeReactions', noticeReactions);
 
+            const usersIds = noticeReactions.documents.map((reaction) => reaction.sender_id);
+
+            console.log('usersIds', usersIds);
+
+            const users = await Promise.all(usersIds.map(async (userId) => await getUserAccountByUserId(userId)));
+
+            console.log('users', users);
+
+            const newUserMap = { ...reactionUserMap[noticeId] };
+            users.forEach(user => {
+                if (user) {
+                    newUserMap[user.$id] = user.username;
+                }
+            });
+
             setLoadedReactions(prev => ({
                 ...prev,
                 [noticeId]: [
@@ -244,7 +260,17 @@ export const Notices = ({
 
                 setReactionUsers(users);
 
-                const fullReaction = [];
+                const userMap = {};
+                users.forEach(user => {
+                    if (user) {
+                        userMap[user.$id] = user.username;
+                    }
+                });
+
+                setReactionUserMap(prev => ({
+                    ...prev,
+                    [noticeId]: userMap
+                }));
 
                 setLoadedReactions(prev => ({
                     ...prev,
@@ -432,9 +458,11 @@ export const Notices = ({
                                     </Col>
                                 ) : loadedReactions[notice.$id]?.length > 0 ? (
                                     <>
-
                                         {loadedReactions[notice.$id].map((reaction) => (
                                             <Col key={reaction.$id}>
+                                                <strong>
+                                                    {reactionUserMap[notice.$id]?.[reaction.sender_id] || 'Unknown user'}
+                                                </strong>
                                                 {reaction.content}
                                             </Col>
                                         ))}
