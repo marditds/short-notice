@@ -439,9 +439,9 @@ const useNotices = (googleUserData) => {
     }
 
     // Get reactions from DB
-    const getReactionsForNotice = async (notice_id) => {
+    const getReactionsForNotice = async (notice_id, limit, offset) => {
         try {
-            const response = await fetchAllReactionsByNoticeId(notice_id);
+            const response = await fetchAllReactionsByNoticeId(notice_id, limit, offset);
             console.log('getAllReactionsByNoticeId', response);
             return response;
         } catch (error) {

@@ -1152,13 +1152,15 @@ export const getAllReactionsByRecipientId = async (recipient_id) => {
     }
 }
 
-export const getAllReactionsByNoticeId = async (notice_id) => {
+export const getAllReactionsByNoticeId = async (notice_id, limit, offset) => {
     try {
         const response = await databases.listDocuments(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_REACTIONS_COLLECTION,
             [
                 Query.equal('notice_id', notice_id),
+                Query.limit(limit),
+                Query.offset(offset)
             ]
         )
         // console.log('Successfully got reactions by notice_id doc.:', response);

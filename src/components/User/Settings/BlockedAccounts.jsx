@@ -4,7 +4,6 @@ import { useUserContext } from '../../../lib/context/UserContext';
 import useUserInfo from '../../../lib/hooks/useUserInfo';
 import { getAvatarUrl as avatarUrl } from '../../../lib/utils/avatarUtils';
 import defaultAvatar from '../../../assets/default.png';
-import { SlClose } from "react-icons/sl";
 import { Loading } from '../../Loading/Loading';
 import { AiFillCloseCircle } from "react-icons/ai";
 

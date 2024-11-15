@@ -39,6 +39,13 @@ export const Notices = ({
     const [reactionText, setReactionText] = useState('');
     const [isSendingReactionLoading, setIsSendingReactionLoading] = useState(false);
 
+    const [limit] = useState(5);
+    // const [offset, setOffset] = useState(0);
+    // const [hasMoreReactions, setHasMoreReactions] = useState(true);
+    const [offsets, setOffsets] = useState({});
+    const [hasMoreReactions, setHasMoreReactions] = useState({});
+    const [isLoadingMoreReactions, setIsLoadingMoreReactions] = useState(false);
+
     const [loadingStates, setLoadingStates] = useState({});
     const [loadedReactions, setLoadedReactions] = useState({});
     const [activeNoticeId, setActiveNoticeId] = useState(null);
@@ -150,12 +157,65 @@ export const Notices = ({
         setReportReason(null);
     }
 
+    const handleLoadMoreReactions = async (noticeId) => {
+        try {
+            setIsLoadingMoreReactions(true);
+
+            const currentOffset = offsets[noticeId] || 0;
+
+            // Get reactions from DB only for one specific notice
+            const noticeReactions = await getReactionsForNotice(noticeId, limit, currentOffset);
+
+            console.log('noticeReactions', noticeReactions);
+
+            setLoadedReactions(prev => ({
+                ...prev,
+                [noticeId]: [
+                    ...(prev[noticeId] || []), // Spread previous reactions if they exist
+                    ...(noticeReactions?.documents || []) // Append new reactions
+                ]
+            }));
+
+            const hasMore = noticeReactions?.documents?.length === limit;
+            setHasMoreReactions(prev => ({
+                ...prev,
+                [noticeId]: hasMore
+            }));
+
+            if (noticeReactions?.documents.length < limit) {
+                setHasMoreReactions(false);  // No more reactions to load
+            }
+
+            setOffsets(prev => ({
+                ...prev,
+                [noticeId]: currentOffset + limit
+            }));
+
+
+        } catch (error) {
+            console.error('Error loading reactions:', error);
+        } finally {
+            setLoadingStates(prev => ({ ...prev, [noticeId]: false }));
+            setIsLoadingMoreReactions(false);
+        }
+    }
+
     const handleAccordionToggle = async (noticeId) => {
         // If closing the accordion
         if (activeNoticeId === noticeId) {
             setActiveNoticeId(null);
             // Clean up loaded reactions for this notice
             setLoadedReactions(prev => {
+                const newState = { ...prev };
+                delete newState[noticeId];
+                return newState;
+            });
+            setOffsets(prev => {
+                const newState = { ...prev };
+                delete newState[noticeId];
+                return newState;
+            });
+            setHasMoreReactions(prev => {
                 const newState = { ...prev };
                 delete newState[noticeId];
                 return newState;
@@ -168,29 +228,30 @@ export const Notices = ({
         // If reactions aren't loaded and not currently loading
         if (!loadedReactions[noticeId] && !loadingStates[noticeId]) {
             setLoadingStates(prev => ({ ...prev, [noticeId]: true }));
-
             try {
-                // Get reactions from DB only for one specific notice
-                const noticeReactions = await getReactionsForNotice(noticeId);
-
-                console.log('noticeReactions', noticeReactions);
+                const initialReactions = await getReactionsForNotice(noticeId, limit, 0);
 
                 setLoadedReactions(prev => ({
                     ...prev,
-                    [noticeId]: noticeReactions?.documents || []
+                    [noticeId]: initialReactions?.documents || []
                 }));
 
+                const hasMore = initialReactions?.documents?.length === limit;
+                setHasMoreReactions(prev => ({
+                    ...prev,
+                    [noticeId]: hasMore
+                }));
+
+                setOffsets(prev => ({
+                    ...prev,
+                    [noticeId]: limit
+                }));
             } catch (error) {
-                console.error('Error loading reactions:', error);
+                console.error('Error loading initial reactions:', error);
             } finally {
                 setLoadingStates(prev => ({ ...prev, [noticeId]: false }));
             }
 
-            // Filter reactions for this specific notice
-            // const noticeReactions = reactions.filter(reaction => reaction.notice_id === noticeId);
-
-            // setLoadedReactions(prev => ({ ...prev, [noticeId]: noticeReactions }));
-            // setLoadingStates(prev => ({ ...prev, [noticeId]: false }));
         }
     };
 
@@ -365,6 +426,20 @@ export const Notices = ({
                                         No reactions for this notice
                                     </Col>
                                 )}
+                                <div>
+                                    {hasMoreReactions ?
+                                        <Button
+                                            onClick={() => handleLoadMoreReactions(notice.$id)}
+                                            className='settings__load-blocked-btn'
+                                            disabled={isLoadingMoreReactions || !hasMoreReactions}
+                                        >
+                                            {isLoadingMoreReactions ?
+                                                <><Loading size={24} /> Loading...</>
+                                                : 'Load More Reactions'}
+                                        </Button>
+                                        :
+                                        'No more reactions'
+                                    }</div>
 
                                 {/* {
                                     reactions?.map((reaction) => {
