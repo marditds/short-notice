@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { formatDateToLocal, calculateCountdown } from '../../lib/utils/dateUtils';
+import { getAvatarUrl as avatarUrl } from '../../lib/utils/avatarUtils';
 import { Row, Col, Modal, Form, Accordion, Button } from 'react-bootstrap';
 import { CgTrash } from 'react-icons/cg';
 import { AiFillEdit } from 'react-icons/ai';
@@ -46,7 +47,8 @@ export const Notices = ({
     const [isLoadingMoreReactions, setIsLoadingMoreReactions] = useState(false);
 
     const [reactionUsers, setReactionUsers] = useState([]);
-    const [reactionUserMap, setReactionUserMap] = useState({});
+    const [reactionUsernameMap, setReactionUsernameMap] = useState({});
+    const [reactionAvatarMap, setReactionAvatarMap] = useState({});
 
     const [loadingStates, setLoadingStates] = useState({});
     const [loadedReactions, setLoadedReactions] = useState({});
@@ -178,7 +180,7 @@ export const Notices = ({
 
             console.log('users', users);
 
-            const newUserMap = { ...reactionUserMap[noticeId] };
+            const newUserMap = { ...reactionUsernameMap[noticeId] };
             users.forEach(user => {
                 if (user) {
                     newUserMap[user.$id] = user.username;
@@ -260,17 +262,39 @@ export const Notices = ({
 
                 setReactionUsers(users);
 
-                const userMap = {};
+                const usernameMap = {};
                 users.forEach(user => {
                     if (user) {
-                        userMap[user.$id] = user.username;
+                        usernameMap[user.$id] = user.username;
                     }
                 });
 
-                setReactionUserMap(prev => ({
+                console.log('userMap', usernameMap);
+
+                const avatarMap = {};
+                users.forEach(user => {
+                    if (user) {
+                        avatarMap[user.$id] = user.avatar;
+                    }
+                });
+
+                console.log('avatarMap', avatarMap);
+
+
+                setReactionUsernameMap(prev => ({
                     ...prev,
-                    [noticeId]: userMap
+                    [noticeId]: usernameMap
                 }));
+
+                setReactionAvatarMap(prev => ({
+                    ...prev,
+                    [noticeId]: avatarMap
+                }));
+
+                console.log('ReactionUsernameMap', reactionUsernameMap);
+
+                console.log('ReactionAvatarMap', reactionAvatarMap);
+
 
                 setLoadedReactions(prev => ({
                     ...prev,
@@ -447,8 +471,8 @@ export const Notices = ({
                                 </Col>
                             </Row>
                         </Accordion.Header>
-                        <Accordion.Body className='d-flex justify-content-around w-100'>
-                            <Row className='d-grid gap-3'>
+                        <Accordion.Body className='d-flex justify-content-center notice__reaction'>
+                            <Row className='d-grid w-100'>
 
                                 {loadingStates[notice.$id] ? (
                                     <Col className="text-center py-3">
@@ -459,11 +483,30 @@ export const Notices = ({
                                 ) : loadedReactions[notice.$id]?.length > 0 ? (
                                     <>
                                         {loadedReactions[notice.$id].map((reaction) => (
-                                            <Col key={reaction.$id}>
-                                                <strong>
-                                                    {reactionUserMap[notice.$id]?.[reaction.sender_id] || 'Unknown user'}
-                                                </strong>
-                                                {reaction.content}
+                                            <Col key={reaction.$id} >
+                                                <Row>
+                                                    <Col className='col-md-9'>
+                                                        {reaction.content}
+                                                    </Col>
+                                                    <Col className='col-md-3 d-flex align-items-center justify-content-end'>
+                                                        <Link to={`/user/${reactionUsernameMap[notice.$id]?.[reaction.sender_id]}`}
+                                                            className='text-decoration-none notice__reaction-username'><strong className='ms-auto me-0'>
+                                                                {reactionUsernameMap[notice.$id]?.[reaction.sender_id] || 'Unknown user'}
+                                                            </strong>
+                                                        </Link>
+                                                        <Link to={`/user/${reactionUsernameMap[notice.$id]?.[reaction.sender_id]}`}
+                                                            className='notice__reaction-avatar'
+                                                        >
+                                                            <img
+                                                                src={avatarUrl(reactionAvatarMap[notice.$id]?.[reaction.sender_id]) || defaultAvatar}
+                                                                alt="Profile"
+                                                                style={{ borderRadius: '50%', width: '50px', height: '50px' }}
+                                                                className='d-flex'
+                                                            />
+                                                        </Link>
+                                                    </Col>
+                                                </Row>
+                                                <hr />
                                             </Col>
                                         ))}
                                         <div>
