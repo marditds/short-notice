@@ -44,6 +44,7 @@ export const Notices = ({
     const [limit] = useState(5);
     const [offsets, setOffsets] = useState({});
     const [hasMoreReactions, setHasMoreReactions] = useState({});
+    const [showLoadMoreBtn, setShowLoadMoreBtn] = useState(false);
     const [isLoadingMoreReactions, setIsLoadingMoreReactions] = useState(false);
 
     const [reactionUsernameMap, setReactionUsernameMap] = useState({});
@@ -201,9 +202,15 @@ export const Notices = ({
                 reactionAvatarMap
             );
 
-            setReactionUsernameMap(prev => ({ ...prev, [noticeId]: updatedUsernameMap }));
+            setReactionUsernameMap(prev => ({
+                ...prev,
+                [noticeId]: updatedUsernameMap
+            }));
 
-            setReactionAvatarMap(prev => ({ ...prev, [noticeId]: updatedAvatarMap }));
+            setReactionAvatarMap(prev => ({
+                ...prev,
+                [noticeId]: updatedAvatarMap
+            }));
 
             console.log('ReactionUsernameMap', reactionUsernameMap);
 
@@ -223,6 +230,10 @@ export const Notices = ({
                 [noticeId]: hasMore
             }));
 
+            if (noticeReactions?.documents?.length < limit) {
+                setHasMoreReactions(false);
+            }
+
             setOffsets(prev => ({
                 ...prev,
                 [noticeId]: currentOffset + limit
@@ -239,16 +250,16 @@ export const Notices = ({
 
     useEffect(() => {
         console.log('activeNoticeId', activeNoticeId);
+        setShowLoadMoreBtn(true);
     }, [activeNoticeId])
 
-    useEffect(() => {
-        console.log('hasMoreReactions', hasMoreReactions);
-    }, [hasMoreReactions])
+
 
     const handleAccordionToggle = async (noticeId) => {
 
         if (activeNoticeId === noticeId) {
             setActiveNoticeId(null);
+            setShowLoadMoreBtn(false);
 
             setLoadedReactions(prev => {
                 const newState = { ...prev };
@@ -269,12 +280,6 @@ export const Notices = ({
         }
 
         setActiveNoticeId(noticeId);
-
-        setHasMoreReactions(prev => ({
-            ...prev,
-            [noticeId]: true
-        }));
-
 
         // If reactions aren't loaded and not currently loading
         if (!loadedReactions[noticeId] && !loadingStates[noticeId]) {
@@ -299,8 +304,15 @@ export const Notices = ({
                     reactionAvatarMap
                 );
 
-                setReactionUsernameMap(prev => ({ ...prev, [noticeId]: updatedUsernameMap }));
-                setReactionAvatarMap(prev => ({ ...prev, [noticeId]: updatedAvatarMap }));
+                setReactionUsernameMap(prev => ({
+                    ...prev,
+                    [noticeId]: updatedUsernameMap
+                }));
+
+                setReactionAvatarMap(prev => ({
+                    ...prev,
+                    [noticeId]: updatedAvatarMap
+                }));
 
 
                 console.log('ReactionUsernameMap', reactionUsernameMap);
@@ -522,11 +534,11 @@ export const Notices = ({
                                             </Col>
                                         ))}
                                         <div>
-                                            {hasMoreReactions ?
+                                            {showLoadMoreBtn ?
                                                 <Button
                                                     onClick={() => handleLoadMoreReactions(notice.$id)}
                                                     className='settings__load-blocked-btn'
-                                                    disabled={isLoadingMoreReactions || !hasMoreReactions}
+                                                    disabled={isLoadingMoreReactions}
                                                 >
                                                     {isLoadingMoreReactions ?
                                                         <><Loading size={24} /> Loading...</>
