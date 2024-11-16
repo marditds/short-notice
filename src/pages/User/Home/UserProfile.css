@@ -356,7 +356,8 @@
 }
 
 .notice__reaction {
-    background: rgb(255, 255, 255);
+    background-attachment: fixed;
+    background: rgb(0, 0, 0);
     background: -moz-linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.58) 76%, rgba(23, 199, 105, 0.58) 100%);
     background: -webkit-linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.58) 76%, rgba(23, 199, 105, 0.58) 100%);
     background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.58) 76%, rgba(23, 199, 105, 0.58) 100%);

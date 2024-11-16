@@ -46,7 +46,6 @@ export const Notices = ({
     const [hasMoreReactions, setHasMoreReactions] = useState({});
     const [isLoadingMoreReactions, setIsLoadingMoreReactions] = useState(false);
 
-    const [reactionUsers, setReactionUsers] = useState([]);
     const [reactionUsernameMap, setReactionUsernameMap] = useState({});
     const [reactionAvatarMap, setReactionAvatarMap] = useState({});
 
@@ -161,6 +160,21 @@ export const Notices = ({
         setReportReason(null);
     }
 
+    const updateReactionMaps = (users, noticeId, usernameMap, avatarMap) => {
+        const updatedUsernameMap = { ...usernameMap[noticeId] };
+        const updatedAvatarMap = { ...avatarMap[noticeId] };
+
+        users.forEach(user => {
+            if (user) {
+                updatedUsernameMap[user.$id] = user.username;
+                updatedAvatarMap[user.$id] = user.avatar;
+            }
+        });
+
+        return { updatedUsernameMap, updatedAvatarMap };
+    };
+
+
     const handleLoadMoreReactions = async (noticeId) => {
         try {
             setIsLoadingMoreReactions(true);
@@ -180,12 +194,20 @@ export const Notices = ({
 
             console.log('users', users);
 
-            const newUserMap = { ...reactionUsernameMap[noticeId] };
-            users.forEach(user => {
-                if (user) {
-                    newUserMap[user.$id] = user.username;
-                }
-            });
+            const { updatedUsernameMap, updatedAvatarMap } = updateReactionMaps(
+                users,
+                noticeId,
+                reactionUsernameMap,
+                reactionAvatarMap
+            );
+
+            setReactionUsernameMap(prev => ({ ...prev, [noticeId]: updatedUsernameMap }));
+
+            setReactionAvatarMap(prev => ({ ...prev, [noticeId]: updatedAvatarMap }));
+
+            console.log('ReactionUsernameMap', reactionUsernameMap);
+
+            console.log('ReactionAvatarMap', reactionAvatarMap);
 
             setLoadedReactions(prev => ({
                 ...prev,
@@ -201,10 +223,6 @@ export const Notices = ({
                 [noticeId]: hasMore
             }));
 
-            if (noticeReactions?.documents.length < limit) {
-                setHasMoreReactions(false);
-            }
-
             setOffsets(prev => ({
                 ...prev,
                 [noticeId]: currentOffset + limit
@@ -218,6 +236,14 @@ export const Notices = ({
             setIsLoadingMoreReactions(false);
         }
     }
+
+    useEffect(() => {
+        console.log('activeNoticeId', activeNoticeId);
+    }, [activeNoticeId])
+
+    useEffect(() => {
+        console.log('hasMoreReactions', hasMoreReactions);
+    }, [hasMoreReactions])
 
     const handleAccordionToggle = async (noticeId) => {
 
@@ -244,6 +270,12 @@ export const Notices = ({
 
         setActiveNoticeId(noticeId);
 
+        setHasMoreReactions(prev => ({
+            ...prev,
+            [noticeId]: true
+        }));
+
+
         // If reactions aren't loaded and not currently loading
         if (!loadedReactions[noticeId] && !loadingStates[noticeId]) {
             setLoadingStates(prev => ({ ...prev, [noticeId]: true }));
@@ -260,36 +292,16 @@ export const Notices = ({
 
                 console.log('users', users);
 
-                setReactionUsers(users);
+                const { updatedUsernameMap, updatedAvatarMap } = updateReactionMaps(
+                    users,
+                    noticeId,
+                    reactionUsernameMap,
+                    reactionAvatarMap
+                );
 
-                const usernameMap = {};
-                users.forEach(user => {
-                    if (user) {
-                        usernameMap[user.$id] = user.username;
-                    }
-                });
+                setReactionUsernameMap(prev => ({ ...prev, [noticeId]: updatedUsernameMap }));
+                setReactionAvatarMap(prev => ({ ...prev, [noticeId]: updatedAvatarMap }));
 
-                console.log('userMap', usernameMap);
-
-                const avatarMap = {};
-                users.forEach(user => {
-                    if (user) {
-                        avatarMap[user.$id] = user.avatar;
-                    }
-                });
-
-                console.log('avatarMap', avatarMap);
-
-
-                setReactionUsernameMap(prev => ({
-                    ...prev,
-                    [noticeId]: usernameMap
-                }));
-
-                setReactionAvatarMap(prev => ({
-                    ...prev,
-                    [noticeId]: avatarMap
-                }));
 
                 console.log('ReactionUsernameMap', reactionUsernameMap);
 
