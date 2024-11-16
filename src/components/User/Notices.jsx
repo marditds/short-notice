@@ -175,7 +175,6 @@ export const Notices = ({
         return { updatedUsernameMap, updatedAvatarMap };
     };
 
-
     const handleLoadMoreReactions = async (noticeId) => {
         try {
             setIsLoadingMoreReactions(true);
@@ -252,8 +251,6 @@ export const Notices = ({
         console.log('activeNoticeId', activeNoticeId);
         setShowLoadMoreBtn(true);
     }, [activeNoticeId])
-
-
 
     const handleAccordionToggle = async (noticeId) => {
 
@@ -524,7 +521,7 @@ export const Notices = ({
                                                             <img
                                                                 src={avatarUrl(reactionAvatarMap[notice.$id]?.[reaction.sender_id]) || defaultAvatar}
                                                                 alt="Profile"
-                                                                style={{ borderRadius: '50%', width: '50px', height: '50px' }}
+                                                                style={{ borderRadius: '50%', width: '35px', height: '35px' }}
                                                                 className='d-flex'
                                                             />
                                                         </Link>
