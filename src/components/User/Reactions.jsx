@@ -1,0 +1,73 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { Row, Col, Button } from 'react-bootstrap';
+import { getAvatarUrl as avatarUrl } from '../../lib/utils/avatarUtils';
+import { Loading } from '../Loading/Loading';
+
+
+export const Reactions = ({ loadingStates, notice, loadedReactions, reactionUsernameMap, reactionAvatarMap, defaultAvatar, showLoadMoreBtn, isLoadingMoreReactions, handleLoadMoreReactions }) => {
+    return (
+        <Row className='d-grid w-100'>
+
+            {loadingStates[notice.$id] ? (
+                <Col className="text-center py-3">
+                    <Loading size={24} />
+                    <Loading size={24} />
+                    <Loading size={24} />
+                </Col>
+            ) : loadedReactions[notice.$id]?.length > 0 ? (
+                <>
+                    {loadedReactions[notice.$id].map((reaction) => (
+                        <Col key={reaction.$id} >
+                            <Row>
+                                <Col className='col-md-9'>
+                                    {reaction.content}
+                                </Col>
+                                <Col className='col-md-3 d-flex align-items-center justify-content-end'>
+                                    <Link to={`/user/${reactionUsernameMap[notice.$id]?.[reaction.sender_id]}`}
+                                        className='text-decoration-none notice__reaction-username'><strong className='ms-auto me-0'>
+                                            {reactionUsernameMap[notice.$id]?.[reaction.sender_id] || 'Unknown user'}
+                                        </strong>
+                                    </Link>
+                                    <Link to={`/user/${reactionUsernameMap[notice.$id]?.[reaction.sender_id]}`}
+                                        className='notice__reaction-avatar'
+                                    >
+                                        <img
+                                            src={avatarUrl(reactionAvatarMap[notice.$id]?.[reaction.sender_id]) || defaultAvatar}
+                                            alt="Profile"
+                                            style={{ borderRadius: '50%', width: '35px', height: '35px' }}
+                                            className='d-flex'
+                                        />
+                                    </Link>
+                                </Col>
+                            </Row>
+                            <hr />
+                        </Col>
+                    ))}
+                    <div>
+                        {showLoadMoreBtn ?
+                            <Button
+                                onClick={() => handleLoadMoreReactions(notice.$id)}
+                                className='settings__load-blocked-btn'
+                                disabled={isLoadingMoreReactions}
+                            >
+                                {isLoadingMoreReactions ?
+                                    <><Loading size={24} /> Loading...</>
+                                    : 'Load More Reactions'}
+                            </Button>
+                            :
+                            <Col className="text-center text-muted py-3">
+                                No more reactions
+                            </Col>
+                        }
+                    </div>
+                </>
+            ) : (
+                <Col className="text-center text-muted py-3">
+                    No reactions for this notice
+                </Col>
+            )}
+
+        </Row>
+    )
+}

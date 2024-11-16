@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { formatDateToLocal, calculateCountdown } from '../../lib/utils/dateUtils';
-import { getAvatarUrl as avatarUrl } from '../../lib/utils/avatarUtils';
 import { Row, Col, Modal, Form, Accordion, Button } from 'react-bootstrap';
 import { CgTrash } from 'react-icons/cg';
 import { AiFillEdit } from 'react-icons/ai';
@@ -10,6 +9,7 @@ import { RiMegaphoneLine, RiMegaphoneFill } from 'react-icons/ri';
 import { BsHandThumbsUp, BsHandThumbsUpFill, BsExclamationTriangle } from 'react-icons/bs';
 import defaultAvatar from '../../assets/default.png';
 import { Loading } from '../Loading/Loading';
+import { Reactions } from './Reactions';
 
 
 export const Notices = ({
@@ -161,6 +161,7 @@ export const Notices = ({
         setReportReason(null);
     }
 
+    // Fetching and listing reactions and related user info
     const updateReactionMaps = (users, noticeId, usernameMap, avatarMap) => {
         const updatedUsernameMap = { ...usernameMap[noticeId] };
         const updatedAvatarMap = { ...avatarMap[noticeId] };
@@ -493,68 +494,17 @@ export const Notices = ({
                             </Row>
                         </Accordion.Header>
                         <Accordion.Body className='d-flex justify-content-center notice__reaction'>
-                            <Row className='d-grid w-100'>
-
-                                {loadingStates[notice.$id] ? (
-                                    <Col className="text-center py-3">
-                                        <Loading size={24} />
-                                        <Loading size={24} />
-                                        <Loading size={24} />
-                                    </Col>
-                                ) : loadedReactions[notice.$id]?.length > 0 ? (
-                                    <>
-                                        {loadedReactions[notice.$id].map((reaction) => (
-                                            <Col key={reaction.$id} >
-                                                <Row>
-                                                    <Col className='col-md-9'>
-                                                        {reaction.content}
-                                                    </Col>
-                                                    <Col className='col-md-3 d-flex align-items-center justify-content-end'>
-                                                        <Link to={`/user/${reactionUsernameMap[notice.$id]?.[reaction.sender_id]}`}
-                                                            className='text-decoration-none notice__reaction-username'><strong className='ms-auto me-0'>
-                                                                {reactionUsernameMap[notice.$id]?.[reaction.sender_id] || 'Unknown user'}
-                                                            </strong>
-                                                        </Link>
-                                                        <Link to={`/user/${reactionUsernameMap[notice.$id]?.[reaction.sender_id]}`}
-                                                            className='notice__reaction-avatar'
-                                                        >
-                                                            <img
-                                                                src={avatarUrl(reactionAvatarMap[notice.$id]?.[reaction.sender_id]) || defaultAvatar}
-                                                                alt="Profile"
-                                                                style={{ borderRadius: '50%', width: '35px', height: '35px' }}
-                                                                className='d-flex'
-                                                            />
-                                                        </Link>
-                                                    </Col>
-                                                </Row>
-                                                <hr />
-                                            </Col>
-                                        ))}
-                                        <div>
-                                            {showLoadMoreBtn ?
-                                                <Button
-                                                    onClick={() => handleLoadMoreReactions(notice.$id)}
-                                                    className='settings__load-blocked-btn'
-                                                    disabled={isLoadingMoreReactions}
-                                                >
-                                                    {isLoadingMoreReactions ?
-                                                        <><Loading size={24} /> Loading...</>
-                                                        : 'Load More Reactions'}
-                                                </Button>
-                                                :
-                                                <Col className="text-center text-muted py-3">
-                                                    No more reactions
-                                                </Col>
-                                            }
-                                        </div>
-                                    </>
-                                ) : (
-                                    <Col className="text-center text-muted py-3">
-                                        No reactions for this notice
-                                    </Col>
-                                )}
-
-                            </Row>
+                            <Reactions
+                                notice={notice}
+                                defaultAvatar={defaultAvatar}
+                                isLoadingMoreReactions={isLoadingMoreReactions}
+                                loadedReactions={loadedReactions}
+                                loadingStates={loadingStates}
+                                reactionAvatarMap={reactionAvatarMap}
+                                reactionUsernameMap={reactionUsernameMap}
+                                showLoadMoreBtn={showLoadMoreBtn}
+                                handleLoadMoreReactions={handleLoadMoreReactions}
+                            />
                         </Accordion.Body>
                     </Accordion.Item>
                 ))
