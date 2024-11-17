@@ -35,9 +35,6 @@ export default async ({ req, res, log, error }) => {
     for (const reaction of reactions) {
       const expiresAt = new Date(reaction.expiresAt);
 
-      log('expiresAt', expiresAt);
-
-
       if (reaction.expiresAt !== null) {
         // Delete notice if it is expired
 
