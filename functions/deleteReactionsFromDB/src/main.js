@@ -38,7 +38,7 @@ export default async ({ req, res, log, error }) => {
       log('expiresAt', expiresAt);
 
 
-      if (reaction.expiresAt < now && reaction.expiresAt !== null) {
+      if (reaction.expiresAt === null) {
         // Delete notice if it is expired
 
         log('reaction.expiresAt:', reaction.expiresAt)
