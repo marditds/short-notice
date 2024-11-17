@@ -35,19 +35,18 @@ export default async ({ req, res, log, error }) => {
     for (const reaction of reactions) {
       const expiresAt = new Date(reaction.expiresAt);
 
-      log('expiresAt', expiresAt);
-
-
-      if (reaction.expiresAt < now && reaction.expiresAt !== null) {
+      if (reaction.expiresAt !== null) {
         // Delete notice if it is expired
-
         log('reaction.expiresAt:', reaction.expiresAt)
-        log('FOUND AN EXPIRED REACTION!', reaction.content);
-        // await databases.deleteDocument(
-        //   process.env.VITE_DATABASE,
-        //   process.env.VITE_REACTIONS_COLLECTION,
-        //   reaction.$id);
-        // console.log(`Deleted expired reaction: ${reaction.$id}`);
+        if (expiresAt <= now) {
+          log('FOUND AN EXPIRED REACTION!', reaction.content);
+          await databases.deleteDocument(
+            process.env.VITE_DATABASE,
+            process.env.VITE_REACTIONS_COLLECTION,
+            reaction.$id);
+          log(`Deleted expired reaction: ${reaction.$id}`);
+        }
+
       }
     }
     // Log messages and errors to the Appwrite Console
