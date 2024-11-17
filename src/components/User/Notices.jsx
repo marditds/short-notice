@@ -111,7 +111,7 @@ export const Notices = ({
                 const notice = notices.find(notice => notice.$id === reactingNoticeId);
 
                 if (notice) {
-                    const res = await handleReact(notice.user_id, reactionText, notice.$id);
+                    const res = await handleReact(notice.user_id, reactionText, notice.$id, notice.expiresAt);
                     console.log('handleReactSubmission', res);
                     setShowReactModal(false);
                     setReactionText('');

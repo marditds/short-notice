@@ -1096,7 +1096,7 @@ export const getOtherUserFollowingsById = async (user_id) => {
     }
 }
 
-export const createReaction = async (sender_id, recipient_id, content, timestamp, notice_id) => {
+export const createReaction = async (sender_id, recipient_id, content, timestamp, notice_id, expiresAt) => {
     try {
         const response = await databases.createDocument(
             import.meta.env.VITE_DATABASE,
@@ -1107,7 +1107,8 @@ export const createReaction = async (sender_id, recipient_id, content, timestamp
                 recipient_id,
                 content,
                 timestamp,
-                notice_id
+                notice_id,
+                expiresAt
             },
             // [
             //     Permission.write(Role.users()),
@@ -1174,7 +1175,8 @@ export const getAllReactionsByNoticeId = async (notice_id, limit, offset) => {
             [
                 Query.equal('notice_id', notice_id),
                 Query.limit(limit),
-                Query.offset(offset)
+                Query.offset(offset),
+                Query.orderDesc('$createdAt')
             ]
         )
         // console.log('Successfully got reactions by notice_id doc.:', response);
