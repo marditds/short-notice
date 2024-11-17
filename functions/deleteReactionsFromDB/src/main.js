@@ -33,7 +33,7 @@ export default async ({ req, res, log, error }) => {
     for (const reaction of reactions) {
       const expiresAt = new Date(reaction.expiresAt);
 
-      if (reaction.expiresAt <= now && expiresAt !== null) {
+      if (reaction.expiresAt <= now && reaction.expiresAt !== null) {
         // Delete notice if it is expired
         log('FOUND AN EXPIRED REACTION!', reaction.content);
         // await databases.deleteDocument(
