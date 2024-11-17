@@ -230,9 +230,9 @@ const UserFeed = () => {
         }
     }
 
-    const handleReact = async (currUserId, content, notice_id) => {
+    const handleReact = async (currUserId, content, notice_id, expiresAt) => {
         try {
-            await sendReaction(currUserId, content, notice_id);
+            await sendReaction(currUserId, content, notice_id, expiresAt);
             console.log('Success handleReact.');
         } catch (error) {
             console.error('Failed handleReact:', error);

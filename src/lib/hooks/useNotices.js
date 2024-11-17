@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { createNotice, getUserNotices, updateNotice, deleteNotice, deleteAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSpread, getUserSpreads, removeSpread, createReport, createLike, removeLike, getUserLikes, getAllLikedNotices as fetchAllLikedNotices, getAllSpreadNotices as fetchAllSpreadNotices, createReaction, getAllReactionsBySenderId as fetchAllReactionsBySenderId, getAllReactions as fetchAllReactions, getAllReactionsByRecipientId as fetchAllReactionsByRecipientId, getNoticeByNoticeId as fetchNoticeByNoticeId, getAllReactionsByNoticeId as fetchAllReactionsByNoticeId } from '../../lib/context/dbhandler';
+import { createNotice, getUserNotices, updateNotice, deleteNotice, deleteAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSpread, getUserSpreads, removeSpread, createReport, createLike, removeLike, getUserLikes, getAllLikedNotices as fetchAllLikedNotices, getAllSpreadNotices as fetchAllSpreadNotices, createReaction, deleteReaction, getAllReactionsBySenderId as fetchAllReactionsBySenderId, getAllReactions as fetchAllReactions, getAllReactionsByRecipientId as fetchAllReactionsByRecipientId, getNoticeByNoticeId as fetchNoticeByNoticeId, getAllReactionsByNoticeId as fetchAllReactionsByNoticeId } from '../../lib/context/dbhandler';
 import { UserId } from '../../components/User/UserId.jsx';
 
 const useNotices = (googleUserData) => {
@@ -232,7 +232,7 @@ const useNotices = (googleUserData) => {
                 prevNotices.filter(notice => {
                     if (notice.expiresAt) {
                         const expiresAtDate = new Date(notice.expiresAt);
-                        expiresAtDate.setHours(expiresAtDate.getHours() + 7); // Adjust for the 7-hour difference
+                        expiresAtDate.setHours(expiresAtDate.getHours() + 7); // Adjusting the 7-hour difference
 
                         if (expiresAtDate <= now) {
                             deleteNotice(notice.$id);
@@ -267,6 +267,8 @@ const useNotices = (googleUserData) => {
             //         return true; 
             //     })
             // );
+
+            console.log('usrNotices - useNotices:', usrNotices);
 
             return usrNotices;
 
@@ -390,16 +392,25 @@ const useNotices = (googleUserData) => {
         }
     };
 
-    const sendReaction = async (otherUser_id, content, notice_id) => {
+    const sendReaction = async (otherUser_id, content, notice_id, expiresAt) => {
 
         const now = new Date();
 
         try {
-            const response = createReaction(user_id, otherUser_id, content, now, notice_id);
+            const response = createReaction(user_id, otherUser_id, content, now, notice_id, expiresAt);
             console.log('Success sending reaction');
             return response;
         } catch (error) {
             console.error('Failed to send reaction:', error);
+        }
+    }
+
+    const removeReaction = async (reactionId) => {
+        try {
+            await deleteReaction(reactionId);
+            console.log('Reaction removed successfully.');
+        } catch (error) {
+            console.error('Error removing reaction:', error);
         }
     }
 
@@ -507,6 +518,7 @@ const useNotices = (googleUserData) => {
         setLikedNotices,
         removeAllNoticesByUser,
         sendReaction,
+        removeReaction,
         getReactionsForNotice,
         // fetchReactionsForNotices,
         setNoticesReactions,

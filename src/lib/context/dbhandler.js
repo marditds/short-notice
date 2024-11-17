@@ -1122,6 +1122,28 @@ export const createReaction = async (sender_id, recipient_id, content, timestamp
     }
 }
 
+export const deleteReaction = async (reactionId) => {
+    console.log('Attempting to delete reaction with ID:', reactionId);
+    try {
+        const response = await databases.deleteDocument(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_REACTIONS_COLLECTION,
+            reactionId,
+            [
+                Permission.delete(Role.users()),
+                Permission.delete(Role.guests())
+            ]
+        );
+        console.log('Reaction deleted successfully:', response);
+    } catch (error) {
+        if (error.code === 404) {
+            console.log('Ha, 404. Kez inch. 🤪');
+        } else {
+            console.error('Error deleting reaction:', error);
+        }
+    }
+};
+
 export const getAllReactions = async () => {
     try {
         const response = await databases.listDocuments(
