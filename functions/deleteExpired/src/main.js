@@ -11,7 +11,6 @@ export default async ({ req, res, log, error }) => {
 
   const databases = new Databases(client);
 
-  const users = new Users(client);
 
   try {
     log('Request method: ' + req.method);
@@ -19,14 +18,13 @@ export default async ({ req, res, log, error }) => {
     log('Raw body: ' + req.body);
     log('Raw payload: ' + req.payload);
 
-    const response = await users.list();
 
     const res = await databases.listDocuments(
       process.env.VITE_DATABASE,
       process.env.VITE_NOTICES_COLLECTION
     )
 
-    const notices = response.documents;
+    const notices = res.documents;
     const now = new Date();
 
     for (const notice of notices) {
@@ -49,11 +47,11 @@ export default async ({ req, res, log, error }) => {
   }
 
   // The req object contains the request data
-  if (req.path === "/ping") {
-    // Use res object to respond with text(), json(), or binary()
-    // Don't forget to return a response!
-    return res.text("Pong");
-  }
+  // if (req.path === "/ping") {
+  // Use res object to respond with text(), json(), or binary()
+  // Don't forget to return a response!
+  // return res.text("Pong");
+  // }
 
   return res.json({
     motto: "Build like a team of hundreds_",
