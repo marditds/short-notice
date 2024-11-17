@@ -25,6 +25,9 @@ export default async ({ req, res, log, error }) => {
     )
 
     const notices = res.documents;
+
+    log(notices);
+
     const now = new Date();
 
     for (const notice of notices) {
