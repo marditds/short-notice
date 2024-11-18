@@ -334,7 +334,6 @@ const UserProfile = () => {
 
     return (
         <>
-
             <Profile
                 username={username}
                 avatarUrl={avatarUrl}
@@ -343,7 +342,6 @@ const UserProfile = () => {
                 followingAccounts={followingAccounts}
                 followersAccounts={followersAccounts}
             />
-
 
             <ComposeNotice
                 duration={duration}
@@ -362,6 +360,7 @@ const UserProfile = () => {
                 justify
                 className='user-profile__notice-tab fixed-bottom'
             >
+                {/* My Notices */}
                 <Tab
                     eventKey='my-notices'
                     title="My Notices"
@@ -390,6 +389,7 @@ const UserProfile = () => {
                     </div>
                 </Tab>
 
+                {/* My Spreads */}
                 <Tab
                     eventKey='my-spreads'
                     title="Spreads"
@@ -422,7 +422,7 @@ const UserProfile = () => {
                     </div>
                 </Tab>
 
-
+                {/* My Likes */}
                 <Tab
                     eventKey='my-likes'
                     title="Likes"

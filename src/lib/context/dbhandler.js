@@ -1144,6 +1144,29 @@ export const deleteReaction = async (reactionId) => {
     }
 };
 
+export const deleteAllReactions = async (sender_id) => {
+    try {
+        const reactions = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_REACTIONS_COLLECTION,
+            [Query.equal('sender_id', sender_id)],
+            [
+                Permission.delete(Role.users()),
+                Permission.delete(Role.guests())
+            ]
+        );
+
+        for (const reaction of reactions.documents) {
+            await deleteReaction(reaction.$id);
+        }
+
+        console.log(`All reactions from user ${sender_id} deleted successfully.`);
+    } catch (error) {
+        console.error('Error deleting user reactions:', error);
+        throw error;
+    }
+}
+
 export const getAllReactions = async () => {
     try {
         const response = await databases.listDocuments(

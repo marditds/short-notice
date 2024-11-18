@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { createNotice, getUserNotices, updateNotice, deleteNotice, deleteAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSpread, getUserSpreads, removeSpread, createReport, createLike, removeLike, getUserLikes, getAllLikedNotices as fetchAllLikedNotices, getAllSpreadNotices as fetchAllSpreadNotices, createReaction, deleteReaction, getAllReactionsBySenderId as fetchAllReactionsBySenderId, getAllReactions as fetchAllReactions, getAllReactionsByRecipientId as fetchAllReactionsByRecipientId, getNoticeByNoticeId as fetchNoticeByNoticeId, getAllReactionsByNoticeId as fetchAllReactionsByNoticeId } from '../../lib/context/dbhandler';
+import { createNotice, getUserNotices, updateNotice, deleteNotice, deleteAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSpread, getUserSpreads, removeSpread, createReport, createLike, removeLike, getUserLikes, getAllLikedNotices as fetchAllLikedNotices, getAllSpreadNotices as fetchAllSpreadNotices, createReaction, deleteReaction, getAllReactionsBySenderId as fetchAllReactionsBySenderId, getAllReactions as fetchAllReactions, getAllReactionsByRecipientId as fetchAllReactionsByRecipientId, getNoticeByNoticeId as fetchNoticeByNoticeId, getAllReactionsByNoticeId as fetchAllReactionsByNoticeId, deleteAllReactions } from '../../lib/context/dbhandler';
 import { UserId } from '../../components/User/UserId.jsx';
 
 const useNotices = (googleUserData) => {
@@ -232,7 +232,7 @@ const useNotices = (googleUserData) => {
                 prevNotices.filter(notice => {
                     if (notice.expiresAt) {
                         const expiresAtDate = new Date(notice.expiresAt);
-                        expiresAtDate.setHours(expiresAtDate.getHours() + 7); // Adjusting the 7-hour difference
+                        expiresAtDate.setHours(expiresAtDate.getHours() + 8); // Adjusting the 8-hour difference
 
                         if (expiresAtDate <= now) {
                             deleteNotice(notice.$id);
@@ -269,6 +269,8 @@ const useNotices = (googleUserData) => {
             // );
 
             console.log('usrNotices - useNotices:', usrNotices);
+
+
 
             return usrNotices;
 
@@ -414,6 +416,17 @@ const useNotices = (googleUserData) => {
         }
     }
 
+    const removeAllReactionsByUser = async (user_id) => {
+        try {
+            const response = await deleteAllReactions(user_id);
+            return response;
+        } catch (error) {
+            console.error('Error deleting all reactions:', error);
+        }
+    }
+
+
+
     const getAllReactions = async () => {
         try {
             const response = await fetchAllReactions();
@@ -517,6 +530,7 @@ const useNotices = (googleUserData) => {
         likeNotice,
         setLikedNotices,
         removeAllNoticesByUser,
+        removeAllReactionsByUser,
         sendReaction,
         removeReaction,
         getReactionsForNotice,

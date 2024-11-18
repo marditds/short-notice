@@ -7,7 +7,7 @@ import { Loading } from '../../Loading/Loading';
 export const DeleteAllNotices = () => {
 
     const { googleUserData } = useUserContext();
-    const { user_id, removeAllNoticesByUser } = useNotices(googleUserData);
+    const { user_id, removeAllNoticesByUser, removeAllReactionsByUser } = useNotices(googleUserData);
 
     const [showModal, setShowModal] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -23,6 +23,7 @@ export const DeleteAllNotices = () => {
 
         try {
             await removeAllNoticesByUser(user_id);
+            await removeAllReactionsByUser(user_id);
         } catch (error) {
             console.error('Error all notice deletion:', error);
         } finally {

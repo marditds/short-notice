@@ -6,6 +6,7 @@ import { CgTrash } from 'react-icons/cg';
 import { AiFillEdit } from 'react-icons/ai';
 import { BsReply } from "react-icons/bs";
 import { RiMegaphoneLine, RiMegaphoneFill } from 'react-icons/ri';
+import { RiBookmarkLine, RiBookmarkFill } from "react-icons/ri";
 import { BsHandThumbsUp, BsHandThumbsUpFill, BsExclamationTriangle } from 'react-icons/bs';
 import defaultAvatar from '../../assets/default.png';
 import { Loading } from '../Loading/Loading';
@@ -455,12 +456,18 @@ export const Notices = ({
                                                             disabled={user_id === notice.user_id}
                                                         >
                                                             {spreadNotices && spreadNotices[notice.$id] ? (
-                                                                <RiMegaphoneFill
+                                                                <RiBookmarkFill
                                                                     className='notice__reaction-btn-fill'
                                                                     size={19}
                                                                 />
+                                                                // <RiMegaphoneFill
+                                                                //     className='notice__reaction-btn-fill'
+                                                                //     size={19}
+                                                                // />
+
                                                             ) : (
-                                                                <RiMegaphoneLine size={19} />
+                                                                <RiBookmarkLine size={19} />
+                                                                // <RiMegaphoneLine size={19} />
                                                             )}
                                                         </div>
                                                         <div
