@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useParams, redirect, useNavigate } from 'react-router-dom';
+import { useParams, redirect, useNavigate, useLocation } from 'react-router-dom';
 import { Profile } from '../../../components/User/Profile.jsx';
 import { Notices } from '../../../components/User/Notices.jsx';
 import { Tabs, Tab, Form, Modal, Button } from 'react-bootstrap';
@@ -18,6 +18,7 @@ const OtherUserProfile = () => {
 
     let { otherUsername } = useParams();
     const navigate = useNavigate();
+    const location = useLocation();
 
     const { googleUserData, username } = useUserContext();
 
@@ -97,6 +98,9 @@ const OtherUserProfile = () => {
     const [offsetLikes, setOffsetLikes] = useState(0);
     const [hasMoreLikes, setHasMoreLikes] = useState(true);
     const [isLoadingMoreLikes, setIsLoadingMoreLikes] = useState(false);
+
+    // Tabs' EventKey
+    const [eventKey, setEventKey] = useState('notices');
 
     // Check for username vs. otherUsername
     useEffect(() => {
@@ -408,6 +412,11 @@ const OtherUserProfile = () => {
         }
     }
 
+    useEffect(() => {
+        console.log('Pathname:', location.pathname);
+        console.log('Event Key:', eventKey);
+    }, [eventKey])
+
 
     if (noticesLoading) {
         return <div><Loading />Loading {otherUsername}'s profile</div>;
@@ -447,9 +456,8 @@ const OtherUserProfile = () => {
                                 defaultActiveKey="notices"
                                 id="notices-tabs"
                                 justify
-                                className='user-profile__notice-tab 
-                fixed-bottom
-                '
+                                className='user-profile__notice-tab fixed-bottom'
+                                onSelect={(key) => setEventKey(key)}
                             >
                                 {/* NOTICES TAB */}
                                 <Tab
@@ -469,7 +477,7 @@ const OtherUserProfile = () => {
                                                 handleReact={handleReact}
                                                 getReactionsForNotice={getReactionsForNotice}
                                                 getUserAccountByUserId={getUserAccountByUserId}
-                                                eventKey='notices'
+                                                eventKey={eventKey}
                                             />
                                             <div className="d-flex justify-content-center mt-4">
                                                 {hasMoreNotices ?
@@ -506,6 +514,7 @@ const OtherUserProfile = () => {
                                                 handleReact={handleReact}
                                                 getReactionsForNotice={getReactionsForNotice}
                                                 getUserAccountByUserId={getUserAccountByUserId}
+                                                eventKey={eventKey}
                                             />
                                             <div className="d-flex justify-content-center mt-4">
                                                 {hasMoreSpreads ?
@@ -542,6 +551,7 @@ const OtherUserProfile = () => {
                                                 handleReact={handleReact}
                                                 getReactionsForNotice={getReactionsForNotice}
                                                 getUserAccountByUserId={getUserAccountByUserId}
+                                                eventKey={eventKey}
                                             />
                                             <div className="d-flex justify-content-center mt-4">
                                                 {hasMoreLikes ?

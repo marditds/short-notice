@@ -90,6 +90,9 @@ const UserProfile = () => {
     const [hasMoreLikes, setHasMoreLikes] = useState(true);
     const [isLoadingMoreLikes, setIsLoadingMoreLikes] = useState(false);
 
+    // Tabs' EventKey
+    const [eventKey, setEventKey] = useState('my-notices');
+
     // Fetch account type by username
     useEffect(() => {
         const fetchUserByUserame = async () => {
@@ -324,6 +327,10 @@ const UserProfile = () => {
         }
     }
 
+    useEffect(() => {
+        console.log('eventKey', eventKey);
+    }, [eventKey])
+
     const timerSpacing = 'mx-2';
     const timerDisplay = 'd-flex';
     const classname = `${timerDisplay} ${timerSpacing}`;
@@ -359,6 +366,7 @@ const UserProfile = () => {
                 id="justify-tab-example"
                 justify
                 className='user-profile__notice-tab fixed-bottom'
+                onSelect={(key) => setEventKey(key)}
             >
                 {/* My Notices */}
                 <Tab
@@ -368,9 +376,9 @@ const UserProfile = () => {
                     <Notices
                         notices={notices}
                         username={username}
+                        eventKey={eventKey}
                         handleEditNotice={handleEditNotice}
                         handleDeleteNotice={handleDeleteNotice}
-                        eventKey='my-notices'
                         // reactions={noticesReactions}
                         getReactionsForNotice={getReactionsForNotice}
                         getUserAccountByUserId={getUserAccountByUserId}
@@ -399,6 +407,7 @@ const UserProfile = () => {
                         username={username}
                         likedNotices={likedNotices}
                         spreadNotices={spreadNotices}
+                        eventKey={eventKey}
                         handleLike={handleLike}
                         handleSpread={handleSpread}
                         handleReport={handleReport}
@@ -432,6 +441,7 @@ const UserProfile = () => {
                         username={username}
                         likedNotices={likedNotices}
                         spreadNotices={spreadNotices}
+                        eventKey={eventKey}
                         handleLike={handleLike}
                         handleSpread={handleSpread}
                         handleReport={handleReport}
