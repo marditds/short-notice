@@ -362,7 +362,7 @@ export const Notices = ({
                             <Row className='w-100 m-auto'>
                                 <Col className='col-md-9 d-flex justify-content-between flex-column'
                                 >
-                                    <p className='mb-0'>{notice?.text}</p>
+                                    <p className='mb-0 text-break'>{notice?.text}</p>
 
                                     <small className='me-auto'>
                                         <span
