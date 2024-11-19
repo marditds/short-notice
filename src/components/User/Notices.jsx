@@ -52,6 +52,8 @@ export const Notices = ({
     const [reactionUsernameMap, setReactionUsernameMap] = useState({});
     const [reactionAvatarMap, setReactionAvatarMap] = useState({});
 
+    const [reactions, setReactions] = useState([]);
+
     const [loadingStates, setLoadingStates] = useState({});
     const [loadedReactions, setLoadedReactions] = useState({});
     const [activeNoticeId, setActiveNoticeId] = useState(null);
@@ -194,6 +196,9 @@ export const Notices = ({
 
             console.log('noticeReactions', noticeReactions);
 
+            setReactions(prevReactions => [...prevReactions, noticeReactions?.documents]);
+
+
             const usersIds = noticeReactions.documents.map((reaction) => reaction.sender_id);
 
             console.log('usersIds', usersIds);
@@ -265,6 +270,7 @@ export const Notices = ({
         if (activeNoticeId === noticeId) {
             setActiveNoticeId(null);
             setShowLoadMoreBtn(false);
+            setReactions([]);
 
             setLoadedReactions(prev => {
                 const newState = { ...prev };
@@ -293,6 +299,7 @@ export const Notices = ({
                 const initialReactions = await getReactionsForNotice(noticeId, limit, 0);
 
                 console.log('initialReactions', initialReactions);
+                setReactions(prevReactions => [...prevReactions, initialReactions?.documents]);
 
                 const usersIds = initialReactions.documents.map((reaction) => reaction.sender_id);
 
@@ -350,6 +357,10 @@ export const Notices = ({
     };
 
     //Reporting Reaction
+    useEffect(() => {
+        console.log('Reactions:', reactions);
+    }, [reactions]);
+
     const handleReportReaction = (reactionId) => {
         setReprotingReactionId(reactionId);
         setShowReportReactionModal(true);
