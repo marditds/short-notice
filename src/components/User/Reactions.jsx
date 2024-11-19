@@ -3,9 +3,13 @@ import { Link } from 'react-router-dom';
 import { Row, Col, Button } from 'react-bootstrap';
 import { getAvatarUrl as avatarUrl } from '../../lib/utils/avatarUtils';
 import { Loading } from '../Loading/Loading';
+import { CgTrash } from 'react-icons/cg';
+import { BsExclamationTriangle } from 'react-icons/bs';
 
 
-export const Reactions = ({ loadingStates, notice, loadedReactions, reactionUsernameMap, reactionAvatarMap, defaultAvatar, showLoadMoreBtn, isLoadingMoreReactions, handleLoadMoreReactions }) => {
+
+
+export const Reactions = ({ loadingStates, notice, loadedReactions, reactionUsernameMap, reactionAvatarMap, defaultAvatar, showLoadMoreBtn, isLoadingMoreReactions, handleLoadMoreReactions, handleReportReaction }) => {
     return (
         <Row className='d-grid w-100'>
 
@@ -23,22 +27,39 @@ export const Reactions = ({ loadingStates, notice, loadedReactions, reactionUser
                                 <Col className='col-md-9'>
                                     {reaction.content}
                                 </Col>
-                                <Col className='col-md-3 d-flex align-items-center justify-content-end'>
-                                    <Link to={`/user/${reactionUsernameMap[notice.$id]?.[reaction.sender_id]}`}
-                                        className='text-decoration-none notice__reaction-username'><strong className='ms-auto me-0'>
-                                            {reactionUsernameMap[notice.$id]?.[reaction.sender_id] || 'Unknown user'}
-                                        </strong>
-                                    </Link>
-                                    <Link to={`/user/${reactionUsernameMap[notice.$id]?.[reaction.sender_id]}`}
-                                        className='notice__reaction-avatar'
-                                    >
-                                        <img
-                                            src={avatarUrl(reactionAvatarMap[notice.$id]?.[reaction.sender_id]) || defaultAvatar}
-                                            alt="Profile"
-                                            style={{ borderRadius: '50%', width: '35px', height: '35px' }}
-                                            className='d-flex'
-                                        />
-                                    </Link>
+                                <Col className='col-md-3 d-flex flex-column align-items-center justify-content-end'>
+                                    <div className='d-flex ms-auto align-items-center'>
+                                        <Link to={`/user/${reactionUsernameMap[notice.$id]?.[reaction.sender_id]}`}
+                                            className='text-decoration-none notice__reaction-username'><strong className='ms-auto me-0'>
+                                                {reactionUsernameMap[notice.$id]?.[reaction.sender_id] || 'Unknown user'}
+                                            </strong>
+                                        </Link>
+                                        <Link to={`/user/${reactionUsernameMap[notice.$id]?.[reaction.sender_id]}`}
+                                            className='notice__reaction-avatar'
+                                        >
+                                            <img
+                                                src={avatarUrl(reactionAvatarMap[notice.$id]?.[reaction.sender_id]) || defaultAvatar}
+                                                alt="Profile"
+                                                style={{ borderRadius: '50%', width: '35px', height: '35px' }}
+                                                className='d-flex ms-auto'
+                                            />
+                                        </Link>
+                                    </div>
+                                    <div className='d-flex ms-auto'>
+                                        {/* <div
+                                            className='ms-1 mt-1 notice__delete-btn d-flex align-items-center'
+                                            onClick={() => handleDeleteReaction(reaction.$id)}
+                                        >
+                                            <CgTrash size={22} />
+
+                                        </div> */}
+                                        <div
+                                            className='ms-1 mt-1 d-flex notice__delete-btn d-flex align-items-center'
+                                            onClick={() => handleReportReaction(reaction.$id)}
+                                        >
+                                            <BsExclamationTriangle size={20} />
+                                        </div>
+                                    </div>
                                 </Col>
                             </Row>
                             <hr />

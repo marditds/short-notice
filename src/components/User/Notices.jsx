@@ -5,7 +5,8 @@ import { Row, Col, Modal, Form, Accordion, Button } from 'react-bootstrap';
 import { CgTrash } from 'react-icons/cg';
 import { AiFillEdit } from 'react-icons/ai';
 import { BsReply } from "react-icons/bs";
-import { RiMegaphoneLine, RiMegaphoneFill } from 'react-icons/ri';
+// import { RiMegaphoneLine, RiMegaphoneFill } from 'react-icons/ri'; 
+import { RiSave2Line, RiSave2Fill } from "react-icons/ri";
 import { RiBookmarkLine, RiBookmarkFill } from "react-icons/ri";
 import { BsHandThumbsUp, BsHandThumbsUpFill, BsExclamationTriangle } from 'react-icons/bs';
 import defaultAvatar from '../../assets/default.png';
@@ -26,9 +27,9 @@ export const Notices = ({
     user_id,
     likedNotices,
     spreadNotices,
-    reactions,
     getReactionsForNotice,
-    getUserAccountByUserId
+    getUserAccountByUserId,
+    // handleDeleteReaction
 }) => {
     const location = useLocation();
 
@@ -44,7 +45,7 @@ export const Notices = ({
 
     const [limit] = useState(5);
     const [offsets, setOffsets] = useState({});
-    const [hasMoreReactions, setHasMoreReactions] = useState({});
+    // const [hasMoreReactions, setHasMoreReactions] = useState({});
     const [showLoadMoreBtn, setShowLoadMoreBtn] = useState(false);
     const [isLoadingMoreReactions, setIsLoadingMoreReactions] = useState(false);
 
@@ -76,6 +77,11 @@ export const Notices = ({
     const [reportingNoticeId, setReprotingNoticeId] = useState(null);
     const [reportReason, setReportReason] = useState(null);
     const [showReportConfirmation, setShowReportConfirmation] = useState(false);
+
+    const [showReportReactionModal, setShowReportReactionModal] = useState(false);
+    const [reportingReactionId, setReprotingReactionId] = useState(null);
+    const [showReportReactionConfirmation, setShowReportReactionConfirmation] = useState(false);
+
 
 
     useEffect(() => {
@@ -225,15 +231,15 @@ export const Notices = ({
                 ]
             }));
 
-            const hasMore = noticeReactions?.documents?.length === limit;
-            setHasMoreReactions(prev => ({
-                ...prev,
-                [noticeId]: hasMore
-            }));
+            // const hasMore = noticeReactions?.documents?.length === limit;
+            // setHasMoreReactions(prev => ({
+            //     ...prev,
+            //     [noticeId]: hasMore
+            // }));
 
-            if (noticeReactions?.documents?.length < limit) {
-                setHasMoreReactions(false);
-            }
+            // if (noticeReactions?.documents?.length < limit) {
+            //     setHasMoreReactions(false);
+            // }
 
             setOffsets(prev => ({
                 ...prev,
@@ -270,11 +276,11 @@ export const Notices = ({
                 delete newState[noticeId];
                 return newState;
             });
-            setHasMoreReactions(prev => {
-                const newState = { ...prev };
-                delete newState[noticeId];
-                return newState;
-            });
+            // setHasMoreReactions(prev => {
+            //     const newState = { ...prev };
+            //     delete newState[noticeId];
+            //     return newState;
+            // });
             return;
         }
 
@@ -324,11 +330,11 @@ export const Notices = ({
                     [noticeId]: initialReactions?.documents || []
                 }));
 
-                const hasMore = initialReactions?.documents?.length === limit;
-                setHasMoreReactions(prev => ({
-                    ...prev,
-                    [noticeId]: hasMore
-                }));
+                // const hasMore = initialReactions?.documents?.length === limit;
+                // setHasMoreReactions(prev => ({
+                //     ...prev,
+                //     [noticeId]: hasMore
+                // }));
 
                 setOffsets(prev => ({
                     ...prev,
@@ -342,6 +348,41 @@ export const Notices = ({
 
         }
     };
+
+    //Reporting Reaction
+    const handleReportReaction = (reactionId) => {
+        setReprotingReactionId(reactionId);
+        setShowReportReactionModal(true);
+        setShowReportReactionConfirmation(false);
+    }
+
+    const handleReportReactionSubmission = async () => {
+
+        if (reportReason && reportingReactionId) {
+            try {
+
+                const reaction = reactions.find(reaction => reaction.$id === reportingReactionId);
+
+                if (reaction) {
+                    const res = await handleReportReaction(reaction.$id, reaction.sender_id, reportReason);
+
+                    setShowReportConfirmation(true);
+                    setTimeout(() => {
+                        setShowReportModal(false);
+                    }, 2000);
+                }
+            } catch (error) {
+                console.error("Error reporting notice:", error);
+            }
+        }
+    };
+
+    const handleCloseReportReactionModal = () => {
+        setShowReportReactionModal(false);
+        setReportReason(null);
+    }
+
+
 
     const shouldShowUserInfo = () => {
         return (
@@ -468,13 +509,13 @@ export const Notices = ({
                                                                 disabled={user_id === notice.user_id}
                                                             >
                                                                 {spreadNotices && spreadNotices[notice.$id] ? (
-                                                                    <RiBookmarkFill
+                                                                    <RiSave2Fill
                                                                         className='notice__reaction-btn-fill'
-                                                                        size={19}
+                                                                        size={20}
                                                                     />
 
                                                                 ) : (
-                                                                    <RiBookmarkLine size={19} />
+                                                                    <RiSave2Line size={20} />
                                                                 )}
                                                             </div>
                                                             <div
@@ -519,6 +560,7 @@ export const Notices = ({
                                 reactionUsernameMap={reactionUsernameMap}
                                 showLoadMoreBtn={showLoadMoreBtn}
                                 handleLoadMoreReactions={handleLoadMoreReactions}
+                                handleReportReaction={handleReportReaction}
                             />
                         </Accordion.Body>
                     </Accordion.Item>
@@ -635,7 +677,46 @@ export const Notices = ({
                 </Modal.Footer>
             </Modal>
 
-
+            <Modal show={showReportReactionModal} onHide={handleCloseReportReactionModal}>
+                <Modal.Header>
+                    <Modal.Title>Report Reaction</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {showReportReactionConfirmation ? (
+                        <p>Your report has been successfully submitted!</p>
+                    ) : (
+                        <Form>
+                            <Form.Group className='mb-3' controlId='reportReaction'>
+                                <Form.Label>Reason:</Form.Label>
+                                {reportCategories.map((category) => (
+                                    <Form.Check
+                                        key={category.key}
+                                        type='radio'
+                                        label={category.name}
+                                        id={category.name}
+                                        name='reportReason'
+                                        onChange={() => setReportReason(category.key)}
+                                    />
+                                ))}
+                            </Form.Group>
+                        </Form>
+                    )}
+                </Modal.Body>
+                <Modal.Footer>
+                    {showReportReactionConfirmation ? null : (
+                        <>
+                            <Button onClick={handleCloseReportReactionModal}>
+                                Cancel
+                            </Button>
+                            <Button onClick={handleReportReactionSubmission}
+                            // disabled={!reportReason}
+                            >
+                                Report
+                            </Button>
+                        </>
+                    )}
+                </Modal.Footer>
+            </Modal>
         </>
     );
 };

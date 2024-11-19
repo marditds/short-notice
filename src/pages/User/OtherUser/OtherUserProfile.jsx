@@ -476,13 +476,13 @@ const OtherUserProfile = () => {
                                                 likedNotices={likedNotices}
                                                 spreadNotices={spreadNotices}
                                                 reactions={noticesReactions}
+                                                eventKey={eventKey}
                                                 handleLike={handleLike}
                                                 handleSpread={handleSpread}
                                                 handleReport={handleReport}
                                                 handleReact={handleReact}
                                                 getReactionsForNotice={getReactionsForNotice}
                                                 getUserAccountByUserId={getUserAccountByUserId}
-                                                eventKey={eventKey}
                                             />
                                             <div className="d-flex justify-content-center mt-4">
                                                 {hasMoreNotices ?
@@ -513,8 +513,6 @@ const OtherUserProfile = () => {
                                                 likedNotices={likedNotices}
                                                 spreadNotices={spreadNotices}
                                                 eventKey={eventKey}
-                                                username={username}
-                                                // reactions={spreadReactions}
                                                 handleLike={handleLike}
                                                 handleSpread={handleSpread}
                                                 handleReport={handleReport}
@@ -551,8 +549,6 @@ const OtherUserProfile = () => {
                                                 likedNotices={likedNotices}
                                                 spreadNotices={spreadNotices}
                                                 eventKey={eventKey}
-                                                username={username}
-                                                // reactions={likedReactions}
                                                 handleLike={handleLike}
                                                 handleSpread={handleSpread}
                                                 handleReport={handleReport}
