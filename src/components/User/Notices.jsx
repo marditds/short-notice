@@ -343,6 +343,17 @@ export const Notices = ({
         }
     };
 
+    const shouldShowUserInfo = () => {
+        return (
+            location.pathname === '/user/feed' ||
+            (location.pathname === '/user/profile' && eventKey !== 'my-notices') ||
+            (location.pathname.startsWith('/user/') &&
+                location.pathname !== '/user/profile' &&
+                location.pathname !== '/user/feed' &&
+                eventKey !== 'notices')
+        );
+    };
+
     return (
         <>
             <Accordion
@@ -374,43 +385,37 @@ export const Notices = ({
                                     </small>
                                 </Col>
 
-                                {/* Username, Profile Picture, Interaction Col */}
+                                {/* Username, Profile Picture, Edit/Delete, Interaction Col */}
                                 <Col className='col-md-3 d-flex flex-column justify-content-end'>
 
-                                    {
-                                        location.pathname === '/user/feed' ||
-                                            (location.pathname === '/user/profile' && eventKey !== 'my-notices') ||
-                                            (location.pathname.startsWith('/user/') &&
-                                                location.pathname !== '/user/profile' &&
-                                                location.pathname !== '/user/feed' &&
-                                                eventKey !== 'notices') ?
-                                            (<div className='d-flex justify-content-end align-items-center mt-auto'>
+                                    {/* Username and Profile Picture */}
+                                    {shouldShowUserInfo() ?
+                                        (<div className='d-flex justify-content-end align-items-center mt-auto'>
 
-                                                <p
-                                                    className='w-100 my-0 text-end notice__username'
-                                                >
-                                                    <Link to={`../${notice.username}`}
-                                                        className='text-decoration-none'>
-                                                        <strong>{notice?.username}</strong>
-                                                    </Link>
-                                                </p>
-
-                                                <Link to={`../${notice.username}`}>
-                                                    <img
-                                                        src={notice.avatarUrl || defaultAvatar}
-                                                        alt="Profile"
-                                                        style={{ borderRadius: '50%', width: 50, height: 50 }}
-                                                        className='d-flex ms-auto'
-                                                    />
+                                            <p
+                                                className='w-100 my-0 text-end notice__username'
+                                            >
+                                                <Link to={`../${notice.username}`}
+                                                    className='text-decoration-none'>
+                                                    <strong>{notice?.username}</strong>
                                                 </Link>
-                                            </div>)
-                                            :
-                                            null
+                                            </p>
+
+                                            <Link to={`../${notice.username}`}>
+                                                <img
+                                                    src={notice.avatarUrl || defaultAvatar}
+                                                    alt="Profile"
+                                                    style={{ borderRadius: '50%', width: 50, height: 50 }}
+                                                    className='d-flex ms-auto'
+                                                />
+                                            </Link>
+                                        </div>)
+                                        :
+                                        null
                                     }
 
-
-                                    {location.pathname === '/user/profile' && eventKey === 'my-notices' ?
-
+                                    {/* Edit and Delete Notice */}
+                                    {location.pathname === '/user/profile' && eventKey === 'my-notices' &&
                                         <div
                                             className='d-flex flex-column justify-content-end h-100'>
                                             <span className='d-flex ms-auto mt-auto'>
@@ -428,123 +433,78 @@ export const Notices = ({
 
                                                 </div>
                                             </span>
-                                            <small
-                                                className='text-end notice__create-date'
-                                            >
-                                                {formatDateToLocal(notice?.timestamp)}
-                                            </small>
-                                        </div>
-                                        :
-                                        <div className='d-flex flex-column justify-content-end'>
-
-                                            {/* {
-                                                location.pathname !== `/user/${notice.username}` && eventKey === 'notices'
-                                                    ?
-                                                    null
-                                                    :
-                                                    <div className='d-flex justify-content-end align-items-center mt-auto'>
-
-                                                        <p
-                                                            className='w-100 my-0 text-end notice__username'
-                                                        >
-                                                            <Link to={`../${notice.username}`}
-                                                                className='text-decoration-none'>
-                                                                <strong>{notice?.username}</strong>
-                                                            </Link>
-                                                        </p>
-
-                                                        <Link to={`../${notice.username}`}>
-                                                            <img
-                                                                src={notice.avatarUrl || defaultAvatar}
-                                                                alt="Profile"
-                                                                style={{ borderRadius: '50%', width: 50, height: 50 }}
-                                                                className='d-flex ms-auto'
-                                                            />
-                                                        </Link>
-                                                    </div>
-                                            } */}
-
-                                            <div className='d-grid'>
-                                                {user_id === notice.user_id ?
-                                                    <div>
-                                                        <div
-                                                            className='d-flex flex-column justify-content-end h-100'>
-                                                            <span className='d-flex ms-auto mt-auto'>
-                                                                <div
-                                                                    className='ms-auto notice__edit-btn'
-                                                                    onClick={() => handleEditNotice(notice.$id, notice.text)}
-                                                                >
-                                                                    <AiFillEdit size={20} />
-                                                                </div>
-                                                                <div
-                                                                    className='ms-2 notice__delete-btn'
-                                                                    onClick={() => handleDeleteNotice(notice.$id)}
-                                                                >
-                                                                    <CgTrash size={20} />
-
-                                                                </div>
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                    :
-                                                    <div
-                                                        className='d-flex justify-content-end align-items-center'
-                                                        style={{ height: '35px' }}
-                                                    >
-                                                        <div
-                                                            className='notice__reaction-btn ms-2'
-                                                            onClick={() => handleLike(notice)}
-                                                        >
-                                                            {likedNotices && likedNotices[notice.$id] ? (
-                                                                <BsHandThumbsUpFill
-                                                                    className='notice__reaction-btn-fill'
-                                                                    size={19}
-                                                                />
-                                                            ) : (
-                                                                <BsHandThumbsUp size={19} />
-                                                            )}
-                                                        </div>
-                                                        <div
-                                                            onClick={() => handleSpread(notice)}
-                                                            className='notice__reaction-btn ms-2'
-                                                            disabled={user_id === notice.user_id}
-                                                        >
-                                                            {spreadNotices && spreadNotices[notice.$id] ? (
-                                                                <RiBookmarkFill
-                                                                    className='notice__reaction-btn-fill'
-                                                                    size={19}
-                                                                />
-
-                                                            ) : (
-                                                                <RiBookmarkLine size={19} />
-                                                            )}
-                                                        </div>
-                                                        <div
-                                                            onClick={() => handleReactNotice(notice.$id, notice.username, notice.avatarUrl, notice.text)}
-                                                            className='notice__reaction-btn ms-2'
-                                                            disabled={user_id === notice.user_id}
-                                                        >
-                                                            <BsReply
-                                                                size={23}
-                                                            />
-                                                        </div>
-                                                        <div
-                                                            onClick={() => handleReportNotice(notice.$id)}
-                                                            className='notice__reaction-btn ms-2'
-                                                            disabled={user_id === notice.user_id}
-                                                        >
-                                                            <BsExclamationTriangle
-                                                                size={19}
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                }
-                                                <small className='text-end mt-auto notice__create-date'>
-                                                    {formatDateToLocal(notice.timestamp)}
-                                                </small>
-                                            </div>
                                         </div>
                                     }
+
+                                    {/* Interaction w/ Notice */}
+                                    <div className='d-flex flex-column justify-content-end'>
+                                        <div className='d-grid'>
+                                            {(location.pathname === '/user/profile' && eventKey === 'my-notices') ?
+                                                null
+                                                :
+                                                <>
+                                                    {(location.pathname === '/user/feed' && user_id === notice.user_id) || ((location.pathname !== `/user/profile` || location.pathname !== `/user/feed`) && user_id === notice.user_id) ?
+                                                        <div style={{ height: '35px' }} /> :
+                                                        <div
+                                                            className='d-flex justify-content-end align-items-center'
+                                                            style={{ height: '35px' }}
+                                                        >
+                                                            <div
+                                                                className='notice__reaction-btn ms-2'
+                                                                onClick={() => handleLike(notice)}
+                                                            >
+                                                                {likedNotices && likedNotices[notice.$id] ? (
+                                                                    <BsHandThumbsUpFill
+                                                                        className='notice__reaction-btn-fill'
+                                                                        size={19}
+                                                                    />
+                                                                ) : (
+                                                                    <BsHandThumbsUp size={19} />
+                                                                )}
+                                                            </div>
+                                                            <div
+                                                                onClick={() => handleSpread(notice)}
+                                                                className='notice__reaction-btn ms-2'
+                                                                disabled={user_id === notice.user_id}
+                                                            >
+                                                                {spreadNotices && spreadNotices[notice.$id] ? (
+                                                                    <RiBookmarkFill
+                                                                        className='notice__reaction-btn-fill'
+                                                                        size={19}
+                                                                    />
+
+                                                                ) : (
+                                                                    <RiBookmarkLine size={19} />
+                                                                )}
+                                                            </div>
+                                                            <div
+                                                                onClick={() => handleReactNotice(notice.$id, notice.username, notice.avatarUrl, notice.text)}
+                                                                className='notice__reaction-btn ms-2'
+                                                                disabled={user_id === notice.user_id}
+                                                            >
+                                                                <BsReply
+                                                                    size={23}
+                                                                />
+                                                            </div>
+                                                            <div
+                                                                onClick={() => handleReportNotice(notice.$id)}
+                                                                className='notice__reaction-btn ms-2'
+                                                                disabled={user_id === notice.user_id}
+                                                            >
+                                                                <BsExclamationTriangle
+                                                                    size={19}
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                </>
+                                            }
+                                            <small className='text-end mt-auto notice__create-date'>
+                                                {formatDateToLocal(notice.timestamp)}
+                                            </small>
+                                        </div>
+                                    </div>
+
                                 </Col>
                             </Row>
                         </Accordion.Header>

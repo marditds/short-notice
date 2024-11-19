@@ -109,6 +109,11 @@ const OtherUserProfile = () => {
         }
     }, [otherUsername, username, navigate]);
 
+    // Hello
+    useEffect(() => {
+        console.log('Barev', username);
+    }, [username]);
+
     // Get Other User
     useEffect(() => {
         const getCurrUser = async () => {
@@ -507,6 +512,8 @@ const OtherUserProfile = () => {
                                                 user_id={user_id}
                                                 likedNotices={likedNotices}
                                                 spreadNotices={spreadNotices}
+                                                eventKey={eventKey}
+                                                username={username}
                                                 // reactions={spreadReactions}
                                                 handleLike={handleLike}
                                                 handleSpread={handleSpread}
@@ -514,7 +521,6 @@ const OtherUserProfile = () => {
                                                 handleReact={handleReact}
                                                 getReactionsForNotice={getReactionsForNotice}
                                                 getUserAccountByUserId={getUserAccountByUserId}
-                                                eventKey={eventKey}
                                             />
                                             <div className="d-flex justify-content-center mt-4">
                                                 {hasMoreSpreads ?
@@ -544,6 +550,8 @@ const OtherUserProfile = () => {
                                                 user_id={user_id}
                                                 likedNotices={likedNotices}
                                                 spreadNotices={spreadNotices}
+                                                eventKey={eventKey}
+                                                username={username}
                                                 // reactions={likedReactions}
                                                 handleLike={handleLike}
                                                 handleSpread={handleSpread}
@@ -551,7 +559,7 @@ const OtherUserProfile = () => {
                                                 handleReact={handleReact}
                                                 getReactionsForNotice={getReactionsForNotice}
                                                 getUserAccountByUserId={getUserAccountByUserId}
-                                                eventKey={eventKey}
+
                                             />
                                             <div className="d-flex justify-content-center mt-4">
                                                 {hasMoreLikes ?
