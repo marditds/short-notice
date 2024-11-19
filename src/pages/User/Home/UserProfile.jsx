@@ -47,6 +47,8 @@ const UserProfile = () => {
         getAllLikedNotices,
         getAllSpreadNotices,
         getReactionsForNotice,
+        getReactionByReactionId,
+        reportReaction
         // fetchReactionsForNotices,
         // setNoticesReactions,
         // setSpreadReactions,
@@ -308,9 +310,9 @@ const UserProfile = () => {
         }
     };
 
-    const handleReport = async (notice_id, author_id, reason) => {
+    const handleReport = async (notice_id, author_id, reason, noticeText) => {
         try {
-            await reportNotice(notice_id, author_id, reason);
+            await reportNotice(notice_id, author_id, reason, noticeText);
             return 'Report success';
         } catch (error) {
             console.error('Could not report notice');
@@ -415,7 +417,8 @@ const UserProfile = () => {
                         // reactions={spreadReactions}
                         getReactionsForNotice={getReactionsForNotice}
                         getUserAccountByUserId={getUserAccountByUserId}
-
+                        getReactionByReactionId={getReactionByReactionId}
+                        reportReaction={reportReaction}
                     />
                     <div className="d-flex justify-content-center mt-4">
                         {hasMoreSpreads ?
@@ -449,7 +452,8 @@ const UserProfile = () => {
                         // reactions={likedReactions}
                         getReactionsForNotice={getReactionsForNotice}
                         getUserAccountByUserId={getUserAccountByUserId}
-
+                        getReactionByReactionId={getReactionByReactionId}
+                        reportReaction={reportReaction}
                     />
                     <div className="d-flex justify-content-center mt-4">
                         {hasMoreLikes ?

@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { createNotice, getUserNotices, updateNotice, deleteNotice, deleteAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSpread, getUserSpreads, removeSpread, createReport, createLike, removeLike, getUserLikes, getAllLikedNotices as fetchAllLikedNotices, getAllSpreadNotices as fetchAllSpreadNotices, createReaction, deleteReaction, getAllReactionsBySenderId as fetchAllReactionsBySenderId, getAllReactions as fetchAllReactions, getAllReactionsByRecipientId as fetchAllReactionsByRecipientId, getNoticeByNoticeId as fetchNoticeByNoticeId, getAllReactionsByNoticeId as fetchAllReactionsByNoticeId, deleteAllReactions } from '../../lib/context/dbhandler';
+import { createNotice, getUserNotices, updateNotice, deleteNotice, deleteAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSpread, getUserSpreads, removeSpread, createReport, createLike, removeLike, getUserLikes, getAllLikedNotices as fetchAllLikedNotices, getAllSpreadNotices as fetchAllSpreadNotices, createReaction, deleteReaction, getAllReactionsBySenderId as fetchAllReactionsBySenderId, getAllReactions as fetchAllReactions, getAllReactionsByRecipientId as fetchAllReactionsByRecipientId, getNoticeByNoticeId as fetchNoticeByNoticeId, getAllReactionsByNoticeId as fetchAllReactionsByNoticeId, getReactionByReactionId as fetchReactionByReactionId, deleteAllReactions, createReactionReport } from '../../lib/context/dbhandler';
 import { UserId } from '../../components/User/UserId.jsx';
 
 const useNotices = (googleUserData) => {
@@ -384,9 +384,9 @@ const useNotices = (googleUserData) => {
         }
     };
 
-    const reportNotice = async (notice_id, author_id, reason) => {
+    const reportNotice = async (notice_id, author_id, reason, noticeText) => {
         try {
-            await createReport(notice_id, author_id, reason, user_id);
+            await createReport(notice_id, author_id, reason, user_id, noticeText);
             console.log('Notice reported successfully!');
         } catch (error) {
             console.error('Error reporting notice:', error);
@@ -473,6 +473,25 @@ const useNotices = (googleUserData) => {
         }
     }
 
+    const getReactionByReactionId = async (reactionId) => {
+        try {
+            const reaction = await fetchReactionByReactionId(reactionId);
+            console.log('Succes fetching reaction:', reaction);
+            return reaction;
+        } catch (error) {
+            console.error('Error fetching reaction', error);
+        }
+    }
+
+    const reportReaction = async (reaction_id, author_id, reason, reaction_text) => {
+        try {
+            await createReactionReport(reaction_id, author_id, reason, user_id, reaction_text)
+            console.log('Report successful!');
+        } catch (error) {
+            console.error('Error adding reaction:', error);
+        }
+    }
+
 
     // const fetchReactionsForNotices = async (usrNtcs, setReactionsState) => {
     //     if (usrNtcs.length > 0) {
@@ -534,6 +553,8 @@ const useNotices = (googleUserData) => {
         sendReaction,
         removeReaction,
         getReactionsForNotice,
+        getReactionByReactionId,
+        reportReaction,
         // fetchReactionsForNotices,
         setNoticesReactions,
         setSpreadReactions,

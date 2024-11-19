@@ -958,7 +958,7 @@ export const getAllSpreadNotices = async (spreadNoticeIds, limit, offset) => {
     }
 };
 
-export const createReport = async (notice_id, author_id, reason, user_id) => {
+export const createReport = async (notice_id, author_id, reason, user_id, noticeText) => {
     try {
         const response = await databases.createDocument(
             import.meta.env.VITE_DATABASE,
@@ -968,7 +968,8 @@ export const createReport = async (notice_id, author_id, reason, user_id) => {
                 notice_id: notice_id,
                 author_id: author_id,
                 reason: reason,
-                user_id: user_id
+                user_id: user_id,
+                noticeText: noticeText
             },
             // [
             //     Permission.write(Role.users()),
@@ -1228,6 +1229,46 @@ export const getAllReactionsByNoticeId = async (notice_id, limit, offset) => {
         return response;
     } catch (error) {
         console.error('Error getting reactions by notice_id:', error);
+    }
+}
+
+export const getReactionByReactionId = async (reactionId) => {
+    try {
+        const reaction = await databases.getDocument(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_REACTIONS_COLLECTION,
+            reactionId
+        )
+        console.log('Success getting reaction:', reaction);
+        return reaction;
+    } catch (error) {
+        console.error('Error getting reaction:', error);
+    }
+}
+
+export const createReactionReport = async (reaction_id, author_id, reason, user_id, reaction_text) => {
+    try {
+        const response = await databases.createDocument(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_REPORTS_REACTIONS_COLLECTION,
+            ID.unique(),
+            {
+                reaction_id: reaction_id,
+                author_id: author_id,
+                reason: reason,
+                user_id: user_id,
+                reaction_text: reaction_text
+            },
+            // [
+            //     Permission.write(Role.users()),
+            //     Permission.write(Role.guests())
+            // ]
+        );
+        console.log('Report created successfully');
+        return response;
+    } catch (error) {
+        console.error('Error adding to reports:', error);
+        throw error;
     }
 }
 

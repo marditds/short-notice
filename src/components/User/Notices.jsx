@@ -28,7 +28,9 @@ export const Notices = ({
     likedNotices,
     spreadNotices,
     getReactionsForNotice,
+    getReactionByReactionId,
     getUserAccountByUserId,
+    reportReaction
     // handleDeleteReaction
 }) => {
     const location = useLocation();
@@ -51,8 +53,6 @@ export const Notices = ({
 
     const [reactionUsernameMap, setReactionUsernameMap] = useState({});
     const [reactionAvatarMap, setReactionAvatarMap] = useState({});
-
-    const [reactions, setReactions] = useState([]);
 
     const [loadingStates, setLoadingStates] = useState({});
     const [loadedReactions, setLoadedReactions] = useState({});
@@ -81,7 +81,7 @@ export const Notices = ({
     const [showReportConfirmation, setShowReportConfirmation] = useState(false);
 
     const [showReportReactionModal, setShowReportReactionModal] = useState(false);
-    const [reportingReactionId, setReprotingReactionId] = useState(null);
+    const [reportingReactionId, setReportingReactionId] = useState(null);
     const [showReportReactionConfirmation, setShowReportReactionConfirmation] = useState(false);
 
 
@@ -152,7 +152,7 @@ export const Notices = ({
                 const notice = notices.find(notice => notice.$id === reportingNoticeId);
 
                 if (notice) {
-                    const res = await handleReport(notice.$id, notice.user_id, reportReason);
+                    await handleReport(notice.$id, notice.user_id, reportReason, notice.text);
 
                     setShowReportConfirmation(true);
                     setTimeout(() => {
@@ -195,9 +195,6 @@ export const Notices = ({
             const noticeReactions = await getReactionsForNotice(noticeId, limit, currentOffset);
 
             console.log('noticeReactions', noticeReactions);
-
-            setReactions(prevReactions => [...prevReactions, noticeReactions?.documents]);
-
 
             const usersIds = noticeReactions.documents.map((reaction) => reaction.sender_id);
 
@@ -270,7 +267,6 @@ export const Notices = ({
         if (activeNoticeId === noticeId) {
             setActiveNoticeId(null);
             setShowLoadMoreBtn(false);
-            setReactions([]);
 
             setLoadedReactions(prev => {
                 const newState = { ...prev };
@@ -299,7 +295,6 @@ export const Notices = ({
                 const initialReactions = await getReactionsForNotice(noticeId, limit, 0);
 
                 console.log('initialReactions', initialReactions);
-                setReactions(prevReactions => [...prevReactions, initialReactions?.documents]);
 
                 const usersIds = initialReactions.documents.map((reaction) => reaction.sender_id);
 
@@ -356,30 +351,33 @@ export const Notices = ({
         }
     };
 
-    //Reporting Reaction
-    useEffect(() => {
-        console.log('Reactions:', reactions);
-    }, [reactions]);
-
+    //Reporting Reaction 
     const handleReportReaction = (reactionId) => {
-        setReprotingReactionId(reactionId);
+        setReportingReactionId(reactionId);
         setShowReportReactionModal(true);
         setShowReportReactionConfirmation(false);
     }
+
+    useEffect(() => {
+        console.log('ReprotingReactionId', reportingReactionId);
+    }, [reportingReactionId])
 
     const handleReportReactionSubmission = async () => {
 
         if (reportReason && reportingReactionId) {
             try {
 
-                const reaction = reactions.find(reaction => reaction.$id === reportingReactionId);
+                const reaction = await getReactionByReactionId(reportingReactionId);
+
+                console.log('Reported!', reaction);
+
 
                 if (reaction) {
-                    const res = await handleReportReaction(reaction.$id, reaction.sender_id, reportReason);
+                    await reportReaction(reaction.$id, reaction.sender_id, reportReason, reaction.content);
 
-                    setShowReportConfirmation(true);
+                    setShowReportReactionConfirmation(true);
                     setTimeout(() => {
-                        setShowReportModal(false);
+                        setShowReportReactionModal(false);
                     }, 2000);
                 }
             } catch (error) {
@@ -626,6 +624,7 @@ export const Notices = ({
                             />
                         </Form.Group>
                     </Form>
+                    ❗ For the time being, you do not have the option of deleting your reactions to notices. Please use this feature wisely.
 
                 </Modal.Body>
                 <Modal.Footer
