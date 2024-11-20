@@ -708,11 +708,7 @@ export const deleteAllNotices = async (userId) => {
         const notices = await databases.listDocuments(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_NOTICES_COLLECTION,
-            [Query.equal('user_id', userId)],
-            [
-                Permission.delete(Role.users()),
-                Permission.delete(Role.guests())
-            ]
+            [Query.equal('user_id', userId)]
         );
 
         for (const notice of notices.documents) {
@@ -824,16 +820,36 @@ export const removeSave = async (save_id) => {
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_SAVES_COLLECTION,
             save_id,
-            // [
-            //     Permission.delete(Role.users()),
-            //     Permission.delete(Role.guests())
-            // ]
+            [
+                Permission.delete(Role.users()),
+                Permission.delete(Role.guests())
+            ]
         );
         console.log('Save removed successfully:', response);
         return response;
     } catch (error) {
         console.error('Error removing save:', error);
         throw error;
+    }
+}
+
+export const removeAllSaves = async (user_id) => {
+    try {
+        const saves = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_SAVES_COLLECTION,
+            [
+                Query.equal('user_id', user_id)
+            ]
+        )
+
+        for (const save of saves) {
+            await removeSave(save.$id);
+        }
+
+        console.log(`All saves for user ${user_id} removed successfully.`);
+    } catch (error) {
+        console.error('Error removing all saves:', error);
     }
 }
 
@@ -877,6 +893,26 @@ export const removeLike = async (like_id) => {
     } catch (error) {
         console.error('Error removing like:', error);
         throw error;
+    }
+}
+
+export const removeAllLikes = async (user_id) => {
+    try {
+        const likes = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_LIKES_COLLECTION,
+            [
+                Query.equal('user_id', user_id)
+            ]
+        )
+
+        for (const like of likes) {
+            await removeLike(like.$id);
+        }
+
+        console.log(`All likes for user ${user_id} removed successfully.`);
+    } catch (error) {
+        console.error('Error removing all likes:', error);
     }
 }
 // The like icon
