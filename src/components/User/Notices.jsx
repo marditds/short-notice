@@ -18,7 +18,7 @@ export const Notices = ({
     notices,
     handleEditNotice,
     handleDeleteNotice,
-    handleSpread,
+    handleSave,
     handleReport,
     handleLike,
     handleReact,
@@ -26,7 +26,7 @@ export const Notices = ({
     username,
     user_id,
     likedNotices,
-    spreadNotices,
+    saveNotices,
     getReactionsForNotice,
     getReactionByReactionId,
     getUserAccountByUserId,
@@ -513,11 +513,11 @@ export const Notices = ({
                                                                 )}
                                                             </div>
                                                             <div
-                                                                onClick={() => handleSpread(notice)}
+                                                                onClick={() => handleSave(notice)}
                                                                 className='notice__reaction-btn ms-2'
                                                                 disabled={user_id === notice.user_id}
                                                             >
-                                                                {spreadNotices && spreadNotices[notice.$id] ? (
+                                                                {saveNotices && saveNotices[notice.$id] ? (
                                                                     <RiSave2Fill
                                                                         className='notice__reaction-btn-fill'
                                                                         size={20}

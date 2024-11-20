@@ -26,32 +26,32 @@ const UserProfile = () => {
     const {
         user_id,
         // userNotices,
-        spreadNotices,
+        saveNotices,
         likedNotices,
         isLoading,
         isAddingNotice,
         removingNoticeId,
         isRemovingNotice,
         // noticesReactions,
-        // spreadReactions,
+        // saveReactions,
         // likedReactions,
         addNotice,
         editNotice,
         removeNotice,
         setRemovingNoticeId,
         likeNotice,
-        spreadNotice,
+        saveNotice,
         reportNotice,
         sendReaction,
         fetchUserNotices,
         getAllLikedNotices,
-        getAllSpreadNotices,
+        getAllSaveNotices,
         getReactionsForNotice,
         getReactionByReactionId,
         reportReaction
         // fetchReactionsForNotices,
         // setNoticesReactions,
-        // setSpreadReactions,
+        // setSaveReactions,
         // setLikedReactions
     } = useNotices(googleUserData);
 
@@ -69,7 +69,7 @@ const UserProfile = () => {
     } = useUserInfo(googleUserData);
 
     const [notices, setNotices] = useState([]);
-    const [spreadNoticesData, setSpreadNoticesData] = useState([]);
+    const [saveNoticesData, setSaveNoticesData] = useState([]);
     const [likedNoticesData, setLikedNoticesData] = useState([]);
 
     const { avatarUrl } = useUserAvatar(user_id);
@@ -81,10 +81,10 @@ const UserProfile = () => {
     const [isLoadingMore, setIsLoadingMore] = useState(false);
 
     // Saves Tab
-    const [limitSpreads] = useState(10);
-    const [offsetSpreads, setOffsetSpreadas] = useState(0);
-    const [hasMoreSpreads, setHasMoreSpreads] = useState(true);
-    const [isLoadingMoreSpreads, setIsLoadingMoreSpreads] = useState(false);
+    const [limitSaves] = useState(10);
+    const [offsetSaves, setOffsetSaveas] = useState(0);
+    const [hasMoreSaves, setHasMoreSaves] = useState(true);
+    const [isLoadingMoreSaves, setIsLoadingMoreSaves] = useState(false);
 
     // Likes Tab
     const [limitLikes] = useState(10);
@@ -155,27 +155,27 @@ const UserProfile = () => {
 
     // Fetch saves and users' data for saves tab
     useEffect(() => {
-        const fetchSpreadNotices = async () => {
-            setIsLoadingMoreSpreads(true);
+        const fetchSaveNotices = async () => {
+            setIsLoadingMoreSaves(true);
             try {
-                const allSpreadNotices = await getAllSpreadNotices(user_id, limitSpreads, offsetSpreads);
+                const allSaveNotices = await getAllSaveNotices(user_id, limitSaves, offsetSaves);
 
-                if (allSpreadNotices?.length < limit) {
-                    setHasMoreSpreads(false);
+                if (allSaveNotices?.length < limit) {
+                    setHasMoreSaves(false);
                 } else {
-                    setHasMoreSpreads(true);
+                    setHasMoreSaves(true);
                 }
 
-                await fetchUsersData(allSpreadNotices, setSpreadNoticesData, avatarUtil);
+                await fetchUsersData(allSaveNotices, setSaveNoticesData, avatarUtil);
             } catch (error) {
                 console.error('Error fetching saves - ', error);
             } finally {
-                setIsLoadingMoreSpreads(false);
+                setIsLoadingMoreSaves(false);
             }
 
         };
-        fetchSpreadNotices();
-    }, [user_id, offsetSpreads])
+        fetchSaveNotices();
+    }, [user_id, offsetSaves])
 
     // Fetch likes and users' data for likes tab 
     useEffect(() => {
@@ -207,8 +207,8 @@ const UserProfile = () => {
 
     // Reactions For Saves tab
     // useEffect(() => {
-    //     fetchReactionsForNotices(spreadNoticesData, setSpreadReactions);
-    // }, [spreadNoticesData]);
+    //     fetchReactionsForNotices(saveNoticesData, setSaveReactions);
+    // }, [saveNoticesData]);
 
     // Reactions For Likes tab
     // useEffect(() => {
@@ -302,9 +302,9 @@ const UserProfile = () => {
         }
     }
 
-    const handleSpread = async (notice) => {
+    const handleSave = async (notice) => {
         try {
-            await spreadNotice(notice.$id, notice.user_id, user_id);
+            await saveNotice(notice.$id, notice.user_id, user_id);
         } catch (error) {
             console.error('Error creating save entry:', error);
         }
@@ -405,28 +405,28 @@ const UserProfile = () => {
                     title="Saves"
                 >
                     <Notices
-                        notices={spreadNoticesData}
+                        notices={saveNoticesData}
                         username={username}
                         likedNotices={likedNotices}
-                        spreadNotices={spreadNotices}
+                        saveNotices={saveNotices}
                         eventKey={eventKey}
                         handleLike={handleLike}
-                        handleSpread={handleSpread}
+                        handleSave={handleSave}
                         handleReport={handleReport}
                         handleReact={handleReact}
-                        // reactions={spreadReactions}
+                        // reactions={saveReactions}
                         getReactionsForNotice={getReactionsForNotice}
                         getUserAccountByUserId={getUserAccountByUserId}
                         getReactionByReactionId={getReactionByReactionId}
                         reportReaction={reportReaction}
                     />
                     <div className="d-flex justify-content-center mt-4">
-                        {hasMoreSpreads ?
+                        {hasMoreSaves ?
                             <Button
-                                onClick={() => setOffsetSpreadas(offset + limit)}
-                                disabled={isLoadingMoreSpreads || !hasMoreSpreads}
+                                onClick={() => setOffsetSaveas(offset + limit)}
+                                disabled={isLoadingMoreSaves || !hasMoreSaves}
                             >
-                                {isLoadingMoreSpreads ?
+                                {isLoadingMoreSaves ?
                                     <><Loading size={24} /> Loading...</>
                                     : 'Load More'}
                             </Button>
@@ -443,10 +443,10 @@ const UserProfile = () => {
                         notices={likedNoticesData}
                         username={username}
                         likedNotices={likedNotices}
-                        spreadNotices={spreadNotices}
+                        saveNotices={saveNotices}
                         eventKey={eventKey}
                         handleLike={handleLike}
-                        handleSpread={handleSpread}
+                        handleSave={handleSave}
                         handleReport={handleReport}
                         handleReact={handleReact}
                         // reactions={likedReactions}

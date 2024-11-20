@@ -794,7 +794,7 @@ export const updateUserInterests = async (userId, selectedTags) => {
     }
 };
 
-export const createSpread = async (notice_id, author_id, user_id) => {
+export const createSave = async (notice_id, author_id, user_id) => {
     try {
         const response = await databases.createDocument(
             import.meta.env.VITE_DATABASE,
@@ -818,12 +818,12 @@ export const createSpread = async (notice_id, author_id, user_id) => {
     }
 };
 
-export const removeSpread = async (spread_id) => {
+export const removeSave = async (save_id) => {
     try {
         const response = await databases.deleteDocument(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_SAVES_COLLECTION,
-            spread_id,
+            save_id,
             // [
             //     Permission.delete(Role.users()),
             //     Permission.delete(Role.guests())
@@ -920,7 +920,7 @@ export const getAllLikedNotices = async (likedNoticeIds, limit, offset) => {
 };
 
 // The save icon
-export const getUserSpreads = async (user_id) => {
+export const getUserSaves = async (user_id) => {
     try {
         const response = await databases.listDocuments(
             import.meta.env.VITE_DATABASE,
@@ -936,22 +936,22 @@ export const getUserSpreads = async (user_id) => {
 }
 
 // The full notice
-export const getAllSpreadNotices = async (spreadNoticeIds, limit, offset) => {
+export const getAllSaveNotices = async (saveNoticeIds, limit, offset) => {
     try {
-        if (spreadNoticeIds.length === 0) {
+        if (saveNoticeIds.length === 0) {
             return []; // Return empty array if no save
         }
 
-        const allSpreadNotices = await databases.listDocuments(
+        const allSaveNotices = await databases.listDocuments(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_NOTICES_COLLECTION,
             [
-                Query.equal('$id', spreadNoticeIds),
+                Query.equal('$id', saveNoticeIds),
                 Query.limit(limit),
                 Query.offset(offset)
             ]
         );
-        return allSpreadNotices.documents;
+        return allSaveNotices.documents;
     } catch (error) {
         console.error('Error fetching all save notices:', error);
         return [];

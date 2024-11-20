@@ -55,12 +55,12 @@ const UserFeed = () => {
         noticesReactions,
         getInterests,
         getFeedNotices,
-        spreadNotice,
+        saveNotice,
         reportNotice,
         likeNotice,
         sendReaction,
         likedNotices,
-        spreadNotices,
+        saveNotices,
         getReactionsForNotice
         // fetchReactionsForNotices,
         // setNoticesReactions
@@ -204,9 +204,9 @@ const UserFeed = () => {
     // }, [feedNotices])
 
 
-    const handleSpread = async (notice) => {
+    const handleSave = async (notice) => {
         try {
-            await spreadNotice(notice.$id, notice.user_id, user_id);
+            await saveNotice(notice.$id, notice.user_id, user_id);
         } catch (error) {
             console.error('Error creating save entry:', error);
         }
@@ -271,10 +271,10 @@ const UserFeed = () => {
                 notices={feedNotices}
                 user_id={user_id}
                 likedNotices={likedNotices}
-                spreadNotices={spreadNotices}
+                saveNotices={saveNotices}
                 // reactions={noticesReactions}
                 handleLike={handleLike}
-                handleSpread={handleSpread}
+                handleSave={handleSave}
                 handleReport={handleReport}
                 handleReact={handleReact}
                 getReactionsForNotice={getReactionsForNotice}

@@ -1,14 +1,14 @@
 import { useState, useEffect, useCallback } from 'react';
-import { createNotice, getUserNotices, updateNotice, deleteNotice, deleteAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSpread, getUserSpreads, removeSpread, createReport, createLike, removeLike, getUserLikes, getAllLikedNotices as fetchAllLikedNotices, getAllSpreadNotices as fetchAllSpreadNotices, createReaction, deleteReaction, getAllReactionsBySenderId as fetchAllReactionsBySenderId, getAllReactions as fetchAllReactions, getAllReactionsByRecipientId as fetchAllReactionsByRecipientId, getNoticeByNoticeId as fetchNoticeByNoticeId, getAllReactionsByNoticeId as fetchAllReactionsByNoticeId, getReactionByReactionId as fetchReactionByReactionId, deleteAllReactions, createReactionReport } from '../../lib/context/dbhandler';
+import { createNotice, getUserNotices, updateNotice, deleteNotice, deleteAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSave, getUserSaves, removeSave, createReport, createLike, removeLike, getUserLikes, getAllLikedNotices as fetchAllLikedNotices, getAllSaveNotices as fetchAllSaveNotices, createReaction, deleteReaction, getAllReactionsBySenderId as fetchAllReactionsBySenderId, getAllReactions as fetchAllReactions, getAllReactionsByRecipientId as fetchAllReactionsByRecipientId, getNoticeByNoticeId as fetchNoticeByNoticeId, getAllReactionsByNoticeId as fetchAllReactionsByNoticeId, getReactionByReactionId as fetchReactionByReactionId, deleteAllReactions, createReactionReport } from '../../lib/context/dbhandler';
 import { UserId } from '../../components/User/UserId.jsx';
 
 const useNotices = (googleUserData) => {
     const [user_id, setUserId] = useState(null);
     const [userNotices, setUserNotices] = useState([]);
-    const [spreadNotices, setSpreadNotices] = useState([]);
+    const [saveNotices, setSaveNotices] = useState([]);
     const [likedNotices, setLikedNotices] = useState({});
     const [noticesReactions, setNoticesReactions] = useState([]);
-    const [spreadReactions, setSpreadReactions] = useState([]);
+    const [saveReactions, setSaveReactions] = useState([]);
     const [likedReactions, setLikedReactions] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isAddingNotice, setIsAddingNotice] = useState(false);
@@ -58,22 +58,22 @@ const useNotices = (googleUserData) => {
 
     // Fetch User Likes
     useEffect(() => {
-        const fetchUserSpreads = async () => {
+        const fetchUserSaves = async () => {
             try {
-                const userSpreads = await getUserSpreads(user_id);
+                const userSaves = await getUserSaves(user_id);
 
-                const spreadNoticesMap = {};
-                userSpreads.forEach(save => {
-                    spreadNoticesMap[save.notice_id] = save.$id;
+                const saveNoticesMap = {};
+                userSaves.forEach(save => {
+                    saveNoticesMap[save.notice_id] = save.$id;
                 });
-                setSpreadNotices(spreadNoticesMap);
+                setSaveNotices(saveNoticesMap);
             } catch (error) {
                 console.error('Error fetching user saves:', error);
             }
         };
 
         if (user_id) {
-            fetchUserSpreads();
+            fetchUserSaves();
         }
     }, [user_id]);
 
@@ -312,20 +312,20 @@ const useNotices = (googleUserData) => {
         }
     }
 
-    const spreadNotice = async (notice_id, author_id) => {
+    const saveNotice = async (notice_id, author_id) => {
         try {
-            if (spreadNotices[notice_id]) {
-                await removeSpread(spreadNotices[notice_id]);
-                setSpreadNotices((prevSpreads) => {
-                    const updatedSpreads = { ...prevSpreads };
-                    delete updatedSpreads[notice_id];
-                    return updatedSpreads;
+            if (saveNotices[notice_id]) {
+                await removeSave(saveNotices[notice_id]);
+                setSaveNotices((prevSaves) => {
+                    const updatedSaves = { ...prevSaves };
+                    delete updatedSaves[notice_id];
+                    return updatedSaves;
                 });
             } else {
-                const newSpread = await createSpread(notice_id, author_id, user_id);
-                setSpreadNotices((prevSpread) => ({
-                    ...prevSpread,
-                    [notice_id]: newSpread.$id,
+                const newSave = await createSave(notice_id, author_id, user_id);
+                setSaveNotices((prevSave) => ({
+                    ...prevSave,
+                    [notice_id]: newSave.$id,
                 }));
             }
         } catch (error) {
@@ -369,14 +369,14 @@ const useNotices = (googleUserData) => {
         }
     };
 
-    const getAllSpreadNotices = async (user_id, limit, offset) => {
+    const getAllSaveNotices = async (user_id, limit, offset) => {
         try {
 
-            const userSpreads = await getUserSpreads(user_id);
+            const userSaves = await getUserSaves(user_id);
 
-            const spreadNoticeIds = userSpreads.map(like => like.notice_id);
+            const saveNoticeIds = userSaves.map(like => like.notice_id);
 
-            return await fetchAllSpreadNotices(spreadNoticeIds, limit, offset);
+            return await fetchAllSaveNotices(saveNoticeIds, limit, offset);
 
         } catch (error) {
             // console.error('Error fetching all save notices:', error);
@@ -523,14 +523,14 @@ const useNotices = (googleUserData) => {
     return {
         user_id,
         userNotices,
-        spreadNotices,
+        saveNotices,
         likedNotices,
         isLoading,
         isAddingNotice,
         isRemovingNotice,
         removingNoticeId,
         noticesReactions,
-        spreadReactions,
+        saveReactions,
         likedReactions,
         addNotice,
         editNotice,
@@ -542,9 +542,9 @@ const useNotices = (googleUserData) => {
         getInterests,
         setRemovingNoticeId,
         updateInterests,
-        spreadNotice,
+        saveNotice,
         getAllLikedNotices,
-        getAllSpreadNotices,
+        getAllSaveNotices,
         reportNotice,
         likeNotice,
         setLikedNotices,
@@ -557,7 +557,7 @@ const useNotices = (googleUserData) => {
         reportReaction,
         // fetchReactionsForNotices,
         setNoticesReactions,
-        setSpreadReactions,
+        setSaveReactions,
         setLikedReactions
     };
 };
