@@ -568,6 +568,7 @@ export const Notices = ({
                                 reactionAvatarMap={reactionAvatarMap}
                                 reactionUsernameMap={reactionUsernameMap}
                                 showLoadMoreBtn={showLoadMoreBtn}
+                                user_id={user_id}
                                 handleLoadMoreReactions={handleLoadMoreReactions}
                                 handleReportReaction={handleReportReaction}
                             />

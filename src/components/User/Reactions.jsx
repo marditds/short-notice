@@ -9,7 +9,18 @@ import { BsExclamationTriangle } from 'react-icons/bs';
 
 
 
-export const Reactions = ({ loadingStates, notice, loadedReactions, reactionUsernameMap, reactionAvatarMap, defaultAvatar, showLoadMoreBtn, isLoadingMoreReactions, handleLoadMoreReactions, handleReportReaction }) => {
+export const Reactions = ({
+    loadingStates,
+    notice,
+    loadedReactions,
+    reactionUsernameMap,
+    reactionAvatarMap,
+    defaultAvatar,
+    showLoadMoreBtn,
+    isLoadingMoreReactions,
+    handleLoadMoreReactions,
+    handleReportReaction,
+    user_id }) => {
     return (
         <Row className='d-grid w-100'>
 
@@ -53,12 +64,16 @@ export const Reactions = ({ loadingStates, notice, loadedReactions, reactionUser
                                             <CgTrash size={22} />
 
                                         </div> */}
-                                        <div
-                                            className='ms-1 mt-1 d-flex notice__delete-btn d-flex align-items-center'
-                                            onClick={() => handleReportReaction(reaction.$id)}
-                                        >
-                                            <BsExclamationTriangle size={20} />
-                                        </div>
+                                        {reaction.sender_id !== user_id ?
+                                            <div
+                                                className='ms-1 mt-1 d-flex notice__delete-btn d-flex align-items-center'
+                                                onClick={() => handleReportReaction(reaction.$id)}
+                                            >
+                                                <BsExclamationTriangle size={20} />
+                                            </div>
+                                            :
+                                            <div style={{ height: '24px' }} />
+                                        }
                                     </div>
                                 </Col>
                             </Row>

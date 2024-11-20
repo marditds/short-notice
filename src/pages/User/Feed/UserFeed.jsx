@@ -52,16 +52,18 @@ const UserFeed = () => {
 
     const {
         user_id,
-        noticesReactions,
+        likedNotices,
+        saveNotices,
         getInterests,
         getFeedNotices,
         saveNotice,
         reportNotice,
         likeNotice,
         sendReaction,
-        likedNotices,
-        saveNotices,
-        getReactionsForNotice
+        getReactionsForNotice,
+        getReactionByReactionId,
+        reportReaction
+        // noticesReactions, 
         // fetchReactionsForNotices,
         // setNoticesReactions
     } = useNotices(googleUserData);
@@ -279,6 +281,8 @@ const UserFeed = () => {
                 handleReact={handleReact}
                 getReactionsForNotice={getReactionsForNotice}
                 getUserAccountByUserId={getUserAccountByUserId}
+                getReactionByReactionId={getReactionByReactionId}
+                reportReaction={reportReaction}
             />
 
             {/* Load More Button */}

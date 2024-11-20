@@ -41,7 +41,9 @@ const OtherUserProfile = () => {
         getAllSaveNotices,
         fetchUserNotices,
         sendReaction,
-        getReactionsForNotice
+        getReactionsForNotice,
+        getReactionByReactionId,
+        reportReaction
         // fetchReactionsForNotices,
         // setNoticesReactions,
         // setSaveReactions,
@@ -486,6 +488,8 @@ const OtherUserProfile = () => {
                                                 handleReact={handleReact}
                                                 getReactionsForNotice={getReactionsForNotice}
                                                 getUserAccountByUserId={getUserAccountByUserId}
+                                                getReactionByReactionId={getReactionByReactionId}
+                                                reportReaction={reportReaction}
                                             />
                                             <div className="d-flex justify-content-center mt-4">
                                                 {hasMoreNotices ?
@@ -522,6 +526,8 @@ const OtherUserProfile = () => {
                                                 handleReact={handleReact}
                                                 getReactionsForNotice={getReactionsForNotice}
                                                 getUserAccountByUserId={getUserAccountByUserId}
+                                                getReactionByReactionId={getReactionByReactionId}
+                                                reportReaction={reportReaction}
                                             />
                                             <div className="d-flex justify-content-center mt-4">
                                                 {hasMoreSaves ?
@@ -558,6 +564,8 @@ const OtherUserProfile = () => {
                                                 handleReact={handleReact}
                                                 getReactionsForNotice={getReactionsForNotice}
                                                 getUserAccountByUserId={getUserAccountByUserId}
+                                                getReactionByReactionId={getReactionByReactionId}
+                                                reportReaction={reportReaction}
 
                                             />
                                             <div className="d-flex justify-content-center mt-4">
