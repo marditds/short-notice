@@ -87,7 +87,7 @@ const OtherUserProfile = () => {
     const [hasMoreNotices, setHasMoreNotices] = useState(true);
     const [isLoadingMore, setIsLoadingMore] = useState(false);
 
-    // Spreads Tab
+    // Saves Tab
     const [limitSpreads] = useState(10);
     const [offsetSpreads, setOffsetSpreads] = useState(0);
     const [hasMoreSpreads, setHasMoreSpreads] = useState(true);
@@ -220,7 +220,7 @@ const OtherUserProfile = () => {
         }
     }
 
-    // Fetch spreads and users' data for spreads tab 
+    // Fetch saves and users' data for saves tab 
     useEffect(() => {
         const fetchSpreadNotices = async () => {
             setIsLoadingMoreSpreads(true);
@@ -238,7 +238,7 @@ const OtherUserProfile = () => {
 
                 await fetchUsersData(allSpreadNotices, setSpreadNoticesData, avatarUtil);
             } catch (error) {
-                console.error('Error fetching spreads - ', error);
+                console.error('Error fetching saves - ', error);
             } finally {
                 setIsLoadingMoreSpreads(false);
             }
@@ -284,7 +284,7 @@ const OtherUserProfile = () => {
     // useEffect(() => {
     //     fetchReactionsForNotices(notices, setNoticesReactions);
     // }, [notices]);
-    // Reactions For Spreads tab
+    // Reactions For Saves tab
     // useEffect(() => {
     //     fetchReactionsForNotices(spreadNoticesData, setSpreadReactions);
     // }, [spreadNoticesData]);
@@ -337,7 +337,7 @@ const OtherUserProfile = () => {
         try {
             await spreadNotice(notice.$id, notice.user_id);
         } catch (error) {
-            console.error('Error creating spread entry:', error);
+            console.error('Error creating save entry:', error);
         }
     };
 
@@ -502,8 +502,8 @@ const OtherUserProfile = () => {
 
                                 {/* SPREADS TAB */}
                                 <Tab
-                                    eventKey='spreads'
-                                    title="Spreads"
+                                    eventKey='saves'
+                                    title="Saves"
                                 >
                                     {spreadNoticesData.length !== 0 ?
                                         <>
@@ -530,7 +530,7 @@ const OtherUserProfile = () => {
                                                             <><Loading size={24} /> Loading...</>
                                                             : 'Load More'}
                                                     </Button>
-                                                    : 'No more spreads'}
+                                                    : 'No more saves'}
                                             </div>
                                         </>
                                         : 'No spreadas yet'}

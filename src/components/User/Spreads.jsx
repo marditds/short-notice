@@ -1,7 +1,7 @@
 import React from 'react';
 import { formatDateToLocal, calculateCountdown } from '../../lib/utils/dateUtils';
 
-export const Spreads = ({ notices, username }) => {
+export const Saves = ({ notices, username }) => {
     return (
         <>
             {notices.map((notice, idx) => (

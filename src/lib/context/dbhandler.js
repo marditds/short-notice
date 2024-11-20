@@ -798,7 +798,7 @@ export const createSpread = async (notice_id, author_id, user_id) => {
     try {
         const response = await databases.createDocument(
             import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_SPREADS_COLLECTION,
+            import.meta.env.VITE_SAVES_COLLECTION,
             ID.unique(),
             {
                 notice_id: notice_id,
@@ -810,10 +810,10 @@ export const createSpread = async (notice_id, author_id, user_id) => {
             //     Permission.write(Role.guests())
             // ]
         );
-        console.log('Spread entry created successfully:', response);
+        console.log('Save entry created successfully:', response);
         return response;
     } catch (error) {
-        console.error('Error adding to spreads:', error);
+        console.error('Error adding to saves:', error);
         throw error;
     }
 };
@@ -822,17 +822,17 @@ export const removeSpread = async (spread_id) => {
     try {
         const response = await databases.deleteDocument(
             import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_SPREADS_COLLECTION,
+            import.meta.env.VITE_SAVES_COLLECTION,
             spread_id,
             // [
             //     Permission.delete(Role.users()),
             //     Permission.delete(Role.guests())
             // ]
         );
-        console.log('Spread removed successfully:', response);
+        console.log('Save removed successfully:', response);
         return response;
     } catch (error) {
-        console.error('Error removing spread:', error);
+        console.error('Error removing save:', error);
         throw error;
     }
 }
@@ -919,19 +919,19 @@ export const getAllLikedNotices = async (likedNoticeIds, limit, offset) => {
     }
 };
 
-// The spread icon
+// The save icon
 export const getUserSpreads = async (user_id) => {
     try {
         const response = await databases.listDocuments(
             import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_SPREADS_COLLECTION,
+            import.meta.env.VITE_SAVES_COLLECTION,
             [
                 Query.equal('user_id', user_id)
             ]
         )
         return response.documents;
     } catch (error) {
-        // console.error('Error fetching spreads:', error);
+        // console.error('Error fetching saves:', error);
     }
 }
 
@@ -939,7 +939,7 @@ export const getUserSpreads = async (user_id) => {
 export const getAllSpreadNotices = async (spreadNoticeIds, limit, offset) => {
     try {
         if (spreadNoticeIds.length === 0) {
-            return []; // Return empty array if no spread
+            return []; // Return empty array if no save
         }
 
         const allSpreadNotices = await databases.listDocuments(
@@ -953,7 +953,7 @@ export const getAllSpreadNotices = async (spreadNoticeIds, limit, offset) => {
         );
         return allSpreadNotices.documents;
     } catch (error) {
-        console.error('Error fetching all spread notices:', error);
+        console.error('Error fetching all save notices:', error);
         return [];
     }
 };

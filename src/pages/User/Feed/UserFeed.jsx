@@ -208,7 +208,7 @@ const UserFeed = () => {
         try {
             await spreadNotice(notice.$id, notice.user_id, user_id);
         } catch (error) {
-            console.error('Error creating spread entry:', error);
+            console.error('Error creating save entry:', error);
         }
     };
 

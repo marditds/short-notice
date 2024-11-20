@@ -63,12 +63,12 @@ const useNotices = (googleUserData) => {
                 const userSpreads = await getUserSpreads(user_id);
 
                 const spreadNoticesMap = {};
-                userSpreads.forEach(spread => {
-                    spreadNoticesMap[spread.notice_id] = spread.$id;
+                userSpreads.forEach(save => {
+                    spreadNoticesMap[save.notice_id] = save.$id;
                 });
                 setSpreadNotices(spreadNoticesMap);
             } catch (error) {
-                console.error('Error fetching user spreads:', error);
+                console.error('Error fetching user saves:', error);
             }
         };
 
@@ -77,7 +77,7 @@ const useNotices = (googleUserData) => {
         }
     }, [user_id]);
 
-    // Fetch User Spreads
+    // Fetch User Saves
     useEffect(() => {
         const fetchUserLikes = async () => {
             try {
@@ -329,7 +329,7 @@ const useNotices = (googleUserData) => {
                 }));
             }
         } catch (error) {
-            console.error('Error toggling spreads:', error);
+            console.error('Error toggling saves:', error);
         }
     }
 
@@ -379,7 +379,7 @@ const useNotices = (googleUserData) => {
             return await fetchAllSpreadNotices(spreadNoticeIds, limit, offset);
 
         } catch (error) {
-            // console.error('Error fetching all spread notices:', error);
+            // console.error('Error fetching all save notices:', error);
             return [];
         }
     };
