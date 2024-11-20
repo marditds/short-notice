@@ -410,12 +410,15 @@ const OtherUserProfile = () => {
             if (psscd[0].passcode === passcode) {
                 setAccountTypeCheck(true);
             }
-            console.log('accountTypeCheck', accountTypeCheck);
 
         } catch (error) {
             console.error('Error checking passcode:', error);
         }
     }
+
+    useEffect(() => {
+        console.log('accountTypeCheck', accountTypeCheck);
+    }, [accountTypeCheck])
 
     useEffect(() => {
         console.log('Pathname:', location.pathname);

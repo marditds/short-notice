@@ -1082,6 +1082,26 @@ export const removeFollow = async (following_id) => {
     }
 }
 
+export const removeAllFollows = async (user_id) => {
+    try {
+        const follows = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_FOLLOWING_COLLECTION,
+            [
+                Query.equal('user_id', user_id)
+            ]
+        )
+
+        for (const follow of follows) {
+            await removeFollow(follow.$id);
+        }
+
+        console.log(`All follows made by ${user_id} removed successfully.`);
+    } catch (error) {
+        console.error('Error removing all follows:', error);
+    }
+}
+
 export const getUserFollowingsById = async (user_id) => {
 
     console.log('user_id:', user_id);
