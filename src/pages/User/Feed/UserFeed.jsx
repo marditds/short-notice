@@ -53,7 +53,7 @@ const UserFeed = () => {
     const {
         user_id,
         likedNotices,
-        saveNotices,
+        savedNotices,
         getInterests,
         getFeedNotices,
         saveNotice,
@@ -273,7 +273,7 @@ const UserFeed = () => {
                 notices={feedNotices}
                 user_id={user_id}
                 likedNotices={likedNotices}
-                saveNotices={saveNotices}
+                savedNotices={savedNotices}
                 // reactions={noticesReactions}
                 handleLike={handleLike}
                 handleSave={handleSave}

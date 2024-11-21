@@ -26,7 +26,7 @@ export const Notices = ({
     username,
     user_id,
     likedNotices,
-    saveNotices,
+    savedNotices,
     getReactionsForNotice,
     getReactionByReactionId,
     getUserAccountByUserId,
@@ -517,7 +517,7 @@ export const Notices = ({
                                                                 className='notice__reaction-btn ms-2'
                                                                 disabled={user_id === notice.user_id}
                                                             >
-                                                                {saveNotices && saveNotices[notice.$id] ? (
+                                                                {savedNotices && savedNotices[notice.$id] ? (
                                                                     <RiSave2Fill
                                                                         className='notice__reaction-btn-fill'
                                                                         size={20}

@@ -944,6 +944,7 @@ export const getAllLikedNotices = async (likedNoticeIds, limit, offset) => {
             import.meta.env.VITE_NOTICES_COLLECTION,
             [
                 Query.equal('$id', likedNoticeIds),
+                // Query.notEqual('noticeType', ['organization']),
                 Query.limit(limit),
                 Query.offset(offset)
             ]
@@ -962,32 +963,33 @@ export const getUserSaves = async (user_id) => {
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_SAVES_COLLECTION,
             [
-                Query.equal('user_id', user_id)
+                Query.equal('user_id', user_id),
             ]
         )
         return response.documents;
     } catch (error) {
-        // console.error('Error fetching saves:', error);
+        console.error('Error getting saves:', error);
     }
 }
 
 // The full notice
-export const getAllSaveNotices = async (saveNoticeIds, limit, offset) => {
+export const getAllSavedNotices = async (saveNoticeIds, limit, offset) => {
     try {
         if (saveNoticeIds.length === 0) {
             return []; // Return empty array if no save
         }
 
-        const allSaveNotices = await databases.listDocuments(
+        const allSavedNotices = await databases.listDocuments(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_NOTICES_COLLECTION,
             [
                 Query.equal('$id', saveNoticeIds),
+                // Query.notEqual('noticeType', ['organization']),
                 Query.limit(limit),
                 Query.offset(offset)
             ]
         );
-        return allSaveNotices.documents;
+        return allSavedNotices.documents;
     } catch (error) {
         console.error('Error fetching all save notices:', error);
         return [];

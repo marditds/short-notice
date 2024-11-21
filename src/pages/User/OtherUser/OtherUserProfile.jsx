@@ -29,7 +29,7 @@ const OtherUserProfile = () => {
     const {
         user_id,
         likedNotices,
-        saveNotices,
+        savedNotices,
         isLoading: noticesLoading,
         noticesReactions,
         // saveReactions,
@@ -38,7 +38,7 @@ const OtherUserProfile = () => {
         saveNotice,
         reportNotice,
         getAllLikedNotices,
-        getAllSaveNotices,
+        getAllSavedNotices,
         fetchUserNotices,
         sendReaction,
         getReactionsForNotice,
@@ -78,7 +78,7 @@ const OtherUserProfile = () => {
     const [isOtherUserBlocked, setIsOtherUserBlocked] = useState(false);
 
     const [notices, setNotices] = useState([]);
-    const [saveNoticesData, setSaveNoticesData] = useState([]);
+    const [savedNoticesData, setSavedNoticesData] = useState([]);
     const [likedNoticesData, setLikedNoticesData] = useState([]);
 
     const { avatarUrl } = useUserAvatar(currUserId);
@@ -227,24 +227,26 @@ const OtherUserProfile = () => {
         const fetchSaveNotices = async () => {
             setIsLoadingMoreSaves(true);
             try {
-                const allSaveNotices = await getAllSaveNotices(currUserId, limitSaves, offsetSaves);
+                const allSavedNotices = await getAllSavedNotices(currUserId, limitSaves, offsetSaves);
 
-                console.log('allSaveNotices', allSaveNotices);
+                console.log('allSavedNotices', allSavedNotices);
 
+                const noticesWithoutTypeOrganization = allSavedNotices.filter((savedNotice) => savedNotice.noticeType !== 'organization');
 
-                if (allSaveNotices?.length < limitSaves) {
+                console.log('noticesWithoutTypeOrganization', noticesWithoutTypeOrganization);
+
+                if (noticesWithoutTypeOrganization?.length < limitSaves) {
                     setHasMoreSaves(false);
                 } else {
                     setHasMoreSaves(true);
                 }
 
-                await fetchUsersData(allSaveNotices, setSaveNoticesData, avatarUtil);
+                await fetchUsersData(noticesWithoutTypeOrganization, setSavedNoticesData, avatarUtil);
             } catch (error) {
                 console.error('Error fetching saves - ', error);
             } finally {
                 setIsLoadingMoreSaves(false);
             }
-
         };
         // if (isBlocked === false) {
         //     fetchSaveNotices();
@@ -261,13 +263,19 @@ const OtherUserProfile = () => {
             try {
                 const allLikedNotices = await getAllLikedNotices(currUserId, limitLikes, offsetLikes);
 
-                if (allLikedNotices?.length < limitLikes) {
+                console.log('allLikedNotices', allLikedNotices);
+
+                const noticesWithoutTypeOrganization = allLikedNotices.filter((likedNotice) => likedNotice.noticeType !== 'organization');
+
+                console.log('noticesWithoutTypeOrganization', noticesWithoutTypeOrganization);
+
+                if (noticesWithoutTypeOrganization?.length < limitLikes) {
                     setHasMoreLikes(false);
                 } else {
                     setHasMoreLikes(true);
                 }
 
-                await fetchUsersData(allLikedNotices, setLikedNoticesData, avatarUtil);
+                await fetchUsersData(noticesWithoutTypeOrganization, setLikedNoticesData, avatarUtil);
             } catch (error) {
                 console.error('Error fetching likes - ', error);
             } finally {
@@ -479,7 +487,7 @@ const OtherUserProfile = () => {
                                             <Notices
                                                 notices={notices}
                                                 likedNotices={likedNotices}
-                                                saveNotices={saveNotices}
+                                                savedNotices={savedNotices}
                                                 reactions={noticesReactions}
                                                 eventKey={eventKey}
                                                 handleLike={handleLike}
@@ -512,13 +520,13 @@ const OtherUserProfile = () => {
                                     eventKey='saves'
                                     title="Saves"
                                 >
-                                    {saveNoticesData.length !== 0 ?
+                                    {savedNoticesData.length !== 0 ?
                                         <>
                                             <Notices
-                                                notices={saveNoticesData}
+                                                notices={savedNoticesData}
                                                 user_id={user_id}
                                                 likedNotices={likedNotices}
-                                                saveNotices={saveNotices}
+                                                savedNotices={savedNotices}
                                                 eventKey={eventKey}
                                                 handleLike={handleLike}
                                                 handleSave={handleSave}
@@ -556,7 +564,7 @@ const OtherUserProfile = () => {
                                                 notices={likedNoticesData}
                                                 user_id={user_id}
                                                 likedNotices={likedNotices}
-                                                saveNotices={saveNotices}
+                                                savedNotices={savedNotices}
                                                 eventKey={eventKey}
                                                 handleLike={handleLike}
                                                 handleSave={handleSave}

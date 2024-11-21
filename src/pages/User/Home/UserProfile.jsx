@@ -26,7 +26,7 @@ const UserProfile = () => {
     const {
         user_id,
         // userNotices,
-        saveNotices,
+        savedNotices,
         likedNotices,
         isLoading,
         isAddingNotice,
@@ -45,7 +45,7 @@ const UserProfile = () => {
         sendReaction,
         fetchUserNotices,
         getAllLikedNotices,
-        getAllSaveNotices,
+        getAllSavedNotices,
         getReactionsForNotice,
         getReactionByReactionId,
         reportReaction
@@ -69,7 +69,7 @@ const UserProfile = () => {
     } = useUserInfo(googleUserData);
 
     const [notices, setNotices] = useState([]);
-    const [saveNoticesData, setSaveNoticesData] = useState([]);
+    const [savedNoticesData, setSavedNoticesData] = useState([]);
     const [likedNoticesData, setLikedNoticesData] = useState([]);
 
     const { avatarUrl } = useUserAvatar(user_id);
@@ -158,15 +158,15 @@ const UserProfile = () => {
         const fetchSaveNotices = async () => {
             setIsLoadingMoreSaves(true);
             try {
-                const allSaveNotices = await getAllSaveNotices(user_id, limitSaves, offsetSaves);
+                const allSavedNotices = await getAllSavedNotices(user_id, limitSaves, offsetSaves);
 
-                if (allSaveNotices?.length < limit) {
+                if (allSavedNotices?.length < limit) {
                     setHasMoreSaves(false);
                 } else {
                     setHasMoreSaves(true);
                 }
 
-                await fetchUsersData(allSaveNotices, setSaveNoticesData, avatarUtil);
+                await fetchUsersData(allSavedNotices, setSavedNoticesData, avatarUtil);
             } catch (error) {
                 console.error('Error fetching saves - ', error);
             } finally {
@@ -405,10 +405,10 @@ const UserProfile = () => {
                     title="Saves"
                 >
                     <Notices
-                        notices={saveNoticesData}
+                        notices={savedNoticesData}
                         username={username}
                         likedNotices={likedNotices}
-                        saveNotices={saveNotices}
+                        savedNotices={savedNotices}
                         eventKey={eventKey}
                         handleLike={handleLike}
                         handleSave={handleSave}
@@ -443,7 +443,7 @@ const UserProfile = () => {
                         notices={likedNoticesData}
                         username={username}
                         likedNotices={likedNotices}
-                        saveNotices={saveNotices}
+                        savedNotices={savedNotices}
                         eventKey={eventKey}
                         handleLike={handleLike}
                         handleSave={handleSave}
