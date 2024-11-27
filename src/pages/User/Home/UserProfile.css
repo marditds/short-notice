@@ -54,6 +54,7 @@
         radial-gradient(var(--r) at bottom var(--_g));
     clip-path: polygon(0 50%, 100% 100%, 100% 0);
     object-fit: cover;
+    object-position: left center;
 }
 
 .user-profile__interaction-btn {
@@ -301,12 +302,6 @@
 
 }
 
-.notice__reaction-btn.disabled>svg,
-.notice__reaction-btn:hover.disabled>svg {
-    cursor: not-allowed;
-    color: var(--main-text-muted) !important;
-}
-
 .notice__edit-btn>svg,
 .notice__delete-btn>svg,
 .notice__reaction-btn>svg {
@@ -321,6 +316,13 @@
 .notice__reaction-btn:focus>svg {
     color: var(--main-accent-color) !important;
     filter: drop-shadow(0px 0px 5px var(--main-accent-color)) !important;
+}
+
+.notice__reaction-btn.disabled>svg,
+.notice__reaction-btn:hover.disabled>svg {
+    /* cursor: not-allowed; */
+    color: yellow !important;
+    /* color: var(--main-text-muted) !important; */
 }
 
 .notice__reaction-btn-fill {
@@ -373,14 +375,14 @@
 
 }
 
-.notice__reaction {
-    /* background-attachment: fixed;
+/* .notice__reaction {
+    background-attachment: fixed;
     background: rgb(255, 255, 255);
     background: -moz-linear-gradient(180deg, rgba(244, 244, 244, 0) 0%, rgba(255, 255, 255, 0.58) 76%, rgba(23, 199, 105, 0.58) 100%);
     background: -webkit-linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.58) 76%, rgba(23, 199, 105, 0.58) 100%);
     background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.58) 76%, rgba(23, 199, 105, 0.58) 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#ffffff", endColorstr="#17c769", GradientType=1); */
-}
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#ffffff", endColorstr="#17c769", GradientType=1);
+} */
 
 .notice__reaction>.row {
     max-width: 95%;

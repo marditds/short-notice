@@ -186,6 +186,7 @@ const UserProfile = () => {
 
                 console.log('allLikedNotices - UserProfile.jsx', allLikedNotices);
 
+                await fetchUsersData(allLikedNotices, setLikedNoticesData, avatarUtil);
 
                 if (allLikedNotices?.length < limit) {
                     setHasMoreLikes(false);
@@ -193,7 +194,6 @@ const UserProfile = () => {
                     setHasMoreLikes(true);
                 }
 
-                await fetchUsersData(allLikedNotices, setLikedNoticesData, avatarUtil);
             } catch (error) {
                 console.error('Error fetching likes - ', error);
             } finally {

@@ -276,13 +276,14 @@ const OtherUserProfile = () => {
 
                 const filteredNotices = await filterBlocksFromLikesSaves(noticesWithoutTypeOrganization, user_id);
 
+                await fetchUsersData(filteredNotices, setLikedNoticesData, avatarUtil);
+
                 if (filteredNotices?.length < limitLikes) {
                     setHasMoreLikes(false);
                 } else {
                     setHasMoreLikes(true);
                 }
 
-                await fetchUsersData(filteredNotices, setLikedNoticesData, avatarUtil);
             } catch (error) {
                 console.error('Error fetching likes - ', error);
             } finally {
@@ -497,6 +498,7 @@ const OtherUserProfile = () => {
                                                 savedNotices={savedNotices}
                                                 reactions={noticesReactions}
                                                 eventKey={eventKey}
+                                                isBlocked={isBlocked}
                                                 handleLike={handleLike}
                                                 handleSave={handleSave}
                                                 handleReport={handleReport}
