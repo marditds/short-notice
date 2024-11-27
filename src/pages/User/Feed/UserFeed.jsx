@@ -150,7 +150,8 @@ const UserFeed = () => {
 
                 // Filtering out notices from accounts blocked by user
                 const noticesFromAccountsNotBlockedByUser = notices.filter((notice) =>
-                    !blockedUsersByUser.some((user) => notice.user_id === user.blocked_id)
+                    blockedUsersByUser.every((user) => notice.user_id !== user.blocked_id)
+                    // !blockedUsersByUser.some((user) => notice.user_id === user.blocked_id)
                 );
 
                 console.log('noticesFromAccountsNotBlockedByUser', noticesFromAccountsNotBlockedByUser);
@@ -160,7 +161,10 @@ const UserFeed = () => {
                 console.log('usersBlockingUser', usersBlockingUser);
 
                 // Filtering out notices from accounts blocking the user 
-                const noticesFromAccountNotBlockingTheUser = noticesFromAccountsNotBlockedByUser.filter((notice) => !usersBlockingUser.some((user) => notice.user_id === user.blocker_id));
+                const noticesFromAccountNotBlockingTheUser = noticesFromAccountsNotBlockedByUser.filter((notice) =>
+                    usersBlockingUser.every((user) => notice.user_id !== user.blocker_id)
+                    // !usersBlockingUser.some((user) => notice.user_id === user.blocker_id)
+                );
 
                 const filteredNotices = noticesFromAccountNotBlockingTheUser || [];
 
