@@ -8,6 +8,7 @@ import useUserInfo from '../../../lib/hooks/useUserInfo.js';
 import { getAvatarUrl as avatarUtil } from '../../../lib/utils/avatarUtils.js';
 import useUserAvatar from '../../../lib/hooks/useUserAvatar.js';
 import useNotices from '../../../lib/hooks/useNotices.js';
+import { useUnblockedNotices } from '../../../lib/utils/blockFilter.js';
 import { Passcode } from '../../../components/User/Passcode.jsx';
 import { Loading } from '../../../components/Loading/Loading.jsx';
 
@@ -49,6 +50,8 @@ const OtherUserProfile = () => {
         // setSaveReactions,
         // setLikedReactions
     } = useNotices(googleUserData);
+
+    const { filterBlocksFromLikesSaves } = useUnblockedNotices();
 
     const {
         isFollowingUserLoading,
@@ -235,13 +238,15 @@ const OtherUserProfile = () => {
 
                 console.log('noticesWithoutTypeOrganization', noticesWithoutTypeOrganization);
 
-                if (noticesWithoutTypeOrganization?.length < limitSaves) {
+                const filteredNotices = await filterBlocksFromLikesSaves(noticesWithoutTypeOrganization, user_id);
+
+                if (filteredNotices?.length < limitSaves) {
                     setHasMoreSaves(false);
                 } else {
                     setHasMoreSaves(true);
                 }
 
-                await fetchUsersData(noticesWithoutTypeOrganization, setSavedNoticesData, avatarUtil);
+                await fetchUsersData(filteredNotices, setSavedNoticesData, avatarUtil);
             } catch (error) {
                 console.error('Error fetching saves - ', error);
             } finally {
@@ -269,13 +274,15 @@ const OtherUserProfile = () => {
 
                 console.log('noticesWithoutTypeOrganization', noticesWithoutTypeOrganization);
 
-                if (noticesWithoutTypeOrganization?.length < limitLikes) {
+                const filteredNotices = await filterBlocksFromLikesSaves(noticesWithoutTypeOrganization, user_id);
+
+                if (filteredNotices?.length < limitLikes) {
                     setHasMoreLikes(false);
                 } else {
                     setHasMoreLikes(true);
                 }
 
-                await fetchUsersData(noticesWithoutTypeOrganization, setLikedNoticesData, avatarUtil);
+                await fetchUsersData(filteredNotices, setLikedNoticesData, avatarUtil);
             } catch (error) {
                 console.error('Error fetching likes - ', error);
             } finally {

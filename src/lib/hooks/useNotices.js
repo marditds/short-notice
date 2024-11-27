@@ -378,7 +378,7 @@ const useNotices = (googleUserData) => {
 
             const userSaves = await getUserSaves(userId);
 
-            const noticesWithoutTwoWayBlock = await filterBlocksFromNotices(userSaves, user_id);
+            const noticesWithoutTwoWayBlock = await filterBlocksFromLikesSaves(userSaves, user_id);
 
             const saveNoticeIds = noticesWithoutTwoWayBlock.map(like => like.notice_id);
 
