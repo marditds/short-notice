@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { createNotice, getUserNotices, updateNotice, deleteNotice, deleteAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSave, getUserSaves, removeSave, createReport, createLike, removeLike, getUserLikes, getAllLikedNotices as fetchAllLikedNotices, getAllSavedNotices as fetchAllSavedNotices, createReaction, deleteReaction, getAllReactionsBySenderId as fetchAllReactionsBySenderId, getAllReactions as fetchAllReactions, getAllReactionsByRecipientId as fetchAllReactionsByRecipientId, getNoticeByNoticeId as fetchNoticeByNoticeId, getAllReactionsByNoticeId as fetchAllReactionsByNoticeId, getReactionByReactionId as fetchReactionByReactionId, deleteAllReactions, createReactionReport } from '../../lib/context/dbhandler';
 import { UserId } from '../../components/User/UserId.jsx';
+import useUserInfo from './useUserInfo.js';
 
 const useNotices = (googleUserData) => {
     const [user_id, setUserId] = useState(null);
@@ -15,8 +16,7 @@ const useNotices = (googleUserData) => {
     const [isRemovingNotice, setIsRemovingNotice] = useState(false);
     const [removingNoticeId, setRemovingNoticeId] = useState(null);
 
-    // const [offset, setOffset] = useState(0);  
-    // const [limit] = useState(10);  
+    const { getUsersBlockingUser } = useUserInfo();
 
     // Fetch User Notces
     useEffect(() => {
@@ -354,19 +354,24 @@ const useNotices = (googleUserData) => {
         }
     };
 
-    const getAllLikedNotices = async (user_id, limit, offset) => {
+    const getAllLikedNotices = async (userId, limit, offset) => {
         try {
 
-            const userLikes = await getUserLikes(user_id);
+            const userLikes = await getUserLikes(userId);
 
             console.log('userLikes', userLikes);
 
-            // fetch the ids that have blocked me (blocked_id = user_id)
-            // compare blocker_id with author_id of userLikes
-            // create a new array of object excluding the likes where the user's blocker_id === author_id
-            // map the new array of objects
+            const usersBlockingUser = await getUsersBlockingUser(user_id);
 
-            const likedNoticeIds = userLikes.map(like => like.notice_id);
+            console.log('usersBlockingUser', usersBlockingUser);
+
+            var likesWithoutBlockingAccount = [];
+
+            likesWithoutBlockingAccount = userLikes.filter((userLike) => usersBlockingUser.every((user) => userLike.author_id !== user.blocker_id))
+
+            console.log('likesWithoutBlockingAccount', likesWithoutBlockingAccount);
+
+            const likedNoticeIds = likesWithoutBlockingAccount.map(like => like.notice_id);
 
             return await fetchAllLikedNotices(likedNoticeIds, limit, offset);
 
