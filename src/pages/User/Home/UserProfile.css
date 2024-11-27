@@ -44,6 +44,25 @@
     color: var(--main-accent-color-hover) !important;
 }
 
+.user-profile__avatar {
+    height: 100px;
+}
+
+.user-profile__avatar,
+.notice__avatar,
+.notice__reaction-avatar {
+    --r: 5px;
+    aspect-ratio: cos(30deg);
+    --_g: calc(tan(60deg)*var(--r)) right var(--r), #000 98%, #0000 101%;
+    mask:
+        conic-gradient(from 240deg at calc(200% - 3*var(--r)/2), #000 60deg, #0000 0) 100% 0/calc(100% - 3*var(--r)/2) 100% no-repeat,
+        radial-gradient(var(--r) at calc(2*var(--r)) 50%, #000 98%, #0000 101%),
+        radial-gradient(var(--r) at top var(--_g)),
+        radial-gradient(var(--r) at bottom var(--_g));
+    clip-path: polygon(0 50%, 100% 100%, 100% 0);
+    object-fit: cover;
+}
+
 .user-profile__interaction-btn {
     background-color: rgb(0, 0, 0, 0.0);
     border-color: var(--main-accent-color);
@@ -227,7 +246,7 @@
 
 .notice__username>a {
     color: var(--main-text-color);
-    margin-right: 12px;
+    margin-right: 6px;
     transition: 0.3s;
 }
 
@@ -235,12 +254,18 @@
     color: var(--main-accent-color);
 }
 
-.notice__username+a {
+.notice__username+a,
+.notice__reaction-username+a {
     transition: 0.5s;
 }
 
-.notice__username+a:hover {
+.notice__username+a:hover,
+.notice__reaction-username+a:hover {
     filter: sepia(1) hue-rotate(100deg) saturate(6) brightness(0.7);
+}
+
+.notice__avatar {
+    height: 70px;
 }
 
 .user-profile__notice-tab {
@@ -380,9 +405,9 @@
 }
 
 .notice__reaction-avatar {
-    transition: 0.5s;
+    height: 53px;
 }
 
-.notice__reaction-avatar:hover {
+/* .notice__reaction-avatar:hover {
     filter: sepia(1) hue-rotate(100deg) saturate(6) brightness(0.7);
-}
+} */

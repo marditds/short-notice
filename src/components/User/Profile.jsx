@@ -100,7 +100,11 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
 
                 {/* Profile Picture Col */}
                 <Col className='w-100 d-grid justify-content-center gap-2'>
-                    <img src={avatarUrl ? avatarUrl : defaultAvatar} alt="Profile" style={{ borderRadius: '50%', width: 100, height: 100 }} />
+                    <img
+                        src={avatarUrl ? avatarUrl : defaultAvatar}
+                        alt="Profile"
+                        className='user-profile__avatar'
+                    />
                     <p className='my-0 text-center'>{username}</p>
                 </Col>
 

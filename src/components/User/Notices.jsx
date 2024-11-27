@@ -455,8 +455,7 @@ export const Notices = ({
                                                 <img
                                                     src={notice.avatarUrl || defaultAvatar}
                                                     alt="Profile"
-                                                    style={{ borderRadius: '50%', width: 50, height: 50 }}
-                                                    className='d-flex ms-auto'
+                                                    className='d-flex ms-auto notice__avatar'
                                                 />
                                             </Link>
                                         </div>)

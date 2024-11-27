@@ -47,13 +47,11 @@ export const Reactions = ({
                                             </strong>
                                         </Link>
                                         <Link to={`/user/${reactionUsernameMap[notice.$id]?.[reaction.sender_id]}`}
-                                            className='notice__reaction-avatar'
                                         >
                                             <img
                                                 src={avatarUrl(reactionAvatarMap[notice.$id]?.[reaction.sender_id]) || defaultAvatar}
                                                 alt="Profile"
-                                                style={{ borderRadius: '50%', width: '35px', height: '35px' }}
-                                                className='d-flex ms-auto'
+                                                className='notice__reaction-avatar'
                                             />
                                         </Link>
                                     </div>
