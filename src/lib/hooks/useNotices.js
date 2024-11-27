@@ -359,6 +359,13 @@ const useNotices = (googleUserData) => {
 
             const userLikes = await getUserLikes(user_id);
 
+            console.log('userLikes', userLikes);
+
+            // fetch the ids that have blocked me (blocked_id = user_id)
+            // compare blocker_id with author_id of userLikes
+            // create a new array of object excluding the likes where the user's blocker_id === author_id
+            // map the new array of objects
+
             const likedNoticeIds = userLikes.map(like => like.notice_id);
 
             return await fetchAllLikedNotices(likedNoticeIds, limit, offset);

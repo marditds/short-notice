@@ -184,6 +184,9 @@ const UserProfile = () => {
             try {
                 const allLikedNotices = await getAllLikedNotices(user_id, limitLikes, offsetLikes);
 
+                console.log('allLikedNotices - UserProfile.jsx', allLikedNotices);
+
+
                 if (allLikedNotices?.length < limit) {
                     setHasMoreLikes(false);
                 } else {
