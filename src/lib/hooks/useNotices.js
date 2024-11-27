@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { createNotice, getUserNotices, updateNotice, deleteNotice, deleteAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSave, getUserSaves, removeSave, createReport, createLike, removeLike, getUserLikes, getAllLikedNotices as fetchAllLikedNotices, getAllSavedNotices as fetchAllSavedNotices, createReaction, deleteReaction, getAllReactionsBySenderId as fetchAllReactionsBySenderId, getAllReactions as fetchAllReactions, getAllReactionsByRecipientId as fetchAllReactionsByRecipientId, getNoticeByNoticeId as fetchNoticeByNoticeId, getAllReactionsByNoticeId as fetchAllReactionsByNoticeId, getReactionByReactionId as fetchReactionByReactionId, deleteAllReactions, createReactionReport } from '../../lib/context/dbhandler';
 import { UserId } from '../../components/User/UserId.jsx';
-import { useFilteredProfileNotices } from '../utils/blockFilter.js';
+import { useUnblockedNotices } from '../utils/blockFilter.js';
 
 const useNotices = (googleUserData) => {
     const [user_id, setUserId] = useState(null);
@@ -16,7 +16,7 @@ const useNotices = (googleUserData) => {
     const [isRemovingNotice, setIsRemovingNotice] = useState(false);
     const [removingNoticeId, setRemovingNoticeId] = useState(null);
 
-    const { filterBlocksFromNotices } = useFilteredProfileNotices();
+    const { filterBlocksFromLikesSaves } = useUnblockedNotices();
 
     // Fetch User Notces
     useEffect(() => {
@@ -361,8 +361,7 @@ const useNotices = (googleUserData) => {
 
             console.log('userLikes', userLikes);
 
-
-            const noticesWithoutTwoWayBlock = await filterBlocksFromNotices(userLikes, user_id);
+            const noticesWithoutTwoWayBlock = await filterBlocksFromLikesSaves(userLikes, user_id);
 
             const likedNoticeIds = noticesWithoutTwoWayBlock.map(like => like.notice_id);
 

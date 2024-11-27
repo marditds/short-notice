@@ -4,6 +4,7 @@ import useNotices from '../../../lib/hooks/useNotices';
 import useUserInfo from '../../../lib/hooks/useUserInfo';
 import { getAvatarUrl as avatarUtil } from '../../../lib/utils/avatarUtils';
 import { Notices } from '../../../components/User/Notices';
+import { useUnblockedNotices } from '../../../lib/utils/blockFilter';
 import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { Loading } from '../../../components/Loading/Loading';
 import { FaCircleExclamation } from "react-icons/fa6";
@@ -71,6 +72,8 @@ const UserFeed = () => {
     const { fetchUsersData, getBlockedUsersByUser, getUsersBlockingUser, getUserAccountByUserId } = useUserInfo(googleUserData);
 
     const [feedNotices, setFeedNotices] = useState([]);
+
+    const { filterBlocksFromFeed } = useUnblockedNotices();
 
     const [isLoadingNotices, setIsLoadingNotices] = useState(false);
     const [isLoadingUsers, setIsLoadingUsers] = useState(false);
@@ -144,29 +147,14 @@ const UserFeed = () => {
                 console.log('offset:', offset);
                 const notices = await getFeedNotices(selectedTags, limit, offset);
 
-                const blockedUsersByUser = await getBlockedUsersByUser(user_id);
+                console.log('notices', notices);
 
-                console.log('blockedUsersByUser', blockedUsersByUser);
 
-                // Filtering out notices from accounts blocked by user
-                const noticesFromAccountsNotBlockedByUser = notices.filter((notice) =>
-                    blockedUsersByUser.every((user) => notice.user_id !== user.blocked_id)
-                    // !blockedUsersByUser.some((user) => notice.user_id === user.blocked_id)
-                );
+                const filteredNotices = await filterBlocksFromFeed(notices, user_id);
 
-                console.log('noticesFromAccountsNotBlockedByUser', noticesFromAccountsNotBlockedByUser);
+                console.log('filteredNotices', filteredNotices);
 
-                const usersBlockingUser = await getUsersBlockingUser(user_id);
-
-                console.log('usersBlockingUser', usersBlockingUser);
-
-                // Filtering out notices from accounts blocking the user 
-                const noticesFromAccountNotBlockingTheUser = noticesFromAccountsNotBlockedByUser.filter((notice) =>
-                    usersBlockingUser.every((user) => notice.user_id !== user.blocker_id)
-                    // !usersBlockingUser.some((user) => notice.user_id === user.blocker_id)
-                );
-
-                const filteredNotices = noticesFromAccountNotBlockingTheUser || [];
+                // const filteredNotices = noticesFromAccountNotBlockingTheUser || [];
 
                 await fetchUsersData(filteredNotices, setFeedNotices, avatarUtil);
 
