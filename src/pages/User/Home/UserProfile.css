@@ -51,7 +51,7 @@
 .user-profile__avatar,
 .notice__avatar,
 .notice__reaction-avatar {
-    --r: 5px;
+    --r: 8px;
     aspect-ratio: cos(30deg);
     --_g: calc(tan(60deg)*var(--r)) right var(--r), #000 98%, #0000 101%;
     mask:
