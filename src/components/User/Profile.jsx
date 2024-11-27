@@ -39,7 +39,7 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
     }
 
     return (
-        <>
+        <div className='user-profile__body'>
             <Row className='user-profile fixed-top'>
 
                 {/* Folllowes/Following Col */}
@@ -279,6 +279,6 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                 </Modal.Body>
             </Modal>
 
-        </>
+        </div>
     )
 }

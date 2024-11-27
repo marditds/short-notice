@@ -9,6 +9,7 @@ import { BsReply } from "react-icons/bs";
 import { RiSave2Line, RiSave2Fill } from "react-icons/ri";
 import { RiBookmarkLine, RiBookmarkFill } from "react-icons/ri";
 import { BsHandThumbsUp, BsHandThumbsUpFill, BsExclamationTriangle } from 'react-icons/bs';
+import { AiOutlineExclamationCircle } from "react-icons/ai";
 import defaultAvatar from '../../assets/default.png';
 import { Loading } from '../Loading/Loading';
 import { Reactions } from './Reactions';
@@ -540,9 +541,12 @@ export const Notices = ({
                                                                 className='notice__reaction-btn ms-2'
                                                                 disabled={user_id === notice.user_id}
                                                             >
-                                                                <BsExclamationTriangle
-                                                                    size={19}
+                                                                <AiOutlineExclamationCircle
+                                                                    size={22}
                                                                 />
+                                                                {/* <BsExclamationTriangle
+                                                                    size={19}
+                                                                /> */}
                                                             </div>
                                                         </div>
                                                     }

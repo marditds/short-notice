@@ -4,7 +4,8 @@ import { Row, Col, Button } from 'react-bootstrap';
 import { getAvatarUrl as avatarUrl } from '../../lib/utils/avatarUtils';
 import { Loading } from '../Loading/Loading';
 // import { CgTrash } from 'react-icons/cg';
-import { BsExclamationTriangle } from 'react-icons/bs';
+// import { BsExclamationTriangle } from 'react-icons/bs';
+import { AiOutlineExclamationCircle } from "react-icons/ai";
 import { formatDateToLocal } from '../../lib/utils/dateUtils';
 
 
@@ -68,7 +69,8 @@ export const Reactions = ({
                                             onClick={() => handleReportReaction(reaction.$id)}
                                             style={{ height: '35px' }}
                                         >
-                                            <BsExclamationTriangle size={20} />
+                                            <AiOutlineExclamationCircle size={20} />
+                                            {/* <BsExclamationTriangle size={20} /> */}
                                         </div>
                                         :
                                         <div style={{ height: '35px' }} />

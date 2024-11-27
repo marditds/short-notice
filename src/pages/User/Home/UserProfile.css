@@ -5,13 +5,6 @@
     padding: 54px 45px 12px 45px;
     height: 198px;
 
-    /* background: rgb(0, 0, 0);
-    background: -moz-linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.29) 16%, rgba(0, 0, 0, 0.5788690476190477) 43%, rgba(0, 0, 0, 0.58) 66%, rgba(23, 199, 105, 0.58) 100%);
-    background: -webkit-linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.29) 16%, rgba(0, 0, 0, 0.5788690476190477) 43%, rgba(0, 0, 0, 0.58) 66%, rgba(23, 199, 105, 0.58) 100%);
-    background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.29) 16%, rgba(0, 0, 0, 0.5788690476190477) 43%, rgba(0, 0, 0, 0.58) 66%, rgba(23, 199, 105, 0.58) 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#000000", endColorstr="#17c769", GradientType=1); */
-
-
     backdrop-filter: blur(4px);
 
 }
@@ -381,17 +374,16 @@
 }
 
 .notice__reaction {
-    background-attachment: fixed;
-    background: rgb(0, 0, 0);
-    background: -moz-linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.58) 76%, rgba(23, 199, 105, 0.58) 100%);
-    background: -webkit-linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.58) 76%, rgba(23, 199, 105, 0.58) 100%);
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.58) 76%, rgba(23, 199, 105, 0.58) 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#ffffff", endColorstr="#17c769", GradientType=1);
-    ;
+    /* background-attachment: fixed;
+    background: rgb(255, 255, 255);
+    background: -moz-linear-gradient(180deg, rgba(244, 244, 244, 0) 0%, rgba(255, 255, 255, 0.58) 76%, rgba(23, 199, 105, 0.58) 100%);
+    background: -webkit-linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.58) 76%, rgba(23, 199, 105, 0.58) 100%);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.58) 76%, rgba(23, 199, 105, 0.58) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#ffffff", endColorstr="#17c769", GradientType=1); */
 }
 
 .notice__reaction>.row {
-    max-width: 1200px;
+    max-width: 95%;
 }
 
 .notice__reaction-username {
