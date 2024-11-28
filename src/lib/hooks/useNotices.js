@@ -205,6 +205,9 @@ const useNotices = (googleUserData) => {
     const getNoticesByUser = useCallback(async (user_id, limit, offset) => {
         try {
             const response = await getUserNotices(user_id, limit, offset);
+
+            // console.log('getNoticesByUser', response);
+
             return response;
         } catch (error) {
             console.error('Error getNoticesByUser - useNotices');

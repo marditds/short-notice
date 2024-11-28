@@ -61,28 +61,37 @@ const UserFeed = () => {
         reportNotice,
         likeNotice,
         sendReaction,
-        getAllLikesByNoticeId,
         getReactionsForNotice,
         getReactionByReactionId,
-        reportReaction
+        reportReaction,
+        getNoticesByUser,
+        fetchUserNotices,
         // noticesReactions, 
         // fetchReactionsForNotices,
         // setNoticesReactions
     } = useNotices(googleUserData);
 
-    const { fetchUsersData, getUserAccountByUserId } = useUserInfo(googleUserData);
+    const { fetchUsersData, getUserAccountByUserId, fetchAccountsFollowedByUser } = useUserInfo(googleUserData);
 
     const [feedNotices, setFeedNotices] = useState([]);
+    const [personalFeedNotices, setPersonalFeedNotices] = useState([]);
 
     const { filterBlocksFromFeed } = useUnblockedNotices();
 
     const [isLoadingNotices, setIsLoadingNotices] = useState(false);
     const [isLoadingUsers, setIsLoadingUsers] = useState(false);
 
+    // Interests Feed
     const [limit] = useState(10);
     const [offset, setOffset] = useState(0);
     const [hasMoreNotices, setHasMoreNotices] = useState(true);
     const [isLoadingMore, setIsLoadingMore] = useState(false);
+
+    // Personal Feed
+    const [limitPersonal] = useState(10);
+    const [offsetPersonal, setOffsetSPersonal] = useState(0);
+    const [hasMorePersonal, setHasMorePersonal] = useState(true);
+    const [isLoadingMorePersonal, setIsLoadingMorePersonal] = useState(false);
 
     // Fetch User's interests  
     useEffect(() => {
@@ -175,12 +184,33 @@ const UserFeed = () => {
 
     // Fetch feed (the user follows)
     useEffect(() => {
-        const fetchOnlyFollowingNotices = async () => {
-            console.log('Barev,', user_id);
+        const fetchPersonalFeed = async () => {
 
+            // list the ids that the user follows
+            var followedByUser = await fetchAccountsFollowedByUser(user_id);
+
+            console.log('followedByUser', followedByUser);
+
+            var usrNtcs = [];
+
+            const allNotices = await Promise.all(
+                followedByUser.map((user) => getNoticesByUser(user.$id, limitPersonal, offsetPersonal))
+            );
+
+            usrNtcs = allNotices.flat();
+
+            console.log('usrNtcs', usrNtcs);
+
+            await fetchUsersData(usrNtcs, setPersonalFeedNotices, avatarUtil);
+
+            // setPersonalFeedNotices(usrNtcs)
         }
-        fetchOnlyFollowingNotices();
-    }, [user_id])
+        fetchPersonalFeed();
+    }, [user_id]);
+
+    useEffect(() => {
+        console.log('personalFeedNotices:', personalFeedNotices);
+    }, [personalFeedNotices])
 
 
     // const handleTagSelect = (categoryName, tagIndex, tag, isSelected) => {
@@ -269,7 +299,7 @@ const UserFeed = () => {
 
 
             <Notices
-                notices={feedNotices}
+                notices={personalFeedNotices}
                 user_id={user_id}
                 likedNotices={likedNotices}
                 savedNotices={savedNotices}

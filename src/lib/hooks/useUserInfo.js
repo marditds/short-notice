@@ -304,6 +304,8 @@ const useUserInfo = (data) => {
 
             setFollowingCount(accountsFollowedByUser.length);
 
+            return accountsFollowedByUser;
+
         } catch (error) {
             console.error('Failed to fetch user followers:', error);
         }
@@ -329,7 +331,6 @@ const useUserInfo = (data) => {
             console.error('Error querying user by id:', error);
         }
     }
-
 
     const makePasscode = async (userId, passcode, accountType) => {
         try {
