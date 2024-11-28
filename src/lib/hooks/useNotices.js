@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { createNotice, getUserNotices, updateNotice, deleteNotice, deleteAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSave, getUserSaves, removeSave, createReport, createLike, removeLike, getUserLikes, getAllLikedNotices as fetchAllLikedNotices, getAllSavedNotices as fetchAllSavedNotices, createReaction, deleteReaction, getAllReactionsBySenderId as fetchAllReactionsBySenderId, getAllReactions as fetchAllReactions, getAllReactionsByRecipientId as fetchAllReactionsByRecipientId, getNoticeByNoticeId as fetchNoticeByNoticeId, getAllReactionsByNoticeId as fetchAllReactionsByNoticeId, getReactionByReactionId as fetchReactionByReactionId, deleteAllReactions, createReactionReport } from '../../lib/context/dbhandler';
+import { createNotice, getUserNotices, updateNotice, deleteNotice, deleteAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSave, getUserSaves, removeSave, createReport, createLike, removeLike, getUserLikes, getAllLikedNotices as fetchAllLikedNotices, getAllLikesByNoticeId as fetchAllLikesByNoticeId, getAllSavedNotices as fetchAllSavedNotices, createReaction, deleteReaction, getAllReactionsBySenderId as fetchAllReactionsBySenderId, getAllReactions as fetchAllReactions, getAllReactionsByRecipientId as fetchAllReactionsByRecipientId, getNoticeByNoticeId as fetchNoticeByNoticeId, getAllReactionsByNoticeId as fetchAllReactionsByNoticeId, getReactionByReactionId as fetchReactionByReactionId, deleteAllReactions, createReactionReport } from '../../lib/context/dbhandler';
 import { UserId } from '../../components/User/UserId.jsx';
 import { useUnblockedNotices } from '../utils/blockFilter.js';
 
@@ -56,7 +56,7 @@ const useNotices = (googleUserData) => {
 
     }, [googleUserData]);
 
-    // Fetch User Likes
+    // Fetch User Saves
     useEffect(() => {
         const fetchUserSaves = async () => {
             try {
@@ -77,7 +77,7 @@ const useNotices = (googleUserData) => {
         }
     }, [user_id]);
 
-    // Fetch User Saves
+    // Fetch User Likes
     useEffect(() => {
         const fetchUserLikes = async () => {
             try {
@@ -373,6 +373,16 @@ const useNotices = (googleUserData) => {
         }
     };
 
+    const getAllLikesByNoticeId = async (noticeId) => {
+        try {
+            const res = await fetchAllLikesByNoticeId(noticeId);
+            console.log('All likes for a notice by its id:', res);
+            return res.documents;
+        } catch (error) {
+            console.error('Error fetching all likes by notice id.', error);
+        }
+    }
+
     const getAllSavedNotices = async (userId, limit, offset) => {
         try {
 
@@ -550,6 +560,7 @@ const useNotices = (googleUserData) => {
         updateInterests,
         saveNotice,
         getAllLikedNotices,
+        getAllLikesByNoticeId,
         getAllSavedNotices,
         reportNotice,
         likeNotice,

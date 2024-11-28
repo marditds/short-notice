@@ -314,14 +314,17 @@
 .notice__edit-btn:focus>svg,
 .notice__delete-btn:focus>svg,
 .notice__reaction-btn:focus>svg {
+    margin-bottom: 2px;
     color: var(--main-accent-color) !important;
     filter: drop-shadow(0px 0px 5px var(--main-accent-color)) !important;
 }
 
 .notice__reaction-btn.disabled>svg,
 .notice__reaction-btn:hover.disabled>svg {
-    /* cursor: not-allowed; */
-    color: yellow !important;
+    cursor: not-allowed;
+    color: var(--main-text-muted) !important;
+    filter: none !important;
+
     /* color: var(--main-text-muted) !important; */
 }
 

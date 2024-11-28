@@ -25,7 +25,6 @@ export const Notices = ({
     handleReact,
     eventKey,
     isOtherUserBlocked,
-    username,
     user_id,
     likedNotices,
     savedNotices,
@@ -494,7 +493,6 @@ export const Notices = ({
                                                 null
                                                 :
                                                 <>
-                                                    {isOtherUserBlocked ? 'HAKOPOS' : 'Barev'}
                                                     {(location.pathname === '/user/feed' && user_id === notice.user_id) || ((location.pathname !== `/user/profile` || location.pathname !== `/user/feed`) && user_id === notice.user_id) ?
                                                         <div style={{ height: '35px' }} /> :
                                                         <div
@@ -504,22 +502,23 @@ export const Notices = ({
                                                             <div
                                                                 className={`notice__reaction-btn ${isOtherUserBlocked ? 'disabled' : ''} ms-2`}
                                                                 onClick={() => {
-                                                                    // handleLike(notice)
                                                                     isOtherUserBlocked ? console.log(`YOU are blocked`) : handleLike(notice);
                                                                 }}
                                                             >
                                                                 {likedNotices && likedNotices[notice.$id] ? (
-                                                                    <BsHandThumbsUpFill
-                                                                        className='notice__reaction-btn-fill'
-                                                                        size={19}
-                                                                    />
+                                                                    <>
+                                                                        <BsHandThumbsUpFill
+                                                                            className='notice__reaction-btn-fill'
+                                                                            size={19}
+                                                                        />
+                                                                    </>
                                                                 ) : (
-                                                                    <BsHandThumbsUp size={19} className='notice__reaction-btn' />
+                                                                    <BsHandThumbsUp size={19} />
                                                                 )}
                                                             </div>
                                                             <div
                                                                 onClick={() => handleSave(notice)}
-                                                                className={`notice__reaction-btn${isOtherUserBlocked ? 'disabled' : ''} ms-2`}
+                                                                className={`notice__reaction-btn ${isOtherUserBlocked ? 'disabled' : ''} ms-2`}
                                                             >
                                                                 {savedNotices && savedNotices[notice.$id] ? (
                                                                     <RiSave2Fill
@@ -533,11 +532,9 @@ export const Notices = ({
                                                             </div>
                                                             <div
                                                                 onClick={() => handleReactNotice(notice.$id, notice.username, notice.avatarUrl, notice.text)}
-                                                                className={`notice__reaction-btn${!isOtherUserBlocked ? 'disabled' : ''} ms-2`}
+                                                                className={`notice__reaction-btn ${isOtherUserBlocked ? 'disabled' : ''} ms-2`}
                                                             >
-                                                                <BsReply
-                                                                    size={23}
-                                                                />
+                                                                <BsReply size={23} />
                                                             </div>
                                                             <div
                                                                 onClick={() => handleReportNotice(notice.$id)}
@@ -546,9 +543,6 @@ export const Notices = ({
                                                                 <AiOutlineExclamationCircle
                                                                     size={22}
                                                                 />
-                                                                {/* <BsExclamationTriangle
-                                                                    size={19}
-                                                                /> */}
                                                             </div>
                                                         </div>
                                                     }

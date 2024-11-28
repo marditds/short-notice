@@ -175,14 +175,15 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                 </Col>
                 {isBlocked &&
                     <div style={{ color: 'white', textAlign: 'center' }}>
-                        You are not authorzied to view the notices shared by {username}.
+                        You are not authorzied to view, like, and save the notices shared by {username}.
                     </div>
                 }
-                {isOtherUserBlocked &&
+                {/* {isOtherUserBlocked &&
                     <div style={{ color: 'white', textAlign: 'center' }}>
-                        You have blocked {username}. They cannot follow you and interact with your notices.
+                        - You have blocked {username}. You cannot like, save, and react to their notices.
+                        - They cannot follow you and interact with your notices.
                     </div>
-                }
+                } */}
             </Row>
 
             {/* Followers Modal */}

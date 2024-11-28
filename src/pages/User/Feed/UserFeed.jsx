@@ -61,6 +61,7 @@ const UserFeed = () => {
         reportNotice,
         likeNotice,
         sendReaction,
+        getAllLikesByNoticeId,
         getReactionsForNotice,
         getReactionByReactionId,
         reportReaction
@@ -69,7 +70,7 @@ const UserFeed = () => {
         // setNoticesReactions
     } = useNotices(googleUserData);
 
-    const { fetchUsersData, getBlockedUsersByUser, getUsersBlockingUser, getUserAccountByUserId } = useUserInfo(googleUserData);
+    const { fetchUsersData, getUserAccountByUserId } = useUserInfo(googleUserData);
 
     const [feedNotices, setFeedNotices] = useState([]);
 
@@ -149,12 +150,9 @@ const UserFeed = () => {
 
                 console.log('notices', notices);
 
-
                 const filteredNotices = await filterBlocksFromFeed(notices, user_id);
 
                 console.log('filteredNotices', filteredNotices);
-
-                // const filteredNotices = noticesFromAccountNotBlockingTheUser || [];
 
                 await fetchUsersData(filteredNotices, setFeedNotices, avatarUtil);
 
@@ -174,6 +172,15 @@ const UserFeed = () => {
         };
         fetchFeedData();
     }, [selectedTags, offset]);
+
+    // Fetch feed (the user follows)
+    useEffect(() => {
+        const fetchOnlyFollowingNotices = async () => {
+            console.log('Barev,', user_id);
+
+        }
+        fetchOnlyFollowingNotices();
+    }, [user_id])
 
 
     // const handleTagSelect = (categoryName, tagIndex, tag, isSelected) => {

@@ -956,6 +956,21 @@ export const getAllLikedNotices = async (likedNoticeIds, limit, offset) => {
     }
 };
 
+export const getAllLikesByNoticeId = async (notice_id) => {
+    try {
+        const res = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_LIKES_COLLECTION,
+            [
+                Query.equal('notice_id', notice_id)
+            ]
+        )
+        return res;
+    } catch (error) {
+        console.error('Error getting all likes by notice id.', error);
+    }
+}
+
 // The save icon
 export const getUserSaves = async (user_id) => {
     try {
