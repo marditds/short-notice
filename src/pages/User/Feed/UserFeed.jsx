@@ -122,7 +122,7 @@ const UserFeed = () => {
     }, [user_id, tagCategories]);
 
 
-    // Fetch User's feed  
+    // Fetch User's feed (interests)
     useEffect(() => {
         const fetchFeedData = async () => {
 
@@ -198,6 +198,8 @@ const UserFeed = () => {
             );
 
             usrNtcs = allNotices.flat();
+
+            usrNtcs.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 
             console.log('usrNtcs', usrNtcs);
 
