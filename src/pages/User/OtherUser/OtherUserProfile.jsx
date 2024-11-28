@@ -498,7 +498,7 @@ const OtherUserProfile = () => {
                                                 savedNotices={savedNotices}
                                                 reactions={noticesReactions}
                                                 eventKey={eventKey}
-                                                isBlocked={isBlocked}
+                                                isOtherUserBlocked={isOtherUserBlocked}
                                                 handleLike={handleLike}
                                                 handleSave={handleSave}
                                                 handleReport={handleReport}

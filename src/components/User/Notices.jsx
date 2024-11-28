@@ -494,7 +494,7 @@ export const Notices = ({
                                                 null
                                                 :
                                                 <>
-                                                    {!isOtherUserBlocked ? 'HAKOPOS' : 'Barev'}
+                                                    {isOtherUserBlocked ? 'HAKOPOS' : 'Barev'}
                                                     {(location.pathname === '/user/feed' && user_id === notice.user_id) || ((location.pathname !== `/user/profile` || location.pathname !== `/user/feed`) && user_id === notice.user_id) ?
                                                         <div style={{ height: '35px' }} /> :
                                                         <div
@@ -502,10 +502,10 @@ export const Notices = ({
                                                             style={{ height: '35px' }}
                                                         >
                                                             <div
-                                                                className={`notice__reaction-btn ${!isOtherUserBlocked ? 'disabled' : ''} ms-2`}
+                                                                className={`notice__reaction-btn ${isOtherUserBlocked ? 'disabled' : ''} ms-2`}
                                                                 onClick={() => {
                                                                     // handleLike(notice)
-                                                                    !isOtherUserBlocked ? console.log(`YOU are blocked`) : handleLike(notice);
+                                                                    isOtherUserBlocked ? console.log(`YOU are blocked`) : handleLike(notice);
                                                                 }}
                                                             >
                                                                 {likedNotices && likedNotices[notice.$id] ? (
@@ -519,7 +519,7 @@ export const Notices = ({
                                                             </div>
                                                             <div
                                                                 onClick={() => handleSave(notice)}
-                                                                className={`notice__reaction-btn${!isOtherUserBlocked ? 'disabled' : ''} ms-2`}
+                                                                className={`notice__reaction-btn${isOtherUserBlocked ? 'disabled' : ''} ms-2`}
                                                             >
                                                                 {savedNotices && savedNotices[notice.$id] ? (
                                                                     <RiSave2Fill
