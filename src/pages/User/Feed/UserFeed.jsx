@@ -5,7 +5,7 @@ import useUserInfo from '../../../lib/hooks/useUserInfo';
 import { getAvatarUrl as avatarUtil } from '../../../lib/utils/avatarUtils';
 import { Notices } from '../../../components/User/Notices';
 import { useUnblockedNotices } from '../../../lib/utils/blockFilter';
-import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Button, OverlayTrigger, Tooltip, Form, Row, Col } from 'react-bootstrap';
 import { Loading } from '../../../components/Loading/Loading';
 import { FaCircleExclamation } from "react-icons/fa6";
 
@@ -78,7 +78,8 @@ const UserFeed = () => {
 
     const { filterBlocksFromFeed } = useUnblockedNotices();
 
-    const [isLoadingNotices, setIsLoadingNotices] = useState(false);
+    const [isLoadingFeedNotices, setIsLoadingFeedNotices] = useState(false);
+    const [isLoadingPersonalFeedNotices, setIsLoadingPersonalFeedNotices] = useState(false);
     const [isLoadingUsers, setIsLoadingUsers] = useState(false);
 
     // Interests Feed
@@ -89,8 +90,8 @@ const UserFeed = () => {
 
     // Personal Feed
     const [limitPersonal] = useState(10);
-    const [offsetPersonal, setOffsetSPersonal] = useState(0);
-    const [hasMorePersonal, setHasMorePersonal] = useState(true);
+    const [offsetPersonal, setOffsetPersonal] = useState(0);
+    const [hasMorePersonalNotices, setHasMorePersonalNotices] = useState(true);
     const [isLoadingMorePersonal, setIsLoadingMorePersonal] = useState(false);
 
     // Fetch User's interests  
@@ -125,8 +126,7 @@ const UserFeed = () => {
     // Fetch User's feed (interests)
     useEffect(() => {
         const fetchFeedData = async () => {
-
-            setIsLoadingNotices(true);
+            setIsLoadingFeedNotices(true);
             setIsLoadingUsers(true);
             setIsLoadingMore(true);
             try {
@@ -174,7 +174,7 @@ const UserFeed = () => {
             } catch (error) {
                 console.error('Error fetching feed notices:', error);
             } finally {
-                setIsLoadingNotices(false);
+                setIsLoadingFeedNotices(false);
                 setIsLoadingUsers(false);
                 setIsLoadingMore(false);
             }
@@ -185,27 +185,43 @@ const UserFeed = () => {
     // Fetch feed (the user follows)
     useEffect(() => {
         const fetchPersonalFeed = async () => {
+            try {
+                setIsLoadingPersonalFeedNotices(true);
+                setIsLoadingUsers(true);
+                setIsLoadingMorePersonal(true);
+                // list the ids that the user follows
+                var followedByUser = await fetchAccountsFollowedByUser(user_id);
 
-            // list the ids that the user follows
-            var followedByUser = await fetchAccountsFollowedByUser(user_id);
+                console.log('followedByUser', followedByUser);
 
-            console.log('followedByUser', followedByUser);
+                var usrNtcs = [];
 
-            var usrNtcs = [];
+                const allNotices = await Promise.all(
+                    followedByUser.map((user) => getNoticesByUser(user.$id, limitPersonal, offsetPersonal))
+                );
 
-            const allNotices = await Promise.all(
-                followedByUser.map((user) => getNoticesByUser(user.$id, limitPersonal, offsetPersonal))
-            );
+                usrNtcs = allNotices.flat();
 
-            usrNtcs = allNotices.flat();
+                usrNtcs.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 
-            usrNtcs.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+                console.log('usrNtcs', usrNtcs);
 
-            console.log('usrNtcs', usrNtcs);
+                await fetchUsersData(usrNtcs, setPersonalFeedNotices, avatarUtil);
 
-            await fetchUsersData(usrNtcs, setPersonalFeedNotices, avatarUtil);
+                if (usrNtcs.length < limit) {
+                    setHasMorePersonalNotices(false);
+                } else {
+                    setHasMorePersonalNotices(true);
+                }
 
-            // setPersonalFeedNotices(usrNtcs)
+            } catch (error) {
+                console.error('Error fetching personal feed', error);
+            } finally {
+                setIsLoadingPersonalFeedNotices(false);
+                setIsLoadingUsers(true);
+                setIsLoadingMorePersonal(false);
+            }
+
         }
         fetchPersonalFeed();
     }, [user_id]);
@@ -273,9 +289,16 @@ const UserFeed = () => {
     }
 
 
+    const [isToggled, setIsToggled] = useState(false);
+
+    const handleToggle = () => {
+        setIsToggled(!isToggled);
+    };
+
+
     // Render loading state while data is being fetched
-    if ((isLoadingNotices || isLoadingUsers) && feedNotices.length === 0) {
-        return <div><Loading size={24} />Loading feed...</div>;
+    if ((isLoadingFeedNotices || isLoadingUsers || isLoadingPersonalFeedNotices) && feedNotices.length === 0) {
+        return <div className='mt-5'><Loading size={24} />Loading feed...</div>;
     }
 
     return (
@@ -299,9 +322,31 @@ const UserFeed = () => {
                 }
             </h2>
 
+            {/* Toggle personal and general feed */}
+            <Form>
+                <Form.Group as={Row} className="align-items-center">
+                    <Col xs="auto">
+                        <Form.Label className="mb-0">View personal</Form.Label>
+                    </Col>
+
+                    <Col xs="auto">
+                        <Form.Check
+                            type="switch"
+                            id="feed-switch"
+                            label=""
+                            checked={isToggled}
+                            onChange={handleToggle}
+                        />
+                    </Col>
+
+                    <Col xs="auto">
+                        <Form.Label className="mb-0">View general</Form.Label>
+                    </Col>
+                </Form.Group>
+            </Form>
 
             <Notices
-                notices={personalFeedNotices}
+                notices={!isToggled ? personalFeedNotices : feedNotices}
                 user_id={user_id}
                 likedNotices={likedNotices}
                 savedNotices={savedNotices}
@@ -320,12 +365,13 @@ const UserFeed = () => {
             <div className="d-flex justify-content-center mt-4">
 
                 <div className="d-flex justify-content-center mt-4">
-                    {hasMoreNotices ?
+                    {(!isToggled && hasMorePersonalNotices) || (isToggled && hasMoreNotices) ?
                         <Button
-                            onClick={() => setOffset(offset + limit)}
-                            disabled={isLoadingMore || !hasMoreNotices} // Disable if already loading or no more notices
+                            onClick={() => { !isToggled ? setOffsetPersonal(offsetPersonal + limitPersonal) : setOffset(offset + limit) }}
+                            disabled={(isToggled && (isLoadingMore || !hasMoreNotices)) ||
+                                (!isToggled && (isLoadingMorePersonal || !hasMorePersonalNotices))} // Disable if already loading or no more notices
                         >
-                            {isLoadingMore ?
+                            {isLoadingMore || isLoadingMorePersonal ?
                                 <><Loading size={24} /> Loading...</>
                                 : 'Load More'}
                         </Button>

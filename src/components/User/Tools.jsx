@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Dropdown, DropdownButton } from 'react-bootstrap';
+import { Dropdown, DropdownButton, Form, Row, Col } from 'react-bootstrap';
 import { PiDotsThreeOutlineVertical } from "react-icons/pi";
 import { UserSearch } from './UserSearch';
 
@@ -10,10 +10,12 @@ export const Tools = ({ googleLogout, removeSession, setIsLoggedIn, setGoogleUse
     return (
         <>
             <div className='userhome__body--profile--tools 
-        w-100 
-        d-flex 
-        fixed-top
-        '>
+                w-100 
+                d-flex 
+                fixed-top
+                '>
+
+
                 <UserSearch userId={userId} />
 
                 <DropdownButton
