@@ -67,6 +67,7 @@ const OtherUserProfile = () => {
         fetchUsersData,
         getBlockedUsersByUser,
         followUser,
+        unfollowUser,
         setIsFollowing,
         fetchAccountsFollowingTheUser,
         fetchAccountsFollowedByUser,
@@ -390,6 +391,7 @@ const OtherUserProfile = () => {
     const handleBlock = async (currUserId) => {
         try {
             await makeBlock(currUserId);
+            await unfollowUser(currUserId);
             navigate('/user/feed');
         } catch (error) {
             console.error('Failed to block user:', error);

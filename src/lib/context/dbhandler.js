@@ -843,7 +843,7 @@ export const removeAllSaves = async (user_id) => {
             ]
         )
 
-        for (const save of saves) {
+        for (const save of saves.documents) {
             await removeSave(save.$id);
         }
 
@@ -906,7 +906,7 @@ export const removeAllLikes = async (user_id) => {
             ]
         )
 
-        for (const like of likes) {
+        for (const like of likes.documents) {
             await removeLike(like.$id);
         }
 
@@ -1109,13 +1109,33 @@ export const removeAllFollows = async (user_id) => {
             ]
         )
 
-        for (const follow of follows) {
+        for (const follow of follows.documents) {
             await removeFollow(follow.$id);
         }
 
         console.log(`All follows made by ${user_id} removed successfully.`);
     } catch (error) {
         console.error('Error removing all follows:', error);
+    }
+}
+
+export const unfollow = async (user_id, otherUser_id) => {
+    try {
+        const res = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_FOLLOWING_COLLECTION,
+            [
+                Query.and([Query.equal('user_id', user_id), Query.equal('otherUser_id', otherUser_id)])
+            ]
+        )
+
+        console.log('Follow instance FOUND:', res);
+
+        for (const r of res.documents) {
+            await removeFollow(r.$id);
+        }
+    } catch (error) {
+        console.error('Error unfollowing:', error);
     }
 }
 
