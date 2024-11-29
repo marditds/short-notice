@@ -504,8 +504,8 @@ const useNotices = (googleUserData) => {
 
     const reportReaction = async (reaction_id, author_id, reason, reaction_text) => {
         try {
-            await createReactionReport(reaction_id, author_id, reason, user_id, reaction_text)
-            console.log('Report successful!');
+            await createReactionReport(reaction_id, author_id, reason, user_id, reaction_text);
+            console.log('Reporting reacion successful!');
         } catch (error) {
             console.error('Error adding reaction:', error);
         }

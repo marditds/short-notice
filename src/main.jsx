@@ -19,7 +19,6 @@ import UserSettings from './pages/User/Settings/UserSettings.jsx';
 import UserProfile from './pages/User/Home/UserProfile.jsx';
 import UserFeed from './pages/User/Feed/UserFeed.jsx';
 import OtherUserProfile from './pages/User/OtherUser/OtherUserProfile.jsx';
-import Reactions from './pages/User/Reactions/Reactions.jsx';
 
 const router = createBrowserRouter([
   {
@@ -81,10 +80,6 @@ const router = createBrowserRouter([
           {
             path: ':otherUsername',
             element: <OtherUserProfile />
-          },
-          {
-            path: 'reactions',
-            element: <Reactions />
           },
           {
             index: true,

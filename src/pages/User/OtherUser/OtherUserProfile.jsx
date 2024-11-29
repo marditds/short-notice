@@ -70,7 +70,8 @@ const OtherUserProfile = () => {
         setIsFollowing,
         fetchAccountsFollowingTheUser,
         fetchAccountsFollowedByUser,
-        getPassocdeByBusincessId
+        getPassocdeByBusincessId,
+        reportUser
     } = useUserInfo(googleUserData);
 
     const [accountType, setAccountType] = useState(null);
@@ -395,6 +396,16 @@ const OtherUserProfile = () => {
         }
     }
 
+    // Reporting user
+    const handleUserReport = async (reported_id, reason) => {
+        try {
+            await reportUser(reported_id, reason);
+            console.log('Reporting user successful!');
+        } catch (error) {
+            console.error('Error reporting user', error);
+        }
+    }
+
     const timerSpacing = 'mx-2';
     const timerDisplay = 'd-flex';
     const classname = `${timerDisplay} ${timerSpacing}`;
@@ -474,6 +485,7 @@ const OtherUserProfile = () => {
                     isInitialFollowCheckLoading={isInitialFollowCheckLoading}
                     handleFollow={handleFollow}
                     handleBlock={handleBlock}
+                    handleUserReport={handleUserReport}
                 />
                 <>
                     {!isBlocked ?

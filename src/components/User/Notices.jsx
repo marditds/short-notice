@@ -577,6 +577,7 @@ export const Notices = ({
                 }
             </Accordion>
 
+            {/* Reaction modal */}
             <Modal show={showReactModal}
                 onHide={handleCloseReactModal}
                 className='notice__react--modal'
@@ -646,6 +647,7 @@ export const Notices = ({
                 </Modal.Footer>
             </Modal>
 
+            {/* Notice report modal */}
             <Modal show={showReportModal} onHide={handleCloseReportModal}>
                 <Modal.Header>
                     <Modal.Title>Report Notice</Modal.Title>
@@ -687,6 +689,7 @@ export const Notices = ({
                 </Modal.Footer>
             </Modal>
 
+            {/* Reaction report modal */}
             <Modal show={showReportReactionModal} onHide={handleCloseReportReactionModal}>
                 <Modal.Header>
                     <Modal.Title>Report Reaction</Modal.Title>

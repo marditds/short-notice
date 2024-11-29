@@ -1015,7 +1015,7 @@ export const createReport = async (notice_id, author_id, reason, user_id, notice
     try {
         const response = await databases.createDocument(
             import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_REPORTSE_COLLECTION,
+            import.meta.env.VITE_REPORTS_COLLECTION,
             ID.unique(),
             {
                 notice_id: notice_id,
@@ -1505,6 +1505,30 @@ export const removeBlockUsingBlockedId = async (blocked_id) => {
 
     } catch (error) {
         console.error('Error removing block:', error);
+    }
+}
+
+export const createUserReport = async (reported_id, reason, reporter_id) => {
+    try {
+        const response = await databases.createDocument(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_REPORTS_USERS_COLLECTION,
+            ID.unique(),
+            {
+                reported_id,
+                reason,
+                reporter_id
+            },
+            // [
+            //     Permission.write(Role.users()),
+            //     Permission.write(Role.guests())
+            // ]
+        );
+        console.log('Report created successfully');
+        return response;
+    } catch (error) {
+        console.error('Error adding to reports:', error);
+        throw error;
     }
 }
 
