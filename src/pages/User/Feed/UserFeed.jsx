@@ -5,9 +5,9 @@ import useUserInfo from '../../../lib/hooks/useUserInfo';
 import { getAvatarUrl as avatarUtil } from '../../../lib/utils/avatarUtils';
 import { Notices } from '../../../components/User/Notices';
 import { useUnblockedNotices } from '../../../lib/utils/blockFilter';
-import { Button, OverlayTrigger, Tooltip, Form, Row, Col } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { Loading } from '../../../components/Loading/Loading';
-import { FaCircleExclamation } from "react-icons/fa6";
+import { FeedHeader } from '../../../components/User/Feed/FeedHeader/FeedHeader';
 
 const UserFeed = () => {
 
@@ -65,7 +65,6 @@ const UserFeed = () => {
         getReactionByReactionId,
         reportReaction,
         getNoticesByUser,
-        fetchUserNotices,
         // noticesReactions, 
         // fetchReactionsForNotices,
         // setNoticesReactions
@@ -289,10 +288,10 @@ const UserFeed = () => {
     }
 
 
-    const [isToggled, setIsToggled] = useState(false);
+    const [isFeedToggled, setIsFeedToggled] = useState(false);
 
-    const handleToggle = () => {
-        setIsToggled(!isToggled);
+    const handleFeedToggle = () => {
+        setIsFeedToggled(!isFeedToggled);
     };
 
 
@@ -302,51 +301,16 @@ const UserFeed = () => {
     }
 
     return (
-        <div>
+        <div style={{ marginTop: '100px' }}>
 
-
-            <h2 style={{ marginTop: '30px' }}>
-
-                {!isTagSelected ?
-                    <span>
-                        <FaCircleExclamation /> To view notices in your feed, set your interests in your profile <a href='../user/settings'>settings</a>.
-                    </span>
-                    :
-                    <OverlayTrigger
-                        placement="right"
-                        overlay={<Tooltip>{'Update you interests in your profile settings.'}</Tooltip>}>
-                        <Button>
-                            <FaCircleExclamation />
-                        </Button>
-                    </OverlayTrigger>
-                }
-            </h2>
-
-            {/* Toggle personal and general feed */}
-            <Form>
-                <Form.Group as={Row} className="align-items-center">
-                    <Col xs="auto">
-                        <Form.Label className="mb-0">View personal</Form.Label>
-                    </Col>
-
-                    <Col xs="auto">
-                        <Form.Check
-                            type="switch"
-                            id="feed-switch"
-                            label=""
-                            checked={isToggled}
-                            onChange={handleToggle}
-                        />
-                    </Col>
-
-                    <Col xs="auto">
-                        <Form.Label className="mb-0">View general</Form.Label>
-                    </Col>
-                </Form.Group>
-            </Form>
+            <FeedHeader
+                isTagSelected={isTagSelected}
+                isFeedToggled={isFeedToggled}
+                handleFeedToggle={handleFeedToggle}
+            />
 
             <Notices
-                notices={!isToggled ? personalFeedNotices : feedNotices}
+                notices={!isFeedToggled ? personalFeedNotices : feedNotices}
                 user_id={user_id}
                 likedNotices={likedNotices}
                 savedNotices={savedNotices}
@@ -365,11 +329,11 @@ const UserFeed = () => {
             <div className="d-flex justify-content-center mt-4">
 
                 <div className="d-flex justify-content-center mt-4">
-                    {(!isToggled && hasMorePersonalNotices) || (isToggled && hasMoreNotices) ?
+                    {(!isFeedToggled && hasMorePersonalNotices) || (isFeedToggled && hasMoreNotices) ?
                         <Button
-                            onClick={() => { !isToggled ? setOffsetPersonal(offsetPersonal + limitPersonal) : setOffset(offset + limit) }}
-                            disabled={(isToggled && (isLoadingMore || !hasMoreNotices)) ||
-                                (!isToggled && (isLoadingMorePersonal || !hasMorePersonalNotices))} // Disable if already loading or no more notices
+                            onClick={() => { !isFeedToggled ? setOffsetPersonal(offsetPersonal + limitPersonal) : setOffset(offset + limit) }}
+                            disabled={(isFeedToggled && (isLoadingMore || !hasMoreNotices)) ||
+                                (!isFeedToggled && (isLoadingMorePersonal || !hasMorePersonalNotices))} // Disable if already loading or no more notices
                         >
                             {isLoadingMore || isLoadingMorePersonal ?
                                 <><Loading size={24} /> Loading...</>
