@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Profile } from '../../../components/User/Profile';
+import { Profile } from '../../../components/User/Profile/Profile.jsx';
 import { Notices } from '../../../components/User/Notices';
 import { Tabs, Tab, Form, Modal, Button } from 'react-bootstrap';
 import { useUserContext } from '../../../lib/context/UserContext';
@@ -9,7 +9,7 @@ import useUserAvatar from '../../../lib/hooks/useUserAvatar.js';
 import useNotices from '../../../lib/hooks/useNotices.js';
 import { ComposeNotice } from '../../../components/User/ComposeNotice';
 import { Loading } from '../../../components/Loading/Loading.jsx';
-import './UserProfile.css';
+import '../../../components/User/Profile/UserProfile.css';
 
 
 const UserProfile = () => {

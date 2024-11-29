@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { Row, Col, Button, Modal } from 'react-bootstrap';
-import { getAvatarUrl } from '../../lib/utils/avatarUtils.js';
-import defaultAvatar from '../../assets/default.png';
+import { getAvatarUrl } from '../../../lib/utils/avatarUtils.js';
+import defaultAvatar from '../../../assets/default.png';
 import { SlClose } from "react-icons/sl";
-import { Loading } from '../Loading/Loading.jsx';
+import { Loading } from '../../Loading/Loading.jsx';
 
 export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUserId, followingCount, followersCount, isFollowing, followingAccounts, followersAccounts, isInitialFollowCheckLoading, isFollowingUserLoading, isBlocked, isOtherUserBlocked }) => {
 
@@ -129,16 +129,6 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                                                 {isFollowing ? 'Following' : 'Follow'}
                                             </>
                                         }
-                                        {/* {isOtherUserBlocked ? (
-                                            'Blocked'
-                                        ) : (
-                                            isInitialFollowCheckLoading || isFollowingUserLoading ? (
-                                                <Loading />
-                                            ) : (
-                                                isFollowing ? 'Following' : 'Follow'
-                                            )
-                                        )} */}
-
                                     </Button>
                             }
 
@@ -162,15 +152,7 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                             </Button>
                         </>
                         :
-                        <>
-                            <Button
-                                className='user-profile__follow-numbers-text'
-                                as={Link}
-                                to='/user/reactions'
-                            >
-                                Reactions
-                            </Button>
-                        </>
+                        null
                     }
                 </Col>
                 {isBlocked &&

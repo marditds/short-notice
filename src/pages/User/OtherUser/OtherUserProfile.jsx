@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, redirect, useNavigate, useLocation } from 'react-router-dom';
-import { Profile } from '../../../components/User/Profile.jsx';
+import { Profile } from '../../../components/User/Profile/Profile.jsx';
 import { Notices } from '../../../components/User/Notices.jsx';
 import { Tabs, Tab, Form, Modal, Button } from 'react-bootstrap';
 import { useUserContext } from '../../../lib/context/UserContext.jsx';

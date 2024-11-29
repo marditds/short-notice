@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import useUserInfo from '../../lib/hooks/useUserInfo';
-import { getAvatarUrl as avatarUrl } from '../../lib/utils/avatarUtils';
-import defaultAvatar from '../../assets/default.png';
+import useUserInfo from '../../../lib/hooks/useUserInfo';
+import { getAvatarUrl as avatarUrl } from '../../../lib/utils/avatarUtils';
+import defaultAvatar from '../../../assets/default.png';
 import { Button, Form, Modal, Stack } from 'react-bootstrap';
 import { CgSearch } from "react-icons/cg";
-import { Loading } from '../Loading/Loading';
+import { Loading } from '../../Loading/Loading';
 
 export const UserSearch = ({ userId }) => {
 
