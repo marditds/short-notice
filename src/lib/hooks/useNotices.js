@@ -189,22 +189,46 @@ const useNotices = (googleUserData) => {
         }
     }
 
-    const getFeedNotices = async (selectedTags, limit, offset) => {
+    // const getFeedNotices = async (selectedTags, limit, offset) => {
+    //     try {
+    //         // console.log('selected tags', selectedTags);
+
+    //         const notices = await getFilteredNotices(selectedTags, limit, offset);
+    //         console.log('notices - getFeedNotices', notices);
+
+    //         return notices;
+    //     } catch (error) {
+    //         console.error('Error fetching filtered notices:', error);
+    //     }
+    // };
+
+    const getFeedNotices = async (selectedTags, limit, lastId) => {
         try {
-            // console.log('selected tags', selectedTags);
-
-            const notices = await getFilteredNotices(selectedTags, limit, offset);
+            const notices = await getFilteredNotices(selectedTags, limit, lastId);
             console.log('notices - getFeedNotices', notices);
-
             return notices;
         } catch (error) {
             console.error('Error fetching filtered notices:', error);
         }
     };
 
-    const getNoticesByUser = useCallback(async (user_id, limit, offset) => {
+    // const getNoticesByUser = useCallback(async (user_id, limit, offset) => {
+    //     try {
+    //         const response = await getUserNotices(user_id, limit, offset);
+
+    //         // console.log('getNoticesByUser', response);
+
+    //         return response;
+    //     } catch (error) {
+    //         console.error('Error getNoticesByUser - useNotices');
+    //     }
+    // }, [googleUserData]);
+
+    // In UserProfile.jsx and OtherUserProfile.jsx
+
+    const getNoticesByUser = useCallback(async (user_id, limit, lastId) => {
         try {
-            const response = await getUserNotices(user_id, limit, offset);
+            const response = await getUserNotices(user_id, limit, lastId);
 
             // console.log('getNoticesByUser', response);
 
@@ -214,7 +238,7 @@ const useNotices = (googleUserData) => {
         }
     }, [googleUserData]);
 
-    // In UserProfile.jsx and OtherUserProfile.jsx
+
     const fetchUserNotices = async (id, setNotices, limit, offset) => {
         if (!id) return;
 

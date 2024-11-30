@@ -544,24 +544,52 @@ export const createNotice = async ({ user_id, text, timestamp, expiresAt, notice
     }
 };
 
-export const getUserNotices = async (user_id, limit, offset) => {
+// export const getUserNotices = async (user_id, limit, offset) => {
+//     try {
+//         const response = await databases.listDocuments(
+//             import.meta.env.VITE_DATABASE,
+//             import.meta.env.VITE_NOTICES_COLLECTION,
+//             [
+//                 Query.equal('user_id', user_id),
+//                 Query.limit(limit),
+//                 Query.offset(offset),
+//                 Query.orderDesc('timestamp'),
+//             ]
+//         );
+//         return response.documents;
+//     } catch (error) {
+//         console.error('Error fetching notices:', error);
+//         return [];
+//     }
+// };
+
+export const getUserNotices = async (user_id, limit, lastId) => {
     try {
+        // Construct query parameters
+        const queries = [
+            Query.equal('user_id', user_id),
+            Query.limit(limit),
+            Query.orderDesc('timestamp'),
+        ];
+
+        // Add cursorAfter if lastId exists
+        if (lastId) {
+            queries.push(Query.cursorAfter(lastId));
+        }
+
         const response = await databases.listDocuments(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_NOTICES_COLLECTION,
-            [
-                Query.equal('user_id', user_id),
-                Query.limit(limit),
-                Query.offset(offset),
-                Query.orderDesc('timestamp'),
-            ]
+            queries
         );
+
         return response.documents;
     } catch (error) {
         console.error('Error fetching notices:', error);
         return [];
     }
 };
+
 
 export const getNoticeByTagname = async (tagnames) => {
     try {
@@ -611,7 +639,57 @@ export const getAllNotices = async () => {
     }
 }
 
-export const getFilteredNotices = async (selectedTags, limit, offset) => {
+// export const getFilteredNotices = async (selectedTags, limit, offset) => {
+//     try {
+//         if (typeof selectedTags !== 'object' || selectedTags === null) {
+//             throw new Error('selectedTags must be an object');
+//         }
+
+//         const queryList = Object.keys(selectedTags)
+//             .filter(tagKey => selectedTags[tagKey] === true)
+//             .map(tagKey => Query.equal(tagKey, true));
+
+//         let notices;
+//         if (queryList.length === 0) {
+//             notices = { documents: [] };
+//         } else if (queryList.length === 1) {
+//             notices = await databases.listDocuments(
+//                 import.meta.env.VITE_DATABASE,
+//                 import.meta.env.VITE_NOTICES_COLLECTION,
+//                 [
+//                     queryList[0],
+//                     Query.notEqual('noticeType', ['organization']),
+//                     Query.limit(limit),
+//                     Query.offset(offset),
+//                     Query.orderDesc('timestamp'),
+//                 ]
+//             );
+//         } else {
+//             notices = await databases.listDocuments(
+//                 import.meta.env.VITE_DATABASE,
+//                 import.meta.env.VITE_NOTICES_COLLECTION,
+//                 [
+//                     Query.notEqual('noticeType', ['organization']),
+//                     Query.or(queryList),
+//                     Query.limit(limit),
+//                     Query.offset(offset),
+//                     Query.orderDesc('timestamp')
+//                 ]
+//             );
+//         }
+
+//         // console.log('notices.documents', notices.documents);
+
+//         return notices.documents;
+
+
+//     } catch (error) {
+//         console.error('Error fetching filtered notices:', error);
+//     }
+// };
+
+
+export const getFilteredNotices = async (selectedTags, limit, lastId) => {
     try {
         if (typeof selectedTags !== 'object' || selectedTags === null) {
             throw new Error('selectedTags must be an object');
@@ -621,44 +699,37 @@ export const getFilteredNotices = async (selectedTags, limit, offset) => {
             .filter(tagKey => selectedTags[tagKey] === true)
             .map(tagKey => Query.equal(tagKey, true));
 
-        let notices;
-        if (queryList.length === 0) {
-            notices = { documents: [] };
-        } else if (queryList.length === 1) {
-            notices = await databases.listDocuments(
-                import.meta.env.VITE_DATABASE,
-                import.meta.env.VITE_NOTICES_COLLECTION,
-                [
-                    queryList[0],
-                    Query.notEqual('noticeType', ['organization']),
-                    Query.limit(limit),
-                    Query.offset(offset),
-                    Query.orderDesc('timestamp'),
-                ]
-            );
-        } else {
-            notices = await databases.listDocuments(
-                import.meta.env.VITE_DATABASE,
-                import.meta.env.VITE_NOTICES_COLLECTION,
-                [
-                    Query.notEqual('noticeType', ['organization']),
-                    Query.or(queryList),
-                    Query.limit(limit),
-                    Query.offset(offset),
-                    Query.orderDesc('timestamp')
-                ]
-            );
+        const queries = [
+            Query.notEqual('noticeType', ['organization']),
+            Query.limit(limit),
+            Query.orderDesc('timestamp'),
+        ];
+
+        // Add the cursor query if lastId exists
+        if (lastId) {
+            queries.push(Query.cursorAfter(lastId));
         }
 
-        // console.log('notices.documents', notices.documents);
+        // Add additional filters based on selectedTags
+        if (queryList.length === 1) {
+            queries.push(queryList[0]);
+        } else if (queryList.length > 1) {
+            queries.push(Query.or(queryList));
+        }
+
+        const notices = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_NOTICES_COLLECTION,
+            queries
+        );
 
         return notices.documents;
-
-
     } catch (error) {
         console.error('Error fetching filtered notices:', error);
     }
 };
+
+
 
 export const updateNotice = async (noticeId, newText) => {
     try {
