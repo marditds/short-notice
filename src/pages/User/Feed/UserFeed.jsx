@@ -69,11 +69,10 @@ const UserFeed = () => {
     } = useNotices(googleUserData);
 
     const { fetchUsersData, getUserAccountByUserId, fetchAccountsFollowedByUser } = useUserInfo(googleUserData);
-
-    const [feedNotices, setFeedNotices] = useState([]);
-    const [personalFeedNotices, setPersonalFeedNotices] = useState([]);
-
     const { filterBlocksFromFeed } = useUnblockedNotices();
+
+    const [generalFeedNotices, setGeneralFeedNotices] = useState([]);
+    const [personalFeedNotices, setPersonalFeedNotices] = useState([]);
 
     const [isLoadingFeedNotices, setIsLoadingFeedNotices] = useState(false);
     const [isLoadingPersonalFeedNotices, setIsLoadingPersonalFeedNotices] = useState(false);
@@ -81,7 +80,7 @@ const UserFeed = () => {
 
     const [isFeedToggled, setIsFeedToggled] = useState(false);
 
-    // Interests Feed
+    // General Feed
     const [limit] = useState(10);
     const [lastId, setLastId] = useState(null);
     const [hasMoreNotices, setHasMoreNotices] = useState(true);
@@ -124,7 +123,7 @@ const UserFeed = () => {
         fetchUserInterests();
     }, [user_id, tagCategories]);
 
-    // Fetch feed (interests)-(initial)
+    // Fetch feed (general)-(initial)
     useEffect(() => {
         const fetchInitialGeneralFeed = async () => {
             setIsLoadingFeedNotices(true);
@@ -164,7 +163,7 @@ const UserFeed = () => {
                 const filteredNotices = await filterBlocksFromFeed(notices, user_id);
                 console.log('Filtered notices:', filteredNotices);
 
-                await fetchUsersData(filteredNotices, setFeedNotices, avatarUtil);
+                await fetchUsersData(filteredNotices, setGeneralFeedNotices, avatarUtil);
 
                 if (filteredNotices.length < limit) {
                     setHasMoreNotices(false);
@@ -180,12 +179,12 @@ const UserFeed = () => {
             }
         };
 
-        if (isFeedToggled) {
+        if (isFeedToggled && generalFeedNotices.length === 0) {
             fetchInitialGeneralFeed();
         }
-    }, [selectedTags, isFeedToggled]);
+    }, [isFeedToggled]);
 
-    // Fetch feed (interests)-(subsequent) 
+    // Fetch feed (general)-(subsequent) 
     useEffect(() => {
         if (!loadMore) return;
 
@@ -224,7 +223,7 @@ const UserFeed = () => {
                 const filteredNotices = await filterBlocksFromFeed(notices, user_id);
                 console.log('Filtered notices:', filteredNotices);
 
-                await fetchUsersData(filteredNotices, setFeedNotices, avatarUtil);
+                await fetchUsersData(filteredNotices, setGeneralFeedNotices, avatarUtil);
 
                 if (filteredNotices.length < limit) {
                     setHasMoreNotices(false);
@@ -238,12 +237,12 @@ const UserFeed = () => {
                 setLoadMore(false);
             }
         };
-        if (isFeedToggled) {
+        if (isFeedToggled && loadMore) {
             fetchSubsequentGeneralFeed();
         }
-    }, [loadMore, selectedTags, lastId, isFeedToggled]);
+    }, [loadMore, lastId, isFeedToggled]);
 
-    // Fetch feed (the user follows)-(initial)
+    // Fetch feed (personal)-(initial)
     useEffect(() => {
         const fetchInitialPersonalFeed = async () => {
             try {
@@ -254,15 +253,13 @@ const UserFeed = () => {
                 const followedByUser = await fetchAccountsFollowedByUser(user_id);
                 console.log('followedByUser', followedByUser);
 
-                let usrNtcs = [];
-
                 const allNotices = await Promise.all(
                     followedByUser.map((user) =>
                         getNoticesByUser(user.$id, limitPersonal, lastIdPersonal)
                     )
                 );
 
-                usrNtcs = allNotices.flat();
+                let usrNtcs = allNotices.flat();
 
                 usrNtcs.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
                 console.log('usrNtcs', usrNtcs);
@@ -286,7 +283,7 @@ const UserFeed = () => {
         fetchInitialPersonalFeed();
     }, [user_id]);
 
-    // Fetch feed (the user follows)-(subsequent)
+    // Fetch feed (personal)-(subsequent)
     useEffect(() => {
         if (!loadMorePersonal) return;
 
@@ -296,15 +293,13 @@ const UserFeed = () => {
 
                 const followedByUser = await fetchAccountsFollowedByUser(user_id);
 
-                let usrNtcs = [];
-
                 const allNotices = await Promise.all(
                     followedByUser.map((user) =>
                         getNoticesByUser(user.$id, limitPersonal, lastIdPersonal)
                     )
                 );
 
-                usrNtcs = allNotices.flat();
+                let usrNtcs = allNotices.flat();
 
                 usrNtcs.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
                 console.log('usrNtcs', usrNtcs);
@@ -323,8 +318,9 @@ const UserFeed = () => {
                 setLoadMorePersonal(false);
             }
         };
-
-        fetchSubsequentPersonalFeed();
+        if (loadMorePersonal) {
+            fetchSubsequentPersonalFeed();
+        }
     }, [loadMorePersonal]);
 
     useEffect(() => {
@@ -390,12 +386,32 @@ const UserFeed = () => {
     }
 
     const handleFeedToggle = () => {
-        setIsFeedToggled(!isFeedToggled);
+
+        setIsFeedToggled((prev) => !prev);
+
+        // if (!isFeedToggled && feedNotices.length === 0) {
+        //     fetchGeneralFeed();
+        // } else if (isFeedToggled && personalFeedNotices.length === 0) {
+        //     fetchPersonalFeed();
+        // }
+    };
+
+    const handleRefresh = () => {
+        if (isFeedToggled) {
+            setGeneralFeedNotices([]);
+            fetchGeneralFeed();
+        } else {
+            setPersonalFeedNotices([]);
+            fetchPersonalFeed();
+        }
     };
 
 
     // Render loading state while data is being fetched
-    if ((isLoadingFeedNotices || isLoadingUsers || isLoadingPersonalFeedNotices) && feedNotices.length === 0) {
+    if (
+        (isLoadingFeedNotices || isLoadingUsers || isLoadingPersonalFeedNotices) &&
+        (personalFeedNotices.length === 0 || generalFeedNotices.length === 0)
+    ) {
         return <div className='mt-5'><Loading size={24} />Loading feed...</div>;
     }
 
@@ -409,7 +425,7 @@ const UserFeed = () => {
             />
 
             <Notices
-                notices={!isFeedToggled ? personalFeedNotices : feedNotices}
+                notices={!isFeedToggled ? personalFeedNotices : generalFeedNotices}
                 user_id={user_id}
                 likedNotices={likedNotices}
                 savedNotices={savedNotices}
@@ -436,13 +452,14 @@ const UserFeed = () => {
                             }
                         }}
                         disabled={(isFeedToggled && (isLoadingMore || !hasMoreNotices)) ||
-                            (!isFeedToggled && (isLoadingMorePersonal || !hasMorePersonalNotices))} // Disable if already loading or no more notices
+                            (!isFeedToggled && (isLoadingMorePersonal || !hasMorePersonalNotices))}
                     >
                         {isLoadingMore || isLoadingMorePersonal ?
                             <><Loading size={24} /> Loading...</>
                             : 'Load More'}
                     </Button>
                     : 'No more notices'}
+                <Button onClick={handleRefresh}>Refresh Feed</Button>
             </div>
         </div>
     )
