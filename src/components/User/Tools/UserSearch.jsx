@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import useUserInfo from '../../../lib/hooks/useUserInfo';
 import { getAvatarUrl as avatarUrl } from '../../../lib/utils/avatarUtils';
@@ -18,7 +18,7 @@ export const UserSearch = ({ userId }) => {
     const [isResultLoading, setIsResultLoading] = useState(false);
 
     const [limit] = useState(7);
-    const [offset, setOffset] = useState(0);
+    const [lastId, setLastId] = useState(null);
     const [hasMoreProfiles, setHasMoreProfiles] = useState(true);
     const [isLoadingMore, setIsLoadingMore] = useState(false);
 
@@ -26,23 +26,25 @@ export const UserSearch = ({ userId }) => {
         setSearchUsername(e.target.value);
     };
 
-
     const fetchSearchResults = async () => {
-        if (offset === 0) {
+        if (!lastId) {
             setIsResultLoading(true);
         }
         setIsLoadingMore(true);
         try {
-
             console.log('userIdasasas:', userId);
             console.log('limit:', limit);
-            console.log('offset:', offset);
+            console.log('lastId:', lastId);
 
-            const users = await getAllUsersByString(searchUsername, limit, offset);
+            const users = await getAllUsersByString(searchUsername, limit, lastId);
+
+            console.log('users:', users);
 
             const blockedUsers = await getBlockedUsersByUser(userId);
 
-            const filteredUsers = users.filter((user) =>
+            console.log('blockedUsers:', blockedUsers);
+
+            const filteredUsers = users.documents.filter((user) =>
                 !blockedUsers.some((blocked) => user.$id === blocked.blocked_id)
             );
 
@@ -53,22 +55,17 @@ export const UserSearch = ({ userId }) => {
                     const moreUsers = filteredUsers?.filter(user =>
                         !prevUsers.some(loadedUser => loadedUser.$id === user.$id)
                     );
-
                     return [...prevUsers, ...moreUsers];
                 });
             } else {
                 return 'No results';
             }
-
-            if (users?.length < limit) {
+            if (filteredUsers?.length < limit) {
                 setHasMoreProfiles(false);
             } else {
                 setHasMoreProfiles(true);
-                setOffset(offset + limit);
+                setLastId(filteredUsers[filteredUsers.length - 1].$id);
             }
-
-            console.log('users:', users);
-
         } catch (error) {
             console.error('Error listing users:', error);
         } finally {
@@ -77,9 +74,13 @@ export const UserSearch = ({ userId }) => {
         }
     }
 
+    useEffect(() => {
+        console.log('lastId', lastId);
+    }, [lastId])
+
     const handleShowSearchUsersModal = async () => {
         setShow(true);
-        fetchSearchResults();
+        await fetchSearchResults();
     };
 
     const handleLoadMoreProfiles = () => {
@@ -88,7 +89,7 @@ export const UserSearch = ({ userId }) => {
 
     const handleCloseSeachUsersModal = () => {
         setShow(false)
-        setOffset(preVal => preVal = 0);
+        setLastId(null);
         setUsersResult([]);
     };
 

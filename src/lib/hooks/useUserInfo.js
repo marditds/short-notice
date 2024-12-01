@@ -146,16 +146,15 @@ const useUserInfo = (data) => {
 
     }
 
-    const getAllUsersByString = async (username, limit, offset) => {
+    const getAllUsersByString = async (username, limit, cursorAfter) => {
         try {
-            const usrnm = await fetchAllUsersByString(username, limit, offset);
+            const usrnm = await fetchAllUsersByString(username, limit, cursorAfter);
             console.log('username found:', usrnm);
             return usrnm;
         } catch (error) {
             console.error('Error getting user by username:', error);
         }
-
-    }
+    };
 
     const getUsersData = useCallback(async () => {
         try {

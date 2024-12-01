@@ -188,20 +188,25 @@ export const getUserByUsername = async (username) => {
     }
 };
 
-export const getAllUsersByString = async (str, limit, offset) => {
+export const getAllUsersByString = async (str, limit, cursorAfter) => {
     try {
+        const queryParams = [
+            Query.contains('username', str),
+            Query.limit(limit),
+        ];
+
+        if (cursorAfter) {
+            queryParams.push(Query.cursorAfter(cursorAfter));
+        }
+
         const userList = await databases.listDocuments(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_USERS_COLLECTION,
-            [
-                Query.contains('username', str),
-                Query.limit(limit),
-                Query.offset(offset)
-            ]
+            queryParams
         );
 
         if (userList.total > 0) {
-            return userList.documents;
+            return userList;
         }
 
         return null;
@@ -209,7 +214,7 @@ export const getAllUsersByString = async (str, limit, offset) => {
         console.error('Error fetching user by string:', error);
         return null;
     }
-}
+};
 
 const checkUsernameExists = async (username) => {
     try {

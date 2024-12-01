@@ -79,11 +79,7 @@ const UserFeed = () => {
     const [isLoadingPersonalFeedNotices, setIsLoadingPersonalFeedNotices] = useState(false);
     const [isLoadingUsers, setIsLoadingUsers] = useState(false);
 
-    // Interests Feed
-    // const [limit] = useState(10);
-    // const [offset, setOffset] = useState(0);
-    // const [hasMoreNotices, setHasMoreNotices] = useState(true);
-    // const [isLoadingMore, setIsLoadingMore] = useState(false);
+    const [isFeedToggled, setIsFeedToggled] = useState(false);
 
     // Interests Feed
     const [limit] = useState(10);
@@ -434,9 +430,6 @@ const UserFeed = () => {
         }
     }
 
-
-    const [isFeedToggled, setIsFeedToggled] = useState(false);
-
     const handleFeedToggle = () => {
         setIsFeedToggled(!isFeedToggled);
     };
@@ -492,21 +485,6 @@ const UserFeed = () => {
                     </Button>
                     : 'No more notices'}
             </div>
-
-            {/* <div className="d-flex justify-content-center mt-4">
-                {hasMoreNotices ? (
-                    <Button
-                        onClick={() => setLoadMore(true)} // Trigger fetch when button is clicked
-                        disabled={isLoadingMore || !hasMoreNotices}
-                    >
-                        {isLoadingMore ? <><Loading size={24} /> Loading...</> : 'Load More'}
-                    </Button>
-                ) : (
-                    'No more notices'
-                )}
-            </div> */}
-
-
         </div>
     )
 }
