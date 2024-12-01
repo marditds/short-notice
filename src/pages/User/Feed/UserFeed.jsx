@@ -180,8 +180,10 @@ const UserFeed = () => {
             }
         };
 
-        fetchInitialGeneralFeed();
-    }, [selectedTags]);
+        if (isFeedToggled) {
+            fetchInitialGeneralFeed();
+        }
+    }, [selectedTags, isFeedToggled]);
 
     // Fetch feed (interests)-(subsequent) 
     useEffect(() => {
@@ -236,9 +238,10 @@ const UserFeed = () => {
                 setLoadMore(false);
             }
         };
-
-        fetchSubsequentGeneralFeed();
-    }, [loadMore, selectedTags, lastId]);
+        if (isFeedToggled) {
+            fetchSubsequentGeneralFeed();
+        }
+    }, [loadMore, selectedTags, lastId, isFeedToggled]);
 
     // Fetch feed (the user follows)-(initial)
     useEffect(() => {
@@ -323,50 +326,6 @@ const UserFeed = () => {
 
         fetchSubsequentPersonalFeed();
     }, [loadMorePersonal]);
-
-    // Fetch feed (the user follows)
-    // useEffect(() => {
-    //     const fetchPersonalFeed = async () => {
-    //         try {
-    //             setIsLoadingPersonalFeedNotices(true);
-    //             setIsLoadingUsers(true);
-    //             setIsLoadingMorePersonal(true);
-    //             // list the ids that the user follows
-    //             var followedByUser = await fetchAccountsFollowedByUser(user_id);
-
-    //             console.log('followedByUser', followedByUser);
-
-    //             var usrNtcs = [];
-
-    //             const allNotices = await Promise.all(
-    //                 followedByUser.map((user) => getNoticesByUser(user.$id, limitPersonal, offsetPersonal))
-    //             );
-
-    //             usrNtcs = allNotices.flat();
-
-    //             usrNtcs.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-
-    //             console.log('usrNtcs', usrNtcs);
-
-    //             await fetchUsersData(usrNtcs, setPersonalFeedNotices, avatarUtil);
-
-    //             if (usrNtcs.length < limit) {
-    //                 setHasMorePersonalNotices(false);
-    //             } else {
-    //                 setHasMorePersonalNotices(true);
-    //             }
-
-    //         } catch (error) {
-    //             console.error('Error fetching personal feed', error);
-    //         } finally {
-    //             setIsLoadingPersonalFeedNotices(false);
-    //             setIsLoadingUsers(true);
-    //             setIsLoadingMorePersonal(false);
-    //         }
-
-    //     }
-    //     fetchPersonalFeed();
-    // }, [user_id]);
 
     useEffect(() => {
         console.log('personalFeedNotices:', personalFeedNotices);
