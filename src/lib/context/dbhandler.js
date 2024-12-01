@@ -1537,48 +1537,24 @@ export const getBlockedUsersByUser = async (blocker_id) => {
     }
 }
 
-// export const getBlockedUsersByUserByBatch = async (blocker_id, limit, offset) => {
-//     try {
-//         const res = await databases.listDocuments(
-//             import.meta.env.VITE_DATABASE,
-//             import.meta.env.VITE_BLOCKS_COLLECTION,
-//             [
-//                 Query.equal('blocker_id', blocker_id),
-//                 Query.limit(limit),
-//                 Query.offset(offset)
-//             ]
-//         )
-//         console.log('Blocked users:', res);
-//         return res.documents;
-//     } catch (error) {
-//         console.error('Error getting blocked users:', error);
-//     }
-// }
-
-export const getBlockedUsersByUserByBatch = async (blocker_id, limit, lastId) => {
+export const getBlockedUsersByUserByBatch = async (blocker_id, limit, offset) => {
     try {
-        // Construct query parameters
-        const queries = [
-            Query.equal('blocker_id', blocker_id),
-            Query.limit(limit)
-        ];
-
-        // Add cursorAfter if lastId exists
-        if (lastId) {
-            queries.push(Query.cursorAfter(lastId));
-        }
-
-        const response = await databases.listDocuments(
+        const res = await databases.listDocuments(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_BLOCKS_COLLECTION,
-            queries
-        );
-
-        return response.documents;
+            [
+                Query.equal('blocker_id', blocker_id),
+                Query.limit(limit),
+                Query.offset(offset)
+            ]
+        )
+        console.log('Blocked users:', res);
+        return res.documents;
     } catch (error) {
         console.error('Error getting blocked users:', error);
     }
 }
+
 
 export const getUsersBlockingUser = async (blocked_id) => {
     try {
