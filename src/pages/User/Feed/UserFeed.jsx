@@ -328,7 +328,6 @@ const UserFeed = () => {
         }
     };
 
-
     const handleLike = async (notice) => {
         try {
             await likeNotice(notice.$id, notice.user_id, user_id)
@@ -362,14 +361,12 @@ const UserFeed = () => {
     const handleRefresh = () => {
         if (isFeedToggled) {
             // Refresh General Feed
-            console.log('Refreshing general feed...');
             setGeneralFeedNotices([]);
             setLastId(null);
             setHasMoreGeneralNotices(true);
             setLoadMore(true);
         } else {
-            // Refresh Personal Feed
-            console.log('Refreshing personal feed...');
+            // Refresh Personal Feed 
             setPersonalFeedNotices([]);
             setLastIdPersonal(null);
             setHasMorePersonalNotices(true);

@@ -48,7 +48,6 @@ export const Notices = ({
 
     const [limit] = useState(5);
     const [offsets, setOffsets] = useState({});
-    // const [hasMoreReactions, setHasMoreReactions] = useState({});
     const [showLoadMoreBtn, setShowLoadMoreBtn] = useState(false);
     const [isLoadingMoreReactions, setIsLoadingMoreReactions] = useState(false);
 
@@ -234,21 +233,10 @@ export const Notices = ({
                 ]
             }));
 
-            // const hasMore = noticeReactions?.documents?.length === limit;
-            // setHasMoreReactions(prev => ({
-            //     ...prev,
-            //     [noticeId]: hasMore
-            // }));
-
-            // if (noticeReactions?.documents?.length < limit) {
-            //     setHasMoreReactions(false);
-            // }
-
             setOffsets(prev => ({
                 ...prev,
                 [noticeId]: currentOffset + limit
             }));
-
 
         } catch (error) {
             console.error('Error loading reactions:', error);
@@ -279,16 +267,10 @@ export const Notices = ({
                 delete newState[noticeId];
                 return newState;
             });
-            // setHasMoreReactions(prev => {
-            //     const newState = { ...prev };
-            //     delete newState[noticeId];
-            //     return newState;
-            // });
             return;
         }
 
         setActiveNoticeId(noticeId);
-
         // If reactions aren't loaded and not currently loading
         if (!loadedReactions[noticeId] && !loadingStates[noticeId]) {
             setLoadingStates(prev => ({ ...prev, [noticeId]: true }));
@@ -322,22 +304,14 @@ export const Notices = ({
                     [noticeId]: updatedAvatarMap
                 }));
 
-
                 console.log('ReactionUsernameMap', reactionUsernameMap);
 
                 console.log('ReactionAvatarMap', reactionAvatarMap);
-
 
                 setLoadedReactions(prev => ({
                     ...prev,
                     [noticeId]: initialReactions?.documents || []
                 }));
-
-                // const hasMore = initialReactions?.documents?.length === limit;
-                // setHasMoreReactions(prev => ({
-                //     ...prev,
-                //     [noticeId]: hasMore
-                // }));
 
                 setOffsets(prev => ({
                     ...prev,
@@ -348,7 +322,6 @@ export const Notices = ({
             } finally {
                 setLoadingStates(prev => ({ ...prev, [noticeId]: false }));
             }
-
         }
     };
 
