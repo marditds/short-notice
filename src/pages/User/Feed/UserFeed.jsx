@@ -196,7 +196,7 @@ const UserFeed = () => {
                 await fetchUsersData(filteredNotices, setGeneralFeedNotices, avatarUtil);
 
                 if (filteredNotices.length < limit) {
-                    setHasMoreNotices(false);
+                    setHasMoreGeneralNotices(false);
                 } else {
                     setLastId(filteredNotices[filteredNotices.length - 1].$id);
                 }
@@ -394,6 +394,7 @@ const UserFeed = () => {
                 isTagSelected={isTagSelected}
                 isFeedToggled={isFeedToggled}
                 handleFeedToggle={handleFeedToggle}
+                handleRefresh={handleRefresh}
             />
 
             <Notices
@@ -431,7 +432,6 @@ const UserFeed = () => {
                             : 'Load More'}
                     </Button>
                     : 'No more notices'}
-                <Button onClick={handleRefresh}>Refresh Feed</Button>
             </div>
         </div>
     )
