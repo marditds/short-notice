@@ -74,7 +74,7 @@ const UserFeed = () => {
     const [generalFeedNotices, setGeneralFeedNotices] = useState([]);
     const [personalFeedNotices, setPersonalFeedNotices] = useState([]);
 
-    const [isLoadingFeedNotices, setIsLoadingFeedNotices] = useState(false);
+    const [isLoadingGeneralFeedNotices, setIsLoadingGeneralFeedNotices] = useState(false);
     const [isLoadingPersonalFeedNotices, setIsLoadingPersonalFeedNotices] = useState(false);
     const [isLoadingUsers, setIsLoadingUsers] = useState(false);
 
@@ -83,7 +83,7 @@ const UserFeed = () => {
     // General Feed
     const [limit] = useState(10);
     const [lastId, setLastId] = useState(null);
-    const [hasMoreNotices, setHasMoreNotices] = useState(true);
+    const [hasMoreGeneralNotices, setHasMoreGeneralNotices] = useState(true);
     const [isLoadingMore, setIsLoadingMore] = useState(false);
     const [loadMore, setLoadMore] = useState(false);
 
@@ -107,15 +107,6 @@ const UserFeed = () => {
                     }
                 } catch (error) {
                     console.error('Error fetching user interests:', error);
-                    // if (error.code === 404) {
-                    //     const newSelectedTags = {};
-                    //     tagCategories.forEach(category => {
-                    //         category.tags.forEach(tag => {
-                    //             newSelectedTags[tag.key] = false;
-                    //         });
-                    //     });
-                    //     setSelectedTags(newSelectedTags);
-                    // }
                 }
             }
         };
@@ -123,36 +114,40 @@ const UserFeed = () => {
         fetchUserInterests();
     }, [user_id, tagCategories]);
 
+    // Fetch selected tags
+    useEffect(() => {
+        try {
+            const falseVal = Object.values(selectedTags).filter((tag) => tag === false);
+
+            function indexOfAll(array, value) {
+                const indices = [];
+                for (let i = 0; i < array.length; i++) {
+                    if (array[i] === value) {
+                        indices.push(i);
+                    }
+                }
+                return indices;
+            }
+
+            const indices = indexOfAll(falseVal, false);
+            console.log('Indices of false values:', indices.length);
+
+            if (indices.length < 13) {
+                setIsTagSelected(true);
+            } else {
+                setIsTagSelected(false);
+            }
+        } catch (error) {
+            console.error('Error fetching selected tags:', error);
+        }
+    }, [selectedTags])
+
     // Fetch feed (general)-(initial)
     useEffect(() => {
         const fetchInitialGeneralFeed = async () => {
-            setIsLoadingFeedNotices(true);
+            setIsLoadingGeneralFeedNotices(true);
             setIsLoadingUsers(true);
             try {
-                console.log('Fetching initial data');
-
-                const falseVal = Object.values(selectedTags).filter((tag) => tag === false);
-
-                function indexOfAll(array, value) {
-                    const indices = [];
-                    for (let i = 0; i < array.length; i++) {
-                        if (array[i] === value) {
-                            indices.push(i);
-                        }
-                    }
-                    return indices;
-                }
-
-                const indices = indexOfAll(falseVal, false);
-                console.log('Indices of false values:', indices.length);
-
-
-                if (indices.length < 13) {
-                    setIsTagSelected(true);
-                } else {
-                    setIsTagSelected(false);
-                }
-
                 console.log('Limit:', limit);
                 console.log('Last ID:', lastId);
 
@@ -166,19 +161,18 @@ const UserFeed = () => {
                 await fetchUsersData(filteredNotices, setGeneralFeedNotices, avatarUtil);
 
                 if (filteredNotices.length < limit) {
-                    setHasMoreNotices(false);
+                    setHasMoreGeneralNotices(false);
                 } else {
-                    setHasMoreNotices(true);
+                    setHasMoreGeneralNotices(true);
                     setLastId(filteredNotices[filteredNotices.length - 1].$id);
                 }
             } catch (error) {
                 console.error('Error fetching initial feed notices:', error);
             } finally {
-                setIsLoadingFeedNotices(false);
+                setIsLoadingGeneralFeedNotices(false);
                 setIsLoadingUsers(false);
             }
         };
-
         if (isFeedToggled && generalFeedNotices.length === 0) {
             fetchInitialGeneralFeed();
         }
@@ -187,33 +181,9 @@ const UserFeed = () => {
     // Fetch feed (general)-(subsequent) 
     useEffect(() => {
         if (!loadMore) return;
-
         const fetchSubsequentGeneralFeed = async () => {
             setIsLoadingMore(true);
             try {
-                console.log('Fetching more data');
-
-                const falseVal = Object.values(selectedTags).filter((tag) => tag === false);
-
-                function indexOfAll(array, value) {
-                    const indices = [];
-                    for (let i = 0; i < array.length; i++) {
-                        if (array[i] === value) {
-                            indices.push(i);
-                        }
-                    }
-                    return indices;
-                }
-
-                const indices = indexOfAll(falseVal, false);
-                console.log('Indices of false values:', indices.length);
-
-                if (indices.length < 13) {
-                    setIsTagSelected(true);
-                } else {
-                    setIsTagSelected(false);
-                }
-
                 console.log('Limit:', limit);
                 console.log('Last ID:', lastId);
 
@@ -262,7 +232,7 @@ const UserFeed = () => {
                 let usrNtcs = allNotices.flat();
 
                 usrNtcs.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-                console.log('usrNtcs', usrNtcs);
+                console.log('usrNtcs - Personal', usrNtcs);
 
                 await fetchUsersData(usrNtcs, setPersonalFeedNotices, avatarUtil);
 
@@ -302,7 +272,7 @@ const UserFeed = () => {
                 let usrNtcs = allNotices.flat();
 
                 usrNtcs.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-                console.log('usrNtcs', usrNtcs);
+                console.log('usrNtcs - Personal', usrNtcs);
 
                 await fetchUsersData(usrNtcs, setPersonalFeedNotices, avatarUtil);
 
@@ -386,33 +356,35 @@ const UserFeed = () => {
     }
 
     const handleFeedToggle = () => {
-
         setIsFeedToggled((prev) => !prev);
-
-        // if (!isFeedToggled && feedNotices.length === 0) {
-        //     fetchGeneralFeed();
-        // } else if (isFeedToggled && personalFeedNotices.length === 0) {
-        //     fetchPersonalFeed();
-        // }
     };
 
     const handleRefresh = () => {
         if (isFeedToggled) {
+            // Refresh General Feed
+            console.log('Refreshing general feed...');
             setGeneralFeedNotices([]);
-            fetchGeneralFeed();
+            setLastId(null);
+            setHasMoreGeneralNotices(true);
+            setLoadMore(true);
         } else {
+            // Refresh Personal Feed
+            console.log('Refreshing personal feed...');
             setPersonalFeedNotices([]);
-            fetchPersonalFeed();
+            setLastIdPersonal(null);
+            setHasMorePersonalNotices(true);
+            setLoadMorePersonal(true);
         }
     };
 
-
     // Render loading state while data is being fetched
     if (
-        (isLoadingFeedNotices || isLoadingUsers || isLoadingPersonalFeedNotices) &&
+        (isLoadingGeneralFeedNotices || isLoadingUsers || isLoadingPersonalFeedNotices) &&
         (personalFeedNotices.length === 0 || generalFeedNotices.length === 0)
     ) {
-        return <div className='mt-5'><Loading size={24} />Loading feed...</div>;
+        return <div className='mt-5'>
+            <Loading size={24} />{`Loading ${!isFeedToggled ? 'personal' : 'general'} feed...`}
+        </div>;
     }
 
     return (
@@ -442,7 +414,7 @@ const UserFeed = () => {
 
             {/* Load More Button */}
             <div className="d-flex justify-content-center mt-4">
-                {(!isFeedToggled && hasMorePersonalNotices) || (isFeedToggled && hasMoreNotices) ?
+                {(!isFeedToggled && hasMorePersonalNotices) || (isFeedToggled && hasMoreGeneralNotices) ?
                     <Button
                         onClick={() => {
                             if (!isFeedToggled) {
@@ -451,7 +423,7 @@ const UserFeed = () => {
                                 setLoadMore(true);
                             }
                         }}
-                        disabled={(isFeedToggled && (isLoadingMore || !hasMoreNotices)) ||
+                        disabled={(isFeedToggled && (isLoadingMore || !hasMoreGeneralNotices)) ||
                             (!isFeedToggled && (isLoadingMorePersonal || !hasMorePersonalNotices))}
                     >
                         {isLoadingMore || isLoadingMorePersonal ?

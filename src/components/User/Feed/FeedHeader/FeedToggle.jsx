@@ -1,7 +1,6 @@
 import React from 'react';
 import { Form, Row, Col } from 'react-bootstrap';
 
-
 export const FeedToggle = ({ isFeedToggled, handleFeedToggle }) => {
     return (
         <Form className='d-flex justify-content-center align-items-center'

@@ -1,7 +1,9 @@
 import React from 'react';
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col, Button } from 'react-bootstrap';
 import { GeneralFeedGuide } from './GeneralFeedGuide';
 import { FeedToggle } from './FeedToggle';
+import { GrRefresh } from "react-icons/gr";
+
 import '../Feed.css'
 
 
@@ -13,6 +15,9 @@ export const FeedHeader = ({ isTagSelected, isFeedToggled, handleFeedToggle }) =
                 <GeneralFeedGuide
                     isTagSelected={isTagSelected}
                 />
+                <Button>
+                    {/* <MdOutlineRefresh size={24} /> */}
+                </Button>
             </Col>
             <Col>
                 <FeedToggle
