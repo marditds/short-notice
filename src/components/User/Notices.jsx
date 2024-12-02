@@ -5,10 +5,8 @@ import { Row, Col, Modal, Form, Accordion, Button } from 'react-bootstrap';
 import { CgTrash } from 'react-icons/cg';
 import { AiFillEdit } from 'react-icons/ai';
 import { BsReply } from "react-icons/bs";
-// import { RiMegaphoneLine, RiMegaphoneFill } from 'react-icons/ri'; 
 import { RiSave2Line, RiSave2Fill } from "react-icons/ri";
-// import { RiBookmarkLine, RiBookmarkFill } from "react-icons/ri";
-import { BsHandThumbsUp, BsHandThumbsUpFill, BsExclamationTriangle } from 'react-icons/bs';
+import { BsHandThumbsUp, BsHandThumbsUpFill } from 'react-icons/bs';
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 import defaultAvatar from '../../assets/default.png';
 import { Loading } from '../Loading/Loading';
@@ -47,7 +45,7 @@ export const Notices = ({
     const [isSendingReactionLoading, setIsSendingReactionLoading] = useState(false);
 
     const [limit] = useState(5);
-    const [offsets, setOffsets] = useState({});
+    const [cursors, setCursors] = useState({});
     const [showLoadMoreBtn, setShowLoadMoreBtn] = useState(false);
     const [isLoadingMoreReactions, setIsLoadingMoreReactions] = useState(false);
 
@@ -87,7 +85,6 @@ export const Notices = ({
 
 
     useEffect(() => {
-
         const intervalId = setInterval(() => {
             const newCountdowns = notices.map(notice => calculateCountdown(notice.expiresAt));
             setCountdowns(newCountdowns);
@@ -189,10 +186,9 @@ export const Notices = ({
         try {
             setIsLoadingMoreReactions(true);
 
-            const currentOffset = offsets[noticeId] || 0;
+            const currentCursor = cursors[noticeId] || null;
 
-            // Get reactions from DB only for one specific notice
-            const noticeReactions = await getReactionsForNotice(noticeId, limit, currentOffset);
+            const noticeReactions = await getReactionsForNotice(noticeId, limit, currentCursor);
 
             console.log('noticeReactions', noticeReactions);
 
@@ -233,9 +229,13 @@ export const Notices = ({
                 ]
             }));
 
-            setOffsets(prev => ({
+            const newCursor = noticeReactions.documents.length > 0
+                ? noticeReactions.documents[noticeReactions.documents.length - 1].$id
+                : null;
+
+            setCursors(prev => ({
                 ...prev,
-                [noticeId]: currentOffset + limit
+                [noticeId]: newCursor
             }));
 
         } catch (error) {
@@ -244,7 +244,7 @@ export const Notices = ({
             setLoadingStates(prev => ({ ...prev, [noticeId]: false }));
             setIsLoadingMoreReactions(false);
         }
-    }
+    };
 
     useEffect(() => {
         console.log('activeNoticeId', activeNoticeId);
@@ -252,7 +252,6 @@ export const Notices = ({
     }, [activeNoticeId])
 
     const handleAccordionToggle = async (noticeId) => {
-
         if (activeNoticeId === noticeId) {
             setActiveNoticeId(null);
             setShowLoadMoreBtn(false);
@@ -262,7 +261,7 @@ export const Notices = ({
                 delete newState[noticeId];
                 return newState;
             });
-            setOffsets(prev => {
+            setCursors(prev => {
                 const newState = { ...prev };
                 delete newState[noticeId];
                 return newState;
@@ -271,15 +270,16 @@ export const Notices = ({
         }
 
         setActiveNoticeId(noticeId);
-        // If reactions aren't loaded and not currently loading
+
+        // If reactions aren't loaded and not currently loading 
         if (!loadedReactions[noticeId] && !loadingStates[noticeId]) {
             setLoadingStates(prev => ({ ...prev, [noticeId]: true }));
             try {
-                const initialReactions = await getReactionsForNotice(noticeId, limit, 0);
+                const initialReactions = await getReactionsForNotice(noticeId, limit);
 
                 console.log('initialReactions', initialReactions);
 
-                const usersIds = initialReactions.documents.map((reaction) => reaction.sender_id);
+                const usersIds = initialReactions?.documents.map((reaction) => reaction.sender_id);
 
                 console.log('usersIds', usersIds);
 
@@ -313,10 +313,15 @@ export const Notices = ({
                     [noticeId]: initialReactions?.documents || []
                 }));
 
-                setOffsets(prev => ({
+                const newCursor = initialReactions.documents.length > 0
+                    ? initialReactions.documents[initialReactions.documents.length - 1].$id
+                    : null;
+
+                setCursors(prev => ({
                     ...prev,
-                    [noticeId]: limit
+                    [noticeId]: newCursor
                 }));
+
             } catch (error) {
                 console.error('Error loading initial reactions:', error);
             } finally {
@@ -364,8 +369,6 @@ export const Notices = ({
         setShowReportReactionModal(false);
         setReportReason(null);
     }
-
-
 
     const shouldShowUserInfo = () => {
         return (

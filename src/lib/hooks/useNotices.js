@@ -468,8 +468,6 @@ const useNotices = (googleUserData) => {
         }
     }
 
-
-
     const getAllReactions = async () => {
         try {
             const response = await fetchAllReactions();
@@ -506,9 +504,9 @@ const useNotices = (googleUserData) => {
     }
 
     // Get reactions from DB
-    const getReactionsForNotice = async (notice_id, limit, offset) => {
+    const getReactionsForNotice = async (notice_id, limit, cursor = null) => {
         try {
-            const response = await fetchAllReactionsByNoticeId(notice_id, limit, offset);
+            const response = await fetchAllReactionsByNoticeId(notice_id, limit, cursor);
             console.log('getAllReactionsByNoticeId', response);
             return response;
         } catch (error) {
@@ -534,34 +532,6 @@ const useNotices = (googleUserData) => {
             console.error('Error adding reaction:', error);
         }
     }
-
-
-    // const fetchReactionsForNotices = async (usrNtcs, setReactionsState) => {
-    //     if (usrNtcs.length > 0) {
-    //         const allReactions = [];
-
-    //         // console.log('userNotices', usrNtcs);
-
-    //         for (const notice of usrNtcs) {
-    //             const res = await fetchAllReactionsByNoticeId(notice?.$id);
-
-    //             console.log('res', res);
-
-    //             const noticeReactions = res.documents || [];
-
-    //             if (noticeReactions) {
-    //                 allReactions.push(...noticeReactions);
-    //             }
-    //         }
-    //         console.log(eval(`allReactions for ${setReactionsState}`, allReactions))
-    //         // console.log(`allReactions for ${(setReactionsState)}`, allReactions);
-
-    //         setReactionsState(allReactions);
-    //     }
-    // };
-
-
-
 
     return {
         user_id,
