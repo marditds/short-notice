@@ -156,7 +156,7 @@ const UserFeed = () => {
                 console.log('Fetched notices:', notices);
 
                 const filteredNotices = await filterBlocksFromFeed(notices, user_id);
-                console.log('Filtered notices:', filteredNotices);
+                console.log('Filtered notices - general:', filteredNotices);
 
                 await fetchUsersData(filteredNotices, setGeneralFeedNotices, avatarUtil);
 
@@ -191,7 +191,7 @@ const UserFeed = () => {
                 console.log('Fetched notices:', notices);
 
                 const filteredNotices = await filterBlocksFromFeed(notices, user_id);
-                console.log('Filtered notices:', filteredNotices);
+                console.log('Filtered notices - general:', filteredNotices);
 
                 await fetchUsersData(filteredNotices, setGeneralFeedNotices, avatarUtil);
 
@@ -231,16 +231,24 @@ const UserFeed = () => {
 
                 let usrNtcs = allNotices.flat();
 
-                usrNtcs.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-                console.log('usrNtcs - Personal', usrNtcs);
+                console.log('notices BEFORE filtering:', usrNtcs);
 
-                await fetchUsersData(usrNtcs, setPersonalFeedNotices, avatarUtil);
 
-                if (usrNtcs.length < limitPersonal) {
+                const filteredNotices = await filterBlocksFromFeed(usrNtcs, user_id);
+
+                console.log('Filtered notices - personal:', filteredNotices);
+
+                filteredNotices.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+                console.log('filteredNotices - Personal', filteredNotices);
+
+                await fetchUsersData(filteredNotices, setPersonalFeedNotices, avatarUtil);
+
+                if (filteredNotices.length < limitPersonal) {
                     setHasMorePersonalNotices(false);
                 } else {
                     setHasMorePersonalNotices(true);
-                    setLastIdPersonal(usrNtcs[usrNtcs.length - 1].$id);
+                    setLastIdPersonal(filteredNotices[filteredNotices.length - 1].$id);
                 }
             } catch (error) {
                 console.error('Error fetching personal feed', error);
@@ -271,15 +279,18 @@ const UserFeed = () => {
 
                 let usrNtcs = allNotices.flat();
 
-                usrNtcs.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-                console.log('usrNtcs - Personal', usrNtcs);
+                const filteredNotices = await filterBlocksFromFeed(usrNtcs, user_id);
 
-                await fetchUsersData(usrNtcs, setPersonalFeedNotices, avatarUtil);
+                console.log('Filtered notices - personal:', filteredNotices);
 
-                if (usrNtcs.length < limitPersonal) {
+                filteredNotices.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+                await fetchUsersData(filteredNotices, setPersonalFeedNotices, avatarUtil);
+
+                if (filteredNotices.length < limitPersonal) {
                     setHasMorePersonalNotices(false);
                 } else {
-                    setLastIdPersonal(usrNtcs[usrNtcs.length - 1].$id);
+                    setLastIdPersonal(filteredNotices[filteredNotices.length - 1].$id);
                 }
             } catch (error) {
                 console.error('Error fetching more personal feed', error);
