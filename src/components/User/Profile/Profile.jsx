@@ -208,12 +208,6 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                         You are not authorzied to view, like, and save the notices shared by {username}.
                     </div>
                 }
-                {/* {isOtherUserBlocked &&
-                    <div style={{ color: 'white', textAlign: 'center' }}>
-                        - You have blocked {username}. You cannot like, save, and react to their notices.
-                        - They cannot follow you and interact with your notices.
-                    </div>
-                } */}
             </Row>
 
             {/* Followers modal */}
@@ -228,12 +222,13 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                     <Modal.Title>{`Follower(s)`}</Modal.Title>
                     <Button
                         onClick={handleCloseFollowersModal}
+                        className='ms-auto'
                     >
-                        <SlClose size={24} className='ms-auto' />
+                        <SlClose size={24} />
                     </Button>
                 </Modal.Header>
                 <Modal.Body
-                    className='user-profile__following--modal-body'
+                    className='d-grid gap-2 user-profile__following--modal-body'
                 >
                     THESE ARE FOLLOWING {username}
                     {followersAccounts && followersAccounts.map((followerAccount) => {
@@ -241,9 +236,11 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                             <div key={followerAccount.$id}>
                                 <Link
                                     to={`/user/${followerAccount.username}`}
+                                    className='w-100 d-flex justify-content-between align-items-center'
                                 >
                                     {followerAccount.username}
-                                    <img src={getAvatarUrl(followerAccount.avatar) || defaultAvatar} />
+                                    <img src={getAvatarUrl(followerAccount.avatar) || defaultAvatar}
+                                        className='follower__avatar' />
                                 </Link>
                             </div>
                         )
@@ -263,24 +260,28 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                     <Modal.Title>Following</Modal.Title>
                     <Button
                         onClick={handleCloseFollowingModal}
+                        className='ms-auto'
                     >
-                        <SlClose size={24} className='ms-auto' />
+                        <SlClose size={24} />
                     </Button>
                 </Modal.Header>
                 <Modal.Body
-                    className='user-profile__following--modal-body'
+                    className='d-grid user-profile__following--modal-body'
                 >
-                    THESE ARE FOLLOWED BY {username}
+                    THESE ACCOUNTS ARE FOLLOWED BY {username}
                     {followingAccounts && followingAccounts.map((followingAccount) => {
                         return (
                             <div key={followingAccount.$id}>
                                 <Link
                                     to={`/user/${followingAccount.username}`}
+                                    className='w-100 d-flex justify-content-between align-items-center'
                                 >
                                     {followingAccount.username}
-                                    <img src={getAvatarUrl(followingAccount.avatar) || defaultAvatar} />
+                                    <img src={getAvatarUrl(followingAccount.avatar) || defaultAvatar}
+                                        className='following__avatar' />
                                 </Link>
                             </div>
+
                         )
                     })}
                 </Modal.Body>

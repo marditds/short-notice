@@ -15,7 +15,7 @@ body {
 }
 
 .userhome__body--search-results-modal>div>div {
-    background-color: var(--main-bg-color) !important;
+    background-color: rgb(var(--main-bg-color), 0.8) !important;
     border: 1px solid var(--main-accent-color);
 }
 

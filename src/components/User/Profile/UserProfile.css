@@ -43,7 +43,9 @@
 
 .user-profile__avatar,
 .notice__avatar,
-.notice__reaction-avatar {
+.notice__reaction-avatar,
+.follower__avatar,
+.following__avatar {
     --r: 8px;
     aspect-ratio: cos(30deg);
     --_g: calc(tan(60deg)*var(--r)) right var(--r), #000 98%, #0000 101%;
@@ -344,15 +346,15 @@
 }
 
 .notice__edit--modal>div>div,
-.notice__react--modal>div>div {
+.notice__react--modal>div>div,
+.user-profile__following--modal>div>div {
     border-color: var(--main-accent-color);
     border-width: 0.5px;
-    background-color: var(--main-bg-color);
+    background-color: rgba(var(--main-bg-color), 0.8);
     border-radius: 8px !important;
     border-color: var(--main-accent-color);
     border-width: 0.5px;
-    background-color: var(--main-bg-color);
-
+    transition: 0.3s;
 }
 
 
@@ -407,9 +409,24 @@
     color: var(--main-accent-color);
 }
 
-.notice__reaction-avatar {
+.notice__reaction-avatar,
+.follower__avatar,
+.following__avatar {
     height: 53px;
 }
+
+
+.user-profile__following--modal-body>div>a {
+    padding-inline: 10px;
+    padding-block: 5px;
+    border-bottom: 1px solid var(--main-accent-color-hover);
+    transition: 0.3s;
+}
+
+.user-profile__following--modal-body>div>a:hover {
+    background-color: rgba(255, 255, 255, 0.4) !important;
+}
+
 
 /* .notice__reaction-avatar:hover {
     filter: sepia(1) hue-rotate(100deg) saturate(6) brightness(0.7);
