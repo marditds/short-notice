@@ -189,19 +189,6 @@ const useNotices = (googleUserData) => {
         }
     }
 
-    // const getFeedNotices = async (selectedTags, limit, offset) => {
-    //     try {
-    //         // console.log('selected tags', selectedTags);
-
-    //         const notices = await getFilteredNotices(selectedTags, limit, offset);
-    //         console.log('notices - getFeedNotices', notices);
-
-    //         return notices;
-    //     } catch (error) {
-    //         console.error('Error fetching filtered notices:', error);
-    //     }
-    // };
-
     const getFeedNotices = async (selectedTags, limit, lastId) => {
         try {
             const notices = await getFilteredNotices(selectedTags, limit, lastId);
@@ -212,32 +199,15 @@ const useNotices = (googleUserData) => {
         }
     };
 
-    // const getNoticesByUser = useCallback(async (user_id, limit, offset) => {
-    //     try {
-    //         const response = await getUserNotices(user_id, limit, offset);
-
-    //         // console.log('getNoticesByUser', response);
-
-    //         return response;
-    //     } catch (error) {
-    //         console.error('Error getNoticesByUser - useNotices');
-    //     }
-    // }, [googleUserData]);
-
-    // In UserProfile.jsx and OtherUserProfile.jsx
-
     const getNoticesByUser = useCallback(async (user_id, limit, lastId) => {
         try {
             const response = await getUserNotices(user_id, limit, lastId);
-
-            // console.log('getNoticesByUser', response);
 
             return response;
         } catch (error) {
             console.error('Error getNoticesByUser - useNotices');
         }
     }, [googleUserData]);
-
 
     const fetchUserNotices = async (id, setNotices, limit, offset) => {
         if (!id) return;
@@ -270,41 +240,12 @@ const useNotices = (googleUserData) => {
                 })
             );
 
-            // setNotices(prevNotices =>
-            //     prevNotices.filter(notice => {
-            //         if (notice.expiresAt) {
-            //             const expirationTime = new Date(notice.expiresAt).getTime();
-
-            //           
-            //             if (now >= expirationTime) {
-            //                 deleteNotice(notice.$id); 
-            //                 return false; 
-            //             }
-            //         }
-            //         return true;
-            //     })
-            // );
-
-            // setNotices(prevNotices =>
-            //     prevNotices.filter(notice => {
-            //         if (notice.expiresAt && new Date(notice.expiresAt) <= now) {
-            //             deleteNotice(notice.$id);
-            //             return false; 
-            //         }
-            //         return true; 
-            //     })
-            // );
-
             console.log('usrNotices - useNotices:', usrNotices);
-
-
 
             return usrNotices;
 
-
         } catch (error) {
             console.error('Error fetchUserNotices - useNotices');
-
         }
     }
 

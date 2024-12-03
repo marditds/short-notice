@@ -223,16 +223,17 @@ const UserFeed = () => {
                 const followedByUser = await fetchAccountsFollowedByUser(user_id);
                 console.log('followedByUser', followedByUser);
 
-                const allNotices = await Promise.all(
-                    followedByUser.map((user) =>
-                        getNoticesByUser(user.$id, limitPersonal, lastIdPersonal)
-                    )
-                );
+                const followedUserIds = followedByUser.map((user) => user.$id);
+
+                console.log('followedUserIds', followedUserIds);
+
+                const allNotices = await getNoticesByUser(followedUserIds, limitPersonal, null);
+
+                console.log('allNotices', allNotices);
 
                 let usrNtcs = allNotices.flat();
 
                 console.log('notices BEFORE filtering:', usrNtcs);
-
 
                 const filteredNotices = await filterBlocksFromFeed(usrNtcs, user_id);
 
@@ -271,11 +272,13 @@ const UserFeed = () => {
 
                 const followedByUser = await fetchAccountsFollowedByUser(user_id);
 
-                const allNotices = await Promise.all(
-                    followedByUser.map((user) =>
-                        getNoticesByUser(user.$id, limitPersonal, lastIdPersonal)
-                    )
-                );
+                const followedUserIds = followedByUser.map((user) => user.$id);
+
+                console.log('followedUserIds', followedUserIds);
+
+                const allNotices = await getNoticesByUser(followedUserIds, limitPersonal, lastIdPersonal);
+
+                console.log('allNotices', allNotices);
 
                 let usrNtcs = allNotices.flat();
 
