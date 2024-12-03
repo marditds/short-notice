@@ -1,5 +1,5 @@
 :root {
-    --main-bg-color: #ffffff;
+    --main-bg-color: 255, 255, 255;
     --main-text-color: #000000;
     --main-text-muted: #626262;
     --main-accent-color: #17c769;
