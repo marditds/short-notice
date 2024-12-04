@@ -155,7 +155,7 @@ export const UserSearch = ({ userId }) => {
                 <Modal.Header className='w-100'>
                     <Modal.Title>Showing results for "{searchUsername}"</Modal.Title>
                     <Button
-                        className='ms-auto p-0 tools__search--results-modal-btn'
+                        className='ms-auto p-0 tools__search--results-modal-close-btn'
                         onClick={handleCloseSeachUsersModal}>
                         <SlClose size={32} />
                     </Button>
@@ -173,7 +173,7 @@ export const UserSearch = ({ userId }) => {
                                 usersResult ? usersResult?.map((user) =>
                                     <div
                                         key={user.$id}
-                                        className='userhome__body--search-results-profiles'
+                                        className='tools__search--search-results-profiles'
                                     >
                                         <Link to={`../user/${user.username}`} className='w-100 d-flex align-items-center justify-content-end'>
                                             {user?.username}
@@ -190,14 +190,53 @@ export const UserSearch = ({ userId }) => {
                         }
                         {/* </Row> */}
                     </Stack>
+                    {/* {hasMoreProfiles ?
+                        <Button
+                            onClick={handleLoadMoreProfiles}
+                            disabled={isLoadingMore || !hasMoreProfiles}
+                            className='tools__search--results-modal-expand-btn'
+                        >
+                            {isLoadingMore ?
+                                <Loading size={24} />
+                                :
+                                <>
+
+                                    <i class='bi bi-chevron-down'></i>
+                                </>
+                            }
+                        </Button>
+                        :
+                        'No more profiles'
+                    } */}
+                    {/* {hasMoreProfiles ?
+                        <Button
+                            onClick={handleLoadMoreProfiles}
+                            disabled={isLoadingMore || !hasMoreProfiles}
+                            className='w-100'
+                        >
+                            {isLoadingMore ?
+                                <Loading size={24} />
+                                :
+                                <div className='tools__search--results-modal-expand-icon d-flex justify-content-evenly align-items-center'>
+                                    Load more
+                                    <i class='bi bi-chevron-down ms-2'></i>
+                                </div>
+                            }
+                        </Button>
+                        :
+                        'No more profiles'
+                    } */}
                     {hasMoreProfiles ?
                         <Button
                             onClick={handleLoadMoreProfiles}
                             disabled={isLoadingMore || !hasMoreProfiles}
+                            className='w-100 expand--btn'
                         >
                             {isLoadingMore ?
-                                <><Loading size={24} /> Loading...</>
-                                : 'Load More Profiles'}
+                                <Loading size={24} />
+                                :
+                                <i class='bi bi-chevron-down expand--icon'></i>
+                            }
                         </Button>
                         :
                         'No more profiles'
