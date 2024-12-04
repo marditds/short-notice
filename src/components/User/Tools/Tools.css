@@ -14,14 +14,31 @@ body {
     color: var(--main-text-color) !important;
 }
 
-.userhome__body--search-results-modal>div>div {
+.tools__search--results-modal>div>div {
     background-color: rgb(var(--main-bg-color), 0.8) !important;
     border: 1px solid var(--main-accent-color);
 }
 
-.userhome__body--search-results-modal>div>div>div {
+.tools__search--results-modal>div>div>div {
     color: var(--main-text-color) !important;
     border-block: none;
+}
+
+.tools__search--results-modal-btn,
+.tools__search--results-modal-btn:hover,
+.tools__search--results-modal-btn:focus,
+.tools__search--results-modal-btn:active {
+    background-color: transparent !important;
+    border: 0;
+}
+
+.tools__search--results-modal-btn>svg {
+    color: var(--main-accent-color);
+    transition: 0.3s;
+}
+
+.tools__search--results-modal-btn:hover>svg {
+    color: var(--main-accent-color-hover);
 }
 
 .userhome__body--search-results-profiles {
@@ -36,7 +53,6 @@ body {
 
 .userhome__body--search-results-profiles:hover {
     border-color: var(--main-accent-color-hover);
-    /* background-color: var(--main-accent-color-hover); */
     color: var(--main-bg-color) !important;
     transition: 0.3s;
 }
@@ -60,31 +76,9 @@ body {
     filter: sepia(1) hue-rotate(100deg) saturate(6) brightness(0.7);
 }
 
-.userhome__body--search-results-modal-footer>button {
-    background-color: var(--main-accent-color);
-    color: var(--main-bg-color);
-    border: none;
-}
-
-.userhome__body--search-results-modal-footer>button:hover,
-.userhome__body--search-results-modal-footer>button:focus {
-    background-color: var(--main-accent-color-hover);
-    color: var(--main-bg-color);
-    box-shadow: none;
-}
-
-.userhome__body--search-results-modal-footer>button:active {
-    background-color: var(--main-accent-color-hover) !important;
-    color: var(--main-bg-color) !important;
-}
-
 .userhome__body--profile--tools {
     margin-top: 12px;
     z-index: 9000;
-    /* margin-top: 12px;
-    background-color: transparent;
-    backdrop-filter: blur(2px) !important;
-    z-index: 9999; */
 }
 
 .userhome__body--profile--tools--dropdown>button {
@@ -142,4 +136,32 @@ body {
 .userhome__body--btn {
     background-color: transparent !important;
     border: 0 !important;
+}
+
+.tools__search-btn {
+    background-color: var(--main-accent-color) !important;
+    border: var(--main-accent-color);
+    height: 40px;
+    width: 40px;
+    transition: 0.3s;
+}
+
+.tools__search-btn:hover {
+    background-color: var(--main-accent-color-hover) !important;
+    border: var(--main-accent-color-hover);
+}
+
+.tools__search-btn:hover>svg {
+    color: var(--main-accent-color) !important;
+}
+
+.tools__search-field {
+    border: 2px solid var(--main-accent-color);
+    resize: none;
+    transition: 0.3s;
+}
+
+.tools__search-field:focus {
+    border-color: var(--main-accent-color-hover);
+    box-shadow: none;
 }

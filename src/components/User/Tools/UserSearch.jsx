@@ -5,6 +5,7 @@ import { getAvatarUrl as avatarUrl } from '../../../lib/utils/avatarUtils';
 import defaultAvatar from '../../../assets/default.png';
 import { Button, Form, Modal, Stack } from 'react-bootstrap';
 import { CgSearch } from "react-icons/cg";
+import { SlClose } from "react-icons/sl";
 import { Loading } from '../../Loading/Loading';
 
 export const UserSearch = ({ userId }) => {
@@ -23,7 +24,10 @@ export const UserSearch = ({ userId }) => {
     const [isLoadingMore, setIsLoadingMore] = useState(false);
 
     const onUserSearchChange = (e) => {
-        setSearchUsername(e.target.value);
+        const value = e.target.value;
+        if (/^[a-zA-Z]*$/.test(value)) {
+            setSearchUsername(value);
+        }
     };
 
     const fetchSearchResults = async () => {
@@ -93,38 +97,68 @@ export const UserSearch = ({ userId }) => {
         setUsersResult([]);
     };
 
+    const handleOnKeyDown = (e) => {
+        if (
+            !e.key.match(/^[a-zA-Z]$/) &&
+            e.key !== "Backspace" &&
+            e.key !== "Delete" &&
+            e.key !== "ArrowLeft" &&
+            e.key !== "ArrowRight" &&
+            e.key !== "Tab"
+        ) {
+            e.preventDefault();
+        }
+
+        if (e.key === "Enter") {
+            e.preventDefault();
+            if (searchUsername.trim() !== "") {
+                handleShowSearchUsersModal();
+            }
+        }
+    }
+
     return (
         <>
-            <Button
-                onClick={handleShowSearchUsersModal}
-                className='ms-3 p-0'
-                disabled={searchUsername === '' ? true : false}
-                style={{ maxHeight: '36px' }}
-            >
-                <CgSearch
-                    size={24}
-                />
-            </Button>
-            <Form>
-                <Form.Group controlId="userSearch">
-                    <Form.Label className='visually-hidden'>Search Users</Form.Label>
-                    <Form.Control
-                        as="textarea"
-                        rows={1}
-                        placeholder='User Search'
-                        onChange={onUserSearchChange}
+            <div className='d-flex align-items-center'>
+                <Button
+                    onClick={handleShowSearchUsersModal}
+                    className='ms-3 me-1 px-2 tools__search-btn'
+                    disabled={searchUsername === '' ? true : false}
+                >
+                    <CgSearch
+                        size={24}
+                        color={'var(--main-text-color)'}
                     />
-                </Form.Group>
-            </Form>
+                </Button>
+                <Form>
+                    <Form.Group controlId="userSearch">
+                        <Form.Label className='visually-hidden'>Search Users</Form.Label>
+                        <Form.Control
+                            as="textarea"
+                            rows={1}
+                            placeholder='User Search'
+                            onChange={onUserSearchChange}
+                            onKeyDown={handleOnKeyDown}
+                            className='tools__search-field'
+                        />
+                    </Form.Group>
+                </Form>
+            </div>
 
+            {/* Search results */}
             <Modal
                 show={show}
                 onHide={handleCloseSeachUsersModal}
                 style={{ zIndex: '9999999' }}
-                className='userhome__body--search-results-modal'
+                className='tools__search--results-modal'
             >
-                <Modal.Header>
+                <Modal.Header className='w-100'>
                     <Modal.Title>Showing results for "{searchUsername}"</Modal.Title>
+                    <Button
+                        className='ms-auto p-0 tools__search--results-modal-btn'
+                        onClick={handleCloseSeachUsersModal}>
+                        <SlClose size={32} />
+                    </Button>
                 </Modal.Header>
                 <Modal.Body>
                     <Stack
@@ -141,11 +175,6 @@ export const UserSearch = ({ userId }) => {
                                         key={user.$id}
                                         className='userhome__body--search-results-profiles'
                                     >
-                                        {/* <Col
-                                        key={user.$id}
-                                        className='userhome__body--search-results 
-'
-                                    > */}
                                         <Link to={`../user/${user.username}`} className='w-100 d-flex align-items-center justify-content-end'>
                                             {user?.username}
                                             < img src={avatarUrl(user.avatar) || defaultAvatar}
@@ -154,7 +183,6 @@ export const UserSearch = ({ userId }) => {
                                                 className='d-flex'
                                             />
                                         </Link>
-                                        {/* </Col> */}
                                     </div>
                                 )
                                     :
@@ -176,11 +204,8 @@ export const UserSearch = ({ userId }) => {
                     }
 
                 </Modal.Body>
-                <Modal.Footer className='userhome__body--search-results-modal-footer'>
-                    <Button variant="secondary" onClick={handleCloseSeachUsersModal}>
-                        Close
-                    </Button>
-                </Modal.Footer>
+                {/* <Modal.Footer className='userhome__body--search-results-modal-footer'> 
+                </Modal.Footer> */}
             </Modal>
         </>
     )
