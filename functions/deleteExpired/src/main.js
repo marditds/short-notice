@@ -1,3 +1,4 @@
+import { Query } from 'appwrite';
 import { Client, Users, Databases } from 'node-appwrite';
 
 // This Appwrite function will be executed every time your function is triggered
@@ -19,42 +20,110 @@ export default async ({ req, res, log, error }) => {
     log('Raw payload: ' + req.payload);
 
 
-    const res = await databases.listDocuments(
+    const ntcs = await databases.listDocuments(
       process.env.VITE_DATABASE,
       process.env.VITE_NOTICES_COLLECTION
     )
 
-    const notices = res.documents;
+    const notices = ntcs.documents;
 
     log(notices);
 
     const now = new Date();
 
     for (const notice of notices) {
+
+      if (!notice.expiresAt || isNaN(new Date(notice.expiresAt))) {
+        log(`Skipping notice with invalid expiresAt: ${notice.$id}`);
+        continue;
+      }
+
       const expiresAt = new Date(notice.expiresAt);
 
       if (expiresAt <= now) {
-        // Delete notice if it is expired
+
+        const [likesRes, savesRes] = await Promise.all([
+          databases.listDocuments(
+            process.env.VITE_DATABASE,
+            process.env.VITE_LIKES_COLLECTION,
+            [Query.equal('notice_id', notice.$id)]
+          ),
+          databases.listDocuments(
+            process.env.VITE_DATABASE,
+            process.env.VITE_SAVES_COLLECTION,
+            [Query.equal('notice_id', notice.$id)]
+          )
+        ]);
+
+        const likes = likesRes.documents;
+        const saves = savesRes.documents;
+
+        await Promise.allSettled([
+          ...likes.map((like) =>
+            databases.deleteDocument(
+              process.env.VITE_DATABASE,
+              process.env.VITE_LIKES_COLLECTION,
+              like.$id
+            )
+          ),
+
+          ...saves.map((save) =>
+            databases.deleteDocument(
+              process.env.VITE_DATABASE,
+              process.env.VITE_SAVES_COLLECTION,
+              save.$id
+            )
+          )
+        ]);
+
+
+        // const lks = await databases.listDocuments(
+        //   process.env.VITE_DATABASE,
+        //   process.env.VITE_LIKES_COLLECTION,
+        //   [Query.equal('notice_id', notice.$id)]
+        // );
+        // const likes = lks.documents; 
+        // log(likes); 
+        // await Promise.allSettled(
+        //   likes.map((like) =>
+        //     databases.deleteDocument(
+        //       process.env.VITE_DATABASE,
+        //       process.env.VITE_LIKES_COLLECTION,
+        //       like.$id
+        //     )
+        //   )
+        // );
+
+        // const svs = await databases.listDocuments(
+        //   process.env.VITE_DATABASE,
+        //   process.env.VITE_SAVES_COLLECTION,
+        //   [Query.equal('notice_id', notice.$id)]
+        // );
+        // const saves = savesRes.documents;  
+        // log(saves); 
+        // await Promise.allSettled(
+        //   saves.map((save) =>
+        //     databases.deleteDocument(
+        //       process.env.VITE_DATABASE,
+        //       process.env.VITE_SAVES_COLLECTION,
+        //       save.$id
+        //     )
+        //   )
+        // );
+
         await databases.deleteDocument(
           process.env.VITE_DATABASE,
           process.env.VITE_NOTICES_COLLECTION,
           notice.$id);
-        console.log(`Deleted expired notice: ${notice.$id}`);
+        log(`Deleted expired notice: ${notice.$id}`);
+
+
       }
     }
-    // Log messages and errors to the Appwrite Console
-    // These logs won't be seen by your end users
 
   } catch (err) {
-    console.error("Error deleting expired notices:", error);
+    error("Error deleting expired notices:", err);
   }
-
-  // The req object contains the request data
-  // if (req.path === "/ping") {
-  // Use res object to respond with text(), json(), or binary()
-  // Don't forget to return a response!
-  // return res.text("Pong");
-  // }
 
   return res.json({
     motto: "Build like a team of hundreds_",
