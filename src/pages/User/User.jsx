@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, Navigate } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
 import { Tools } from '../../components/User/Tools';
 import { googleLogout } from '@react-oauth/google';
@@ -16,11 +16,10 @@ const User = () => {
         googleUserData,
         isLoading } = useUserContext();
 
-    const { removeSession } = useUserInfo(googleUserData);
+    const { userId, removeSession } = useUserInfo(googleUserData);
 
     useEffect(() => {
         console.log('googleUserData:', googleUserData);
-
     }, [googleUserData])
 
 
@@ -38,6 +37,7 @@ const User = () => {
     return (
         <Container className='userhome__body'>
             <Tools
+                userId={userId}
                 removeSession={removeSession}
                 googleLogout={googleLogout}
                 setGoogleUserData={setGoogleUserData}

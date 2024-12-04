@@ -61,12 +61,12 @@ const UserFeed = () => {
         sendReaction,
         likedNotices,
         spreadNotices,
-        setNoticesReactions,
-        getReactionsForNotice,
-        fetchReactionsForNotices
+        getReactionsForNotice
+        // fetchReactionsForNotices,
+        // setNoticesReactions
     } = useNotices(googleUserData);
 
-    const { fetchUsersData } = useUserInfo(googleUserData);
+    const { fetchUsersData, getBlockedUsersByUser, getUsersBlockingUser, getUserAccountByUserId } = useUserInfo(googleUserData);
 
     const [feedNotices, setFeedNotices] = useState([]);
 
@@ -140,9 +140,27 @@ const UserFeed = () => {
 
                 console.log('limit:', limit);
                 console.log('offset:', offset);
-                const res = await getFeedNotices(selectedTags, limit, offset);
+                const notices = await getFeedNotices(selectedTags, limit, offset);
 
-                const filteredNotices = res || [];
+                const blockedUsersByUser = await getBlockedUsersByUser(user_id);
+
+                console.log('blockedUsersByUser', blockedUsersByUser);
+
+                // Filtering out notices from accounts blocked by user
+                const noticesFromAccountsNotBlockedByUser = notices.filter((notice) =>
+                    !blockedUsersByUser.some((user) => notice.user_id === user.blocked_id)
+                );
+
+                console.log('noticesFromAccountsNotBlockedByUser', noticesFromAccountsNotBlockedByUser);
+
+                const usersBlockingUser = await getUsersBlockingUser(user_id);
+
+                console.log('usersBlockingUser', usersBlockingUser);
+
+                // Filtering out notices from accounts blocking the user 
+                const noticesFromAccountNotBlockingTheUser = noticesFromAccountsNotBlockedByUser.filter((notice) => !usersBlockingUser.some((user) => notice.user_id === user.blocker_id));
+
+                const filteredNotices = noticesFromAccountNotBlockingTheUser || [];
 
                 await fetchUsersData(filteredNotices, setFeedNotices, avatarUtil);
 
@@ -159,7 +177,6 @@ const UserFeed = () => {
                 setIsLoadingUsers(false);
                 setIsLoadingMore(false);
             }
-
         };
         fetchFeedData();
     }, [selectedTags, offset]);
@@ -176,16 +193,15 @@ const UserFeed = () => {
 
     // };
 
-    //Fetch reactions to feed notices 
+    //Fetch reactions to feed notices  
+    // useEffect(() => {
+    //     try {
+    //         fetchReactionsForNotices(feedNotices, setNoticesReactions);
+    //     } catch (error) {
+    //         console.error(error);
+    //     }
 
-    useEffect(() => {
-        try {
-            fetchReactionsForNotices(feedNotices, setNoticesReactions);
-        } catch (error) {
-            console.error(error);
-        }
-
-    }, [feedNotices])
+    // }, [feedNotices])
 
 
     const handleSpread = async (notice) => {
@@ -214,9 +230,9 @@ const UserFeed = () => {
         }
     }
 
-    const handleReact = async (currUserId, content, notice_id) => {
+    const handleReact = async (currUserId, content, notice_id, expiresAt) => {
         try {
-            await sendReaction(currUserId, content, notice_id);
+            await sendReaction(currUserId, content, notice_id, expiresAt);
             console.log('Success handleReact.');
         } catch (error) {
             console.error('Failed handleReact:', error);
@@ -256,12 +272,13 @@ const UserFeed = () => {
                 user_id={user_id}
                 likedNotices={likedNotices}
                 spreadNotices={spreadNotices}
-                reactions={noticesReactions}
+                // reactions={noticesReactions}
                 handleLike={handleLike}
                 handleSpread={handleSpread}
                 handleReport={handleReport}
                 handleReact={handleReact}
                 getReactionsForNotice={getReactionsForNotice}
+                getUserAccountByUserId={getUserAccountByUserId}
             />
 
             {/* Load More Button */}

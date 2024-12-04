@@ -14,7 +14,7 @@ import App from './App.jsx';
 import User from './pages/User/User.jsx';
 import Home from './pages/Home/Home.jsx';
 import './index.css';
-import CreateUsername from './pages/CreateUsername/CreateUsername.jsx';
+import CreateAccount from './pages/CreateAccount/CreateAccount.jsx';
 import UserSettings from './pages/User/Settings/UserSettings.jsx';
 import UserProfile from './pages/User/Home/UserProfile.jsx';
 import UserFeed from './pages/User/Feed/UserFeed.jsx';
@@ -33,7 +33,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'set-username',
-        element: <CreateUsername />,
+        element: <CreateAccount />,
         loader: async () => {
           const accessToken = localStorage.getItem('accessToken');
           if (!accessToken) {

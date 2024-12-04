@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { createNotice, getUserNotices, updateNotice, deleteNotice, deleteAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSpread, getUserSpreads, removeSpread, createReport, createLike, removeLike, getUserLikes, getAllLikedNotices as fetchAllLikedNotices, getAllSpreadNotices as fetchAllSpreadNotices, createReaction, getAllReactionsBySenderId as fetchAllReactionsBySenderId, getAllReactions as fetchAllReactions, getAllReactionsByRecipientId as fetchAllReactionsByRecipientId, getNoticeByNoticeId as fetchNoticeByNoticeId, getAllReactionsByNoticeId as fetchAllReactionsByNoticeId } from '../../lib/context/dbhandler';
+import { createNotice, getUserNotices, updateNotice, deleteNotice, deleteAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSpread, getUserSpreads, removeSpread, createReport, createLike, removeLike, getUserLikes, getAllLikedNotices as fetchAllLikedNotices, getAllSpreadNotices as fetchAllSpreadNotices, createReaction, deleteReaction, getAllReactionsBySenderId as fetchAllReactionsBySenderId, getAllReactions as fetchAllReactions, getAllReactionsByRecipientId as fetchAllReactionsByRecipientId, getNoticeByNoticeId as fetchNoticeByNoticeId, getAllReactionsByNoticeId as fetchAllReactionsByNoticeId } from '../../lib/context/dbhandler';
 import { UserId } from '../../components/User/UserId.jsx';
 
 const useNotices = (googleUserData) => {
@@ -99,7 +99,7 @@ const useNotices = (googleUserData) => {
     }, [user_id]);
 
 
-    const addNotice = async (text, duration, selectedTags) => {
+    const addNotice = async (text, duration, noticeType, selectedTags) => {
 
         if (user_id) {
 
@@ -111,6 +111,7 @@ const useNotices = (googleUserData) => {
                 text,
                 timestamp: now.toISOString(),
                 expiresAt: expiresAt.toISOString(),
+                noticeType: noticeType,
 
                 science: selectedTags['science'] || false,
                 technology: selectedTags['technology'] || false,
@@ -231,14 +232,14 @@ const useNotices = (googleUserData) => {
                 prevNotices.filter(notice => {
                     if (notice.expiresAt) {
                         const expiresAtDate = new Date(notice.expiresAt);
-                        expiresAtDate.setHours(expiresAtDate.getHours() + 7); // Adjust for the 7-hour difference
+                        expiresAtDate.setHours(expiresAtDate.getHours() + 7); // Adjusting the 7-hour difference
 
                         if (expiresAtDate <= now) {
-                            deleteNotice(notice.$id); // Call your delete function here
-                            return false; // Exclude expired notice from state
+                            deleteNotice(notice.$id);
+                            return false;
                         }
                     }
-                    return true; // Keep non-expired notices in state
+                    return true;
                 })
             );
 
@@ -247,25 +248,27 @@ const useNotices = (googleUserData) => {
             //         if (notice.expiresAt) {
             //             const expirationTime = new Date(notice.expiresAt).getTime();
 
-            //             // Ensure the notice is deleted *only* if it's fully past expiration time
+            //           
             //             if (now >= expirationTime) {
-            //                 deleteNotice(notice.$id); // Call your delete function here
-            //                 return false; // Exclude expired notice from state
+            //                 deleteNotice(notice.$id); 
+            //                 return false; 
             //             }
             //         }
-            //         return true; // Keep non-expired notices in state
+            //         return true;
             //     })
             // );
 
             // setNotices(prevNotices =>
             //     prevNotices.filter(notice => {
             //         if (notice.expiresAt && new Date(notice.expiresAt) <= now) {
-            //             deleteNotice(notice.$id); // Call your delete function here
-            //             return false; // Exclude expired notice from state
+            //             deleteNotice(notice.$id);
+            //             return false; 
             //         }
-            //         return true; // Keep non-expired notices in state
+            //         return true; 
             //     })
             // );
+
+            console.log('usrNotices - useNotices:', usrNotices);
 
             return usrNotices;
 
@@ -389,16 +392,25 @@ const useNotices = (googleUserData) => {
         }
     };
 
-    const sendReaction = async (otherUser_id, content, notice_id) => {
+    const sendReaction = async (otherUser_id, content, notice_id, expiresAt) => {
 
         const now = new Date();
 
         try {
-            const response = createReaction(user_id, otherUser_id, content, now, notice_id);
+            const response = createReaction(user_id, otherUser_id, content, now, notice_id, expiresAt);
             console.log('Success sending reaction');
             return response;
         } catch (error) {
             console.error('Failed to send reaction:', error);
+        }
+    }
+
+    const removeReaction = async (reactionId) => {
+        try {
+            await deleteReaction(reactionId);
+            console.log('Reaction removed successfully.');
+        } catch (error) {
+            console.error('Error removing reaction:', error);
         }
     }
 
@@ -437,9 +449,10 @@ const useNotices = (googleUserData) => {
         }
     }
 
-    const getReactionsForNotice = async (notice_id) => {
+    // Get reactions from DB
+    const getReactionsForNotice = async (notice_id, limit, offset) => {
         try {
-            const response = await fetchAllReactionsByNoticeId(notice_id);
+            const response = await fetchAllReactionsByNoticeId(notice_id, limit, offset);
             console.log('getAllReactionsByNoticeId', response);
             return response;
         } catch (error) {
@@ -447,29 +460,30 @@ const useNotices = (googleUserData) => {
         }
     }
 
-    // Fetch reactions for each notice when usrNtcs changes
-    const fetchReactionsForNotices = async (usrNtcs, setReactionsState) => {
-        if (usrNtcs.length > 0) {
-            const allReactions = [];
 
-            // console.log('userNotices', usrNtcs);
+    // const fetchReactionsForNotices = async (usrNtcs, setReactionsState) => {
+    //     if (usrNtcs.length > 0) {
+    //         const allReactions = [];
 
-            for (const notice of usrNtcs) {
-                const res = await fetchAllReactionsByNoticeId(notice?.$id);
+    //         // console.log('userNotices', usrNtcs);
 
-                // console.log('res', res);
+    //         for (const notice of usrNtcs) {
+    //             const res = await fetchAllReactionsByNoticeId(notice?.$id);
 
-                const noticeReactions = res.documents || [];
+    //             console.log('res', res);
 
-                if (noticeReactions) {  // Ensure this is an array
-                    allReactions.push(...noticeReactions);  // Use spread only on iterable arrays
-                }
-            }
-            // console.log('allReactions', allReactions);
+    //             const noticeReactions = res.documents || [];
 
-            setReactionsState(allReactions);  // Now setReactions will always get an  
-        }
-    };
+    //             if (noticeReactions) {
+    //                 allReactions.push(...noticeReactions);
+    //             }
+    //         }
+    //         console.log(eval(`allReactions for ${setReactionsState}`, allReactions))
+    //         // console.log(`allReactions for ${(setReactionsState)}`, allReactions);
+
+    //         setReactionsState(allReactions);
+    //     }
+    // };
 
 
 
@@ -504,8 +518,9 @@ const useNotices = (googleUserData) => {
         setLikedNotices,
         removeAllNoticesByUser,
         sendReaction,
+        removeReaction,
         getReactionsForNotice,
-        fetchReactionsForNotices,
+        // fetchReactionsForNotices,
         setNoticesReactions,
         setSpreadReactions,
         setLikedReactions

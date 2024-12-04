@@ -9,6 +9,7 @@ import { RiMegaphoneLine, RiMegaphoneFill } from 'react-icons/ri';
 import { BsHandThumbsUp, BsHandThumbsUpFill, BsExclamationTriangle } from 'react-icons/bs';
 import defaultAvatar from '../../assets/default.png';
 import { Loading } from '../Loading/Loading';
+import { Reactions } from './Reactions';
 
 
 export const Notices = ({
@@ -25,7 +26,8 @@ export const Notices = ({
     likedNotices,
     spreadNotices,
     reactions,
-    getReactionsForNotice
+    getReactionsForNotice,
+    getUserAccountByUserId
 }) => {
     const location = useLocation();
 
@@ -38,6 +40,15 @@ export const Notices = ({
     const [noticeText, setNoticeText] = useState(null);
     const [reactionText, setReactionText] = useState('');
     const [isSendingReactionLoading, setIsSendingReactionLoading] = useState(false);
+
+    const [limit] = useState(5);
+    const [offsets, setOffsets] = useState({});
+    const [hasMoreReactions, setHasMoreReactions] = useState({});
+    const [showLoadMoreBtn, setShowLoadMoreBtn] = useState(false);
+    const [isLoadingMoreReactions, setIsLoadingMoreReactions] = useState(false);
+
+    const [reactionUsernameMap, setReactionUsernameMap] = useState({});
+    const [reactionAvatarMap, setReactionAvatarMap] = useState({});
 
     const [loadingStates, setLoadingStates] = useState({});
     const [loadedReactions, setLoadedReactions] = useState({});
@@ -77,7 +88,7 @@ export const Notices = ({
     }, [notices]);
 
 
-    // Replying to a notice
+    // Reacting to a notice
     const handleReactNotice = (noticeId, noticeUsername, noticeAvatarUrl, noticeText) => {
         setReactingNoticeId(noticeId);
         setShowReactModal(true);
@@ -100,7 +111,7 @@ export const Notices = ({
                 const notice = notices.find(notice => notice.$id === reactingNoticeId);
 
                 if (notice) {
-                    const res = await handleReact(notice.user_id, reactionText, notice.$id);
+                    const res = await handleReact(notice.user_id, reactionText, notice.$id, notice.expiresAt);
                     console.log('handleReactSubmission', res);
                     setShowReactModal(false);
                     setReactionText('');
@@ -150,12 +161,115 @@ export const Notices = ({
         setReportReason(null);
     }
 
+    // Fetching and listing reactions and related user info
+    const updateReactionMaps = (users, noticeId, usernameMap, avatarMap) => {
+        const updatedUsernameMap = { ...usernameMap[noticeId] };
+        const updatedAvatarMap = { ...avatarMap[noticeId] };
+
+        users.forEach(user => {
+            if (user) {
+                updatedUsernameMap[user.$id] = user.username;
+                updatedAvatarMap[user.$id] = user.avatar;
+            }
+        });
+
+        return { updatedUsernameMap, updatedAvatarMap };
+    };
+
+    const handleLoadMoreReactions = async (noticeId) => {
+        try {
+            setIsLoadingMoreReactions(true);
+
+            const currentOffset = offsets[noticeId] || 0;
+
+            // Get reactions from DB only for one specific notice
+            const noticeReactions = await getReactionsForNotice(noticeId, limit, currentOffset);
+
+            console.log('noticeReactions', noticeReactions);
+
+            const usersIds = noticeReactions.documents.map((reaction) => reaction.sender_id);
+
+            console.log('usersIds', usersIds);
+
+            const users = await Promise.all(usersIds.map(async (userId) => await getUserAccountByUserId(userId)));
+
+            console.log('users', users);
+
+            const { updatedUsernameMap, updatedAvatarMap } = updateReactionMaps(
+                users,
+                noticeId,
+                reactionUsernameMap,
+                reactionAvatarMap
+            );
+
+            setReactionUsernameMap(prev => ({
+                ...prev,
+                [noticeId]: updatedUsernameMap
+            }));
+
+            setReactionAvatarMap(prev => ({
+                ...prev,
+                [noticeId]: updatedAvatarMap
+            }));
+
+            console.log('ReactionUsernameMap', reactionUsernameMap);
+
+            console.log('ReactionAvatarMap', reactionAvatarMap);
+
+            setLoadedReactions(prev => ({
+                ...prev,
+                [noticeId]: [
+                    ...(prev[noticeId] || []),
+                    ...(noticeReactions?.documents || [])
+                ]
+            }));
+
+            const hasMore = noticeReactions?.documents?.length === limit;
+            setHasMoreReactions(prev => ({
+                ...prev,
+                [noticeId]: hasMore
+            }));
+
+            if (noticeReactions?.documents?.length < limit) {
+                setHasMoreReactions(false);
+            }
+
+            setOffsets(prev => ({
+                ...prev,
+                [noticeId]: currentOffset + limit
+            }));
+
+
+        } catch (error) {
+            console.error('Error loading reactions:', error);
+        } finally {
+            setLoadingStates(prev => ({ ...prev, [noticeId]: false }));
+            setIsLoadingMoreReactions(false);
+        }
+    }
+
+    useEffect(() => {
+        console.log('activeNoticeId', activeNoticeId);
+        setShowLoadMoreBtn(true);
+    }, [activeNoticeId])
+
     const handleAccordionToggle = async (noticeId) => {
-        // If closing the accordion
+
         if (activeNoticeId === noticeId) {
             setActiveNoticeId(null);
-            // Clean up loaded reactions for this notice
+            setShowLoadMoreBtn(false);
+
             setLoadedReactions(prev => {
+                const newState = { ...prev };
+                delete newState[noticeId];
+                return newState;
+            });
+            setOffsets(prev => {
+                const newState = { ...prev };
+                delete newState[noticeId];
+                return newState;
+            });
+            setHasMoreReactions(prev => {
                 const newState = { ...prev };
                 delete newState[noticeId];
                 return newState;
@@ -168,27 +282,63 @@ export const Notices = ({
         // If reactions aren't loaded and not currently loading
         if (!loadedReactions[noticeId] && !loadingStates[noticeId]) {
             setLoadingStates(prev => ({ ...prev, [noticeId]: true }));
-
             try {
-                // Fetch reactions only for one specific notice
-                const noticeReactions = await getReactionsForNotice(noticeId);
+                const initialReactions = await getReactionsForNotice(noticeId, limit, 0);
+
+                console.log('initialReactions', initialReactions);
+
+                const usersIds = initialReactions.documents.map((reaction) => reaction.sender_id);
+
+                console.log('usersIds', usersIds);
+
+                const users = await Promise.all(usersIds.map(async (userId) => await getUserAccountByUserId(userId)));
+
+                console.log('users', users);
+
+                const { updatedUsernameMap, updatedAvatarMap } = updateReactionMaps(
+                    users,
+                    noticeId,
+                    reactionUsernameMap,
+                    reactionAvatarMap
+                );
+
+                setReactionUsernameMap(prev => ({
+                    ...prev,
+                    [noticeId]: updatedUsernameMap
+                }));
+
+                setReactionAvatarMap(prev => ({
+                    ...prev,
+                    [noticeId]: updatedAvatarMap
+                }));
+
+
+                console.log('ReactionUsernameMap', reactionUsernameMap);
+
+                console.log('ReactionAvatarMap', reactionAvatarMap);
+
 
                 setLoadedReactions(prev => ({
                     ...prev,
-                    [noticeId]: noticeReactions?.documents || []
+                    [noticeId]: initialReactions?.documents || []
                 }));
 
+                const hasMore = initialReactions?.documents?.length === limit;
+                setHasMoreReactions(prev => ({
+                    ...prev,
+                    [noticeId]: hasMore
+                }));
+
+                setOffsets(prev => ({
+                    ...prev,
+                    [noticeId]: limit
+                }));
             } catch (error) {
-                console.error('Error loading reactions:', error);
+                console.error('Error loading initial reactions:', error);
             } finally {
                 setLoadingStates(prev => ({ ...prev, [noticeId]: false }));
             }
 
-            // Filter reactions for this specific notice
-            const noticeReactions = reactions.filter(reaction => reaction.notice_id === noticeId);
-
-            // setLoadedReactions(prev => ({ ...prev, [noticeId]: noticeReactions }));
-            // setLoadingStates(prev => ({ ...prev, [noticeId]: false }));
         }
     };
 
@@ -343,186 +493,25 @@ export const Notices = ({
                                 </Col>
                             </Row>
                         </Accordion.Header>
-                        <Accordion.Body className='d-flex justify-content-around w-100'>
-                            <Row className='d-grid gap-3'>
-
-                                {loadingStates[notice.$id] ? (
-                                    <Col className="text-center py-3">
-                                        <Loading size={24} />
-                                        <Loading size={24} />
-                                        <Loading size={24} />
-                                    </Col>
-                                ) : loadedReactions[notice.$id]?.length > 0 ? (
-                                    loadedReactions[notice.$id].map((reaction) => (
-                                        <Col key={reaction.$id}>
-                                            {reaction.content}
-                                        </Col>
-                                    ))
-                                ) : (
-                                    <Col className="text-center text-muted py-3">
-                                        No reactions for this notice
-                                    </Col>
-                                )}
-
-                                {/* {
-                                    reactions?.map((reaction) => {
-                                        return (reaction.notice_id === notice.$id &&
-                                            <Col key={reaction.$id}>
-                                                {reaction.content}
-                                            </Col>)
-                                    }
-                                    )
-                                } */}
-                            </Row>
+                        <Accordion.Body className='d-flex justify-content-center notice__reaction'>
+                            <Reactions
+                                notice={notice}
+                                defaultAvatar={defaultAvatar}
+                                isLoadingMoreReactions={isLoadingMoreReactions}
+                                loadedReactions={loadedReactions}
+                                loadingStates={loadingStates}
+                                reactionAvatarMap={reactionAvatarMap}
+                                reactionUsernameMap={reactionUsernameMap}
+                                showLoadMoreBtn={showLoadMoreBtn}
+                                handleLoadMoreReactions={handleLoadMoreReactions}
+                            />
                         </Accordion.Body>
                     </Accordion.Item>
                 ))
                 }
             </Accordion>
 
-
-
-
-            {/* {notices.map((notice, idx) => (
-                <div key={idx}>
-                    <Row className='mt-3'>
-                        <Col className='col-md-9 d-flex justify-content-between flex-column'
-                        >
-                            <p className='mb-0' style={{ marginLeft: '12px' }}>{notice.text}</p>
-
-                            <small className='me-auto'>
-                                <span
-                                    style={{ color: 'gray', marginLeft: '12px' }}
-                                >
-                                    Expires In:
-                                </span>  {countdowns[idx] || calculateCountdown(notice.expiresAt)}
-                            </small>
-                        </Col>
-                        <Col>
-
-                            {location.pathname === '/user/profile' && eventKey === 'my-notices' ?
-
-                                <div
-                                    className='d-flex flex-column justify-content-end h-100'>
-                                    <span className='d-flex ms-auto mt-auto'>
-                                        <Button
-                                            className='ms-auto notice__edit-btn'
-                                            onClick={() => handleEditNotice(notice.$id, notice.text)}
-                                        >
-                                            <AiFillEdit size={20} />
-                                        </Button>
-                                        <Button
-                                            className='ms-2 notice__delete-btn'
-                                            onClick={() => handleDeleteNotice(notice.$id)}
-                                        >
-                                            <CgTrash size={20} />
-
-                                        </Button>
-                                    </span>
-                                    <small className='text-end  notice__create-date'
-                                        style={{ marginRight: '12px' }}>
-                                        {formatDateToLocal(notice.timestamp)}
-                                    </small>
-                                </div>
-                                :
-                                <div className='d-flex flex-column justify-content-end h-100'>
-
-                                    {
-                                        location.pathname !== `/user/${notice.username}` && eventKey === 'notices'
-                                            ?
-                                            null
-                                            :
-                                            <div className='d-flex justify-content-end align-items-center mt-auto'>
-
-                                                <p
-                                                    className='w-100 my-0 text-end notice__username'
-                                                >
-                                                    <Link to={`../${notice.username}`}
-                                                        className=' text-decoration-none'>
-                                                        <strong>{notice.username}</strong>
-                                                    </Link>
-                                                </p>
-
-                                                <Link to={`../${notice.username}`}>
-                                                    <img
-                                                        src={notice.avatarUrl || defaultAvatar}
-                                                        alt="Profile"
-                                                        style={{ borderRadius: '50%', width: 50, height: 50, marginRight: '12px' }}
-                                                        className='d-flex ms-auto'
-                                                    />
-                                                </Link>
-                                            </div>
-                                    } */}
-            {/* </Link> */}
-            {/* <div className='d-grid'>
-                                        <div
-                                            className='d-flex justify-content-end'
-                                        >
-                                            <Button
-                                                className='notice__reaction-btn'
-                                                disabled={user_id === notice.user_id}
-                                                onClick={() => handleLike(notice)}
-                                            >
-                                                {likedNotices && likedNotices[notice.$id] ? (
-                                                    <BsHandThumbsUpFill
-                                                        className='notice__reaction-btn-fill'
-                                                        size={19}
-                                                    />
-                                                ) : (
-                                                    <BsHandThumbsUp size={19} />
-                                                )}
-                                            </Button>
-                                            <Button
-                                                onClick={() => handleSpread(notice)}
-                                                className='notice__reaction-btn'
-                                                disabled={user_id === notice.user_id}
-                                            >
-                                                {spreadNotices && spreadNotices[notice.$id] ? (
-                                                    <RiMegaphoneFill
-                                                        className='notice__reaction-btn-fill'
-                                                        size={19}
-                                                    />
-                                                ) : (
-                                                    <RiMegaphoneLine size={19} />
-                                                )}
-                                            </Button>
-                                            <Button
-                                                onClick={() => handleReactNotice(notice.$id, notice.username, notice.avatarUrl, notice.text)}
-                                                // onClick={() => setShowReactModal(true)}
-                                                className='notice__reaction-btn'
-                                                disabled={user_id === notice.user_id}
-                                            >
-                                                <BsReply
-                                                    size={23}
-                                                />
-                                            </Button>
-                                            <Button
-                                                onClick={() => handleReportNotice(notice.$id)}
-                                                className='notice__reaction-btn'
-                                                disabled={user_id === notice.user_id}
-                                            >
-                                                <BsExclamationTriangle
-                                                    size={19}
-                                                />
-                                            </Button>
-                                        </div>
-
-                                        <small style={{ marginRight: '12px' }} className='text-end mt-auto notice__create-date'>
-                                            {formatDateToLocal(notice.timestamp)}
-                                        </small>
-                                    </div>
-                                </div>
-                            }
-                        </Col>
-
-                    </Row>
-                    <hr />
-
-                </div>
-            ))} */}
-
-            <Modal
-                show={showReactModal}
+            <Modal show={showReactModal}
                 onHide={handleCloseReactModal}
                 className='notice__react--modal'
             >

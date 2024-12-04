@@ -1,13 +1,13 @@
-import { useEffect, useCallback } from 'react';
+import { useEffect } from 'react';
 import { useNavigate, Outlet } from 'react-router-dom';
 import Home from './pages/Home/Home';
-import CreateUsername from './pages/CreateUsername/CreateUsername.jsx';
+import CreateAccount from './pages/CreateAccount/CreateAccount.jsx';
 import { jwtDecode } from "jwt-decode";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
-import { createUser, getUserByEmail, account } from './lib/context/dbhandler.js';
+import { createUser, getUserByEmail } from './lib/context/dbhandler.js';
 import { useUserContext } from './lib/context/UserContext';
-import { ID, OAuthProvider } from 'appwrite';
+import { ID } from 'appwrite';
 import useUserInfo from './lib/hooks/useUserInfo.js';
 
 function App() {
@@ -17,7 +17,9 @@ function App() {
     isLoggedIn, setIsLoggedIn,
     username, setUsername,
     registeredUsername, setRegisteredUsername,
-    hasUsername, setHasUsername,
+    accountType, setAccountType,
+    hasAccountType, setHasAccountType,
+    hasUsername, setHasUsername
   } = useUserContext();
 
   const navigate = useNavigate();
@@ -27,7 +29,7 @@ function App() {
     createSession,
     getSessionDetails,
     checkingIdInAuth,
-    checkingEmailInAuth
+    checkingEmailInAuth,
   } = useUserInfo(googleUserData);
 
   useEffect(() => {
@@ -37,7 +39,9 @@ function App() {
         const decoded = jwtDecode(storedToken);
         setGoogleUserData(decoded);
         setIsLoggedIn(preVal => true);
+        // setHasAccountType(preVal => true);
         console.log('Logged in successfully - 1st useEffect');
+
 
         await checkUsernameInDatabase(decoded.email);
 
@@ -65,6 +69,7 @@ function App() {
 
       if (user && user.username) {
         setUsername(user.username);
+        setAccountType(user.accountType);
         setRegisteredUsername(user.username);
         localStorage.setItem('username', user.username);
         setHasUsername(true);
@@ -110,18 +115,6 @@ function App() {
 
     setIsLoggedIn(preVal => true);
 
-    // if (decoded) {
-    //   console.log('deciding on session');
-    //   const sessionDetails = await getSessionDetails();
-    //   console.log('stiil deciding on session');
-    //   if (!sessionDetails) {
-    //     console.log('session not found so starting a new session');
-    //     await startSession();
-    //   } else {
-    //     console.log('Session already in progress for ', googleUserData.email);
-    //   }
-    // }
-
     const accessToken = credentialResponse?.credential;
     console.log('Access Token:', accessToken);
 
@@ -134,12 +127,25 @@ function App() {
       console.log('Creating a session.');
       await createSession(decoded.email);
     } else {
-      console.log('Session already in progress.');
+      console.log('Session already in progress. LOL');
     }
 
     localStorage.setItem('accessToken', accessToken);
 
     checkUsernameInDatabase(decoded.email);
+
+    // if (decoded) {
+    //   console.log('deciding on session');
+    //   const sessionDetails = await getSessionDetails();
+    //   console.log('stiil deciding on session');
+    //   if (!sessionDetails) {
+    //     console.log('session not found so starting a new session');
+    //     await startSession();
+    //   } else {
+    //     console.log('Session already in progress for ', googleUserData.email);
+    //   }
+    // }
+
   };
 
 
@@ -187,11 +193,13 @@ function App() {
             id: usrID,
             email: googleUserData.email,
             given_name: googleUserData.given_name,
-            username: username.toLowerCase()
+            username: username.toLowerCase(),
+            accountType: accountType
           });
 
           localStorage.setItem('username', username.toLowerCase());
 
+          setHasAccountType(true);
           setHasUsername(true);
 
           setTimeout(() => {
@@ -212,12 +220,16 @@ function App() {
           id: usrData.$id,
           email: googleUserData.email,
           given_name: googleUserData.given_name,
-          username: username.toLowerCase()
+          username: username.toLowerCase(),
+          accountType: accountType
+
         });
 
         localStorage.setItem('username', username.toLowerCase());
 
+        setHasAccountType(true);
         setHasUsername(true);
+
       }
 
     }
@@ -238,11 +250,13 @@ function App() {
               isLoggedIn, setIsLoggedIn,
               username, setUsername,
               registeredUsername, setRegisteredUsername,
-              hasUsername, setHasUsername
+              hasUsername, setHasUsername,
+              accountType, setAccountType,
+              hasAccountType, setHasAccountType
             }}
           />
         ) : (
-          <CreateUsername
+          <CreateAccount
             username={username}
             setUsername={setUsername}
             setUser={setUser}

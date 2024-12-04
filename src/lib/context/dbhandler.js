@@ -134,6 +134,20 @@ export const getUserById = async (userId) => {
     }
 };
 
+export const getUserByIdQuery = async (userId) => {
+    try {
+        const response = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_USERS_COLLECTION,
+            [Query.equal('$id', userId)]
+        );
+        return response;
+    } catch (error) {
+        // console.error('Error fetching user by ID:', error);
+        throw error;
+    }
+};
+
 export const getUserByEmail = async (email) => {
     try {
         const userList = await databases.listDocuments(
@@ -154,6 +168,8 @@ export const getUserByEmail = async (email) => {
 };
 
 export const getUserByUsername = async (username) => {
+    console.log('otherUsername', username);
+
     try {
         const userList = await databases.listDocuments(
             import.meta.env.VITE_DATABASE,
@@ -209,7 +225,7 @@ const checkUsernameExists = async (username) => {
     }
 };
 
-export const createUser = async ({ id, email, given_name, username }) => {
+export const createUser = async ({ id, email, given_name, username, accountType }) => {
     try {
 
         const existingUser = await databases.listDocuments(
@@ -241,7 +257,8 @@ export const createUser = async ({ id, email, given_name, username }) => {
             {
                 email,
                 given_name,
-                username: username.toLowerCase()
+                username: username.toLowerCase(),
+                accountType
             },
 
         );
@@ -275,7 +292,7 @@ export const registerAuthUser = async (id, email, username) => {
 
 export const updateUser = async ({ userId, username }) => {
     try {
-        await databases.updateDocument(
+        const res = await databases.updateDocument(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_USERS_COLLECTION,
             userId,
@@ -288,6 +305,7 @@ export const updateUser = async ({ userId, username }) => {
             // ]
         );
         console.log('Username successfully updated.');
+        return res;
     } catch (error) {
         console.error('Error updating the username:', error);
 
@@ -485,7 +503,7 @@ export const getSessionDetails = async () => {
 //     }
 // }
 
-export const createNotice = async ({ user_id, text, timestamp, expiresAt, science, technology, engineering, math, literature, history, philosophy, music, medicine, economics, law, polSci, sports
+export const createNotice = async ({ user_id, text, timestamp, expiresAt, noticeType, science, technology, engineering, math, literature, history, philosophy, music, medicine, economics, law, polSci, sports
 }) => {
 
     try {
@@ -499,6 +517,7 @@ export const createNotice = async ({ user_id, text, timestamp, expiresAt, scienc
                 text,
                 timestamp,
                 expiresAt,
+                noticeType,
                 science: science || false,
                 technology: technology || false,
                 engineering: engineering || false,
@@ -611,7 +630,7 @@ export const getFilteredNotices = async (selectedTags, limit, offset) => {
                 import.meta.env.VITE_NOTICES_COLLECTION,
                 [
                     queryList[0],
-                    // Query.equal('user_id', user_id),
+                    Query.notEqual('noticeType', ['organization']),
                     Query.limit(limit),
                     Query.offset(offset),
                     Query.orderDesc('timestamp'),
@@ -622,6 +641,7 @@ export const getFilteredNotices = async (selectedTags, limit, offset) => {
                 import.meta.env.VITE_DATABASE,
                 import.meta.env.VITE_NOTICES_COLLECTION,
                 [
+                    Query.notEqual('noticeType', ['organization']),
                     Query.or(queryList),
                     Query.limit(limit),
                     Query.offset(offset),
@@ -1076,7 +1096,7 @@ export const getOtherUserFollowingsById = async (user_id) => {
     }
 }
 
-export const createReaction = async (sender_id, recipient_id, content, timestamp, notice_id) => {
+export const createReaction = async (sender_id, recipient_id, content, timestamp, notice_id, expiresAt) => {
     try {
         const response = await databases.createDocument(
             import.meta.env.VITE_DATABASE,
@@ -1087,7 +1107,8 @@ export const createReaction = async (sender_id, recipient_id, content, timestamp
                 recipient_id,
                 content,
                 timestamp,
-                notice_id
+                notice_id,
+                expiresAt
             },
             // [
             //     Permission.write(Role.users()),
@@ -1100,6 +1121,28 @@ export const createReaction = async (sender_id, recipient_id, content, timestamp
         console.error('Error creating reaction:', error);
     }
 }
+
+export const deleteReaction = async (reactionId) => {
+    console.log('Attempting to delete reaction with ID:', reactionId);
+    try {
+        const response = await databases.deleteDocument(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_REACTIONS_COLLECTION,
+            reactionId,
+            [
+                Permission.delete(Role.users()),
+                Permission.delete(Role.guests())
+            ]
+        );
+        console.log('Reaction deleted successfully:', response);
+    } catch (error) {
+        if (error.code === 404) {
+            console.log('Ha, 404. Kez inch. 🤪');
+        } else {
+            console.error('Error deleting reaction:', error);
+        }
+    }
+};
 
 export const getAllReactions = async () => {
     try {
@@ -1146,19 +1189,185 @@ export const getAllReactionsByRecipientId = async (recipient_id) => {
     }
 }
 
-export const getAllReactionsByNoticeId = async (notice_id) => {
+export const getAllReactionsByNoticeId = async (notice_id, limit, offset) => {
     try {
         const response = await databases.listDocuments(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_REACTIONS_COLLECTION,
             [
                 Query.equal('notice_id', notice_id),
+                Query.limit(limit),
+                Query.offset(offset),
+                Query.orderDesc('$createdAt')
             ]
         )
         // console.log('Successfully got reactions by notice_id doc.:', response);
         return response;
     } catch (error) {
         console.error('Error getting reactions by notice_id:', error);
+    }
+}
+
+export const createPassocde = async (user_id, passcode, accountType) => {
+    try {
+        console.log('usr id', user_id);
+        console.log('passcode', passcode);
+        console.log('accountType', accountType);
+        const response = await databases.createDocument(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_PASSCODES_COLLECTION,
+            ID.unique(),
+            {
+                user_id,
+                passcode,
+                accountType
+            }
+        )
+        console.log('Passcode created successfuly:', response);
+        return response;
+    } catch (error) {
+        console.error('Error creating passcode:', error);
+    }
+}
+
+export const updatePassocde = async (user_id, passcode) => {
+    try {
+        console.log('usr id', user_id);
+        console.log('passcode', passcode);
+
+        const listResponse = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_PASSCODES_COLLECTION,
+            [Query.equal('user_id', user_id)]
+        );
+
+        const documentId = listResponse.documents[0].$id;
+
+        const updateResponse = await databases.updateDocument(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_PASSCODES_COLLECTION,
+            documentId,
+            { passcode: passcode }
+        );
+
+        console.log('Passcode updated successfully:', updateResponse);
+
+        return updateResponse;
+
+    } catch (error) {
+        console.error('Error updating passcode:', error);
+    }
+}
+
+export const getPassocdeByBusincessId = async (user_id) => {
+    try {
+        const response = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_PASSCODES_COLLECTION,
+            [
+                Query.equal('user_id', user_id)
+            ]
+        )
+        console.log('Passcode gotten successfuly:', response);
+        return response;
+    } catch (error) {
+        console.error('Error getting passcode:', error);
+    }
+}
+
+export const createBlock = async (user_id, currUser_id) => {
+    try {
+        const res = await databases.createDocument(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_BLOCKS_COLLECTION,
+            ID.unique(),
+            {
+                blocker_id: user_id,
+                blocked_id: currUser_id
+            }
+        )
+        console.log('User blocked successfully: ', res);
+        return res;
+    } catch (error) {
+        console.error('Error blocking user:', error);
+    }
+}
+
+export const getBlockedUsersByUser = async (blocker_id) => {
+    try {
+        const res = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_BLOCKS_COLLECTION,
+            [
+                Query.equal('blocker_id', blocker_id)
+            ]
+        )
+        console.log('Blocked users:', res);
+        return res.documents;
+    } catch (error) {
+        console.error('Error getting blocked users:', error);
+    }
+}
+
+export const getBlockedUsersByUserByBatch = async (blocker_id, limit, offset) => {
+    try {
+        const res = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_BLOCKS_COLLECTION,
+            [
+                Query.equal('blocker_id', blocker_id),
+                Query.limit(limit),
+                Query.offset(offset)
+            ]
+        )
+        console.log('Blocked users:', res);
+        return res.documents;
+    } catch (error) {
+        console.error('Error getting blocked users:', error);
+    }
+}
+
+export const getUsersBlockingUser = async (blocked_id) => {
+    try {
+        const res = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_BLOCKS_COLLECTION,
+            [
+                Query.equal('blocked_id', blocked_id)
+            ]
+        )
+        console.log('These accounts blocked you:', res);
+        return res.documents;
+    } catch (error) {
+        console.error('Error getting users:', error);
+    }
+}
+
+export const removeBlockUsingBlockedId = async (blocked_id) => {
+    try {
+        console.log('To be removed:', blocked_id);
+
+        const user = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_BLOCKS_COLLECTION,
+            [
+                Query.equal('blocked_id', blocked_id)
+            ]
+        );
+
+        console.log('Removing block for - 1:', user);
+        console.log('Removing block for - 2:', user.documents[0].$id);
+
+        await databases.deleteDocument(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_BLOCKS_COLLECTION,
+            user.documents[0].$id
+        )
+
+        console.log('Block removed succesfully');
+
+    } catch (error) {
+        console.error('Error removing block:', error);
     }
 }
 

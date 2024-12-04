@@ -8,6 +8,7 @@ import useUserInfo from '../../../lib/hooks/useUserInfo.js';
 import { getAvatarUrl as avatarUtil } from '../../../lib/utils/avatarUtils.js';
 import useUserAvatar from '../../../lib/hooks/useUserAvatar.js';
 import useNotices from '../../../lib/hooks/useNotices.js';
+import { Passcode } from '../../../components/User/Passcode.jsx';
 import { Loading } from '../../../components/Loading/Loading.jsx';
 
 
@@ -30,8 +31,8 @@ const OtherUserProfile = () => {
         spreadNotices,
         isLoading: noticesLoading,
         noticesReactions,
-        spreadReactions,
-        likedReactions,
+        // spreadReactions,
+        // likedReactions,
         likeNotice,
         spreadNotice,
         reportNotice,
@@ -39,27 +40,39 @@ const OtherUserProfile = () => {
         getAllSpreadNotices,
         fetchUserNotices,
         sendReaction,
-        getReactionsForNotice,
-        fetchReactionsForNotices,
-        setNoticesReactions,
-        setSpreadReactions,
-        setLikedReactions
+        getReactionsForNotice
+        // fetchReactionsForNotices,
+        // setNoticesReactions,
+        // setSpreadReactions,
+        // setLikedReactions
     } = useNotices(googleUserData);
 
     const {
-        isFollowingLoading,
+        isFollowingUserLoading,
+        isInitialFollowCheckLoading,
         isFollowing,
         followersCount,
         followingCount,
         followersAccounts,
         followingAccounts,
+        makeBlock,
+        getUserByUsername,
+        getUserAccountByUserId,
         fetchUsersData,
-        getUsersData,
+        getBlockedUsersByUser,
         followUser,
         setIsFollowing,
         fetchAccountsFollowingTheUser,
-        fetchAccountsFollowedByUser
+        fetchAccountsFollowedByUser,
+        getPassocdeByBusincessId
     } = useUserInfo(googleUserData);
+
+    const [accountType, setAccountType] = useState(null);
+    const [accountTypeCheck, setAccountTypeCheck] = useState(false);
+    const [passcode, setPasscode] = useState('');
+
+    const [isBlocked, setIsBlocked] = useState(false);
+    const [isOtherUserBlocked, setIsOtherUserBlocked] = useState(false);
 
     const [notices, setNotices] = useState([]);
     const [spreadNoticesData, setSpreadNoticesData] = useState([]);
@@ -85,21 +98,68 @@ const OtherUserProfile = () => {
     const [hasMoreLikes, setHasMoreLikes] = useState(true);
     const [isLoadingMoreLikes, setIsLoadingMoreLikes] = useState(false);
 
+    // Check for username vs. otherUsername
+    useEffect(() => {
+        if (otherUsername === username) {
+            navigate('/user/profile');
+        }
+    }, [otherUsername, username, navigate]);
+
     // Get Other User
     useEffect(() => {
         const getCurrUser = async () => {
 
             try {
-                const allUsers = await getUsersData();
+                // const allUsers = await getUsersData();
 
                 // console.log('allUsers:', allUsers.documents);
 
-                const currUser = allUsers.documents.find((user) => user.username === otherUsername);
+                // const currUser = allUsers.documents.find((user) => user.username === otherUsername);
 
-                // console.log('currUser:', currUser);
-                if (currUser) {
+                console.log('otherUsername', otherUsername);
+
+                const otherUser = await getUserByUsername(otherUsername);
+
+                console.log('otherUser:', otherUser);
+
+                const user = await getUserByUsername(username);
+
+                console.log('user:', user);
+
+                const blckdByOtherUser = await getBlockedUsersByUser(otherUser.$id);
+
+                console.log(`blckdLst by ${otherUser.username}:`, blckdByOtherUser);
+
+                const blckdByUser = await getBlockedUsersByUser(user.$id);
+
+                console.log(`blckdLst by ${user.username}:`, blckdByUser);
+
+                // Checking if the other user has blocked user 
+                if (blckdByOtherUser.length !== 0) {
+                    const blockdByOtherUser = blckdByOtherUser.filter((blocked) => blocked.blocked_id === user.$id);
+
+                    if (blockdByOtherUser.length !== 0 || null) {
+                        console.log('blockedId', blockdByOtherUser);
+                        setIsBlocked(true);
+                    }
+                }
+
+                // Checking if user has blocked the other user 
+                if (blckdByUser.length !== 0) {
+                    const blockdByUser = blckdByUser.filter((blocked) => blocked.blocked_id === otherUser.$id);
+
+                    if (blockdByUser.length !== 0 || null) {
+                        console.log('blockerId', blockdByUser);
+                        setIsOtherUserBlocked(true);
+                    }
+                }
+
+
+                if (otherUser) {
                     // Only update if different to prevent unnecessary re-renders
-                    setCurrUserId((prevId) => (prevId !== currUser.$id ? currUser.$id : prevId));
+                    setCurrUserId((prevId) => (prevId !== otherUser.$id ? otherUser.$id : prevId));
+
+                    setAccountType(otherUser.accountType)
                 } else {
                     console.error(`User with username "${otherUsername}" not found.`);
                 }
@@ -109,7 +169,11 @@ const OtherUserProfile = () => {
             }
         }
         getCurrUser();
-    }, [otherUsername, getUsersData])
+    }, [username, otherUsername])
+
+    useEffect(() => {
+        console.log('acountType:', accountType);
+    }, [accountType])
 
     // Fetch notices for other user
     useEffect(() => {
@@ -117,6 +181,8 @@ const OtherUserProfile = () => {
             setIsLoadingMore(true);
             try {
                 const usrNtcs = await fetchUserNotices(currUserId, setNotices, limit, offset);
+
+                console.log('usrNtcs', usrNtcs);
 
                 if (usrNtcs?.length < limit) {
                     setHasMoreNotices(false);
@@ -129,8 +195,21 @@ const OtherUserProfile = () => {
                 setIsLoadingMore(false);
             }
         };
-        fetchNotices();
+        // if (isBlocked === false) {
+        //     fetchNotices();
+        // } else {
+        //     console.log('This user blocked you.');
+        // }
+        callFunctionIfNotBlocked(fetchNotices);
     }, [currUserId, offset])
+
+    const callFunctionIfNotBlocked = (functionName) => {
+        if (isBlocked === false) {
+            functionName();
+        } else {
+            console.log('This user blocked you.');
+        }
+    }
 
     // Fetch spreads and users' data for spreads tab 
     useEffect(() => {
@@ -138,6 +217,9 @@ const OtherUserProfile = () => {
             setIsLoadingMoreSpreads(true);
             try {
                 const allSpreadNotices = await getAllSpreadNotices(currUserId, limitSpreads, offsetSpreads);
+
+                console.log('allSpreadNotices', allSpreadNotices);
+
 
                 if (allSpreadNotices?.length < limitSpreads) {
                     setHasMoreSpreads(false);
@@ -153,7 +235,12 @@ const OtherUserProfile = () => {
             }
 
         };
-        fetchSpreadNotices();
+        // if (isBlocked === false) {
+        //     fetchSpreadNotices();
+        // } else {
+        //     console.log('This user blocked you.');
+        // }
+        callFunctionIfNotBlocked(fetchSpreadNotices);
     }, [currUserId, offsetSpreads])
 
     // Fetch likes and users' data for likes tab  
@@ -176,34 +263,57 @@ const OtherUserProfile = () => {
                 setIsLoadingMoreLikes(false);
             }
         };
-        fetchLikedNotices();
+        // if (isBlocked === false) {
+        //     fetchLikedNotices();
+        // } else {
+        //     console.log('This user blocked you.');
+        // }
+        callFunctionIfNotBlocked(fetchLikedNotices);
     }, [currUserId, offsetLikes])
 
     // Reactions For Notices tab
-    useEffect(() => {
-        fetchReactionsForNotices(notices, setNoticesReactions);
-    }, [notices]);
-
+    // useEffect(() => {
+    //     fetchReactionsForNotices(notices, setNoticesReactions);
+    // }, [notices]);
     // Reactions For Spreads tab
-    useEffect(() => {
-        fetchReactionsForNotices(spreadNoticesData, setSpreadReactions);
-    }, [spreadNoticesData]);
-
+    // useEffect(() => {
+    //     fetchReactionsForNotices(spreadNoticesData, setSpreadReactions);
+    // }, [spreadNoticesData]);
     // Reactions For Likes tab
-    useEffect(() => {
-        fetchReactionsForNotices(likedNoticesData, setLikedReactions);
-    }, [likedNoticesData]);
+    // useEffect(() => {
+    //     fetchReactionsForNotices(likedNoticesData, setLikedReactions);
+    // }, [likedNoticesData]);
 
     // Fetch accounts following the other user
     useEffect(() => {
-        if (currUserId && user_id) {
-            fetchAccountsFollowingTheUser(currUserId, user_id);
+        const fetchFollowingTheUser = async () => {
+            try {
+                if (currUserId && user_id && (isBlocked === false)) {
+                    fetchAccountsFollowingTheUser(currUserId, user_id);
+                } else {
+                    console.log('This user blocked you. - follow(ing/er)');
+                }
+            } catch (error) {
+                console.error('Failed fetchFollowingTheUser:', error);
+            }
         }
+        fetchFollowingTheUser();
     }, [currUserId, user_id])
 
     // Fetch accounts followed by other user
     useEffect(() => {
-        fetchAccountsFollowedByUser(currUserId);
+        const fetchFollowedByUser = async () => {
+            try {
+                if (currUserId && (isBlocked === false)) {
+                    fetchAccountsFollowedByUser(currUserId);
+                } else {
+                    console.log('This user blocked you. - follow(ing/er)');
+                }
+            } catch (error) {
+                console.error('Failed fetchFollowedByUser:', error);
+            }
+        }
+        fetchFollowedByUser();
     }, [currUserId])
 
     const handleLike = async (notice) => {
@@ -231,9 +341,9 @@ const OtherUserProfile = () => {
         }
     }
 
-    const handleReact = async (currUserId, content, notice_id) => {
+    const handleReact = async (currUserId, content, notice_id, expiresAt) => {
         try {
-            await sendReaction(currUserId, content, notice_id);
+            await sendReaction(currUserId, content, notice_id, expiresAt);
             console.log('Success handleReact.');
         } catch (error) {
             console.error('Failed handleReact:', error);
@@ -249,152 +359,210 @@ const OtherUserProfile = () => {
         }
     }
 
+    const handleBlock = async (currUserId) => {
+        try {
+            await makeBlock(currUserId);
+            navigate('/user/feed');
+        } catch (error) {
+            console.error('Failed to block user:', error);
+        }
+    }
+
     const timerSpacing = 'mx-2';
     const timerDisplay = 'd-flex';
     const classname = `${timerDisplay} ${timerSpacing}`;
 
-    useEffect(() => {
-        if (otherUsername === username) {
-            navigate('/user/profile');
+
+
+    // useEffect(() => {
+    //     const fetchUserPasscode = async () => {
+    //         const psscd = await getPassocdeByBusincessId(currUserId);
+    //         console.log('psscd', psscd[0].passcode);
+
+    //         if (psscd[0].passcode === passcode) {
+    //             setAccountTypeCheck(true);
+    //         }
+
+    //     }
+    //     fetchUserPasscode();
+    // }, [currUserId])
+
+    const checkPasscode = async () => {
+        try {
+            console.log('accountTypeCheck', accountTypeCheck);
+
+            const psscd = await getPassocdeByBusincessId(currUserId);
+
+            console.log('psscd', psscd[0].passcode);
+            localStorage.setItem('passcode', passcode);
+
+            console.log('Stored passcode in localStorage:', localStorage.getItem('passcode'));
+
+            if (psscd[0].passcode === passcode) {
+                setAccountTypeCheck(true);
+            }
+            console.log('accountTypeCheck', accountTypeCheck);
+
+        } catch (error) {
+            console.error('Error checking passcode:', error);
         }
-    }, [otherUsername, username, navigate]);
+    }
 
 
     if (noticesLoading) {
         return <div><Loading />Loading {otherUsername}'s profile</div>;
     }
 
+    if (accountType === 'organization' && accountTypeCheck === false) {
+        return <Passcode
+            passcode={passcode}
+            setPasscode={setPasscode}
+            checkPasscode={checkPasscode}
+        />
+    }
+
     return (
         <>
-
-            <Profile
-                username={otherUsername}
-                avatarUrl={avatarUrl}
-                currUserId={currUserId}
-                followingAccounts={followingAccounts}
-                followersAccounts={followersAccounts}
-                followersCount={followersCount}
-                followingCount={followingCount}
-                isFollowing={isFollowing}
-                isFollowingLoading={isFollowingLoading}
-                handleFollow={handleFollow}
-            />
-
-
-            <Tabs
-                defaultActiveKey="notices"
-                id="notices-tabs"
-                justify
-                className='user-profile__notice-tab 
+            <>
+                <Profile
+                    username={otherUsername}
+                    avatarUrl={avatarUrl}
+                    currUserId={currUserId}
+                    isBlocked={isBlocked}
+                    isOtherUserBlocked={isOtherUserBlocked}
+                    followingAccounts={followingAccounts}
+                    followersAccounts={followersAccounts}
+                    followersCount={followersCount}
+                    followingCount={followingCount}
+                    isFollowing={isFollowing}
+                    isFollowingUserLoading={isFollowingUserLoading}
+                    isInitialFollowCheckLoading={isInitialFollowCheckLoading}
+                    handleFollow={handleFollow}
+                    handleBlock={handleBlock}
+                />
+                <>
+                    {!isBlocked ?
+                        <>
+                            <Tabs
+                                defaultActiveKey="notices"
+                                id="notices-tabs"
+                                justify
+                                className='user-profile__notice-tab 
                 fixed-bottom
                 '
-            >
-                {/* NOTICES TAB */}
-                <Tab
-                    eventKey='notices'
-                    title="Notices"
-                >
-                    {notices.length !== 0 ?
-                        <>
-                            <Notices
-                                notices={notices}
-                                likedNotices={likedNotices}
-                                spreadNotices={spreadNotices}
-                                reactions={noticesReactions}
-                                handleLike={handleLike}
-                                handleSpread={handleSpread}
-                                handleReport={handleReport}
-                                handleReact={handleReact}
-                                getReactionsForNotice={getReactionsForNotice}
-                                eventKey='notices'
-                            />
-                            <div className="d-flex justify-content-center mt-4">
-                                {hasMoreNotices ?
-                                    <Button
-                                        onClick={() => setOffset(offset + limit)}
-                                        disabled={isLoadingMore || !hasMoreNotices}
-                                    >
-                                        {isLoadingMore ?
-                                            <><Loading size={24} /> Loading...</>
-                                            : 'Load More'}
-                                    </Button>
-                                    : 'No more notices'}
-                            </div>
-                        </>
-                        : 'No notices yet'}
-                </Tab>
+                            >
+                                {/* NOTICES TAB */}
+                                <Tab
+                                    eventKey='notices'
+                                    title="Notices"
+                                >
+                                    {notices.length !== 0 ?
+                                        <>
+                                            <Notices
+                                                notices={notices}
+                                                likedNotices={likedNotices}
+                                                spreadNotices={spreadNotices}
+                                                reactions={noticesReactions}
+                                                handleLike={handleLike}
+                                                handleSpread={handleSpread}
+                                                handleReport={handleReport}
+                                                handleReact={handleReact}
+                                                getReactionsForNotice={getReactionsForNotice}
+                                                getUserAccountByUserId={getUserAccountByUserId}
+                                                eventKey='notices'
+                                            />
+                                            <div className="d-flex justify-content-center mt-4">
+                                                {hasMoreNotices ?
+                                                    <Button
+                                                        onClick={() => setOffset(offset + limit)}
+                                                        disabled={isLoadingMore || !hasMoreNotices}
+                                                    >
+                                                        {isLoadingMore ?
+                                                            <><Loading size={24} /> Loading...</>
+                                                            : 'Load More'}
+                                                    </Button>
+                                                    : 'No more notices'}
+                                            </div>
+                                        </>
+                                        : 'No notices yet'}
+                                </Tab>
 
-                {/* SPREADS TAB */}
-                <Tab
-                    eventKey='spreads'
-                    title="Spreads"
-                >
-                    {spreadNoticesData.length !== 0 ?
-                        <>
-                            <Notices
-                                notices={spreadNoticesData}
-                                user_id={user_id}
-                                likedNotices={likedNotices}
-                                spreadNotices={spreadNotices}
-                                reactions={spreadReactions}
-                                handleLike={handleLike}
-                                handleSpread={handleSpread}
-                                handleReport={handleReport}
-                                handleReact={handleReact}
-                                getReactionsForNotice={getReactionsForNotice}
-                            />
-                            <div className="d-flex justify-content-center mt-4">
-                                {hasMoreSpreads ?
-                                    <Button
-                                        onClick={() => setOffsetSpreads(offset + limit)}
-                                        disabled={isLoadingMoreSpreads || !hasMoreSpreads}
-                                    >
-                                        {isLoadingMoreSpreads ?
-                                            <><Loading size={24} /> Loading...</>
-                                            : 'Load More'}
-                                    </Button>
-                                    : 'No more spreads'}
-                            </div>
-                        </>
-                        : 'No spreadas yet'}
-                </Tab>
+                                {/* SPREADS TAB */}
+                                <Tab
+                                    eventKey='spreads'
+                                    title="Spreads"
+                                >
+                                    {spreadNoticesData.length !== 0 ?
+                                        <>
+                                            <Notices
+                                                notices={spreadNoticesData}
+                                                user_id={user_id}
+                                                likedNotices={likedNotices}
+                                                spreadNotices={spreadNotices}
+                                                // reactions={spreadReactions}
+                                                handleLike={handleLike}
+                                                handleSpread={handleSpread}
+                                                handleReport={handleReport}
+                                                handleReact={handleReact}
+                                                getReactionsForNotice={getReactionsForNotice}
+                                                getUserAccountByUserId={getUserAccountByUserId}
+                                            />
+                                            <div className="d-flex justify-content-center mt-4">
+                                                {hasMoreSpreads ?
+                                                    <Button
+                                                        onClick={() => setOffsetSpreads(offset + limit)}
+                                                        disabled={isLoadingMoreSpreads || !hasMoreSpreads}
+                                                    >
+                                                        {isLoadingMoreSpreads ?
+                                                            <><Loading size={24} /> Loading...</>
+                                                            : 'Load More'}
+                                                    </Button>
+                                                    : 'No more spreads'}
+                                            </div>
+                                        </>
+                                        : 'No spreadas yet'}
+                                </Tab>
 
-                {/* LIKES TAB */}
-                <Tab
-                    eventKey='likes'
-                    title="Likes"
-                >
-                    {likedNoticesData.length !== 0 ?
-                        <>
-                            <Notices
-                                notices={likedNoticesData}
-                                user_id={user_id}
-                                likedNotices={likedNotices}
-                                spreadNotices={spreadNotices}
-                                reactions={likedReactions}
-                                handleLike={handleLike}
-                                handleSpread={handleSpread}
-                                handleReport={handleReport}
-                                handleReact={handleReact}
-                                getReactionsForNotice={getReactionsForNotice}
-                            />
-                            <div className="d-flex justify-content-center mt-4">
-                                {hasMoreLikes ?
-                                    <Button
-                                        onClick={() => setOffsetLikes(offset + limit)}
-                                        disabled={isLoadingMoreLikes || !hasMoreLikes}
-                                    >
-                                        {isLoadingMoreLikes ?
-                                            <><Loading size={24} /> Loading...</>
-                                            : 'Load More'}
-                                    </Button>
-                                    : 'No more likes'}
-                            </div>
+                                {/* LIKES TAB */}
+                                <Tab
+                                    eventKey='likes'
+                                    title="Likes"
+                                >
+                                    {likedNoticesData.length !== 0 ?
+                                        <>
+                                            <Notices
+                                                notices={likedNoticesData}
+                                                user_id={user_id}
+                                                likedNotices={likedNotices}
+                                                spreadNotices={spreadNotices}
+                                                // reactions={likedReactions}
+                                                handleLike={handleLike}
+                                                handleSpread={handleSpread}
+                                                handleReport={handleReport}
+                                                handleReact={handleReact}
+                                                getReactionsForNotice={getReactionsForNotice}
+                                                getUserAccountByUserId={getUserAccountByUserId}
+                                            />
+                                            <div className="d-flex justify-content-center mt-4">
+                                                {hasMoreLikes ?
+                                                    <Button
+                                                        onClick={() => setOffsetLikes(offset + limit)}
+                                                        disabled={isLoadingMoreLikes || !hasMoreLikes}
+                                                    >
+                                                        {isLoadingMoreLikes ?
+                                                            <><Loading size={24} /> Loading...</>
+                                                            : 'Load More'}
+                                                    </Button>
+                                                    : 'No more likes'}
+                                            </div>
+                                        </>
+                                        : 'No likes yet'}
+                                </Tab>
+                            </Tabs>
                         </>
-                        : 'No likes yet'}
-                </Tab>
-            </Tabs>
-
+                        : null}
+                </>
+            </>
         </>
     )
 }

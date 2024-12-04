@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { checkIdExistsInAuth, checkEmailExistsInAuth as checkEmailInAuthFromServer, registerAuthUser, deleteAuthUser, createUserSession, getSessionDetails as fetchSessionDetails, deleteUserSession, updateUser, updateAuthUser, deleteUser, getUserByUsername as fetchUserByUsername, getAllUsersByString as fetchAllUsersByString, deleteAllNotices, getUsersDocument, createFollow, removeFollow, getUserFollowingsById as fetchUserFollowingsById, getUserFollowersById as fetchUserFollowersById, getOtherUserFollowingsById as fetchOtherUserFollowingsById } from '../context/dbhandler';
+import { createBlock, getBlockedUsersByUser as fetchBlockedUsersByUser, getBlockedUsersByUserByBatch as fetchBlockedUsersByUserByBatch, getUsersBlockingUser as fetchUsersBlockingUser, removeBlockUsingBlockedId, checkIdExistsInAuth, checkEmailExistsInAuth as checkEmailInAuthFromServer, registerAuthUser, getUserById, getUserByIdQuery as fetchUserByIdQuery, deleteAuthUser, createUserSession, getSessionDetails as fetchSessionDetails, deleteUserSession, updateUser, updateAuthUser, deleteUser, getUserByUsername as fetchUserByUsername, getAllUsersByString as fetchAllUsersByString, deleteAllNotices, getUsersDocument, createFollow, removeFollow, getUserFollowingsById as fetchUserFollowingsById, getUserFollowersById as fetchUserFollowersById, getOtherUserFollowingsById as fetchOtherUserFollowingsById, createPassocde, updatePassocde, getPassocdeByBusincessId as fetchPassocdeByBusincessId } from '../context/dbhandler';
 import { useUserContext } from '../context/UserContext';
 import { UserId } from '../../components/User/UserId';
 
@@ -14,7 +14,8 @@ const useUserInfo = (data) => {
     const [followingCount, setFollowingCount] = useState(null);
     const [followersAccounts, setFollowersAccounts] = useState([]);
     const [followingAccounts, setFollowingAccounts] = useState([]);
-    const [isFollowingLoading, setIsFollowingLoading] = useState(false);
+    const [isFollowingUserLoading, setIsFollowingUserLoading] = useState(false);
+    const [isInitialFollowCheckLoading, setIsInitialFollowCheckLoading] = useState(true);
     const [isFollowing, setIsFollowing] = useState(false);
 
 
@@ -77,14 +78,16 @@ const useUserInfo = (data) => {
 
         try {
 
-            await updateUser({ userId, username });
+            console.log('userId', userId);
+
+            const res = await updateUser({ userId, username });
 
             await updateAuthUser(username);
 
             setUsername(username);
             // setRegisterdUsername(username);
 
-            console.log('Username updated successfully.');
+            console.log('Username updated successfully.', res);
 
         } catch (error) {
             console.error('Error updating the username:', error);
@@ -127,6 +130,8 @@ const useUserInfo = (data) => {
     }
 
     const getUserByUsername = async (username) => {
+        console.log('otherUsername', username);
+
         try {
             const usrnm = await fetchUserByUsername(username);
             console.log('username found:', usrnm);
@@ -187,6 +192,8 @@ const useUserInfo = (data) => {
 
     const followUser = async (otherUser_id) => {
         try {
+            setIsFollowingUserLoading(true);
+
             const result = await createFollow(userId, otherUser_id);
 
             setFollowing((prevFollowing) => {
@@ -201,11 +208,11 @@ const useUserInfo = (data) => {
                     };
                 }
             });
-
         } catch (error) {
             console.error('Follow failed.', error);
+        } finally {
+            setIsFollowingUserLoading(false);
         }
-
     }
 
     const getUserFollowingsById = async (otherUser_id) => {
@@ -244,9 +251,7 @@ const useUserInfo = (data) => {
 
     const fetchAccountsFollowingTheUser = async (otherUser_id, user_id) => {
         try {
-            setIsFollowingLoading(true);
-
-
+            setIsInitialFollowCheckLoading(true);
             const allUsers = await getUsersData();
             // console.log('allUsers:', allUsers.documents);
 
@@ -264,8 +269,6 @@ const useUserInfo = (data) => {
 
             setFollowersCount(accountsFollowingTheUser.length);
 
-
-
             // Set the button to 'Following' if user follows the other user 
             if (userFollowersById && user_id) {
 
@@ -274,14 +277,12 @@ const useUserInfo = (data) => {
                 console.log('matchUserWithFollower', matchUserWithFollower);
 
                 setIsFollowing(!!matchUserWithFollower);
-                setIsFollowingLoading(false);
+                setIsInitialFollowCheckLoading(false);
+
             }
 
         } catch (error) {
             console.error('Failed to fetch user followers:', error);
-        }
-        finally {
-            setIsFollowingLoading(false);
         }
     }
 
@@ -299,25 +300,144 @@ const useUserInfo = (data) => {
 
             setFollowingCount(accountsFollowedByUser.length);
 
-
         } catch (error) {
             console.error('Failed to fetch user followers:', error);
         }
     }
 
+    const getUserAccountByUserId = async (userId) => {
+        try {
+            const accnt = await getUserById(userId);
 
+            console.log('accnt: ', accnt);
+
+            return accnt;
+        } catch (error) {
+            console.error('Error getting user account ', error);
+        }
+    }
+
+    const getUserByIdQuery = async (userId) => {
+        try {
+            const user = await fetchUserByIdQuery(userId);
+            return user;
+        } catch (error) {
+            console.error('Error querying user by id:', error);
+        }
+    }
+
+
+    const makePasscode = async (userId, passcode, accountType) => {
+        try {
+            console.log('usr id', userId);
+            console.log('passcode', passcode);
+            console.log('accountType', accountType);
+            const res = await createPassocde(userId, passcode, accountType);
+            return res;
+        } catch (error) {
+            console.error('Error making passcode:', error);
+        }
+    }
+
+    const editPasscode = async (passcode) => {
+        try {
+            console.log('usr id', userId);
+            console.log('passcode', passcode);
+            const res = await updatePassocde(userId, passcode);
+
+            console.log('Success passcode update:', res);
+
+            return res;
+        } catch (error) {
+            console.error('Error editing passcode:', error);
+        }
+    }
+
+    const getPassocdeByBusincessId = async (userId) => {
+        try {
+            const res = await fetchPassocdeByBusincessId(userId);
+            return res.documents;
+        } catch (error) {
+            console.error('Error fetching passcode:', error);
+        }
+    }
+
+    const makeBlock = async (currUser_id) => {
+        try {
+            console.log('userId', userId);
+            console.log('currUser_id', currUser_id);
+            const res = await createBlock(userId, currUser_id);
+            console.log('Blocked made successfully: ', res);
+            return res;
+        } catch (error) {
+            console.error('Error making block:', error);
+        }
+    }
+
+    const getBlockedUsersByUser = async (user_id) => {
+        try {
+            console.log('userId', user_id);
+
+            const res = await fetchBlockedUsersByUser(user_id);
+            console.log('Blocked listed successfully: ', res);
+            return res;
+        } catch (error) {
+            console.error('Error listing blocked:', error);
+        }
+    }
+
+    const getBlockedUsersByUserByBatch = async (user_id, limit, offset) => {
+        try {
+            console.log('userId', user_id);
+
+            const res = await fetchBlockedUsersByUserByBatch(user_id, limit, offset);
+            console.log('Blocked listed successfully: ', res);
+            return res;
+        } catch (error) {
+            console.error('Error listing blocked:', error);
+        }
+    }
+
+    const getUsersBlockingUser = async (user_id) => {
+        try {
+            console.log('userId', user_id);
+
+            const res = await fetchUsersBlockingUser(user_id);
+            console.log('These accounts blocked you: ', res);
+            return res;
+        } catch (error) {
+            console.error('Error listing users:', error);
+        }
+    }
+
+    const deleteBlockUsingBlockedId = async (blocked_id) => {
+        try {
+            console.log('blocked_id', blocked_id);
+
+            await removeBlockUsingBlockedId(blocked_id);
+            console.log('Block removed successfully.');
+        } catch (error) {
+            console.error('Error deleting block:', error);
+        }
+    }
 
 
 
     return {
-        isFollowingLoading,
+        userId,
+        isFollowingUserLoading,
+        isInitialFollowCheckLoading,
         following,
         isFollowing,
         followersCount,
         followingCount,
         followersAccounts,
         followingAccounts,
-        // isLoading,
+        makeBlock,
+        getBlockedUsersByUser,
+        getBlockedUsersByUserByBatch,
+        getUsersBlockingUser,
+        deleteBlockUsingBlockedId,
         checkingIdInAuth,
         checkingEmailInAuth,
         registerUser,
@@ -337,7 +457,11 @@ const useUserInfo = (data) => {
         getOtherUserFollowingsById,
         fetchAccountsFollowingTheUser,
         fetchAccountsFollowedByUser,
-        // authedUsers
+        getUserAccountByUserId,
+        getUserByIdQuery,
+        makePasscode,
+        editPasscode,
+        getPassocdeByBusincessId
     }
 }
 

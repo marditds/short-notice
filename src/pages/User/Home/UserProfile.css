@@ -236,7 +236,7 @@
 }
 
 .notice__username+a {
-    transition: filter 0.3s ease;
+    transition: 0.5s;
 }
 
 .notice__username+a:hover {
@@ -353,4 +353,36 @@
     border: transparent;
     box-shadow: none !important;
 
+}
+
+.notice__reaction {
+    background-attachment: fixed;
+    background: rgb(0, 0, 0);
+    background: -moz-linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.58) 76%, rgba(23, 199, 105, 0.58) 100%);
+    background: -webkit-linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.58) 76%, rgba(23, 199, 105, 0.58) 100%);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.58) 76%, rgba(23, 199, 105, 0.58) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#ffffff", endColorstr="#17c769", GradientType=1);
+    ;
+}
+
+.notice__reaction>.row {
+    max-width: 800px;
+}
+
+.notice__reaction-username {
+    margin-right: 12px;
+    color: var(--main-text-color);
+    transition: 0.3s;
+}
+
+.notice__reaction-username:hover {
+    color: var(--main-accent-color);
+}
+
+.notice__reaction-avatar {
+    transition: 0.5s;
+}
+
+.notice__reaction-avatar:hover {
+    filter: sepia(1) hue-rotate(100deg) saturate(6) brightness(0.7);
 }

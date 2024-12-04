@@ -4,12 +4,11 @@ import { Row, Col, Form, Button } from 'react-bootstrap';
 import useUserInfo from '../../../lib/hooks/useUserInfo';
 import { Loading } from '../../Loading/Loading';
 
-export const Info = () => {
+export const Info = ({ accountType }) => {
 
     const { googleUserData,
         username,
         setUsername,
-        registeredUserame,
         setRegisteredUsername } = useUserContext();
 
     const { handleUpdateUser } = useUserInfo(googleUserData);
@@ -44,11 +43,13 @@ export const Info = () => {
 
     };
 
+    let usrnm = accountType === 'personal' ? 'username' : 'organization\'s name';
+
     return (
         <Row>
             <Col>
-                <h4>Update Username:</h4>
-                <p>Update your username. The maximum number of characters for your username is 16.</p>
+                <h4>Update {usrnm}:</h4>
+                <p>Update your {usrnm}. The maximum number of characters for your {usrnm} is 16.</p>
             </Col>
             <Col className='d-flex'>
                 <h4
@@ -63,7 +64,7 @@ export const Info = () => {
                     <Form.Group
                         controlId='usernameField'>
                         <Form.Label>
-                            Username:
+                            {usrnm}:
                         </Form.Label>
                         <Form.Control
                             type='username'
@@ -74,7 +75,7 @@ export const Info = () => {
                             className='settings__username-field'
                         />
                         <Form.Text className='settings__username-unique'>
-                            Your userame must be unique.
+                            Your {usrnm} must be unique.
                         </Form.Text>
                     </Form.Group>
                     <Button

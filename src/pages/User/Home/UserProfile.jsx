@@ -10,15 +10,13 @@ import useNotices from '../../../lib/hooks/useNotices.js';
 import { ComposeNotice } from '../../../components/User/ComposeNotice';
 import { Loading } from '../../../components/Loading/Loading.jsx';
 import './UserProfile.css';
-import { account } from '../../../lib/context/dbhandler.js';
-import { Query } from 'appwrite';
-
-
 
 
 const UserProfile = () => {
 
     const { googleUserData, username } = useUserContext();
+
+    const [accountType, setAccountType] = useState(null);
     const [noticeText, setNoticeText] = useState('');
     const [duration, setDuration] = useState(24);
     const [editingNoticeId, setEditingNoticeId] = useState(null);
@@ -34,9 +32,9 @@ const UserProfile = () => {
         isAddingNotice,
         removingNoticeId,
         isRemovingNotice,
-        noticesReactions,
-        spreadReactions,
-        likedReactions,
+        // noticesReactions,
+        // spreadReactions,
+        // likedReactions,
         addNotice,
         editNotice,
         removeNotice,
@@ -49,10 +47,10 @@ const UserProfile = () => {
         getAllLikedNotices,
         getAllSpreadNotices,
         getReactionsForNotice,
-        fetchReactionsForNotices,
-        setNoticesReactions,
-        setSpreadReactions,
-        setLikedReactions
+        // fetchReactionsForNotices,
+        // setNoticesReactions,
+        // setSpreadReactions,
+        // setLikedReactions
     } = useNotices(googleUserData);
 
     const {
@@ -60,10 +58,13 @@ const UserProfile = () => {
         followingCount,
         followersAccounts,
         followingAccounts,
+        getUserAccountByUserId,
+        getUserByUsername,
         fetchUsersData,
         fetchAccountsFollowingTheUser,
-        fetchAccountsFollowedByUser
-    } = useUserInfo();
+        fetchAccountsFollowedByUser,
+        getBlockedUsersByUser
+    } = useUserInfo(googleUserData);
 
     const [notices, setNotices] = useState([]);
     const [spreadNoticesData, setSpreadNoticesData] = useState([]);
@@ -88,6 +89,34 @@ const UserProfile = () => {
     const [offsetLikes, setOffsetLikes] = useState(0);
     const [hasMoreLikes, setHasMoreLikes] = useState(true);
     const [isLoadingMoreLikes, setIsLoadingMoreLikes] = useState(false);
+
+    // Fetch account type by username
+    useEffect(() => {
+        const fetchUserByUserame = async () => {
+            try {
+                const usr = await getUserByUsername(username);
+                setAccountType(usr.accountType);
+            } catch (error) {
+                console.log('Error creating notice', error);
+            }
+        }
+        fetchUserByUserame();
+    }, [username])
+
+    useEffect(() => {
+        const fetchBlockedUsersByUser = async () => {
+            try {
+                console.log('user_idsasasa,', user_id);
+
+                const res = await getBlockedUsersByUser(user_id);
+                console.log('Bloccked users:', res);
+
+            } catch (error) {
+                console.error('Error fetching blocked users', error);
+            }
+        }
+        fetchBlockedUsersByUser();
+    }, [user_id])
 
     // Fetch notices for user
     useEffect(() => {
@@ -167,19 +196,22 @@ const UserProfile = () => {
     }, [user_id, offsetLikes])
 
     // Reactions For Notices tab
-    useEffect(() => {
-        fetchReactionsForNotices(notices, setNoticesReactions);
-    }, [notices]);
+    // useEffect(() => {
+    //     fetchReactionsForNotices(notices, setNoticesReactions);
+    // }, [notices]);
 
     // Reactions For Spreads tab
-    useEffect(() => {
-        fetchReactionsForNotices(spreadNoticesData, setSpreadReactions);
-    }, [spreadNoticesData]);
+    // useEffect(() => {
+    //     fetchReactionsForNotices(spreadNoticesData, setSpreadReactions);
+    // }, [spreadNoticesData]);
 
     // Reactions For Likes tab
+    // useEffect(() => {
+    //     fetchReactionsForNotices(likedNoticesData, setLikedReactions);
+    // }, [likedNoticesData]);
     useEffect(() => {
-        fetchReactionsForNotices(likedNoticesData, setLikedReactions);
-    }, [likedNoticesData]);
+        console.log('Hello', username);
+    }, [username])
 
     // Fetch accounts followed by user
     useEffect(() => {
@@ -317,6 +349,7 @@ const UserProfile = () => {
                 duration={duration}
                 isAddingNotice={isAddingNotice}
                 noticeText={noticeText}
+                noticeType={accountType}
                 setNoticeText={setNoticeText}
                 setDuration={setDuration}
                 addNotice={addNotice}
@@ -339,8 +372,9 @@ const UserProfile = () => {
                         handleEditNotice={handleEditNotice}
                         handleDeleteNotice={handleDeleteNotice}
                         eventKey='my-notices'
-                        reactions={noticesReactions}
+                        // reactions={noticesReactions}
                         getReactionsForNotice={getReactionsForNotice}
+                        getUserAccountByUserId={getUserAccountByUserId}
                     />
                     <div className="d-flex justify-content-center mt-4">
                         {hasMoreNotices ?
@@ -369,8 +403,9 @@ const UserProfile = () => {
                         handleSpread={handleSpread}
                         handleReport={handleReport}
                         handleReact={handleReact}
-                        reactions={spreadReactions}
+                        // reactions={spreadReactions}
                         getReactionsForNotice={getReactionsForNotice}
+                        getUserAccountByUserId={getUserAccountByUserId}
 
                     />
                     <div className="d-flex justify-content-center mt-4">
@@ -401,8 +436,9 @@ const UserProfile = () => {
                         handleSpread={handleSpread}
                         handleReport={handleReport}
                         handleReact={handleReact}
-                        reactions={likedReactions}
+                        // reactions={likedReactions}
                         getReactionsForNotice={getReactionsForNotice}
+                        getUserAccountByUserId={getUserAccountByUserId}
 
                     />
                     <div className="d-flex justify-content-center mt-4">

@@ -80,11 +80,11 @@ export const Avatar = () => {
                     alt="Profile"
                     style={{
                         borderRadius: '50%',
-                        width: '50%',
-                        height: '50%',
+                        width: '100px',
+                        height: '100px',
                         objectFit: 'cover'
                     }}
-                    className='me-5'
+                    className='me-5 d-flex'
                 />
                 <Form>
                     <Form.Group className="mb-3" controlId="profilePictureUpload">

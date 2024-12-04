@@ -6,12 +6,13 @@ import defaultAvatar from '../../assets/default.png';
 import { SlClose } from "react-icons/sl";
 import { Loading } from '../Loading/Loading.jsx';
 
-export const Profile = ({ username, avatarUrl, handleFollow, currUserId, followingCount, followersCount, isFollowing, followingAccounts, followersAccounts, isFollowingLoading }) => {
+export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUserId, followingCount, followersCount, isFollowing, followingAccounts, followersAccounts, isInitialFollowCheckLoading, isFollowingUserLoading, isBlocked, isOtherUserBlocked }) => {
 
     const location = useLocation();
 
     const [showFollowersModal, setShowFollowersModal] = useState(false);
     const [showFollowingModal, setShowFollowingModal] = useState(false);
+    const [showBlockModal, setShowBlockModal] = useState(false);
 
     const handleShowFollowersModal = () => {
         setShowFollowersModal(true);
@@ -29,95 +30,124 @@ export const Profile = ({ username, avatarUrl, handleFollow, currUserId, followi
         setShowFollowingModal(false);
     }
 
+    const handleShowBlockModal = () => {
+        setShowBlockModal(true);
+    }
+
+    const handleCloseBlockModal = () => {
+        setShowBlockModal(false);
+    }
+
     return (
         <>
             <Row className='user-profile fixed-top'>
+
+                {/* Folllowes/Following Col */}
                 <Col className='d-grid'>
+                    {
+                        isBlocked ?
+                            null :
+                            <>
+                                <Button
+                                    onClick={handleShowFollowersModal}
+                                    className='user-profile__follow-numbers-text'
+                                >
+                                    {followersCount === null ?
+                                        null
+                                        :
+                                        'Followers'
+                                    }
+                                </Button>
+                                <Button
+                                    onClick={handleShowFollowersModal}
+                                    className='user-profile__follow-numbers-number'
+                                >
+                                    {followersCount === null ?
+                                        <Loading />
+                                        :
+                                        <strong>
+                                            {followersCount}
+                                        </strong>
 
-                    <Button
-                        onClick={handleShowFollowersModal}
-                        className='user-profile__follow-numbers-text'
-                    >
-                        {followersCount === null ?
-                            null
-                            :
-                            'Followers'
-                        }
-                    </Button>
+                                    }
+                                </Button>
 
-                    <Button
-                        onClick={handleShowFollowersModal}
-                        className='user-profile__follow-numbers-number'
-                    >
-                        {followersCount === null ?
-                            <Loading />
-                            :
-                            <strong>
-                                {followersCount}
-                            </strong>
-
-                        }
-                    </Button>
-
-
-
-                    <Button
-                        onClick={handleShowFollowingModal}
-                        className='user-profile__follow-numbers-text'
-                    >
-                        {followingCount === null ?
-                            null
-                            :
-                            'Following'
-                        }
-                    </Button>
-
-                    <Button
-                        onClick={handleShowFollowingModal}
-                        className='user-profile__follow-numbers-number'
-                    >
-                        {followingCount === null ?
-                            <Loading />
-                            :
-                            <strong>
-                                {followingCount}
-                            </strong>
-                        }
-                    </Button>
-
-
+                                <Button
+                                    onClick={handleShowFollowingModal}
+                                    className='user-profile__follow-numbers-text'
+                                >
+                                    {followingCount === null ?
+                                        null
+                                        :
+                                        'Following'
+                                    }
+                                </Button>
+                                <Button
+                                    onClick={handleShowFollowingModal}
+                                    className='user-profile__follow-numbers-number'
+                                >
+                                    {followingCount === null ?
+                                        <Loading />
+                                        :
+                                        <strong>
+                                            {followingCount}
+                                        </strong>
+                                    }
+                                </Button>
+                            </>
+                    }
                 </Col>
 
+                {/* Profile Picture Col */}
                 <Col className='w-100 d-grid justify-content-center gap-2'>
                     <img src={avatarUrl ? avatarUrl : defaultAvatar} alt="Profile" style={{ borderRadius: '50%', width: 100, height: 100 }} />
                     <p className='my-0 text-center'>{username}</p>
                 </Col>
 
+                {/* Follow/Block/Report Col */}
                 <Col
-                    className='d-grid gap-0 align-content-between justify-content-end'
+                    className='d-grid gap-0 align-content-stretch justify-content-end'
                 >
                     {location.pathname !== '/user/profile' ?
                         <>
-                            <Button
-                                className={`user-profile__interaction-btn
+                            {
+                                isBlocked ? null :
+                                    <Button
+                                        className={`user-profile__interaction-btn
                                 ${isFollowing ? 'following' : ''}`}
-                                onClick={() => handleFollow(currUserId)}
-                                style={{
-                                    height: 'fit-content', width: 'fit-content', marginLeft: 'auto'
-                                }}
-                            >
-                                {isFollowingLoading ? <Loading /> :
-                                    <>
-                                        {isFollowing ? 'Following' : 'Follow'}
-                                    </>
-                                }
-                            </Button>
+                                        onClick={() => handleFollow(currUserId)}
+                                        style={{
+                                            height: 'fit-content', width: 'fit-content', marginLeft: 'auto'
+                                        }}
+                                    >
+                                        {isFollowingUserLoading ? <Loading /> :
+                                            <>
+                                                {isFollowing ? 'Following' : 'Follow'}
+                                            </>
+                                        }
+                                        {/* {isOtherUserBlocked ? (
+                                            'Blocked'
+                                        ) : (
+                                            isInitialFollowCheckLoading || isFollowingUserLoading ? (
+                                                <Loading />
+                                            ) : (
+                                                isFollowing ? 'Following' : 'Follow'
+                                            )
+                                        )} */}
+
+                                    </Button>
+                            }
+
+
                             <Button
+                                onClick={handleShowBlockModal}
                                 className='user-profile__interaction-btn'
                                 style={{
                                     height: 'fit-content', width: 'fit-content', marginLeft: 'auto'
-                                }}>
-                                Block
+                                }}
+                                disabled={isOtherUserBlocked ? true : false}
+                            >
+                                {isOtherUserBlocked ? 'Blocked' : 'Block'}
                             </Button>
                             <Button
                                 className='user-profile__interaction-btn'
@@ -139,6 +169,16 @@ export const Profile = ({ username, avatarUrl, handleFollow, currUserId, followi
                         </>
                     }
                 </Col>
+                {isBlocked &&
+                    <div style={{ color: 'white', textAlign: 'center' }}>
+                        You are not authorzied to view the notices shared by {username}.
+                    </div>
+                }
+                {isOtherUserBlocked &&
+                    <div style={{ color: 'white', textAlign: 'center' }}>
+                        You have blocked {username}. They cannot follow you and interact with your notices.
+                    </div>
+                }
             </Row>
 
             {/* Followers Modal */}
@@ -150,7 +190,7 @@ export const Profile = ({ username, avatarUrl, handleFollow, currUserId, followi
                 <Modal.Header
                     className='user-profile__following--modal-header w-100'
                 >
-                    <Modal.Title>Following</Modal.Title>
+                    <Modal.Title>{`Follower(s)`}</Modal.Title>
                     <Button
                         onClick={handleCloseFollowersModal}
                     >
@@ -208,6 +248,30 @@ export const Profile = ({ username, avatarUrl, handleFollow, currUserId, followi
                             </div>
                         )
                     })}
+                </Modal.Body>
+            </Modal>
+
+            {/* Block modal */}
+            <Modal
+                show={showBlockModal}
+                onHide={handleCloseBlockModal}
+                className='user-profile__following--modal'
+            >
+                <Modal.Header
+                    className='user-profile__following--modal-header w-100'
+                >
+                    <Button
+                        onClick={handleCloseBlockModal}
+                    >
+                        <SlClose size={24} className='ms-auto' />
+                    </Button>
+                </Modal.Header>
+                <Modal.Body
+                    className='user-profile__following--modal-body'
+                >
+                    Are you sure you want to block {username}?
+                    <Button onClick={() => handleBlock(currUserId)}>Yes</Button>
+                    <Button onClick={handleCloseBlockModal}>Cancel</Button>
                 </Modal.Body>
             </Modal>
 
