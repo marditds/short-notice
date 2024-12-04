@@ -25,16 +25,12 @@ const UserProfile = () => {
 
     const {
         user_id,
-        // userNotices,
         savedNotices,
         likedNotices,
         isLoading,
         isAddingNotice,
         removingNoticeId,
         isRemovingNotice,
-        // noticesReactions,
-        // saveReactions,
-        // likedReactions,
         addNotice,
         editNotice,
         removeNotice,
@@ -49,10 +45,6 @@ const UserProfile = () => {
         getReactionsForNotice,
         getReactionByReactionId,
         reportReaction
-        // fetchReactionsForNotices,
-        // setNoticesReactions,
-        // setSaveReactions,
-        // setLikedReactions
     } = useNotices(googleUserData);
 
     const {
@@ -155,6 +147,8 @@ const UserProfile = () => {
 
     // Fetch saves and users' data for saves tab
     useEffect(() => {
+        if (eventKey !== 'my-saves') return;
+
         const fetchSaveNotices = async () => {
             setIsLoadingMoreSaves(true);
             try {
@@ -175,10 +169,12 @@ const UserProfile = () => {
 
         };
         fetchSaveNotices();
-    }, [user_id, offsetSaves])
+    }, [user_id, offsetSaves, eventKey])
 
     // Fetch likes and users' data for likes tab 
     useEffect(() => {
+        if (eventKey !== 'my-likes') return;
+
         const fetchLikedNotices = async () => {
             setIsLoadingMoreLikes(true);
             try {
@@ -201,7 +197,7 @@ const UserProfile = () => {
             }
         };
         fetchLikedNotices();
-    }, [user_id, offsetLikes])
+    }, [user_id, offsetLikes, eventKey])
 
     useEffect(() => {
         console.log('Hello', username);
@@ -370,7 +366,6 @@ const UserProfile = () => {
                         eventKey={eventKey}
                         handleEditNotice={handleEditNotice}
                         handleDeleteNotice={handleDeleteNotice}
-                        // reactions={noticesReactions}
                         getReactionsForNotice={getReactionsForNotice}
                         getUserAccountByUserId={getUserAccountByUserId}
                     />
@@ -403,7 +398,6 @@ const UserProfile = () => {
                         handleSave={handleSave}
                         handleReport={handleReport}
                         handleReact={handleReact}
-                        // reactions={saveReactions}
                         getReactionsForNotice={getReactionsForNotice}
                         getUserAccountByUserId={getUserAccountByUserId}
                         getReactionByReactionId={getReactionByReactionId}
@@ -438,7 +432,6 @@ const UserProfile = () => {
                         handleSave={handleSave}
                         handleReport={handleReport}
                         handleReact={handleReact}
-                        // reactions={likedReactions}
                         getReactionsForNotice={getReactionsForNotice}
                         getUserAccountByUserId={getUserAccountByUserId}
                         getReactionByReactionId={getReactionByReactionId}
@@ -459,8 +452,6 @@ const UserProfile = () => {
                 </Tab>
             </Tabs>
 
-
-            {/* <div className='position-fixed'> */}
             <Modal show={showEditModal}
                 onHide={handleCloseEditModal}
                 className='notice__edit--modal'

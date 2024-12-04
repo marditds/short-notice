@@ -218,6 +218,8 @@ const OtherUserProfile = () => {
 
     // Fetch saves and users' data for saves tab 
     useEffect(() => {
+        if (eventKey !== 'saves') return;
+
         const fetchSaveNotices = async () => {
             setIsLoadingMoreSaves(true);
             try {
@@ -249,6 +251,8 @@ const OtherUserProfile = () => {
 
     // Fetch likes and users' data for likes tab  
     useEffect(() => {
+        if (eventKey !== 'likes') return;
+
         const fetchLikedNotices = async () => {
             setIsLoadingMoreLikes(true);
             try {
