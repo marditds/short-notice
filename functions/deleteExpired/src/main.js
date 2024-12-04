@@ -1,5 +1,5 @@
-import { Query } from 'appwrite';
-import { Client, Databases } from 'appwrite';
+// import { Query } from 'appwrite';
+import { Query, Client, Databases } from 'node-appwrite';
 
 // This Appwrite function will be executed every time your function is triggered
 export default async ({ req, res, log, error }) => {
