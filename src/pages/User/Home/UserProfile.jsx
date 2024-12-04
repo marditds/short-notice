@@ -203,20 +203,6 @@ const UserProfile = () => {
         fetchLikedNotices();
     }, [user_id, offsetLikes])
 
-    // Reactions For Notices tab
-    // useEffect(() => {
-    //     fetchReactionsForNotices(notices, setNoticesReactions);
-    // }, [notices]);
-
-    // Reactions For Saves tab
-    // useEffect(() => {
-    //     fetchReactionsForNotices(saveNoticesData, setSaveReactions);
-    // }, [saveNoticesData]);
-
-    // Reactions For Likes tab
-    // useEffect(() => {
-    //     fetchReactionsForNotices(likedNoticesData, setLikedReactions);
-    // }, [likedNoticesData]);
     useEffect(() => {
         console.log('Hello', username);
     }, [username])
@@ -475,8 +461,7 @@ const UserProfile = () => {
 
 
             {/* <div className='position-fixed'> */}
-            <Modal
-                show={showEditModal}
+            <Modal show={showEditModal}
                 onHide={handleCloseEditModal}
                 className='notice__edit--modal'
             >
@@ -520,7 +505,8 @@ const UserProfile = () => {
             {/* </div> */}
 
 
-            <Modal show={showDeleteModal} onHide={handleCloseDeleteModal}>
+            <Modal show={showDeleteModal}
+                onHide={handleCloseDeleteModal}>
                 <Modal.Header>
                     <Modal.Title>Delete Notice</Modal.Title>
                 </Modal.Header>

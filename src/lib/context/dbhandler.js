@@ -1156,6 +1156,7 @@ export const getUserFollowingsById = async (user_id) => {
             import.meta.env.VITE_FOLLOWING_COLLECTION,
             [
                 Query.equal('user_id', user_id),
+                Query.orderDesc('$createdAt')
             ]
         )
         // console.log('Successfully got following document.', response.documents);
@@ -1178,22 +1179,6 @@ export const getUserFollowersById = async (otherUser_id) => {
         return response.documents;
     } catch (error) {
         console.error('Error getting other user following:', error);
-    }
-}
-
-export const getOtherUserFollowingsById = async (user_id) => {
-    try {
-        const response = await databases.listDocuments(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_FOLLOWING_COLLECTION,
-            [
-                Query.equal('user_id', user_id),
-            ]
-        )
-        console.log('Successfully got following document.', response.documents);
-        return response.documents;
-    } catch (error) {
-        console.error('Could not get following document', error);
     }
 }
 

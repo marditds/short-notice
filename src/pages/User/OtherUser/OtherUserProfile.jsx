@@ -126,12 +126,6 @@ const OtherUserProfile = () => {
         const getCurrUser = async () => {
 
             try {
-                // const allUsers = await getUsersData();
-
-                // console.log('allUsers:', allUsers.documents);
-
-                // const currUser = allUsers.documents.find((user) => user.username === otherUsername);
-
                 console.log('otherUsername', otherUsername);
 
                 const otherUser = await getUserByUsername(otherUsername);
@@ -211,11 +205,6 @@ const OtherUserProfile = () => {
                 setIsLoadingMore(false);
             }
         };
-        // if (isBlocked === false) {
-        //     fetchNotices();
-        // } else {
-        //     console.log('This user blocked you.');
-        // }
         callFunctionIfNotBlocked(fetchNotices);
     }, [currUserId, offset])
 
@@ -255,11 +244,6 @@ const OtherUserProfile = () => {
                 setIsLoadingMoreSaves(false);
             }
         };
-        // if (isBlocked === false) {
-        //     fetchSaveNotices();
-        // } else {
-        //     console.log('This user blocked you.');
-        // }
         callFunctionIfNotBlocked(fetchSaveNotices);
     }, [currUserId, offsetSaves])
 
@@ -292,26 +276,8 @@ const OtherUserProfile = () => {
                 setIsLoadingMoreLikes(false);
             }
         };
-        // if (isBlocked === false) {
-        //     fetchLikedNotices();
-        // } else {
-        //     console.log('This user blocked you.');
-        // }
         callFunctionIfNotBlocked(fetchLikedNotices);
     }, [currUserId, offsetLikes])
-
-    // Reactions For Notices tab
-    // useEffect(() => {
-    //     fetchReactionsForNotices(notices, setNoticesReactions);
-    // }, [notices]);
-    // Reactions For Saves tab
-    // useEffect(() => {
-    //     fetchReactionsForNotices(saveNoticesData, setSaveReactions);
-    // }, [saveNoticesData]);
-    // Reactions For Likes tab
-    // useEffect(() => {
-    //     fetchReactionsForNotices(likedNoticesData, setLikedReactions);
-    // }, [likedNoticesData]);
 
     // Fetch accounts following the other user
     useEffect(() => {
@@ -411,21 +377,6 @@ const OtherUserProfile = () => {
     const timerSpacing = 'mx-2';
     const timerDisplay = 'd-flex';
     const classname = `${timerDisplay} ${timerSpacing}`;
-
-
-
-    // useEffect(() => {
-    //     const fetchUserPasscode = async () => {
-    //         const psscd = await getPassocdeByBusincessId(currUserId);
-    //         console.log('psscd', psscd[0].passcode);
-
-    //         if (psscd[0].passcode === passcode) {
-    //             setAccountTypeCheck(true);
-    //         }
-
-    //     }
-    //     fetchUserPasscode();
-    // }, [currUserId])
 
     const checkPasscode = async () => {
         try {
