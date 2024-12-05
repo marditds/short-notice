@@ -6,7 +6,7 @@ import defaultAvatar from '../../../assets/default.png';
 import { SlClose } from "react-icons/sl";
 import { Loading } from '../../Loading/Loading.jsx';
 
-export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUserId, followingCount, followersCount, isFollowing, followingAccounts, followersAccounts, isFollowingUserLoading, isBlocked, isOtherUserBlocked, handleUserReport }) => {
+export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUserId, followingCount, followersCount, isFollowing, followingAccounts, followersAccounts, isFollowingUserLoading, isBlocked, isOtherUserBlocked, handleUserReport, hasMoreFollowing, hasMoreFollowers, loadFollowing, loadFollowers }) => {
 
     const location = useLocation();
 
@@ -284,6 +284,11 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
 
                         )
                     })}
+                    {hasMoreFollowing && (
+                        <Button onClick={loadFollowing} className="btn btn-primary mt-3">
+                            Load More
+                        </Button>
+                    )}
                 </Modal.Body>
             </Modal>
 

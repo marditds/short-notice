@@ -55,6 +55,8 @@ const UserProfile = () => {
         getUserAccountByUserId,
         getUserByUsername,
         fetchUsersData,
+        getfollwedByUserCount,
+        getFollowingTheUserCount,
         fetchAccountsFollowingTheUser,
         fetchAccountsFollowedByUser,
         getBlockedUsersByUser
@@ -83,6 +85,11 @@ const UserProfile = () => {
     const [offsetLikes, setOffsetLikes] = useState(0);
     const [hasMoreLikes, setHasMoreLikes] = useState(true);
     const [isLoadingMoreLikes, setIsLoadingMoreLikes] = useState(false);
+
+    // Following
+    const [limitFollowing] = useState(11);
+    const [lastIdFollowing, setLastIdFollowing] = useState(null);
+    const [hasMoreFollowing, setHasMoreFollowing] = useState(true);
 
     // Tabs' EventKey
     const [eventKey, setEventKey] = useState('my-notices');
@@ -204,12 +211,30 @@ const UserProfile = () => {
     }, [username])
 
     // Fetch accounts followed by user
+    const fetchFollowing = async () => {
+        if (!hasMoreFollowing) return;
+
+        const newAccounts = await fetchAccountsFollowedByUser(user_id, limitFollowing, lastIdFollowing);
+
+        console.log('newAccounts', newAccounts);
+
+        if (newAccounts.length < limitFollowing) {
+            setHasMoreFollowing(false);
+        }
+
+        if (newAccounts.length > 0) {
+            setLastIdFollowing(newAccounts[newAccounts.length - 1].$id);
+        }
+    };
+
     useEffect(() => {
-        fetchAccountsFollowedByUser(user_id);
+        getfollwedByUserCount(user_id);
+        fetchFollowing();
     }, [user_id])
 
     // Fetch accounts following the user 
     useEffect(() => {
+        getFollowingTheUserCount(user_id);
         fetchAccountsFollowingTheUser(user_id);
     }, [user_id])
 
@@ -335,6 +360,10 @@ const UserProfile = () => {
                 followersCount={followersCount}
                 followingAccounts={followingAccounts}
                 followersAccounts={followersAccounts}
+                // loadMoreFollowers={fetchMoreFollowers}
+                loadFollowing={fetchFollowing}
+                // hasMoreFollowers={hasMoreFollowers}
+                hasMoreFollowing={hasMoreFollowing}
             />
 
             <ComposeNotice

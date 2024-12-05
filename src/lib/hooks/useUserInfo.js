@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { createBlock, getBlockedUsersByUser as fetchBlockedUsersByUser, getBlockedUsersByUserByBatch as fetchBlockedUsersByUserByBatch, getUsersBlockingUser as fetchUsersBlockingUser, removeBlockUsingBlockedId, checkIdExistsInAuth, checkEmailExistsInAuth as checkEmailInAuthFromServer, registerAuthUser, getUserById, getUserByIdQuery as fetchUserByIdQuery, deleteAuthUser, createUserSession, getSessionDetails as fetchSessionDetails, deleteUserSession, updateUser, updateAuthUser, deleteUser, getUserByUsername as fetchUserByUsername, getAllUsersByString as fetchAllUsersByString, deleteAllNotices, deleteAllReactions, removeAllSaves, removeAllLikes, removeAllFollows, getUsersDocument, createFollow, unfollow, getUserFollowingsById as fetchUserFollowingsById, getUserFollowersById as fetchUserFollowersById, createPassocde, updatePassocde, getPassocdeByBusincessId as fetchPassocdeByBusincessId, createUserReport } from '../context/dbhandler';
+import { createBlock, getBlockedUsersByUser as fetchBlockedUsersByUser, getBlockedUsersByUserByBatch as fetchBlockedUsersByUserByBatch, getUsersBlockingUser as fetchUsersBlockingUser, removeBlockUsingBlockedId, checkIdExistsInAuth, checkEmailExistsInAuth as checkEmailInAuthFromServer, registerAuthUser, getUserById, getUserByIdQuery as fetchUserByIdQuery, deleteAuthUser, createUserSession, getSessionDetails as fetchSessionDetails, deleteUserSession, updateUser, updateAuthUser, deleteUser, getUserByUsername as fetchUserByUsername, getAllUsersByString as fetchAllUsersByString, deleteAllNotices, deleteAllReactions, removeAllSaves, removeAllLikes, removeAllFollows, getUsersDocument, createFollow, unfollow, getUserFollowingsById, getUserFollowersById, followedByUserCount, followingTheUserCount, getPersonalFeedAccounts as fetchPersonalFeedAccounts, createPassocde, updatePassocde, getPassocdeByBusincessId as fetchPassocdeByBusincessId, createUserReport, getUserByIdQuery } from '../context/dbhandler';
 import { useUserContext } from '../context/UserContext';
 import { UserId } from '../../components/User/UserId';
 
@@ -228,30 +228,42 @@ const useUserInfo = (data) => {
     }
 
     // User follows them
-    const getUserFollowingsById = async (otherUser_id) => {
+    const getfollwedByUserCount = async (id) => {
         try {
-            const response = await fetchUserFollowingsById(otherUser_id);
+            const res = await followedByUserCount(id);
+            console.log('FollowingCount', res);
 
-            return response;
+            setFollowingCount(res);
         } catch (error) {
-            console.error('Failed to fetch user followers:', error);
-
+            console.error('Error getting follwed by user count', error);
         }
     }
 
-    const fetchAccountsFollowedByUser = async (id) => {
+    const fetchAccountsFollowedByUser = async (id, limit, lastId) => {
         try {
-            const allUsers = await getUsersData();
+            console.log('Fetching accounts followed by user:', { id, limit, lastId });
 
-            const followedByUserIds = await getUserFollowingsById(id);
+            const followedByUser = await getUserFollowingsById(id, limit, lastId);
+            console.log('followedByUser,', followedByUser);
 
-            const accountsFollowedByUser = followedByUserIds.map((followed) => {
-                return allUsers.documents.find((user) => user.$id === followed.otherUser_id);
-            }).filter(Boolean);
+            const followedByUserIds = followedByUser.map((user) => user.otherUser_id);
 
-            setFollowingAccounts(accountsFollowedByUser);
+            console.log('followedByUserIds,', followedByUserIds);
 
-            setFollowingCount(accountsFollowedByUser.length);
+
+            const allUsers = await getUserByIdQuery(followedByUserIds);
+
+            // const accountsFollowedByUser = followedByUserIds.map((followed) => {
+            //     return allUsers.documents.find((user) => user.$id === followed.otherUser_id);
+            // }).filter(Boolean);
+
+            const accountsFollowedByUser = allUsers.documents;
+
+            console.log('accountsFollowedByUser', accountsFollowedByUser);
+
+            if (accountsFollowedByUser.length > 0) {
+                setFollowingAccounts((prev) => [...prev, ...accountsFollowedByUser]);
+            }
 
             return accountsFollowedByUser;
 
@@ -260,15 +272,32 @@ const useUserInfo = (data) => {
         }
     }
 
-    // They follow the user
-    const getUserFollowersById = async (otherUser_id) => {
+    const getPersonalFeedAccounts = async (user_id) => {
         try {
-            const response = await fetchUserFollowersById(otherUser_id);
+            const allUsers = await getUsersData();
 
-            return response;
+            const accntIds = await fetchPersonalFeedAccounts(user_id);
+
+            const accountsFollowedByUser = accntIds.documents.map((followed) => {
+                return allUsers.documents.find((user) => user.$id === followed.otherUser_id);
+            }).filter(Boolean);
+
+            return accountsFollowedByUser;
+
         } catch (error) {
-            console.error('Failed to fetch user followers:', error);
+            console.error('Error fetching personal feed accounts:', error);
+        }
+    }
 
+    // They follow the user
+    const getFollowingTheUserCount = async (id) => {
+        try {
+            const res = await followingTheUserCount(id);
+            console.log('FollowersCount', res);
+
+            setFollowersCount(res);
+        } catch (error) {
+            console.error('Error getting follwers by user count', error);
         }
     }
 
@@ -284,8 +313,6 @@ const useUserInfo = (data) => {
             );
 
             setFollowersAccounts(accountsFollowingTheUser);
-
-            setFollowersCount(accountsFollowingTheUser.length);
 
             // Setting the button to 'Following' if user follows the other user 
             if (userFollowersById && user_id) {
@@ -459,11 +486,14 @@ const useUserInfo = (data) => {
         followUser,
         unfollowUser,
         setIsFollowing,
+        getfollwedByUserCount,
+        getFollowingTheUserCount,
         getUserFollowingsById,
         getUserFollowersById,
         fetchAccountsFollowingTheUser,
         fetchAccountsFollowedByUser,
         getUserAccountByUserId,
+        getPersonalFeedAccounts,
         getUserByIdQuery,
         makePasscode,
         editPasscode,

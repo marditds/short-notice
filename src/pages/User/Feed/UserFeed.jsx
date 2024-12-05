@@ -68,7 +68,7 @@ const UserFeed = () => {
         // setNoticesReactions
     } = useNotices(googleUserData);
 
-    const { fetchUsersData, getUserAccountByUserId, fetchAccountsFollowedByUser } = useUserInfo(googleUserData);
+    const { fetchUsersData, getUserAccountByUserId, getPersonalFeedAccounts } = useUserInfo(googleUserData);
     const { filterBlocksFromFeed } = useUnblockedNotices();
 
     const [generalFeedNotices, setGeneralFeedNotices] = useState([]);
@@ -220,7 +220,7 @@ const UserFeed = () => {
                 setIsLoadingUsers(true);
                 setIsLoadingMorePersonal(true);
 
-                const followedByUser = await fetchAccountsFollowedByUser(user_id);
+                const followedByUser = await getPersonalFeedAccounts(user_id);
                 console.log('followedByUser', followedByUser);
 
                 const followedUserIds = followedByUser.map((user) => user.$id);
@@ -270,7 +270,7 @@ const UserFeed = () => {
             try {
                 setIsLoadingMorePersonal(true);
 
-                const followedByUser = await fetchAccountsFollowedByUser(user_id);
+                const followedByUser = await getPersonalFeedAccounts(user_id);
 
                 const followedUserIds = followedByUser.map((user) => user.$id);
 

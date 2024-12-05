@@ -1146,18 +1146,59 @@ export const unfollow = async (user_id, otherUser_id) => {
     }
 }
 
-export const getUserFollowingsById = async (user_id) => {
-
-    console.log('user_id:', user_id);
-
+export const followedByUserCount = async (user_id) => {
     try {
-        const response = await databases.listDocuments(
+        const res = await databases.listDocuments(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_FOLLOWING_COLLECTION,
             [
-                Query.equal('user_id', user_id),
-                Query.orderDesc('$createdAt')
+                Query.equal('user_id', user_id)
             ]
+        )
+        return res.total;
+    } catch (error) {
+        console.error('Error followed by count:', error);
+    }
+}
+
+export const followingTheUserCount = async (user_id) => {
+    try {
+        const res = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_FOLLOWING_COLLECTION,
+            [
+                Query.equal('otherUser_id', user_id)
+            ]
+        )
+        return res.total;
+    } catch (error) {
+        console.error('Error followed by count:', error);
+    }
+}
+
+export const getUserFollowingsById = async (user_id, limit, lastId) => {
+
+    console.log('Fetching followings with params:', {
+        user_id,
+        limit,
+        lastId
+    });
+
+    try {
+        const queries = [
+            Query.equal('user_id', user_id),
+            Query.limit(limit),
+            Query.orderDesc('$createdAt')
+        ]
+
+        if (lastId) {
+            queries.push(Query.cursorAfter(lastId));
+        }
+
+        const response = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_FOLLOWING_COLLECTION,
+            queries
         )
         // console.log('Successfully got following document.', response.documents);
         return response.documents;
@@ -1179,6 +1220,21 @@ export const getUserFollowersById = async (otherUser_id) => {
         return response.documents;
     } catch (error) {
         console.error('Error getting other user following:', error);
+    }
+}
+
+export const getPersonalFeedAccounts = async (user_id) => {
+    try {
+        const res = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_FOLLOWING_COLLECTION,
+            [
+                Query.equal('user_id', user_id)
+            ]
+        )
+        return res;
+    } catch (error) {
+        console.error('Error getting personal feed acounts:', error);
     }
 }
 
