@@ -1220,6 +1220,25 @@ export const getUserFollowersById = async (otherUser_id, limit, offset) => {
     }
 }
 
+export const getFollowStatus = async (user_id, otherUser_id) => {
+    console.log('getting follow status - 1', { user_id, otherUser_id });
+
+    try {
+        const res = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_FOLLOWING_COLLECTION,
+            [
+                Query.and([Query.equal('user_id', user_id), Query.equal('otherUser_id', otherUser_id)])
+            ]
+        )
+        console.log('AND QUERY', res);
+
+        return res;
+    } catch (error) {
+        console.error('Error matching with user', error);
+    }
+}
+
 export const getPersonalFeedAccounts = async (user_id) => {
     try {
         const res = await databases.listDocuments(

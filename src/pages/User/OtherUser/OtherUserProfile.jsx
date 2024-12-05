@@ -68,6 +68,7 @@ const OtherUserProfile = () => {
         getBlockedUsersByUser,
         followUser,
         unfollowUser,
+        getFollowStatus,
         setIsFollowing,
         getfollwedByUserCount,
         getFollowingTheUserCount,
@@ -335,6 +336,12 @@ const OtherUserProfile = () => {
             setIsLoadingMoreFollowers(false);
         }
     };
+
+    //Fetch follow status
+    useEffect(() => {
+        getFollowStatus(user_id, currUserId);
+    }, [user_id, currUserId])
+
     // Fetch followers count
     useEffect(() => {
         getFollowingTheUserCount(currUserId);

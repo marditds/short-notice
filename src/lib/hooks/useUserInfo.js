@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { createBlock, getBlockedUsersByUser as fetchBlockedUsersByUser, getBlockedUsersByUserByBatch as fetchBlockedUsersByUserByBatch, getUsersBlockingUser as fetchUsersBlockingUser, removeBlockUsingBlockedId, checkIdExistsInAuth, checkEmailExistsInAuth as checkEmailInAuthFromServer, registerAuthUser, getUserById, getUserByIdQuery as fetchUserByIdQuery, deleteAuthUser, createUserSession, getSessionDetails as fetchSessionDetails, deleteUserSession, updateUser, updateAuthUser, deleteUser, getUserByUsername as fetchUserByUsername, getAllUsersByString as fetchAllUsersByString, deleteAllNotices, deleteAllReactions, removeAllSaves, removeAllLikes, removeAllFollows, getUsersDocument, createFollow, unfollow, getUserFollowingsById, getUserFollowersById, followedByUserCount, followingTheUserCount, getPersonalFeedAccounts as fetchPersonalFeedAccounts, createPassocde, updatePassocde, getPassocdeByBusincessId as fetchPassocdeByBusincessId, createUserReport, getUserByIdQuery } from '../context/dbhandler';
+import { createBlock, getBlockedUsersByUser as fetchBlockedUsersByUser, getBlockedUsersByUserByBatch as fetchBlockedUsersByUserByBatch, getUsersBlockingUser as fetchUsersBlockingUser, removeBlockUsingBlockedId, checkIdExistsInAuth, checkEmailExistsInAuth as checkEmailInAuthFromServer, registerAuthUser, getUserById, getUserByIdQuery as fetchUserByIdQuery, deleteAuthUser, createUserSession, getSessionDetails as fetchSessionDetails, deleteUserSession, updateUser, updateAuthUser, deleteUser, getUserByUsername as fetchUserByUsername, getAllUsersByString as fetchAllUsersByString, deleteAllNotices, deleteAllReactions, removeAllSaves, removeAllLikes, removeAllFollows, getUsersDocument, createFollow, unfollow, getUserFollowingsById, getUserFollowersById, followedByUserCount, followingTheUserCount, getPersonalFeedAccounts as fetchPersonalFeedAccounts, createPassocde, updatePassocde, getPassocdeByBusincessId as fetchPassocdeByBusincessId, createUserReport, getFollowStatus as fetchFollowStatus } from '../context/dbhandler';
 import { useUserContext } from '../context/UserContext';
 import { UserId } from '../../components/User/UserId';
 
@@ -319,16 +319,15 @@ const useUserInfo = (data) => {
 
             setFollowersAccounts((prev) => [...prev, ...accountsFollowingTheUser]);
 
-            // Setting the button to 'Following' if user follows the other user 
-            if (followingTheUser && id) {
+            // if (followingTheUser && id) {
 
-                const matchUserWithFollower = followingTheUser.find((user) => user.otherUser_id === id);
+            //     const matchUserWithFollower = followingTheUser.find((user) => user.otherUser_id === id);
 
-                console.log('matchUserWithFollower', matchUserWithFollower);
+            //     console.log('matchUserWithFollower', matchUserWithFollower);
 
-                setIsFollowing(!!matchUserWithFollower);
-                setIsInitialFollowCheckLoading(false);
-            }
+            //     setIsFollowing(!!matchUserWithFollower);
+            //     setIsInitialFollowCheckLoading(false);
+            // }
 
             return accountsFollowingTheUser;
 
@@ -336,6 +335,31 @@ const useUserInfo = (data) => {
             console.error('Failed to fetch user followers:', error);
         }
     }
+
+    const getFollowStatus = async (user_id, otherUser_id) => {
+        try {
+            console.log('getting follow status - 2', { user_id, otherUser_id });
+            setIsInitialFollowCheckLoading(true);
+
+            const res = await fetchFollowStatus(user_id, otherUser_id);
+
+            console.log('fetchFollowStatus', res);
+
+
+            // Setting the button to 'Following' if user follows the other user 
+            if (res.total > 0) {
+                console.log('Follow each other', res);
+
+                setIsFollowing(!!res);
+            }
+            return res;
+        } catch (error) {
+            console.error('Error getting follow status:', error);
+        } finally {
+            setIsInitialFollowCheckLoading(false);
+        }
+    }
+
 
     const getUserAccountByUserId = async (userId) => {
         try {
@@ -492,6 +516,7 @@ const useUserInfo = (data) => {
         fetchUsersData,
         followUser,
         unfollowUser,
+        getFollowStatus,
         setIsFollowing,
         getfollwedByUserCount,
         getFollowingTheUserCount,
