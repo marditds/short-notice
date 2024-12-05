@@ -6,7 +6,7 @@ import defaultAvatar from '../../../assets/default.png';
 import { SlClose } from "react-icons/sl";
 import { Loading } from '../../Loading/Loading.jsx';
 
-export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUserId, followingCount, followersCount, isFollowing, followingAccounts, followersAccounts, isFollowingUserLoading, isBlocked, isOtherUserBlocked, handleUserReport, hasMoreFollowing, hasMoreFollowers, loadFollowing, loadFollowers }) => {
+export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUserId, followingCount, followersCount, isFollowing, followingAccounts, followersAccounts, isFollowingUserLoading, isBlocked, isOtherUserBlocked, handleUserReport, hasMoreFollowing, hasMoreFollowers, loadFollowing, loadFollowers, isLoadingMoreFollowing }) => {
 
     const location = useLocation();
 
@@ -120,7 +120,11 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                                 </Button>
 
                                 <Button
-                                    onClick={handleShowFollowingModal}
+                                    onClick={() => {
+                                        handleShowFollowingModal(),
+                                            loadFollowing()
+                                    }
+                                    }
                                     className='user-profile__follow-numbers-text'
                                 >
                                     {followingCount === null ?
@@ -130,7 +134,11 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                                     }
                                 </Button>
                                 <Button
-                                    onClick={handleShowFollowingModal}
+                                    onClick={() => {
+                                        handleShowFollowingModal(),
+                                            loadFollowing()
+                                    }
+                                    }
                                     className='user-profile__follow-numbers-number'
                                 >
                                     {followingCount === null ?
@@ -285,10 +293,15 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                         )
                     })}
                     {hasMoreFollowing && (
-                        <Button onClick={loadFollowing} className="btn btn-primary mt-3">
-                            Load More
-                        </Button>
+                        isLoadingMoreFollowing ? (
+                            <div><Loading size={24} /></div>
+                        ) : (
+                            <Button onClick={loadFollowing} className="btn btn-primary mt-3">
+                                Load More
+                            </Button>
+                        )
                     )}
+                    {!hasMoreFollowing && <p className="text-muted mt-3">No more accounts to load.</p>}
                 </Modal.Body>
             </Modal>
 

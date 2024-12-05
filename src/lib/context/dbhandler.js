@@ -1176,29 +1176,23 @@ export const followingTheUserCount = async (user_id) => {
     }
 }
 
-export const getUserFollowingsById = async (user_id, limit, lastId) => {
-
+export const getUserFollowingsById = async (user_id, limit, offset) => {
     console.log('Fetching followings with params:', {
         user_id,
         limit,
-        lastId
+        offset
     });
 
     try {
-        const queries = [
-            Query.equal('user_id', user_id),
-            Query.limit(limit),
-            Query.orderDesc('$createdAt')
-        ]
-
-        if (lastId) {
-            queries.push(Query.cursorAfter(lastId));
-        }
-
         const response = await databases.listDocuments(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_FOLLOWING_COLLECTION,
-            queries
+            [
+                Query.equal('user_id', user_id),
+                Query.limit(limit),
+                Query.offset(offset),
+                Query.orderDesc('$createdAt')
+            ]
         )
         // console.log('Successfully got following document.', response.documents);
         return response.documents;

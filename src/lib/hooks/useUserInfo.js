@@ -239,31 +239,27 @@ const useUserInfo = (data) => {
         }
     }
 
-    const fetchAccountsFollowedByUser = async (id, limit, lastId) => {
+    const fetchAccountsFollowedByUser = async (id, limit, offset) => {
         try {
-            console.log('Fetching accounts followed by user:', { id, limit, lastId });
+            console.log('Fetching accounts followed by user:', { id, limit, offset });
 
-            const followedByUser = await getUserFollowingsById(id, limit, lastId);
+            const followedByUser = await getUserFollowingsById(id, limit, offset);
             console.log('followedByUser,', followedByUser);
 
             const followedByUserIds = followedByUser.map((user) => user.otherUser_id);
-
             console.log('followedByUserIds,', followedByUserIds);
 
+            const allFollowings = await getUserByIdQuery(followedByUserIds);
 
-            const allUsers = await getUserByIdQuery(followedByUserIds);
+            console.log('allFollowings', allFollowings);
 
-            // const accountsFollowedByUser = followedByUserIds.map((followed) => {
-            //     return allUsers.documents.find((user) => user.$id === followed.otherUser_id);
-            // }).filter(Boolean);
-
-            const accountsFollowedByUser = allUsers.documents;
+            const accountsFollowedByUser = followedByUserIds.map((userId) =>
+                allFollowings.documents.find((user) => user.$id === userId)
+            );
 
             console.log('accountsFollowedByUser', accountsFollowedByUser);
 
-            if (accountsFollowedByUser.length > 0) {
-                setFollowingAccounts((prev) => [...prev, ...accountsFollowedByUser]);
-            }
+            setFollowingAccounts((prev) => [...prev, ...accountsFollowedByUser]);
 
             return accountsFollowedByUser;
 
