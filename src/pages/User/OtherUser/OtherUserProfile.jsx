@@ -69,6 +69,8 @@ const OtherUserProfile = () => {
         followUser,
         unfollowUser,
         setIsFollowing,
+        getfollwedByUserCount,
+        getFollowingTheUserCount,
         fetchAccountsFollowingTheUser,
         fetchAccountsFollowedByUser,
         getPassocdeByBusincessId,
@@ -105,6 +107,18 @@ const OtherUserProfile = () => {
     const [offsetLikes, setOffsetLikes] = useState(0);
     const [hasMoreLikes, setHasMoreLikes] = useState(true);
     const [isLoadingMoreLikes, setIsLoadingMoreLikes] = useState(false);
+
+    // Following
+    const [limitFollowing] = useState(11);
+    const [offsetFollowing, setOffsetFollowing] = useState(0);
+    const [hasMoreFollowing, setHasMoreFollowing] = useState(true);
+    const [isLoadingMoreFollowing, setIsLoadingMoreFollowing] = useState(false);
+
+    // Following
+    const [limitFollowers] = useState(11);
+    const [offsetFollowers, setOffsetFollowers] = useState(0);
+    const [hasMoreFollowers, setHasMoreFollowers] = useState(true);
+    const [isLoadingMoreFollowers, setIsLoadingMoreFollowers] = useState(false);
 
     // Tabs' EventKey
     const [eventKey, setEventKey] = useState('notices');
@@ -284,36 +298,91 @@ const OtherUserProfile = () => {
     }, [currUserId, offsetLikes])
 
     // Fetch accounts following the other user
-    useEffect(() => {
-        const fetchFollowingTheUser = async () => {
-            try {
-                if (currUserId && user_id && (isBlocked === false)) {
-                    fetchAccountsFollowingTheUser(currUserId, user_id);
-                } else {
-                    console.log('This user blocked you. - follow(ing/er)');
-                }
-            } catch (error) {
-                console.error('Failed fetchFollowingTheUser:', error);
+    // useEffect(() => {
+    //     const fetchFollowingTheUser = async () => {
+    //         try {
+    //             if (currUserId && user_id && (isBlocked === false)) {
+    //                 fetchAccountsFollowingTheUser(currUserId, user_id);
+    //             } else {
+    //                 console.log('This user blocked you. - follow(ing/er)');
+    //             }
+    //         } catch (error) {
+    //             console.error('Failed fetchFollowingTheUser:', error);
+    //         }
+    //     }
+    //     fetchFollowingTheUser();
+    // }, [currUserId, user_id])
+    const loadFollowers = async () => {
+        if (!hasMoreFollowers || isLoadingMoreFollowers) return;
+        try {
+            setIsLoadingMoreFollowers(true);
+
+            const newAccounts = await fetchAccountsFollowingTheUser(currUserId, limitFollowers, offsetFollowers);
+
+            console.log('newAccounts', newAccounts);
+
+            if (newAccounts.length < limitFollowers) {
+                setHasMoreFollowers(false);
             }
+
+            if (newAccounts.length > 0) {
+                setOffsetFollowers((prevOffset) => prevOffset + limitFollowers);
+            }
+
+        } catch (error) {
+            console.error('Error loaing followers:', error);
+        } finally {
+            setIsLoadingMoreFollowers(false);
         }
-        fetchFollowingTheUser();
-    }, [currUserId, user_id])
+    };
+    // Fetch followers count
+    useEffect(() => {
+        getFollowingTheUserCount(currUserId);
+    }, [currUserId])
 
     // Fetch accounts followed by other user
+    // useEffect(() => {
+    //     const fetchFollowedByUser = async () => {
+    //         try {
+    //             if (currUserId && (isBlocked === false)) {
+    //                 fetchAccountsFollowedByUser(currUserId);
+    //             } else {
+    //                 console.log('This user blocked you. - follow(ing/er)');
+    //             }
+    //         } catch (error) {
+    //             console.error('Failed fetchFollowedByUser:', error);
+    //         }
+    //     }
+    //     fetchFollowedByUser();
+    // }, [currUserId])
+    // Fetch following count
     useEffect(() => {
-        const fetchFollowedByUser = async () => {
-            try {
-                if (currUserId && (isBlocked === false)) {
-                    fetchAccountsFollowedByUser(currUserId);
-                } else {
-                    console.log('This user blocked you. - follow(ing/er)');
-                }
-            } catch (error) {
-                console.error('Failed fetchFollowedByUser:', error);
-            }
-        }
-        fetchFollowedByUser();
+        getfollwedByUserCount(currUserId);
     }, [currUserId])
+
+    const loadFollowing = async () => {
+        if (!hasMoreFollowing || isLoadingMoreFollowing) return;
+        try {
+            setIsLoadingMoreFollowing(true);
+
+            const newAccounts = await fetchAccountsFollowedByUser(currUserId, limitFollowing, offsetFollowing);
+
+            console.log('newAccounts', newAccounts);
+
+            if (newAccounts.length < limitFollowing) {
+                setHasMoreFollowing(false);
+            }
+
+            if (newAccounts.length > 0) {
+                setOffsetFollowing((prevOffset) => prevOffset + limitFollowing);
+            }
+
+        } catch (error) {
+            console.error('Error loaing following:', error);
+        } finally {
+            setIsLoadingMoreFollowing(false);
+        }
+    }
 
     const handleLike = async (notice) => {
         try {
@@ -443,6 +512,12 @@ const OtherUserProfile = () => {
                     handleFollow={handleFollow}
                     handleBlock={handleBlock}
                     handleUserReport={handleUserReport}
+                    loadFollowing={loadFollowing}
+                    loadFollowers={loadFollowers}
+                    hasMoreFollowers={hasMoreFollowers}
+                    hasMoreFollowing={hasMoreFollowing}
+                    isLoadingMoreFollowing={isLoadingMoreFollowing}
+                    isLoadingMoreFollowers={isLoadingMoreFollowers}
                 />
                 <>
                     {!isBlocked ?

@@ -92,6 +92,12 @@ const UserProfile = () => {
     const [hasMoreFollowing, setHasMoreFollowing] = useState(true);
     const [isLoadingMoreFollowing, setIsLoadingMoreFollowing] = useState(false);
 
+    // Following
+    const [limitFollowers] = useState(11);
+    const [offsetFollowers, setOffsetFollowers] = useState(0);
+    const [hasMoreFollowers, setHasMoreFollowers] = useState(true);
+    const [isLoadingMoreFollowers, setIsLoadingMoreFollowers] = useState(false);
+
     // Tabs' EventKey
     const [eventKey, setEventKey] = useState('my-notices');
 
@@ -236,14 +242,38 @@ const UserProfile = () => {
         }
     };
 
+    // Fetch following count
     useEffect(() => {
         getfollwedByUserCount(user_id);
     }, [user_id])
 
-    // Fetch accounts following the user 
+    // Fetch accounts following the user  
+    const loadFollowers = async () => {
+        if (!hasMoreFollowers || isLoadingMoreFollowers) return;
+        try {
+            setIsLoadingMoreFollowers(true);
+
+            const newAccounts = await fetchAccountsFollowingTheUser(user_id, limitFollowers, offsetFollowers);
+
+            console.log('newAccounts', newAccounts);
+
+            if (newAccounts.length < limitFollowers) {
+                setHasMoreFollowers(false);
+            }
+
+            if (newAccounts.length > 0) {
+                setOffsetFollowers((prevOffset) => prevOffset + limitFollowers);
+            }
+
+        } catch (error) {
+            console.error('Error loaing followers:', error);
+        } finally {
+            setIsLoadingMoreFollowers(false);
+        }
+    };
+    // Fetch followers count
     useEffect(() => {
         getFollowingTheUserCount(user_id);
-        fetchAccountsFollowingTheUser(user_id);
     }, [user_id])
 
     const handleEditNotice = (noticeId, currentText) => {
@@ -368,11 +398,12 @@ const UserProfile = () => {
                 followersCount={followersCount}
                 followingAccounts={followingAccounts}
                 followersAccounts={followersAccounts}
-                // loadMoreFollowers={fetchMoreFollowers}
+                loadFollowers={loadFollowers}
                 loadFollowing={loadFollowing}
-                // hasMoreFollowers={hasMoreFollowers}
+                hasMoreFollowers={hasMoreFollowers}
                 hasMoreFollowing={hasMoreFollowing}
                 isLoadingMoreFollowing={isLoadingMoreFollowing}
+                isLoadingMoreFollowers={isLoadingMoreFollowers}
             />
 
             <ComposeNotice

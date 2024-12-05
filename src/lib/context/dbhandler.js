@@ -1201,13 +1201,16 @@ export const getUserFollowingsById = async (user_id, limit, offset) => {
     }
 }
 
-export const getUserFollowersById = async (otherUser_id) => {
+export const getUserFollowersById = async (otherUser_id, limit, offset) => {
     try {
         const response = await databases.listDocuments(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_FOLLOWING_COLLECTION,
             [
                 Query.equal('otherUser_id', otherUser_id),
+                Query.limit(limit),
+                Query.offset(offset),
+                Query.orderDesc('$createdAt')
             ]
         )
         // console.log('Successfully got following document.', response.documents);

@@ -297,29 +297,40 @@ const useUserInfo = (data) => {
         }
     }
 
-    const fetchAccountsFollowingTheUser = async (otherUser_id, user_id) => {
+    const fetchAccountsFollowingTheUser = async (id, limit, offset) => {
         try {
             setIsInitialFollowCheckLoading(true);
-            const allUsers = await getUsersData();
 
-            const userFollowersById = await getUserFollowersById(otherUser_id);
+            const followingTheUser = await getUserFollowersById(id, limit, offset);
+            console.log('followingTheUser,', followingTheUser);
 
-            const accountsFollowingTheUser = allUsers.documents.filter((user) =>
-                userFollowersById?.some(followed => user.$id === followed.user_id)
+            const followingTheUserIds = followingTheUser.map((user) => user.user_id);
+            console.log('followingTheUserIds,', followingTheUserIds);
+
+            const allFollowers = await getUserByIdQuery(followingTheUserIds);
+
+            console.log('allFollowers', allFollowers);
+
+            const accountsFollowingTheUser = followingTheUserIds.map((userId) =>
+                allFollowers.documents.find((user) => user.$id === userId)
             );
 
-            setFollowersAccounts(accountsFollowingTheUser);
+            console.log('accountsFollowedByUser', accountsFollowingTheUser);
+
+            setFollowersAccounts((prev) => [...prev, ...accountsFollowingTheUser]);
 
             // Setting the button to 'Following' if user follows the other user 
-            if (userFollowersById && user_id) {
+            if (followingTheUser && id) {
 
-                const matchUserWithFollower = userFollowersById.find((user) => user.user_id === user_id);
+                const matchUserWithFollower = followingTheUser.find((user) => user.otherUser_id === id);
 
                 console.log('matchUserWithFollower', matchUserWithFollower);
 
                 setIsFollowing(!!matchUserWithFollower);
                 setIsInitialFollowCheckLoading(false);
             }
+
+            return accountsFollowingTheUser;
 
         } catch (error) {
             console.error('Failed to fetch user followers:', error);
@@ -484,8 +495,6 @@ const useUserInfo = (data) => {
         setIsFollowing,
         getfollwedByUserCount,
         getFollowingTheUserCount,
-        getUserFollowingsById,
-        getUserFollowersById,
         fetchAccountsFollowingTheUser,
         fetchAccountsFollowedByUser,
         getUserAccountByUserId,
