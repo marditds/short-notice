@@ -415,6 +415,10 @@
     height: 53px;
 }
 
+.user-profile__following--modal {
+    z-index: 9002;
+}
+
 
 .user-profile__following--modal-body>div>a {
     padding-inline: 10px;

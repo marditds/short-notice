@@ -8,7 +8,6 @@ const useUserInfo = (data) => {
     const { setUsername } = useUserContext();
     const [userId, setUserId] = useState(null);
 
-
     const [following, setFollowing] = useState({});
     const [followersCount, setFollowersCount] = useState(null);
     const [followingCount, setFollowingCount] = useState(null);
@@ -241,7 +240,9 @@ const useUserInfo = (data) => {
 
     const fetchAccountsFollowedByUser = async (id, limit, offset) => {
         try {
-            console.log('Fetching accounts followed by user:', { id, limit, offset });
+            if (offset === 0) {
+                setFollowingAccounts([]);
+            }
 
             const followedByUser = await getUserFollowingsById(id, limit, offset);
             console.log('followedByUser,', followedByUser);
@@ -318,16 +319,6 @@ const useUserInfo = (data) => {
             console.log('accountsFollowedByUser', accountsFollowingTheUser);
 
             setFollowersAccounts((prev) => [...prev, ...accountsFollowingTheUser]);
-
-            // if (followingTheUser && id) {
-
-            //     const matchUserWithFollower = followingTheUser.find((user) => user.otherUser_id === id);
-
-            //     console.log('matchUserWithFollower', matchUserWithFollower);
-
-            //     setIsFollowing(!!matchUserWithFollower);
-            //     setIsInitialFollowCheckLoading(false);
-            // }
 
             return accountsFollowingTheUser;
 
@@ -522,6 +513,7 @@ const useUserInfo = (data) => {
         getFollowingTheUserCount,
         fetchAccountsFollowingTheUser,
         fetchAccountsFollowedByUser,
+        setFollowingAccounts,
         getUserAccountByUserId,
         getPersonalFeedAccounts,
         getUserByIdQuery,

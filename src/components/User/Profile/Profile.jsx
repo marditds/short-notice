@@ -251,6 +251,8 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                                 <Link
                                     to={`/user/${followerAccount.username}`}
                                     className='w-100 d-flex justify-content-between align-items-center'
+                                    onClick={handleCloseFollowingModal}
+
                                 >
                                     {followerAccount.username}
                                     <img src={getAvatarUrl(followerAccount.avatar) || defaultAvatar}
@@ -299,6 +301,7 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                                 <Link
                                     to={`/user/${followingAccount.username}`}
                                     className='w-100 d-flex justify-content-between align-items-center'
+                                    onClick={handleCloseFollowingModal}
                                 >
                                     {followingAccount.username}
                                     <img src={getAvatarUrl(followingAccount.avatar) || defaultAvatar}

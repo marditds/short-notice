@@ -216,12 +216,18 @@ const useNotices = (googleUserData) => {
             const usrNotices = await getNoticesByUser(id, limit, offset);
 
             setNotices(prevNotices => {
-                const newNotices = usrNotices.filter(notice =>
-                    !prevNotices.some(existingNotice => existingNotice.$id === notice.$id)
-                );
+                const newNotices = usrNotices
+                    .filter(notice => notice.user_id === id)
+                    .filter(notice =>
+                        !prevNotices.some(existingNotice => existingNotice.$id === notice.$id)
+                    );
+
+                console.log('FETCHED NTCS:', newNotices);
 
                 return [...prevNotices, ...newNotices];
             });
+
+
 
             const now = new Date().getTime();
 

@@ -86,6 +86,7 @@ const OtherUserProfile = () => {
     const [isOtherUserBlocked, setIsOtherUserBlocked] = useState(false);
 
     const [notices, setNotices] = useState([]);
+    const [otherUserNotices, setOtherUserNotices] = useState([]);
     const [savedNoticesData, setSavedNoticesData] = useState([]);
     const [likedNoticesData, setLikedNoticesData] = useState([]);
 
@@ -135,6 +136,11 @@ const OtherUserProfile = () => {
     useEffect(() => {
         console.log('Barev', username);
     }, [username]);
+
+    // CurrUserId
+    useEffect(() => {
+        console.log('CurrUserId', currUserId);
+    }, [currUserId])
 
     // Get Other User
     useEffect(() => {
@@ -206,6 +212,8 @@ const OtherUserProfile = () => {
             setIsLoadingMore(true);
             try {
                 const usrNtcs = await fetchUserNotices(currUserId, setNotices, limit, offset);
+
+                setOtherUserNotices(usrNtcs);
 
                 console.log('usrNtcs', usrNtcs);
 
@@ -299,20 +307,6 @@ const OtherUserProfile = () => {
     }, [currUserId, offsetLikes])
 
     // Fetch accounts following the other user
-    // useEffect(() => {
-    //     const fetchFollowingTheUser = async () => {
-    //         try {
-    //             if (currUserId && user_id && (isBlocked === false)) {
-    //                 fetchAccountsFollowingTheUser(currUserId, user_id);
-    //             } else {
-    //                 console.log('This user blocked you. - follow(ing/er)');
-    //             }
-    //         } catch (error) {
-    //             console.error('Failed fetchFollowingTheUser:', error);
-    //         }
-    //     }
-    //     fetchFollowingTheUser();
-    // }, [currUserId, user_id])
     const loadFollowers = async () => {
         if (!hasMoreFollowers || isLoadingMoreFollowers) return;
         try {
@@ -347,21 +341,6 @@ const OtherUserProfile = () => {
         getFollowingTheUserCount(currUserId);
     }, [currUserId])
 
-    // Fetch accounts followed by other user
-    // useEffect(() => {
-    //     const fetchFollowedByUser = async () => {
-    //         try {
-    //             if (currUserId && (isBlocked === false)) {
-    //                 fetchAccountsFollowedByUser(currUserId);
-    //             } else {
-    //                 console.log('This user blocked you. - follow(ing/er)');
-    //             }
-    //         } catch (error) {
-    //             console.error('Failed fetchFollowedByUser:', error);
-    //         }
-    //     }
-    //     fetchFollowedByUser();
-    // }, [currUserId])
     // Fetch following count
     useEffect(() => {
         getfollwedByUserCount(currUserId);
@@ -371,6 +350,10 @@ const OtherUserProfile = () => {
         if (!hasMoreFollowing || isLoadingMoreFollowing) return;
         try {
             setIsLoadingMoreFollowing(true);
+
+            if (offsetFollowing === 0) {
+                setHasMoreFollowing(true);
+            }
 
             const newAccounts = await fetchAccountsFollowedByUser(currUserId, limitFollowing, offsetFollowing);
 
@@ -390,6 +373,10 @@ const OtherUserProfile = () => {
             setIsLoadingMoreFollowing(false);
         }
     }
+
+    useEffect(() => {
+        setOffsetFollowing(0);
+    }, [currUserId])
 
     const handleLike = async (notice) => {
         try {
@@ -541,10 +528,10 @@ const OtherUserProfile = () => {
                                     eventKey='notices'
                                     title="Notices"
                                 >
-                                    {notices.length !== 0 ?
+                                    {notices?.length !== 0 ?
                                         <>
                                             <Notices
-                                                notices={notices}
+                                                notices={otherUserNotices}
                                                 likedNotices={likedNotices}
                                                 savedNotices={savedNotices}
                                                 reactions={noticesReactions}

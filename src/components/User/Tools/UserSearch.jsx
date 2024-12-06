@@ -175,7 +175,10 @@ export const UserSearch = ({ userId }) => {
                                         key={user.$id}
                                         className='tools__search--search-results-profiles'
                                     >
-                                        <Link to={`../user/${user.username}`} className='w-100 d-flex align-items-center justify-content-end'>
+                                        <Link to={`../user/${user.username}`}
+                                            className='w-100 d-flex align-items-center justify-content-end'
+                                            onClick={handleCloseSeachUsersModal}
+                                        >
                                             {user?.username}
                                             < img src={avatarUrl(user.avatar) || defaultAvatar}
                                                 alt="Profile"
