@@ -355,9 +355,6 @@ const OtherUserProfile = () => {
         try {
             setIsLoadingMoreFollowing(true);
 
-            console.log('currUserId - loadFollowing', currUserId);
-
-
             const accountsFollowedByUser = await fetchAccountsFollowedByUser(currUserId, limitFollowing, offsetFollowing);
 
             console.log('accountsFollowedByUser', accountsFollowedByUser);
@@ -382,9 +379,12 @@ const OtherUserProfile = () => {
     useEffect(() => {
         if (currUserId) {
             console.log('Current User ID changed:', currUserId);
-            setFollowingAccounts([]); // Clear previous accounts for the new user
-            setOffsetFollowing(0);    // Reset offset for new user
-            setHasMoreFollowing(true); // Reset pagination for the new user
+            setFollowingAccounts([]);
+            setOffsetFollowing(0);
+            setHasMoreFollowing(true);
+            setFollowersAccounts([]);
+            setOffsetFollowers(0);
+            setHasMoreFollowers(true);
         }
     }, [currUserId]);
 

@@ -255,7 +255,6 @@ const useUserInfo = (data) => {
 
             console.log('accountsFollowedByUser', accountsFollowedByUser);
 
-            //MOVE setFollowingAccounts and followingAccounts to OtherUserProfile, rest stays the same
             return accountsFollowedByUser;
 
         } catch (error) {
