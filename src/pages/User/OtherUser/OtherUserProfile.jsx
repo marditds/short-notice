@@ -59,8 +59,6 @@ const OtherUserProfile = () => {
         isFollowing,
         followersCount,
         followingCount,
-        // followersAccounts,
-        // followingAccounts,
         makeBlock,
         getUserByUsername,
         getUserAccountByUserId,
@@ -350,6 +348,7 @@ const OtherUserProfile = () => {
         getfollwedByUserCount(currUserId);
     }, [currUserId])
 
+    // Fetch accounts followed by the other user
     const loadFollowing = async () => {
         if (!hasMoreFollowing || isLoadingMoreFollowing) return;
         try {

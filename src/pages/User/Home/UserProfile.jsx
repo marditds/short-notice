@@ -50,8 +50,6 @@ const UserProfile = () => {
     const {
         followersCount,
         followingCount,
-        followersAccounts,
-        followingAccounts,
         getUserAccountByUserId,
         getUserByUsername,
         fetchUsersData,
@@ -67,6 +65,9 @@ const UserProfile = () => {
     const [likedNoticesData, setLikedNoticesData] = useState([]);
 
     const { avatarUrl } = useUserAvatar(user_id);
+
+    const [followingAccounts, setFollowingAccounts] = useState([]);
+    const [followersAccounts, setFollowersAccounts] = useState([]);
 
     // Notices Tab
     const [limit] = useState(10);
@@ -223,15 +224,17 @@ const UserProfile = () => {
         try {
             setIsLoadingMoreFollowing(true);
 
-            const newAccounts = await fetchAccountsFollowedByUser(user_id, limitFollowing, offsetFollowing);
+            const accountsFollowedByUser = await fetchAccountsFollowedByUser(user_id, limitFollowing, offsetFollowing);
 
-            console.log('newAccounts', newAccounts);
+            console.log('accountsFollowedByUser', accountsFollowedByUser);
 
-            if (newAccounts.length < limitFollowing) {
+            setFollowingAccounts((prev) => [...prev, ...accountsFollowedByUser]);
+
+            if (accountsFollowedByUser.length < limitFollowing) {
                 setHasMoreFollowing(false);
             }
 
-            if (newAccounts.length > 0) {
+            if (accountsFollowedByUser.length > 0) {
                 setOffsetFollowing((prevOffset) => prevOffset + limitFollowing);
             }
 
@@ -253,15 +256,17 @@ const UserProfile = () => {
         try {
             setIsLoadingMoreFollowers(true);
 
-            const newAccounts = await fetchAccountsFollowingTheUser(user_id, limitFollowers, offsetFollowers);
+            const accountsFollowingTheUser = await fetchAccountsFollowingTheUser(user_id, limitFollowers, offsetFollowers);
 
-            console.log('newAccounts', newAccounts);
+            console.log('accountsFollowingTheUser', accountsFollowingTheUser);
 
-            if (newAccounts.length < limitFollowers) {
+            setFollowersAccounts((prev) => [...prev, ...accountsFollowingTheUser]);
+
+            if (accountsFollowingTheUser.length < limitFollowers) {
                 setHasMoreFollowers(false);
             }
 
-            if (newAccounts.length > 0) {
+            if (accountsFollowingTheUser.length > 0) {
                 setOffsetFollowers((prevOffset) => prevOffset + limitFollowers);
             }
 
@@ -271,10 +276,24 @@ const UserProfile = () => {
             setIsLoadingMoreFollowers(false);
         }
     };
+
     // Fetch followers count
     useEffect(() => {
         getFollowingTheUserCount(user_id);
     }, [user_id])
+
+    // Restting follow(ing/ers) data
+    useEffect(() => {
+        if (user_id) {
+            console.log('Current User ID changed:', user_id);
+            setFollowingAccounts([]);
+            setOffsetFollowing(0);
+            setHasMoreFollowing(true);
+            setFollowersAccounts([]);
+            setOffsetFollowers(0);
+            setHasMoreFollowers(true);
+        }
+    }, [user_id]);
 
     const handleEditNotice = (noticeId, currentText) => {
         setEditingNoticeId(noticeId);
