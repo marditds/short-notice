@@ -11,8 +11,7 @@ const useUserInfo = (data) => {
     const [following, setFollowing] = useState({});
     const [followersCount, setFollowersCount] = useState(null);
     const [followingCount, setFollowingCount] = useState(null);
-    const [followersAccounts, setFollowersAccounts] = useState([]);
-    const [followingAccounts, setFollowingAccounts] = useState([]);
+
     const [isFollowingUserLoading, setIsFollowingUserLoading] = useState(false);
     const [isInitialFollowCheckLoading, setIsInitialFollowCheckLoading] = useState(true);
     const [isFollowing, setIsFollowing] = useState(false);
@@ -240,10 +239,6 @@ const useUserInfo = (data) => {
 
     const fetchAccountsFollowedByUser = async (id, limit, offset) => {
         try {
-            if (offset === 0) {
-                setFollowingAccounts([]);
-            }
-
             const followedByUser = await getUserFollowingsById(id, limit, offset);
             console.log('followedByUser,', followedByUser);
 
@@ -260,8 +255,7 @@ const useUserInfo = (data) => {
 
             console.log('accountsFollowedByUser', accountsFollowedByUser);
 
-            setFollowingAccounts((prev) => [...prev, ...accountsFollowedByUser]);
-
+            //MOVE setFollowingAccounts and followingAccounts to OtherUserProfile, rest stays the same
             return accountsFollowedByUser;
 
         } catch (error) {
@@ -300,8 +294,6 @@ const useUserInfo = (data) => {
 
     const fetchAccountsFollowingTheUser = async (id, limit, offset) => {
         try {
-            setIsInitialFollowCheckLoading(true);
-
             const followingTheUser = await getUserFollowersById(id, limit, offset);
             console.log('followingTheUser,', followingTheUser);
 
@@ -317,8 +309,6 @@ const useUserInfo = (data) => {
             );
 
             console.log('accountsFollowedByUser', accountsFollowingTheUser);
-
-            setFollowersAccounts((prev) => [...prev, ...accountsFollowingTheUser]);
 
             return accountsFollowingTheUser;
 
@@ -486,8 +476,8 @@ const useUserInfo = (data) => {
         isFollowing,
         followersCount,
         followingCount,
-        followersAccounts,
-        followingAccounts,
+        // followersAccounts,
+        // followingAccounts,
         makeBlock,
         getBlockedUsersByUser,
         getBlockedUsersByUserByBatch,
@@ -513,7 +503,7 @@ const useUserInfo = (data) => {
         getFollowingTheUserCount,
         fetchAccountsFollowingTheUser,
         fetchAccountsFollowedByUser,
-        setFollowingAccounts,
+        // setFollowingAccounts,
         getUserAccountByUserId,
         getPersonalFeedAccounts,
         getUserByIdQuery,

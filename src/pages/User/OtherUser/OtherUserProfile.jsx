@@ -59,8 +59,8 @@ const OtherUserProfile = () => {
         isFollowing,
         followersCount,
         followingCount,
-        followersAccounts,
-        followingAccounts,
+        // followersAccounts,
+        // followingAccounts,
         makeBlock,
         getUserByUsername,
         getUserAccountByUserId,
@@ -91,6 +91,9 @@ const OtherUserProfile = () => {
     const [likedNoticesData, setLikedNoticesData] = useState([]);
 
     const { avatarUrl } = useUserAvatar(currUserId);
+
+    const [followingAccounts, setFollowingAccounts] = useState([]);
+    const [followersAccounts, setFollowersAccounts] = useState([]);
 
     // Notices Tab
     const [limit] = useState(10);
@@ -137,11 +140,6 @@ const OtherUserProfile = () => {
         console.log('Barev', username);
     }, [username]);
 
-    // CurrUserId
-    useEffect(() => {
-        console.log('CurrUserId', currUserId);
-    }, [currUserId])
-
     // Get Other User
     useEffect(() => {
         const getCurrUser = async () => {
@@ -185,7 +183,6 @@ const OtherUserProfile = () => {
                     }
                 }
 
-
                 if (otherUser) {
                     // Only update if different to prevent unnecessary re-renders
                     setCurrUserId((prevId) => (prevId !== otherUser.$id ? otherUser.$id : prevId));
@@ -201,6 +198,11 @@ const OtherUserProfile = () => {
         }
         getCurrUser();
     }, [username, otherUsername])
+
+    // CurrUserId
+    useEffect(() => {
+        console.log('CurrUserId', currUserId);
+    }, [currUserId])
 
     useEffect(() => {
         console.log('acountType:', accountType);
@@ -312,15 +314,17 @@ const OtherUserProfile = () => {
         try {
             setIsLoadingMoreFollowers(true);
 
-            const newAccounts = await fetchAccountsFollowingTheUser(currUserId, limitFollowers, offsetFollowers);
+            const accountsFollowingTheUser = await fetchAccountsFollowingTheUser(currUserId, limitFollowers, offsetFollowers);
 
-            console.log('newAccounts', newAccounts);
+            console.log('accountsFollowingTheUser', accountsFollowingTheUser);
 
-            if (newAccounts.length < limitFollowers) {
+            setFollowersAccounts((prev) => [...prev, ...accountsFollowingTheUser]);
+
+            if (accountsFollowingTheUser.length < limitFollowers) {
                 setHasMoreFollowers(false);
             }
 
-            if (newAccounts.length > 0) {
+            if (accountsFollowingTheUser.length > 0) {
                 setOffsetFollowers((prevOffset) => prevOffset + limitFollowers);
             }
 
@@ -351,19 +355,20 @@ const OtherUserProfile = () => {
         try {
             setIsLoadingMoreFollowing(true);
 
-            if (offsetFollowing === 0) {
-                setHasMoreFollowing(true);
-            }
+            console.log('currUserId - loadFollowing', currUserId);
 
-            const newAccounts = await fetchAccountsFollowedByUser(currUserId, limitFollowing, offsetFollowing);
 
-            console.log('newAccounts', newAccounts);
+            const accountsFollowedByUser = await fetchAccountsFollowedByUser(currUserId, limitFollowing, offsetFollowing);
 
-            if (newAccounts.length < limitFollowing) {
+            console.log('accountsFollowedByUser', accountsFollowedByUser);
+
+            setFollowingAccounts((prev) => [...prev, ...accountsFollowedByUser]);
+
+            if (accountsFollowedByUser.length < limitFollowing) {
                 setHasMoreFollowing(false);
             }
 
-            if (newAccounts.length > 0) {
+            if (accountsFollowedByUser.length > 0) {
                 setOffsetFollowing((prevOffset) => prevOffset + limitFollowing);
             }
 
@@ -375,8 +380,14 @@ const OtherUserProfile = () => {
     }
 
     useEffect(() => {
-        setOffsetFollowing(0);
-    }, [currUserId])
+        if (currUserId) {
+            console.log('Current User ID changed:', currUserId);
+            setFollowingAccounts([]); // Clear previous accounts for the new user
+            setOffsetFollowing(0);    // Reset offset for new user
+            setHasMoreFollowing(true); // Reset pagination for the new user
+        }
+    }, [currUserId]);
+
 
     const handleLike = async (notice) => {
         try {
@@ -506,8 +517,10 @@ const OtherUserProfile = () => {
                     handleFollow={handleFollow}
                     handleBlock={handleBlock}
                     handleUserReport={handleUserReport}
-                    loadFollowing={loadFollowing}
                     loadFollowers={loadFollowers}
+
+                    loadFollowing={loadFollowing}
+
                     hasMoreFollowers={hasMoreFollowers}
                     hasMoreFollowing={hasMoreFollowing}
                     isLoadingMoreFollowing={isLoadingMoreFollowing}

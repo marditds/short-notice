@@ -100,6 +100,9 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                                         handleShowFollowersModal(),
                                             loadFollowers()
                                     }}
+                                    // onClick={
+                                    //     handleShowFollowersModal
+                                    // }
                                     className='user-profile__follow-numbers-text'
                                 >
                                     {followersCount === null ?
@@ -113,6 +116,9 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                                         handleShowFollowersModal(),
                                             loadFollowers()
                                     }}
+                                    // onClick={
+                                    //     handleShowFollowersModal
+                                    // }
                                     className='user-profile__follow-numbers-number'
                                 >
                                     {followersCount === null ?
@@ -126,11 +132,14 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                                 </Button>
 
                                 <Button
-                                    onClick={() => {
-                                        handleShowFollowingModal(),
-                                            loadFollowing()
+                                    onClick={async () => {
+                                        handleShowFollowingModal();
+                                        await loadFollowing()
                                     }
                                     }
+                                    // onClick={
+                                    //     handleShowFollowingModal
+                                    // }
                                     className='user-profile__follow-numbers-text'
                                 >
                                     {followingCount === null ?
@@ -140,9 +149,12 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                                     }
                                 </Button>
                                 <Button
-                                    onClick={() => {
-                                        handleShowFollowingModal(),
-                                            loadFollowing()
+                                    // onClick={
+                                    //     handleShowFollowingModal
+                                    // }
+                                    onClick={async () => {
+                                        handleShowFollowingModal();
+                                        await loadFollowing()
                                     }
                                     }
                                     className='user-profile__follow-numbers-number'
