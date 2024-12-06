@@ -551,6 +551,7 @@ export const createNotice = async ({ user_id, text, timestamp, expiresAt, notice
 
 export const getUserNotices = async (user_id, limit, lastId) => {
     try {
+        console.log('limit + offset', { limit, lastId });
         // Construct query parameters
         const queries = [
             Query.equal('user_id', user_id),

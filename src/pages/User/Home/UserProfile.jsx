@@ -61,6 +61,7 @@ const UserProfile = () => {
     } = useUserInfo(googleUserData);
 
     const [notices, setNotices] = useState([]);
+    const [userNotices, setUserNotices] = useState([]);
     const [savedNoticesData, setSavedNoticesData] = useState([]);
     const [likedNoticesData, setLikedNoticesData] = useState([]);
 
@@ -71,7 +72,7 @@ const UserProfile = () => {
 
     // Notices Tab
     const [limit] = useState(10);
-    const [offset, setOffset] = useState(0);
+    const [lastId, setLastId] = useState(0);
     const [hasMoreNotices, setHasMoreNotices] = useState(true);
     const [isLoadingMore, setIsLoadingMore] = useState(false);
 
@@ -130,30 +131,41 @@ const UserProfile = () => {
         fetchBlockedUsersByUser();
     }, [user_id])
 
-    // Fetch notices for user
-    useEffect(() => {
-        const fetchNotices = async () => {
-            // fetchUserNotices(user_id, setNotices);
-            setIsLoadingMore(true);
-            try {
-                const usrNtcs = await fetchUserNotices(user_id, setNotices, limit, offset);
+    const fetchNotices = async () => {
+        // fetchUserNotices(user_id, setNotices);
+        setIsLoadingMore(true);
+        try {
+            const usrNtcs = await fetchUserNotices(user_id, setNotices, limit, lastId);
 
-                console.log('usrNtcs', usrNtcs);
+            console.log('usrNtcs', usrNtcs);
+
+            if (usrNtcs.length > 0) {
+
+                setUserNotices((prevNotices) => [
+                    ...prevNotices,
+                    ...usrNtcs,
+                ]);
+
+                setLastId(usrNtcs[usrNtcs.length - 1].$id);
 
                 if (usrNtcs?.length < limit) {
                     setHasMoreNotices(false);
-                } else {
-                    setHasMoreNotices(true);
                 }
-
-            } catch (error) {
-                console.error('Error fetching notices - ', error);
-            } finally {
-                setIsLoadingMore(false);
+            } else {
+                setHasMoreNotices(true);
             }
-        };
+
+        } catch (error) {
+            console.error('Error fetching notices - ', error);
+        } finally {
+            setIsLoadingMore(false);
+        }
+    };
+
+    // Fetch notices for user
+    useEffect(() => {
         fetchNotices();
-    }, [user_id, offset])
+    }, [user_id])
 
     // Display notice in UI immediately after it is added
     const handleNoticeAdded = (newNotice) => {
@@ -460,7 +472,7 @@ const UserProfile = () => {
                     <div className="d-flex justify-content-center mt-4">
                         {hasMoreNotices ?
                             <Button
-                                onClick={() => setOffset(offset + limit)}
+                                onClick={fetchNotices}
                                 disabled={isLoadingMore || !hasMoreNotices}
                             >
                                 {isLoadingMore ?
@@ -494,7 +506,7 @@ const UserProfile = () => {
                     <div className="d-flex justify-content-center mt-4">
                         {hasMoreSaves ?
                             <Button
-                                onClick={() => setOffsetSaveas(offset + limit)}
+                                onClick={() => setOffsetSaveas(offsetSaves + limitSaves)}
                                 disabled={isLoadingMoreSaves || !hasMoreSaves}
                             >
                                 {isLoadingMoreSaves ?
@@ -528,7 +540,7 @@ const UserProfile = () => {
                     <div className="d-flex justify-content-center mt-4">
                         {hasMoreLikes ?
                             <Button
-                                onClick={() => setOffsetLikes(offset + limit)}
+                                onClick={() => setOffsetLikes(offsetLikes + limitLikes)}
                                 disabled={isLoadingMoreLikes || !hasMoreLikes}
                             >
                                 {isLoadingMoreLikes ?

@@ -95,7 +95,7 @@ const OtherUserProfile = () => {
 
     // Notices Tab
     const [limit] = useState(10);
-    const [offset, setOffset] = useState(0);
+    const [lastId, setLastId] = useState(null);
     const [hasMoreNotices, setHasMoreNotices] = useState(true);
     const [isLoadingMore, setIsLoadingMore] = useState(false);
 
@@ -207,29 +207,39 @@ const OtherUserProfile = () => {
     }, [accountType])
 
     // Fetch notices for other user
-    useEffect(() => {
-        const fetchNotices = async () => {
-            setIsLoadingMore(true);
-            try {
-                const usrNtcs = await fetchUserNotices(currUserId, setNotices, limit, offset);
+    const fetchNotices = async () => {
+        setIsLoadingMore(true);
+        try {
+            const usrNtcs = await fetchUserNotices(currUserId, setNotices, limit, lastId);
 
-                setOtherUserNotices(usrNtcs);
+            console.log('usrNtcs', usrNtcs);
 
-                console.log('usrNtcs', usrNtcs);
+            if (usrNtcs.length > 0) {
+
+                setOtherUserNotices((prevNotices) => [
+                    ...prevNotices,
+                    ...usrNtcs,
+                ]);
+
+                setLastId(usrNtcs[usrNtcs.length - 1].$id);
 
                 if (usrNtcs?.length < limit) {
                     setHasMoreNotices(false);
-                } else {
-                    setHasMoreNotices(true);
                 }
-            } catch (error) {
-                console.error('Error fetching notices - ', error);
-            } finally {
-                setIsLoadingMore(false);
+            } else {
+                setHasMoreNotices(false);
             }
-        };
+        } catch (error) {
+            console.error('Error fetching notices - ', error);
+        } finally {
+            setIsLoadingMore(false);
+        }
+    };
+
+    // Fetch notices on initial load
+    useEffect(() => {
         callFunctionIfNotBlocked(fetchNotices);
-    }, [currUserId, offset])
+    }, [currUserId])
 
     const callFunctionIfNotBlocked = (functionName) => {
         if (isBlocked === false) {
@@ -375,6 +385,7 @@ const OtherUserProfile = () => {
         }
     }
 
+    // Restting follow(ing/ers) data
     useEffect(() => {
         if (currUserId) {
             console.log('Current User ID changed:', currUserId);
@@ -561,7 +572,7 @@ const OtherUserProfile = () => {
                                             <div className="d-flex justify-content-center mt-4">
                                                 {hasMoreNotices ?
                                                     <Button
-                                                        onClick={() => setOffset(offset + limit)}
+                                                        onClick={fetchNotices}
                                                         disabled={isLoadingMore || !hasMoreNotices}
                                                     >
                                                         {isLoadingMore ?
@@ -599,7 +610,7 @@ const OtherUserProfile = () => {
                                             <div className="d-flex justify-content-center mt-4">
                                                 {hasMoreSaves ?
                                                     <Button
-                                                        onClick={() => setOffsetSaves(offset + limit)}
+                                                        onClick={() => setOffsetSaves(offsetSaves + limitSaves)}
                                                         disabled={isLoadingMoreSaves || !hasMoreSaves}
                                                     >
                                                         {isLoadingMoreSaves ?
@@ -638,7 +649,7 @@ const OtherUserProfile = () => {
                                             <div className="d-flex justify-content-center mt-4">
                                                 {hasMoreLikes ?
                                                     <Button
-                                                        onClick={() => setOffsetLikes(offset + limit)}
+                                                        onClick={() => setOffsetLikes(offsetLikes + limitLikes)}
                                                         disabled={isLoadingMoreLikes || !hasMoreLikes}
                                                     >
                                                         {isLoadingMoreLikes ?
