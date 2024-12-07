@@ -38,6 +38,7 @@ const OtherUserProfile = () => {
         likeNotice,
         saveNotice,
         reportNotice,
+        getNoticeByUserId,
         getAllLikedNotices,
         getAllSavedNotices,
         fetchUserNotices,
@@ -83,7 +84,6 @@ const OtherUserProfile = () => {
     const [isBlocked, setIsBlocked] = useState(false);
     const [isOtherUserBlocked, setIsOtherUserBlocked] = useState(false);
 
-    const [notices, setNotices] = useState([]);
     const [otherUserNotices, setOtherUserNotices] = useState([]);
     const [savedNoticesData, setSavedNoticesData] = useState([]);
     const [likedNoticesData, setLikedNoticesData] = useState([]);
@@ -94,8 +94,8 @@ const OtherUserProfile = () => {
     const [followersAccounts, setFollowersAccounts] = useState([]);
 
     // Notices Tab
-    const [limit] = useState(10);
-    const [lastId, setLastId] = useState(null);
+    const [limitNotices] = useState(10);
+    const [offsetNotices, setOffsetNotices] = useState(0);
     const [hasMoreNotices, setHasMoreNotices] = useState(true);
     const [isLoadingMore, setIsLoadingMore] = useState(false);
 
@@ -203,44 +203,41 @@ const OtherUserProfile = () => {
     }, [currUserId])
 
     useEffect(() => {
-        console.log('acountType:', accountType);
-    }, [accountType])
+        console.log('otherUserNotices:', otherUserNotices);
+    }, [otherUserNotices])
 
-    // Fetch notices for other user
-    const fetchNotices = async () => {
-        setIsLoadingMore(true);
-        try {
-            const usrNtcs = await fetchUserNotices(currUserId, setNotices, limit, lastId);
-
-            console.log('usrNtcs', usrNtcs);
-
-            if (usrNtcs.length > 0) {
-
-                setOtherUserNotices((prevNotices) => [
-                    ...prevNotices,
-                    ...usrNtcs,
-                ]);
-
-                setLastId(usrNtcs[usrNtcs.length - 1].$id);
-
-                if (usrNtcs?.length < limit) {
-                    setHasMoreNotices(false);
-                }
-            } else {
-                setHasMoreNotices(false);
-            }
-        } catch (error) {
-            console.error('Error fetching notices - ', error);
-        } finally {
-            setIsLoadingMore(false);
-        }
-    };
-
-    // Fetch notices on initial load
+    // Fetch notices for other user 
     useEffect(() => {
-        callFunctionIfNotBlocked(fetchNotices);
-    }, [currUserId])
+        if (eventKey !== 'notices') return;
 
+        const fetchNotices = async () => {
+            setIsLoadingMore(true);
+            try {
+
+                console.log('LIMIT TO BE SENT OUT:', limitNotices);
+
+                const usrNtcs = await getNoticeByUserId(currUserId, limitNotices, offsetNotices, setOtherUserNotices);
+
+                console.log('OtherUserNotices', usrNtcs);
+
+                setOtherUserNotices((preVal) => [...preVal, ...usrNtcs]);
+
+
+                if (usrNtcs?.length < limitNotices) {
+                    setHasMoreNotices(false);
+                } else {
+                    setHasMoreNotices(true);
+                }
+            } catch (error) {
+                console.error('Error fetching notices - ', error);
+            } finally {
+                setIsLoadingMore(false);
+            }
+        };
+        callFunctionIfNotBlocked(fetchNotices);
+    }, [currUserId, offsetNotices])
+
+    // Call function only if user is not blocked
     const callFunctionIfNotBlocked = (functionName) => {
         if (isBlocked === false) {
             functionName();
@@ -256,6 +253,8 @@ const OtherUserProfile = () => {
         const fetchSaveNotices = async () => {
             setIsLoadingMoreSaves(true);
             try {
+                console.log('currUserId - allSavedNotices', currUserId);
+
                 const allSavedNotices = await getAllSavedNotices(currUserId, limitSaves, offsetSaves);
 
                 console.log('allSavedNotices', allSavedNotices);
@@ -272,6 +271,8 @@ const OtherUserProfile = () => {
                     setHasMoreSaves(true);
                 }
 
+                console.log('SAVE - filteredNotices', filteredNotices);
+
                 await fetchUsersData(filteredNotices, setSavedNoticesData, avatarUtil);
             } catch (error) {
                 console.error('Error fetching saves - ', error);
@@ -280,7 +281,7 @@ const OtherUserProfile = () => {
             }
         };
         callFunctionIfNotBlocked(fetchSaveNotices);
-    }, [currUserId, offsetSaves])
+    }, [currUserId, offsetLikes, eventKey])
 
     // Fetch likes and users' data for likes tab  
     useEffect(() => {
@@ -314,7 +315,7 @@ const OtherUserProfile = () => {
             }
         };
         callFunctionIfNotBlocked(fetchLikedNotices);
-    }, [currUserId, offsetLikes])
+    }, [currUserId, offsetLikes, eventKey])
 
     // Fetch accounts following the other user
     const loadFollowers = async () => {
@@ -551,7 +552,7 @@ const OtherUserProfile = () => {
                                     eventKey='notices'
                                     title="Notices"
                                 >
-                                    {notices?.length !== 0 ?
+                                    {otherUserNotices?.length !== 0 ?
                                         <>
                                             <Notices
                                                 notices={otherUserNotices}
@@ -572,7 +573,7 @@ const OtherUserProfile = () => {
                                             <div className="d-flex justify-content-center mt-4">
                                                 {hasMoreNotices ?
                                                     <Button
-                                                        onClick={fetchNotices}
+                                                        onClick={() => setOffsetNotices(offsetNotices + limitNotices)}
                                                         disabled={isLoadingMore || !hasMoreNotices}
                                                     >
                                                         {isLoadingMore ?
@@ -582,7 +583,8 @@ const OtherUserProfile = () => {
                                                     : 'No more notices'}
                                             </div>
                                         </>
-                                        : 'No notices yet'}
+                                        : 'No notices yet'
+                                    }
                                 </Tab>
 
                                 {/* SAVES TAB */}

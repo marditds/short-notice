@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { createNotice, getUserNotices, updateNotice, deleteNotice, deleteAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSave, getUserSaves, removeSave, createReport, createLike, removeLike, getUserLikes, getAllLikedNotices as fetchAllLikedNotices, getAllLikesByNoticeId as fetchAllLikesByNoticeId, getAllSavedNotices as fetchAllSavedNotices, createReaction, deleteReaction, getAllReactionsBySenderId as fetchAllReactionsBySenderId, getAllReactions as fetchAllReactions, getAllReactionsByRecipientId as fetchAllReactionsByRecipientId, getNoticeByNoticeId as fetchNoticeByNoticeId, getAllReactionsByNoticeId as fetchAllReactionsByNoticeId, getReactionByReactionId as fetchReactionByReactionId, deleteAllReactions, createReactionReport } from '../../lib/context/dbhandler';
+import { createNotice, getUserNotices, updateNotice, deleteNotice, deleteAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSave, getUserSaves, removeSave, createReport, createLike, removeLike, getUserLikes, getAllLikedNotices as fetchAllLikedNotices, getAllLikesByNoticeId as fetchAllLikesByNoticeId, getAllSavedNotices as fetchAllSavedNotices, createReaction, deleteReaction, getAllReactionsBySenderId as fetchAllReactionsBySenderId, getAllReactions as fetchAllReactions, getAllReactionsByRecipientId as fetchAllReactionsByRecipientId, getNoticeByNoticeId as fetchNoticeByNoticeId, getAllReactionsByNoticeId as fetchAllReactionsByNoticeId, getReactionByReactionId as fetchReactionByReactionId, deleteAllReactions, createReactionReport, getNoticeByUserId as fetchNoticeByUserId } from '../../lib/context/dbhandler';
 import { UserId } from '../../components/User/UserId.jsx';
 import { useUnblockedNotices } from '../utils/blockFilter.js';
 
@@ -209,38 +209,38 @@ const useNotices = (googleUserData) => {
         }
     }, [googleUserData]);
 
-    const fetchUserNotices = async (id, setNotices, limit, offset) => {
+    const fetchUserNotices = async (id, limit, lastId) => {
         if (!id) return;
 
         try {
-            const usrNotices = await getNoticesByUser(id, limit, offset);
+            const usrNotices = await getNoticesByUser(id, limit, lastId);
 
-            setNotices(prevNotices => {
-                const newNotices = usrNotices.filter(notice =>
-                    !prevNotices.some(existingNotice => existingNotice.$id === notice.$id)
-                );
+            // setNotices(prevNotices => {
+            //     const newNotices = usrNotices.filter(notice =>
+            //         !prevNotices.some(existingNotice => existingNotice.$id === notice.$id)
+            //     );
 
-                console.log('FETCHED NTCS:', newNotices);
+            //     console.log('FETCHED NTCS:', newNotices);
 
-                return [...prevNotices, ...newNotices];
-            });
+            //     return [...prevNotices, ...newNotices];
+            // });
 
-            const now = new Date().getTime();
+            // const now = new Date().getTime();
 
-            setNotices(prevNotices =>
-                prevNotices.filter(notice => {
-                    if (notice.expiresAt) {
-                        const expiresAtDate = new Date(notice.expiresAt);
-                        expiresAtDate.setHours(expiresAtDate.getHours() + 8); // Adjusting the 8-hour difference
+            // setNotices(prevNotices =>
+            //     prevNotices.filter(notice => {
+            //         if (notice.expiresAt) {
+            //             const expiresAtDate = new Date(notice.expiresAt);
+            //             expiresAtDate.setHours(expiresAtDate.getHours() + 8); // Adjusting the 8-hour difference
 
-                        if (expiresAtDate <= now) {
-                            deleteNotice(notice.$id);
-                            return false;
-                        }
-                    }
-                    return true;
-                })
-            );
+            //             if (expiresAtDate <= now) {
+            //                 deleteNotice(notice.$id);
+            //                 return false;
+            //             }
+            //         }
+            //         return true;
+            //     })
+            // );
 
             console.log('usrNotices - useNotices:', usrNotices);
 
@@ -343,6 +343,23 @@ const useNotices = (googleUserData) => {
         }
     };
 
+    const getNoticeByUserId = async (id, limit, offset) => {
+        try {
+            console.log('LIMIT - useNotice', limit);
+
+            const res = await fetchNoticeByUserId(id, limit, offset);
+
+            console.log('NOTICES:', res);
+
+            // setUserNotices(res);
+            // setUserNotices((preVal) => [...preVal, ...res]);
+
+            return res;
+        } catch (error) {
+            console.error('Error fetching notice by user id:', error);
+        }
+    }
+
     const getAllLikesByNoticeId = async (noticeId) => {
         try {
             const res = await fetchAllLikesByNoticeId(noticeId);
@@ -357,6 +374,9 @@ const useNotices = (googleUserData) => {
         try {
 
             const userSaves = await getUserSaves(userId);
+
+            console.log('userSaves', userSaves);
+
 
             const noticesWithoutTwoWayBlock = await filterBlocksFromLikesSaves(userSaves, user_id);
 
@@ -500,6 +520,7 @@ const useNotices = (googleUserData) => {
         updateInterests,
         saveNotice,
         getAllLikedNotices,
+        getNoticeByUserId,
         getAllLikesByNoticeId,
         getAllSavedNotices,
         reportNotice,

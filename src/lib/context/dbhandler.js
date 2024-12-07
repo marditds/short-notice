@@ -551,15 +551,12 @@ export const createNotice = async ({ user_id, text, timestamp, expiresAt, notice
 
 export const getUserNotices = async (user_id, limit, lastId) => {
     try {
-        console.log('limit + offset', { limit, lastId });
-        // Construct query parameters
         const queries = [
             Query.equal('user_id', user_id),
             Query.limit(limit),
             Query.orderDesc('timestamp'),
         ];
 
-        // Add cursorAfter if lastId exists
         if (lastId) {
             queries.push(Query.cursorAfter(lastId));
         }
@@ -577,6 +574,29 @@ export const getUserNotices = async (user_id, limit, lastId) => {
     }
 };
 
+export const getNoticeByUserId = async (user_id, limit, offset) => {
+    try {
+        console.log('user_id, limit, offset - dbhandler', { user_id, limit, offset });
+
+        if (user_id === null || undefined) {
+            return [];
+        }
+
+        const res = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_NOTICES_COLLECTION,
+            [
+                Query.equal('user_id', user_id),
+                Query.limit(limit),
+                Query.offset(offset),
+                Query.orderDesc('timestamp')
+            ]
+        );
+        return res.documents;
+    } catch (error) {
+        console.error('Error getting notice by user id:', error);
+    }
+}
 
 export const getNoticeByTagname = async (tagnames) => {
     try {

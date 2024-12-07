@@ -135,7 +135,7 @@ const UserProfile = () => {
         // fetchUserNotices(user_id, setNotices);
         setIsLoadingMore(true);
         try {
-            const usrNtcs = await fetchUserNotices(user_id, setNotices, limit, lastId);
+            const usrNtcs = await fetchUserNotices(user_id, limit, lastId);
 
             console.log('usrNtcs', usrNtcs);
 
@@ -461,7 +461,7 @@ const UserProfile = () => {
                     title="My Notices"
                 >
                     <Notices
-                        notices={notices}
+                        notices={userNotices}
                         username={username}
                         eventKey={eventKey}
                         handleEditNotice={handleEditNotice}
