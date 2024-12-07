@@ -213,15 +213,11 @@ const OtherUserProfile = () => {
         const fetchNotices = async () => {
             setIsLoadingMore(true);
             try {
+                const usrNtcs = await getNoticeByUserId(currUserId, limitNotices, offsetNotices);
 
-                console.log('LIMIT TO BE SENT OUT:', limitNotices);
-
-                const usrNtcs = await getNoticeByUserId(currUserId, limitNotices, offsetNotices, setOtherUserNotices);
-
-                console.log('OtherUserNotices', usrNtcs);
+                console.log('usrNtc', usrNtcs);
 
                 setOtherUserNotices((preVal) => [...preVal, ...usrNtcs]);
-
 
                 if (usrNtcs?.length < limitNotices) {
                     setHasMoreNotices(false);
@@ -234,8 +230,10 @@ const OtherUserProfile = () => {
                 setIsLoadingMore(false);
             }
         };
+        setOffsetNotices(0);
+        setOtherUserNotices([]);
         callFunctionIfNotBlocked(fetchNotices);
-    }, [currUserId, offsetNotices])
+    }, [currUserId, offsetNotices, eventKey])
 
     // Call function only if user is not blocked
     const callFunctionIfNotBlocked = (functionName) => {
@@ -280,8 +278,10 @@ const OtherUserProfile = () => {
                 setIsLoadingMoreSaves(false);
             }
         };
+        setOffsetSaves(0);
+        setSavedNoticesData([]);
         callFunctionIfNotBlocked(fetchSaveNotices);
-    }, [currUserId, offsetLikes, eventKey])
+    }, [currUserId, offsetSaves, eventKey])
 
     // Fetch likes and users' data for likes tab  
     useEffect(() => {
@@ -314,6 +314,8 @@ const OtherUserProfile = () => {
                 setIsLoadingMoreLikes(false);
             }
         };
+        setOffsetLikes(0);
+        setLikedNoticesData([]);
         callFunctionIfNotBlocked(fetchLikedNotices);
     }, [currUserId, offsetLikes, eventKey])
 
@@ -396,6 +398,17 @@ const OtherUserProfile = () => {
             setFollowersAccounts([]);
             setOffsetFollowers(0);
             setHasMoreFollowers(true);
+        }
+    }, [currUserId]);
+
+    // Restting notices data 
+    useEffect(() => {
+        if (currUserId) {
+            console.log('Current User ID changed:', currUserId);
+            // setOtherUserNotices([]);
+            // setOffsetNotices([]);
+            // setHasMoreNotices([]);
+            // setIsLoadingMore([]);
         }
     }, [currUserId]);
 
