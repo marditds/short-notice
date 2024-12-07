@@ -194,6 +194,8 @@ const OtherUserProfile = () => {
                 console.error(error);
             }
         }
+        setIsOtherUserBlocked(false);
+        setIsBlocked(false);
         getCurrUser();
     }, [username, otherUsername])
 
@@ -205,6 +207,11 @@ const OtherUserProfile = () => {
     useEffect(() => {
         console.log('otherUserNotices:', otherUserNotices);
     }, [otherUserNotices])
+
+    // Set tab back to 'Notices' when user changes
+    useEffect(() => {
+        setEventKey('notices');
+    }, [currUserId])
 
     // Fetch notices for other user 
     useEffect(() => {
@@ -401,18 +408,6 @@ const OtherUserProfile = () => {
         }
     }, [currUserId]);
 
-    // Restting notices data 
-    useEffect(() => {
-        if (currUserId) {
-            console.log('Current User ID changed:', currUserId);
-            // setOtherUserNotices([]);
-            // setOffsetNotices([]);
-            // setHasMoreNotices([]);
-            // setIsLoadingMore([]);
-        }
-    }, [currUserId]);
-
-
     const handleLike = async (notice) => {
         try {
             await likeNotice(notice.$id, notice.user_id);
@@ -554,7 +549,8 @@ const OtherUserProfile = () => {
                     {!isBlocked ?
                         <>
                             <Tabs
-                                defaultActiveKey="notices"
+                                activeKey={eventKey}
+                                defaultActiveKey='notices'
                                 id="notices-tabs"
                                 justify
                                 className='user-profile__notice-tab fixed-bottom'

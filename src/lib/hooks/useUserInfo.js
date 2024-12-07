@@ -329,8 +329,9 @@ const useUserInfo = (data) => {
             // Setting the button to 'Following' if user follows the other user 
             if (res.total > 0) {
                 console.log('Follow each other', res);
-
-                setIsFollowing(!!res);
+                setIsFollowing(true);
+            } else {
+                setIsFollowing(false)
             }
             return res;
         } catch (error) {
