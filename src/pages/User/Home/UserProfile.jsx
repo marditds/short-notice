@@ -25,6 +25,8 @@ const UserProfile = () => {
 
     const {
         user_id,
+        // userNotices,
+        latestNotice,
         savedNotices,
         likedNotices,
         isLoading,
@@ -61,7 +63,7 @@ const UserProfile = () => {
     } = useUserInfo(googleUserData);
 
     const [notices, setNotices] = useState([]);
-    const [userNotices, setUserNotices] = useState([]);
+    const [userProfileNotices, setUserProfileNotices] = useState([]);
     const [savedNoticesData, setSavedNoticesData] = useState([]);
     const [likedNoticesData, setLikedNoticesData] = useState([]);
 
@@ -116,6 +118,7 @@ const UserProfile = () => {
         fetchUserByUserame();
     }, [username])
 
+    // fetchBlockedUsersByUser
     useEffect(() => {
         const fetchBlockedUsersByUser = async () => {
             try {
@@ -131,6 +134,7 @@ const UserProfile = () => {
         fetchBlockedUsersByUser();
     }, [user_id])
 
+    // function for fetching notices
     const fetchNotices = async () => {
         // fetchUserNotices(user_id, setNotices);
         setIsLoadingMore(true);
@@ -141,7 +145,7 @@ const UserProfile = () => {
 
             if (usrNtcs.length > 0) {
 
-                setUserNotices((prevNotices) => [
+                setUserProfileNotices((prevNotices) => [
                     ...prevNotices,
                     ...usrNtcs,
                 ]);
@@ -162,15 +166,20 @@ const UserProfile = () => {
         }
     };
 
-    // Fetch notices for user
+    // Fetch notices for user on component load
     useEffect(() => {
         fetchNotices();
     }, [user_id])
 
-    // Display notice in UI immediately after it is added
-    const handleNoticeAdded = (newNotice) => {
-        setNotices(prevNotices => [newNotice, ...prevNotices]);
-    };
+    // Display notice in UI immediately after it is added 
+    useEffect(() => {
+        if (latestNotice && Object.keys(latestNotice).length > 0) {
+            setUserProfileNotices((prevNotices) => [
+                latestNotice,
+                ...prevNotices
+            ]);
+        }
+    }, [latestNotice])
 
     // Fetch saves and users' data for saves tab
     useEffect(() => {
@@ -344,10 +353,6 @@ const UserProfile = () => {
         }
     };
 
-    useEffect(() => {
-        console.log('notices', notices);
-    }, [notices])
-
     const handleDeleteNotice = (noticeId) => {
         setRemovingNoticeId(noticeId);
         setShowDeleteModal(true);
@@ -445,7 +450,6 @@ const UserProfile = () => {
                 setNoticeText={setNoticeText}
                 setDuration={setDuration}
                 addNotice={addNotice}
-                onNoticeAdded={handleNoticeAdded}
             />
 
             <Tabs
@@ -461,7 +465,7 @@ const UserProfile = () => {
                     title="My Notices"
                 >
                     <Notices
-                        notices={userNotices}
+                        notices={userProfileNotices}
                         username={username}
                         eventKey={eventKey}
                         handleEditNotice={handleEditNotice}

@@ -258,8 +258,11 @@ const OtherUserProfile = () => {
     // Fetch saves and users' data for saves tab 
     useEffect(() => {
         const fetchSaveNotices = async () => {
-            setIsLoadingMoreSaves(true);
+            // if (eventKey !== 'saves') return;
+
             try {
+                setIsLoadingMoreSaves(true);
+
                 console.log('currUserId - allSavedNotices', currUserId);
 
                 const allSavedNotices = await getAllSavedNotices(currUserId, limitSaves, offsetSaves);
@@ -295,6 +298,8 @@ const OtherUserProfile = () => {
     // Fetch likes and users' data for likes tab  
     useEffect(() => {
         const fetchLikedNotices = async () => {
+            if (eventKey !== 'likes') return;
+
             try {
                 setIsLoadingMoreLikes(true);
 
@@ -325,7 +330,7 @@ const OtherUserProfile = () => {
         setOffsetLikes(0);
         setLikedNoticesData([]);
         callFunctionIfNotBlocked(fetchLikedNotices);
-    }, [currUserId, offsetLikes])
+    }, [currUserId, offsetLikes, eventKey])
 
     useEffect(() => {
         console.log('isLoadingMoreLikes updated:', isLoadingMoreLikes);
@@ -611,37 +616,41 @@ const OtherUserProfile = () => {
                                     eventKey='saves'
                                     title="Saves"
                                 >
-                                    {savedNoticesData.length !== 0 ?
-                                        <>
-                                            <Notices
-                                                notices={savedNoticesData}
-                                                user_id={user_id}
-                                                likedNotices={likedNotices}
-                                                savedNotices={savedNotices}
-                                                eventKey={eventKey}
-                                                handleLike={handleLike}
-                                                handleSave={handleSave}
-                                                handleReport={handleReport}
-                                                handleReact={handleReact}
-                                                getReactionsForNotice={getReactionsForNotice}
-                                                getUserAccountByUserId={getUserAccountByUserId}
-                                                getReactionByReactionId={getReactionByReactionId}
-                                                reportReaction={reportReaction}
-                                            />
-                                            <div className="d-flex justify-content-center mt-4">
-                                                {hasMoreSaves ?
-                                                    <Button
-                                                        onClick={() => setOffsetSaves(offsetSaves + limitSaves)}
-                                                        disabled={isLoadingMoreSaves || !hasMoreSaves}
-                                                    >
-                                                        {isLoadingMoreSaves ?
-                                                            <><Loading size={24} /> Loading...</>
-                                                            : 'Load More'}
-                                                    </Button>
-                                                    : 'No more saves'}
-                                            </div>
-                                        </>
-                                        : 'No saveas yet'}
+                                    {!isLoadingMoreSaves ?
+                                        (
+                                            savedNoticesData.length !== 0 ?
+                                                <>
+                                                    <Notices
+                                                        notices={savedNoticesData}
+                                                        user_id={user_id}
+                                                        likedNotices={likedNotices}
+                                                        savedNotices={savedNotices}
+                                                        eventKey={eventKey}
+                                                        handleLike={handleLike}
+                                                        handleSave={handleSave}
+                                                        handleReport={handleReport}
+                                                        handleReact={handleReact}
+                                                        getReactionsForNotice={getReactionsForNotice}
+                                                        getUserAccountByUserId={getUserAccountByUserId}
+                                                        getReactionByReactionId={getReactionByReactionId}
+                                                        reportReaction={reportReaction}
+                                                    />
+                                                    <div className="d-flex justify-content-center mt-4">
+                                                        {hasMoreSaves ?
+                                                            <Button
+                                                                onClick={() => setOffsetSaves(offsetSaves + limitSaves)}
+                                                                disabled={isLoadingMoreSaves || !hasMoreSaves}
+                                                            >
+                                                                {isLoadingMoreSaves ?
+                                                                    <><Loading size={24} /> Loading...</>
+                                                                    : 'Load More'}
+                                                            </Button>
+                                                            : 'No more saves'}
+                                                    </div>
+                                                </>
+                                                : 'No saveas yet'
+                                        )
+                                        : <Loading size={24} />}
                                 </Tab>
 
                                 {/* LIKES TAB */}
@@ -649,38 +658,42 @@ const OtherUserProfile = () => {
                                     eventKey='likes'
                                     title="Likes"
                                 >
-                                    {likedNoticesData.length !== 0 ?
-                                        <>
-                                            <Notices
-                                                notices={likedNoticesData}
-                                                user_id={user_id}
-                                                likedNotices={likedNotices}
-                                                savedNotices={savedNotices}
-                                                eventKey={eventKey}
-                                                handleLike={handleLike}
-                                                handleSave={handleSave}
-                                                handleReport={handleReport}
-                                                handleReact={handleReact}
-                                                getReactionsForNotice={getReactionsForNotice}
-                                                getUserAccountByUserId={getUserAccountByUserId}
-                                                getReactionByReactionId={getReactionByReactionId}
-                                                reportReaction={reportReaction}
+                                    {!isLoadingMoreLikes ?
+                                        (likedNoticesData.length !== 0 ?
+                                            <>
+                                                <Notices
+                                                    notices={likedNoticesData}
+                                                    user_id={user_id}
+                                                    likedNotices={likedNotices}
+                                                    savedNotices={savedNotices}
+                                                    eventKey={eventKey}
+                                                    handleLike={handleLike}
+                                                    handleSave={handleSave}
+                                                    handleReport={handleReport}
+                                                    handleReact={handleReact}
+                                                    getReactionsForNotice={getReactionsForNotice}
+                                                    getUserAccountByUserId={getUserAccountByUserId}
+                                                    getReactionByReactionId={getReactionByReactionId}
+                                                    reportReaction={reportReaction}
 
-                                            />
-                                            <div className="d-flex justify-content-center mt-4">
-                                                {hasMoreLikes ?
-                                                    <Button
-                                                        onClick={() => setOffsetLikes(offsetLikes + limitLikes)}
-                                                        disabled={isLoadingMoreLikes || !hasMoreLikes}
-                                                    >
-                                                        {isLoadingMoreLikes ?
-                                                            <><Loading size={24} /> Loading...</>
-                                                            : 'Load More'}
-                                                    </Button>
-                                                    : 'No more likes'}
-                                            </div>
-                                        </>
-                                        : 'No likes yet'}
+                                                />
+                                                <div className="d-flex justify-content-center mt-4">
+                                                    {hasMoreLikes ?
+                                                        <Button
+                                                            onClick={() => setOffsetLikes(offsetLikes + limitLikes)}
+                                                            disabled={isLoadingMoreLikes || !hasMoreLikes}
+                                                        >
+                                                            {isLoadingMoreLikes ?
+                                                                <><Loading size={24} /> Loading...</>
+                                                                : 'Load More'}
+                                                        </Button>
+                                                        : 'No more likes'}
+                                                </div>
+                                            </>
+                                            : 'No likes yet'
+                                        ) :
+                                        <Loading size={20} />}
+
                                 </Tab>
                             </Tabs>
                         </>

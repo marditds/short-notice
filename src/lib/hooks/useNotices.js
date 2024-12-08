@@ -6,6 +6,7 @@ import { useUnblockedNotices } from '../utils/blockFilter.js';
 const useNotices = (googleUserData) => {
     const [user_id, setUserId] = useState(null);
     const [userNotices, setUserNotices] = useState([]);
+    const [latestNotice, setLatestNotice] = useState({});
     const [savedNotices, setSaveNotices] = useState([]);
     const [likedNotices, setLikedNotices] = useState({});
     const [noticesReactions, setNoticesReactions] = useState([]);
@@ -129,9 +130,13 @@ const useNotices = (googleUserData) => {
             };
 
             setIsAddingNotice(true);
+
             try {
                 const createdNotice = await createNotice(newNotice);
-                setUserNotices((prevNotices) => [createdNotice, ...prevNotices]);
+
+                setLatestNotice(createdNotice);
+                console.log('THIS WILL BE THE LATEST NOTICE:', createdNotice);
+
                 return createdNotice;
 
             } catch (error) {
@@ -139,8 +144,24 @@ const useNotices = (googleUserData) => {
             } finally {
                 setIsAddingNotice(false);
             }
+
+            // try {
+            //     const createdNotice = await createNotice(newNotice);
+            //     setUserNotices((prevNotices) => [createdNotice, ...prevNotices]);
+            //     return createdNotice;
+
+            // } catch (error) {
+            //     console.error('Error adding notice:', error);
+            // } finally {
+            //     setIsAddingNotice(false);
+            // }
         }
     };
+
+    useEffect(() => {
+        console.log('THIS IS THE LATEST NOTICE:', latestNotice);
+
+    }, [latestNotice])
 
     const editNotice = async (noticeId, newText) => {
 
@@ -158,7 +179,6 @@ const useNotices = (googleUserData) => {
     const removeNotice = async (noticeId) => {
 
         console.log('Attempting to delete notice with ID:', noticeId);
-        console.log('Current notices:', userNotices);
 
         setIsRemovingNotice(true);
         setRemovingNoticeId(noticeId);
@@ -498,7 +518,8 @@ const useNotices = (googleUserData) => {
 
     return {
         user_id,
-        userNotices,
+        // userNotices,
+        latestNotice,
         savedNotices,
         likedNotices,
         isLoading,

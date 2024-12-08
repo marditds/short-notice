@@ -52,8 +52,8 @@ export const ComposeNotice = ({ noticeText, setNoticeText, duration, noticeType,
     const handleNotify = async () => {
         if (noticeText.trim()) {
 
-            const newNotice = await addNotice(noticeText, duration, noticeType, selectedTags);
-            onNoticeAdded(newNotice);
+            await addNotice(noticeText, duration, noticeType, selectedTags);
+            // onNoticeAdded(newNotice);
             setNoticeText('');
             setSelectedTags({});
             setCharCount(0);
