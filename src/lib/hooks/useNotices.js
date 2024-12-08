@@ -166,11 +166,7 @@ const useNotices = (googleUserData) => {
     const editNotice = async (noticeId, newText) => {
 
         const updtNtc = await updateNotice(noticeId, newText);
-        setUserNotices((prevNotices) =>
-            prevNotices.map((notice) =>
-                notice.$id === noticeId ? { ...notice, text: newText } : notice
-            )
-        );
+
         console.log('updtNtc', updtNtc);
 
         return updtNtc;

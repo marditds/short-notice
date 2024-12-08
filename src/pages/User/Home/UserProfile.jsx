@@ -317,6 +317,7 @@ const UserProfile = () => {
     }, [user_id]);
 
     const handleEditNotice = (noticeId, currentText) => {
+        console.log('EditingNoticeId + Current text', { noticeId, currentText });
         setEditingNoticeId(noticeId);
         setNoticeText(currentText);
         setShowEditModal(true);
@@ -324,7 +325,12 @@ const UserProfile = () => {
 
     const handleSaveEdit = async () => {
         if (editingNoticeId && noticeText.trim()) {
-            const noticeToUpdate = notices.find(notice => notice.$id === editingNoticeId);
+            console.log('EditingNoticeId + noticeText', { editingNoticeId, noticeText });
+
+            const noticeToUpdate = userProfileNotices.find(notice => notice.$id === editingNoticeId);
+
+            console.log('noticeToUpdate', noticeToUpdate);
+
             let updatedNotice = null;
             if (noticeToUpdate) {
                 updatedNotice = {
@@ -332,14 +338,13 @@ const UserProfile = () => {
                     text: noticeText
                 };
 
-
                 const updtdntc = await editNotice(editingNoticeId, updatedNotice.text);
 
                 console.log('editingNoticeId', editingNoticeId);
 
                 console.log('updtdntc.text', updtdntc.text);
 
-                setNotices(prevNotices =>
+                setUserProfileNotices(prevNotices =>
                     prevNotices.map((notice) =>
                         notice.$id === editingNoticeId ?
                             { ...notice, text: updtdntc.text } : notice)
@@ -354,14 +359,16 @@ const UserProfile = () => {
     };
 
     const handleDeleteNotice = (noticeId) => {
+        console.log('RemovingNoticeId', noticeId);
         setRemovingNoticeId(noticeId);
         setShowDeleteModal(true);
     }
 
     const handleDelete = async () => {
         if (removingNoticeId) {
+            console.log('removingNoticeId', removingNoticeId);
             await removeNotice(removingNoticeId);
-            setNotices(prevNotices => prevNotices.filter(notice => notice.$id !== removingNoticeId));
+            setUserProfileNotices(prevNotices => prevNotices.filter(notice => notice.$id !== removingNoticeId));
             setRemovingNoticeId(null);
             setShowDeleteModal(false);
         }
