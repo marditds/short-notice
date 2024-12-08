@@ -95,6 +95,9 @@ const UserFeed = () => {
     const [loadMorePersonal, setLoadMorePersonal] = useState(false);
 
 
+    const notices = !isFeedToggled ? personalFeedNotices : generalFeedNotices;
+    const feedType = !isFeedToggled ? 'personal' : 'general';
+
     // Fetch User's interests  
     useEffect(() => {
         const fetchUserInterests = async () => {
@@ -145,9 +148,9 @@ const UserFeed = () => {
     // Fetch feed (general)-(initial)
     useEffect(() => {
         const fetchInitialGeneralFeed = async () => {
-            setIsLoadingGeneralFeedNotices(true);
-            setIsLoadingUsers(true);
             try {
+                setIsLoadingGeneralFeedNotices(true);
+
                 console.log('Limit:', limit);
                 console.log('Last ID:', lastId);
 
@@ -170,7 +173,6 @@ const UserFeed = () => {
                 console.error('Error fetching initial feed notices:', error);
             } finally {
                 setIsLoadingGeneralFeedNotices(false);
-                setIsLoadingUsers(false);
             }
         };
         if (isFeedToggled && generalFeedNotices.length === 0) {
@@ -182,8 +184,9 @@ const UserFeed = () => {
     useEffect(() => {
         if (!loadMore) return;
         const fetchSubsequentGeneralFeed = async () => {
-            setIsLoadingMore(true);
             try {
+                setIsLoadingMore(true);
+
                 console.log('Limit:', limit);
                 console.log('Last ID:', lastId);
 
@@ -217,7 +220,7 @@ const UserFeed = () => {
         const fetchInitialPersonalFeed = async () => {
             try {
                 setIsLoadingPersonalFeedNotices(true);
-                setIsLoadingUsers(true);
+                // setIsLoadingUsers(true);
                 setIsLoadingMorePersonal(true);
 
                 const followedByUser = await getPersonalFeedAccounts(user_id);
@@ -255,7 +258,7 @@ const UserFeed = () => {
                 console.error('Error fetching personal feed', error);
             } finally {
                 setIsLoadingPersonalFeedNotices(false);
-                setIsLoadingUsers(false);
+                // setIsLoadingUsers(false);
                 setIsLoadingMorePersonal(false);
             }
         };
@@ -390,11 +393,12 @@ const UserFeed = () => {
 
     // Render loading state while data is being fetched
     if (
-        (isLoadingGeneralFeedNotices || isLoadingUsers || isLoadingPersonalFeedNotices) &&
-        (personalFeedNotices.length === 0 || generalFeedNotices.length === 0)
+        (isLoadingPersonalFeedNotices)
+        // &&
+        // (personalFeedNotices.length === 0 || generalFeedNotices.length === 0)
     ) {
         return <div className='mt-5'>
-            <Loading size={24} />{`Loading ${!isFeedToggled ? 'personal' : 'general'} feed...`}
+            <Loading size={24} />{`Loading your feed...`}
         </div>;
     }
 
@@ -407,22 +411,25 @@ const UserFeed = () => {
                 handleFeedToggle={handleFeedToggle}
                 handleRefresh={handleRefresh}
             />
-
-            <Notices
-                notices={!isFeedToggled ? personalFeedNotices : generalFeedNotices}
-                user_id={user_id}
-                likedNotices={likedNotices}
-                savedNotices={savedNotices}
-                // reactions={noticesReactions}
-                handleLike={handleLike}
-                handleSave={handleSave}
-                handleReport={handleReport}
-                handleReact={handleReact}
-                getReactionsForNotice={getReactionsForNotice}
-                getUserAccountByUserId={getUserAccountByUserId}
-                getReactionByReactionId={getReactionByReactionId}
-                reportReaction={reportReaction}
-            />
+            {
+                notices.length !== 0 ?
+                    <Notices
+                        notices={notices}
+                        user_id={user_id}
+                        likedNotices={likedNotices}
+                        savedNotices={savedNotices}
+                        handleLike={handleLike}
+                        handleSave={handleSave}
+                        handleReport={handleReport}
+                        handleReact={handleReact}
+                        getReactionsForNotice={getReactionsForNotice}
+                        getUserAccountByUserId={getUserAccountByUserId}
+                        getReactionByReactionId={getReactionByReactionId}
+                        reportReaction={reportReaction}
+                    />
+                    :
+                    <><Loading size={24} />Loading {feedType} feed.</>
+            }
 
             {/* Load More Button */}
             <div className="d-flex justify-content-center mt-4">

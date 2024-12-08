@@ -94,6 +94,7 @@ export const Notices = ({
     }, [notices]);
 
 
+
     // Reacting to a notice
     const handleReactNotice = (noticeId, noticeUsername, noticeAvatarUrl, noticeText) => {
         setReactingNoticeId(noticeId);
@@ -383,13 +384,13 @@ export const Notices = ({
 
     return (
         <>
+            {/* {!isLoadingNotices ? */}
             <Accordion
                 // defaultActiveKey={['0']}
                 className='user-profile__notices-accordion'
                 activeKey={activeNoticeId}
                 onSelect={handleAccordionToggle}
             >
-                {/* {notices.slice(0, displayCount).map((notice, idx) => ( */}
                 {notices.map((notice, idx) => (
                     <Accordion.Item eventKey={notice?.$id} key={notice?.$id}>
                         <Accordion.Header

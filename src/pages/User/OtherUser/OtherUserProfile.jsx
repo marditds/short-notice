@@ -31,7 +31,6 @@ const OtherUserProfile = () => {
         user_id,
         likedNotices,
         savedNotices,
-        isLoading: noticesLoading,
         noticesReactions,
         // saveReactions,
         // likedReactions,
@@ -81,6 +80,7 @@ const OtherUserProfile = () => {
     const [accountTypeCheck, setAccountTypeCheck] = useState(false);
     const [passcode, setPasscode] = useState('');
 
+    const [isOtherUserLoading, setIsOtherUserLoading] = useState(false);
     const [isBlocked, setIsBlocked] = useState(false);
     const [isOtherUserBlocked, setIsOtherUserBlocked] = useState(false);
 
@@ -100,13 +100,13 @@ const OtherUserProfile = () => {
     const [isLoadingMore, setIsLoadingMore] = useState(false);
 
     // Saves Tab
-    const [limitSaves] = useState(10);
+    const [limitSaves] = useState(5);
     const [offsetSaves, setOffsetSaves] = useState(0);
     const [hasMoreSaves, setHasMoreSaves] = useState(true);
     const [isLoadingMoreSaves, setIsLoadingMoreSaves] = useState(false);
 
     // Likes Tab
-    const [limitLikes] = useState(10);
+    const [limitLikes] = useState(5);
     const [offsetLikes, setOffsetLikes] = useState(0);
     const [hasMoreLikes, setHasMoreLikes] = useState(true);
     const [isLoadingMoreLikes, setIsLoadingMoreLikes] = useState(false);
@@ -143,6 +143,7 @@ const OtherUserProfile = () => {
         const getCurrUser = async () => {
 
             try {
+                setIsOtherUserLoading(true);
                 console.log('otherUsername', otherUsername);
 
                 const otherUser = await getUserByUsername(otherUsername);
@@ -192,6 +193,8 @@ const OtherUserProfile = () => {
 
             } catch (error) {
                 console.error(error);
+            } finally {
+                setIsOtherUserLoading(false);
             }
         }
         setIsOtherUserBlocked(false);
@@ -215,11 +218,12 @@ const OtherUserProfile = () => {
 
     // Fetch notices for other user 
     useEffect(() => {
-        if (eventKey !== 'notices') return;
+        // if (eventKey !== 'notices') return;
 
         const fetchNotices = async () => {
-            setIsLoadingMore(true);
             try {
+                setIsLoadingMore(true);
+
                 const usrNtcs = await getNoticeByUserId(currUserId, limitNotices, offsetNotices);
 
                 console.log('usrNtc', usrNtcs);
@@ -240,7 +244,7 @@ const OtherUserProfile = () => {
         setOffsetNotices(0);
         setOtherUserNotices([]);
         callFunctionIfNotBlocked(fetchNotices);
-    }, [currUserId, offsetNotices, eventKey])
+    }, [currUserId, offsetNotices])
 
     // Call function only if user is not blocked
     const callFunctionIfNotBlocked = (functionName) => {
@@ -253,8 +257,6 @@ const OtherUserProfile = () => {
 
     // Fetch saves and users' data for saves tab 
     useEffect(() => {
-        if (eventKey !== 'saves') return;
-
         const fetchSaveNotices = async () => {
             setIsLoadingMoreSaves(true);
             try {
@@ -288,15 +290,14 @@ const OtherUserProfile = () => {
         setOffsetSaves(0);
         setSavedNoticesData([]);
         callFunctionIfNotBlocked(fetchSaveNotices);
-    }, [currUserId, offsetSaves, eventKey])
+    }, [currUserId, offsetSaves])
 
     // Fetch likes and users' data for likes tab  
     useEffect(() => {
-        if (eventKey !== 'likes') return;
-
         const fetchLikedNotices = async () => {
-            setIsLoadingMoreLikes(true);
             try {
+                setIsLoadingMoreLikes(true);
+
                 const allLikedNotices = await getAllLikedNotices(currUserId, limitLikes, offsetLikes);
 
                 console.log('allLikedNotices', allLikedNotices);
@@ -324,7 +325,11 @@ const OtherUserProfile = () => {
         setOffsetLikes(0);
         setLikedNoticesData([]);
         callFunctionIfNotBlocked(fetchLikedNotices);
-    }, [currUserId, offsetLikes, eventKey])
+    }, [currUserId, offsetLikes])
+
+    useEffect(() => {
+        console.log('isLoadingMoreLikes updated:', isLoadingMoreLikes);
+    }, [isLoadingMoreLikes]);
 
     // Fetch accounts following the other user
     const loadFollowers = async () => {
@@ -505,8 +510,10 @@ const OtherUserProfile = () => {
     }, [eventKey])
 
 
-    if (noticesLoading) {
-        return <div><Loading />Loading {otherUsername}'s profile</div>;
+
+
+    if (isOtherUserLoading) {
+        return <div className='mt-5'><Loading />Loading {otherUsername}'s profile</div>;
     }
 
     if (accountType === 'organization' && accountTypeCheck === false) {
@@ -537,9 +544,7 @@ const OtherUserProfile = () => {
                     handleBlock={handleBlock}
                     handleUserReport={handleUserReport}
                     loadFollowers={loadFollowers}
-
                     loadFollowing={loadFollowing}
-
                     hasMoreFollowers={hasMoreFollowers}
                     hasMoreFollowing={hasMoreFollowing}
                     isLoadingMoreFollowing={isLoadingMoreFollowing}
@@ -561,39 +566,44 @@ const OtherUserProfile = () => {
                                     eventKey='notices'
                                     title="Notices"
                                 >
-                                    {otherUserNotices?.length !== 0 ?
-                                        <>
-                                            <Notices
-                                                notices={otherUserNotices}
-                                                likedNotices={likedNotices}
-                                                savedNotices={savedNotices}
-                                                reactions={noticesReactions}
-                                                eventKey={eventKey}
-                                                isOtherUserBlocked={isOtherUserBlocked}
-                                                handleLike={handleLike}
-                                                handleSave={handleSave}
-                                                handleReport={handleReport}
-                                                handleReact={handleReact}
-                                                getReactionsForNotice={getReactionsForNotice}
-                                                getUserAccountByUserId={getUserAccountByUserId}
-                                                getReactionByReactionId={getReactionByReactionId}
-                                                reportReaction={reportReaction}
-                                            />
-                                            <div className="d-flex justify-content-center mt-4">
-                                                {hasMoreNotices ?
-                                                    <Button
-                                                        onClick={() => setOffsetNotices(offsetNotices + limitNotices)}
-                                                        disabled={isLoadingMore || !hasMoreNotices}
-                                                    >
-                                                        {isLoadingMore ?
-                                                            <><Loading size={24} /> Loading...</>
-                                                            : 'Load More'}
-                                                    </Button>
-                                                    : 'No more notices'}
-                                            </div>
-                                        </>
-                                        : 'No notices yet'
+                                    {!isLoadingMore ?
+                                        (otherUserNotices?.length !== 0 ?
+                                            <>
+                                                <Notices
+                                                    notices={otherUserNotices}
+                                                    likedNotices={likedNotices}
+                                                    savedNotices={savedNotices}
+                                                    reactions={noticesReactions}
+                                                    eventKey={eventKey}
+                                                    isOtherUserBlocked={isOtherUserBlocked}
+                                                    handleLike={handleLike}
+                                                    handleSave={handleSave}
+                                                    handleReport={handleReport}
+                                                    handleReact={handleReact}
+                                                    getReactionsForNotice={getReactionsForNotice}
+                                                    getUserAccountByUserId={getUserAccountByUserId}
+                                                    getReactionByReactionId={getReactionByReactionId}
+                                                    reportReaction={reportReaction}
+                                                />
+                                                <div className="d-flex justify-content-center mt-4">
+                                                    {hasMoreNotices ?
+                                                        <Button
+                                                            onClick={() => setOffsetNotices(offsetNotices + limitNotices)}
+                                                            disabled={isLoadingMore || !hasMoreNotices}
+                                                        >
+                                                            {isLoadingMore ?
+                                                                <><Loading size={24} /> Loading...</>
+                                                                : 'Load More'}
+                                                        </Button>
+                                                        : 'No more notices'}
+                                                </div>
+                                            </>
+                                            : 'No notices yet'
+                                        )
+                                        :
+                                        <Loading size={24} />
                                     }
+
                                 </Tab>
 
                                 {/* SAVES TAB */}
