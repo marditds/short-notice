@@ -163,7 +163,7 @@ const UserFeed = () => {
 
                 await fetchUsersData(filteredNotices, setGeneralFeedNotices, avatarUtil);
 
-                if (filteredNotices.length < limit) {
+                if (notices.length < limit) {
                     setHasMoreGeneralNotices(false);
                 } else {
                     setHasMoreGeneralNotices(true);
@@ -198,7 +198,7 @@ const UserFeed = () => {
 
                 await fetchUsersData(filteredNotices, setGeneralFeedNotices, avatarUtil);
 
-                if (filteredNotices.length < limit) {
+                if (notices.length < limit) {
                     setHasMoreGeneralNotices(false);
                 } else {
                     setLastId(filteredNotices[filteredNotices.length - 1].$id);

@@ -160,7 +160,6 @@ const useNotices = (googleUserData) => {
 
     useEffect(() => {
         console.log('THIS IS THE LATEST NOTICE:', latestNotice);
-
     }, [latestNotice])
 
     const editNotice = async (noticeId, newText) => {
@@ -181,7 +180,6 @@ const useNotices = (googleUserData) => {
 
         try {
             const removedNotice = await deleteNotice(noticeId);
-            // setUserNotices((prevNotices) => prevNotices.filter((notice) => notice.$id !== noticeId));
             return removedNotice;
         } catch (error) {
             if (error.code === 404) {
