@@ -248,7 +248,7 @@ const UserFeed = () => {
 
                 await fetchUsersData(filteredNotices, setPersonalFeedNotices, avatarUtil);
 
-                if (filteredNotices.length < limitPersonal) {
+                if (usrNtcs.length < limitPersonal) {
                     setHasMorePersonalNotices(false);
                 } else {
                     setHasMorePersonalNotices(true);
@@ -293,7 +293,7 @@ const UserFeed = () => {
 
                 await fetchUsersData(filteredNotices, setPersonalFeedNotices, avatarUtil);
 
-                if (filteredNotices.length < limitPersonal) {
+                if (usrNtcs.length < limitPersonal) {
                     setHasMorePersonalNotices(false);
                 } else {
                     setLastIdPersonal(filteredNotices[filteredNotices.length - 1].$id);
