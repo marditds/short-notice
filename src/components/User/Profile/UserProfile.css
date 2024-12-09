@@ -174,12 +174,14 @@
     background-color: var(--main-bg-color) 0.5 !important;
     padding-inline: 5px !important;
     padding-block: 10px !important;
+    transition: 0.3s;
 }
 
 .user-profile__notices-accordion>div>h2>button:hover,
 .user-profile__notices-accordion>div>h2>button:not(.collapsed),
 .notice__reaction {
     background: rgba(var(--main-bg-color), 0.1) !important;
+    box-shadow: 0px 0px 2px var(--main-accent-color-hover) !important;
 }
 
 .user-profile__notices-accordion>div>h2>button::after,
