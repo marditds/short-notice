@@ -44,7 +44,7 @@ const useNotices = (googleUserData) => {
             const now = new Date();
             setUserNotices((prevNotices) =>
                 prevNotices.filter((notice) => {
-                    if (notice.expiresAt && new Date(notice.expiresAt) <= now) {
+                    if (notice.expiresAt && new Date(notice.expiresAt) < now) {
                         deleteNotice(notice.$id);
                         return false;
                     }

@@ -55,6 +55,7 @@ const UserFeed = () => {
         savedNotices,
         getInterests,
         getFeedNotices,
+        removeNotice,
         saveNotice,
         reportNotice,
         likeNotice,
@@ -246,13 +247,29 @@ const UserFeed = () => {
 
                 console.log('filteredNotices - Personal', filteredNotices);
 
-                await fetchUsersData(filteredNotices, setPersonalFeedNotices, avatarUtil);
+                const now = new Date();
+                const unExpiredNotices = filteredNotices.filter((notice) => {
+                    if (notice.expiresAt && new Date(notice.expiresAt) <= now) {
+                        if (expirationTime.getTime() <= now.getTime()) {
+                            console.log('Deleting notice with this text:', notice.text);
+                            removeNotice(notice.$id);
+                        }
+                        return false;
+                    } else {
+                        return true;
+                    }
+                })
+
+                console.log('unExpiredNotices', unExpiredNotices);
+
+
+                await fetchUsersData(unExpiredNotices, setPersonalFeedNotices, avatarUtil);
 
                 if (usrNtcs.length < limitPersonal) {
                     setHasMorePersonalNotices(false);
                 } else {
                     setHasMorePersonalNotices(true);
-                    setLastIdPersonal(filteredNotices[filteredNotices.length - 1].$id);
+                    setLastIdPersonal(unExpiredNotices[unExpiredNotices.length - 1].$id);
                 }
             } catch (error) {
                 console.error('Error fetching personal feed', error);
