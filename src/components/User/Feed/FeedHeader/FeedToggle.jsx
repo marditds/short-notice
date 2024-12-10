@@ -14,7 +14,7 @@ export const FeedToggle = ({ isFeedToggled, handleFeedToggle, handleRefresh }) =
                     >
                         <i className='bi bi-arrow-clockwise'></i>
                     </Button>
-                    <Form.Label className='mb-0'>Personal Feed</Form.Label>
+                    <Form.Label onClick={!isFeedToggled ? null : handleFeedToggle} className='mb-0 user-feed__toggle-label'>Personal Feed</Form.Label>
                 </Col>
 
                 <Col xs='auto px-0'>
@@ -29,7 +29,7 @@ export const FeedToggle = ({ isFeedToggled, handleFeedToggle, handleRefresh }) =
                 </Col>
 
                 <Col xs='auto' className='d-flex align-items-center'>
-                    <Form.Label className='mb-0'>General Feed</Form.Label>
+                    <Form.Label onClick={isFeedToggled ? null : handleFeedToggle} className='mb-0 user-feed__toggle-label'>General Feed</Form.Label>
                     <Button
                         className='py-0 px-1 mx-1 user-feed__refresh-btn'
                         style={{ visibility: isFeedToggled ? 'visible' : 'hidden', height: '26px' }}
