@@ -40,20 +40,20 @@ const useNotices = (googleUserData) => {
 
         obtainUserById();
 
-        const checkExpiredNotices = setInterval(() => {
-            const now = new Date();
-            setUserNotices((prevNotices) =>
-                prevNotices.filter((notice) => {
-                    if (notice.expiresAt && new Date(notice.expiresAt) < now) {
-                        deleteNotice(notice.$id);
-                        return false;
-                    }
-                    return true;
-                })
-            );
-        }, 10000);
+        // const checkExpiredNotices = setInterval(() => {
+        //     const now = new Date();
+        //     setUserNotices((prevNotices) =>
+        //         prevNotices.filter((notice) => {
+        //             if (notice.expiresAt && new Date(notice.expiresAt) < now) {
+        //                 deleteNotice(notice.$id);
+        //                 return false;
+        //             }
+        //             return true;
+        //         })
+        //     );
+        // }, 10000);
 
-        return () => clearInterval(checkExpiredNotices);
+        // return () => clearInterval(checkExpiredNotices);
 
     }, [googleUserData]);
 
