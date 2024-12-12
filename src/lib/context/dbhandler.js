@@ -188,20 +188,25 @@ export const getUserByUsername = async (username) => {
     }
 };
 
-export const getAllUsersByString = async (str, limit, offset) => {
+export const getAllUsersByString = async (str, limit, cursorAfter) => {
     try {
+        const queryParams = [
+            Query.contains('username', str),
+            Query.limit(limit),
+        ];
+
+        if (cursorAfter) {
+            queryParams.push(Query.cursorAfter(cursorAfter));
+        }
+
         const userList = await databases.listDocuments(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_USERS_COLLECTION,
-            [
-                Query.contains('username', str),
-                Query.limit(limit),
-                Query.offset(offset)
-            ]
+            queryParams
         );
 
         if (userList.total > 0) {
-            return userList.documents;
+            return userList;
         }
 
         return null;
@@ -209,7 +214,7 @@ export const getAllUsersByString = async (str, limit, offset) => {
         console.error('Error fetching user by string:', error);
         return null;
     }
-}
+};
 
 const checkUsernameExists = async (username) => {
     try {
@@ -544,24 +549,54 @@ export const createNotice = async ({ user_id, text, timestamp, expiresAt, notice
     }
 };
 
-export const getUserNotices = async (user_id, limit, offset) => {
+export const getUserNotices = async (user_id, limit, lastId) => {
     try {
+        const queries = [
+            Query.equal('user_id', user_id),
+            Query.limit(limit),
+            Query.orderDesc('timestamp'),
+        ];
+
+        if (lastId) {
+            queries.push(Query.cursorAfter(lastId));
+        }
+
         const response = await databases.listDocuments(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_NOTICES_COLLECTION,
-            [
-                Query.equal('user_id', user_id),
-                Query.limit(limit),
-                Query.offset(offset),
-                Query.orderDesc('timestamp'),
-            ]
+            queries
         );
+
         return response.documents;
     } catch (error) {
         console.error('Error fetching notices:', error);
         return [];
     }
 };
+
+export const getNoticeByUserId = async (user_id, limit, offset) => {
+    try {
+        console.log('user_id, limit, offset - dbhandler', { user_id, limit, offset });
+
+        if (user_id === null || undefined) {
+            return [];
+        }
+
+        const res = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_NOTICES_COLLECTION,
+            [
+                Query.equal('user_id', user_id),
+                Query.limit(limit),
+                Query.offset(offset),
+                Query.orderDesc('timestamp')
+            ]
+        );
+        return res.documents;
+    } catch (error) {
+        console.error('Error getting notice by user id:', error);
+    }
+}
 
 export const getNoticeByTagname = async (tagnames) => {
     try {
@@ -611,7 +646,7 @@ export const getAllNotices = async () => {
     }
 }
 
-export const getFilteredNotices = async (selectedTags, limit, offset) => {
+export const getFilteredNotices = async (selectedTags, limit, lastId) => {
     try {
         if (typeof selectedTags !== 'object' || selectedTags === null) {
             throw new Error('selectedTags must be an object');
@@ -621,44 +656,37 @@ export const getFilteredNotices = async (selectedTags, limit, offset) => {
             .filter(tagKey => selectedTags[tagKey] === true)
             .map(tagKey => Query.equal(tagKey, true));
 
-        let notices;
-        if (queryList.length === 0) {
-            notices = { documents: [] };
-        } else if (queryList.length === 1) {
-            notices = await databases.listDocuments(
-                import.meta.env.VITE_DATABASE,
-                import.meta.env.VITE_NOTICES_COLLECTION,
-                [
-                    queryList[0],
-                    Query.notEqual('noticeType', ['organization']),
-                    Query.limit(limit),
-                    Query.offset(offset),
-                    Query.orderDesc('timestamp'),
-                ]
-            );
-        } else {
-            notices = await databases.listDocuments(
-                import.meta.env.VITE_DATABASE,
-                import.meta.env.VITE_NOTICES_COLLECTION,
-                [
-                    Query.notEqual('noticeType', ['organization']),
-                    Query.or(queryList),
-                    Query.limit(limit),
-                    Query.offset(offset),
-                    Query.orderDesc('timestamp')
-                ]
-            );
+        const queries = [
+            Query.notEqual('noticeType', ['organization']),
+            Query.limit(limit),
+            Query.orderDesc('timestamp'),
+        ];
+
+        // Add the cursor query if lastId exists
+        if (lastId) {
+            queries.push(Query.cursorAfter(lastId));
         }
 
-        // console.log('notices.documents', notices.documents);
+        // Add additional filters based on selectedTags
+        if (queryList.length === 1) {
+            queries.push(queryList[0]);
+        } else if (queryList.length > 1) {
+            queries.push(Query.or(queryList));
+        }
+
+        const notices = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_NOTICES_COLLECTION,
+            queries
+        );
 
         return notices.documents;
-
-
     } catch (error) {
         console.error('Error fetching filtered notices:', error);
     }
 };
+
+
 
 export const updateNotice = async (noticeId, newText) => {
     try {
@@ -708,11 +736,7 @@ export const deleteAllNotices = async (userId) => {
         const notices = await databases.listDocuments(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_NOTICES_COLLECTION,
-            [Query.equal('user_id', userId)],
-            [
-                Permission.delete(Role.users()),
-                Permission.delete(Role.guests())
-            ]
+            [Query.equal('user_id', userId)]
         );
 
         for (const notice of notices.documents) {
@@ -794,11 +818,11 @@ export const updateUserInterests = async (userId, selectedTags) => {
     }
 };
 
-export const createSpread = async (notice_id, author_id, user_id) => {
+export const createSave = async (notice_id, author_id, user_id) => {
     try {
         const response = await databases.createDocument(
             import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_SPREADS_COLLECTION,
+            import.meta.env.VITE_SAVES_COLLECTION,
             ID.unique(),
             {
                 notice_id: notice_id,
@@ -810,30 +834,50 @@ export const createSpread = async (notice_id, author_id, user_id) => {
             //     Permission.write(Role.guests())
             // ]
         );
-        console.log('Spread entry created successfully:', response);
+        console.log('Save entry created successfully:', response);
         return response;
     } catch (error) {
-        console.error('Error adding to spreads:', error);
+        console.error('Error adding to saves:', error);
         throw error;
     }
 };
 
-export const removeSpread = async (spread_id) => {
+export const removeSave = async (save_id) => {
     try {
         const response = await databases.deleteDocument(
             import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_SPREADS_COLLECTION,
-            spread_id,
-            // [
-            //     Permission.delete(Role.users()),
-            //     Permission.delete(Role.guests())
-            // ]
+            import.meta.env.VITE_SAVES_COLLECTION,
+            save_id,
+            [
+                Permission.delete(Role.users()),
+                Permission.delete(Role.guests())
+            ]
         );
-        console.log('Spread removed successfully:', response);
+        console.log('Save removed successfully:', response);
         return response;
     } catch (error) {
-        console.error('Error removing spread:', error);
+        console.error('Error removing save:', error);
         throw error;
+    }
+}
+
+export const removeAllSaves = async (user_id) => {
+    try {
+        const saves = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_SAVES_COLLECTION,
+            [
+                Query.equal('user_id', user_id)
+            ]
+        )
+
+        for (const save of saves.documents) {
+            await removeSave(save.$id);
+        }
+
+        console.log(`All saves for user ${user_id} removed successfully.`);
+    } catch (error) {
+        console.error('Error removing all saves:', error);
     }
 }
 
@@ -879,6 +923,26 @@ export const removeLike = async (like_id) => {
         throw error;
     }
 }
+
+export const removeAllLikes = async (user_id) => {
+    try {
+        const likes = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_LIKES_COLLECTION,
+            [
+                Query.equal('user_id', user_id)
+            ]
+        )
+
+        for (const like of likes.documents) {
+            await removeLike(like.$id);
+        }
+
+        console.log(`All likes for user ${user_id} removed successfully.`);
+    } catch (error) {
+        console.error('Error removing all likes:', error);
+    }
+}
 // The like icon
 export const getUserLikes = async (user_id) => {
     try {
@@ -908,6 +972,7 @@ export const getAllLikedNotices = async (likedNoticeIds, limit, offset) => {
             import.meta.env.VITE_NOTICES_COLLECTION,
             [
                 Query.equal('$id', likedNoticeIds),
+                // Query.notEqual('noticeType', ['organization']),
                 Query.limit(limit),
                 Query.offset(offset)
             ]
@@ -919,56 +984,73 @@ export const getAllLikedNotices = async (likedNoticeIds, limit, offset) => {
     }
 };
 
-// The spread icon
-export const getUserSpreads = async (user_id) => {
+export const getAllLikesByNoticeId = async (notice_id) => {
+    try {
+        const res = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_LIKES_COLLECTION,
+            [
+                Query.equal('notice_id', notice_id)
+            ]
+        )
+        return res;
+    } catch (error) {
+        console.error('Error getting all likes by notice id.', error);
+    }
+}
+
+// The save icon
+export const getUserSaves = async (user_id) => {
     try {
         const response = await databases.listDocuments(
             import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_SPREADS_COLLECTION,
+            import.meta.env.VITE_SAVES_COLLECTION,
             [
-                Query.equal('user_id', user_id)
+                Query.equal('user_id', user_id),
             ]
         )
         return response.documents;
     } catch (error) {
-        // console.error('Error fetching spreads:', error);
+        console.error('Error getting saves:', error);
     }
 }
 
 // The full notice
-export const getAllSpreadNotices = async (spreadNoticeIds, limit, offset) => {
+export const getAllSavedNotices = async (saveNoticeIds, limit, offset) => {
     try {
-        if (spreadNoticeIds.length === 0) {
-            return []; // Return empty array if no spread
+        if (saveNoticeIds.length === 0) {
+            return []; // Return empty array if no save
         }
 
-        const allSpreadNotices = await databases.listDocuments(
+        const allSavedNotices = await databases.listDocuments(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_NOTICES_COLLECTION,
             [
-                Query.equal('$id', spreadNoticeIds),
+                Query.equal('$id', saveNoticeIds),
+                // Query.notEqual('noticeType', ['organization']),
                 Query.limit(limit),
                 Query.offset(offset)
             ]
         );
-        return allSpreadNotices.documents;
+        return allSavedNotices.documents;
     } catch (error) {
-        console.error('Error fetching all spread notices:', error);
+        console.error('Error fetching all save notices:', error);
         return [];
     }
 };
 
-export const createReport = async (notice_id, author_id, reason, user_id) => {
+export const createReport = async (notice_id, author_id, reason, user_id, noticeText) => {
     try {
         const response = await databases.createDocument(
             import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_REPORTSE_COLLECTION,
+            import.meta.env.VITE_REPORTS_COLLECTION,
             ID.unique(),
             {
                 notice_id: notice_id,
                 author_id: author_id,
                 reason: reason,
-                user_id: user_id
+                user_id: user_id,
+                noticeText: noticeText
             },
             // [
             //     Permission.write(Role.users()),
@@ -1045,9 +1127,82 @@ export const removeFollow = async (following_id) => {
     }
 }
 
-export const getUserFollowingsById = async (user_id) => {
+export const removeAllFollows = async (user_id) => {
+    try {
+        const follows = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_FOLLOWING_COLLECTION,
+            [
+                Query.equal('user_id', user_id)
+            ]
+        )
 
-    console.log('user_id:', user_id);
+        for (const follow of follows.documents) {
+            await removeFollow(follow.$id);
+        }
+
+        console.log(`All follows made by ${user_id} removed successfully.`);
+    } catch (error) {
+        console.error('Error removing all follows:', error);
+    }
+}
+
+export const unfollow = async (user_id, otherUser_id) => {
+    try {
+        const res = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_FOLLOWING_COLLECTION,
+            [
+                Query.and([Query.equal('user_id', user_id), Query.equal('otherUser_id', otherUser_id)])
+            ]
+        )
+
+        console.log('Follow instance FOUND:', res);
+
+        for (const r of res.documents) {
+            await removeFollow(r.$id);
+        }
+    } catch (error) {
+        console.error('Error unfollowing:', error);
+    }
+}
+
+export const followedByUserCount = async (user_id) => {
+    try {
+        const res = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_FOLLOWING_COLLECTION,
+            [
+                Query.equal('user_id', user_id)
+            ]
+        )
+        return res.total;
+    } catch (error) {
+        console.error('Error followed by count:', error);
+    }
+}
+
+export const followingTheUserCount = async (user_id) => {
+    try {
+        const res = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_FOLLOWING_COLLECTION,
+            [
+                Query.equal('otherUser_id', user_id)
+            ]
+        )
+        return res.total;
+    } catch (error) {
+        console.error('Error followed by count:', error);
+    }
+}
+
+export const getUserFollowingsById = async (user_id, limit, offset) => {
+    console.log('Fetching followings with params:', {
+        user_id,
+        limit,
+        offset
+    });
 
     try {
         const response = await databases.listDocuments(
@@ -1055,6 +1210,9 @@ export const getUserFollowingsById = async (user_id) => {
             import.meta.env.VITE_FOLLOWING_COLLECTION,
             [
                 Query.equal('user_id', user_id),
+                Query.limit(limit),
+                Query.offset(offset),
+                Query.orderDesc('$createdAt')
             ]
         )
         // console.log('Successfully got following document.', response.documents);
@@ -1064,13 +1222,16 @@ export const getUserFollowingsById = async (user_id) => {
     }
 }
 
-export const getUserFollowersById = async (otherUser_id) => {
+export const getUserFollowersById = async (otherUser_id, limit, offset) => {
     try {
         const response = await databases.listDocuments(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_FOLLOWING_COLLECTION,
             [
                 Query.equal('otherUser_id', otherUser_id),
+                Query.limit(limit),
+                Query.offset(offset),
+                Query.orderDesc('$createdAt')
             ]
         )
         // console.log('Successfully got following document.', response.documents);
@@ -1080,19 +1241,37 @@ export const getUserFollowersById = async (otherUser_id) => {
     }
 }
 
-export const getOtherUserFollowingsById = async (user_id) => {
+export const getFollowStatus = async (user_id, otherUser_id) => {
+    console.log('getting follow status - 1', { user_id, otherUser_id });
+
     try {
-        const response = await databases.listDocuments(
+        const res = await databases.listDocuments(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_FOLLOWING_COLLECTION,
             [
-                Query.equal('user_id', user_id),
+                Query.and([Query.equal('user_id', user_id), Query.equal('otherUser_id', otherUser_id)])
             ]
         )
-        console.log('Successfully got following document.', response.documents);
-        return response.documents;
+        console.log('AND QUERY', res);
+
+        return res;
     } catch (error) {
-        console.error('Could not get following document', error);
+        console.error('Error matching with user', error);
+    }
+}
+
+export const getPersonalFeedAccounts = async (user_id) => {
+    try {
+        const res = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_FOLLOWING_COLLECTION,
+            [
+                Query.equal('user_id', user_id)
+            ]
+        )
+        return res;
+    } catch (error) {
+        console.error('Error getting personal feed acounts:', error);
     }
 }
 
@@ -1144,6 +1323,29 @@ export const deleteReaction = async (reactionId) => {
     }
 };
 
+export const deleteAllReactions = async (sender_id) => {
+    try {
+        const reactions = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_REACTIONS_COLLECTION,
+            [Query.equal('sender_id', sender_id)],
+            [
+                Permission.delete(Role.users()),
+                Permission.delete(Role.guests())
+            ]
+        );
+
+        for (const reaction of reactions.documents) {
+            await deleteReaction(reaction.$id);
+        }
+
+        console.log(`All reactions from user ${sender_id} deleted successfully.`);
+    } catch (error) {
+        console.error('Error deleting user reactions:', error);
+        throw error;
+    }
+}
+
 export const getAllReactions = async () => {
     try {
         const response = await databases.listDocuments(
@@ -1189,22 +1391,66 @@ export const getAllReactionsByRecipientId = async (recipient_id) => {
     }
 }
 
-export const getAllReactionsByNoticeId = async (notice_id, limit, offset) => {
+export const getAllReactionsByNoticeId = async (notice_id, limit, cursor = null) => {
     try {
+        const queries = [
+            Query.equal('notice_id', notice_id),
+            Query.limit(limit),
+            Query.orderDesc('$createdAt')
+        ];
+
+        if (cursor) {
+            queries.push(Query.cursorAfter(cursor));
+        }
+
         const response = await databases.listDocuments(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_REACTIONS_COLLECTION,
-            [
-                Query.equal('notice_id', notice_id),
-                Query.limit(limit),
-                Query.offset(offset),
-                Query.orderDesc('$createdAt')
-            ]
+            queries
         )
-        // console.log('Successfully got reactions by notice_id doc.:', response);
         return response;
     } catch (error) {
         console.error('Error getting reactions by notice_id:', error);
+    }
+}
+
+export const getReactionByReactionId = async (reactionId) => {
+    try {
+        const reaction = await databases.getDocument(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_REACTIONS_COLLECTION,
+            reactionId
+        )
+        console.log('Success getting reaction:', reaction);
+        return reaction;
+    } catch (error) {
+        console.error('Error getting reaction:', error);
+    }
+}
+
+export const createReactionReport = async (reaction_id, author_id, reason, user_id, reaction_text) => {
+    try {
+        const response = await databases.createDocument(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_REPORTS_REACTIONS_COLLECTION,
+            ID.unique(),
+            {
+                reaction_id: reaction_id,
+                author_id: author_id,
+                reason: reason,
+                user_id: user_id,
+                reaction_text: reaction_text
+            },
+            // [
+            //     Permission.write(Role.users()),
+            //     Permission.write(Role.guests())
+            // ]
+        );
+        console.log('Report created successfully');
+        return response;
+    } catch (error) {
+        console.error('Error adding to reports:', error);
+        throw error;
     }
 }
 
@@ -1327,6 +1573,7 @@ export const getBlockedUsersByUserByBatch = async (blocker_id, limit, offset) =>
     }
 }
 
+
 export const getUsersBlockingUser = async (blocked_id) => {
     try {
         const res = await databases.listDocuments(
@@ -1368,6 +1615,30 @@ export const removeBlockUsingBlockedId = async (blocked_id) => {
 
     } catch (error) {
         console.error('Error removing block:', error);
+    }
+}
+
+export const createUserReport = async (reported_id, reason, reporter_id) => {
+    try {
+        const response = await databases.createDocument(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_REPORTS_USERS_COLLECTION,
+            ID.unique(),
+            {
+                reported_id,
+                reason,
+                reporter_id
+            },
+            // [
+            //     Permission.write(Role.users()),
+            //     Permission.write(Role.guests())
+            // ]
+        );
+        console.log('Report created successfully');
+        return response;
+    } catch (error) {
+        console.error('Error adding to reports:', error);
+        throw error;
     }
 }
 

@@ -1,7 +1,7 @@
 :root {
-    --main-bg-color: #000000;
-    --main-text-color: #F5F7F8;
-    --main-text-muted: #808080;
+    --main-bg-color: 255, 255, 255;
+    --main-text-color: #000000;
+    --main-text-muted: #626262;
     --main-accent-color: #17c769;
     --main-accent-color-hover: #0f7c42;
     --main-caution-color: #c71717;
@@ -19,14 +19,4 @@
 p::selection {
     background-color: var(--main-accent-color) !important;
     color: black;
-}
-
-body {
-    background: rgb(0, 0, 0);
-    background: -moz-linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.29) 16%, rgba(0, 0, 0, 0.5788690476190477) 43%, rgba(0, 0, 0, 0.58) 76%, rgba(23, 199, 105, 0.58) 100%);
-    background: -webkit-linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.29) 16%, rgba(0, 0, 0, 0.5788690476190477) 43%, rgba(0, 0, 0, 0.58) 76%, rgba(23, 199, 105, 0.58) 100%);
-    background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.29) 16%, rgba(0, 0, 0, 0.5788690476190477) 43%, rgba(0, 0, 0, 0.58) 76%, rgba(23, 199, 105, 0.58) 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#000000", endColorstr="#17c769", GradientType=1);
-
-    background-attachment: fixed;
 }

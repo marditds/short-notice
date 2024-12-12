@@ -1,4 +1,4 @@
-import { Client, Users, Databases } from 'node-appwrite';
+import { Client, Query, Databases } from 'node-appwrite';
 
 // This Appwrite function will be executed every time your function is triggered
 export default async ({ req, res, log, error }) => {
@@ -33,11 +33,13 @@ export default async ({ req, res, log, error }) => {
     log('now:', now);
 
     for (const reaction of reactions) {
+
       const expiresAt = new Date(reaction.expiresAt);
 
       if (reaction.expiresAt !== null) {
-
+        log('reaction.expiresAt:', reaction.expiresAt)
         if (expiresAt <= now) {
+
           log('FOUND AN EXPIRED REACTION!', reaction.content);
           log('reaction.expiresAt:', reaction.expiresAt)
 

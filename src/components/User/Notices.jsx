@@ -5,8 +5,9 @@ import { Row, Col, Modal, Form, Accordion, Button } from 'react-bootstrap';
 import { CgTrash } from 'react-icons/cg';
 import { AiFillEdit } from 'react-icons/ai';
 import { BsReply } from "react-icons/bs";
-import { RiMegaphoneLine, RiMegaphoneFill } from 'react-icons/ri';
-import { BsHandThumbsUp, BsHandThumbsUpFill, BsExclamationTriangle } from 'react-icons/bs';
+import { RiSave2Line, RiSave2Fill } from "react-icons/ri";
+import { BsHandThumbsUp, BsHandThumbsUpFill } from 'react-icons/bs';
+import { AiOutlineExclamationCircle } from "react-icons/ai";
 import defaultAvatar from '../../assets/default.png';
 import { Loading } from '../Loading/Loading';
 import { Reactions } from './Reactions';
@@ -16,18 +17,20 @@ export const Notices = ({
     notices,
     handleEditNotice,
     handleDeleteNotice,
-    handleSpread,
+    handleSave,
     handleReport,
     handleLike,
     handleReact,
     eventKey,
-    username,
+    isOtherUserBlocked,
     user_id,
     likedNotices,
-    spreadNotices,
-    reactions,
+    savedNotices,
     getReactionsForNotice,
-    getUserAccountByUserId
+    getReactionByReactionId,
+    getUserAccountByUserId,
+    reportReaction
+    // handleDeleteReaction
 }) => {
     const location = useLocation();
 
@@ -42,8 +45,7 @@ export const Notices = ({
     const [isSendingReactionLoading, setIsSendingReactionLoading] = useState(false);
 
     const [limit] = useState(5);
-    const [offsets, setOffsets] = useState({});
-    const [hasMoreReactions, setHasMoreReactions] = useState({});
+    const [cursors, setCursors] = useState({});
     const [showLoadMoreBtn, setShowLoadMoreBtn] = useState(false);
     const [isLoadingMoreReactions, setIsLoadingMoreReactions] = useState(false);
 
@@ -76,9 +78,13 @@ export const Notices = ({
     const [reportReason, setReportReason] = useState(null);
     const [showReportConfirmation, setShowReportConfirmation] = useState(false);
 
+    const [showReportReactionModal, setShowReportReactionModal] = useState(false);
+    const [reportingReactionId, setReportingReactionId] = useState(null);
+    const [showReportReactionConfirmation, setShowReportReactionConfirmation] = useState(false);
+
+
 
     useEffect(() => {
-
         const intervalId = setInterval(() => {
             const newCountdowns = notices.map(notice => calculateCountdown(notice.expiresAt));
             setCountdowns(newCountdowns);
@@ -86,6 +92,7 @@ export const Notices = ({
 
         return () => clearInterval(intervalId);
     }, [notices]);
+
 
 
     // Reacting to a notice
@@ -143,7 +150,7 @@ export const Notices = ({
                 const notice = notices.find(notice => notice.$id === reportingNoticeId);
 
                 if (notice) {
-                    const res = await handleReport(notice.$id, notice.user_id, reportReason);
+                    await handleReport(notice.$id, notice.user_id, reportReason, notice.text);
 
                     setShowReportConfirmation(true);
                     setTimeout(() => {
@@ -180,10 +187,9 @@ export const Notices = ({
         try {
             setIsLoadingMoreReactions(true);
 
-            const currentOffset = offsets[noticeId] || 0;
+            const currentCursor = cursors[noticeId] || null;
 
-            // Get reactions from DB only for one specific notice
-            const noticeReactions = await getReactionsForNotice(noticeId, limit, currentOffset);
+            const noticeReactions = await getReactionsForNotice(noticeId, limit, currentCursor);
 
             console.log('noticeReactions', noticeReactions);
 
@@ -224,21 +230,14 @@ export const Notices = ({
                 ]
             }));
 
-            const hasMore = noticeReactions?.documents?.length === limit;
-            setHasMoreReactions(prev => ({
+            const newCursor = noticeReactions.documents.length > 0
+                ? noticeReactions.documents[noticeReactions.documents.length - 1].$id
+                : null;
+
+            setCursors(prev => ({
                 ...prev,
-                [noticeId]: hasMore
+                [noticeId]: newCursor
             }));
-
-            if (noticeReactions?.documents?.length < limit) {
-                setHasMoreReactions(false);
-            }
-
-            setOffsets(prev => ({
-                ...prev,
-                [noticeId]: currentOffset + limit
-            }));
-
 
         } catch (error) {
             console.error('Error loading reactions:', error);
@@ -246,7 +245,7 @@ export const Notices = ({
             setLoadingStates(prev => ({ ...prev, [noticeId]: false }));
             setIsLoadingMoreReactions(false);
         }
-    }
+    };
 
     useEffect(() => {
         console.log('activeNoticeId', activeNoticeId);
@@ -254,7 +253,6 @@ export const Notices = ({
     }, [activeNoticeId])
 
     const handleAccordionToggle = async (noticeId) => {
-
         if (activeNoticeId === noticeId) {
             setActiveNoticeId(null);
             setShowLoadMoreBtn(false);
@@ -264,12 +262,7 @@ export const Notices = ({
                 delete newState[noticeId];
                 return newState;
             });
-            setOffsets(prev => {
-                const newState = { ...prev };
-                delete newState[noticeId];
-                return newState;
-            });
-            setHasMoreReactions(prev => {
+            setCursors(prev => {
                 const newState = { ...prev };
                 delete newState[noticeId];
                 return newState;
@@ -279,15 +272,15 @@ export const Notices = ({
 
         setActiveNoticeId(noticeId);
 
-        // If reactions aren't loaded and not currently loading
+        // If reactions aren't loaded and not currently loading 
         if (!loadedReactions[noticeId] && !loadingStates[noticeId]) {
             setLoadingStates(prev => ({ ...prev, [noticeId]: true }));
             try {
-                const initialReactions = await getReactionsForNotice(noticeId, limit, 0);
+                const initialReactions = await getReactionsForNotice(noticeId, limit);
 
                 console.log('initialReactions', initialReactions);
 
-                const usersIds = initialReactions.documents.map((reaction) => reaction.sender_id);
+                const usersIds = initialReactions?.documents.map((reaction) => reaction.sender_id);
 
                 console.log('usersIds', usersIds);
 
@@ -312,45 +305,92 @@ export const Notices = ({
                     [noticeId]: updatedAvatarMap
                 }));
 
-
                 console.log('ReactionUsernameMap', reactionUsernameMap);
 
                 console.log('ReactionAvatarMap', reactionAvatarMap);
-
 
                 setLoadedReactions(prev => ({
                     ...prev,
                     [noticeId]: initialReactions?.documents || []
                 }));
 
-                const hasMore = initialReactions?.documents?.length === limit;
-                setHasMoreReactions(prev => ({
+                const newCursor = initialReactions.documents.length > 0
+                    ? initialReactions.documents[initialReactions.documents.length - 1].$id
+                    : null;
+
+                setCursors(prev => ({
                     ...prev,
-                    [noticeId]: hasMore
+                    [noticeId]: newCursor
                 }));
 
-                setOffsets(prev => ({
-                    ...prev,
-                    [noticeId]: limit
-                }));
             } catch (error) {
                 console.error('Error loading initial reactions:', error);
             } finally {
                 setLoadingStates(prev => ({ ...prev, [noticeId]: false }));
             }
-
         }
+    };
+
+    //Reporting Reaction 
+    const handleReportReaction = (reactionId) => {
+        setReportingReactionId(reactionId);
+        setShowReportReactionModal(true);
+        setShowReportReactionConfirmation(false);
+    }
+
+    useEffect(() => {
+        console.log('ReprotingReactionId', reportingReactionId);
+    }, [reportingReactionId])
+
+    const handleReportReactionSubmission = async () => {
+
+        if (reportReason && reportingReactionId) {
+            try {
+
+                const reaction = await getReactionByReactionId(reportingReactionId);
+
+                console.log('Reported!', reaction);
+
+
+                if (reaction) {
+                    await reportReaction(reaction.$id, reaction.sender_id, reportReason, reaction.content);
+
+                    setShowReportReactionConfirmation(true);
+                    setTimeout(() => {
+                        setShowReportReactionModal(false);
+                    }, 2000);
+                }
+            } catch (error) {
+                console.error("Error reporting notice:", error);
+            }
+        }
+    };
+
+    const handleCloseReportReactionModal = () => {
+        setShowReportReactionModal(false);
+        setReportReason(null);
+    }
+
+    const shouldShowUserInfo = () => {
+        return (
+            location.pathname === '/user/feed' ||
+            (location.pathname === '/user/profile' && eventKey !== 'my-notices') ||
+            (location.pathname.startsWith('/user/') &&
+                location.pathname !== '/user/profile' &&
+                location.pathname !== '/user/feed' &&
+                eventKey !== 'notices')
+        );
     };
 
     return (
         <>
+            {/* {!isLoadingNotices ? */}
             <Accordion
                 // defaultActiveKey={['0']}
                 className='user-profile__notices-accordion'
                 activeKey={activeNoticeId}
                 onSelect={handleAccordionToggle}
             >
-                {/* {notices.slice(0, displayCount).map((notice, idx) => ( */}
                 {notices.map((notice, idx) => (
                     <Accordion.Item eventKey={notice?.$id} key={notice?.$id}>
                         <Accordion.Header
@@ -359,9 +399,10 @@ export const Notices = ({
                         >
                             {/* <FaAngleDown size={20} className='me-3' /> */}
                             <Row className='w-100 m-auto'>
+                                {/* Text and Countdown Col */}
                                 <Col className='col-md-9 d-flex justify-content-between flex-column'
                                 >
-                                    <p className='mb-0'>{notice?.text}</p>
+                                    <p className='mb-0 text-break'>{notice?.text}</p>
 
                                     <small className='me-auto'>
                                         <span
@@ -371,10 +412,37 @@ export const Notices = ({
                                         </span>  {countdowns[idx] || calculateCountdown(notice?.expiresAt)}
                                     </small>
                                 </Col>
-                                <Col className='col-md-3'>
 
-                                    {location.pathname === '/user/profile' && eventKey === 'my-notices' ?
+                                {/* Username, Profile Picture, Edit/Delete, Interaction Col */}
+                                <Col className='col-md-3 d-flex flex-column justify-content-end'>
 
+                                    {/* Username and Profile Picture */}
+                                    {shouldShowUserInfo() ?
+                                        (<div className='d-flex justify-content-end align-items-center mt-auto'>
+
+                                            <p
+                                                className='w-100 my-0 text-end notice__username'
+                                            >
+                                                <Link to={`../${notice.username}`}
+                                                    className='text-decoration-none'>
+                                                    <strong>{notice?.username}</strong>
+                                                </Link>
+                                            </p>
+
+                                            <Link to={`../${notice.username}`}>
+                                                <img
+                                                    src={notice.avatarUrl || defaultAvatar}
+                                                    alt="Profile"
+                                                    className='d-flex ms-auto notice__avatar'
+                                                />
+                                            </Link>
+                                        </div>)
+                                        :
+                                        null
+                                    }
+
+                                    {/* Edit and Delete Notice */}
+                                    {location.pathname === '/user/profile' && eventKey === 'my-notices' &&
                                         <div
                                             className='d-flex flex-column justify-content-end h-100'>
                                             <span className='d-flex ms-auto mt-auto'>
@@ -392,104 +460,77 @@ export const Notices = ({
 
                                                 </div>
                                             </span>
-                                            <small
-                                                className='text-end notice__create-date'
-                                            >
-                                                {formatDateToLocal(notice?.timestamp)}
-                                            </small>
-                                        </div>
-                                        :
-                                        <div className='d-flex flex-column justify-content-end h-100'>
-
-                                            {
-                                                location.pathname !== `/user/${notice.username}` && eventKey === 'notices'
-                                                    ?
-                                                    null
-                                                    :
-                                                    <div className='d-flex justify-content-end align-items-center mt-auto'>
-
-                                                        <p
-                                                            className='w-100 my-0 text-end notice__username'
-                                                        >
-                                                            <Link to={`../${notice.username}`}
-                                                                className='text-decoration-none'>
-                                                                <strong>{notice?.username}</strong>
-                                                            </Link>
-                                                        </p>
-
-                                                        <Link to={`../${notice.username}`}>
-                                                            <img
-                                                                src={notice.avatarUrl || defaultAvatar}
-                                                                alt="Profile"
-                                                                style={{ borderRadius: '50%', width: 50, height: 50 }}
-                                                                className='d-flex ms-auto'
-                                                            />
-                                                        </Link>
-                                                    </div>
-                                            }
-                                            {/* </Link> */}
-                                            <div className='d-grid'>
-                                                {user_id === notice.user_id ?
-                                                    <div style={{ height: '23.5px' }}></div>
-                                                    :
-                                                    <div
-                                                        className='d-flex justify-content-end align-items-center'
-                                                        style={{ height: '35px' }}
-                                                    >
-                                                        <div
-                                                            className='notice__reaction-btn ms-2'
-                                                            onClick={() => handleLike(notice)}
-                                                        >
-                                                            {likedNotices && likedNotices[notice.$id] ? (
-                                                                <BsHandThumbsUpFill
-                                                                    className='notice__reaction-btn-fill'
-                                                                    size={19}
-                                                                />
-                                                            ) : (
-                                                                <BsHandThumbsUp size={19} />
-                                                            )}
-                                                        </div>
-                                                        <div
-                                                            onClick={() => handleSpread(notice)}
-                                                            className='notice__reaction-btn ms-2'
-                                                            disabled={user_id === notice.user_id}
-                                                        >
-                                                            {spreadNotices && spreadNotices[notice.$id] ? (
-                                                                <RiMegaphoneFill
-                                                                    className='notice__reaction-btn-fill'
-                                                                    size={19}
-                                                                />
-                                                            ) : (
-                                                                <RiMegaphoneLine size={19} />
-                                                            )}
-                                                        </div>
-                                                        <div
-                                                            onClick={() => handleReactNotice(notice.$id, notice.username, notice.avatarUrl, notice.text)}
-                                                            // onClick={() => setShowReactModal(true)}
-                                                            className='notice__reaction-btn ms-2'
-                                                            disabled={user_id === notice.user_id}
-                                                        >
-                                                            <BsReply
-                                                                size={23}
-                                                            />
-                                                        </div>
-                                                        <div
-                                                            onClick={() => handleReportNotice(notice.$id)}
-                                                            className='notice__reaction-btn ms-2'
-                                                            disabled={user_id === notice.user_id}
-                                                        >
-                                                            <BsExclamationTriangle
-                                                                size={19}
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                }
-                                                <small className='text-end mt-auto notice__create-date'>
-                                                    {formatDateToLocal(notice.timestamp)}
-                                                </small>
-                                            </div>
                                         </div>
                                     }
+
+                                    {/* Interaction w/ Notice */}
+                                    <div className='d-flex flex-column justify-content-end'>
+                                        <div className='d-grid'>
+                                            {(location.pathname === '/user/profile' && eventKey === 'my-notices') ?
+                                                null
+                                                :
+                                                <>
+                                                    {(location.pathname === '/user/feed' && user_id === notice.user_id) || ((location.pathname !== `/user/profile` || location.pathname !== `/user/feed`) && user_id === notice.user_id) ?
+                                                        <div style={{ height: '35px' }} /> :
+                                                        <div
+                                                            className='d-flex justify-content-end align-items-center'
+                                                            style={{ height: '35px' }}
+                                                        >
+                                                            <div
+                                                                className={`notice__reaction-btn ${isOtherUserBlocked ? 'disabled' : ''} ms-2`}
+                                                                onClick={() => {
+                                                                    isOtherUserBlocked ? console.log(`YOU are blocked`) : handleLike(notice);
+                                                                }}
+                                                            >
+                                                                {likedNotices && likedNotices[notice.$id] ? (
+                                                                    <>
+                                                                        <BsHandThumbsUpFill
+                                                                            className='notice__reaction-btn-fill'
+                                                                            size={19}
+                                                                        />
+                                                                    </>
+                                                                ) : (
+                                                                    <BsHandThumbsUp size={19} />
+                                                                )}
+                                                            </div>
+                                                            <div
+                                                                onClick={() => handleSave(notice)}
+                                                                className={`notice__reaction-btn ${isOtherUserBlocked ? 'disabled' : ''} ms-2`}
+                                                            >
+                                                                {savedNotices && savedNotices[notice.$id] ? (
+                                                                    <RiSave2Fill
+                                                                        className='notice__reaction-btn-fill'
+                                                                        size={20}
+                                                                    />
+
+                                                                ) : (
+                                                                    <RiSave2Line size={20} />
+                                                                )}
+                                                            </div>
+                                                            <div
+                                                                onClick={() => handleReactNotice(notice.$id, notice.username, notice.avatarUrl, notice.text)}
+                                                                className={`notice__reaction-btn ${isOtherUserBlocked ? 'disabled' : ''} ms-2`}
+                                                            >
+                                                                <BsReply size={23} />
+                                                            </div>
+                                                            <div
+                                                                onClick={() => handleReportNotice(notice.$id)}
+                                                                className='notice__reaction-btn ms-2'
+                                                            >
+                                                                <AiOutlineExclamationCircle
+                                                                    size={22}
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                </>
+                                            }
+                                            <small className='text-end mt-auto notice__create-date'>
+                                                {formatDateToLocal(notice.timestamp)}
+                                            </small>
+                                        </div>
+                                    </div>
+
                                 </Col>
                             </Row>
                         </Accordion.Header>
@@ -503,7 +544,9 @@ export const Notices = ({
                                 reactionAvatarMap={reactionAvatarMap}
                                 reactionUsernameMap={reactionUsernameMap}
                                 showLoadMoreBtn={showLoadMoreBtn}
+                                user_id={user_id}
                                 handleLoadMoreReactions={handleLoadMoreReactions}
+                                handleReportReaction={handleReportReaction}
                             />
                         </Accordion.Body>
                     </Accordion.Item>
@@ -511,6 +554,7 @@ export const Notices = ({
                 }
             </Accordion>
 
+            {/* Reaction modal */}
             <Modal show={showReactModal}
                 onHide={handleCloseReactModal}
                 className='notice__react--modal'
@@ -558,6 +602,7 @@ export const Notices = ({
                             />
                         </Form.Group>
                     </Form>
+                    ❗ For the time being, you do not have the option of deleting your reactions to notices. Please use this feature wisely.
 
                 </Modal.Body>
                 <Modal.Footer
@@ -579,6 +624,7 @@ export const Notices = ({
                 </Modal.Footer>
             </Modal>
 
+            {/* Notice report modal */}
             <Modal show={showReportModal} onHide={handleCloseReportModal}>
                 <Modal.Header>
                     <Modal.Title>Report Notice</Modal.Title>
@@ -620,7 +666,47 @@ export const Notices = ({
                 </Modal.Footer>
             </Modal>
 
-
+            {/* Reaction report modal */}
+            <Modal show={showReportReactionModal} onHide={handleCloseReportReactionModal}>
+                <Modal.Header>
+                    <Modal.Title>Report Reaction</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {showReportReactionConfirmation ? (
+                        <p>Your report has been successfully submitted!</p>
+                    ) : (
+                        <Form>
+                            <Form.Group className='mb-3' controlId='reportReaction'>
+                                <Form.Label>Reason:</Form.Label>
+                                {reportCategories.map((category) => (
+                                    <Form.Check
+                                        key={category.key}
+                                        type='radio'
+                                        label={category.name}
+                                        id={category.name}
+                                        name='reportReason'
+                                        onChange={() => setReportReason(category.key)}
+                                    />
+                                ))}
+                            </Form.Group>
+                        </Form>
+                    )}
+                </Modal.Body>
+                <Modal.Footer>
+                    {showReportReactionConfirmation ? null : (
+                        <>
+                            <Button onClick={handleCloseReportReactionModal}>
+                                Cancel
+                            </Button>
+                            <Button onClick={handleReportReactionSubmission}
+                            // disabled={!reportReason}
+                            >
+                                Report
+                            </Button>
+                        </>
+                    )}
+                </Modal.Footer>
+            </Modal>
         </>
     );
 };

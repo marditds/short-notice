@@ -1,22 +1,23 @@
 import { useState, useEffect, useCallback } from 'react';
-import { createNotice, getUserNotices, updateNotice, deleteNotice, deleteAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSpread, getUserSpreads, removeSpread, createReport, createLike, removeLike, getUserLikes, getAllLikedNotices as fetchAllLikedNotices, getAllSpreadNotices as fetchAllSpreadNotices, createReaction, deleteReaction, getAllReactionsBySenderId as fetchAllReactionsBySenderId, getAllReactions as fetchAllReactions, getAllReactionsByRecipientId as fetchAllReactionsByRecipientId, getNoticeByNoticeId as fetchNoticeByNoticeId, getAllReactionsByNoticeId as fetchAllReactionsByNoticeId } from '../../lib/context/dbhandler';
+import { createNotice, getUserNotices, updateNotice, deleteNotice, deleteAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSave, getUserSaves, removeSave, createReport, createLike, removeLike, getUserLikes, getAllLikedNotices as fetchAllLikedNotices, getAllLikesByNoticeId as fetchAllLikesByNoticeId, getAllSavedNotices as fetchAllSavedNotices, createReaction, deleteReaction, getAllReactionsBySenderId as fetchAllReactionsBySenderId, getAllReactions as fetchAllReactions, getAllReactionsByRecipientId as fetchAllReactionsByRecipientId, getNoticeByNoticeId as fetchNoticeByNoticeId, getAllReactionsByNoticeId as fetchAllReactionsByNoticeId, getReactionByReactionId as fetchReactionByReactionId, deleteAllReactions, createReactionReport, getNoticeByUserId as fetchNoticeByUserId } from '../../lib/context/dbhandler';
 import { UserId } from '../../components/User/UserId.jsx';
+import { useUnblockedNotices } from '../utils/blockFilter.js';
 
 const useNotices = (googleUserData) => {
     const [user_id, setUserId] = useState(null);
     const [userNotices, setUserNotices] = useState([]);
-    const [spreadNotices, setSpreadNotices] = useState([]);
+    const [latestNotice, setLatestNotice] = useState({});
+    const [savedNotices, setSaveNotices] = useState([]);
     const [likedNotices, setLikedNotices] = useState({});
     const [noticesReactions, setNoticesReactions] = useState([]);
-    const [spreadReactions, setSpreadReactions] = useState([]);
+    const [saveReactions, setSaveReactions] = useState([]);
     const [likedReactions, setLikedReactions] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isAddingNotice, setIsAddingNotice] = useState(false);
     const [isRemovingNotice, setIsRemovingNotice] = useState(false);
     const [removingNoticeId, setRemovingNoticeId] = useState(null);
 
-    // const [offset, setOffset] = useState(0);  
-    // const [limit] = useState(10);  
+    const { filterBlocksFromLikesSaves } = useUnblockedNotices();
 
     // Fetch User Notces
     useEffect(() => {
@@ -39,45 +40,45 @@ const useNotices = (googleUserData) => {
 
         obtainUserById();
 
-        const checkExpiredNotices = setInterval(() => {
-            const now = new Date();
-            setUserNotices((prevNotices) =>
-                prevNotices.filter((notice) => {
-                    if (notice.expiresAt && new Date(notice.expiresAt) <= now) {
-                        deleteNotice(notice.$id);
-                        return false;
-                    }
-                    return true;
-                })
-            );
-        }, 10000);
+        // const checkExpiredNotices = setInterval(() => {
+        //     const now = new Date();
+        //     setUserNotices((prevNotices) =>
+        //         prevNotices.filter((notice) => {
+        //             if (notice.expiresAt && new Date(notice.expiresAt) < now) {
+        //                 deleteNotice(notice.$id);
+        //                 return false;
+        //             }
+        //             return true;
+        //         })
+        //     );
+        // }, 10000);
 
-        return () => clearInterval(checkExpiredNotices);
+        // return () => clearInterval(checkExpiredNotices);
 
     }, [googleUserData]);
 
-    // Fetch User Likes
+    // Fetch User Saves
     useEffect(() => {
-        const fetchUserSpreads = async () => {
+        const fetchUserSaves = async () => {
             try {
-                const userSpreads = await getUserSpreads(user_id);
+                const userSaves = await getUserSaves(user_id);
 
-                const spreadNoticesMap = {};
-                userSpreads.forEach(spread => {
-                    spreadNoticesMap[spread.notice_id] = spread.$id;
+                const saveNoticesMap = {};
+                userSaves.forEach(save => {
+                    saveNoticesMap[save.notice_id] = save.$id;
                 });
-                setSpreadNotices(spreadNoticesMap);
+                setSaveNotices(saveNoticesMap);
             } catch (error) {
-                console.error('Error fetching user spreads:', error);
+                console.error('Error fetching user saves:', error);
             }
         };
 
         if (user_id) {
-            fetchUserSpreads();
+            fetchUserSaves();
         }
     }, [user_id]);
 
-    // Fetch User Spreads
+    // Fetch User Likes
     useEffect(() => {
         const fetchUserLikes = async () => {
             try {
@@ -129,9 +130,13 @@ const useNotices = (googleUserData) => {
             };
 
             setIsAddingNotice(true);
+
             try {
                 const createdNotice = await createNotice(newNotice);
-                setUserNotices((prevNotices) => [createdNotice, ...prevNotices]);
+
+                setLatestNotice(createdNotice);
+                console.log('THIS WILL BE THE LATEST NOTICE:', createdNotice);
+
                 return createdNotice;
 
             } catch (error) {
@@ -139,17 +144,28 @@ const useNotices = (googleUserData) => {
             } finally {
                 setIsAddingNotice(false);
             }
+
+            // try {
+            //     const createdNotice = await createNotice(newNotice);
+            //     setUserNotices((prevNotices) => [createdNotice, ...prevNotices]);
+            //     return createdNotice;
+
+            // } catch (error) {
+            //     console.error('Error adding notice:', error);
+            // } finally {
+            //     setIsAddingNotice(false);
+            // }
         }
     };
+
+    useEffect(() => {
+        console.log('THIS IS THE LATEST NOTICE:', latestNotice);
+    }, [latestNotice])
 
     const editNotice = async (noticeId, newText) => {
 
         const updtNtc = await updateNotice(noticeId, newText);
-        setUserNotices((prevNotices) =>
-            prevNotices.map((notice) =>
-                notice.$id === noticeId ? { ...notice, text: newText } : notice
-            )
-        );
+
         console.log('updtNtc', updtNtc);
 
         return updtNtc;
@@ -158,14 +174,12 @@ const useNotices = (googleUserData) => {
     const removeNotice = async (noticeId) => {
 
         console.log('Attempting to delete notice with ID:', noticeId);
-        console.log('Current notices:', userNotices);
 
         setIsRemovingNotice(true);
         setRemovingNoticeId(noticeId);
 
         try {
             const removedNotice = await deleteNotice(noticeId);
-            // setUserNotices((prevNotices) => prevNotices.filter((notice) => notice.$id !== noticeId));
             return removedNotice;
         } catch (error) {
             if (error.code === 404) {
@@ -189,82 +203,85 @@ const useNotices = (googleUserData) => {
         }
     }
 
-    const getFeedNotices = async (selectedTags, limit, offset) => {
+    const deleteExpiredNotice = async (notices) => {
         try {
-            // console.log('selected tags', selectedTags);
+            const unExpiredNotices = notices.filter((notice) => {
+                if (notice.expiresAt) {
+                    const expirationTime = new Date(notice.expiresAt);
+                    const now = new Date();
 
-            const notices = await getFilteredNotices(selectedTags, limit, offset);
+                    console.log('Expiration Check:', {
+                        expirationTime: expirationTime,
+                        now: now,
+                        isExpired: now > expirationTime
+                    });
+
+                    if (now > expirationTime) {
+                        console.log('Deleting expired notice:', notice.text);
+                        removeNotice(notice.$id);
+                        return false;
+                    }
+                }
+                return true;
+            });
+
+            return unExpiredNotices;
+
+        } catch (error) {
+            'Error deleting expired notices:', error;
+        }
+    }
+
+    const getFeedNotices = async (selectedTags, limit, lastId) => {
+        try {
+            const notices = await getFilteredNotices(selectedTags, limit, lastId);
             console.log('notices - getFeedNotices', notices);
-
             return notices;
         } catch (error) {
             console.error('Error fetching filtered notices:', error);
         }
     };
 
-    const getNoticesByUser = useCallback(async (user_id, limit, offset) => {
+    const getNoticesByUser = useCallback(async (user_id, limit, lastId) => {
         try {
-            const response = await getUserNotices(user_id, limit, offset);
+            const response = await getUserNotices(user_id, limit, lastId);
+
             return response;
         } catch (error) {
             console.error('Error getNoticesByUser - useNotices');
         }
     }, [googleUserData]);
 
-    // In UserProfile.jsx and OtherUserProfile.jsx
-    const fetchUserNotices = async (id, setNotices, limit, offset) => {
+    const fetchUserNotices = async (id, limit, lastId) => {
         if (!id) return;
 
         try {
-            const usrNotices = await getNoticesByUser(id, limit, offset);
+            const usrNotices = await getNoticesByUser(id, limit, lastId);
 
-            setNotices(prevNotices => {
-                const newNotices = usrNotices.filter(notice =>
-                    !prevNotices.some(existingNotice => existingNotice.$id === notice.$id)
-                );
+            // setNotices(prevNotices => {
+            //     const newNotices = usrNotices.filter(notice =>
+            //         !prevNotices.some(existingNotice => existingNotice.$id === notice.$id)
+            //     );
 
-                return [...prevNotices, ...newNotices];
-            });
+            //     console.log('FETCHED NTCS:', newNotices);
 
-            const now = new Date().getTime();
+            //     return [...prevNotices, ...newNotices];
+            // });
 
-            setNotices(prevNotices =>
-                prevNotices.filter(notice => {
-                    if (notice.expiresAt) {
-                        const expiresAtDate = new Date(notice.expiresAt);
-                        expiresAtDate.setHours(expiresAtDate.getHours() + 7); // Adjusting the 7-hour difference
-
-                        if (expiresAtDate <= now) {
-                            deleteNotice(notice.$id);
-                            return false;
-                        }
-                    }
-                    return true;
-                })
-            );
+            // const now = new Date().getTime();
 
             // setNotices(prevNotices =>
             //     prevNotices.filter(notice => {
             //         if (notice.expiresAt) {
-            //             const expirationTime = new Date(notice.expiresAt).getTime();
+            //             const expiresAtDate = new Date(notice.expiresAt);
+            //             expiresAtDate.setHours(expiresAtDate.getHours() + 8); // Adjusting the 8-hour difference
 
-            //           
-            //             if (now >= expirationTime) {
-            //                 deleteNotice(notice.$id); 
-            //                 return false; 
+            //             if (expiresAtDate <= now) {
+            //                 deleteNotice(notice.$id);
+            //                 return false;
             //             }
             //         }
             //         return true;
-            //     })
-            // );
-
-            // setNotices(prevNotices =>
-            //     prevNotices.filter(notice => {
-            //         if (notice.expiresAt && new Date(notice.expiresAt) <= now) {
-            //             deleteNotice(notice.$id);
-            //             return false; 
-            //         }
-            //         return true; 
             //     })
             // );
 
@@ -272,10 +289,8 @@ const useNotices = (googleUserData) => {
 
             return usrNotices;
 
-
         } catch (error) {
             console.error('Error fetchUserNotices - useNotices');
-
         }
     }
 
@@ -310,24 +325,24 @@ const useNotices = (googleUserData) => {
         }
     }
 
-    const spreadNotice = async (notice_id, author_id) => {
+    const saveNotice = async (notice_id, author_id) => {
         try {
-            if (spreadNotices[notice_id]) {
-                await removeSpread(spreadNotices[notice_id]);
-                setSpreadNotices((prevSpreads) => {
-                    const updatedSpreads = { ...prevSpreads };
-                    delete updatedSpreads[notice_id];
-                    return updatedSpreads;
+            if (savedNotices[notice_id]) {
+                await removeSave(savedNotices[notice_id]);
+                setSaveNotices((prevSaves) => {
+                    const updatedSaves = { ...prevSaves };
+                    delete updatedSaves[notice_id];
+                    return updatedSaves;
                 });
             } else {
-                const newSpread = await createSpread(notice_id, author_id, user_id);
-                setSpreadNotices((prevSpread) => ({
-                    ...prevSpread,
-                    [notice_id]: newSpread.$id,
+                const newSave = await createSave(notice_id, author_id, user_id);
+                setSaveNotices((prevSave) => ({
+                    ...prevSave,
+                    [notice_id]: newSave.$id,
                 }));
             }
         } catch (error) {
-            console.error('Error toggling spreads:', error);
+            console.error('Error toggling saves:', error);
         }
     }
 
@@ -352,12 +367,16 @@ const useNotices = (googleUserData) => {
         }
     };
 
-    const getAllLikedNotices = async (user_id, limit, offset) => {
+    const getAllLikedNotices = async (userId, limit, offset) => {
         try {
 
-            const userLikes = await getUserLikes(user_id);
+            const userLikes = await getUserLikes(userId);
 
-            const likedNoticeIds = userLikes.map(like => like.notice_id);
+            console.log('userLikes', userLikes);
+
+            const noticesWithoutTwoWayBlock = await filterBlocksFromLikesSaves(userLikes, user_id);
+
+            const likedNoticeIds = noticesWithoutTwoWayBlock.map(like => like.notice_id);
 
             return await fetchAllLikedNotices(likedNoticeIds, limit, offset);
 
@@ -367,24 +386,56 @@ const useNotices = (googleUserData) => {
         }
     };
 
-    const getAllSpreadNotices = async (user_id, limit, offset) => {
+    const getNoticeByUserId = async (id, limit, offset) => {
+        try {
+            console.log('LIMIT - useNotice', limit);
+
+            const res = await fetchNoticeByUserId(id, limit, offset);
+
+            console.log('NOTICES:', res);
+
+            // setUserNotices(res);
+            // setUserNotices((preVal) => [...preVal, ...res]);
+
+            return res;
+        } catch (error) {
+            console.error('Error fetching notice by user id:', error);
+        }
+    }
+
+    const getAllLikesByNoticeId = async (noticeId) => {
+        try {
+            const res = await fetchAllLikesByNoticeId(noticeId);
+            console.log('All likes for a notice by its id:', res);
+            return res.documents;
+        } catch (error) {
+            console.error('Error fetching all likes by notice id.', error);
+        }
+    }
+
+    const getAllSavedNotices = async (userId, limit, offset) => {
         try {
 
-            const userSpreads = await getUserSpreads(user_id);
+            const userSaves = await getUserSaves(userId);
 
-            const spreadNoticeIds = userSpreads.map(like => like.notice_id);
+            console.log('userSaves', userSaves);
 
-            return await fetchAllSpreadNotices(spreadNoticeIds, limit, offset);
+
+            const noticesWithoutTwoWayBlock = await filterBlocksFromLikesSaves(userSaves, user_id);
+
+            const saveNoticeIds = noticesWithoutTwoWayBlock.map(like => like.notice_id);
+
+            return await fetchAllSavedNotices(saveNoticeIds, limit, offset);
 
         } catch (error) {
-            // console.error('Error fetching all spread notices:', error);
+            // console.error('Error fetching all save notices:', error);
             return [];
         }
     };
 
-    const reportNotice = async (notice_id, author_id, reason) => {
+    const reportNotice = async (notice_id, author_id, reason, noticeText) => {
         try {
-            await createReport(notice_id, author_id, reason, user_id);
+            await createReport(notice_id, author_id, reason, user_id, noticeText);
             console.log('Notice reported successfully!');
         } catch (error) {
             console.error('Error reporting notice:', error);
@@ -411,6 +462,15 @@ const useNotices = (googleUserData) => {
             console.log('Reaction removed successfully.');
         } catch (error) {
             console.error('Error removing reaction:', error);
+        }
+    }
+
+    const removeAllReactionsByUser = async (user_id) => {
+        try {
+            const response = await deleteAllReactions(user_id);
+            return response;
+        } catch (error) {
+            console.error('Error deleting all reactions:', error);
         }
     }
 
@@ -450,9 +510,9 @@ const useNotices = (googleUserData) => {
     }
 
     // Get reactions from DB
-    const getReactionsForNotice = async (notice_id, limit, offset) => {
+    const getReactionsForNotice = async (notice_id, limit, cursor = null) => {
         try {
-            const response = await fetchAllReactionsByNoticeId(notice_id, limit, offset);
+            const response = await fetchAllReactionsByNoticeId(notice_id, limit, cursor);
             console.log('getAllReactionsByNoticeId', response);
             return response;
         } catch (error) {
@@ -460,49 +520,42 @@ const useNotices = (googleUserData) => {
         }
     }
 
+    const getReactionByReactionId = async (reactionId) => {
+        try {
+            const reaction = await fetchReactionByReactionId(reactionId);
+            console.log('Succes fetching reaction:', reaction);
+            return reaction;
+        } catch (error) {
+            console.error('Error fetching reaction', error);
+        }
+    }
 
-    // const fetchReactionsForNotices = async (usrNtcs, setReactionsState) => {
-    //     if (usrNtcs.length > 0) {
-    //         const allReactions = [];
-
-    //         // console.log('userNotices', usrNtcs);
-
-    //         for (const notice of usrNtcs) {
-    //             const res = await fetchAllReactionsByNoticeId(notice?.$id);
-
-    //             console.log('res', res);
-
-    //             const noticeReactions = res.documents || [];
-
-    //             if (noticeReactions) {
-    //                 allReactions.push(...noticeReactions);
-    //             }
-    //         }
-    //         console.log(eval(`allReactions for ${setReactionsState}`, allReactions))
-    //         // console.log(`allReactions for ${(setReactionsState)}`, allReactions);
-
-    //         setReactionsState(allReactions);
-    //     }
-    // };
-
-
-
+    const reportReaction = async (reaction_id, author_id, reason, reaction_text) => {
+        try {
+            await createReactionReport(reaction_id, author_id, reason, user_id, reaction_text);
+            console.log('Reporting reacion successful!');
+        } catch (error) {
+            console.error('Error adding reaction:', error);
+        }
+    }
 
     return {
         user_id,
-        userNotices,
-        spreadNotices,
+        // userNotices,
+        latestNotice,
+        savedNotices,
         likedNotices,
         isLoading,
         isAddingNotice,
         isRemovingNotice,
         removingNoticeId,
         noticesReactions,
-        spreadReactions,
+        saveReactions,
         likedReactions,
         addNotice,
         editNotice,
         removeNotice,
+        deleteExpiredNotice,
         getFeedNotices,
         fetchUserNotices,
         getNoticesByUser,
@@ -510,19 +563,24 @@ const useNotices = (googleUserData) => {
         getInterests,
         setRemovingNoticeId,
         updateInterests,
-        spreadNotice,
+        saveNotice,
         getAllLikedNotices,
-        getAllSpreadNotices,
+        getNoticeByUserId,
+        getAllLikesByNoticeId,
+        getAllSavedNotices,
         reportNotice,
         likeNotice,
         setLikedNotices,
         removeAllNoticesByUser,
+        removeAllReactionsByUser,
         sendReaction,
         removeReaction,
         getReactionsForNotice,
+        getReactionByReactionId,
+        reportReaction,
         // fetchReactionsForNotices,
         setNoticesReactions,
-        setSpreadReactions,
+        setSaveReactions,
         setLikedReactions
     };
 };
