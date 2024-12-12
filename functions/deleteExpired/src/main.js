@@ -1,5 +1,4 @@
-// import { Query } from 'appwrite';
-import { Query, Client, Databases } from 'node-appwrite';
+import { Client, Databases, Query } from 'node-appwrite';
 
 // This Appwrite function will be executed every time your function is triggered
 export default async ({ req, res, log, error }) => {
@@ -41,6 +40,12 @@ export default async ({ req, res, log, error }) => {
       const expiresAt = new Date(notice.expiresAt);
 
       if (expiresAt <= now) {
+
+        await databases.deleteDocument(
+          process.env.VITE_DATABASE,
+          process.env.VITE_NOTICES_COLLECTION,
+          notice.$id);
+        log(`Deleted expired notice: ${notice.$id}`);
 
         // const [likesRes, savesRes] = await Promise.all([
         //   databases.listDocuments(
@@ -110,12 +115,6 @@ export default async ({ req, res, log, error }) => {
         //     )
         //   )
         // );
-
-        await databases.deleteDocument(
-          process.env.VITE_DATABASE,
-          process.env.VITE_NOTICES_COLLECTION,
-          notice.$id);
-        log(`Deleted expired notice: ${notice.$id}`);
 
 
       }
