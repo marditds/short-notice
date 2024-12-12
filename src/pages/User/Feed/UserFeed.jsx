@@ -4,13 +4,13 @@ import useNotices from '../../../lib/hooks/useNotices';
 import useUserInfo from '../../../lib/hooks/useUserInfo';
 import { getAvatarUrl as avatarUtil } from '../../../lib/utils/avatarUtils';
 import { Notices } from '../../../components/User/Notices';
-import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { useUnblockedNotices } from '../../../lib/utils/blockFilter';
+// import { deleteExpired } from '../../../lib/utils/deleteExpired';
+import { Button } from 'react-bootstrap';
 import { Loading } from '../../../components/Loading/Loading';
-import { FaCircleExclamation } from "react-icons/fa6";
+import { FeedHeader } from '../../../components/User/Feed/FeedHeader/FeedHeader';
 
 const UserFeed = () => {
-
-    const [usersData, setUsersData] = useState([]);
 
     const [tagCategories, setTagCategories] = useState([
         {
@@ -52,31 +52,51 @@ const UserFeed = () => {
 
     const {
         user_id,
-        noticesReactions,
+        likedNotices,
+        savedNotices,
         getInterests,
         getFeedNotices,
-        spreadNotice,
+        removeNotice,
+        deleteExpiredNotice,
+        saveNotice,
         reportNotice,
         likeNotice,
         sendReaction,
-        likedNotices,
-        spreadNotices,
-        getReactionsForNotice
+        getReactionsForNotice,
+        getReactionByReactionId,
+        reportReaction,
+        getNoticesByUser,
+        // noticesReactions, 
         // fetchReactionsForNotices,
         // setNoticesReactions
     } = useNotices(googleUserData);
 
-    const { fetchUsersData, getBlockedUsersByUser, getUsersBlockingUser, getUserAccountByUserId } = useUserInfo(googleUserData);
+    const { fetchUsersData, getUserAccountByUserId, getPersonalFeedAccounts } = useUserInfo(googleUserData);
+    const { filterBlocksFromFeed } = useUnblockedNotices();
 
-    const [feedNotices, setFeedNotices] = useState([]);
+    const [generalFeedNotices, setGeneralFeedNotices] = useState([]);
+    const [personalFeedNotices, setPersonalFeedNotices] = useState([]);
+    const [isLoadingPersonalFeedNotices, setIsLoadingPersonalFeedNotices] = useState(false);
 
-    const [isLoadingNotices, setIsLoadingNotices] = useState(false);
-    const [isLoadingUsers, setIsLoadingUsers] = useState(false);
+    const [isFeedToggled, setIsFeedToggled] = useState(false);
 
+    // General Feed
     const [limit] = useState(10);
-    const [offset, setOffset] = useState(0);
-    const [hasMoreNotices, setHasMoreNotices] = useState(true);
+    const [lastId, setLastId] = useState(null);
+    const [hasMoreGeneralNotices, setHasMoreGeneralNotices] = useState(true);
     const [isLoadingMore, setIsLoadingMore] = useState(false);
+    const [loadMore, setLoadMore] = useState(false);
+
+    // Personal Feed
+    const [limitPersonal] = useState(10);
+    const [lastIdPersonal, setLastIdPersonal] = useState(null);
+    const [hasMorePersonalNotices, setHasMorePersonalNotices] = useState(true);
+    const [isLoadingMorePersonal, setIsLoadingMorePersonal] = useState(false);
+    const [loadMorePersonal, setLoadMorePersonal] = useState(false);
+
+
+    const notices = !isFeedToggled ? personalFeedNotices : generalFeedNotices;
+    const feedType = !isFeedToggled ? 'personal' : 'general';
 
     // Fetch User's interests  
     useEffect(() => {
@@ -90,15 +110,6 @@ const UserFeed = () => {
                     }
                 } catch (error) {
                     console.error('Error fetching user interests:', error);
-                    // if (error.code === 404) {
-                    //     const newSelectedTags = {};
-                    //     tagCategories.forEach(category => {
-                    //         category.tags.forEach(tag => {
-                    //             newSelectedTags[tag.key] = false;
-                    //         });
-                    //     });
-                    //     setSelectedTags(newSelectedTags);
-                    // }
                 }
             }
         };
@@ -106,80 +117,224 @@ const UserFeed = () => {
         fetchUserInterests();
     }, [user_id, tagCategories]);
 
-
-    // Fetch User's feed  
+    // Fetch selected tags
     useEffect(() => {
-        const fetchFeedData = async () => {
+        try {
+            const falseVal = Object.values(selectedTags).filter((tag) => tag === false);
 
-            setIsLoadingNotices(true);
-            setIsLoadingUsers(true);
-            setIsLoadingMore(true);
-            try {
-                let falseVal = Object.values(selectedTags).filter((tag) => tag === false);
-                // console.log('trueVal', trueVal.indexOf(false, 0));
-                // console.log('these are selectedTags:', Object.values(selectedTags));
-
-                function indexOfAll(array, value) {
-                    const indices = [];
-                    for (let i = 0; i < array.length; i++) {
-                        if (array[i] === value) {
-                            indices.push(i);
-                        }
+            function indexOfAll(array, value) {
+                const indices = [];
+                for (let i = 0; i < array.length; i++) {
+                    if (array[i] === value) {
+                        indices.push(i);
                     }
-                    return indices;
                 }
+                return indices;
+            }
 
-                const indices = indexOfAll(falseVal, false);
-                console.log('indices', indices.length);
+            const indices = indexOfAll(falseVal, false);
+            console.log('Indices of false values:', indices.length);
 
-                if (indices.length < 13) {
-                    setIsTagSelected(true);
+            if (indices.length < 13) {
+                setIsTagSelected(true);
+            } else {
+                setIsTagSelected(false);
+            }
+        } catch (error) {
+            console.error('Error fetching selected tags:', error);
+        }
+    }, [selectedTags])
+
+    // Fetch feed (general)-(initial)
+    useEffect(() => {
+        const fetchInitialGeneralFeed = async () => {
+            try {
+                console.log('Limit:', limit);
+                console.log('Last ID:', lastId);
+
+                const notices = await getFeedNotices(selectedTags, limit, null);
+
+                console.log('Fetched notices:', notices);
+
+                const filteredNotices = await filterBlocksFromFeed(notices, user_id);
+                console.log('Filtered notices - general:', filteredNotices);
+
+                await fetchUsersData(filteredNotices, setGeneralFeedNotices, avatarUtil);
+
+                if (notices.length < limit) {
+                    setHasMoreGeneralNotices(false);
                 } else {
-                    setIsTagSelected(false);
+                    setHasMoreGeneralNotices(true);
+                    setLastId(filteredNotices[filteredNotices.length - 1].$id);
                 }
-
-                console.log('limit:', limit);
-                console.log('offset:', offset);
-                const notices = await getFeedNotices(selectedTags, limit, offset);
-
-                const blockedUsersByUser = await getBlockedUsersByUser(user_id);
-
-                console.log('blockedUsersByUser', blockedUsersByUser);
-
-                // Filtering out notices from accounts blocked by user
-                const noticesFromAccountsNotBlockedByUser = notices.filter((notice) =>
-                    !blockedUsersByUser.some((user) => notice.user_id === user.blocked_id)
-                );
-
-                console.log('noticesFromAccountsNotBlockedByUser', noticesFromAccountsNotBlockedByUser);
-
-                const usersBlockingUser = await getUsersBlockingUser(user_id);
-
-                console.log('usersBlockingUser', usersBlockingUser);
-
-                // Filtering out notices from accounts blocking the user 
-                const noticesFromAccountNotBlockingTheUser = noticesFromAccountsNotBlockedByUser.filter((notice) => !usersBlockingUser.some((user) => notice.user_id === user.blocker_id));
-
-                const filteredNotices = noticesFromAccountNotBlockingTheUser || [];
-
-                await fetchUsersData(filteredNotices, setFeedNotices, avatarUtil);
-
-                if (filteredNotices.length < limit) {
-                    setHasMoreNotices(false);
-                } else {
-                    setHasMoreNotices(true);
-                }
-
             } catch (error) {
-                console.error('Error fetching feed notices:', error);
-            } finally {
-                setIsLoadingNotices(false);
-                setIsLoadingUsers(false);
-                setIsLoadingMore(false);
+                console.error('Error fetching initial feed notices:', error);
             }
         };
-        fetchFeedData();
-    }, [selectedTags, offset]);
+        if (isFeedToggled && generalFeedNotices.length === 0) {
+            fetchInitialGeneralFeed();
+        }
+    }, [isFeedToggled]);
+
+    // Fetch feed (general)-(subsequent) 
+    useEffect(() => {
+        if (!loadMore) return;
+        const fetchSubsequentGeneralFeed = async () => {
+            try {
+                setIsLoadingMore(true);
+
+                console.log('Limit:', limit);
+                console.log('Last ID:', lastId);
+
+                const notices = await getFeedNotices(selectedTags, limit, lastId);
+                console.log('Fetched notices:', notices);
+
+                const filteredNotices = await filterBlocksFromFeed(notices, user_id);
+                console.log('Filtered notices - general:', filteredNotices);
+
+                await fetchUsersData(filteredNotices, setGeneralFeedNotices, avatarUtil);
+
+                if (notices.length < limit) {
+                    setHasMoreGeneralNotices(false);
+                } else {
+                    setLastId(filteredNotices[filteredNotices.length - 1].$id);
+                }
+            } catch (error) {
+                console.error('Error loading more notices:', error);
+            } finally {
+                setIsLoadingMore(false);
+                setLoadMore(false);
+            }
+        };
+        if (isFeedToggled && loadMore) {
+            fetchSubsequentGeneralFeed();
+        }
+    }, [loadMore, lastId, isFeedToggled]);
+
+    // Fetch feed (personal)-(initial)
+    useEffect(() => {
+        const fetchInitialPersonalFeed = async () => {
+            try {
+                setIsLoadingPersonalFeedNotices(true);
+                // setIsLoadingUsers(true);
+                setIsLoadingMorePersonal(true);
+
+                const followedByUser = await getPersonalFeedAccounts(user_id);
+                console.log('followedByUser', followedByUser);
+
+                const followedUserIds = followedByUser.map((user) => user.$id);
+
+                console.log('followedUserIds', followedUserIds);
+
+                const allNotices = await getNoticesByUser(followedUserIds, limitPersonal, null);
+
+                console.log('allNotices', allNotices);
+
+                let usrNtcs = allNotices.flat();
+
+                console.log('notices BEFORE filtering:', usrNtcs);
+
+                const filteredNotices = await filterBlocksFromFeed(usrNtcs, user_id);
+
+                console.log('Filtered notices - personal:', filteredNotices);
+
+                filteredNotices.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+                console.log('filteredNotices - Personal', filteredNotices);
+
+                // const unExpiredNotices = filteredNotices.filter((notice) => {
+                //     if (notice.expiresAt) {
+                //         const expirationTime = new Date(notice.expiresAt);
+                //         const now = new Date();
+
+                //         console.log('Expiration Check:', {
+                //             expirationTime: expirationTime,
+                //             now: now,
+                //             isExpired: now > expirationTime
+                //         });
+
+                //         if (now > expirationTime) {
+                //             console.log('Deleting expired notice:', notice.text);
+                //            removeNotice(notice.$id);
+                //             return false;
+                //         }
+                //     }
+                //     return true;
+                // });
+
+                const unExpiredNotices = await deleteExpiredNotice(filteredNotices);
+
+                console.log('unExpiredNotices', unExpiredNotices);
+
+                await fetchUsersData(unExpiredNotices, setPersonalFeedNotices, avatarUtil);
+
+                if (usrNtcs.length < limitPersonal) {
+                    setHasMorePersonalNotices(false);
+                } else {
+                    setHasMorePersonalNotices(true);
+                    setLastIdPersonal(unExpiredNotices[unExpiredNotices.length - 1].$id);
+                }
+            } catch (error) {
+                console.error('Error fetching personal feed', error);
+            } finally {
+                setIsLoadingPersonalFeedNotices(false);
+                // setIsLoadingUsers(false);
+                setIsLoadingMorePersonal(false);
+            }
+        };
+        fetchInitialPersonalFeed();
+    }, [user_id]);
+
+    // Fetch feed (personal)-(subsequent)
+    useEffect(() => {
+        if (!loadMorePersonal) return;
+
+        const fetchSubsequentPersonalFeed = async () => {
+            try {
+                setIsLoadingMorePersonal(true);
+
+                const followedByUser = await getPersonalFeedAccounts(user_id);
+
+                const followedUserIds = followedByUser.map((user) => user.$id);
+
+                console.log('followedUserIds', followedUserIds);
+
+                const allNotices = await getNoticesByUser(followedUserIds, limitPersonal, lastIdPersonal);
+
+                console.log('allNotices', allNotices);
+
+                let usrNtcs = allNotices.flat();
+
+                const filteredNotices = await filterBlocksFromFeed(usrNtcs, user_id);
+
+                console.log('Filtered notices - personal:', filteredNotices);
+
+                const unExpiredNotices = await deleteExpiredNotice(filteredNotices);
+
+                console.log('unExpiredNotices', unExpiredNotices);
+
+                await fetchUsersData(unExpiredNotices, setPersonalFeedNotices, avatarUtil);
+
+                if (usrNtcs.length < limitPersonal) {
+                    setHasMorePersonalNotices(false);
+                } else {
+                    setLastIdPersonal(unExpiredNotices[unExpiredNotices.length - 1].$id);
+                }
+            } catch (error) {
+                console.error('Error fetching more personal feed', error);
+            } finally {
+                setIsLoadingMorePersonal(false);
+                setLoadMorePersonal(false);
+            }
+        };
+        if (loadMorePersonal) {
+            fetchSubsequentPersonalFeed();
+        }
+    }, [loadMorePersonal]);
+
+    useEffect(() => {
+        console.log('personalFeedNotices:', personalFeedNotices);
+    }, [personalFeedNotices])
 
 
     // const handleTagSelect = (categoryName, tagIndex, tag, isSelected) => {
@@ -204,14 +359,13 @@ const UserFeed = () => {
     // }, [feedNotices])
 
 
-    const handleSpread = async (notice) => {
+    const handleSave = async (notice) => {
         try {
-            await spreadNotice(notice.$id, notice.user_id, user_id);
+            await saveNotice(notice.$id, notice.user_id, user_id);
         } catch (error) {
-            console.error('Error creating spread entry:', error);
+            console.error('Error creating save entry:', error);
         }
     };
-
 
     const handleLike = async (notice) => {
         try {
@@ -239,66 +393,86 @@ const UserFeed = () => {
         }
     }
 
+    const handleFeedToggle = () => {
+        setIsFeedToggled((prev) => !prev);
+    };
+
+    const handleRefresh = () => {
+        if (isFeedToggled) {
+            // Refresh General Feed
+            setGeneralFeedNotices([]);
+            setLastId(null);
+            setHasMoreGeneralNotices(true);
+            setLoadMore(true);
+        } else {
+            // Refresh Personal Feed 
+            setPersonalFeedNotices([]);
+            setLastIdPersonal(null);
+            setHasMorePersonalNotices(true);
+            setLoadMorePersonal(true);
+        }
+    };
 
     // Render loading state while data is being fetched
-    if ((isLoadingNotices || isLoadingUsers) && feedNotices.length === 0) {
-        return <div><Loading size={24} />Loading feed...</div>;
+    if (
+        (isLoadingPersonalFeedNotices)
+        // &&
+        // (personalFeedNotices.length === 0 || generalFeedNotices.length === 0)
+    ) {
+        return <div className='mt-5'>
+            <Loading size={24} />{`Loading your feed...`}
+        </div>;
     }
 
     return (
-        <div>
+        <div style={{ marginTop: '100px' }}>
 
-
-            <h2 style={{ marginTop: '30px' }}>
-
-                {!isTagSelected ?
-                    <span>
-                        <FaCircleExclamation /> To view notices in your feed, set your interests in your profile <a href='../user/settings'>settings</a>.
-                    </span>
-                    :
-                    <OverlayTrigger
-                        placement="right"
-                        overlay={<Tooltip>{'Update you interests in your profile settings.'}</Tooltip>}>
-                        <Button>
-                            <FaCircleExclamation />
-                        </Button>
-                    </OverlayTrigger>
-                }
-            </h2>
-
-
-            <Notices
-                notices={feedNotices}
-                user_id={user_id}
-                likedNotices={likedNotices}
-                spreadNotices={spreadNotices}
-                // reactions={noticesReactions}
-                handleLike={handleLike}
-                handleSpread={handleSpread}
-                handleReport={handleReport}
-                handleReact={handleReact}
-                getReactionsForNotice={getReactionsForNotice}
-                getUserAccountByUserId={getUserAccountByUserId}
+            <FeedHeader
+                isTagSelected={isTagSelected}
+                isFeedToggled={isFeedToggled}
+                handleFeedToggle={handleFeedToggle}
+                handleRefresh={handleRefresh}
             />
+            {
+                notices.length !== 0 ?
+                    <Notices
+                        notices={notices}
+                        user_id={user_id}
+                        likedNotices={likedNotices}
+                        savedNotices={savedNotices}
+                        handleLike={handleLike}
+                        handleSave={handleSave}
+                        handleReport={handleReport}
+                        handleReact={handleReact}
+                        getReactionsForNotice={getReactionsForNotice}
+                        getUserAccountByUserId={getUserAccountByUserId}
+                        getReactionByReactionId={getReactionByReactionId}
+                        reportReaction={reportReaction}
+                    />
+                    :
+                    <><Loading size={24} />Loading {feedType} feed.</>
+            }
 
             {/* Load More Button */}
             <div className="d-flex justify-content-center mt-4">
-
-                <div className="d-flex justify-content-center mt-4">
-                    {hasMoreNotices ?
-                        <Button
-                            onClick={() => setOffset(offset + limit)}
-                            disabled={isLoadingMore || !hasMoreNotices} // Disable if already loading or no more notices
-                        >
-                            {isLoadingMore ?
-                                <><Loading size={24} /> Loading...</>
-                                : 'Load More'}
-                        </Button>
-                        : 'No more notices'}
-                </div>
-
+                {(!isFeedToggled && hasMorePersonalNotices) || (isFeedToggled && hasMoreGeneralNotices) ?
+                    <Button
+                        onClick={() => {
+                            if (!isFeedToggled) {
+                                setLoadMorePersonal(true);
+                            } else {
+                                setLoadMore(true);
+                            }
+                        }}
+                        disabled={(isFeedToggled && (isLoadingMore || !hasMoreGeneralNotices)) ||
+                            (!isFeedToggled && (isLoadingMorePersonal || !hasMorePersonalNotices))}
+                    >
+                        {isLoadingMore || isLoadingMorePersonal ?
+                            <><Loading size={24} /> Loading...</>
+                            : 'Load More'}
+                    </Button>
+                    : 'No more notices'}
             </div>
-
         </div>
     )
 }

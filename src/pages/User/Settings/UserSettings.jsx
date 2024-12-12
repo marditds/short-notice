@@ -8,7 +8,7 @@ import { Visibility } from '../../../components/User/Settings/Visibility.jsx';
 import { Interests } from '../../../components/User/Settings/Interests.jsx';
 import { Stack, Container } from 'react-bootstrap';
 import { DeleteAccount } from '../../../components/User/Settings/DeleteAccount.jsx';
-import './UserSettings.css';
+import '../../../components/User/Settings/Settings.css';
 import { Passcode } from '../../../components/User/Settings/Passcode.jsx';
 import { BlockedAccounts } from '../../../components/User/Settings/BlockedAccounts.jsx';
 

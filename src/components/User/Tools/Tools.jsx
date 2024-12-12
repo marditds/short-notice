@@ -10,10 +10,12 @@ export const Tools = ({ googleLogout, removeSession, setIsLoggedIn, setGoogleUse
     return (
         <>
             <div className='userhome__body--profile--tools 
-        w-100 
-        d-flex 
-        fixed-top
-        '>
+                w-100 
+                d-flex 
+                fixed-top
+                '>
+
+
                 <UserSearch userId={userId} />
 
                 <DropdownButton

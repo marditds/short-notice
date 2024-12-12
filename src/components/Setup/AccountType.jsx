@@ -19,15 +19,15 @@ export const AccountType = ({ setAccountType }) => {
             disabled: false,
         },
         {
-            type: 'professional',
-            label: 'Professional',
-            icon: <PiBagFill size={45} color='var( --main-text-muted)' />,
+            type: 'business',
+            label: 'Business',
+            icon: <PiBagFill size={45} color={selectedType === 'personal' ? 'var(--main-bg-color)' : 'var(--main-text-color)'} style={{ transition: '0.3s' }} />,
             disabled: true,
         },
         {
             type: 'organization',
             label: 'Organization',
-            icon: <BsBuildings size={45} color={selectedType === 'organization' ? 'var(--main-bg-color)' : 'var(--main-text-color)'} style={{ transition: '0.3s' }} />,
+            icon: <i className="bi bi-diagram-3-fill" style={{ color: selectedType === 'organization' ? 'var(--main-bg-color)' : 'var(--main-text-color)', fontSize: '45px', transition: '0.3s' }}></i>,
             disabled: false,
         },
     ];

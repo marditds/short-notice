@@ -1,0 +1,45 @@
+.user-feed__header {
+    background-color: transparent;
+    backdrop-filter: blur(5px);
+    max-width: 1320px;
+    padding-top: 62px;
+}
+
+.user-feed__toggle-label {
+    cursor: pointer;
+}
+
+.user-feed__refresh-btn {
+    background-color: var(--main-accent-color);
+    border-color: var(--main-accent-color);
+    color: var(--main-text-color);
+}
+
+.user-feed__refresh-btn:hover,
+.user-feed__refresh-btn:active {
+    background-color: var(--main-accent-color-hover) !important;
+    border-color: var(--main-accent-color-hover) !important;
+    color: var(--main-text-color) !important;
+}
+
+.user-feed__toggle-btn>input {
+    box-shadow: none !important;
+    border-color: var(--main-accent-color);
+    border-radius: 3px !important;
+    background-image: url('../../../assets/square-fill.svg') !important;
+    transition: 0.3;
+    cursor: pointer;
+}
+
+.user-feed__toggle-btn>input:active,
+.user-feed__toggle-btn>input:focus {
+    box-shadow: none !important;
+    border-color: var(--main-accent-color) !important;
+}
+
+.user-feed__toggle-btn>input:checked {
+    box-shadow: none !important;
+    background-color: white !important;
+    border-color: var(--main-accent-color);
+    background-image: url('../../../assets/square-fill.svg') !important;
+}
