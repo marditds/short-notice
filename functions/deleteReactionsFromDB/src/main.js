@@ -1,4 +1,4 @@
-import { Client, Users, Databases } from 'node-appwrite';
+import { Client, Query, Databases } from 'node-appwrite';
 
 // This Appwrite function will be executed every time your function is triggered
 export default async ({ req, res, log, error }) => {
@@ -33,12 +33,47 @@ export default async ({ req, res, log, error }) => {
     log('now:', now);
 
     for (const reaction of reactions) {
+
       const expiresAt = new Date(reaction.expiresAt);
 
       if (reaction.expiresAt !== null) {
-        // Delete notice if it is expired
         log('reaction.expiresAt:', reaction.expiresAt)
         if (expiresAt <= now) {
+
+          const [likesRes, savesRes] = await Promise.all([
+            databases.listDocuments(
+              process.env.VITE_DATABASE,
+              process.env.VITE_LIKES_COLLECTION,
+              [Query.equal('notice_id', reaction.notice_id)]
+            ),
+            databases.listDocuments(
+              process.env.VITE_DATABASE,
+              process.env.VITE_SAVES_COLLECTION,
+              [Query.equal('notice_id', reaction.notice_id)]
+            )
+          ]);
+
+          const likes = likesRes.documents;
+          const saves = savesRes.documents;
+
+          await Promise.allSettled([
+            ...likes.map((like) =>
+              databases.deleteDocument(
+                process.env.VITE_DATABASE,
+                process.env.VITE_LIKES_COLLECTION,
+                like.$id
+              )
+            ),
+
+            ...saves.map((save) =>
+              databases.deleteDocument(
+                process.env.VITE_DATABASE,
+                process.env.VITE_SAVES_COLLECTION,
+                save.$id
+              )
+            )
+          ]);
+
           log('FOUND AN EXPIRED REACTION!', reaction.content);
           await databases.deleteDocument(
             process.env.VITE_DATABASE,

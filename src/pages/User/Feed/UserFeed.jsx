@@ -5,6 +5,7 @@ import useUserInfo from '../../../lib/hooks/useUserInfo';
 import { getAvatarUrl as avatarUtil } from '../../../lib/utils/avatarUtils';
 import { Notices } from '../../../components/User/Notices';
 import { useUnblockedNotices } from '../../../lib/utils/blockFilter';
+// import { deleteExpired } from '../../../lib/utils/deleteExpired';
 import { Button } from 'react-bootstrap';
 import { Loading } from '../../../components/Loading/Loading';
 import { FeedHeader } from '../../../components/User/Feed/FeedHeader/FeedHeader';
@@ -56,6 +57,7 @@ const UserFeed = () => {
         getInterests,
         getFeedNotices,
         removeNotice,
+        deleteExpiredNotice,
         saveNotice,
         reportNotice,
         likeNotice,
@@ -74,10 +76,7 @@ const UserFeed = () => {
 
     const [generalFeedNotices, setGeneralFeedNotices] = useState([]);
     const [personalFeedNotices, setPersonalFeedNotices] = useState([]);
-
-    const [isLoadingGeneralFeedNotices, setIsLoadingGeneralFeedNotices] = useState(false);
     const [isLoadingPersonalFeedNotices, setIsLoadingPersonalFeedNotices] = useState(false);
-    const [isLoadingUsers, setIsLoadingUsers] = useState(false);
 
     const [isFeedToggled, setIsFeedToggled] = useState(false);
 
@@ -150,8 +149,6 @@ const UserFeed = () => {
     useEffect(() => {
         const fetchInitialGeneralFeed = async () => {
             try {
-                setIsLoadingGeneralFeedNotices(true);
-
                 console.log('Limit:', limit);
                 console.log('Last ID:', lastId);
 
@@ -172,8 +169,6 @@ const UserFeed = () => {
                 }
             } catch (error) {
                 console.error('Error fetching initial feed notices:', error);
-            } finally {
-                setIsLoadingGeneralFeedNotices(false);
             }
         };
         if (isFeedToggled && generalFeedNotices.length === 0) {
@@ -247,27 +242,29 @@ const UserFeed = () => {
 
                 console.log('filteredNotices - Personal', filteredNotices);
 
-                const now = new Date();
-                const TIMEZONE_OFFSET_HOURS = 8; // Difference in hours
-                const TIMEZONE_OFFSET_MS = TIMEZONE_OFFSET_HOURS * 60 * 60 * 1000;
+                // const unExpiredNotices = filteredNotices.filter((notice) => {
+                //     if (notice.expiresAt) {
+                //         const expirationTime = new Date(notice.expiresAt);
+                //         const now = new Date();
 
-                const unExpiredNotices = filteredNotices.filter((notice) => {
+                //         console.log('Expiration Check:', {
+                //             expirationTime: expirationTime,
+                //             now: now,
+                //             isExpired: now > expirationTime
+                //         });
 
-                    const expirationTime = new Date(notice.expiresAt).getTime();
+                //         if (now > expirationTime) {
+                //             console.log('Deleting expired notice:', notice.text);
+                //            removeNotice(notice.$id);
+                //             return false;
+                //         }
+                //     }
+                //     return true;
+                // });
 
-                    const adjustedExpirationTime = expirationTime + TIMEZONE_OFFSET_MS;
-
-                    if (notice.expiresAt && adjustedExpirationTime <= now) {
-                        console.log('Deleting notice with this text:', notice.text);
-                        removeNotice(notice.$id);
-                        return false;
-                    } else {
-                        return true;
-                    }
-                })
+                const unExpiredNotices = await deleteExpiredNotice(filteredNotices);
 
                 console.log('unExpiredNotices', unExpiredNotices);
-
 
                 await fetchUsersData(unExpiredNotices, setPersonalFeedNotices, avatarUtil);
 
@@ -312,14 +309,16 @@ const UserFeed = () => {
 
                 console.log('Filtered notices - personal:', filteredNotices);
 
-                filteredNotices.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+                const unExpiredNotices = await deleteExpiredNotice(filteredNotices);
 
-                await fetchUsersData(filteredNotices, setPersonalFeedNotices, avatarUtil);
+                console.log('unExpiredNotices', unExpiredNotices);
+
+                await fetchUsersData(unExpiredNotices, setPersonalFeedNotices, avatarUtil);
 
                 if (usrNtcs.length < limitPersonal) {
                     setHasMorePersonalNotices(false);
                 } else {
-                    setLastIdPersonal(filteredNotices[filteredNotices.length - 1].$id);
+                    setLastIdPersonal(unExpiredNotices[unExpiredNotices.length - 1].$id);
                 }
             } catch (error) {
                 console.error('Error fetching more personal feed', error);

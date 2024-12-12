@@ -133,6 +133,11 @@ const OtherUserProfile = () => {
         }
     }, [otherUsername, username, navigate]);
 
+    // Scroll to top on pathname(location) change
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [location]);
+
     // Hello
     useEffect(() => {
         console.log('Barev', username);

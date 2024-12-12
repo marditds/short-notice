@@ -203,6 +203,35 @@ const useNotices = (googleUserData) => {
         }
     }
 
+    const deleteExpiredNotice = async (notices) => {
+        try {
+            const unExpiredNotices = notices.filter((notice) => {
+                if (notice.expiresAt) {
+                    const expirationTime = new Date(notice.expiresAt);
+                    const now = new Date();
+
+                    console.log('Expiration Check:', {
+                        expirationTime: expirationTime,
+                        now: now,
+                        isExpired: now > expirationTime
+                    });
+
+                    if (now > expirationTime) {
+                        console.log('Deleting expired notice:', notice.text);
+                        removeNotice(notice.$id);
+                        return false;
+                    }
+                }
+                return true;
+            });
+
+            return unExpiredNotices;
+
+        } catch (error) {
+            'Error deleting expired notices:', error;
+        }
+    }
+
     const getFeedNotices = async (selectedTags, limit, lastId) => {
         try {
             const notices = await getFilteredNotices(selectedTags, limit, lastId);
@@ -526,6 +555,7 @@ const useNotices = (googleUserData) => {
         addNotice,
         editNotice,
         removeNotice,
+        deleteExpiredNotice,
         getFeedNotices,
         fetchUserNotices,
         getNoticesByUser,

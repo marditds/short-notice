@@ -1,5 +1,4 @@
-import { Query } from 'appwrite';
-import { Client, Databases } from 'node-appwrite';
+import { Client, Databases, Query } from 'node-appwrite';
 
 // This Appwrite function will be executed every time your function is triggered
 export default async ({ req, res, log, error }) => {
@@ -42,39 +41,39 @@ export default async ({ req, res, log, error }) => {
 
       if (expiresAt <= now) {
 
-        const [likesRes, savesRes] = await Promise.all([
-          databases.listDocuments(
-            process.env.VITE_DATABASE,
-            process.env.VITE_LIKES_COLLECTION,
-            [Query.equal('notice_id', notice.$id)]
-          ),
-          databases.listDocuments(
-            process.env.VITE_DATABASE,
-            process.env.VITE_SAVES_COLLECTION,
-            [Query.equal('notice_id', notice.$id)]
-          )
-        ]);
+        // const [likesRes, savesRes] = await Promise.all([
+        //   databases.listDocuments(
+        //     process.env.VITE_DATABASE,
+        //     process.env.VITE_LIKES_COLLECTION,
+        //     [Query.equal('notice_id', notice.$id)]
+        //   ),
+        //   databases.listDocuments(
+        //     process.env.VITE_DATABASE,
+        //     process.env.VITE_SAVES_COLLECTION,
+        //     [Query.equal('notice_id', notice.$id)]
+        //   )
+        // ]);
 
-        const likes = likesRes.documents;
-        const saves = savesRes.documents;
+        // const likes = likesRes.documents;
+        // const saves = savesRes.documents;
 
-        await Promise.allSettled([
-          ...likes.map((like) =>
-            databases.deleteDocument(
-              process.env.VITE_DATABASE,
-              process.env.VITE_LIKES_COLLECTION,
-              like.$id
-            )
-          ),
+        // await Promise.allSettled([
+        //   ...likes.map((like) =>
+        //     databases.deleteDocument(
+        //       process.env.VITE_DATABASE,
+        //       process.env.VITE_LIKES_COLLECTION,
+        //       like.$id
+        //     )
+        //   ),
 
-          ...saves.map((save) =>
-            databases.deleteDocument(
-              process.env.VITE_DATABASE,
-              process.env.VITE_SAVES_COLLECTION,
-              save.$id
-            )
-          )
-        ]);
+        //   ...saves.map((save) =>
+        //     databases.deleteDocument(
+        //       process.env.VITE_DATABASE,
+        //       process.env.VITE_SAVES_COLLECTION,
+        //       save.$id
+        //     )
+        //   )
+        // ]);
 
 
         // const lks = await databases.listDocuments(
