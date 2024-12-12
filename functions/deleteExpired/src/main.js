@@ -45,7 +45,7 @@ export default async ({ req, res, log, error }) => {
           process.env.VITE_DATABASE,
           process.env.VITE_NOTICES_COLLECTION,
           notice.$id);
-        log(`Deleted expired notice: ${notice.$id}`);
+        log(`Deleted expired notice: ${notice.text}`);
 
         // const [likesRes, savesRes] = await Promise.all([
         //   databases.listDocuments(
