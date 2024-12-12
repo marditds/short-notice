@@ -1,4 +1,5 @@
 import { Client, Databases, Query } from 'node-appwrite';
+import { Client, Databases, Query } from 'node-appwrite';
 
 // This Appwrite function will be executed every time your function is triggered
 export default async ({ req, res, log, error }) => {
@@ -41,6 +42,12 @@ export default async ({ req, res, log, error }) => {
 
       if (expiresAt <= now) {
 
+        await databases.deleteDocument(
+          process.env.VITE_DATABASE,
+          process.env.VITE_NOTICES_COLLECTION,
+          notice.$id);
+        log(`Deleted expired notice: ${notice.$id}`);
+
         // const [likesRes, savesRes] = await Promise.all([
         //   databases.listDocuments(
         //     process.env.VITE_DATABASE,
@@ -56,7 +63,17 @@ export default async ({ req, res, log, error }) => {
 
         // const likes = likesRes.documents;
         // const saves = savesRes.documents;
+        // const likes = likesRes.documents;
+        // const saves = savesRes.documents;
 
+        // await Promise.allSettled([
+        //   ...likes.map((like) =>
+        //     databases.deleteDocument(
+        //       process.env.VITE_DATABASE,
+        //       process.env.VITE_LIKES_COLLECTION,
+        //       like.$id
+        //     )
+        //   ),
         // await Promise.allSettled([
         //   ...likes.map((like) =>
         //     databases.deleteDocument(
@@ -109,12 +126,6 @@ export default async ({ req, res, log, error }) => {
         //     )
         //   )
         // );
-
-        await databases.deleteDocument(
-          process.env.VITE_DATABASE,
-          process.env.VITE_NOTICES_COLLECTION,
-          notice.$id);
-        log(`Deleted expired notice: ${notice.$id}`);
 
 
       }
