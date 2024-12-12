@@ -36,10 +36,45 @@ export default async ({ req, res, log, error }) => {
       const expiresAt = new Date(reaction.expiresAt);
 
       if (reaction.expiresAt !== null) {
-        // Delete notice if it is expired
-        log('reaction.expiresAt:', reaction.expiresAt)
+
         if (expiresAt <= now) {
           log('FOUND AN EXPIRED REACTION!', reaction.content);
+          log('reaction.expiresAt:', reaction.expiresAt)
+
+          const [likesRes, savesRes] = await Promise.all([
+            databases.listDocuments(
+              process.env.VITE_DATABASE,
+              process.env.VITE_LIKES_COLLECTION,
+              [Query.equal('notice_id', reaction.notice_id)]
+            ),
+            databases.listDocuments(
+              process.env.VITE_DATABASE,
+              process.env.VITE_SAVES_COLLECTION,
+              [Query.equal('notice_id', reaction.notice_id)]
+            )
+          ]);
+
+          const likes = likesRes.documents;
+          const saves = savesRes.documents;
+
+          await Promise.allSettled([
+            ...likes.map((like) =>
+              databases.deleteDocument(
+                process.env.VITE_DATABASE,
+                process.env.VITE_LIKES_COLLECTION,
+                like.$id
+              )
+            ),
+
+            ...saves.map((save) =>
+              databases.deleteDocument(
+                process.env.VITE_DATABASE,
+                process.env.VITE_SAVES_COLLECTION,
+                save.$id
+              )
+            )
+          ]);
+
           await databases.deleteDocument(
             process.env.VITE_DATABASE,
             process.env.VITE_REACTIONS_COLLECTION,
