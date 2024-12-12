@@ -1,5 +1,4 @@
 import { Client, Databases, Query } from 'node-appwrite';
-import { Client, Databases, Query } from 'node-appwrite';
 
 // This Appwrite function will be executed every time your function is triggered
 export default async ({ req, res, log, error }) => {
@@ -14,10 +13,10 @@ export default async ({ req, res, log, error }) => {
 
 
   try {
-    log('Request method: ' + req.method);
-    log('Request headers: ' + JSON.stringify(req.headers));
+    // log('Request method: ' + req.method);
+    // log('Request headers: ' + JSON.stringify(req.headers));
     log('Raw body: ' + req.body);
-    log('Raw payload: ' + req.payload);
+    // log('Raw payload: ' + req.payload);
 
 
     const ntcs = await databases.listDocuments(
@@ -46,7 +45,7 @@ export default async ({ req, res, log, error }) => {
           process.env.VITE_DATABASE,
           process.env.VITE_NOTICES_COLLECTION,
           notice.$id);
-        log(`Deleted expired notice: ${notice.$id}`);
+        log(`Deleted expired notice: ${notice.text}`);
 
         // const [likesRes, savesRes] = await Promise.all([
         //   databases.listDocuments(
