@@ -13,10 +13,10 @@ export default async ({ req, res, log, error }) => {
 
 
   try {
-    log('Request method: ' + req.method);
-    log('Request headers: ' + JSON.stringify(req.headers));
+    // log('Request method: ' + req.method);
+    // log('Request headers: ' + JSON.stringify(req.headers));
     log('Raw body: ' + req.body);
-    log('Raw payload: ' + req.payload);
+    // log('Raw payload: ' + req.payload);
 
 
     const res = await databases.listDocuments(
@@ -30,14 +30,12 @@ export default async ({ req, res, log, error }) => {
 
     const now = new Date();
 
-    log('now:', now);
-
     for (const reaction of reactions) {
 
       const expiresAt = new Date(reaction.expiresAt);
 
       if (reaction.expiresAt !== null) {
-        log('reaction.expiresAt:', reaction.expiresAt)
+        // log('reaction.expiresAt:', reaction.expiresAt)
         if (expiresAt <= now) {
 
           log('FOUND AN EXPIRED REACTION!', reaction.content);
@@ -60,21 +58,25 @@ export default async ({ req, res, log, error }) => {
           const saves = savesRes.documents;
 
           await Promise.allSettled([
-            ...likes.map((like) =>
-              databases.deleteDocument(
+            ...likes.map((like) => {
+              const deletePromise = databases.deleteDocument(
                 process.env.VITE_DATABASE,
                 process.env.VITE_LIKES_COLLECTION,
                 like.$id
-              )
-            ),
+              );
+              log(`Deleted expired like: ${like.notice_id}`);
+              return deletePromise;
+            }),
 
-            ...saves.map((save) =>
-              databases.deleteDocument(
+            ...saves.map((save) => {
+              const deletePromise = databases.deleteDocument(
                 process.env.VITE_DATABASE,
                 process.env.VITE_SAVES_COLLECTION,
                 save.$id
-              )
-            )
+              );
+              log(`Deleted expired save: ${save.notice_id}`);
+              return deletePromise;
+            })
           ]);
 
           await databases.deleteDocument(
