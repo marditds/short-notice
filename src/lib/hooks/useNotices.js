@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { createNotice, getUserNotices, updateNotice, deleteNotice, deleteAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSave, getUserSaves, removeSave, createReport, createLike, removeLike, getUserLikes, getAllLikedNotices as fetchAllLikedNotices, getAllLikesByNoticeId as fetchAllLikesByNoticeId, getAllSavedNotices as fetchAllSavedNotices, createReaction, deleteReaction, getAllReactionsBySenderId as fetchAllReactionsBySenderId, getAllReactions as fetchAllReactions, getAllReactionsByRecipientId as fetchAllReactionsByRecipientId, getNoticeByNoticeId as fetchNoticeByNoticeId, getAllReactionsByNoticeId as fetchAllReactionsByNoticeId, getReactionByReactionId as fetchReactionByReactionId, deleteAllReactions, createReactionReport, getNoticeByUserId as fetchNoticeByUserId } from '../../lib/context/dbhandler';
+import { createNotice, getUserNotices, updateNotice, deleteNotice, saveDeletedNoticeId, deleteAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSave, getUserSaves, removeSave, createReport, createLike, removeLike, getUserLikes, getAllLikedNotices as fetchAllLikedNotices, getAllLikesByNoticeId as fetchAllLikesByNoticeId, getAllSavedNotices as fetchAllSavedNotices, createReaction, deleteReaction, getAllReactionsBySenderId as fetchAllReactionsBySenderId, getAllReactions as fetchAllReactions, getAllReactionsByRecipientId as fetchAllReactionsByRecipientId, getNoticeByNoticeId as fetchNoticeByNoticeId, getAllReactionsByNoticeId as fetchAllReactionsByNoticeId, getReactionByReactionId as fetchReactionByReactionId, deleteAllReactions, createReactionReport, getNoticeByUserId as fetchNoticeByUserId } from '../../lib/context/dbhandler';
 import { UserId } from '../../components/User/UserId.jsx';
 import { useUnblockedNotices } from '../utils/blockFilter.js';
 
@@ -19,7 +19,7 @@ const useNotices = (googleUserData) => {
 
     const { filterBlocksFromLikesSaves } = useUnblockedNotices();
 
-    // Fetch User Notces
+    // Fetch User Identity
     useEffect(() => {
         const obtainUserById = async () => {
             if (googleUserData) {
@@ -39,21 +39,6 @@ const useNotices = (googleUserData) => {
         };
 
         obtainUserById();
-
-        // const checkExpiredNotices = setInterval(() => {
-        //     const now = new Date();
-        //     setUserNotices((prevNotices) =>
-        //         prevNotices.filter((notice) => {
-        //             if (notice.expiresAt && new Date(notice.expiresAt) < now) {
-        //                 deleteNotice(notice.$id);
-        //                 return false;
-        //             }
-        //             return true;
-        //         })
-        //     );
-        // }, 10000);
-
-        // return () => clearInterval(checkExpiredNotices);
 
     }, [googleUserData]);
 
@@ -217,8 +202,16 @@ const useNotices = (googleUserData) => {
                     });
 
                     if (now > expirationTime) {
-                        console.log('Deleting expired notice:', notice.text);
-                        removeNotice(notice.$id);
+                        console.log('Expired notice text:', notice.text);
+
+                        console.log('Now saving the deleting notice id:', notice.$id);
+                        saveDeletedNoticeId(notice.$id);
+
+                        console.log('Now deleting the notice id:', notice.$id);
+                        setTimeout(() => (
+                            removeNotice(notice.$id)
+                        ), 3000)
+
                         return false;
                     }
                 }

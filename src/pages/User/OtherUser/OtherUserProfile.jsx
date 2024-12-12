@@ -40,7 +40,8 @@ const OtherUserProfile = () => {
         getNoticeByUserId,
         getAllLikedNotices,
         getAllSavedNotices,
-        fetchUserNotices,
+        deleteExpiredNotice,
+        // fetchUserNotices,
         sendReaction,
         getReactionsForNotice,
         getReactionByReactionId,
@@ -223,8 +224,6 @@ const OtherUserProfile = () => {
 
     // Fetch notices for other user 
     useEffect(() => {
-        // if (eventKey !== 'notices') return;
-
         const fetchNotices = async () => {
             try {
                 setIsLoadingMore(true);
@@ -233,9 +232,11 @@ const OtherUserProfile = () => {
 
                 console.log('usrNtc', usrNtcs);
 
-                setOtherUserNotices((preVal) => [...preVal, ...usrNtcs]);
+                const unExpiredNotices = await deleteExpiredNotice(usrNtcs);
 
-                if (usrNtcs?.length < limitNotices) {
+                setOtherUserNotices((preVal) => [...preVal, ...unExpiredNotices]);
+
+                if (unExpiredNotices?.length < limitNotices) {
                     setHasMoreNotices(false);
                 } else {
                     setHasMoreNotices(true);
@@ -303,7 +304,7 @@ const OtherUserProfile = () => {
     // Fetch likes and users' data for likes tab  
     useEffect(() => {
         const fetchLikedNotices = async () => {
-            if (eventKey !== 'likes') return;
+            // if (eventKey !== 'likes') return;
 
             try {
                 setIsLoadingMoreLikes(true);
@@ -335,7 +336,7 @@ const OtherUserProfile = () => {
         setOffsetLikes(0);
         setLikedNoticesData([]);
         callFunctionIfNotBlocked(fetchLikedNotices);
-    }, [currUserId, offsetLikes, eventKey])
+    }, [currUserId, offsetLikes])
 
     useEffect(() => {
         console.log('isLoadingMoreLikes updated:', isLoadingMoreLikes);

@@ -216,7 +216,6 @@ const UserFeed = () => {
         const fetchInitialPersonalFeed = async () => {
             try {
                 setIsLoadingPersonalFeedNotices(true);
-                // setIsLoadingUsers(true);
                 setIsLoadingMorePersonal(true);
 
                 const followedByUser = await getPersonalFeedAccounts(user_id);
@@ -242,26 +241,6 @@ const UserFeed = () => {
 
                 console.log('filteredNotices - Personal', filteredNotices);
 
-                // const unExpiredNotices = filteredNotices.filter((notice) => {
-                //     if (notice.expiresAt) {
-                //         const expirationTime = new Date(notice.expiresAt);
-                //         const now = new Date();
-
-                //         console.log('Expiration Check:', {
-                //             expirationTime: expirationTime,
-                //             now: now,
-                //             isExpired: now > expirationTime
-                //         });
-
-                //         if (now > expirationTime) {
-                //             console.log('Deleting expired notice:', notice.text);
-                //            removeNotice(notice.$id);
-                //             return false;
-                //         }
-                //     }
-                //     return true;
-                // });
-
                 const unExpiredNotices = await deleteExpiredNotice(filteredNotices);
 
                 console.log('unExpiredNotices', unExpiredNotices);
@@ -278,7 +257,6 @@ const UserFeed = () => {
                 console.error('Error fetching personal feed', error);
             } finally {
                 setIsLoadingPersonalFeedNotices(false);
-                // setIsLoadingUsers(false);
                 setIsLoadingMorePersonal(false);
             }
         };

@@ -1,4 +1,4 @@
-import { Client, Storage, Account, Databases, ID, Query, Permission, Role, Functions, ExecutionMethod } from 'appwrite';
+import { Client, Storage, Account, Databases, ID, Query, Permission, Role, Functions } from 'appwrite';
 
 const client = new Client()
     .setEndpoint(import.meta.env.VITE_ENDPOINT)
@@ -730,6 +730,23 @@ export const deleteNotice = async (noticeId) => {
         }
     }
 };
+
+export const saveDeletedNoticeId = async (notice_id) => {
+    console.log('Attempting to save notice ID of deleted Notice:', notice_id);
+    try {
+        const response = await databases.createDocument(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_DELETED_NOTICES_COLLECTION,
+            ID.unique(),
+            { notice_id }
+        );
+        console.log('Deleted notice id added successfully:', response);
+        return response;
+    } catch (error) {
+        console.error('Error adding deleted notice id:', error);
+    }
+};
+
 
 export const deleteAllNotices = async (userId) => {
     try {
