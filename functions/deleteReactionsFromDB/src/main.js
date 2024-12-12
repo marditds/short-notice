@@ -59,23 +59,23 @@ export default async ({ req, res, log, error }) => {
 
           await Promise.allSettled([
             ...likes.map((like) => {
-              const deletePromise = databases.deleteDocument(
+              const deleteLike = databases.deleteDocument(
                 process.env.VITE_DATABASE,
                 process.env.VITE_LIKES_COLLECTION,
                 like.$id
               );
               log(`Deleted expired like: ${like.notice_id}`);
-              return deletePromise;
+              return deleteLike;
             }),
 
             ...saves.map((save) => {
-              const deletePromise = databases.deleteDocument(
+              const deleteSave = databases.deleteDocument(
                 process.env.VITE_DATABASE,
                 process.env.VITE_SAVES_COLLECTION,
                 save.$id
               );
               log(`Deleted expired save: ${save.notice_id}`);
-              return deletePromise;
+              return deleteSave;
             })
           ]);
 
