@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import { Outlet, Navigate } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
-import { Tools } from '../../components/User/Tools/Tools';
+import { Navigation } from '../../components/User/Navigation/Navigation';
 import { googleLogout } from '@react-oauth/google';
 import { useUserContext } from '../../lib/context/UserContext';
 import useUserInfo from '../../lib/hooks/useUserInfo';
 import { Loading } from '../../components/Loading/Loading';
-import '../../components/User/Tools/Tools.css';
+import '../../components/User/Navigation/Navigation.css';
 
 const User = () => {
 
@@ -36,7 +36,7 @@ const User = () => {
     // console.log('Rendering User component');
     return (
         <Container className='userhome__body'>
-            <Tools
+            <Navigation
                 userId={userId}
                 removeSession={removeSession}
                 googleLogout={googleLogout}
