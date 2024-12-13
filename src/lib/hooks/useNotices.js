@@ -1,11 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
-import { createNotice, getUserNotices, updateNotice, deleteNotice, saveDeletedNoticeId, deleteAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSave, getUserSaves, removeSave, createReport, createLike, removeLike, getUserLikes, getAllLikedNotices as fetchAllLikedNotices, getAllLikesByNoticeId as fetchAllLikesByNoticeId, getAllSavedNotices as fetchAllSavedNotices, createReaction, deleteReaction, getAllReactionsBySenderId as fetchAllReactionsBySenderId, getAllReactions as fetchAllReactions, getAllReactionsByRecipientId as fetchAllReactionsByRecipientId, getNoticeByNoticeId as fetchNoticeByNoticeId, getAllReactionsByNoticeId as fetchAllReactionsByNoticeId, getReactionByReactionId as fetchReactionByReactionId, deleteAllReactions, createReactionReport, getNoticeByUserId as fetchNoticeByUserId } from '../../lib/context/dbhandler';
+import { createNotice, getUserNotices, updateNotice, deleteNotice, saveDeletedNoticeId, deleteAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSave, getUserSaves, removeSave, createReport, createLike, removeLike, getUserLikes, getAllLikedNotices as fetchAllLikedNotices, getAllLikesByNoticeId as fetchAllLikesByNoticeId, getAllSavedNotices as fetchAllSavedNotices, createReaction, deleteReaction, getAllReactionsBySenderId as fetchAllReactionsBySenderId, getAllReactions as fetchAllReactions, getAllReactionsByRecipientId as fetchAllReactionsByRecipientId, getNoticeByNoticeId as fetchNoticeByNoticeId, getAllReactionsByNoticeId as fetchAllReactionsByNoticeId, getReactionByReactionId as fetchReactionByReactionId, deleteAllReactions, createReactionReport, getNoticeByUserId as fetchNoticeByUserId, removeAllSavesForNotice, removeAllLikesForNotice } from '../../lib/context/dbhandler';
 import { UserId } from '../../components/User/UserId.jsx';
 import { useUnblockedNotices } from '../utils/blockFilter.js';
 
 const useNotices = (googleUserData) => {
     const [user_id, setUserId] = useState(null);
-    const [userNotices, setUserNotices] = useState([]);
+    // const [userNotices, setUserNotices] = useState([]);
     const [latestNotice, setLatestNotice] = useState({});
     const [savedNotices, setSaveNotices] = useState([]);
     const [likedNotices, setLikedNotices] = useState({});
@@ -164,6 +164,12 @@ const useNotices = (googleUserData) => {
         setRemovingNoticeId(noticeId);
 
         try {
+            if (noticeId) {
+                await removeAllSavesForNotice(noticeId);
+
+                await removeAllLikesForNotice(noticeId);
+
+            }
             const removedNotice = await deleteNotice(noticeId);
             return removedNotice;
         } catch (error) {
@@ -416,7 +422,10 @@ const useNotices = (googleUserData) => {
 
             const noticesWithoutTwoWayBlock = await filterBlocksFromLikesSaves(userSaves, user_id);
 
-            const saveNoticeIds = noticesWithoutTwoWayBlock.map(like => like.notice_id);
+            const saveNoticeIds = noticesWithoutTwoWayBlock.map(save => save.notice_id);
+
+            console.log('savedNoticeIds', saveNoticeIds);
+
 
             return await fetchAllSavedNotices(saveNoticeIds, limit, offset);
 

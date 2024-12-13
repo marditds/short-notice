@@ -717,8 +717,7 @@ export const deleteNotice = async (noticeId) => {
             import.meta.env.VITE_NOTICES_COLLECTION,
             noticeId,
             [
-                Permission.delete(Role.users()),
-                Permission.delete(Role.guests())
+                Permission.delete(Role.users())
             ]
         );
         console.log('Notice deleted successfully:', response);
@@ -757,6 +756,8 @@ export const deleteAllNotices = async (userId) => {
         );
 
         for (const notice of notices.documents) {
+            await removeAllLikesForNotice(notice.$id);
+            await removeAllSavesForNotice(notice.$id);
             await deleteNotice(notice.$id);
         }
 
@@ -866,8 +867,7 @@ export const removeSave = async (save_id) => {
             import.meta.env.VITE_SAVES_COLLECTION,
             save_id,
             [
-                Permission.delete(Role.users()),
-                Permission.delete(Role.guests())
+                Permission.delete(Role.users())
             ]
         );
         console.log('Save removed successfully:', response);
@@ -895,6 +895,24 @@ export const removeAllSaves = async (user_id) => {
         console.log(`All saves for user ${user_id} removed successfully.`);
     } catch (error) {
         console.error('Error removing all saves:', error);
+    }
+}
+
+export const removeAllSavesForNotice = async (notice_id) => {
+    try {
+        const saves = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_SAVES_COLLECTION,
+            [
+                Query.equal('notice_id', notice_id)
+            ]
+        )
+        for (const save of saves.documents) {
+            await removeSave(save.$id);
+        }
+        console.log(`Removed all saves for notice id:`, notice_id);
+    } catch (error) {
+        console.error('Error removing saves from the db:', error);
     }
 }
 
@@ -960,14 +978,34 @@ export const removeAllLikes = async (user_id) => {
         console.error('Error removing all likes:', error);
     }
 }
-// The like icon
+
+export const removeAllLikesForNotice = async (notice_id) => {
+    try {
+        const likes = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_LIKES_COLLECTION,
+            [
+                Query.equal('notice_id', notice_id)
+            ]
+        )
+        for (const like of likes.documents) {
+            await removeLike(like.$id);
+        }
+        console.log(`Removed all likes for notice id:`, notice_id);
+    } catch (error) {
+        console.error('Error removing likes from the db:', error);
+    }
+}
+
+// The like icon + user's likes tab
 export const getUserLikes = async (user_id) => {
     try {
         const response = await databases.listDocuments(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_LIKES_COLLECTION,
             [
-                Query.equal('user_id', user_id)
+                Query.equal('user_id', user_id),
+                Query.orderDesc('$createdAt')
             ]
         );
         return response.documents;
@@ -991,7 +1029,8 @@ export const getAllLikedNotices = async (likedNoticeIds, limit, offset) => {
                 Query.equal('$id', likedNoticeIds),
                 // Query.notEqual('noticeType', ['organization']),
                 Query.limit(limit),
-                Query.offset(offset)
+                Query.offset(offset),
+                Query.orderDesc('$createdAt')
             ]
         );
         return allLikedNotices.documents;
@@ -1016,7 +1055,7 @@ export const getAllLikesByNoticeId = async (notice_id) => {
     }
 }
 
-// The save icon
+// The save icon + user's saves tab
 export const getUserSaves = async (user_id) => {
     try {
         const response = await databases.listDocuments(
@@ -1024,6 +1063,7 @@ export const getUserSaves = async (user_id) => {
             import.meta.env.VITE_SAVES_COLLECTION,
             [
                 Query.equal('user_id', user_id),
+                Query.orderDesc('$createdAt')
             ]
         )
         return response.documents;
@@ -1046,7 +1086,8 @@ export const getAllSavedNotices = async (saveNoticeIds, limit, offset) => {
                 Query.equal('$id', saveNoticeIds),
                 // Query.notEqual('noticeType', ['organization']),
                 Query.limit(limit),
-                Query.offset(offset)
+                Query.offset(offset),
+                Query.orderDesc('$createdAt')
             ]
         );
         return allSavedNotices.documents;

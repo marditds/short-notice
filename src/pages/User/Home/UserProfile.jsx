@@ -190,6 +190,8 @@ const UserProfile = () => {
             try {
                 const allSavedNotices = await getAllSavedNotices(user_id, limitSaves, offsetSaves);
 
+                console.log('allSavedNotices', allSavedNotices);
+
                 if (allSavedNotices?.length < limit) {
                     setHasMoreSaves(false);
                 } else {
