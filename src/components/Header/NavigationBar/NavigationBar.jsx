@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-// import NavDropdown from 'react-bootstrap/NavDropdown'; 
-
-
+import snLogo from '../../../assets/sn_long.png';
 import './NavigationBar.css';
 
-const NavigationBar = () => {
+const NavigationBar = ({ children }) => {
 
     return (
 
         <Navbar expand="lg" className="px-4 navigationbar">
-            <Navbar.Brand href="#home">ShortNotice</Navbar.Brand>
+            <Navbar.Brand href="/">
+                <img src={snLogo} alt="short_notice_logo" height={23} className='navigation__logo' />
+            </Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="ms-auto">
@@ -47,6 +47,7 @@ const NavigationBar = () => {
 
                     <Nav.Link href="#link">Mission</Nav.Link>
                     <Nav.Link href="#link">SN+</Nav.Link>
+                    {children}
 
                 </Nav>
             </Navbar.Collapse>

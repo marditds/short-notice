@@ -1,5 +1,5 @@
 .navigationbar, .navigationbar div {
-    background-color: var(--nav-bg-color) !important;
+    background-color: transparent !important;
 }
 
 .navigationbar div>div>div>div>a:hover {
@@ -7,5 +7,9 @@
 }
 
 .navigationbar a {
-    color: var(--nav-text-color);
+    color: var(--main-text-color);
+}
+
+.navigation__logo {
+    filter: drop-shadow(0px 0px 5px rgb(255, 255, 255));
 }

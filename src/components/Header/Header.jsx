@@ -1,9 +1,9 @@
 import React from 'react';
 import NavigationBar from './NavigationBar/NavigationBar';
 
-const Header = () => {
+const Header = ({ children }) => {
     return (
-        <NavigationBar />
+        <NavigationBar>{children}</NavigationBar>
     )
 }
 

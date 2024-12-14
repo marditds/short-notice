@@ -14,7 +14,6 @@ export const GoogleLoginForm = ({ onSuccess }) => {
 
     return (
         <>
-
             <div className="login__btn">
                 <GoogleLogin
                     onSuccess={onSuccess}
@@ -27,9 +26,6 @@ export const GoogleLoginForm = ({ onSuccess }) => {
                     auto_select={false}
                 />
             </div>
-
-
-
         </>
     )
 }
