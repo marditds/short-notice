@@ -27,7 +27,7 @@ const Home = ({ onSuccess }) => {
                             <h5 style={{ textTransform: "none" }}>Strightforward</h5> */}
                         </Col>
                         <Col>
-                            <h4>Tagline</h4>
+                            <h4>Share updates and ideas in the moment. No distractions. No maintenance.</h4>
                             <h4>Grphic</h4>
                             <h4>Login btn</h4>
                         </Col>
@@ -40,10 +40,23 @@ const Home = ({ onSuccess }) => {
                         <Col>
                             <h4>Overview of the product</h4>
                             <ol>
-                                <li>Ephemeral Posting: Your text posts disappear after 12, 24, or 48 hours.</li>
-                                <li>No Noise, Just Words: No photos, videos, or distractions—just authentic thoughts.</li>
-                                <li>Customize the Clock: Choose how long your post stays live.</li>
-                                <li>Real Conversations: Connect without the pressure of permanence.</li>
+                                <li>
+                                    <strong>Ephemeral Posting:</strong>
+                                    Your text posts disappear after 12, 24, or 48 hours.</li>
+                                <li>
+                                    <strong>No Noise, Just Words:</strong>
+                                    No photos, videos, or distractions—just authentic thoughts.</li>
+                                <li>
+                                    <strong>Customize the Clock:</strong>
+                                    Choose how long your post stays live.</li>
+                                <li>
+                                    <strong>Real Conversations:</strong>
+                                    Connect without the pressure of permanence.</li>
+                                <li>
+                                    <strong>Full Control Over Your Posts:
+                                    </strong>
+                                    Need to make changes? No problem. Edit or delete your posts anytime before the timer runs out. It's your space, your rules.
+                                </li>
                             </ol>
                         </Col>
                     </Row>
@@ -55,10 +68,21 @@ const Home = ({ onSuccess }) => {
                         <Col>
                             <h4>Step by step</h4>
                             <ol>
-                                <li>Sign Up - Create an account in seconds.</li>
-                                <li>Post Your Thought - Type what's on your mind and set a timer.</li>
-                                <li>Engage - Start conversations before your post disappears.</li>
+                                <li><strong>Sign Up:</strong> Create an account in seconds.</li>
+                                <li><strong>Post Your Thought</strong> Type what's on your mind and set a timer.</li>
+                                <li><strong>Edit or Delete Anytime:</strong> Adjust or remove your post while it's live.</li>
+                                <li><strong>Let It Fade:</strong> Once the timer ends, it's gone forever.</li>
                             </ol>
+                        </Col>
+                    </Row>
+                    {/* FAQ */}
+                    <Row>
+                        <Col>
+                            <h2>FAQ</h2>
+                        </Col>
+                        <Col>
+                            <strong>Q:</strong> Can I edit or delete my posts?
+                            <strong>A:</strong> Absolutely! You can edit or delete your posts anytime before they disappear. It's all about giving you control over what you share."
                         </Col>
                     </Row>
                 </Container>
