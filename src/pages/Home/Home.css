@@ -5,7 +5,7 @@
 }
 
 .home__body main {
-    background-color: black;
+    /* background-color: black; */
     color: var(--main-text-color) !important;
     font-size: var(--primary-font-size);
 }
@@ -24,9 +24,7 @@
     flex: 1;
     /* Ensures the inner div fills the column */
     /* flex-direction: column; */
-
-
-    background-color: rgb(240, 248, 255, 0.3);
+    background-color: rgb(240, 248, 255, 0.2);
     backdrop-filter: blur(4px);
     border-radius: var(--main-rounded-corner);
 }

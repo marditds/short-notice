@@ -11,45 +11,31 @@ const Home = ({ onSuccess }) => {
     const [isWaiting, setIsWaiting] = useState(false);
     const [sampleNotice, setSampleNotice] = useState('I\'ve had a bust day 😪. Time to watch some tv 📺.');
 
-    const clock = '⌚';
-
     const features = [
         {
-            // title: (
-            //     <span>
-            //         <i className="bi bi-stopwatch"></i>
-            //         {' Ephemeral Posting'}
-            //     </span>
-            // ),
-            title: "⌚ Ephemeral Posting: ",
-            description: "Choose how long your text posts stay live—12, 24, or 48 hours."
+            title: 'Ephemeral Posting: ',
+            description: 'Choose how long your text posts stay live—12, 24, or 48 hours.',
+            icon: '⌚'
         },
         {
-            title: "💭 No Noise, Just Words: ",
-            description: "No photos, videos, or distractions—just authentic thoughts. Maybe GIFs in the near future 😜."
+            title: 'No Noise, Just Words: ',
+            description: 'No photos, videos, or distractions—just authentic thoughts. Maybe GIFs in the near future 😜.',
+            icon: '💭'
         },
         {
-            // title: (
-            //     <span>
-            //         <i className="bi bi-pencil"></i>
-            //         {' Edit your notices'}
-            //     </span>
-            // ),
-            title: "📝 Edit your notices: ",
-            description: "Need to make changes? No problem. Edit your notices anytime before the timer runs out. It's your space, your rules."
+            title: 'Edit your notices: ',
+            description: "Need to make changes? No problem. Edit your notices anytime before the timer runs out. It's your space, your rules.",
+            icon: '📝'
         },
         {
-            title: (
-                <span>
-                    <i className="bi bi-trash3"></i>
-                    {' Delete your notices: '}
-                </span>
-            ),
-            description: "Don't like what you posted? No problem. Delete your notices even if the timer has not run out."
+            title: ' Delete your notices: ',
+            description: 'Don\'t like what you posted? No problem. Delete your notices even if the timer has not run out.',
+            icon: <i className="bi bi-trash3"></i>
         },
         {
-            title: "🔒 Secure Access for Teams and Groups: ",
-            description: "Leaders set passcodes to control who can view posts, ensuring secure and targeted communication."
+            title: 'Secure Access for Teams and Groups: ',
+            description: 'Leaders set passcodes to control who can view posts, ensuring secure and targeted communication.',
+            icon: '🔒'
         }
     ];
 
@@ -168,7 +154,7 @@ const Home = ({ onSuccess }) => {
                                             <strong>{feature.title}</strong>
                                             {feature.description}
                                         </div>
-                                        <div style={{ fontSize: '24pt' }} className='text-center mt-3'>{clock}</div>
+                                        <div style={{ fontSize: '24pt' }} className='text-center mt-3'>{feature.icon}</div>
                                     </div>
 
                                 </Col>
