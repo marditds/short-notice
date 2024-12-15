@@ -78,6 +78,21 @@ const Home = ({ onSuccess }) => {
         }
     ];
 
+    const organizationExamples = [
+        {
+            title: "For Instructors:",
+            description: "Create a private space for your class to access important updates, assignments, or reminders—protected by a passcode.",
+            icon: "👩‍🏫",
+        },
+        {
+            title: "For Teams:",
+            description: "Keep internal updates secure by requiring team members to enter a passcode to view posts.*",
+            subtext: "*The posts made by the team leaders will also appear in the team members' personal feed.",
+            icon: <RiTeamFill size={43} />,
+        },
+    ];
+
+
     const faq = [
         {
             question: "Can I edit or delete my posts?",
@@ -196,11 +211,11 @@ const Home = ({ onSuccess }) => {
                         })}
                     </Row>
                     {/* Organization Example */}
-                    <Row as='ul' className='home__body-organization-examples-row list-unstyled'>
+                    {/* <Row as='ul' className='home__body-organization-examples-row list-unstyled'>
                         <Col as='li' xs={12} md={6} className='home__body-organization-example-col d-flex align-items-stretch'>
                             <div className='home__body-organization-example-col-div px-3 py-2 d-flex flex-column justify-content-between h-100'>
                                 <div>
-                                    <strong>For Intructors:</strong>
+                                    <strong>For Intructors: </strong>
                                     <span>Create a private space for your class to access important updates, assignments, or reminders—protected by a passcode.</span>
                                 </div>
                                 <div style={{ fontSize: '24pt' }} className='text-center my-3'>
@@ -211,17 +226,40 @@ const Home = ({ onSuccess }) => {
                         <Col as='li' xs={12} md={6} className='home__body-organization-example-col d-flex align-items-stretch'>
                             <div className='home__body-organization-example-col-div px-3 py-2 d-flex flex-column justify-content-between h-100'>
                                 <div>
-                                    <strong>For Teams:</strong>
+                                    <strong>For Teams: </strong>
                                     <span>Keep internal updates secure by requiring team members to enter a passcode to view posts.*</span>
                                     <br />
                                     <sub>*The posts made by the team leaders will also appear in the team members' personal feed.</sub>
                                 </div>
                                 <div className='text-center my-3'>
-                                    <RiTeamFill size={42} />
+                                    <RiTeamFill size={43} />
                                 </div>
                             </div>
                         </Col>
+                    </Row> */}
+
+                    <Row as="ul" className="home__body-organization-examples-row list-unstyled">
+                        {organizationExamples.map((example, idx) => (
+                            <Col
+                                key={idx}
+                                as="li"
+                                xs={12} md={6}
+                                className="home__body-organization-example-col d-flex align-items-stretch"
+                            >
+                                <div className="home__body-organization-example-col-div px-3 py-2 d-flex flex-column justify-content-between h-100">
+                                    <div>
+                                        <strong>{example.title}</strong>
+                                        <span>{example.description}</span>
+                                        {example.subtext && <sub><br />{example.subtext}</sub>}
+                                    </div>
+                                    <div style={{ fontSize: '24pt' }} className="text-center my-3">
+                                        {example.icon}
+                                    </div>
+                                </div>
+                            </Col>
+                        ))}
                     </Row>
+
 
                     {/* HOW IT WORKS */}
                     {/* <Row>
