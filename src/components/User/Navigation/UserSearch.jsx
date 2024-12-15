@@ -204,7 +204,7 @@ export const UserSearch = ({ userId }) => {
                                 :
                                 <>
 
-                                    <i class='bi bi-chevron-down'></i>
+                                    <i className='bi bi-chevron-down'></i>
                                 </>
                             }
                         </Button>
@@ -222,7 +222,7 @@ export const UserSearch = ({ userId }) => {
                                 :
                                 <div className='tools__search--results-modal-expand-icon d-flex justify-content-evenly align-items-center'>
                                     Load more
-                                    <i class='bi bi-chevron-down ms-2'></i>
+                                    <i className='bi bi-chevron-down ms-2'></i>
                                 </div>
                             }
                         </Button>
@@ -238,7 +238,7 @@ export const UserSearch = ({ userId }) => {
                             {isLoadingMore ?
                                 <Loading size={24} />
                                 :
-                                <i class='bi bi-chevron-down expand--icon'></i>
+                                <i className='bi bi-chevron-down expand--icon'></i>
                             }
                         </Button>
                         :

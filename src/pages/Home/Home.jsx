@@ -4,7 +4,11 @@ import { GoogleLoginForm } from '../../components/LoginForm/Google/GoogleLoginFo
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import { MdOutlinePassword } from "react-icons/md";
+import { BsReply } from "react-icons/bs";
+import { FaHeart } from "react-icons/fa";
+import { AiOutlineSave } from "react-icons/ai";
 import { RiTeamFill } from "react-icons/ri";
+import { RiNumber1, RiNumber2, RiNumber3, RiNumber4 } from "react-icons/ri";
 import './Home.css';
 
 const Home = ({ onSuccess }) => {
@@ -26,8 +30,20 @@ const Home = ({ onSuccess }) => {
         },
         {
             title: 'Edit your notices: ',
-            description: "Need to make changes? No problem. Edit your notices anytime before the timer runs out. It's your space, your rules.",
+            description: 'Need to make changes? No problem. Edit your notices anytime before the timer runs out. It\'s your space, your rules.',
             icon: '📝'
+        },
+        {
+            title: 'Interact with others\' notices: ',
+            description: 'Like, save, and react to others\' posts.',
+            icon: (
+                <span>
+                    <FaHeart color='red' size={28} /> {' '}
+                    <AiOutlineSave size={30} /> {' '}
+                    <BsReply size={38} />
+
+                </span>
+            ),
         },
         {
             title: ' Delete your notices: ',
@@ -38,25 +54,6 @@ const Home = ({ onSuccess }) => {
             title: 'Secure Access for Teams and Groups: ',
             description: 'Leaders set passcodes to control who can view posts, ensuring secure and targeted communication.',
             icon: '🔒'
-        }
-    ];
-
-    const steps = [
-        {
-            title: "Sign Up",
-            description: "Create an account in seconds."
-        },
-        {
-            title: "Post Your Thought",
-            description: "Type what's on your mind and set a timer."
-        },
-        {
-            title: "Edit or Delete",
-            description: "Adjust or remove your post while it's live."
-        },
-        {
-            title: "Let It Fade",
-            description: "Once the timer ends, it's gone forever."
         }
     ];
 
@@ -80,27 +77,53 @@ const Home = ({ onSuccess }) => {
 
     const organizationExamples = [
         {
-            title: "For Instructors:",
-            description: "Create a private space for your class to access important updates, assignments, or reminders—protected by a passcode.",
-            icon: "👩‍🏫",
+            title: 'For Instructors: ',
+            description: 'Create a private space for your class to access important updates, assignments, or reminders—protected by a passcode.',
+            icon: '👩‍🏫',
         },
         {
-            title: "For Teams:",
-            description: "Keep internal updates secure by requiring team members to enter a passcode to view posts.*",
-            subtext: "*The posts made by the team leaders will also appear in the team members' personal feed.",
+            title: 'For Teams: ',
+            description: 'Keep internal updates secure by requiring team members to enter a passcode to view posts.',
+            subtext: '*The posts made by the team leaders will also appear in the team members\' personal feed.',
             icon: <RiTeamFill size={43} />,
         },
     ];
 
+    const steps = [
+        {
+            title: 'Sign Up: ',
+            description: 'Create an account in seconds.',
+            icon: <RiNumber1 size={40} />
+        },
+        {
+            title: 'Post Your Thought: ',
+            description: 'Type what\'s on your mind and set a timer.',
+            icon: <RiNumber2 size={40} />
+        },
+        {
+            title: 'Edit or Delete: ',
+            description: 'Adjust or remove your post while it\'s live.',
+            icon: <RiNumber3 size={40} />
+        },
+        {
+            title: 'Let It Fade: ',
+            description: 'Once the timer ends, it\'s gone forever.',
+            icon: <RiNumber4 size={40} />
+        }
+    ];
 
     const faq = [
         {
-            question: "Can I edit or delete my posts?",
-            answer: "Absolutely! You can edit or delete your posts anytime before they disappear. It's all about giving you control over what you share."
+            question: 'Can I edit or delete my posts?',
+            answer: 'Absolutely! You can edit or delete your posts anytime before they disappear. It\'s all about giving you control over what you share.'
         },
         {
-            question: "Who can use passcodes to secure posts?",
-            answer: "Passcodes are designed for groups and teams like schools or small businesses to control access to their posts. Notices posted behind the passcodes are not meant for public consumption."
+            question: 'Who can use passcodes to secure posts?',
+            answer: 'Passcodes are designed for groups and teams like schools or small businesses to control access to their posts. Notices posted by teams are not meant for public consumption.'
+        },
+        {
+            question: 'Can I interact with other users?',
+            answer: 'Yes. You can follow the users you find interesting. Their notices will appear in your personal feed.'
         }
     ];
 
@@ -170,7 +193,7 @@ const Home = ({ onSuccess }) => {
                                     className='home__body-features-col d-flex align-items-stretch'
                                 >
                                     <div className='px-3 py-2 home__body-features-col-div d-flex flex-column justify-content-between h-100'>
-                                        <div>
+                                        <div className='mt-3'>
                                             <strong>{feature.title}</strong>
                                             {feature.description}
                                         </div>
@@ -181,6 +204,7 @@ const Home = ({ onSuccess }) => {
                             )
                         })}
                     </Row>
+
                     {/* Organization */}
                     {/* Organization Intro */}
                     <Row className='home__body-organization-row-into'>
@@ -193,6 +217,7 @@ const Home = ({ onSuccess }) => {
                         </Col>
 
                     </Row>
+
                     {/* Organization Perks */}
                     <Row as='ul' className='home__body-organization-perks-row list-unstyled'>
                         {organizationPerks.map((perk, idx) => {
@@ -201,7 +226,7 @@ const Home = ({ onSuccess }) => {
                                     xs={12} lg={6} xl={4}
                                     className='home__body-organization-perks-col d-flex align-items-stretch'>
                                     <div className='home__body-organization-perks-col-div px-3 py-2 d-flex flex-column justify-content-between h-100'>
-                                        <div>
+                                        <div className='mt-3'>
                                             <strong>{perk.title} </strong>{perk.description}
                                         </div>
                                         <div style={{ fontSize: '24pt' }} className='text-center my-3'>{perk.icon}</div>
@@ -210,34 +235,8 @@ const Home = ({ onSuccess }) => {
                             )
                         })}
                     </Row>
-                    {/* Organization Example */}
-                    {/* <Row as='ul' className='home__body-organization-examples-row list-unstyled'>
-                        <Col as='li' xs={12} md={6} className='home__body-organization-example-col d-flex align-items-stretch'>
-                            <div className='home__body-organization-example-col-div px-3 py-2 d-flex flex-column justify-content-between h-100'>
-                                <div>
-                                    <strong>For Intructors: </strong>
-                                    <span>Create a private space for your class to access important updates, assignments, or reminders—protected by a passcode.</span>
-                                </div>
-                                <div style={{ fontSize: '24pt' }} className='text-center my-3'>
-                                    👩‍🏫
-                                </div>
-                            </div>
-                        </Col>
-                        <Col as='li' xs={12} md={6} className='home__body-organization-example-col d-flex align-items-stretch'>
-                            <div className='home__body-organization-example-col-div px-3 py-2 d-flex flex-column justify-content-between h-100'>
-                                <div>
-                                    <strong>For Teams: </strong>
-                                    <span>Keep internal updates secure by requiring team members to enter a passcode to view posts.*</span>
-                                    <br />
-                                    <sub>*The posts made by the team leaders will also appear in the team members' personal feed.</sub>
-                                </div>
-                                <div className='text-center my-3'>
-                                    <RiTeamFill size={43} />
-                                </div>
-                            </div>
-                        </Col>
-                    </Row> */}
 
+                    {/* Organization Example */}
                     <Row as="ul" className="home__body-organization-examples-row list-unstyled">
                         {organizationExamples.map((example, idx) => (
                             <Col
@@ -246,8 +245,8 @@ const Home = ({ onSuccess }) => {
                                 xs={12} md={6}
                                 className="home__body-organization-example-col d-flex align-items-stretch"
                             >
-                                <div className="home__body-organization-example-col-div px-3 py-2 d-flex flex-column justify-content-between h-100">
-                                    <div>
+                                <div className='home__body-organization-example-col-div px-3 py-2 d-flex flex-column justify-content-between h-100'>
+                                    <div className='mt-3'>
                                         <strong>{example.title}</strong>
                                         <span>{example.description}</span>
                                         {example.subtext && <sub><br />{example.subtext}</sub>}
@@ -260,38 +259,38 @@ const Home = ({ onSuccess }) => {
                         ))}
                     </Row>
 
-
                     {/* HOW IT WORKS */}
-                    {/* <Row>
-                        <Col>
-                            <h2>HOW IT WORKS</h2>
-                            <h4>Step by step</h4>
-                            <ol>
-                                {steps.map((step, idx) => {
-                                    return (
-                                        <li key={idx}>
+                    <Row as='ol' className='home__body-how-row list-unstyled'>
+                        <h2>HOW IT WORKS</h2>
+                        {steps.map((step, idx) => {
+                            return (
+                                <Col as='li' key={idx}
+                                    className='home__body-how-col d-flex align-items-stretch'>
+                                    <div className='home__body-how-col-div px-3 py-2 d-flex flex-column justify-content-between h-100'>
+                                        <div className='text-center mt-3'>
+                                            {step.icon}
+                                        </div>
+                                        <div className='my-3'>
                                             <strong>{step.title} </strong>{step.description}
-                                        </li>
-                                    )
-                                })}
-                            </ol>
-                        </Col>
-                    </Row> */}
+                                        </div>
+                                    </div>
+                                </Col>
+                            )
+                        })}
+                    </Row>
 
                     {/* FAQ */}
-                    {/* <Row>
-                        <Col>
-                            <h2>FAQ</h2>
-                            {faq.map((question, idx) => {
-                                return (
-                                    <p key={idx}>
-                                        <strong>{question.question}</strong><br />
-                                        {question.answer}
-                                    </p>
-                                )
-                            })}
+                    <Row as='section' aria-labelledby='faq-title' className='faq-section'>
+                        <Col xs={12}>
+                            <h2 id='faq-title' className='mb-4'>Frequently Asked Questions</h2>
                         </Col>
-                    </Row> */}
+                        {faq.map((item, index) => (
+                            <Col as='details' xs={12} key={index} className='mb-3'>
+                                <summary className='fw-bold'>{item.question}</summary>
+                                <p className='mt-2'>{item.answer}</p>
+                            </Col>
+                        ))}
+                    </Row>
 
                 </Container>
             </main>
