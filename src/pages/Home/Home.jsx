@@ -4,6 +4,7 @@ import { GoogleLoginForm } from '../../components/LoginForm/Google/GoogleLoginFo
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import { MdOutlinePassword } from "react-icons/md";
+import { RiTeamFill } from "react-icons/ri";
 import './Home.css';
 
 const Home = ({ onSuccess }) => {
@@ -195,16 +196,30 @@ const Home = ({ onSuccess }) => {
                         })}
                     </Row>
                     {/* Organization Example */}
-                    <Row className='home__body-organization-row-examples'>
-                        <Col>
-                            <p>
-                                <strong>👩‍🏫 For Intructors:</strong>
-                                <span>Create a private space for your class to access important updates, assignments, or reminders—protected by a passcode.</span>
-                                <br />
-                                <strong> For Teams:</strong>
-                                <span>Keep internal updates secure by requiring team members to enter a passcode to view posts.</span>
-                                <sub>Team members will see the posts made by their team leaders in their personal feed. </sub>
-                            </p>
+                    <Row as='ul' className='home__body-organization-examples-row list-unstyled'>
+                        <Col as='li' xs={12} md={6} className='home__body-organization-example-col d-flex align-items-stretch'>
+                            <div className='home__body-organization-example-col-div px-3 py-2 d-flex flex-column justify-content-between h-100'>
+                                <div>
+                                    <strong>For Intructors:</strong>
+                                    <span>Create a private space for your class to access important updates, assignments, or reminders—protected by a passcode.</span>
+                                </div>
+                                <div style={{ fontSize: '24pt' }} className='text-center my-3'>
+                                    👩‍🏫
+                                </div>
+                            </div>
+                        </Col>
+                        <Col as='li' xs={12} md={6} className='home__body-organization-example-col d-flex align-items-stretch'>
+                            <div className='home__body-organization-example-col-div px-3 py-2 d-flex flex-column justify-content-between h-100'>
+                                <div>
+                                    <strong>For Teams:</strong>
+                                    <span>Keep internal updates secure by requiring team members to enter a passcode to view posts.*</span>
+                                    <br />
+                                    <sub>*The posts made by the team leaders will also appear in the team members' personal feed.</sub>
+                                </div>
+                                <div className='text-center my-3'>
+                                    <RiTeamFill size={42} />
+                                </div>
+                            </div>
                         </Col>
                     </Row>
 

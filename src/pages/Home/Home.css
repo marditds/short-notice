@@ -17,17 +17,24 @@
 }
 
 .home__body-features-col,
-.home__body-organization-perks-col {
+.home__body-organization-perks-col,
+.home__body-organization-example-col {
     padding-block: 12px;
 }
 
 .home__body-features-col-div,
-.home__body-organization-perks-col-div {
+.home__body-organization-perks-col-div,
+.home__body-organization-example-col-div {
     flex: 1;
     background-color: rgba(var(--main-bg-color), 0.2);
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(4px);
     border-radius: var(--main-rounded-corner);
+}
+
+.home__body-organization-example-col-div {
+    background-color: rgba(23, 199, 105, 0.1) !important;
+    /* background-color: yellow !important; */
 }
 
 .home__body-organization-row-intro-icon {
