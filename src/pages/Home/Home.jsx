@@ -3,6 +3,7 @@ import { Container, Row, Col, Stack, Button } from 'react-bootstrap';
 import { GoogleLoginForm } from '../../components/LoginForm/Google/GoogleLoginForm';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
+import { MdOutlinePassword } from "react-icons/md";
 import './Home.css';
 
 const Home = ({ onSuccess }) => {
@@ -60,16 +61,19 @@ const Home = ({ onSuccess }) => {
 
     const organizationPerks = [
         {
-            title: "😎 Private Posting:",
-            description: "Protect updates with passcodes for exclusive access."
+            title: 'Private Posting:',
+            description: "Protect updates with passcodes for exclusive access.",
+            icon: <MdOutlinePassword />
         },
         {
-            title: "✅ Effortless Setup:",
-            description: "Leaders create passcodes; team members enter the code."
+            title: 'Effortless Setup:',
+            description: "Leaders create passcodes; team members enter the code.",
+            icon: '✅'
         },
         {
-            title: "⌚ Ephemeral by Design:",
-            description: "Posts vanish after the timer ends, requiring no cleanup."
+            title: 'Ephemeral by Design:',
+            description: "Posts vanish after the timer ends, requiring no cleanup.",
+            icon: '⌚'
         }
     ];
 
@@ -150,7 +154,7 @@ const Home = ({ onSuccess }) => {
                                     className='home__body-features-col d-flex align-items-stretch'
                                 >
                                     <div className='px-3 py-2 home__body-features-col-div d-flex flex-column justify-content-between h-100'>
-                                        <div className="feature-content">
+                                        <div>
                                             <strong>{feature.title}</strong>
                                             {feature.description}
                                         </div>
@@ -162,26 +166,42 @@ const Home = ({ onSuccess }) => {
                         })}
                     </Row>
                     {/* Organization */}
-                    <Row>
-                        <Col>
-                            <h4>
-                                Designed for streamlining communication from higherups to team members.
+                    {/* Organization Intro */}
+                    <Row className='home__body-organization-row-into'>
+                        <Col >
+                            <h4 className='text-center d-flex align-items-center justify-content-center'>
+                                <i className='bi bi-diagram-3-fill home__body-organization-row-intro-icon me-2'></i>
+                                Designed to streamline communication from higherups to team members.
                             </h4>
-                            <p>Empower your organization with secure and controlled communication. Use passcodes to ensure only authorized members see posts. Perfect for teachers sharing with students or managers updating their teams.</p>
-                            <ul className='list-unstyled'>
-                                {organizationPerks.map((perk, idx) => {
-                                    return (
-                                        <li key={idx}>
+                            <p className='text-center fw-bold'>Empower your organization with secure and controlled communication. Use passcodes to ensure only authorized members see posts. Perfect for teachers sharing with students or managers updating their teams.</p>
+                        </Col>
+
+                    </Row>
+                    {/* Organization Perks */}
+                    <Row as='ul' className='home__body-organization-perks-row list-unstyled'>
+                        {organizationPerks.map((perk, idx) => {
+                            return (
+                                <Col as='li' key={idx}
+                                    xs={12} lg={6} xl={4}
+                                    className='home__body-organization-perks-col d-flex align-items-stretch'>
+                                    <div className='home__body-organization-perks-col-div px-3 py-2 d-flex flex-column justify-content-between h-100'>
+                                        <div>
                                             <strong>{perk.title} </strong>{perk.description}
-                                        </li>
-                                    )
-                                })}
-                            </ul>
+                                        </div>
+                                        <div style={{ fontSize: '24pt' }} className='text-center my-3'>{perk.icon}</div>
+                                    </div>
+                                </Col>
+                            )
+                        })}
+                    </Row>
+                    {/* Organization Example */}
+                    <Row className='home__body-organization-row-examples'>
+                        <Col>
                             <p>
                                 <strong>👩‍🏫 For Intructors:</strong>
                                 <span>Create a private space for your class to access important updates, assignments, or reminders—protected by a passcode.</span>
                                 <br />
-                                <strong><i className="bi bi-diagram-3-fill"></i> For Teams:</strong>
+                                <strong> For Teams:</strong>
                                 <span>Keep internal updates secure by requiring team members to enter a passcode to view posts.</span>
                                 <sub>Team members will see the posts made by their team leaders in their personal feed. </sub>
                             </p>
