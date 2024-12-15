@@ -161,11 +161,13 @@ const Home = ({ onSuccess }) => {
                             return (
                                 <Col as='li' key={idx}
                                     xs={12} lg={6} xl={4}
-                                    className='home__body-features-col d-flex mt-4'
+                                    className='home__body-features-col d-flex align-items-stretch'
                                 >
-                                    <div className='px-3 py-2 home__body-features-col-div'>
-                                        <strong>{feature.title} </strong>{feature.description}
-                                        <br />
+                                    <div className='px-3 py-2 home__body-features-col-div d-flex flex-column justify-content-between h-100'>
+                                        <div className="feature-content">
+                                            <strong>{feature.title}</strong>
+                                            {feature.description}
+                                        </div>
                                         <div style={{ fontSize: '24pt' }} className='text-center mt-3'>{clock}</div>
                                     </div>
 

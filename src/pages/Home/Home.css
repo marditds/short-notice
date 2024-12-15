@@ -5,15 +5,27 @@
 }
 
 .home__body main {
+    background-color: black;
     color: var(--main-text-color) !important;
     font-size: var(--primary-font-size);
 }
 
-.home__body-features-row {}
+.home__body-features-row {
+    display: flex;
+    flex-wrap: wrap;
+    /* Allow children to wrap if needed */
+}
 
-.home__body-features-col {}
+.home__body-features-col {
+    padding-block: 12px;
+}
 
 .home__body-features-col-div {
+    flex: 1;
+    /* Ensures the inner div fills the column */
+    /* flex-direction: column; */
+
+
     background-color: rgb(240, 248, 255, 0.3);
     backdrop-filter: blur(4px);
     border-radius: var(--main-rounded-corner);
