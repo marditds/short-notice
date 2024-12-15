@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Button } from 'react-bootstrap';
+import { Container, Row, Col, ListGroup, Button } from 'react-bootstrap';
 import { GoogleLoginForm } from '../../components/LoginForm/Google/GoogleLoginForm';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
@@ -13,23 +13,40 @@ const Home = ({ onSuccess }) => {
 
     const features = [
         {
-            title: "⏱ Ephemeral Posting",
+            // title: (
+            //     <span>
+            //         <i className="bi bi-stopwatch"></i>
+            //         {' Ephemeral Posting'}
+            //     </span>
+            // ),
+            title: "⌚ Ephemeral Posting: ",
             description: "Choose how long your text posts stay live—12, 24, or 48 hours."
         },
         {
-            title: "💭 No Noise, Just Words",
+            title: "💭 No Noise, Just Words: ",
             description: "No photos, videos, or distractions—just authentic thoughts. Maybe GIFs in the near future 😜."
         },
         {
-            title: "📝 Edit your notices",
+            // title: (
+            //     <span>
+            //         <i className="bi bi-pencil"></i>
+            //         {' Edit your notices'}
+            //     </span>
+            // ),
+            title: "📝 Edit your notices: ",
             description: "Need to make changes? No problem. Edit your notices anytime before the timer runs out. It's your space, your rules."
         },
         {
-            title: "🚮 Delete your notices",
+            title: (
+                <span>
+                    <i className="bi bi-trash3"></i>
+                    {' Delete your notices: '}
+                </span>
+            ),
             description: "Don't like what you posted? No problem. Delete your notices even if the timer has not run out."
         },
         {
-            title: "🔐🔒🛡 Secure Access for Teams and Groups",
+            title: "🔒 Secure Access for Teams and Groups: ",
             description: "Leaders set passcodes to control who can view posts, ensuring secure and targeted communication."
         }
     ];
@@ -55,16 +72,27 @@ const Home = ({ onSuccess }) => {
 
     const organizationPerks = [
         {
-            title: "Private Posting",
+            title: "😎 Private Posting:",
             description: "Protect updates with passcodes for exclusive access."
         },
         {
-            title: "Effortless Setup",
+            title: "✅ Effortless Setup:",
             description: "Leaders create passcodes; team members enter the code."
         },
         {
-            title: "Ephemeral by Design",
+            title: "⌚ Ephemeral by Design:",
             description: "Posts vanish after the timer ends, requiring no cleanup."
+        }
+    ];
+
+    const faq = [
+        {
+            question: "Can I edit or delete my posts?",
+            answer: "Absolutely! You can edit or delete your posts anytime before they disappear. It's all about giving you control over what you share."
+        },
+        {
+            question: "Who can use passcodes to secure posts?",
+            answer: "Passcodes are designed for groups and teams like schools or small businesses to control access to their posts. Notices posted behind the passcodes are not meant for public consumption."
         }
     ];
 
@@ -122,20 +150,49 @@ const Home = ({ onSuccess }) => {
                             </p>
                         </Col>
                     </Row>
-                    {/* FEATURE */}
+                    {/* FEATURES */}
+                    {/* <Row> */}
+                    {/* <Col> */}
+                    {/* <h4>Overview of the product</h4> */}
+                    <Row as='ul' className='d-flex row-gap-3 list-unstyled'>
+                        <h2>FEATURES</h2>
+                        <br />
+                        {features.map((feature, idx) => {
+                            return (
+                                <Col as='li' key={idx}
+                                    xs={12} lg={6} xl={4}
+                                >
+                                    <strong>{feature.title} </strong>{feature.description}
+                                </Col>
+                            )
+                        })}
+                    </Row>
+                    {/* </Col> */}
+                    {/* </Row> */}
+                    {/* Organization */}
                     <Row>
                         <Col>
-                            <h2>FEATURES</h2>
-                            <h4>Overview of the product</h4>
+                            <h4>
+                                Designed for streamlining communication from higherups to team members.
+                            </h4>
+                            <p>Empower your organization with secure and controlled communication. Use passcodes to ensure only authorized members see posts. Perfect for teachers sharing with students or managers updating their teams.</p>
                             <ul className='list-unstyled'>
-                                {features.map((feature, idx) => {
+                                {organizationPerks.map((perk, idx) => {
                                     return (
                                         <li key={idx}>
-                                            <strong>{feature.title} </strong>{feature.description}
+                                            <strong>{perk.title} </strong>{perk.description}
                                         </li>
                                     )
                                 })}
                             </ul>
+                            <p>
+                                <strong>👩‍🏫 For Intructors:</strong>
+                                <span>Create a private space for your class to access important updates, assignments, or reminders—protected by a passcode.</span>
+                                <br />
+                                <strong><i className="bi bi-diagram-3-fill"></i> For Teams:</strong>
+                                <span>Keep internal updates secure by requiring team members to enter a passcode to view posts.</span>
+                                <sub>Team members will see the posts made by their team leaders in their personal feed. </sub>
+                            </p>
                         </Col>
                     </Row>
                     {/* HOW IT WORKS */}
@@ -154,41 +211,18 @@ const Home = ({ onSuccess }) => {
                             </ol>
                         </Col>
                     </Row>
-                    {/* Organization */}
-                    <Row>
-                        <Col>
-                            <h4>
-                                Designed for streamlining communication from higherups to team members.
-                            </h4>
-                            <p>Empower your organization with secure and controlled communication. Use passcodes to ensure only authorized members see posts. Perfect for teachers sharing with students or managers updating their teams.</p>
-                            <ul>
-                                {organizationPerks.map((perk, idx) => {
-                                    return (
-                                        <li key={idx}>
-                                            <strong>{perk.title} </strong>{perk.description}
-                                        </li>
-                                    )
-                                })}
-                            </ul>
-                            <p>
-                                <strong>For Teachers:</strong>
-                                <span>Create a private space for your class to access important updates, assignments, or reminders—protected by a passcode.</span>
-                                <br />
-                                <strong>For Teams:</strong>
-                                <span>Keep internal updates secure by requiring team members to enter a passcode to view posts.</span>
-                                <sub>Team members will see the posts made by their team leaders in their personal feed. </sub>
-                            </p>
-                        </Col>
-                    </Row>
                     {/* FAQ */}
                     <Row>
                         <Col>
                             <h2>FAQ</h2>
-                            <strong>Q: Can I edit or delete my posts?</strong>
-                            A: Absolutely! You can edit or delete your posts anytime before they disappear. It's all about giving you control over what you share.
-
-                            <strong>Q: Who can use passcodes to secure posts?</strong>
-                            A: Passcodes are designed for groups and teams like schools or small businesses to control access to their posts.
+                            {faq.map((question, idx) => {
+                                return (
+                                    <p key={idx}>
+                                        <strong>{question.question}</strong><br />
+                                        {question.answer}
+                                    </p>
+                                )
+                            })}
                         </Col>
                     </Row>
                 </Container>
