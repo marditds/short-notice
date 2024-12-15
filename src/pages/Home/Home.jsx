@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, ListGroup, Button } from 'react-bootstrap';
+import { Container, Row, Col, Stack, Button } from 'react-bootstrap';
 import { GoogleLoginForm } from '../../components/LoginForm/Google/GoogleLoginForm';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
@@ -10,6 +10,8 @@ const Home = ({ onSuccess }) => {
     const [timeLeft, setTimeLeft] = useState(10);
     const [isWaiting, setIsWaiting] = useState(false);
     const [sampleNotice, setSampleNotice] = useState('I\'ve had a bust day 😪. Time to watch some tv 📺.');
+
+    const clock = '⌚';
 
     const features = [
         {
@@ -150,25 +152,27 @@ const Home = ({ onSuccess }) => {
                             </p>
                         </Col>
                     </Row>
+
                     {/* FEATURES */}
-                    {/* <Row> */}
-                    {/* <Col> */}
-                    {/* <h4>Overview of the product</h4> */}
-                    <Row as='ul' className='d-flex row-gap-3 list-unstyled'>
+                    <Row as='ul' className='home__body-features-row list-unstyled'>
                         <h2>FEATURES</h2>
                         <br />
                         {features.map((feature, idx) => {
                             return (
                                 <Col as='li' key={idx}
                                     xs={12} lg={6} xl={4}
+                                    className='home__body-features-col d-flex mt-4'
                                 >
-                                    <strong>{feature.title} </strong>{feature.description}
+                                    <div className='px-3 py-2 home__body-features-col-div'>
+                                        <strong>{feature.title} </strong>{feature.description}
+                                        <br />
+                                        <div style={{ fontSize: '24pt' }} className='text-center mt-3'>{clock}</div>
+                                    </div>
+
                                 </Col>
                             )
                         })}
                     </Row>
-                    {/* </Col> */}
-                    {/* </Row> */}
                     {/* Organization */}
                     <Row>
                         <Col>
@@ -195,8 +199,9 @@ const Home = ({ onSuccess }) => {
                             </p>
                         </Col>
                     </Row>
+
                     {/* HOW IT WORKS */}
-                    <Row>
+                    {/* <Row>
                         <Col>
                             <h2>HOW IT WORKS</h2>
                             <h4>Step by step</h4>
@@ -210,9 +215,10 @@ const Home = ({ onSuccess }) => {
                                 })}
                             </ol>
                         </Col>
-                    </Row>
+                    </Row> */}
+
                     {/* FAQ */}
-                    <Row>
+                    {/* <Row>
                         <Col>
                             <h2>FAQ</h2>
                             {faq.map((question, idx) => {
@@ -224,7 +230,8 @@ const Home = ({ onSuccess }) => {
                                 )
                             })}
                         </Col>
-                    </Row>
+                    </Row> */}
+
                 </Container>
             </main>
             <Footer />

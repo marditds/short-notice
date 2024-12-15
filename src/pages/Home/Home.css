@@ -7,5 +7,14 @@
 .home__body main {
     color: var(--main-text-color) !important;
     font-size: var(--primary-font-size);
+}
 
+.home__body-features-row {}
+
+.home__body-features-col {}
+
+.home__body-features-col-div {
+    background-color: rgb(240, 248, 255, 0.3);
+    backdrop-filter: blur(4px);
+    border-radius: var(--main-rounded-corner);
 }
