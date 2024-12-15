@@ -154,7 +154,7 @@ const Home = ({ onSuccess }) => {
                                             <strong>{feature.title}</strong>
                                             {feature.description}
                                         </div>
-                                        <div style={{ fontSize: '24pt' }} className='text-center mt-3'>{feature.icon}</div>
+                                        <div style={{ fontSize: '24pt' }} className='text-center my-3'>{feature.icon}</div>
                                     </div>
 
                                 </Col>
