@@ -176,11 +176,10 @@ const Home = ({ onSuccess }) => {
 
                     {/* HERO */}
                     <Row className='home__body-hero-row'>
-                        <h2>HERO</h2>
                         <Col className='home__body-hero-col d-flex align-items-stretch'>
-                            <div className='home__body-hero-col-div px-4 py-5 d-flex flex-column justify-content-between h-100'>
-                                <div>
-                                    <h2 className='text-center'>Share updates and ideas in the moment. No distractions. No maintenance.</h2>
+                            <div className='home__body-hero-col-div px-4 py-5 d-flex flex-column align-items-stretch h-100'>
+                                <div className=' py-5'>
+                                    <h2 className='text-center pt-4'>Share updates and ideas in the moment. No distractions. No maintenance.</h2>
                                 </div>
                                 <p>
                                     {/* {sampleNotice} */}
@@ -189,7 +188,7 @@ const Home = ({ onSuccess }) => {
                                 <div>
                                     <p>{'[A text + timer. When the timer runs out, the text fades away. Wait 3 seconds. Reset.]'}</p>
                                 </div>
-                                <div className='d-flex align-items-center justify-content-evenly'>
+                                <div className='d-flex align-items-center justify-content-evenly pt-3'>
                                     <h4 className='mb-0'>Join with your Google account</h4>
 
                                     <GoogleLoginForm onSuccess={onSuccess}

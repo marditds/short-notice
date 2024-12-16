@@ -44,6 +44,14 @@
     border-radius: var(--main-rounded-corner);
 }
 
+.home__body-hero-col-div {
+    background-image: url('../../assets/log_hq.png');
+    background-size: 80%;
+    background-attachment: fixed;
+    background-position: right;
+    background-repeat: no-repeat;
+}
+
 .home__body-organization-example-col-div {
     background-color: rgba(23, 199, 105, 0.1) !important;
 }
