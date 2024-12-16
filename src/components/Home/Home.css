@@ -14,6 +14,7 @@
     row-gap: 200px;
 }
 
+.home__body-hero-row,
 .home__body-features-row,
 .home__body-organization-perks-row,
 .home__body-organization-examples-row,
@@ -22,6 +23,7 @@
     flex-wrap: wrap;
 }
 
+.home__body-hero-col,
 .home__body-features-col,
 .home__body-organization-perks-col,
 .home__body-organization-example-col,
@@ -29,11 +31,12 @@
     padding-block: 12px;
 }
 
+.home__body-hero-col-div,
 .home__body-features-col-div,
 .home__body-organization-perks-col-div,
 .home__body-organization-example-col-div,
 .home__body-how-col-div,
-.cta-col {
+.cta-col-div {
     flex: 1;
     background-color: rgba(var(--main-bg-color), 0.2);
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
@@ -48,5 +51,3 @@
 .home__body-organization-row-intro-icon {
     font-size: 25pt;
 }
-
-.cta-col {}

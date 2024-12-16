@@ -78,16 +78,16 @@ const Home = ({ onSuccess }) => {
 
     const organizationExamples = [
         {
-            title: 'For Instructors: ',
-            description: 'Create a private space for your class to access important updates, assignments, or reminders—protected by a passcode.',
-            icon: '👩‍🏫',
-        },
-        {
             title: 'For Teams: ',
             description: 'Keep internal updates secure by requiring team members to enter a passcode to view notices.',
             subtext: '*The notices by the team leaders will also appear in the team members\' personal feed.',
             icon: <RiTeamFill size={43} />,
         },
+        {
+            title: 'For Instructors: ',
+            description: 'Create a private space for your class to access important updates, assignments, or reminders—protected by a passcode.',
+            icon: '👩‍🏫',
+        }
     ];
 
     const steps = [
@@ -135,30 +135,6 @@ const Home = ({ onSuccess }) => {
         }
     ];
 
-    // const joinNowTexts = [
-    //     'Ready to get started? Join now!',
-    //     'Don\'t miss out—become a part of our community today!',
-    //     'Take the first step toward simplifying your life. Join now!',
-    //     'Your next big opportunity is just one click away.',
-    //     'Join today and unlock all the possibilities!',
-    //     'It\'s free, fast, and full of potential. Join now!',
-    //     'Why wait? Start your journey with us today!',
-    //     'Exclusive features are just a click away—sign up now!',
-    //     'Join now and take control of your world!',
-    //     'Your future self will thank you. Join today!',
-    //     'Discover what you\'ve been missing—join us now!'
-    // ];
-
-    const joinNowTexts = [
-        // Hero Section
-        "Ready to get started? Join now!",
-        // Features Section
-        'Unlock all the possibilities—no cost, no catch. Join now!',
-        // How It Works Section  
-        "Simple steps, incredible outcomes. Start now!"
-    ];
-
-
 
     useEffect(() => {
         let timer;
@@ -197,27 +173,37 @@ const Home = ({ onSuccess }) => {
             </Header>
             <main className='flex-grow-1 '>
                 <Container className='home__body-container'>
+
                     {/* HERO */}
-                    <Row>
-                        <Col>
-                            <h2>HERO</h2>
-                            <h2>Share updates and ideas in the moment. No distractions. No maintenance.</h2>
-                            <p>
-                                {/* {sampleNotice} */}
-                                {/* {formatTime(timeLeft)} */}
-                            </p>
-                            <p>{'[A text + timer. When the timer runs out, the text fades away. Wait 3 seconds. Reset.]'}</p>
-                            <p>Join with your Google account<Button>Login
-                            </Button>
-                                <sub>More options coming soon!</sub>
-                            </p>
+                    <Row className='home__body-hero-row'>
+                        <h2>HERO</h2>
+                        <Col className='home__body-hero-col d-flex align-items-stretch'>
+                            <div className='home__body-hero-col-div px-4 py-5 d-flex flex-column justify-content-between h-100'>
+                                <div>
+                                    <h2 className='text-center'>Share updates and ideas in the moment. No distractions. No maintenance.</h2>
+                                </div>
+                                <p>
+                                    {/* {sampleNotice} */}
+                                    {/* {formatTime(timeLeft)} */}
+                                </p>
+                                <div>
+                                    <p>{'[A text + timer. When the timer runs out, the text fades away. Wait 3 seconds. Reset.]'}</p>
+                                </div>
+                                <div className='d-flex align-items-center justify-content-evenly'>
+                                    <h4 className='mb-0'>Join with your Google account</h4>
+
+                                    <GoogleLoginForm onSuccess={onSuccess}
+                                        subtitle={'More sign in options coming soon!'}
+                                    />
+                                </div>
+                            </div>
                         </Col>
                     </Row>
 
                     {/* CTA */}
-                    <CallToAction joinNowTexts={joinNowTexts[0]}>
+                    {/* <CallToAction sectionName={'hero'}>
                         <GoogleLoginForm onSuccess={onSuccess} />
-                    </CallToAction>
+                    </CallToAction> */}
 
                     {/* FEATURES */}
                     <div>
@@ -298,7 +284,7 @@ const Home = ({ onSuccess }) => {
                     </div>
 
                     {/* CTA */}
-                    <CallToAction joinNowTexts={joinNowTexts[1]}>
+                    <CallToAction sectionName={'features'}>
                         <GoogleLoginForm onSuccess={onSuccess} />
                     </CallToAction>
 
@@ -325,7 +311,7 @@ const Home = ({ onSuccess }) => {
                     </div>
 
                     {/* CTA */}
-                    <CallToAction joinNowTexts={joinNowTexts[2]}>
+                    <CallToAction sectionName={'how'}>
                         <GoogleLoginForm onSuccess={onSuccess} />
                     </CallToAction>
 

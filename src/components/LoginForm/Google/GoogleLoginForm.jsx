@@ -2,7 +2,7 @@ import React from 'react';
 import { GoogleLogin } from '@react-oauth/google';
 
 
-export const GoogleLoginForm = ({ onSuccess }) => {
+export const GoogleLoginForm = ({ onSuccess, subtitle }) => {
 
     // const handleSuccess = (credentialResponse) => {
     //     if (typeof onSuccess === 'function') {
@@ -25,6 +25,7 @@ export const GoogleLoginForm = ({ onSuccess }) => {
                     shape='pill'
                     auto_select={false}
                 />
+                <sub>{subtitle}</sub>
             </div>
         </>
     )
