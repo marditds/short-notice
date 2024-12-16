@@ -1,7 +1,6 @@
 .home__body {
     background-color: var(--main-bg-color);
     font-family: var(--primary-font-family);
-
 }
 
 .home__body main {
@@ -14,8 +13,6 @@
     display: grid;
     row-gap: 200px;
 }
-
-.home__body-container>div+div {}
 
 .home__body-features-row,
 .home__body-organization-perks-row,
@@ -35,7 +32,8 @@
 .home__body-features-col-div,
 .home__body-organization-perks-col-div,
 .home__body-organization-example-col-div,
-.home__body-how-col-div {
+.home__body-how-col-div,
+.cta-col {
     flex: 1;
     background-color: rgba(var(--main-bg-color), 0.2);
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
@@ -50,3 +48,5 @@
 .home__body-organization-row-intro-icon {
     font-size: 25pt;
 }
+
+.cta-col {}

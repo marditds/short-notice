@@ -3,13 +3,14 @@ import { Container, Row, Col, Stack, Button } from 'react-bootstrap';
 import { GoogleLoginForm } from '../../components/LoginForm/Google/GoogleLoginForm';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
+import { CallToAction } from '../../components/Home/CallToAction';
 import { MdOutlinePassword } from "react-icons/md";
 import { BsReply } from "react-icons/bs";
 import { FaHeart } from "react-icons/fa";
 import { AiOutlineSave } from "react-icons/ai";
 import { RiTeamFill } from "react-icons/ri";
 import { RiNumber1, RiNumber2, RiNumber3, RiNumber4 } from "react-icons/ri";
-import './Home.css';
+import '../../components/Home/Home.css';
 
 const Home = ({ onSuccess }) => {
 
@@ -134,19 +135,29 @@ const Home = ({ onSuccess }) => {
         }
     ];
 
+    // const joinNowTexts = [
+    //     'Ready to get started? Join now!',
+    //     'Don\'t miss out—become a part of our community today!',
+    //     'Take the first step toward simplifying your life. Join now!',
+    //     'Your next big opportunity is just one click away.',
+    //     'Join today and unlock all the possibilities!',
+    //     'It\'s free, fast, and full of potential. Join now!',
+    //     'Why wait? Start your journey with us today!',
+    //     'Exclusive features are just a click away—sign up now!',
+    //     'Join now and take control of your world!',
+    //     'Your future self will thank you. Join today!',
+    //     'Discover what you\'ve been missing—join us now!'
+    // ];
+
     const joinNowTexts = [
-        'Ready to get started? Join now!',
-        'Don\'t miss out—become a part of our community today!',
-        'Take the first step toward simplifying your life. Join now!',
-        'Your next big opportunity is just one click away.',
-        'Join today and unlock all the possibilities!',
-        'It\'s free, fast, and full of potential. Join now!',
-        'Why wait? Start your journey with us today!',
-        'Exclusive features are just a click away—sign up now!',
-        'Join now and take control of your world!',
-        'Your future self will thank you. Join today!',
-        'Discover what you\'ve been missing—join us now!'
+        // Hero Section
+        "Ready to get started? Join now!",
+        // Features Section
+        'Unlock all the possibilities—no cost, no catch. Join now!',
+        // How It Works Section  
+        "Simple steps, incredible outcomes. Start now!"
     ];
+
 
 
     useEffect(() => {
@@ -202,6 +213,11 @@ const Home = ({ onSuccess }) => {
                             </p>
                         </Col>
                     </Row>
+
+                    {/* CTA */}
+                    <CallToAction joinNowTexts={joinNowTexts[0]}>
+                        <GoogleLoginForm onSuccess={onSuccess} />
+                    </CallToAction>
 
                     {/* FEATURES */}
                     <div>
@@ -279,15 +295,12 @@ const Home = ({ onSuccess }) => {
                                 </Col>
                             ))}
                         </Row>
-
-                        <Row>
-                            <Col>
-                                <div>
-                                    JOIN NOW AND
-                                </div>
-                            </Col>
-                        </Row>
                     </div>
+
+                    {/* CTA */}
+                    <CallToAction joinNowTexts={joinNowTexts[1]}>
+                        <GoogleLoginForm onSuccess={onSuccess} />
+                    </CallToAction>
 
                     {/* HOW IT WORKS */}
                     <div>
@@ -310,6 +323,11 @@ const Home = ({ onSuccess }) => {
                             })}
                         </Row>
                     </div>
+
+                    {/* CTA */}
+                    <CallToAction joinNowTexts={joinNowTexts[2]}>
+                        <GoogleLoginForm onSuccess={onSuccess} />
+                    </CallToAction>
 
                     {/* FAQ */}
                     <div>
