@@ -10,6 +10,13 @@
     font-size: var(--primary-font-size);
 }
 
+.home__body-container {
+    display: grid;
+    row-gap: 200px;
+}
+
+.home__body-container>div+div {}
+
 .home__body-features-row,
 .home__body-organization-perks-row,
 .home__body-organization-examples-row,

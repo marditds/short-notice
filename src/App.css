@@ -30,7 +30,10 @@ body {
     background-attachment: fixed;
 }
 
-p::selection {
+div::selection,
+p::selection,
+span::selection,
+strong::selection {
     background-color: var(--main-accent-color) !important;
     color: black;
 }
