@@ -3,6 +3,7 @@ import { Container, Row, Col, Stack, Button } from 'react-bootstrap';
 import { GoogleLoginForm } from '../../components/LoginForm/Google/GoogleLoginForm';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
+import { Hero } from '../../components/Home/Hero';
 import { CallToAction } from '../../components/Home/CallToAction';
 import { MdOutlinePassword } from "react-icons/md";
 import { BsReply } from "react-icons/bs";
@@ -13,10 +14,6 @@ import { RiNumber1, RiNumber2, RiNumber3, RiNumber4 } from "react-icons/ri";
 import '../../components/Home/Home.css';
 
 const Home = ({ onSuccess }) => {
-
-    const [timeLeft, setTimeLeft] = useState(10);
-    const [isWaiting, setIsWaiting] = useState(false);
-    const [sampleNotice, setSampleNotice] = useState('I\'ve had a bust day 😪. Time to watch some tv 📺.');
 
     const features = [
         {
@@ -135,35 +132,6 @@ const Home = ({ onSuccess }) => {
         }
     ];
 
-
-    useEffect(() => {
-        let timer;
-
-        if (!isWaiting) {
-            if (timeLeft > 0) {
-                timer = setInterval(() => {
-                    setTimeLeft((prevTime) => prevTime - 1);
-                }, 1000);
-            } else {
-                setIsWaiting(true);
-                setSampleNotice('');
-                setTimeout(() => {
-                    setTimeLeft(10);
-                    setIsWaiting(false);
-                    setSampleNotice('\"I\'ve had a bust day 😪. Time to watch some tv 📺.\"');
-                }, 3000);
-            }
-        }
-
-        return () => clearInterval(timer);
-    }, [timeLeft, isWaiting]);
-
-    const formatTime = (seconds) => {
-        const minutes = String(Math.floor(seconds / 60)).padStart(2, "0");
-        const secs = String(seconds % 60).padStart(2, "0");
-        return `${minutes}:${secs}`;
-    };
-
     return (
         <div className='home__body d-flex flex-column min-vh-100'>
             <Header>
@@ -181,13 +149,7 @@ const Home = ({ onSuccess }) => {
                                 <div className=' py-5'>
                                     <h2 className='text-center pt-4'>Share updates and ideas in the moment. No distractions. No maintenance.</h2>
                                 </div>
-                                <p>
-                                    {/* {sampleNotice} */}
-                                    {/* {formatTime(timeLeft)} */}
-                                </p>
-                                <div>
-                                    <p>{'[A text + timer. When the timer runs out, the text fades away. Wait 3 seconds. Reset.]'}</p>
-                                </div>
+                                <Hero />
                                 <div className='d-flex align-items-center justify-content-evenly pt-3'>
                                     <h4 className='mb-0'>Join with your Google account</h4>
 
