@@ -1,7 +1,7 @@
 import React from 'react';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import snLogo from '../../../assets/sn_long.png';
+import snLogo from '../../../../assets/sn_long.png';
 import './NavigationBar.css';
 
 const NavigationBar = ({ children }) => {

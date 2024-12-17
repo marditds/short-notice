@@ -4,7 +4,7 @@ import { BsReply } from "react-icons/bs";
 import { RiSave2Line } from "react-icons/ri";
 import { BsHandThumbsUp } from 'react-icons/bs';
 import { AiOutlineExclamationCircle } from "react-icons/ai";
-import defaultAvatar from '../../assets/default.png';
+import defaultAvatar from '../../../assets/default.png';
 
 export const Hero = () => {
 

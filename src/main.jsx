@@ -13,6 +13,8 @@ import { UserProvider } from './lib/context/UserContext.jsx';
 import App from './App.jsx';
 import User from './pages/User/User.jsx';
 import Home from './pages/Home/Home.jsx';
+import About from './pages/About/About.jsx';
+import Contact from './pages/Contact/Contact.jsx';
 import './index.css';
 import CreateAccount from './pages/CreateAccount/CreateAccount.jsx';
 import UserSettings from './pages/User/Settings/UserSettings.jsx';
@@ -32,7 +34,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/about',
-        element: <Home />
+        element: <About />
       },
       {
         path: '/privacy-policy',
@@ -48,7 +50,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/contact',
-        element: <Home />
+        element: <Contact />
       },
       {
         path: 'set-username',

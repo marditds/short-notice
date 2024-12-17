@@ -1,17 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Stack, Button } from 'react-bootstrap';
+import React from 'react';
+import { Container, Row, Col } from 'react-bootstrap';
 import { GoogleLoginForm } from '../../components/LoginForm/Google/GoogleLoginForm';
-import Header from '../../components/Header/Header';
-import Footer from '../../components/Footer/Footer';
-import { Hero } from '../../components/Home/Hero';
-import { CallToAction } from '../../components/Home/CallToAction';
+// import Header from '../../components/PreLogin/Header/Header';
+// import Footer from '../../components/PreLogin/Footer/Footer';
+import { Hero } from '../../components/PreLogin/Home/Hero';
+import { CallToAction } from '../../components/PreLogin/Home/CallToAction';
 import { MdOutlinePassword } from "react-icons/md";
 import { BsReply } from "react-icons/bs";
 import { FaHeart } from "react-icons/fa";
 import { AiOutlineSave } from "react-icons/ai";
 import { RiTeamFill } from "react-icons/ri";
 import { RiNumber1, RiNumber2, RiNumber3, RiNumber4 } from "react-icons/ri";
-import '../../components/Home/Home.css';
 
 const Home = ({ onSuccess }) => {
 
@@ -138,12 +137,7 @@ const Home = ({ onSuccess }) => {
 
     return (
         <div className='home__body d-flex flex-column min-vh-100'>
-            <Header>
-                <GoogleLoginForm
-                    onSuccess={onSuccess}
-                />
-            </Header>
-            <main className='flex-grow-1 '>
+            <main className='flex-grow-1'>
                 <Container className='home__body-container'>
 
                     {/* HERO */}
@@ -296,7 +290,6 @@ const Home = ({ onSuccess }) => {
                     </div>
                 </Container>
             </main>
-            <Footer />
         </div>
     )
 }

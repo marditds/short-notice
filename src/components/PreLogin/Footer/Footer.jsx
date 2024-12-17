@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Container, Row, Col } from 'react-bootstrap';
 import { footerData } from './footerData.jsx';
-import snLogo from '../../assets/sn_long.png';
+import snLogo from '../../../assets/sn_long.png';
 import './Footer.css';
 
 
@@ -23,7 +23,7 @@ import './Footer.css';
 
 const Footer = () => {
     return (
-        <Container fluid className='footer__container mt-auto'>
+        <Container fluid className='footer__container'>
             <Container>
                 {/* LINKS */}
                 <Row md={12} className='pt-4 pb-2'>
