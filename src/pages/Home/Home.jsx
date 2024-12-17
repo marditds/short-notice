@@ -119,6 +119,10 @@ const Home = ({ onSuccess }) => {
             )
         },
         {
+            question: 'What sets apart ShortNotice from other similar platforms? Why choose ShortNotice?',
+            answer: 'At ShortNotice, the users will not encounter a cluttered environment. ShortNotice focuses on text-based [continue...]. The goal of the platform is to be an addition to the user\'s daily life and business, and not a distraction. That is why the platform values '
+        },
+        {
             question: 'Can I edit or delete my posts?',
             answer: 'Absolutely! You can edit or delete your posts anytime before they disappear. It\'s all about giving you control over what you share.'
         },
@@ -147,7 +151,7 @@ const Home = ({ onSuccess }) => {
                         <Col className='home__body-hero-col d-flex align-items-stretch'>
                             <div className='home__body-hero-col-div px-4 py-5 d-flex flex-column align-items-stretch h-100'>
                                 <div className=' py-5'>
-                                    <h2 className='text-center pt-4'>Share updates and ideas in the moment. No distractions. No maintenance.</h2>
+                                    <h2 className='text-center pt-4'>Share updates and ideas in the moment. No distractions. No maintenance. Always current.</h2>
                                 </div>
                                 <Hero />
                                 <div className='d-flex align-items-center justify-content-evenly pt-3'>

@@ -6,49 +6,51 @@ import { footerData } from './footerData.js';
 import './Footer.css';
 
 
+// About | Contact | Privacy Policy | Terms of Service | Help Center  
+// Follow Us: [Facebook][Twitter][Instagram]  
+// Download our app: [App Store Icon][Google Play Icon]  
+// © 2024 SocialMediaApp.All rights reserved.  
+
+
+
+// --------------------------------------------------
+// | Home | About | Contact | Privacy | Terms | Help |
+//     --------------------------------------------------
+//         Follow Us: [FB][IG][X][YT]
+//         © 2024 SocialApp.All rights reserved.
+// --------------------------------------------------
+
+
 const Footer = () => {
     return (
         <Container fluid className='footer__container mt-auto'>
             <Container>
-                <Row md={3} sm={2} xs={1} className='justify-content-lg-evenly align-items-start py-4'>
-                    {footerData.map((item, index) => {
+                <Row md={12} className='pt-4 pb-2'>
+                    {footerData.navigationLinks.map((nav, index) => {
                         return (
-                            <Col key={index} className='footer__col d-grid gap-2'>
-                                <h5>{item.title}</h5>
-
-                                {item.items.map((text, idx) => {
-
-                                    if (idx % 2 === 0) {
-
-                                        return (
-                                            <a key={idx}>{text}</a>
-                                        );
-
-                                    } return null;
-
-                                })}
-
+                            <Col key={index} className='footer__col d-flex justify-content-evenly'>
+                                <h6 className='mb-0'>{nav.name}</h6>
                             </Col>
                         )
                     }
                     )
                     }
+                </Row>
+                <Row className='justify-content-center py-2'>
+                    {footerData.socialLinks.map((social, index) => {
+                        return (
+                            <Col xs={1} key={index}
+                                className='footer__col d-flex justify-content-center'>
+                                <h6 className='mb-0'>{social.name}</h6>
+                            </Col>
+                        )
+                    })}
+                </Row>
+                <Row md={12} className='justify-content-center pt-2 pb-4'>
+                    <Col className='footer__col d-flex justify-content-center'>
+                        {footerData.copyright}
+                    </Col>
 
-                    {/* <Col className='footer__col d-grid gap-2 mt-md-0 mt-2'>
-                        <h5>Product</h5>
-                        <a>ShortNotice</a>
-                        <a>SN+</a>
-                    </Col>
-                    <Col className='footer__col d-grid gap-2 mt-md-0 mt-2'>
-                        <h5>Legal</h5>
-                        <a>Terms of use</a>
-                        <a>Privacy Policy</a>
-                    </Col>
-                    <Col className='footer__col d-grid gap-2 mt-md-0 mt-2'>
-                        <h5>Socials</h5>
-                        <a>Facebook</a>
-                        <a>Twitter</a>
-                    </Col> */}
                 </Row>
             </Container>
         </Container>
