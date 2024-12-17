@@ -31,6 +31,26 @@ const router = createBrowserRouter([
         element: <Home />
       },
       {
+        path: '/about',
+        element: <Home />
+      },
+      {
+        path: '/privacy-policy',
+        element: <Home />
+      },
+      {
+        path: '/tos',
+        element: <Home />
+      },
+      {
+        path: '/help-center',
+        element: <Home />
+      },
+      {
+        path: '/contact',
+        element: <Home />
+      },
+      {
         path: 'set-username',
         element: <CreateAccount />,
         loader: async () => {
