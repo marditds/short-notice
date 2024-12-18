@@ -1,11 +1,13 @@
 .home__body,
-.about__body {
+.about__body,
+.snplus__body {
     background-color: var(--main-bg-color);
     font-family: var(--primary-font-family);
 }
 
 .home__body main,
-.about__body main {
+.about__body main,
+.snplus__body main {
     /* background-color: black; */
     color: var(--main-text-color) !important;
     font-size: var(--primary-font-size);

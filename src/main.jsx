@@ -12,9 +12,12 @@ import { getUserByEmail } from './lib/context/dbhandler.js';
 import { UserProvider } from './lib/context/UserContext.jsx';
 import App from './App.jsx';
 import User from './pages/User/User.jsx';
-import Home from './pages/Home/Home.jsx';
-import About from './pages/About/About.jsx';
-import Contact from './pages/Contact/Contact.jsx';
+import Home from './pages/Home/Home';
+import About from './pages/About/About';
+import SNPlus from './pages/SNPlus/SNPlus.jsx';
+import TOS from './pages/TOS/TOS';
+import HelpCenter from './pages/HelpCenter/HelpCenter';
+import Contact from './pages/Contact/Contact';
 import './index.css';
 import CreateAccount from './pages/CreateAccount/CreateAccount.jsx';
 import UserSettings from './pages/User/Settings/UserSettings.jsx';
@@ -37,16 +40,16 @@ const router = createBrowserRouter([
         element: <About />
       },
       {
-        path: '/privacy-policy',
-        element: <Home />
+        path: '/sn-plus',
+        element: <SNPlus />
       },
       {
         path: '/tos',
-        element: <Home />
+        element: <TOS />
       },
       {
         path: '/help-center',
-        element: <Home />
+        element: <HelpCenter />
       },
       {
         path: '/contact',

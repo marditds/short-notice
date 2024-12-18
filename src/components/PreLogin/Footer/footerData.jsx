@@ -5,7 +5,7 @@ export const footerData = {
     navigationLinks: [
         { name: "Home", url: "/" },
         { name: "About", url: "/about" },
-        { name: "Privacy Policy", url: "/privacy-policy" },
+        { name: "SN Plus", url: "/sn-plus" },
         { name: "Terms of Service", url: "/tos" },
         { name: "Help Center", url: "/help-center" },
         { name: "Contact", url: "/contact" }

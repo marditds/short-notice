@@ -46,7 +46,7 @@ const NavigationBar = ({ children }) => {
                     </NavDropdown> */}
 
                     <Nav.Link href="#link">Mission</Nav.Link>
-                    <Nav.Link href="#link">SN+</Nav.Link>
+                    <Nav.Link href="#link">SN Plus</Nav.Link>
                     {children}
 
                 </Nav>

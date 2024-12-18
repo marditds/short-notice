@@ -26,13 +26,13 @@ const Footer = () => {
         <Container fluid className='footer__container'>
             <Container>
                 {/* LINKS */}
-                <Row md={12} className='pt-4 pb-2'>
+                <Row md={12} className='pt-0 pt-md-4 pb-2 justify-content-between'>
                     {/* <Col>
                         <img src={snLogo} alt='shortnotice_logo' height='26px' />
                     </Col> */}
                     {footerData.navigationLinks.map((nav, index) => {
                         return (
-                            <Col key={index} xs={12} sm={4} md={2} className='footer__col d-flex justify-content-evenly'>
+                            <Col key={index} xs={12} sm={4} md={2} className='footer__col d-flex justify-content-center'>
                                 <Link to={nav.url} className=' text-decoration-none'>
                                     <h6 className='my-1 my-sm-2 my-md-0'>
                                         {nav.name}

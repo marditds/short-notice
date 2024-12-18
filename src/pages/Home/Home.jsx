@@ -113,7 +113,7 @@ const Home = ({ onSuccess }) => {
         {
             question: 'How much does it cost?',
             answer: (
-                <span><strong>ShortNotice is available free of charge.</strong> SN+ will be launched in the near future, offering all the functionalities of ShortNotice along with exciting new features. SN+ will require interested users to pay either a monthly or one-time fee.
+                <span><strong>ShortNotice is available free of charge.</strong> SN Plus will be launched in the near future, offering all the functionalities of ShortNotice along with exciting new features. SN Plus will require interested users to pay either a monthly or one-time fee.
                 </span>
             )
         },
