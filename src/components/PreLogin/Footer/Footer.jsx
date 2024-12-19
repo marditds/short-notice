@@ -26,7 +26,7 @@ const Footer = () => {
         <Container fluid className='footer__container'>
             <Container>
                 {/* LINKS */}
-                <Row md={12} className='pt-0 pt-md-4 pb-2 justify-content-between'>
+                <Row md={12} className='pt-5 pt-md-0 pt-md-4 pb-2 justify-content-between'>
                     {/* <Col>
                         <img src={snLogo} alt='shortnotice_logo' height='26px' />
                     </Col> */}

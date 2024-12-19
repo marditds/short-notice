@@ -171,7 +171,7 @@ const Home = ({ onSuccess }) => {
                             {features.map((feature, idx) => {
                                 return (
                                     <Col as='li' key={idx}
-                                        xs={12} lg={6} xl={4}
+                                        xs={12} md={6} xl={4}
                                         className='home__body-features-col d-flex align-items-stretch'
                                     >
                                         <div className='px-3 py-2 home__body-features-col-div d-flex flex-column justify-content-between h-100'>
@@ -205,7 +205,7 @@ const Home = ({ onSuccess }) => {
                             {organizationPerks.map((perk, idx) => {
                                 return (
                                     <Col as='li' key={idx}
-                                        xs={12} lg={6} xl={4}
+                                        xs={12} md={6} xl={4}
                                         className='home__body-organization-perks-col d-flex align-items-stretch'>
                                         <div className='home__body-organization-perks-col-div px-3 py-2 d-flex flex-column justify-content-between h-100'>
                                             <div className='mt-3'>
@@ -249,11 +249,12 @@ const Home = ({ onSuccess }) => {
 
                     {/* HOW IT WORKS */}
                     <div>
-                        <Row as='ol' className='home__body-how-row list-unstyled'>
+                        <Row as='ol' className='home__body-how-row list-unstyled mb-0'>
                             <h2>HOW IT WORKS</h2>
                             {steps.map((step, idx) => {
                                 return (
                                     <Col as='li' key={idx}
+                                        xs={6} md={3}
                                         className='home__body-how-col d-flex align-items-stretch'>
                                         <div className='home__body-how-col-div px-3 py-2 d-flex flex-column justify-content-between h-100'>
                                             <div className='text-center mt-3'>

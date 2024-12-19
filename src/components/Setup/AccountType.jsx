@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Form, Row, Col } from 'react-bootstrap';
 import { BsFillPersonFill, BsBuildings } from "react-icons/bs";
 import { PiBagFill } from "react-icons/pi";
+import { AccountTypeDesc } from './AccountTypeDesc';
 
 export const AccountType = ({ setAccountType }) => {
     const [selectedType, setSelectedType] = useState(null);
@@ -22,7 +23,7 @@ export const AccountType = ({ setAccountType }) => {
             type: 'business',
             label: 'Business',
             icon: <PiBagFill size={45} color={selectedType === 'personal' ? 'var(--main-bg-color)' : 'var(--main-text-color)'} style={{ transition: '0.3s' }} />,
-            disabled: true,
+            disabled: false,
         },
         {
             type: 'organization',
@@ -57,7 +58,6 @@ export const AccountType = ({ setAccountType }) => {
                         </Col>
                     ))}
                 </Row>
-
             </Form.Group>
         </>
     );

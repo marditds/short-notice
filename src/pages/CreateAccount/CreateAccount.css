@@ -25,9 +25,12 @@
 }
 
 .createUsername__accountType--radio:hover,
-.createUsername__accountType--radio:focus,
+.createUsername__accountType--radio:focus {
+    background-color: var(--main-accent-color-hover) !important;
+}
+
 .createUsername__accountType--radio.selected {
-    background-color: blueviolet !important;
+    background-color: var(--main-accent-color) !important;
 }
 
 .createUsername__accountType--radio-input {

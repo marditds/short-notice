@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useUserContext } from '../../lib/context/UserContext';
 import { getUserByUsername } from '../../lib/context/dbhandler';
 import { AccountType } from '../../components/Setup/AccountType';
+import { AccountTypeDesc } from '../../components/Setup/AccountTypeDesc';
 import './CreateAccount.css';
 
 import ReCAPTCHA from 'react-google-recaptcha';
@@ -23,9 +24,7 @@ const CreateAccount = ({ setUser }) => {
         setGoogleUserData,
         setIsLoggedIn,
         accountType,
-        setAccountType,
-        hasAccountType,
-        setHasAccountType
+        setAccountType
     } = useUserContext();
 
     const { makePasscode } = useUserInfo();
@@ -55,7 +54,6 @@ const CreateAccount = ({ setUser }) => {
             setErrorMessage('');
         }
     }
-
 
     const handleDoneClick = async () => {
 
@@ -122,12 +120,13 @@ const CreateAccount = ({ setUser }) => {
     return (
         <Container className='
         createUsername__container 
-        
         '>
             <Form>
                 <Stack gap={3}>
 
                     <AccountType setAccountType={setAccountType} />
+
+                    <AccountTypeDesc accountType={accountType} />
 
                     <CreateUsername accountType={accountType} username={username} onUsernameChange={onUsernameChange} />
 
