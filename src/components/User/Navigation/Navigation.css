@@ -28,7 +28,7 @@
 
 .tools__search--results-modal-close-btn>svg {
     color: var(--main-accent-color);
-    transition: 0.3s;
+    transition: var(--main-transition-speed);
 }
 
 .tools__search--results-modal-close-btn:hover>svg {
@@ -42,19 +42,19 @@
     border-radius: 7px;
     background-color: transparent;
     cursor: pointer;
-    transition: 0.3s;
+    transition: var(--main-transition-speed);
 }
 
 .tools__search--search-results-profiles:hover {
     border-color: var(--main-accent-color-hover);
     color: var(--main-bg-color) !important;
-    transition: 0.3s;
+    transition: var(--main-transition-speed);
 }
 
 .tools__search--search-results-profiles>a {
     color: var(--main-text-color) !important;
     text-decoration: none;
-    transition: 0.3s;
+    transition: var(--main-transition-speed);
 }
 
 .tools__search--search-results-profiles:hover>a {
@@ -71,13 +71,13 @@
 }
 
 .tools__search--results-modal-expand-icon {
-    transition: 0.3s;
+    transition: var(--main-transition-speed);
 }
 
 .expand--icon {
     font-size: 30px;
     color: black;
-    transition: 0.3s;
+    transition: var(--main-transition-speed);
 }
 
 .expand--btn {
@@ -86,7 +86,7 @@
     padding: 0;
     border: 1px solid black !important;
     border-radius: 7px;
-    transition: 0.3s;
+    transition: var(--main-transition-speed);
 }
 
 .expand--btn:hover {
@@ -127,7 +127,7 @@
     justify-content: center;
     align-items: center;
     color: var(--main-accent-color);
-    transition: 0.3s;
+    transition: var(--main-transition-speed);
 }
 
 .userhome__body--profile--tools {
@@ -143,7 +143,7 @@
     border-bottom: 0 !important;
     border-left: 2px solid transparent !important;
     border-right: 2px solid transparent !important;
-    transition: 0.3s;
+    transition: var(--main-transition-speed);
     box-shadow: none !important;
 }
 
@@ -181,7 +181,7 @@
     padding: 4px 0;
     text-align: center;
     color: var(--main-text-color) !important;
-    transition: 0.3s;
+    transition: var(--main-transition-speed);
 }
 
 .userhome__body--profile--tools--dropdown>div>a:hover {
@@ -199,7 +199,7 @@
     border: var(--main-accent-color);
     height: 40px;
     width: 40px;
-    transition: 0.3s;
+    transition: var(--main-transition-speed);
 }
 
 .tools__search-btn:hover {
@@ -214,7 +214,7 @@
 .tools__search-field {
     border: 2px solid var(--main-accent-color);
     resize: none;
-    transition: 0.3s;
+    transition: var(--main-transition-speed);
 }
 
 .tools__search-field:focus {

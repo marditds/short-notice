@@ -124,9 +124,7 @@ const CreateAccount = ({ setUser }) => {
             <Form>
                 <Stack gap={3}>
 
-                    <AccountType setAccountType={setAccountType} />
-
-                    <AccountTypeDesc accountType={accountType} />
+                    <AccountType setAccountType={setAccountType} accountType={accountType} />
 
                     <CreateUsername accountType={accountType} username={username} onUsernameChange={onUsernameChange} />
 
