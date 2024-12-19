@@ -165,7 +165,6 @@ export const UserSearch = ({ userId }) => {
                         gap={3}
                         direction='horizontal'
                         className='d-flex flex-wrap justify-content-start'>
-                        {/* <Row className='gx-4'> */}
                         {isResultLoading ?
                             <div><Loading color={'white'} /></div>
                             :
@@ -191,44 +190,8 @@ export const UserSearch = ({ userId }) => {
                                     :
                                     'No user found')
                         }
-                        {/* </Row> */}
                     </Stack>
-                    {/* {hasMoreProfiles ?
-                        <Button
-                            onClick={handleLoadMoreProfiles}
-                            disabled={isLoadingMore || !hasMoreProfiles}
-                            className='tools__search--results-modal-expand-btn'
-                        >
-                            {isLoadingMore ?
-                                <Loading size={24} />
-                                :
-                                <>
 
-                                    <i className='bi bi-chevron-down'></i>
-                                </>
-                            }
-                        </Button>
-                        :
-                        'No more profiles'
-                    } */}
-                    {/* {hasMoreProfiles ?
-                        <Button
-                            onClick={handleLoadMoreProfiles}
-                            disabled={isLoadingMore || !hasMoreProfiles}
-                            className='w-100'
-                        >
-                            {isLoadingMore ?
-                                <Loading size={24} />
-                                :
-                                <div className='tools__search--results-modal-expand-icon d-flex justify-content-evenly align-items-center'>
-                                    Load more
-                                    <i className='bi bi-chevron-down ms-2'></i>
-                                </div>
-                            }
-                        </Button>
-                        :
-                        'No more profiles'
-                    } */}
                     {hasMoreProfiles ?
                         <Button
                             onClick={handleLoadMoreProfiles}
@@ -246,8 +209,7 @@ export const UserSearch = ({ userId }) => {
                     }
 
                 </Modal.Body>
-                {/* <Modal.Footer className='userhome__body--search-results-modal-footer'> 
-                </Modal.Footer> */}
+
             </Modal>
         </>
     )

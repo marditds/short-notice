@@ -5,6 +5,20 @@
     padding-top: 62px;
 }
 
+.user-feed__feed-guide-btn {
+    background-color: var(--main-accent-color);
+    border-color: var(--main-accent-color);
+    border-radius: var(--main-rounded-corner);
+    transition: var(--main-transition-speed) !important;
+}
+
+.user-feed__feed-guide-btn:hover,
+.user-feed__feed-guide-btn:active,
+.user-feed__feed-guide-btn:focus {
+    background-color: var(--main-accent-color-hover) !important;
+    border-color: var(--main-accent-color-hover) !important;
+}
+
 .user-feed__toggle-label {
     cursor: pointer;
 }
@@ -13,6 +27,7 @@
     background-color: var(--main-accent-color);
     border-color: var(--main-accent-color);
     color: var(--main-text-color);
+    border-radius: var(--main-rounded-corner);
 }
 
 .user-feed__refresh-btn:hover,
@@ -25,7 +40,7 @@
 .user-feed__toggle-btn>input {
     box-shadow: none !important;
     border-color: var(--main-accent-color);
-    border-radius: 3px !important;
+    border-radius: var(--main-rounded-corner) !important;
     background-image: url('../../../assets/square-fill.svg') !important;
     transition: 0.3;
     cursor: pointer;

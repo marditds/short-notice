@@ -15,7 +15,7 @@ export const GeneralFeedGuide = ({ isTagSelected }) => {
                 <OverlayTrigger
                     placement="right"
                     overlay={<Tooltip>{'Update you interests in your profile settings.'}</Tooltip>}>
-                    <Button>
+                    <Button className='user-feed__feed-guide-btn'>
                         <FaCircleExclamation />
                     </Button>
                 </OverlayTrigger>
