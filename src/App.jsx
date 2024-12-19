@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import { useNavigate, Outlet } from 'react-router-dom';
-import Home from './pages/Home/Home';
-import PreLogin from './components/PreLogin/PreLogin.jsx';
+import PreLogin from './pages/PreLogin/PreLogin.jsx';
 import CreateAccount from './pages/CreateAccount/CreateAccount.jsx';
 import { jwtDecode } from "jwt-decode";
 import 'bootstrap/dist/css/bootstrap.min.css';

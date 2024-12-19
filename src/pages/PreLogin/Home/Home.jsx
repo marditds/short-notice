@@ -1,10 +1,10 @@
 import React from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
-import { GoogleLoginForm } from '../../components/LoginForm/Google/GoogleLoginForm';
+import { GoogleLoginForm } from '../../../components/LoginForm/Google/GoogleLoginForm';
 // import Header from '../../components/PreLogin/Header/Header';
 // import Footer from '../../components/PreLogin/Footer/Footer';
-import { Hero } from '../../components/PreLogin/Home/Hero';
-import { CallToAction } from '../../components/PreLogin/Home/CallToAction';
+import { Hero } from '../../../components/PreLogin/Home/Hero';
+import { CallToAction } from '../../../components/PreLogin/Home/CallToAction';
 import { MdOutlinePassword } from "react-icons/md";
 import { BsReply } from "react-icons/bs";
 import { FaHeart } from "react-icons/fa";

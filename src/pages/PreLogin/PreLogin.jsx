@@ -1,14 +1,14 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
-import Header from './Header/Header';
-import Footer from './Footer/Footer';
-import { GoogleLoginForm } from '../LoginForm/Google/GoogleLoginForm';
-import Home from '../../pages/Home/Home';
-import About from '../../pages/About/About';
-import SNPlus from '../../pages/SNPlus/SNPlus';
-import TOS from '../../pages/TOS/TOS';
-import HelpCenter from '../../pages/HelpCenter/HelpCenter';
-import Contact from '../../pages/Contact/Contact';
+import Header from '../../components/PreLogin/Header/Header';
+import Footer from '../../components/PreLogin/Footer/Footer';
+import { GoogleLoginForm } from '../../components/LoginForm/Google/GoogleLoginForm';
+import Home from './Home/Home';
+import About from './About/About';
+import SNPlus from './SNPlus/SNPlus';
+import TOS from './TOS/TOS';
+import HelpCenter from './HelpCenter/HelpCenter';
+import Contact from './Contact/Contact';
 import './PreLogin.css';
 
 const PreLogin = ({ onSuccess }) => {

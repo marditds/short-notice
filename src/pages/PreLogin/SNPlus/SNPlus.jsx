@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Row, Col, Image } from 'react-bootstrap';
-import sn_large from '../../assets/sn_large.png';
+import sn_large from '../../../assets/sn_large.png';
 
 const SNPlus = () => {
     return (
