@@ -32,6 +32,7 @@ export const CreateUsername = ({ accountType, username, onUsernameChange }) => {
                 value={username || ''}
                 onChange={onUsernameChange}
                 disabled={accountType === ''}
+                className='createUsername__username-field'
             />
             <Form.Text className='text-muted'>
                 {

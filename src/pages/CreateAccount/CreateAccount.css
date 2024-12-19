@@ -58,6 +58,29 @@
     color: var(--main-bg-color);
 }
 
+.createUsername__username-field,
+.setPasscode__passcode-field {
+    box-shadow: none !important;
+    border-radius: var(--main-rounded-corner) !important;
+}
+
+.createUsername__username-field:focus,
+.setPasscode__passcode-field:focus {
+    border-color: var(--main-accent-color-hover) !important;
+}
+
+.createAccount__btn {
+    background-color: var(--main-accent-color) !important;
+    color: var(--main-text-color) !important;
+    border-color: var(--main-accent-color) !important;
+    border-radius: var(--main-rounded-corner) !important;
+    min-width: 80px;
+}
+
+.createAccount__btn:hover {
+    background-color: var(--main-accent-color-hover) !important;
+}
+
 @media (min-width:576px) and (max-width: 767px) {
     .createUsername__accountType--radio {
         width: 160px;
@@ -65,10 +88,20 @@
     }
 }
 
+@media (max-width: 767px) {
+    .createUsername__container {
+        font-size: var(--mobile-font-size);
+    }
+}
+
 @media (max-width: 575px) {
     .createUsername__accountType--radio {
         width: 100%;
         height: 80px;
+    }
+
+    .createAccount__btn {
+        min-width: 49%;
     }
 }
 

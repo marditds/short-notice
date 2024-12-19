@@ -10,7 +10,7 @@
 .snplus__body main {
     /* background-color: black; */
     color: var(--main-text-color) !important;
-    font-size: var(--primary-font-size);
+    font-size: var(--pc-font-size);
 }
 
 .home__body-container {

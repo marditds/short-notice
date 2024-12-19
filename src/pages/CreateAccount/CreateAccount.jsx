@@ -5,9 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useUserContext } from '../../lib/context/UserContext';
 import { getUserByUsername } from '../../lib/context/dbhandler';
 import { AccountType } from '../../components/Setup/AccountType';
-import { AccountTypeDesc } from '../../components/Setup/AccountTypeDesc';
 import './CreateAccount.css';
-
 import ReCAPTCHA from 'react-google-recaptcha';
 import { CreateUsername } from '../../components/Setup/CreateUsername';
 import { SetPasscode } from '../../components/Setup/SetPasscode';
@@ -139,10 +137,11 @@ const CreateAccount = ({ setUser }) => {
                         />
                     </div>
 
-                    <div>
+                    <div className='d-flex justify-content-between justify-content-sm-start'>
                         <Button
                             onClick={handleDoneClick}
                             disabled={!isCaptchaVerified || !username || username.trim() === '' || (accountType === 'organization' && passcode.length !== 6)}
+                            className='createAccount__btn'
                         >
                             Done
                         </Button>
@@ -155,7 +154,8 @@ const CreateAccount = ({ setUser }) => {
                                 console.log('Logged out successfully.');
                                 window.location.href = '/';
 
-                            }}>
+                            }}
+                            className='createAccount__btn ms-sm-2'>
                             Cancel
                         </Button>
                     </div>

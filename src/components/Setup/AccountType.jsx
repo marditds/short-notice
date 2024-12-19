@@ -38,9 +38,11 @@ export const AccountType = ({ setAccountType, accountType }) => {
             <Form.Group className='mb-3' controlId='accountType'>
                 <Form.Label>Select Account Type:</Form.Label>
                 <Row xs={2} sm={1}>
-                    <Col className='d-grid d-sm-flex justify-content-evenly'>
+                    <Col className='d-flex flex-column flex-sm-row justify-content-evenly'>
                         {accountTypes.map((accountType) => (
-                            <div key={accountType.type}>
+                            <div key={accountType.type}
+                            // className='w-100'
+                            >
                                 <label
                                     className={`d-flex flex-column justify-content-center align-items-center createUsername__accountType--radio ${selectedType === accountType.type ? 'selected' : ''}`}
                                     onClick={() => !accountType.disabled && handleSelection(accountType.type)}

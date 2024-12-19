@@ -12,7 +12,8 @@
     --main-caution-color-hover: #9b1212;
     --main-rounded-corner: 8px;
     --main-transition-speed: 0.3s;
-    --primary-font-size: 16px;
+    --pc-font-size: 16px;
+    --mobile-font-size: 10px;
     /* --primary-font-family: 'Poppins', sans-serif; */
     /* --primary-font-family: 'Outfit', sans-serif; */
     --primary-font-family: 'Inter', sans-serif;
@@ -29,6 +30,9 @@ body {
 
     background-repeat: no-repeat;
     background-attachment: fixed;
+
+    font-size: var(--pc-font-size);
+    transition: var(--main-transition-speed);
 }
 
 *::selection {
