@@ -61,6 +61,7 @@
 .createUsername__username-field,
 .setPasscode__passcode-field {
     box-shadow: none !important;
+    max-height: 38px;
     border-radius: var(--main-rounded-corner) !important;
 }
 
@@ -89,8 +90,15 @@
 }
 
 @media (max-width: 767px) {
-    .createUsername__container {
-        font-size: var(--mobile-font-size);
+
+    .createUsername__container,
+    .createUsername__username-field,
+    .createAccount__btn {
+        font-size: var(--mobile-font-size) !important;
+    }
+
+    .setPasscode__passcode-field {
+        max-height: 29px;
     }
 }
 

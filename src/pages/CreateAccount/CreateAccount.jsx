@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { googleLogout } from '@react-oauth/google';
-import { Container, Stack, Form, Button, Alert, } from 'react-bootstrap';
+import { Container, Stack, Row, Col, Form, Button, Alert, } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useUserContext } from '../../lib/context/UserContext';
 import { getUserByUsername } from '../../lib/context/dbhandler';
@@ -124,12 +124,16 @@ const CreateAccount = ({ setUser }) => {
 
                     <AccountType setAccountType={setAccountType} accountType={accountType} />
 
-                    <CreateUsername accountType={accountType} username={username} onUsernameChange={onUsernameChange} />
+                    <Row xs={1} sm={2} className='align-items-end'>
+                        <Col>
+                            <CreateUsername accountType={accountType} username={username} onUsernameChange={onUsernameChange} />
 
-                    {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
-
-                    <SetPasscode accountType={accountType} passcode={passcode} onPasscodeChange={onPasscodeChange} />
-
+                            {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
+                        </Col>
+                        <Col>
+                            <SetPasscode accountType={accountType} passcode={passcode} onPasscodeChange={onPasscodeChange} />
+                        </Col>
+                    </Row>
                     <div className='mb-3'>
                         <ReCAPTCHA
                             sitekey={import.meta.env.VITE_CAPTCHA_SITE_KEY}
