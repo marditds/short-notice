@@ -7,7 +7,7 @@ export const Visibility = () => {
     const [privacyStatus, setPrivacyStatus] = useState('Public');
 
     return (
-        <Row>
+        <Row xs={1} sm={2}>
             <Col>
                 <h4>Privacy:</h4>
                 <p>Set your account's visibility to private.</p>

@@ -8,7 +8,8 @@
     /* align-items: end; */
 }
 
-.setting__avatar-display {
+.setting__avatar-display,
+.settings__blocked-accounts-profile-avatar {
     --r: 8px;
     aspect-ratio: cos(30deg);
     --_g: calc(tan(60deg)*var(--r)) right var(--r), #000 98%, #0000 101%;
@@ -62,6 +63,8 @@
     background-color: var(--main-accent-color) !important;
     color: black !important;
     border: none;
+    border-radius: var(--main-rounded-corner) !important;
+    width: fit-content;
 }
 
 .settings__unblocked-btn:hover>svg {
@@ -83,6 +86,7 @@
     border-color: transparent;
     border-style: groove;
     transition: var(--main-transition-speed);
+    max-width: 369px !important;
 }
 
 .settings__username-field:focus {
@@ -104,6 +108,7 @@
     max-width: 500px;
     display: flex;
     flex-wrap: wrap;
+    /* justify-content: space-between; */
     gap: 10px;
     margin: 10px
 }
@@ -127,6 +132,11 @@
     color: black
 }
 
+.settings__update-interests-btn {
+    margin-left: 10px;
+    margin-top: 10px;
+}
+
 .settings__update-interests-btn,
 .settings__load-blocked-btn,
 .settings__delete-account-btn {
@@ -138,7 +148,7 @@
     padding-inline: 12px;
     padding-block: 8px;
     border: 1px solid var(--main-accent-color);
-    border-radius: 7px;
+    border-radius: var(--main-rounded-corner);
     background-color: transparent;
     /* cursor: pointer; */
     transition: var(--main-transition-speed);
@@ -158,25 +168,39 @@
 
 @media (max-width: 767px) {
 
-    .setting__avatar-display {
-        height: 75px;
+    .setting__avatar-display,
+    .settings__username-display {
+        height: 75px !important;
         margin-right: 30px !important;
     }
 
-    .settings__upload-avatar-field {
+    .settings__upload-avatar-field,
+    .settings__username-field {
         width: 80px !important;
+        padding-inline: 6px;
     }
 
     .settings__upload-avatar-field,
+    .settings__username-field,
     .settings__delete-avatar-btn,
     .settings__update-username-btn,
     .settings__update-interests-btn,
+    .settings__load-blocked-btn,
     .settings__delete-account-btn,
     .settings__delete-account-btn {
         font-size: var(--mobile-font-size) !important;
         height: 31px;
         display: flex;
         align-items: center;
+    }
+
+    .settings__blocked-accounts-profiles {
+        padding-inline: 8px;
+        padding-block: 4px;
+    }
+
+    .settings__blocked-accounts-profile-avatar {
+        height: 60px;
     }
 }
 
@@ -188,16 +212,17 @@
 
     .settings__upload-avatar-form {
         width: 50%;
-        display: flex;
-        justify-content: space-evenly;
-        align-items: center;
+        /* display: flex; */
+        /* justify-content: space-evenly; */
+        /* align-items: center; */
     }
 
     .settings__upload-avatar-label {
         margin-bottom: 0;
     }
 
-    .settings__upload-avatar-field {
+    .settings__upload-avatar-field,
+    .settings__username-field {
         width: 100% !important;
     }
 

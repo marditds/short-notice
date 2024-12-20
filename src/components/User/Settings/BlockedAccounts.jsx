@@ -135,49 +135,45 @@ export const BlockedAccounts = () => {
 
 
     return (
-        <Row>
+        <Row xs={1} sm={2}>
             <Col>
                 <h4>Blocked Accounts:</h4>
                 <p>You can unblock the accounts by clicking on the 'X' button next to the username.</p>
             </Col>
-            <Col className='d-flex flex-wrap gap-2'>
-                {isBlockListInitialRunLoading || isUnblockingLoading ?
-                    <div><Loading size={24} /></div> :
-                    (
-                        blockedUsers?.map((user) => {
-                            return (
-                                <div key={user.$id} className='d-flex justify-content-start  align-items-start'>
-                                    <div className='d-flex w-100 align-items-center settings__blocked-accounts-profiles'>
-                                        {user.username}
-                                        < img src={avatarUrl(user.avatar) || defaultAvatar}
-                                            alt="Profile"
-                                            style={{
-                                                borderRadius: '50%',
-                                                width: '50px',
-                                                height: '50px',
-                                                marginLeft: '12px'
-                                            }}
-                                            className='d-flex'
-                                        />
-                                        <Button
-                                            onClick={async () => handleDelteBlock(user.$id)}
-                                            className='p-0 d-flex align-items-center justify-content-center 
+            <Col >
+                <div className='d-flex justify-content-start flex-wrap gap-2'>
+                    {isBlockListInitialRunLoading || isUnblockingLoading ?
+                        <div><Loading size={24} /></div> :
+                        (
+                            blockedUsers?.map((user) => {
+                                return (
+                                    <div key={user.$id} className='d-flex justify-content-start  align-items-start'>
+                                        <div className='d-flex w-100 align-items-center settings__blocked-accounts-profiles'>
+                                            {user.username}
+                                            < img src={avatarUrl(user.avatar) || defaultAvatar}
+                                                alt="profile_pic"
+                                                className='d-flex settings__blocked-accounts-profile-avatar'
+                                            />
+                                            <Button
+                                                onClick={async () => handleDelteBlock(user.$id)}
+                                                className='p-0 d-flex align-items-center justify-content-center 
                                             settings__unblocked-btn
                                             '
-                                            style={{
-                                                marginLeft: '12px'
-                                            }}
-                                        >
-
-                                            <AiFillCloseCircle size={24} color='var(--main-accent-color)' />
-                                        </Button>
+                                                style={{
+                                                    marginLeft: '12px'
+                                                }}
+                                            >
+                                                <AiFillCloseCircle size={24} color='var(--main-accent-color)' />
+                                            </Button>
+                                        </div>
                                     </div>
-                                </div>
-                            )
-                        })
-                    )
-                }
-                <div>
+                                )
+                            })
+                        )
+                    }
+                    {blockedUsers?.length < 1 ? <div>Blocked accounts appear here.</div> : null}
+                </div>
+                <div className='mt-2'>
                     {hasMoreBlockedProfiles ?
                         <Button
                             onClick={handleLoadMoreProfiles}
@@ -191,7 +187,6 @@ export const BlockedAccounts = () => {
                         :
                         'No more profiles'
                     }</div>
-                {blockedUsers?.length < 1 ? <div>Blocked accounts appear here.</div> : null}
             </Col>
         </Row>
     )

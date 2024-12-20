@@ -100,41 +100,32 @@ export const Interests = () => {
         }
     };
 
-
+    const allTags = tagCategories.flatMap(category => category.tags);
 
     return (
-        <Row>
+        <Row xs={1} sm={2}>
             <Col>
-                <h4>Update Interests:</h4>
+                <h4 className='mb-0 mb-sm-2'>Update Interests:</h4>
                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugit, vitae!.</p>
             </Col>
             <Col className='d-flex'>
-
-
-                <div className='d-grid'>
+                <div className='d-grid  w-100'>
                     <div
-                        className='mb-1'
+                        className='d-flex flex-wrap'
                     >
-                        {
-                            tagCategories.map((category, idx) => (
+                        {allTags.map((tag) => (
+                            <div
+                                key={tag.key}
+                                className='settings__update-interests-tag-col' >
                                 <div
-                                    key={idx}
-                                    className='settings__update-interests-tag-col' >
-                                    {
-                                        category.tags.map((tag, index) => (
-                                            <div
-                                                key={tag.key}
-                                                onClick={() => toggleTag(tag.key)}
+                                    onClick={() => toggleTag(tag.key)}
 
-                                                className={`settings__update-interests-tag ${selectedTags[tag.key] && 'tagIsChecked'}`}
-                                            >
-                                                {tag.name}
-                                            </div>
-                                        ))
-                                    }
+                                    className={`settings__update-interests-tag ${selectedTags[tag.key] && 'tagIsChecked'}`}
+                                >
+                                    {tag.name}
                                 </div>
-                            ))
-                        }
+                            </div>
+                        ))}
                     </div>
                     <Button
                         onClick={handleUpdateInterests}

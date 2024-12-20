@@ -76,7 +76,7 @@ export const DeleteAccount = () => {
 
     return (
         <>
-            <Row>
+            <Row xs={1} sm={2}>
                 <Col>
                     <h4>Delete Account:</h4>
                     <p>WARNING: Deleting your account will result in the loss of all data, which cannot be recovered. Please proceed with caution.</p>

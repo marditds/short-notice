@@ -100,7 +100,7 @@ export const Avatar = () => {
                                 </>
                             )}
                     </Form.Group>
-                    <Col>
+                    <Col className="">
                         <Button
                             onClick={handleDeleteAvatar}
                             disabled={isDeleting ? true : false}

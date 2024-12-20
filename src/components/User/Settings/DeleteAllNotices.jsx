@@ -33,7 +33,7 @@ export const DeleteAllNotices = () => {
 
     return (
         <>
-            <Row>
+            <Row xs={1} sm={2}>
                 <Col>
                     <h4>Delete All Notices:</h4>
                     <p>WARNING: Deleting your notices will result in the loss of all data, which cannot be recovered. Please proceed with caution.</p>
