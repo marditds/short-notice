@@ -28,6 +28,9 @@
     border-color: var(--main-accent-color);
     color: var(--main-text-color);
     border-radius: var(--main-rounded-corner);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .user-feed__refresh-btn:hover,
@@ -35,6 +38,12 @@
     background-color: var(--main-accent-color-hover) !important;
     border-color: var(--main-accent-color-hover) !important;
     color: var(--main-text-color) !important;
+}
+
+.user-feed__toggle-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .user-feed__toggle-btn>input {
@@ -57,4 +66,13 @@
     background-color: white !important;
     border-color: var(--main-accent-color);
     background-image: url('../../../assets/square-fill.svg') !important;
+}
+
+@media (max-width: 767px) {
+
+    .user-feed__refresh-btn {
+        height: 23px !important;
+        width: 23px !important;
+    }
+
 }

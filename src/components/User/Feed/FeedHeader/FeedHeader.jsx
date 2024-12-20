@@ -8,8 +8,10 @@ import '../Feed.css'
 
 export const FeedHeader = ({ isTagSelected, isFeedToggled, handleFeedToggle, handleRefresh }) => {
     return (
-        <Row className='fixed-top ms-auto me-auto d-flex align-items-center user-feed__header'>
-            <Col>
+        <Row className='fixed-top ms-auto me-auto user-feed__header'>
+            <Col
+                className={!isTagSelected ? 'd-block' : 'd-none'}
+            >
                 <GeneralFeedGuide
                     isTagSelected={isTagSelected}
                 />
@@ -21,7 +23,7 @@ export const FeedHeader = ({ isTagSelected, isFeedToggled, handleFeedToggle, han
                     handleRefresh={handleRefresh}
                 />
             </Col>
-            <Col className='col d-none d-lg-block'></Col>
+            {/* <Col className='col d-none d-md-block'>aaa</Col> */}
         </Row>
     )
 }

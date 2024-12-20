@@ -160,7 +160,7 @@ export const UserSearch = ({ userId }) => {
                         <SlClose size={32} />
                     </Button>
                 </Modal.Header>
-                <Modal.Body>
+                <Modal.Body className='tools__search--results-modal-body'>
                     <Stack
                         gap={3}
                         direction='horizontal'
