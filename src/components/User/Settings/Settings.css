@@ -2,8 +2,45 @@
     margin-top: 42px;
 }
 
+.settings__upload-avatar-form {
+    flex-direction: column;
+    /* justify-content: center; */
+    /* align-items: end; */
+}
+
+.setting__avatar-display {
+    --r: 8px;
+    aspect-ratio: cos(30deg);
+    --_g: calc(tan(60deg)*var(--r)) right var(--r), #000 98%, #0000 101%;
+    mask:
+        conic-gradient(from 240deg at calc(200% - 3*var(--r)/2), #000 60deg, #0000 0) 100% 0/calc(100% - 3*var(--r)/2) 100% no-repeat,
+        radial-gradient(var(--r) at calc(2*var(--r)) 50%, #000 98%, #0000 101%),
+        radial-gradient(var(--r) at top var(--_g)),
+        radial-gradient(var(--r) at bottom var(--_g));
+    clip-path: polygon(0 50%, 100% 100%, 100% 0);
+    object-fit: cover;
+    object-position: left center;
+    height: 95px;
+}
+
+.settings__upload-avatar-field {
+    height: 38px;
+    transition: var(--main-transition-speed);
+}
+
+.settings__upload-avatar-field:hover,
+.settings__upload-avatar-field:focus,
+.settings__upload-avatar-field:active {
+    box-shadow: none;
+}
+
+.settings__upload-avatar-field:focus,
+.settings__upload-avatar-field:active {
+    border-color: var(--main-accent-color-hover);
+}
+
 .settings__unblocked-btn,
-.settings__unblocked-btn։focus,
+.settings__unblocked-btn:focus,
 .settings__unblocked-btn:active,
 .settings__unblocked-btn:hover {
     color: transparent !important;
@@ -116,4 +153,52 @@
 
 .settings__delete-account-btn:hover {
     background-color: var(--main-caution-color-hover) !important;
+}
+
+
+@media (max-width: 767px) {
+
+    .setting__avatar-display {
+        height: 75px;
+        margin-right: 30px !important;
+    }
+
+    .settings__upload-avatar-field {
+        width: 80px !important;
+    }
+
+    .settings__upload-avatar-field,
+    .settings__delete-avatar-btn,
+    .settings__update-username-btn,
+    .settings__update-interests-btn,
+    .settings__delete-account-btn,
+    .settings__delete-account-btn {
+        font-size: var(--mobile-font-size) !important;
+        height: 31px;
+        display: flex;
+        align-items: center;
+    }
+}
+
+@media (max-width: 575px) {
+
+    .setting__avatar-display {
+        margin-right: 0 !important;
+    }
+
+    .settings__upload-avatar-form {
+        width: 50%;
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+    }
+
+    .settings__upload-avatar-label {
+        margin-bottom: 0;
+    }
+
+    .settings__upload-avatar-field {
+        width: 100% !important;
+    }
+
 }

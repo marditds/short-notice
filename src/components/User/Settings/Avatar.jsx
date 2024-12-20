@@ -69,25 +69,19 @@ export const Avatar = () => {
     }
 
     return (
-        <Row>
-            <Col>
+        <Row xs={1} sm={2} >
+            <Col className='d-flex d-sm-block align-items-baseline'>
                 <h4>Update Avatar:</h4>
-                <p>Add, update, or delete your avatar.</p>
+                <p className='mb-0 ms-2 ms-sm-0'>Add, update, or delete your avatar.</p>
             </Col>
-            <Col className='d-flex justify-content-start align-items-center'>
+            <Col className='d-flex justify-content-md-start justify-content-evenly align-items-center mt-2 mt-sm-0'>
                 <img
                     src={avatarUrl ? avatarUrl : defaultAvatar}
-                    alt="Profile"
-                    style={{
-                        borderRadius: '50%',
-                        width: '100px',
-                        height: '100px',
-                        objectFit: 'cover'
-                    }}
-                    className='me-5 d-flex'
+                    alt='user_avatar'
+                    className='me-5 d-flex setting__avatar-display'
                 />
-                <Form>
-                    <Form.Group className="mb-3" controlId="profilePictureUpload">
+                <Form as={Row} className='settings__upload-avatar-form'>
+                    <Form.Group as={Col} className="mb-3" controlId="profilePictureUpload">
 
                         {isUploading ?
                             (
@@ -97,22 +91,25 @@ export const Avatar = () => {
                             )
                             : (
                                 <>
-                                    <Form.Label>Upload Profile Picture</Form.Label>
+                                    <Form.Label className='settings__upload-avatar-label'>Upload Profile Picture</Form.Label>
                                     <Form.Control
                                         type="file"
                                         onChange={handleFileChange}
+                                        className='settings__upload-avatar-field'
                                     />
                                 </>
                             )}
                     </Form.Group>
-                    <Button
-                        onClick={handleDeleteAvatar}
-                        disabled={isDeleting ? true : false}
-                        className='float-start settings__delete-avatar-btn'
-                    >
-                        {isDeleting ? 'Deleting...' : 'Delete Avatar'}
-                        {isDeleting && <Loading />}
-                    </Button>
+                    <Col>
+                        <Button
+                            onClick={handleDeleteAvatar}
+                            disabled={isDeleting ? true : false}
+                            className='float-start settings__delete-avatar-btn'
+                        >
+                            {isDeleting ? 'Deleting...' : 'Delete Avatar'}
+                            {isDeleting && <Loading />}
+                        </Button>
+                    </Col>
                 </Form>
 
             </Col>

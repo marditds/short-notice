@@ -181,7 +181,6 @@ export const UserSearch = ({ userId }) => {
                                             {user?.username}
                                             < img src={avatarUrl(user.avatar) || defaultAvatar}
                                                 alt="Profile"
-                                                style={{ marginLeft: '12px' }}
                                                 className='d-flex tools__search--search-results-profiles-avatar'
                                             />
                                         </Link>

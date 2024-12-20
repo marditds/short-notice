@@ -23,7 +23,6 @@ export const FeedHeader = ({ isTagSelected, isFeedToggled, handleFeedToggle, han
                     handleRefresh={handleRefresh}
                 />
             </Col>
-            {/* <Col className='col d-none d-md-block'>aaa</Col> */}
         </Row>
     )
 }

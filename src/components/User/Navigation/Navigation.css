@@ -79,6 +79,7 @@
     object-fit: cover;
     object-position: left center;
     height: 65px;
+    margin-left: 12px;
 }
 
 .tools__search--search-results-profiles:hover {
@@ -257,6 +258,16 @@
     .tools__search-btn {
         height: 31px;
         width: 31px;
+    }
+
+    .tools__search--search-results-profiles {
+        padding-inline: 8px;
+        padding-block: 0px;
+    }
+
+    .tools__search--search-results-profiles-avatar {
+        margin-left: 3px;
+        height: 55px;
     }
 
 }
