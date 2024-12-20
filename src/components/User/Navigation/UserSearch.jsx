@@ -46,13 +46,13 @@ export const UserSearch = ({ userId }) => {
 
             const blockedUsers = await getBlockedUsersByUser(userId);
 
-            console.log('blockedUsers:', blockedUsers);
+            // console.log('blockedUsers:', blockedUsers);
 
             const filteredUsers = users.documents.filter((user) =>
                 !blockedUsers.some((blocked) => user.$id === blocked.blocked_id)
             );
 
-            console.log('filteredUsers,', filteredUsers);
+            // console.log('filteredUsers,', filteredUsers);
 
             if (filteredUsers) {
                 setUsersResult(prevUsers => {
@@ -64,11 +64,11 @@ export const UserSearch = ({ userId }) => {
             } else {
                 return 'No results';
             }
-            if (filteredUsers?.length < limit) {
+            if (users?.documents.length < limit) {
                 setHasMoreProfiles(false);
             } else {
                 setHasMoreProfiles(true);
-                setLastId(filteredUsers[filteredUsers.length - 1].$id);
+                setLastId(users.documents[users.documents.length - 1].$id);
             }
         } catch (error) {
             console.error('Error listing users:', error);
@@ -166,7 +166,7 @@ export const UserSearch = ({ userId }) => {
                         direction='horizontal'
                         className='d-flex flex-wrap justify-content-start'>
                         {isResultLoading ?
-                            <div><Loading color={'white'} /></div>
+                            <div><Loading size={24} color={'var(--main-text-color)'} /></div>
                             :
                             (
                                 usersResult ? usersResult?.map((user) =>
@@ -181,8 +181,8 @@ export const UserSearch = ({ userId }) => {
                                             {user?.username}
                                             < img src={avatarUrl(user.avatar) || defaultAvatar}
                                                 alt="Profile"
-                                                style={{ borderRadius: '50%', width: 50, height: 50, marginLeft: '12px' }}
-                                                className='d-flex'
+                                                style={{ marginLeft: '12px' }}
+                                                className='d-flex tools__search--search-results-profiles-avatar'
                                             />
                                         </Link>
                                     </div>
@@ -196,12 +196,12 @@ export const UserSearch = ({ userId }) => {
                         <Button
                             onClick={handleLoadMoreProfiles}
                             disabled={isLoadingMore || !hasMoreProfiles}
-                            className='w-100 expand--btn'
+                            className='w-100 tools__search--results-expand-btn'
                         >
                             {isLoadingMore ?
-                                <Loading size={24} />
+                                <Loading size={24} color={'var(--main-accent-color)'} />
                                 :
-                                <i className='bi bi-chevron-down expand--icon'></i>
+                                <i className='bi bi-chevron-down tools__search--results-expand-btn-icon'></i>
                             }
                         </Button>
                         :

@@ -13,14 +13,16 @@
 }
 
 .tools__search--results-modal>div {
-    height: 90%;
+    height: 100%;
+    margin-block: 0;
+    max-width: 700px;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
 .tools__search--results-modal>div>div {
-    height: max-content !important;
+
     background-color: rgb(var(--main-bg-color), 0.8) !important;
     border: 1px solid var(--main-accent-color);
     border-radius: var(--main-rounded-corner);
@@ -34,8 +36,7 @@
 .tools__search--results-modal-close-btn,
 .tools__search--results-modal-close-btn:hover,
 .tools__search--results-modal-close-btn:focus,
-.tools__search--results-modal-close-btn:active,
-.tools__search--results-modal-expand-icon {
+.tools__search--results-modal-close-btn:active {
     background-color: transparent !important;
     border: 0;
 }
@@ -53,10 +54,25 @@
     padding-inline: 12px;
     padding-block: 8px;
     border: 1px solid var(--main-accent-color);
-    border-radius: 7px;
+    border-radius: var(--main-rounded-corner);
     background-color: transparent;
     cursor: pointer;
     transition: var(--main-transition-speed);
+}
+
+.tools__search--search-results-profiles-avatar {
+    --r: 8px;
+    aspect-ratio: cos(30deg);
+    --_g: calc(tan(60deg)*var(--r)) right var(--r), #000 98%, #0000 101%;
+    mask:
+        conic-gradient(from 240deg at calc(200% - 3*var(--r)/2), #000 60deg, #0000 0) 100% 0/calc(100% - 3*var(--r)/2) 100% no-repeat,
+        radial-gradient(var(--r) at calc(2*var(--r)) 50%, #000 98%, #0000 101%),
+        radial-gradient(var(--r) at top var(--_g)),
+        radial-gradient(var(--r) at bottom var(--_g));
+    clip-path: polygon(0 50%, 100% 100%, 100% 0);
+    object-fit: cover;
+    object-position: left center;
+    height: 65px;
 }
 
 .tools__search--search-results-profiles:hover {
@@ -84,64 +100,40 @@
     filter: sepia(1) hue-rotate(100deg) saturate(6) brightness(0.7);
 }
 
-.tools__search--results-modal-expand-icon {
+
+.tools__search--results-expand-btn-icon {
+    font-size: 25px;
+    color: var(--main-accent-color);
     transition: var(--main-transition-speed);
 }
 
-.expand--icon {
-    font-size: 30px;
-    color: black;
-    transition: var(--main-transition-speed);
-}
-
-.expand--btn {
+.tools__search--results-expand-btn,
+.tools__search--results-expand-btn:disabled {
     margin-top: 15px;
     background-color: transparent;
+    height: 39.5px !important;
     padding: 0;
-    border: 1px solid black !important;
-    border-radius: 7px;
+    border: 1px solid var(--main-accent-color) !important;
+    border-radius: var(--main-rounded-corner);
     transition: var(--main-transition-speed);
 }
 
-.expand--btn:hover {
+.tools__search--results-expand-btn:hover {
     background-color: transparent;
     border-color: var(--main-accent-color-hover) !important;
 }
 
-.expand--btn:active {
+.tools__search--results-expand-btn:active {
     background-color: var(--main-accent-color-hover) !important;
 }
 
-.expand--btn:hover>.expand--icon {
+.tools__search--results-expand-btn:hover>.tools__search--results-expand-btn-icon {
     color: var(--main-accent-color-hover) !important;
 }
 
-.expand--btn:active>.expand--icon {
+.tools__search--results-expand-btn:active>.tools__search--results-expand-btn-icon {
     border-color: var(--main-accent-color);
     color: var(--main-accent-color) !important;
-}
-
-.tools__search--results-modal-expand-icon:hover,
-.tools__search--results-modal-expand-icon:active,
-.tools__search--results-modal-expand-icon:focus,
-.tools__search--results-modal-expand-icon:hover>i,
-.tools__search--results-modal-expand-icon:active>i,
-.tools__search--results-modal-expand-icon:focus>i {
-    color: var(--main-accent-color-hover) !important;
-    border-color: var(--main-accent-color-hover) !important;
-}
-
-.tools__search--results-modal-expand-icon>i {
-    border: 2px solid var(--main-accent-color);
-    height: 32px;
-    width: 32px;
-    border-radius: 50%;
-    font-size: 22px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: var(--main-accent-color);
-    transition: var(--main-transition-speed);
 }
 
 .userhome__body--profile--tools {
