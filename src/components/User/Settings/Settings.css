@@ -2,10 +2,8 @@
     margin-top: 42px;
 }
 
-.settings__upload-avatar-form {
-    flex-direction: column;
-    /* justify-content: center; */
-    /* align-items: end; */
+.settings__sections {
+    gap: 48px;
 }
 
 .setting__avatar-display,
@@ -81,12 +79,18 @@
     color: black !important;
 }
 
+.settings__username-form {
+    width: 100%;
+}
+
 .settings__username-field {
     border-width: 1.5px;
     border-color: transparent;
     border-style: groove;
     transition: var(--main-transition-speed);
-    max-width: 369px !important;
+    /* Maximum width is 369px */
+    /* box-sizing: border-box; */
+    /* Ensure padding and border are included in the width */
 }
 
 .settings__username-field:focus {
@@ -168,14 +172,17 @@
 
 @media (max-width: 767px) {
 
+    .settings__sections {
+        gap: 38px;
+    }
+
     .setting__avatar-display,
     .settings__username-display {
         height: 75px !important;
         margin-right: 30px !important;
     }
 
-    .settings__upload-avatar-field,
-    .settings__username-field {
+    .settings__upload-avatar-field {
         width: 80px !important;
         padding-inline: 6px;
     }
@@ -206,24 +213,33 @@
 
 @media (max-width: 575px) {
 
-    .setting__avatar-display {
-        margin-right: 0 !important;
+    .settings__sections {
+        gap: 28px;
     }
 
-    .settings__upload-avatar-form {
-        width: 50%;
-        /* display: flex; */
-        /* justify-content: space-evenly; */
-        /* align-items: center; */
+    .setting__avatar-display,
+    .settings__username-display {
+        margin-right: 0 !important;
     }
 
     .settings__upload-avatar-label {
         margin-bottom: 0;
     }
 
-    .settings__upload-avatar-field,
-    .settings__username-field {
+    .settings__username-col {}
+
+    .settings__upload-avatar-field {
+        display: flex !important;
         width: 100% !important;
+        max-width: 300px;
     }
 
+    .settings__username-form {
+        width: 225.5px;
+    }
+
+    .settings__username-form-group,
+    .settings__update-username-btn-col {
+        padding-inline: 0;
+    }
 }

@@ -105,11 +105,11 @@ export const Interests = () => {
     return (
         <Row xs={1} sm={2}>
             <Col>
-                <h4 className='mb-0 mb-sm-2'>Update Interests:</h4>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugit, vitae!.</p>
+                <h4 className=''>Update Interests:</h4>
+                <p>You decide what kind of notices fetch in your general feed.</p>
             </Col>
             <Col className='d-flex'>
-                <div className='d-grid  w-100'>
+                <div className='d-flex flex-column'>
                     <div
                         className='d-flex flex-wrap'
                     >

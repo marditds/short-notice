@@ -22,14 +22,13 @@ const UserSettings = () => {
         setIsLoading(false);
     })
 
-
     if (isLoading) {
         return <div><Loading /></div>;
     }
 
     return (
         <Container fluid className='settings'>
-            <Stack gap={5}>
+            <Stack className='settings__sections'>
                 <Avatar />
                 <hr />
                 <Info accountType={accountType} />

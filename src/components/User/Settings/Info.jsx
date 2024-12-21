@@ -48,40 +48,36 @@ export const Info = ({ accountType }) => {
     let usrnm = (accountType === 'personal' && 'Username') || (accountType === 'business' && 'Business Name') || (accountType === 'organization' && 'Organization\'s Name')
 
     return (
-        <Row xs={1} sm={2} className=' align-items-start'>
+        <Row xs={1} sm={2}>
             <Col>
-                <h4 className='mb-0 mb-sm-auto'>Update {usrnm}:</h4>
+                <h4 className=''>Update {usrnm}:</h4>
                 <p className='mb-0'>Update your {usrnm.toLocaleLowerCase()}. The maximum number of characters for your {usrnm.toLowerCase()} is 16.</p>
             </Col>
-            <Col className='mt-3 mt-sm-0 d-flex justify-content-md-start justify-content-evenly'>
-                <h6 className='me-0 me-sm-5 settings__username-display'>
-                    {currUsername}
-                </h6>
-
+            <Col className='mt-3 mt-sm-0 d-flex justify-content-end align-items-center settings__username-col'>
                 <Form
                     as={Row}
                     onSubmit={handleSubmit}
-                    className='d-block'
+                    className='w-100 m-0 flex-column settings__username-form'
                 >
-                    <Col className='mb-3 w-100'>
-                        <Form.Group
-                            controlId='usernameField'>
-                            <Form.Label>
-                                {usrnm}:
-                            </Form.Label>
-                            <Form.Control
-                                type='username'
-                                placeholder='Enter your username'
-                                value={localUsername || ''}
-                                onChange={handleUsernameChange}
-                                className='settings__username-field'
-                            />
-                            <Form.Text className='settings__username-unique'>
-                                Your {usrnm} must be unique.
-                            </Form.Text>
-                        </Form.Group>
-                    </Col>
-                    <Col>
+                    <Form.Group
+                        as={Col}
+                        className='pe-sm-0 settings__username-form-group'
+                        controlId='usernameField'>
+                        <Form.Label>
+                            {usrnm}:
+                        </Form.Label>
+                        <Form.Control
+                            type='username'
+                            placeholder='Enter your username'
+                            value={localUsername || ''}
+                            onChange={handleUsernameChange}
+                            className='settings__username-field'
+                        />
+                        <Form.Text className='settings__username-unique'>
+                            Your {usrnm} must be unique.
+                        </Form.Text>
+                    </Form.Group>
+                    <Col className='settings__update-username-btn-col'>
                         <Button
                             type='submit'
                             disabled={isUpdating || localUsername === '' ? true : false}
