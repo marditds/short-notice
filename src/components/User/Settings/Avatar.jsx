@@ -96,6 +96,7 @@ export const Avatar = () => {
                                         type="file"
                                         onChange={handleFileChange}
                                         className='settings__upload-avatar-field'
+
                                     />
                                 </>
                             )}

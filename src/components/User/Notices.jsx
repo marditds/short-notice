@@ -82,8 +82,6 @@ export const Notices = ({
     const [reportingReactionId, setReportingReactionId] = useState(null);
     const [showReportReactionConfirmation, setShowReportReactionConfirmation] = useState(false);
 
-
-
     useEffect(() => {
         const intervalId = setInterval(() => {
             const newCountdowns = notices.map(notice => calculateCountdown(notice.expiresAt));
@@ -92,8 +90,6 @@ export const Notices = ({
 
         return () => clearInterval(intervalId);
     }, [notices]);
-
-
 
     // Reacting to a notice
     const handleReactNotice = (noticeId, noticeUsername, noticeAvatarUrl, noticeText) => {
@@ -387,7 +383,7 @@ export const Notices = ({
             {/* {!isLoadingNotices ? */}
             <Accordion
                 // defaultActiveKey={['0']}
-                className='user-profile__notices-accordion'
+                className='notices__accordion'
                 activeKey={activeNoticeId}
                 onSelect={handleAccordionToggle}
             >
@@ -400,7 +396,7 @@ export const Notices = ({
                             {/* <FaAngleDown size={20} className='me-3' /> */}
                             <Row className='w-100 m-auto'>
                                 {/* Text and Countdown Col */}
-                                <Col className='col-md-9 d-flex justify-content-between flex-column'
+                                <Col className='col-9 d-flex justify-content-between flex-column'
                                 >
                                     <p className='mb-0 text-break'>{notice?.text}</p>
 
@@ -414,11 +410,11 @@ export const Notices = ({
                                 </Col>
 
                                 {/* Username, Profile Picture, Edit/Delete, Interaction Col */}
-                                <Col className='col-md-3 d-flex flex-column justify-content-end'>
+                                <Col className='col-3 d-flex flex-column justify-content-end'>
 
                                     {/* Username and Profile Picture */}
                                     {shouldShowUserInfo() ?
-                                        (<div className='d-flex justify-content-end align-items-center mt-auto'>
+                                        (<div className='d-flex flex-column flex-sm-row justify-content-end align-items-end align-items-sm-center mt-auto'>
 
                                             <p
                                                 className='w-100 my-0 text-end notice__username'
@@ -433,7 +429,7 @@ export const Notices = ({
                                                 <img
                                                     src={notice.avatarUrl || defaultAvatar}
                                                     alt="Profile"
-                                                    className='d-flex ms-auto notice__avatar'
+                                                    className='notice__avatar'
                                                 />
                                             </Link>
                                         </div>)
@@ -486,11 +482,15 @@ export const Notices = ({
                                                                     <>
                                                                         <BsHandThumbsUpFill
                                                                             className='notice__reaction-btn-fill'
-                                                                            size={19}
+                                                                        // style={{ fontSize: '50px' }}
+
+                                                                        // size={19}
                                                                         />
                                                                     </>
                                                                 ) : (
-                                                                    <BsHandThumbsUp size={19} />
+                                                                    <BsHandThumbsUp
+                                                                    // size={19}
+                                                                    />
                                                                 )}
                                                             </div>
                                                             <div
@@ -500,25 +500,29 @@ export const Notices = ({
                                                                 {savedNotices && savedNotices[notice.$id] ? (
                                                                     <RiSave2Fill
                                                                         className='notice__reaction-btn-fill'
-                                                                        size={20}
+                                                                    // size={20}
                                                                     />
 
                                                                 ) : (
-                                                                    <RiSave2Line size={20} />
+                                                                    <RiSave2Line
+                                                                    // size={20} 
+                                                                    />
                                                                 )}
                                                             </div>
                                                             <div
                                                                 onClick={() => handleReactNotice(notice.$id, notice.username, notice.avatarUrl, notice.text)}
                                                                 className={`notice__reaction-btn ${isOtherUserBlocked ? 'disabled' : ''} ms-2`}
                                                             >
-                                                                <BsReply size={23} />
+                                                                <BsReply
+                                                                // size={23}
+                                                                />
                                                             </div>
                                                             <div
                                                                 onClick={() => handleReportNotice(notice.$id)}
                                                                 className='notice__reaction-btn ms-2'
                                                             >
                                                                 <AiOutlineExclamationCircle
-                                                                    size={22}
+                                                                // size={22}
                                                                 />
                                                             </div>
                                                         </div>

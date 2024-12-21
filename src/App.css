@@ -14,6 +14,8 @@
     --main-transition-speed: 0.3s;
     --pc-font-size: 16px;
     --mobile-font-size: 10px;
+    --pc-icon-size: 20px;
+    /* --mobile-icon-size: 16px; */
     /* --primary-font-family: 'Poppins', sans-serif; */
     /* --primary-font-family: 'Outfit', sans-serif; */
     --primary-font-family: 'Inter', sans-serif;
