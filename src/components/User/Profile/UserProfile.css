@@ -475,11 +475,22 @@
 }
 
 @media (max-width: 575px) {
-    .notice__text-countdown-col {
+
+    .notice__text-countdown-col,
+    .notice__reaction-text-col {
         padding-left: 0px;
     }
 
+    .notice__reaction-info-col,
     .notice__interaction-col {
         padding-right: 0px;
+    }
+
+    .notice__reaction>.row {
+        max-width: 100%;
+    }
+
+    .notice__reaction-username {
+        margin-right: 0px !important;
     }
 }

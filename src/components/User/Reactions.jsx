@@ -35,11 +35,14 @@ export const Reactions = ({
                     {loadedReactions[notice.$id].map((reaction) => (
                         <Col key={reaction.$id} >
                             <Row>
-                                <Col className='col-md-9'>
+                                {/* Reaction Text Col */}
+                                <Col className='col-md-9 notice__reaction-text-col'>
                                     {reaction.content}
                                 </Col>
-                                <Col className='col-md-3 d-flex flex-column align-items-center justify-content-end'>
-                                    <div className='d-flex align-items-center ms-auto'>
+
+                                {/* Profile Picture, Username, and Report Icon Col*/}
+                                <Col className='col-md-3 d-flex flex-column align-items-center justify-content-end notice__reaction-info-col'>
+                                    <div className='d-flex flex-column flex-sm-row align-items-end align-items-sm-center ms-auto'>
                                         <Link to={`/user/${reactionUsernameMap[notice.$id]?.[reaction.sender_id]}`}
                                             className='text-decoration-none notice__reaction-username'><strong className='ms-auto me-0'>
                                                 {reactionUsernameMap[notice.$id]?.[reaction.sender_id] || 'Unknown user'}
