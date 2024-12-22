@@ -299,6 +299,10 @@
     color: var(--main-accent-color) !important;
 }
 
+.notice__reaction-icon-div-empty,
+.notice__reaction-icon-div {
+    height: 35px;
+}
 
 .notice__edit-btn,
 .notice__delete-btn,
@@ -449,6 +453,18 @@
 
     .notice__avatar {
         height: 55px;
+    }
+
+    .notice__username>a {
+        margin-right: 0px;
+    }
+
+    .notice__reaction-icon-div {
+        height: 18px;
+    }
+
+    .notice__reaction-icon-div-empty {
+        height: 5px;
     }
 
     .notice__edit-btn>svg,

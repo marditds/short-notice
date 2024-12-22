@@ -467,10 +467,12 @@ export const Notices = ({
                                                 :
                                                 <>
                                                     {(location.pathname === '/user/feed' && user_id === notice.user_id) || ((location.pathname !== `/user/profile` || location.pathname !== `/user/feed`) && user_id === notice.user_id) ?
-                                                        <div style={{ height: '35px' }} /> :
+                                                        <div className='notice__reaction-icon-div-empty'
+                                                        // style={{ height: '25px' }}
+                                                        /> :
                                                         <div
-                                                            className='d-flex justify-content-end align-items-center'
-                                                            style={{ height: '35px' }}
+                                                            className='d-flex justify-content-end align-items-center notice__reaction-icon-div'
+                                                        // style={{ height: '35px' }}
                                                         >
                                                             <div
                                                                 className={`notice__reaction-btn ${isOtherUserBlocked ? 'disabled' : ''} ms-2`}
