@@ -299,7 +299,10 @@
     color: var(--main-accent-color) !important;
 }
 
-.notice__reaction-icon-div-empty,
+.notice__reaction-icon-div-empty {
+    height: 20px;
+}
+
 .notice__reaction-icon-div {
     height: 35px;
 }
@@ -342,14 +345,11 @@
     cursor: not-allowed;
     color: var(--main-text-muted) !important;
     filter: none !important;
-
-    /* color: var(--main-text-muted) !important; */
 }
 
 .notice__reaction-btn-fill {
     color: var(--main-accent-color) !important;
 }
-
 
 .notice__edit--modal {
     padding: 0 !important;
@@ -472,5 +472,14 @@
     .notice__reaction-btn>svg {
         font-size: var(--mobile-icon-size);
     }
+}
 
+@media (max-width: 575px) {
+    .notice__text-countdown-col {
+        padding-left: 0px;
+    }
+
+    .notice__interaction-col {
+        padding-right: 0px;
+    }
 }

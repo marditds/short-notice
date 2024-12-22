@@ -393,10 +393,9 @@ export const Notices = ({
                             className='d-flex justify-content-center'
                             onClick={() => handleAccordionToggle(notice.$id)}
                         >
-                            {/* <FaAngleDown size={20} className='me-3' /> */}
                             <Row className='w-100 m-auto'>
                                 {/* Text and Countdown Col */}
-                                <Col xs={8} sm={9} className=' d-flex justify-content-between flex-column'
+                                <Col xs={8} sm={9} className='d-flex justify-content-between flex-column notice__text-countdown-col'
                                 >
                                     <p className='mb-0 text-break'>{notice?.text}</p>
 
@@ -410,7 +409,7 @@ export const Notices = ({
                                 </Col>
 
                                 {/* Username, Profile Picture, Edit/Delete, Interaction Col */}
-                                <Col xs={4} sm={3} className=' d-flex flex-column justify-content-end'>
+                                <Col xs={4} sm={3} className='d-flex flex-column justify-content-end notice__interaction-col'>
 
                                     {/* Username and Profile Picture */}
                                     {shouldShowUserInfo() ?
@@ -536,7 +535,6 @@ export const Notices = ({
                                             </small>
                                         </div>
                                     </div>
-
                                 </Col>
                             </Row>
                         </Accordion.Header>
