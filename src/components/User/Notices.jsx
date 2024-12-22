@@ -396,7 +396,7 @@ export const Notices = ({
                             {/* <FaAngleDown size={20} className='me-3' /> */}
                             <Row className='w-100 m-auto'>
                                 {/* Text and Countdown Col */}
-                                <Col className='col-9 d-flex justify-content-between flex-column'
+                                <Col xs={8} sm={9} className=' d-flex justify-content-between flex-column'
                                 >
                                     <p className='mb-0 text-break'>{notice?.text}</p>
 
@@ -410,7 +410,7 @@ export const Notices = ({
                                 </Col>
 
                                 {/* Username, Profile Picture, Edit/Delete, Interaction Col */}
-                                <Col className='col-3 d-flex flex-column justify-content-end'>
+                                <Col xs={4} sm={3} className=' d-flex flex-column justify-content-end'>
 
                                     {/* Username and Profile Picture */}
                                     {shouldShowUserInfo() ?
