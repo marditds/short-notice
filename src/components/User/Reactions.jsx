@@ -40,18 +40,13 @@ export const Reactions = ({
                             // className='px-0'
                             >
                                 {/* Reaction Text Col */}
-                                <Col xs={9} className=' notice__reaction-text-col text-break'>
+                                <Col xs={8} sm={9} className=' notice__reaction-text-col text-break'>
                                     {reaction.content}
                                 </Col>
 
                                 {/* Profile Picture, Username, and Report Icon Col*/}
-                                <Col xs={3} className='d-flex flex-column align-items-center justify-content-end notice__reaction-info-col'>
-                                    <div className='d-flex flex-column flex-sm-row align-items-end align-items-sm-center ms-auto'>
-                                        <Link to={`/user/${reactionUsernameMap[notice.$id]?.[reaction.sender_id]}`}
-                                            className='text-decoration-none notice__reaction-username'><strong className='ms-auto me-0'>
-                                                {reactionUsernameMap[notice.$id]?.[reaction.sender_id] || 'Unknown user'}
-                                            </strong>
-                                        </Link>
+                                <Col xs={4} sm={3} className='d-flex flex-column align-items-center justify-content-end notice__reaction-info-col'>
+                                    <div className='d-flex flex-column justify-content-end align-items-end ms-auto'>
                                         <Link to={`/user/${reactionUsernameMap[notice.$id]?.[reaction.sender_id]}`}
                                         >
                                             <img
@@ -60,24 +55,28 @@ export const Reactions = ({
                                                 className='notice__reaction-avatar'
                                             />
                                         </Link>
+                                        <Link to={`/user/${reactionUsernameMap[notice.$id]?.[reaction.sender_id]}`}
+                                            className='text-decoration-none notice__reaction-username'><strong className='ms-auto me-0'>
+                                                {reactionUsernameMap[notice.$id]?.[reaction.sender_id] || 'Unknown user'}
+                                            </strong>
+                                        </Link>
                                     </div>
                                     {reaction.sender_id !== user_id ?
                                         <div
-                                            className='ms-auto mt-1 d-flex notice__delete-btn d-flex align-items-center'
+                                            className='ms-auto mt-sm-1 d-flex d-flex align-items-center notice__reaction-interaction-div notice__reaction-btn'
                                             onClick={() => handleReportReaction(reaction.$id)}
-                                            style={{ height: '35px' }}
                                         >
-                                            <AiOutlineExclamationCircle size={20} />
+                                            <AiOutlineExclamationCircle />
                                         </div>
                                         :
-                                        <div className='ms-auto mt-1 d-flex notice__delete-btn d-flex align-items-center' style={{ height: '35px' }} />
+                                        <div className=' notice__reaction-interaction-div-empty' />
                                     }
                                     <div className='ms-auto'>
                                         {formatDateToLocal(reaction.$createdAt)}
                                     </div>
                                 </Col>
                             </Row>
-                            <hr />
+                            <hr className='my-2 my-md-3' />
                         </Col>
                     ))}
                     <div>

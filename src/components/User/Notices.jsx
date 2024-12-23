@@ -420,11 +420,19 @@ export const Notices = ({
                                 </Col>
 
                                 {/* Username, Profile Picture, Edit/Delete, Interaction Col */}
-                                <Col xs={4} sm={3} className='d-flex flex-column justify-content-end notice__interaction-col'>
+                                <Col xs={4} sm={3} className='d-flex flex-column justify-content-end align-items-end notice__interaction-col'>
 
                                     {/* Username and Profile Picture */}
                                     {shouldShowUserInfo() ?
-                                        (<div className='d-flex flex-column flex-sm-row justify-content-end align-items-end align-items-sm-center mt-auto'>
+                                        (<div className='d-flex flex-column justify-content-end align-items-end align-items-sm-center mt-auto'>
+
+                                            <Link to={`../${notice.username}`}>
+                                                <img
+                                                    src={notice.avatarUrl || defaultAvatar}
+                                                    alt="Profile"
+                                                    className='notice__avatar'
+                                                />
+                                            </Link>
 
                                             <p
                                                 className='w-100 my-0 text-end notice__username'
@@ -435,13 +443,6 @@ export const Notices = ({
                                                 </Link>
                                             </p>
 
-                                            <Link to={`../${notice.username}`}>
-                                                <img
-                                                    src={notice.avatarUrl || defaultAvatar}
-                                                    alt="Profile"
-                                                    className='notice__avatar'
-                                                />
-                                            </Link>
                                         </div>)
                                         :
                                         null
