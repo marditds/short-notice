@@ -3,7 +3,8 @@
 :root {
     --main-bg-color: 255, 255, 255;
     /* --main-text-color: #ffffff; */
-    --main-text-color: #000000;
+    /* --main-text-color: #000000; */
+    --main-text-color: #ffffff;
     --main-text-color-selected: #ffffff;
     --main-text-muted: #626262;
     --main-accent-color: #17c769;
@@ -24,13 +25,13 @@
 body {
     font-family: var(--primary-font-family);
 
-    background: rgb(255, 255, 255);
+    /* background: rgb(255, 255, 255);
     background: -moz-linear-gradient(0deg, rgba(255, 255, 255, 0) 29%, rgba(170, 170, 170, 0.68531162464986) 68%, rgba(23, 199, 105, 0.24273459383753504) 100%);
     background: -webkit-linear-gradient(0deg, rgba(255, 255, 255, 0) 29%, rgba(170, 170, 170, 0.68531162464986) 68%, rgba(23, 199, 105, 0.24273459383753504) 100%);
     background: linear-gradient(0deg, rgba(255, 255, 255, 0) 29%, rgba(170, 170, 170, 0.68531162464986) 68%, rgba(23, 199, 105, 0.24273459383753504) 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#ffffff", endColorstr="#17c769", GradientType=1);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#ffffff", endColorstr="#17c769", GradientType=1); */
 
-    /* background-color: #000000; */
+    background-color: #000000;
 
     background-repeat: no-repeat;
     background-attachment: fixed;

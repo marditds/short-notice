@@ -406,7 +406,7 @@ export const Notices = ({
                         >
                             <Row className='w-100 m-auto'>
                                 {/* Text and Countdown Col */}
-                                <Col xs={8} sm={9} className='d-flex justify-content-between flex-column notice__text-countdown-col'
+                                <Col xs={9} className='d-flex justify-content-between flex-column notice__text-countdown-col'
                                 >
                                     <p className='mb-0 text-break'>{notice?.text}</p>
 
@@ -420,11 +420,11 @@ export const Notices = ({
                                 </Col>
 
                                 {/* Username, Profile Picture, Edit/Delete, Interaction Col */}
-                                <Col xs={4} sm={3} className='d-flex flex-column justify-content-end align-items-end notice__interaction-col'>
+                                <Col xs={3} className='d-flex flex-column justify-content-end align-items-end notice__interaction-col'>
 
                                     {/* Username and Profile Picture */}
                                     {shouldShowUserInfo() ?
-                                        (<div className='d-flex flex-column justify-content-end align-items-end align-items-sm-center mt-auto'>
+                                        (<div className='d-flex flex-column justify-content-end align-items-end mt-auto'>
 
                                             <Link to={`../${notice.username}`}>
                                                 <img
