@@ -43,7 +43,8 @@
 .notice__avatar,
 .notice__reaction-avatar,
 .follower__avatar,
-.following__avatar {
+.following__avatar,
+.notice__react-modal-avatar {
     --r: 8px;
     aspect-ratio: cos(30deg);
     --_g: calc(tan(60deg)*var(--r)) right var(--r), #000 98%, #0000 101%;
@@ -388,6 +389,7 @@
     background-color: var(--main-accent-color) !important;
     color: black !important;
     border: transparent;
+    font-size: var(--pc-font-size);
 }
 
 .notice__edit--modal-btn:hover,
@@ -428,12 +430,14 @@
 
 
 .notice__reaction-avatar,
+.notice__react-modal-avatar,
 .follower__avatar,
 .following__avatar {
     height: 53px;
 }
 
-.user-profile__following--modal {
+.user-profile__following--modal,
+.notice__react--modal {
     z-index: 9002;
 }
 
@@ -447,6 +451,15 @@
 
 .user-profile__following--modal-body>div>a:hover {
     background-color: rgba(255, 255, 255, 0.4) !important;
+}
+
+.notice__react--modal>div {
+    height: 100%;
+    margin-block: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 700px;
 }
 
 
@@ -482,6 +495,12 @@
     .notice__reaction-btn>svg {
         font-size: var(--mobile-icon-size);
     }
+
+    .notice__edit--modal-btn,
+    .notice__react--modal-btn,
+    .user-profile__form-control {
+        font-size: var(--mobile-font-size);
+    }
 }
 
 @media (max-width: 575px) {
@@ -502,5 +521,24 @@
 
     .notice__reaction-username {
         margin-right: 0px !important;
+    }
+
+    .notice__react--modal-body {
+        padding: 12px;
+    }
+}
+
+@media (max-height: 457px) {
+    body {
+        background-color: yellow !important;
+    }
+
+    .notice__react--modal {
+        padding-block: 20px;
+        padding-inline: 10px !important;
+    }
+
+    .notice__react--modal>div {
+        height: fit-content;
     }
 }

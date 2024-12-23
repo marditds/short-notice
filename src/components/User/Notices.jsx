@@ -576,29 +576,19 @@ export const Notices = ({
                 className='notice__react--modal'
             >
                 <Modal.Header className='d-grid notice__react--modal-header pb-0 pt-4'>
-                    <Row className='align-items-center px-2'>
-                        <Col className='d-flex justify-content-between flex-column col-md-8'
-                        >
-                            <p className='mb-0'>{noticeText}</p>
+                    <Row className='align-items-center'>
+                        <Col xs={9} sm={10} className='d-flex mt-auto mb-auto align-items-center h-100'>
+                            <p className='mb-0 text-start notice__username text-break'>
+                                {noticeText}
+                            </p>
                         </Col>
-                        <Col>
-                            <div className='d-flex flex-column justify-content-end h-100'>
-
-                                <div className='d-flex justify-content-end align-items-center mt-auto'>
-
-                                    <p
-                                        className='w-100 my-0 me-2 text-end notice__username'
-                                    >
-                                        <strong>{noticeUsername}</strong>
-                                    </p>
-                                    <img
-                                        src={noticeAvatarUrl || defaultAvatar}
-                                        alt="Profile"
-                                        style={{ borderRadius: '50%', width: 50, height: 50, marginLeft: '0px' }}
-                                        className='d-flex ms-auto'
-                                    />
-                                </div>
-                            </div>
+                        <Col xs={3} sm={2}>
+                            <img
+                                src={noticeAvatarUrl || defaultAvatar}
+                                alt="Profile"
+                                className='d-flex ms-auto notice__react-modal-avatar'
+                            />
+                            <p className='mb-0 text-end'><strong>{noticeUsername}</strong></p>
                         </Col>
                     </Row>
                 </Modal.Header>

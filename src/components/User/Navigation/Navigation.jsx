@@ -17,8 +17,8 @@ export const Navigation = ({ googleLogout, removeSession, setIsLoggedIn, setGoog
                 
                 '>
                 <Container fluid className='d-flex'>
-                    <Navbar.Brand href="/feed" className='mt-auto mb-auto ms-2'>
-                        <img src={snLogo} alt="short_notice_logo" height={23} className='navigation__logo' />
+                    <Navbar.Brand href='./feed' className='mt-auto mb-auto ms-2'>
+                        <img src={snLogo} alt='short_notice_logo' height={23} className='navigation__logo' />
                     </Navbar.Brand>
 
 
