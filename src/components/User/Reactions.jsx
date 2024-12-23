@@ -22,7 +22,7 @@ export const Reactions = ({
     handleReportReaction,
     user_id }) => {
     return (
-        <Row className='d-grid w-100'>
+        <Row className='flex-column w-100'>
 
             {loadingStates[notice.$id] ? (
                 <Col className="text-center py-3">
@@ -33,15 +33,19 @@ export const Reactions = ({
             ) : loadedReactions[notice.$id]?.length > 0 ? (
                 <>
                     {loadedReactions[notice.$id].map((reaction) => (
-                        <Col key={reaction.$id} >
-                            <Row>
+                        <Col key={reaction.$id}
+                            className='px-4'
+                        >
+                            <Row
+                            // className='px-0'
+                            >
                                 {/* Reaction Text Col */}
-                                <Col className='col-md-9 notice__reaction-text-col'>
+                                <Col xs={9} className=' notice__reaction-text-col text-break'>
                                     {reaction.content}
                                 </Col>
 
                                 {/* Profile Picture, Username, and Report Icon Col*/}
-                                <Col className='col-md-3 d-flex flex-column align-items-center justify-content-end notice__reaction-info-col'>
+                                <Col xs={3} className='d-flex flex-column align-items-center justify-content-end notice__reaction-info-col'>
                                     <div className='d-flex flex-column flex-sm-row align-items-end align-items-sm-center ms-auto'>
                                         <Link to={`/user/${reactionUsernameMap[notice.$id]?.[reaction.sender_id]}`}
                                             className='text-decoration-none notice__reaction-username'><strong className='ms-auto me-0'>
@@ -66,7 +70,7 @@ export const Reactions = ({
                                             <AiOutlineExclamationCircle size={20} />
                                         </div>
                                         :
-                                        <div style={{ height: '35px' }} />
+                                        <div className='ms-auto mt-1 d-flex notice__delete-btn d-flex align-items-center' style={{ height: '35px' }} />
                                     }
                                     <div className='ms-auto'>
                                         {formatDateToLocal(reaction.$createdAt)}

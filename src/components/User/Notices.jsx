@@ -189,6 +189,13 @@ export const Notices = ({
 
             console.log('noticeReactions', noticeReactions);
 
+            if (!noticeReactions || !noticeReactions.documents.length) {
+                // No more reactions to load
+                setShowLoadMoreBtn(false);
+                return;
+            }
+
+
             const usersIds = noticeReactions.documents.map((reaction) => reaction.sender_id);
 
             console.log('usersIds', usersIds);
@@ -234,6 +241,10 @@ export const Notices = ({
                 ...prev,
                 [noticeId]: newCursor
             }));
+
+            if (noticeReactions.documents.length < limit) {
+                setShowLoadMoreBtn(false);
+            }
 
         } catch (error) {
             console.error('Error loading reactions:', error);

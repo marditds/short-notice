@@ -24,6 +24,9 @@ export const Info = ({ accountType }) => {
 
     const handleSubmit = async (e) => {
 
+        console.log('dfdfdfd');
+
+
         setIsUpdating(true);
 
         e.preventDefault();
@@ -56,7 +59,7 @@ export const Info = ({ accountType }) => {
             <Col className='mt-3 mt-sm-0 d-flex justify-content-end align-items-center settings__username-col'>
                 <Form
                     as={Row}
-                    onSubmit={handleSubmit}
+                    // onSubmit={handleSubmit}
                     className='w-100 m-0 flex-column settings__username-form'
                 >
                     <Form.Group
@@ -82,7 +85,7 @@ export const Info = ({ accountType }) => {
                             type='submit'
                             disabled={isUpdating || localUsername === '' ? true : false}
                             className='settings__update-username-btn'
-                        >
+                            onClick={handleSubmit}>
                             {isUpdating ? 'Updating...' : 'Update'}
                             {isUpdating && <Loading />}
                         </Button>

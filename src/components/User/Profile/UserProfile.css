@@ -405,9 +405,9 @@
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#ffffff", endColorstr="#17c769", GradientType=1);
 } */
 
-.notice__reaction>.row {
+/* .notice__reaction>.row {
     max-width: 95%;
-}
+} */
 
 .notice__reaction-username {
     margin-right: 6px;
