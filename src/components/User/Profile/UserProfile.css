@@ -454,6 +454,25 @@
     z-index: 9002;
 }
 
+.user-profile__following--modal>div {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-block: 0;
+
+}
+
+/* .user-profile__following--modal>div, */
+.user-profile__following--modal>div>div {
+    /* margin-block: 0; */
+    max-height: 100vh;
+}
+
+.user-profile__following--modal-body {
+    max-height: 600px;
+    overflow-y: auto;
+}
 
 .user-profile__following--modal-body>div>a {
     padding-inline: 10px;

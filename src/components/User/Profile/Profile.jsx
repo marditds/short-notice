@@ -240,7 +240,7 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                     </Button>
                 </Modal.Header>
                 <Modal.Body
-                    className='d-grid gap-2 user-profile__following--modal-body'
+                    className='user-profile__following--modal-body'
                 >
                     THESE ARE FOLLOWING {username}
                     {followersAccounts && followersAccounts.map((followerAccount) => {
