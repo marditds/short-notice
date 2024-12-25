@@ -37,6 +37,7 @@ export const Notices = ({
     const [countdowns, setCountdowns] = useState([]);
 
     const [showReactModal, setShowReactModal] = useState(false);
+    const [showReactionTextField, setShowReactionTextField] = useState(false);
     const [reactingNoticeId, setReactingNoticeId] = useState(null);
     const [noticeUsername, setNoticeUsername] = useState(null);
     const [noticeAvatarUrl, setNoticeAvatarUrl] = useState(null);
@@ -93,13 +94,15 @@ export const Notices = ({
 
     // Reacting to a notice
     const handleReactNotice = (noticeId, noticeUsername, noticeAvatarUrl, noticeText) => {
-        setReactingNoticeId(noticeId);
-        setShowReactModal(true);
-        setNoticeText(noticeText);
-        setNoticeUsername(noticeUsername);
-        setNoticeAvatarUrl(noticeAvatarUrl);
-        console.log('handleReactNotice', noticeId);
-
+        if (reactingNoticeId === noticeId) {
+            setReactingNoticeId(null);
+        } else {
+            setReactingNoticeId(noticeId);
+            setShowReactionTextField(true);
+            setNoticeText(noticeText);
+            setNoticeUsername(noticeUsername);
+            setNoticeAvatarUrl(noticeAvatarUrl);
+        }
     }
 
     const onReactionTextChange = (e) => {
@@ -256,8 +259,9 @@ export const Notices = ({
 
     useEffect(() => {
         console.log('activeNoticeId', activeNoticeId);
+        console.log('reactingNoticeId', reactingNoticeId);
         setShowLoadMoreBtn(true);
-    }, [activeNoticeId])
+    }, [activeNoticeId, reactingNoticeId])
 
     const handleAccordionToggle = async (noticeId) => {
         if (activeNoticeId === noticeId) {
@@ -401,7 +405,7 @@ export const Notices = ({
                 {notices.map((notice, idx) => (
                     <Accordion.Item eventKey={notice?.$id} key={notice?.$id}>
                         <Accordion.Header
-                            className='d-flex justify-content-center'
+                            // className='d-flex justify-content-center' 
                             onClick={() => handleAccordionToggle(notice.$id)}
                         >
                             <Row className='w-100 m-auto'>
@@ -549,6 +553,24 @@ export const Notices = ({
                                     </div>
                                 </Col>
                             </Row>
+
+                            {reactingNoticeId === notice.$id && reactingNoticeId !== null ?
+                                <Row className='m-auto'>
+                                    <Col>
+                                        <Form>
+                                            <Form.Group className='mb-3' controlId='reportNotice'>
+                                                <Form.Control
+                                                    as="textarea"
+                                                    rows={3}
+                                                    value={reactionText}
+                                                    onChange={onReactionTextChange}
+                                                    className="user-profile__form-control"
+                                                    placeholder=''
+                                                />
+                                            </Form.Group>
+                                        </Form>
+                                    </Col>
+                                </Row> : null}
                         </Accordion.Header>
                         <Accordion.Body className='d-flex justify-content-center notice__reaction'>
                             <Reactions

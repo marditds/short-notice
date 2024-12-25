@@ -157,9 +157,9 @@
     }
 }
 
-/* .notices__accordion {
-    font-size: var(--pc-font-size);
-} */
+.notices__accordion>div>h2>button {
+    display: block;
+}
 
 .user-profile__tags-accordion>div>h2>button,
 .user-profile__tags-accordion>div,
@@ -573,6 +573,7 @@
         background-color: yellow !important;
     }
 
+    /* 
     .notice__edit--modal,
     .notice__react--modal {
         padding-block: 20px;
@@ -582,5 +583,5 @@
     .notice__edit--modal>div,
     .notice__react--modal>div {
         height: fit-content;
-    }
+    } */
 }
