@@ -10,7 +10,7 @@
 
 
 .tools__search--results-modal {
-    height: 100%;
+    /* height: 100%; */
 }
 
 .tools__search--results-modal>div {
@@ -23,7 +23,7 @@
 }
 
 .tools__search--results-modal>div>div {
-
+    max-height: 100vh;
     background-color: rgb(var(--main-bg-color), 0.8) !important;
     border: 1px solid var(--main-accent-color);
     border-radius: var(--main-rounded-corner);
