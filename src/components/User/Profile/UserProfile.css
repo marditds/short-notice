@@ -1,7 +1,9 @@
 .user-profile {
     /* margin: 54px 0 0px 0; */
     max-width: 1320px !important;
-    margin: 0 auto;
+    /* margin: 0 auto; */
+    margin-inline: auto;
+    margin-top: 3px;
     padding: 54px 45px 12px 45px;
     height: 198px;
     backdrop-filter: blur(4px);
@@ -165,7 +167,7 @@
 .user-profile__tags-accordion>div,
 .notices__accordion>div>h2>button,
 .notices__accordion>div {
-    background-color: var(--main-bg-color) 0.5 !important;
+    background-color: var(--main-bg-color) !important;
     color: var(--main-text-color) !important;
     border-radius: 0 !important;
     box-shadow: none !important;
@@ -175,7 +177,7 @@
 }
 
 .user-profile__tags-accordion>div>h2>button {
-    background-color: var(--main-bg-color) 0.5 !important;
+    background-color: var(--main-bg-color) !important;
     padding-inline: 5px !important;
     padding-block: 10px !important;
     transition: var(--main-transition-speed);
@@ -184,9 +186,10 @@
 .notices__accordion>div>h2>button:hover,
 .notices__accordion>div>h2>button:not(.collapsed),
 .notice__reaction {
-    background: rgba(var(--main-bg-color), 0.5) !important;
+    background-color: rgba(255, 255, 255, 0.4) !important;
     box-shadow: 0px 0px 2px var(--main-accent-color-hover) !important;
 }
+
 
 .notices__accordion>div>h2>button::after,
 .user-profile__tags-accordion>div>h2>button::after {
@@ -429,7 +432,6 @@
 } */
 
 .notice__reaction-username {
-    margin-right: 6px;
     color: var(--main-text-color);
     transition: var(--main-transition-speed);
 }

@@ -127,8 +127,6 @@ export const Notices = ({
                         $createdAt: new Date().toISOString()
                     };
 
-                    console.log('content in loadedReaction:', tempReaction.content);
-
                     setLoadedReactions(prev => ({
                         ...prev,
                         [reactingNoticeId]: [tempReaction, ...(prev[reactingNoticeId] || [])]
@@ -304,9 +302,13 @@ export const Notices = ({
     };
 
     useEffect(() => {
+
+        setShowLoadMoreBtn(true);
+        setReactionText('');
+
         console.log('activeNoticeId', activeNoticeId);
         console.log('reactingNoticeId', reactingNoticeId);
-        setShowLoadMoreBtn(true);
+
     }, [activeNoticeId, reactingNoticeId])
 
     const handleAccordionToggle = async (noticeId) => {
@@ -320,6 +322,7 @@ export const Notices = ({
                 delete newState[noticeId];
                 return newState;
             });
+
             setCursors(prev => {
                 const newState = { ...prev };
                 delete newState[noticeId];
