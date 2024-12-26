@@ -36,12 +36,12 @@ export const Notices = ({
 
     const [countdowns, setCountdowns] = useState([]);
 
-    const [showReactModal, setShowReactModal] = useState(false);
-    const [showReactionTextField, setShowReactionTextField] = useState(false);
+    // const [showReactModal, setShowReactModal] = useState(false);
+    // const [noticeUsername, setNoticeUsername] = useState(null);
+    // const [noticeAvatarUrl, setNoticeAvatarUrl] = useState(null);
+    // const [noticeText, setNoticeText] = useState(null);
+
     const [reactingNoticeId, setReactingNoticeId] = useState(null);
-    const [noticeUsername, setNoticeUsername] = useState(null);
-    const [noticeAvatarUrl, setNoticeAvatarUrl] = useState(null);
-    const [noticeText, setNoticeText] = useState(null);
     const [reactionText, setReactionText] = useState('');
     const [isSendingReactionLoading, setIsSendingReactionLoading] = useState(false);
 
@@ -93,17 +93,17 @@ export const Notices = ({
     }, [notices]);
 
     // Reacting to a notice
-    const handleReactNotice = (noticeId, noticeUsername, noticeAvatarUrl, noticeText) => {
-        if (reactingNoticeId === noticeId) {
-            setReactingNoticeId(null);
-        } else {
-            setReactingNoticeId(noticeId);
-            setShowReactionTextField(true);
-            setNoticeText(noticeText);
-            setNoticeUsername(noticeUsername);
-            setNoticeAvatarUrl(noticeAvatarUrl);
-        }
-    }
+    // const handleReactNotice = (noticeId, noticeUsername, noticeAvatarUrl, noticeText) => {
+    //     if (reactingNoticeId === noticeId) {
+    //         setReactingNoticeId(null);
+    //     } else {
+    //         setReactingNoticeId(noticeId);
+    //         setShowReactionTextField(true);
+    //         setNoticeText(noticeText);
+    //         setNoticeUsername(noticeUsername);
+    //         setNoticeAvatarUrl(noticeAvatarUrl);
+    //     }
+    // }
 
     const onReactionTextChange = (e) => {
         setReactionText(e.target.value);
@@ -130,9 +130,9 @@ export const Notices = ({
         }
     };
 
-    const handleCloseReactModal = () => {
-        setShowReactModal(false);
-    }
+    // const handleCloseReactModal = () => {
+    //     setShowReactModal(false);
+    // }
 
     // Repoting Notice
     const handleReportNotice = (noticeId) => {
@@ -167,7 +167,7 @@ export const Notices = ({
         setReportReason(null);
     }
 
-    // Fetching and listing reactions and related user info
+    // Fetching and listing reactions and related user info 
     const updateReactionMaps = (users, noticeId, usernameMap, avatarMap) => {
         const updatedUsernameMap = { ...usernameMap[noticeId] };
         const updatedAvatarMap = { ...avatarMap[noticeId] };
@@ -263,9 +263,10 @@ export const Notices = ({
         setShowLoadMoreBtn(true);
     }, [activeNoticeId, reactingNoticeId])
 
-    const handleAccordionToggle = async (noticeId) => {
+    const handleAccordionToggle = async (noticeId, noticeUsername, noticeAvatarUrl, noticeText) => {
         if (activeNoticeId === noticeId) {
             setActiveNoticeId(null);
+            setReactingNoticeId(null);
             setShowLoadMoreBtn(false);
 
             setLoadedReactions(prev => {
@@ -282,6 +283,10 @@ export const Notices = ({
         }
 
         setActiveNoticeId(noticeId);
+        setReactingNoticeId(noticeId);
+        setNoticeText(noticeText);
+        setNoticeUsername(noticeUsername);
+        setNoticeAvatarUrl(noticeAvatarUrl);
 
         // If reactions aren't loaded and not currently loading 
         if (!loadedReactions[noticeId] && !loadingStates[noticeId]) {
@@ -406,7 +411,7 @@ export const Notices = ({
                     <Accordion.Item eventKey={notice?.$id} key={notice?.$id}>
                         <Accordion.Header
                             // className='d-flex justify-content-center' 
-                            onClick={() => handleAccordionToggle(notice.$id)}
+                            onClick={() => handleAccordionToggle(notice.$id, notice.username, notice.avatarUrl, notice.text)}
                         >
                             <Row className='w-100 m-auto'>
                                 {/* Text and Countdown Col */}
@@ -527,7 +532,7 @@ export const Notices = ({
                                                                 )}
                                                             </div>
                                                             <div
-                                                                onClick={() => handleReactNotice(notice.$id, notice.username, notice.avatarUrl, notice.text)}
+                                                                // onClick={() => handleReactNotice(notice.$id, notice.username, notice.avatarUrl, notice.text)}
                                                                 className={`notice__reaction-btn ${isOtherUserBlocked ? 'disabled' : ''} ms-2`}
                                                             >
                                                                 <BsReply
@@ -553,10 +558,11 @@ export const Notices = ({
                                     </div>
                                 </Col>
                             </Row>
-
-                            {reactingNoticeId === notice.$id && reactingNoticeId !== null ?
+                        </Accordion.Header>
+                        <Accordion.Body className='notice__reaction'>
+                            {isOtherUserBlocked ? null :
                                 <Row className='m-auto'>
-                                    <Col>
+                                    <Col className='px-4'>
                                         <Form>
                                             <Form.Group className='mb-3' controlId='reportNotice'>
                                                 <Form.Control
@@ -569,23 +575,32 @@ export const Notices = ({
                                                 />
                                             </Form.Group>
                                         </Form>
+                                        <Button
+                                            onClick={handleReactSubmission}
+                                            className='notice__react-btn'
+                                            disabled={reactionText === '' ? true : false}
+                                        >
+                                            {isSendingReactionLoading ? <Loading /> : 'Send'}
+                                        </Button>
+                                        <hr />
                                     </Col>
-                                </Row> : null}
-                        </Accordion.Header>
-                        <Accordion.Body className='d-flex justify-content-center notice__reaction'>
-                            <Reactions
-                                notice={notice}
-                                defaultAvatar={defaultAvatar}
-                                isLoadingMoreReactions={isLoadingMoreReactions}
-                                loadedReactions={loadedReactions}
-                                loadingStates={loadingStates}
-                                reactionAvatarMap={reactionAvatarMap}
-                                reactionUsernameMap={reactionUsernameMap}
-                                showLoadMoreBtn={showLoadMoreBtn}
-                                user_id={user_id}
-                                handleLoadMoreReactions={handleLoadMoreReactions}
-                                handleReportReaction={handleReportReaction}
-                            />
+                                </Row>
+                            }
+                            <div className='d-flex justify-content-center'>
+                                <Reactions
+                                    notice={notice}
+                                    defaultAvatar={defaultAvatar}
+                                    isLoadingMoreReactions={isLoadingMoreReactions}
+                                    loadedReactions={loadedReactions}
+                                    loadingStates={loadingStates}
+                                    reactionAvatarMap={reactionAvatarMap}
+                                    reactionUsernameMap={reactionUsernameMap}
+                                    showLoadMoreBtn={showLoadMoreBtn}
+                                    user_id={user_id}
+                                    handleLoadMoreReactions={handleLoadMoreReactions}
+                                    handleReportReaction={handleReportReaction}
+                                />
+                            </div>
                         </Accordion.Body>
                     </Accordion.Item>
                 ))
@@ -593,7 +608,7 @@ export const Notices = ({
             </Accordion>
 
             {/* Reaction modal */}
-            <Modal show={showReactModal}
+            {/* <Modal show={showReactModal}
                 onHide={handleCloseReactModal}
                 className='notice__react--modal'
             >
@@ -650,7 +665,7 @@ export const Notices = ({
                         {isSendingReactionLoading ? <Loading /> : 'Send'}
                     </Button>
                 </Modal.Footer>
-            </Modal>
+            </Modal> */}
 
             {/* Notice report modal */}
             <Modal show={showReportModal} onHide={handleCloseReportModal}>

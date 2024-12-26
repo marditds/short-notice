@@ -398,7 +398,7 @@
 }
 
 .notice__edit--modal-btn,
-.notice__react--modal-btn {
+.notice__react-btn {
     background-color: var(--main-accent-color) !important;
     color: black !important;
     border: transparent;
@@ -407,8 +407,8 @@
 
 .notice__edit--modal-btn:hover,
 .notice__edit--modal-btn:focus,
-.notice__react--modal-btn:hover,
-.notice__react--modal-btn:focus {
+.notice__react-btn:hover,
+.notice__react-btn:focus {
     background-color: var(--main-accent-color-hover) !important;
     color: black !important;
     border: transparent;
@@ -537,7 +537,7 @@
     }
 
     .notice__edit--modal-btn,
-    .notice__react--modal-btn,
+    .notice__react-btn,
     .user-profile__form-control {
         font-size: var(--mobile-font-size);
     }
