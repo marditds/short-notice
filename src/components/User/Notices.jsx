@@ -117,13 +117,59 @@ export const Notices = ({
                 const notice = notices.find(notice => notice.$id === reactingNoticeId);
 
                 if (notice) {
+
+                    const currentUser = await getUserAccountByUserId(user_id);
+
+                    const tempReaction = {
+                        $id: `temp-${Date.now()}`,
+                        content: reactionText,
+                        sender_id: notice.user_id,
+                        $createdAt: new Date().toISOString()
+                    };
+
+                    console.log('content in loadedReaction:', tempReaction.content);
+
+                    setLoadedReactions(prev => ({
+                        ...prev,
+                        [reactingNoticeId]: [tempReaction, ...(prev[reactingNoticeId] || [])]
+                    }));
+
+                    setReactionUsernameMap(prev => ({
+                        ...prev,
+                        [reactingNoticeId]: {
+                            ...prev[reactingNoticeId],
+                            [notice.user_id]: currentUser.username
+                        }
+                    }));
+
+                    setReactionAvatarMap(prev => ({
+                        ...prev,
+                        [reactingNoticeId]: {
+                            ...prev[reactingNoticeId],
+                            [notice.user_id]: currentUser.avatar
+                        }
+                    }));
+
                     const res = await handleReact(notice.user_id, reactionText, notice.$id, notice.expiresAt);
                     console.log('handleReactSubmission', res);
-                    setShowReactModal(false);
+
+                    setLoadedReactions(prev => ({
+                        ...prev,
+                        [reactingNoticeId]: prev[reactingNoticeId].map(reaction =>
+                            reaction.$id === tempReaction.$id ? res : reaction
+                        )
+                    }));
+
                     setReactionText('');
                 }
             } catch (error) {
-                console.error("Error reporting notice:", error);
+                setLoadedReactions(prev => ({
+                    ...prev,
+                    [reactingNoticeId]: prev[reactingNoticeId].filter(
+                        reaction => reaction.$id !== `temp-${Date.now()}`
+                    )
+                }));
+                console.error("Error reacting to notice:", error);
             } finally {
                 setIsSendingReactionLoading(false);
             }
@@ -263,7 +309,7 @@ export const Notices = ({
         setShowLoadMoreBtn(true);
     }, [activeNoticeId, reactingNoticeId])
 
-    const handleAccordionToggle = async (noticeId, noticeUsername, noticeAvatarUrl, noticeText) => {
+    const handleAccordionToggle = async (noticeId) => {
         if (activeNoticeId === noticeId) {
             setActiveNoticeId(null);
             setReactingNoticeId(null);
@@ -284,9 +330,6 @@ export const Notices = ({
 
         setActiveNoticeId(noticeId);
         setReactingNoticeId(noticeId);
-        setNoticeText(noticeText);
-        setNoticeUsername(noticeUsername);
-        setNoticeAvatarUrl(noticeAvatarUrl);
 
         // If reactions aren't loaded and not currently loading 
         if (!loadedReactions[noticeId] && !loadingStates[noticeId]) {
@@ -402,7 +445,6 @@ export const Notices = ({
         <>
             {/* {!isLoadingNotices ? */}
             <Accordion
-                // defaultActiveKey={['0']}
                 className='notices__accordion'
                 activeKey={activeNoticeId}
                 onSelect={handleAccordionToggle}
@@ -411,7 +453,7 @@ export const Notices = ({
                     <Accordion.Item eventKey={notice?.$id} key={notice?.$id}>
                         <Accordion.Header
                             // className='d-flex justify-content-center' 
-                            onClick={() => handleAccordionToggle(notice.$id, notice.username, notice.avatarUrl, notice.text)}
+                            onClick={() => handleAccordionToggle(notice.$id)}
                         >
                             <Row className='w-100 m-auto'>
                                 {/* Text and Countdown Col */}

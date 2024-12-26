@@ -62,7 +62,7 @@ const UserProfile = () => {
         getBlockedUsersByUser
     } = useUserInfo(googleUserData);
 
-    const [notices, setNotices] = useState([]);
+    // const [notices, setNotices] = useState([]);
     const [userProfileNotices, setUserProfileNotices] = useState([]);
     const [savedNoticesData, setSavedNoticesData] = useState([]);
     const [likedNoticesData, setLikedNoticesData] = useState([]);
@@ -507,6 +507,7 @@ const UserProfile = () => {
                         likedNotices={likedNotices}
                         savedNotices={savedNotices}
                         eventKey={eventKey}
+                        user_id={user_id}
                         handleLike={handleLike}
                         handleSave={handleSave}
                         handleReport={handleReport}
@@ -541,6 +542,7 @@ const UserProfile = () => {
                         likedNotices={likedNotices}
                         savedNotices={savedNotices}
                         eventKey={eventKey}
+                        user_id={user_id}
                         handleLike={handleLike}
                         handleSave={handleSave}
                         handleReport={handleReport}

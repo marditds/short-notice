@@ -451,8 +451,9 @@ const OtherUserProfile = () => {
 
     const handleReact = async (currUserId, content, notice_id, expiresAt) => {
         try {
-            await sendReaction(currUserId, content, notice_id, expiresAt);
+            const res = await sendReaction(currUserId, content, notice_id, expiresAt);
             console.log('Success handleReact.');
+            return res;
         } catch (error) {
             console.error('Failed handleReact:', error);
         }
@@ -586,6 +587,7 @@ const OtherUserProfile = () => {
                                                     savedNotices={savedNotices}
                                                     reactions={noticesReactions}
                                                     eventKey={eventKey}
+                                                    user_id={user_id}
                                                     isOtherUserBlocked={isOtherUserBlocked}
                                                     handleLike={handleLike}
                                                     handleSave={handleSave}
