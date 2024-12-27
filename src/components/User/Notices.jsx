@@ -657,10 +657,10 @@ export const Notices = ({
                 onHide={handleCloseReportModal}
                 className='notice__report--modal p-0'
             >
-                <Modal.Header>
+                <Modal.Header className='border-bottom-0'>
                     <Modal.Title>Report Notice</Modal.Title>
                 </Modal.Header>
-                <Modal.Body className='notice__report--modal-body'>
+                <Modal.Body className='notice__report--modal-body py-0'>
                     {showReportConfirmation ? (
                         <p>Your report has been successfully submitted!</p>
                     ) : (
@@ -684,7 +684,7 @@ export const Notices = ({
                         </Form>
                     )}
                 </Modal.Body>
-                <Modal.Footer>
+                <Modal.Footer className='border-top-0'>
                     {showReportConfirmation ? null : (
                         <>
                             <Button onClick={handleCloseReportModal}

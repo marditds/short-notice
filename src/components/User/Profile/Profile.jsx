@@ -354,11 +354,14 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
             </Modal>
 
             {/* User report modal */}
-            <Modal show={showReportUserModal} onHide={handleCloseReportUserModal}>
-                <Modal.Header>
+            <Modal show={showReportUserModal}
+                onHide={handleCloseReportUserModal}
+                className='user-profile__report--modal'
+            >
+                <Modal.Header className='border-bottom-0 user-profile__report--modal-header'>
                     <Modal.Title>Report User</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>
+                <Modal.Body className='user-profile__report--modal-body py-0'>
                     {showReportUserConfirmation ? (
                         <p>Your report has been successfully submitted!</p>
                     ) : (
@@ -373,20 +376,24 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                                         id={category.name}
                                         name='reportReason'
                                         onChange={() => setReportReason(category.key)}
+                                        className='user-profile__report--radio'
                                     />
                                 ))}
                             </Form.Group>
                         </Form>
                     )}
                 </Modal.Body>
-                <Modal.Footer>
+                <Modal.Footer className='user-profile__report--modal-footer border-top-0'>
                     {showReportUserConfirmation ? null : (
                         <>
-                            <Button onClick={handleCloseReportUserModal}>
+                            <Button onClick={handleCloseReportUserModal}
+                                className='user-profile__report--modal-btn'
+                            >
                                 Cancel
                             </Button>
                             <Button onClick={handleReportUserSubmission}
-                            // disabled={!reportReason}
+                                // disabled={!reportReason}
+                                className='user-profile__report--modal-btn'
                             >
                                 Report
                             </Button>

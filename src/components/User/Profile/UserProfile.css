@@ -226,18 +226,27 @@
     max-width: 65px;
 }
 
-.notice__report--radio>input {
+.notice__report--radio>label,
+.user-profile__report--radio>label {
+    cursor: pointer;
+}
+
+.notice__report--radio>input,
+.user-profile__report--radio>input {
     transition: var(--main-transition-speed);
     border-radius: 4px !important;
-
+    cursor: pointer;
 }
 
 .notice__report--radio>input:checked,
-.notice__report--radio>input:active {
+.notice__report--radio>input:active,
+.user-profile__report--radio>input:checked,
+.user-profile__report--radio>input:active {
     border: var(--main-accent-color-hover);
     box-shadow: none !important;
 }
 
+.user-profile__report--radio>input:checked,
 .notice__report--radio>input:checked,
 .notice__report--modal-btn,
 .user-profile__notify-btn,
@@ -248,6 +257,8 @@
     transition: var(--main-transition-speed) !important;
 }
 
+.user-profile__report--radio>input:active,
+.user-profile__report--radio>input:focus,
 .notice__report--radio>input:active,
 .notice__report--modal-btn:focus,
 .user-profile__notify-btn:focus {
@@ -423,7 +434,6 @@
     transition: var(--main-transition-speed);
 }
 
-
 .notice__edit--modal-header,
 .notice__edit--modal-body,
 .notice__edit--modal-footer,
@@ -436,7 +446,8 @@
 
 .notice__edit--modal-btn,
 .notice__react-btn,
-.user-profile__block--modal-body-btn {
+.user-profile__block--modal-body-btn,
+.user-profile__report--modal-btn {
     background-color: var(--main-accent-color) !important;
     color: black !important;
     border: transparent;
@@ -448,7 +459,9 @@
 .notice__react-btn:hover,
 .notice__react-btn:focus,
 .user-profile__block--modal-body-btn:hover,
-.user-profile__block--modal-body-btn:focus {
+.user-profile__block--modal-body-btn:focus,
+.user-profile__report--modal-btn:hover,
+.user-profile__report--modal-btn:focus {
     background-color: var(--main-accent-color-hover) !important;
     color: black !important;
     border: transparent;
@@ -476,9 +489,11 @@
 .notice__react--modal,
 .notice__edit--modal,
 .notice__report--modal,
-.user-profile__block--modal {
+.user-profile__block--modal,
+.user-profile__report--modal {
     z-index: 9002;
 }
+
 
 .user-profile__block--modal>div>div,
 .notice__report--modal>div>div,
@@ -519,7 +534,8 @@
 
 .notice__report--modal-body,
 .user-profile__following--modal-body,
-.user-profile__block--modal-body {
+.user-profile__block--modal-body,
+.user-profile__report--modal-body {
     max-height: 600px;
     overflow-y: auto;
 }
@@ -577,7 +593,10 @@
     .notice__report--modal-body,
     .notice__report--modal>div>div>.modal-footer,
     .user-profile__block--modal>div>div>.modal-header,
-    .user-profile__block--modal-body {
+    .user-profile__block--modal-body,
+    .user-profile__report--modal>div>div>.modal-header,
+    .user-profile__report--modal-body,
+    .user-profile__report--modal>div>div>.modal-footer {
         padding: 10px;
     }
 }
