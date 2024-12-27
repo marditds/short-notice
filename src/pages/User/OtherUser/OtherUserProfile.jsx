@@ -440,9 +440,9 @@ const OtherUserProfile = () => {
         }
     };
 
-    const handleReport = async (notice_id, author_id, reason) => {
+    const handleReport = async (notice_id, author_id, reason, noticeText) => {
         try {
-            await reportNotice(notice_id, author_id, reason);
+            await reportNotice(notice_id, author_id, reason, noticeText);
             return 'Report success';
         } catch (error) {
             console.error('Could not report notice');

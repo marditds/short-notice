@@ -151,12 +151,12 @@ export const Notices = ({
                     const res = await handleReact(notice.user_id, reactionText, notice.$id, notice.expiresAt);
                     console.log('handleReactSubmission', res);
 
-                    setLoadedReactions(prev => ({
-                        ...prev,
-                        [reactingNoticeId]: prev[reactingNoticeId].map(reaction =>
-                            reaction.$id === tempReaction.$id ? res : reaction
-                        )
-                    }));
+                    // setLoadedReactions(prev => ({
+                    //     ...prev,
+                    //     [reactingNoticeId]: prev[reactingNoticeId].map(reaction =>
+                    //         reaction.$id === tempReaction.$id ? res : reaction
+                    //     )
+                    // }));
 
                     setReactionText('');
                 }
@@ -652,6 +652,99 @@ export const Notices = ({
                 }
             </Accordion>
 
+            {/* Notice report modal */}
+            <Modal show={showReportModal}
+                onHide={handleCloseReportModal}
+                className='notice__report--modal p-0'
+            >
+                <Modal.Header>
+                    <Modal.Title>Report Notice</Modal.Title>
+                </Modal.Header>
+                <Modal.Body className='notice__report--modal-body'>
+                    {showReportConfirmation ? (
+                        <p>Your report has been successfully submitted!</p>
+                    ) : (
+                        <Form
+                            className='notice__report--modal-form'
+                        >
+                            <Form.Group className='mb-3' controlId='reportNotice'>
+                                <Form.Label>Reason:</Form.Label>
+                                {reportCategories.map((category) => (
+                                    <Form.Check
+                                        key={category.key}
+                                        type='radio'
+                                        label={category.name}
+                                        id={category.name}
+                                        name='reportReason'
+                                        onChange={() => setReportReason(category.key)}
+                                        className='notice__report--radio'
+                                    />
+                                ))}
+                            </Form.Group>
+                        </Form>
+                    )}
+                </Modal.Body>
+                <Modal.Footer>
+                    {showReportConfirmation ? null : (
+                        <>
+                            <Button onClick={handleCloseReportModal}
+                                className='notice__report--modal-btn'
+                            >
+                                Cancel
+                            </Button>
+                            <Button onClick={handleReportSubmission}
+                                className='notice__report--modal-btn'
+                            // disabled={!reportReason}
+                            >
+                                Report
+                            </Button>
+                        </>
+                    )}
+                </Modal.Footer>
+            </Modal>
+
+            {/* Reaction report modal */}
+            <Modal show={showReportReactionModal} onHide={handleCloseReportReactionModal}>
+                <Modal.Header>
+                    <Modal.Title>Report Reaction</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {showReportReactionConfirmation ? (
+                        <p>Your report has been successfully submitted!</p>
+                    ) : (
+                        <Form>
+                            <Form.Group className='mb-3' controlId='reportReaction'>
+                                <Form.Label>Reason:</Form.Label>
+                                {reportCategories.map((category) => (
+                                    <Form.Check
+                                        key={category.key}
+                                        type='radio'
+                                        label={category.name}
+                                        id={category.name}
+                                        name='reportReason'
+                                        onChange={() => setReportReason(category.key)}
+                                    />
+                                ))}
+                            </Form.Group>
+                        </Form>
+                    )}
+                </Modal.Body>
+                <Modal.Footer>
+                    {showReportReactionConfirmation ? null : (
+                        <>
+                            <Button onClick={handleCloseReportReactionModal}>
+                                Cancel
+                            </Button>
+                            <Button onClick={handleReportReactionSubmission}
+                            // disabled={!reportReason}
+                            >
+                                Report
+                            </Button>
+                        </>
+                    )}
+                </Modal.Footer>
+            </Modal>
+
             {/* Reaction modal */}
             {/* <Modal show={showReactModal}
                 onHide={handleCloseReactModal}
@@ -712,89 +805,6 @@ export const Notices = ({
                 </Modal.Footer>
             </Modal> */}
 
-            {/* Notice report modal */}
-            <Modal show={showReportModal} onHide={handleCloseReportModal}>
-                <Modal.Header>
-                    <Modal.Title>Report Notice</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    {showReportConfirmation ? (
-                        <p>Your report has been successfully submitted!</p>
-                    ) : (
-                        <Form>
-                            <Form.Group className='mb-3' controlId='reportNotice'>
-                                <Form.Label>Reason:</Form.Label>
-                                {reportCategories.map((category) => (
-                                    <Form.Check
-                                        key={category.key}
-                                        type='radio'
-                                        label={category.name}
-                                        id={category.name}
-                                        name='reportReason'
-                                        onChange={() => setReportReason(category.key)}
-                                    />
-                                ))}
-                            </Form.Group>
-                        </Form>
-                    )}
-                </Modal.Body>
-                <Modal.Footer>
-                    {showReportConfirmation ? null : (
-                        <>
-                            <Button onClick={handleCloseReportModal}>
-                                Cancel
-                            </Button>
-                            <Button onClick={handleReportSubmission}
-                            // disabled={!reportReason}
-                            >
-                                Report
-                            </Button>
-                        </>
-                    )}
-                </Modal.Footer>
-            </Modal>
-
-            {/* Reaction report modal */}
-            <Modal show={showReportReactionModal} onHide={handleCloseReportReactionModal}>
-                <Modal.Header>
-                    <Modal.Title>Report Reaction</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    {showReportReactionConfirmation ? (
-                        <p>Your report has been successfully submitted!</p>
-                    ) : (
-                        <Form>
-                            <Form.Group className='mb-3' controlId='reportReaction'>
-                                <Form.Label>Reason:</Form.Label>
-                                {reportCategories.map((category) => (
-                                    <Form.Check
-                                        key={category.key}
-                                        type='radio'
-                                        label={category.name}
-                                        id={category.name}
-                                        name='reportReason'
-                                        onChange={() => setReportReason(category.key)}
-                                    />
-                                ))}
-                            </Form.Group>
-                        </Form>
-                    )}
-                </Modal.Body>
-                <Modal.Footer>
-                    {showReportReactionConfirmation ? null : (
-                        <>
-                            <Button onClick={handleCloseReportReactionModal}>
-                                Cancel
-                            </Button>
-                            <Button onClick={handleReportReactionSubmission}
-                            // disabled={!reportReason}
-                            >
-                                Report
-                            </Button>
-                        </>
-                    )}
-                </Modal.Footer>
-            </Modal>
         </>
     );
 };
