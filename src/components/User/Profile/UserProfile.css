@@ -341,7 +341,8 @@
 .notice__reaction-btn,
 .notice__edit-btn:focus,
 .notice__delete-btn:focus,
-.notice__reaction-btn {
+.notice__reaction-btn,
+.user-profile__block--modal-body-btn {
     background-color: transparent !important;
     border-color: transparent !important;
     box-shadow: none !important;
@@ -398,7 +399,8 @@
 .user-profile__following--modal>div,
 .notice__report--modal>div,
 .notice__edit--modal>div,
-.notice__react--modal>div {
+.notice__react--modal>div,
+.user-profile__block--modal>div {
     margin-block: 0;
     display: flex;
     justify-content: center;
@@ -410,7 +412,8 @@
 .notice__edit--modal>div>div,
 .notice__react--modal>div>div,
 .notice__report--modal>div>div,
-.user-profile__following--modal>div>div {
+.user-profile__following--modal>div>div,
+.user-profile__block--modal>div>div {
     border-color: var(--main-accent-color);
     border-width: 0.5px;
     background-color: rgba(var(--main-bg-color), 0.9);
@@ -432,7 +435,8 @@
 }
 
 .notice__edit--modal-btn,
-.notice__react-btn {
+.notice__react-btn,
+.user-profile__block--modal-body-btn {
     background-color: var(--main-accent-color) !important;
     color: black !important;
     border: transparent;
@@ -442,7 +446,9 @@
 .notice__edit--modal-btn:hover,
 .notice__edit--modal-btn:focus,
 .notice__react-btn:hover,
-.notice__react-btn:focus {
+.notice__react-btn:focus,
+.user-profile__block--modal-body-btn:hover,
+.user-profile__block--modal-body-btn:focus {
     background-color: var(--main-accent-color-hover) !important;
     color: black !important;
     border: transparent;
@@ -469,10 +475,12 @@
 .user-profile__following--modal,
 .notice__react--modal,
 .notice__edit--modal,
-.notice__report--modal {
+.notice__report--modal,
+.user-profile__block--modal {
     z-index: 9002;
 }
 
+.user-profile__block--modal>div>div,
 .notice__report--modal>div>div,
 .user-profile__report--modal>div>div,
 .user-profile__following--modal>div>div {
@@ -482,14 +490,19 @@
 .user-profile__following--modal-header>button,
 .user-profile__following--modal-header>button:hover,
 .user-profile__following--modal-header>button:active,
-.user-profile__following--modal-header>button:focus {
+.user-profile__following--modal-header>button:focus,
+.user-profile__block--modal-header>button,
+.user-profile__block--modal-header>button:hover,
+.user-profile__block--modal-header>button:active,
+.user-profile__block--modal-header>button:focus {
     background: transparent !important;
     border: 0 !important;
     box-shadow: none !important;
     padding: 0;
 }
 
-.user-profile__following--modal-header>button>svg {
+.user-profile__following--modal-header>button>svg,
+.user-profile__block--modal-header>button>svg {
     color: var(--main-accent-color);
     transition: var(--main-transition-speed) !important;
 
@@ -497,12 +510,16 @@
 
 .user-profile__following--modal-header>button:hover>svg,
 .user-profile__following--modal-header>button:active>svg,
-.user-profile__following--modal-header>button:focus>svg {
+.user-profile__following--modal-header>button:focus>svg,
+.user-profile__block--modal-header>button:hover>svg,
+.user-profile__block--modal-header>button:active>svg,
+.user-profile__block--modal-header>button:focus>svg {
     color: var(--main-accent-color-hover)
 }
 
 .notice__report--modal-body,
-.user-profile__following--modal-body {
+.user-profile__following--modal-body,
+.user-profile__block--modal-body {
     max-height: 600px;
     overflow-y: auto;
 }
@@ -551,13 +568,16 @@
     .notice__report--modal-btn,
     .notice__edit--modal-btn,
     .notice__react-btn,
+    .user-profile__block--modal-body-btn,
     .user-profile__form-control {
         font-size: var(--mobile-font-size);
     }
 
     .notice__report--modal>div>div>.modal-header,
     .notice__report--modal-body,
-    .notice__report--modal>div>div>.modal-footer {
+    .notice__report--modal>div>div>.modal-footer,
+    .user-profile__block--modal>div>div>.modal-header,
+    .user-profile__block--modal-body {
         padding: 10px;
     }
 }

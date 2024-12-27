@@ -325,23 +325,31 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
             <Modal
                 show={showBlockModal}
                 onHide={handleCloseBlockModal}
-                className='user-profile__following--modal'
+                className='user-profile__block--modal'
             >
                 <Modal.Header
-                    className='user-profile__following--modal-header w-100'
+                    className='justify-content-end border-bottom-0 user-profile__block--modal-header pb-0 w-100'
                 >
                     <Button
                         onClick={handleCloseBlockModal}
                     >
-                        <SlClose size={24} className='ms-auto' />
+                        <SlClose size={24} className='' />
                     </Button>
                 </Modal.Header>
                 <Modal.Body
-                    className='user-profile__following--modal-body'
+                    className='user-profile__block--modal-body'
                 >
-                    Are you sure you want to block {username}?
-                    <Button onClick={() => handleBlock(currUserId)}>Yes</Button>
-                    <Button onClick={handleCloseBlockModal}>Cancel</Button>
+                    <p>Are you sure you want to block <strong>{username}</strong>?</p>
+                    <Button onClick={() => handleBlock(currUserId)}
+                        className='me-2 user-profile__block--modal-body-btn'
+                    >
+                        Yes
+                    </Button>
+                    <Button onClick={handleCloseBlockModal}
+                        className='user-profile__block--modal-body-btn'
+                    >
+                        Cancel
+                    </Button>
                 </Modal.Body>
             </Modal>
 
@@ -387,6 +395,6 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                 </Modal.Footer>
             </Modal>
 
-        </div>
+        </div >
     )
 }
