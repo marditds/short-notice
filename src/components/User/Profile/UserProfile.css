@@ -11,18 +11,18 @@
 .user-profile__follow-numbers-text:hover,
 .user-profile__follow-numbers-text:focus,
 .user-profile__follow-numbers-text:active,
-.user-profile__follow-numbers-number,
-.user-profile__follow-numbers-number:hover,
-.user-profile__follow-numbers-number:focus,
-.user-profile__follow-numbers-number:active {
+.user-profile__follow-number,
+.user-profile__follow-number:hover,
+.user-profile__follow-number:focus,
+.user-profile__follow-number:active {
     max-width: fit-content;
     background-color: transparent !important;
     border: 0px;
     padding-block: 0;
 }
 
-.user-profile__follow-numbers-number {
-    font-size: 20pt;
+.user-profile__follow-number {
+    font-size: 15pt;
 }
 
 .user-profile__follow-numbers-text:hover,
@@ -30,8 +30,8 @@
     color: var(--main-accent-color-hover);
 }
 
-.user-profile__follow-numbers-number:hover,
-.user-profile__follow-numbers-text:has(+ .user-profile__follow-numbers-number:hover) {
+.user-profile__follow-number:hover,
+.user-profile__follow-numbers-text:has(+ .user-profile__follow-number:hover) {
     color: var(--main-accent-color-hover) !important;
 }
 
@@ -563,7 +563,7 @@
         font-size: 10pt;
     }
 
-    .user-profile__follow-numbers-number {
+    .user-profile__follow-number {
         font-size: 12.5pt;
     }
 

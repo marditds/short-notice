@@ -116,7 +116,7 @@
 
 
 
-/* .user-profile__follow-numbers-text:has(+ .user-profile__follow-numbers-number:hover) {
+/* .user-profile__follow-numbers-text:has(+ .user-profile__follow-number:hover) {
     color: var(--main-accent-color-hover) !important;
 } */
 

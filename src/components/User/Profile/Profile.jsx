@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation, Link } from 'react-router-dom';
-import { Row, Col, Button, Modal, Form } from 'react-bootstrap';
+import { Row, Col, Button, Modal, Form, Dropdown } from 'react-bootstrap';
 import { getAvatarUrl } from '../../../lib/utils/avatarUtils.js';
 import defaultAvatar from '../../../assets/default.png';
 import { SlClose } from "react-icons/sl";
@@ -34,6 +34,8 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
     const [showReportUserModal, setShowReportUserModal] = useState(false);
     const [reportReason, setReportReason] = useState(null);
     const [showReportUserConfirmation, setShowReportUserConfirmation] = useState(false);
+
+    const [isExtraSmallScreen, setIsExtraSmallScreen] = useState(window.innerWidth < 576);
 
     const handleShowFollowersModal = () => {
         setShowFollowersModal(true);
@@ -85,85 +87,68 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
         setReportReason(null);
     }
 
+    // Screen size check
+    useEffect(() => {
+        const handleResize = () => {
+            setIsExtraSmallScreen(window.innerWidth < 576);
+        };
+
+        window.addEventListener('resize', handleResize);
+
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
     return (
         <div className='user-profile__body'>
-            <Row className='user-profile fixed-top'>
+            <Row className='user-profile fixed-top h-100'>
 
                 {/* Folllowes/Following Col */}
                 <Col
-                    xs={{ span: 12, order: 3 }} // Full width and last on xs
+                    xs={{ span: 6, order: 3 }}
                     sm={{ span: 4, order: 1 }}
-                    className='d-flex flex-row flex-sm-column justify-content-evenly'>
+                    className='d-flex flex-row flex-sm-column justify-content-evenly h-50'>
                     {
                         isBlocked ?
                             null :
                             <>
-                                {/* <div className='d-flex flex-row flex-sm-column align-items-end'> */}
-                                {/* <Button
-                                        onClick={() => {
-                                            handleShowFollowersModal();
-                                            loadFollowers()
-                                        }}
-                                        className='user-profile__follow-numbers-text pe-0'
-                                    >
-                                        {followersCount === null ?
-                                            null
-                                            :
-                                            'Followers'
-                                        }
-                                    </Button> */}
                                 <Button
                                     onClick={() => {
                                         handleShowFollowersModal();
                                         loadFollowers()
                                     }}
-                                    className='user-profile__follow-numbers-number d-flex flex-column'
+                                    className='user-profile__follow-number d-flex flex-row flex-sm-column p-0'
                                 >
                                     {followersCount === null ?
                                         <Loading />
                                         :
                                         <>
                                             Followers <br />
-                                            <strong>
+                                            <strong className='ms-2 ms-sm-0'>
                                                 {followersCount}
                                             </strong>
                                         </>
                                     }
                                 </Button>
-                                {/* </div> */}
-                                {/* <div className='d-flex flex-row flex-sm-column'> */}
+
                                 {/* <Button
-                                        onClick={async () => {
-                                            handleShowFollowingModal();
-                                            await loadFollowing()
-                                        }}
-                                        className='user-profile__follow-numbers-text pe-0'
-                                    >
-                                        {followingCount === null ?
-                                            null
-                                            :
-                                            'Following'
-                                        }
-                                    </Button> */}
-                                <Button
                                     onClick={async () => {
                                         handleShowFollowingModal();
                                         await loadFollowing()
                                     }}
-                                    className='user-profile__follow-numbers-number d-flex flex-column'
+                                    className='user-profile__follow-number d-flex flex-row flex-sm-column p-0'
                                 >
                                     {followingCount === null ?
                                         <Loading />
                                         :
                                         <>
                                             Following
-                                            <strong>
+                                            <strong className='ms-2 ms-sm-0'>
                                                 {followingCount}
                                             </strong>
                                         </>
                                     }
-                                </Button>
-                                {/* </div> */}
+                                </Button> */}
+
                             </>
                     }
                 </Col>
@@ -172,7 +157,7 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                 <Col
                     xs={{ span: 6, order: 1 }} // Full width and first on xs
                     sm={{ span: 4, order: 2 }}
-                    className='d-flex flex-column justify-content-evenly align-items-center'>
+                    className='d-flex flex-column justify-content-evenly align-items-stretch h-100'>
                     <div>
                         <img
                             src={avatarUrl ? avatarUrl : defaultAvatar}
@@ -185,9 +170,9 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
 
                 {/* Follow/Block/Report Col */}
                 <Col
-                    xs={{ span: 6, order: 2 }} // Full width and second on xs
+                    xs={{ span: 6, order: 2 }} // Half width and second on xs
                     sm={{ span: 4, order: 3 }}
-                    className='d-flex flex-column justify-content-evenly'
+                    className='d-flex justify-content-start flex-sm-column align-items-stretch justify-content-sm-evenly h-50'
                 >
                     {location.pathname !== '/user/profile' ?
                         <>
@@ -195,10 +180,10 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                                 isBlocked ? null :
                                     <Button
                                         className={`user-profile__interaction-btn
-                                ${isFollowing ? 'following' : ''}`}
+                                ${isFollowing ? 'following' : ''} ms-sm-auto`}
                                         onClick={() => handleFollow(currUserId)}
                                         style={{
-                                            height: 'fit-content', width: 'fit-content', marginLeft: 'auto'
+                                            height: 'fit-content', width: 'fit-content',
                                         }}
                                     >
                                         {isFollowingUserLoading ? <Loading /> :
@@ -209,25 +194,58 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                                     </Button>
                             }
 
-
-                            <Button
-                                onClick={handleShowBlockModal}
-                                className='user-profile__interaction-btn'
-                                style={{
-                                    height: 'fit-content', width: 'fit-content', marginLeft: 'auto'
-                                }}
-                                disabled={isOtherUserBlocked ? true : false}
-                            >
-                                {isOtherUserBlocked ? 'Blocked' : 'Block'}
-                            </Button>
-                            <Button
-                                onClick={handleReportUser}
-                                className='user-profile__interaction-btn'
-                                style={{
-                                    height: 'fit-content', width: 'fit-content', marginLeft: 'auto'
-                                }}>
-                                Report
-                            </Button>
+                            {isExtraSmallScreen ?
+                                <Dropdown className='ms-2'>
+                                    <Dropdown.Toggle variant="success" id="dropdown-basic">
+                                        <i className='bi bi-three-dots' />
+                                    </Dropdown.Toggle>
+                                    <Dropdown.Menu>
+                                        <Dropdown.Item>
+                                            <Button
+                                                onClick={handleShowBlockModal}
+                                                className='user-profile__interaction-btn'
+                                                style={{
+                                                    height: 'fit-content', width: 'fit-content', marginLeft: 'auto'
+                                                }}
+                                                disabled={isOtherUserBlocked ? true : false}
+                                            >
+                                                {isOtherUserBlocked ? 'Blocked' : 'Block'}
+                                            </Button>
+                                        </Dropdown.Item>
+                                        <Dropdown.Item>
+                                            <Button
+                                                onClick={handleReportUser}
+                                                className='user-profile__interaction-btn'
+                                                style={{
+                                                    height: 'fit-content', width: 'fit-content', marginLeft: 'auto'
+                                                }}>
+                                                Report
+                                            </Button>
+                                        </Dropdown.Item>
+                                    </Dropdown.Menu>
+                                </Dropdown>
+                                :
+                                <>
+                                    <Button
+                                        onClick={handleShowBlockModal}
+                                        className='user-profile__interaction-btn'
+                                        style={{
+                                            height: 'fit-content', width: 'fit-content', marginLeft: 'auto'
+                                        }}
+                                        disabled={isOtherUserBlocked ? true : false}
+                                    >
+                                        {isOtherUserBlocked ? 'Blocked' : 'Block'}
+                                    </Button>
+                                    <Button
+                                        onClick={handleReportUser}
+                                        className='user-profile__interaction-btn'
+                                        style={{
+                                            height: 'fit-content', width: 'fit-content', marginLeft: 'auto'
+                                        }}>
+                                        Report
+                                    </Button>
+                                </>
+                            }
                         </>
                         :
                         null
