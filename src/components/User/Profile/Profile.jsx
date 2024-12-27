@@ -158,18 +158,20 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                 </Col>
 
                 {/* Profile Picture Col */}
-                <Col className='w-100 d-grid justify-content-center gap-2'>
-                    <img
-                        src={avatarUrl ? avatarUrl : defaultAvatar}
-                        alt="Profile"
-                        className='user-profile__avatar'
-                    />
+                <Col className='w-100 d-flex flex-column justify-content-evenly align-items-center'>
+                    <div>
+                        <img
+                            src={avatarUrl ? avatarUrl : defaultAvatar}
+                            alt="Profile"
+                            className='user-profile__avatar'
+                        />
+                    </div>
                     <p className='my-0 text-center'>{username}</p>
                 </Col>
 
                 {/* Follow/Block/Report Col */}
                 <Col
-                    className='d-grid gap-0 align-content-stretch justify-content-end'
+                    className='d-flex flex-column justify-content-evenly'
                 >
                     {location.pathname !== '/user/profile' ?
                         <>

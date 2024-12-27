@@ -1,10 +1,8 @@
 .user-profile {
-    /* margin: 54px 0 0px 0; */
     max-width: 1320px !important;
-    /* margin: 0 auto; */
     margin-inline: auto;
     margin-top: 3px;
-    padding: 54px 45px 12px 45px;
+    padding: 54px 33px 12px 33px;
     height: 198px;
     backdrop-filter: blur(4px);
 }
@@ -554,11 +552,31 @@
 
 @media (max-width: 767px) {
 
+    .user-profile {
+        max-width: 540px !important;
+        padding: 54px 20px 12px 20px;
+        margin-top: 3px;
+        height: 198px;
+    }
+
+    .user-profile__follow-numbers-text {
+        font-size: 10pt;
+    }
+
+    .user-profile__follow-numbers-number {
+        font-size: 12.5pt;
+    }
+
+    .user-profile__interaction-btn,
     .user-profile__tags-accordion>div>h2>button,
     .user-profile__tags-accordion>div,
     .notices__accordion>div>h2>button,
     .notices__accordion>div {
         font-size: var(--mobile-font-size);
+    }
+
+    .user-profile__avatar {
+        height: 75px;
     }
 
     .notice__avatar {
