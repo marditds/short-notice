@@ -100,13 +100,13 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
 
     return (
         <div className='user-profile__body'>
-            <Row className='user-profile fixed-top h-100'>
+            <Row className='user-profile fixed-top'>
 
                 {/* Folllowes/Following Col */}
                 <Col
                     xs={{ span: 6, order: 3 }}
                     sm={{ span: 4, order: 1 }}
-                    className='d-flex flex-row flex-sm-column justify-content-evenly h-50'>
+                    className='d-flex flex-row flex-sm-column justify-content-evenly user-profile__follow-count-col'>
                     {
                         isBlocked ?
                             null :
@@ -130,7 +130,7 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                                     }
                                 </Button>
 
-                                {/* <Button
+                                <Button
                                     onClick={async () => {
                                         handleShowFollowingModal();
                                         await loadFollowing()
@@ -147,7 +147,7 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                                             </strong>
                                         </>
                                     }
-                                </Button> */}
+                                </Button>
 
                             </>
                     }
@@ -155,9 +155,9 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
 
                 {/* Profile Picture Col */}
                 <Col
-                    xs={{ span: 6, order: 1 }} // Full width and first on xs
+                    xs={{ span: 6, order: 1 }}
                     sm={{ span: 4, order: 2 }}
-                    className='d-flex flex-column justify-content-evenly align-items-stretch h-100'>
+                    className='d-flex flex-column justify-content-evenly align-items-stretch user-profile__avatar-col'>
                     <div>
                         <img
                             src={avatarUrl ? avatarUrl : defaultAvatar}
@@ -170,9 +170,9 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
 
                 {/* Follow/Block/Report Col */}
                 <Col
-                    xs={{ span: 6, order: 2 }} // Half width and second on xs
+                    xs={{ span: 6, order: 2 }}
                     sm={{ span: 4, order: 3 }}
-                    className='d-flex justify-content-start flex-sm-column align-items-stretch justify-content-sm-evenly h-50'
+                    className='d-flex justify-content-start flex-sm-column align-items-stretch justify-content-sm-evenly user-profile__follow-block-report-col'
                 >
                     {location.pathname !== '/user/profile' ?
                         <>
@@ -195,8 +195,8 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                             }
 
                             {isExtraSmallScreen ?
-                                <Dropdown className='ms-2'>
-                                    <Dropdown.Toggle variant="success" id="dropdown-basic">
+                                <Dropdown className='ms-2 user-profile__interaction-dropdown'>
+                                    <Dropdown.Toggle id='dropdown-block-report'>
                                         <i className='bi bi-three-dots' />
                                     </Dropdown.Toggle>
                                     <Dropdown.Menu>

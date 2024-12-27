@@ -549,6 +549,13 @@
     background-color: rgba(255, 255, 255, 0.4) !important;
 }
 
+.user-profile__follow-block-report-col,
+.user-profile__avatar-col,
+.user-profile__follow-count-col {
+    height: 100%;
+}
+
+
 
 @media (max-width: 767px) {
 
@@ -617,9 +624,28 @@
     .user-profile__report--modal>div>div>.modal-footer {
         padding: 10px;
     }
+
 }
 
 @media (max-width: 575px) {
+
+    .user-profile {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .user-profile__follow-block-report-col,
+    .user-profile__follow-count-col {
+        height: 50%;
+    }
+
+    .user-profile__interaction-dropdown>button {
+        padding: 0;
+    }
+
+    .user-profile__interaction-dropdown>button::after {
+        display: none !important;
+    }
 
     .notice__text-countdown-col,
     .notice__reaction-text-col {
@@ -639,15 +665,18 @@
         margin-right: 0px !important;
     }
 
-    /* .notice__react--modal-body {
-        padding: 12px;
-    } */
+}
+
+@media (max-width: 549px) {
+    .user-profile__follow-number {
+        font-size: 10pt;
+    }
 }
 
 @media (max-height: 457px) {
-    body {
+    /* body {
         background-color: yellow !important;
-    }
+    } */
 
     /* 
     .notice__edit--modal,
