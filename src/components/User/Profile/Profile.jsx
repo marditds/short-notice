@@ -90,75 +90,89 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
             <Row className='user-profile fixed-top'>
 
                 {/* Folllowes/Following Col */}
-                <Col className='d-grid'>
+                <Col
+                    xs={{ span: 12, order: 3 }} // Full width and last on xs
+                    sm={{ span: 4, order: 1 }}
+                    className='d-flex flex-row flex-sm-column justify-content-evenly'>
                     {
                         isBlocked ?
                             null :
                             <>
+                                {/* <div className='d-flex flex-row flex-sm-column align-items-end'> */}
+                                {/* <Button
+                                        onClick={() => {
+                                            handleShowFollowersModal();
+                                            loadFollowers()
+                                        }}
+                                        className='user-profile__follow-numbers-text pe-0'
+                                    >
+                                        {followersCount === null ?
+                                            null
+                                            :
+                                            'Followers'
+                                        }
+                                    </Button> */}
                                 <Button
                                     onClick={() => {
                                         handleShowFollowersModal();
                                         loadFollowers()
                                     }}
-                                    className='user-profile__follow-numbers-text'
-                                >
-                                    {followersCount === null ?
-                                        null
-                                        :
-                                        'Followers'
-                                    }
-                                </Button>
-                                <Button
-                                    onClick={() => {
-                                        handleShowFollowersModal();
-                                        loadFollowers()
-                                    }}
-                                    className='user-profile__follow-numbers-number'
+                                    className='user-profile__follow-numbers-number d-flex flex-column'
                                 >
                                     {followersCount === null ?
                                         <Loading />
                                         :
-                                        <strong>
-                                            {followersCount}
-                                        </strong>
-
+                                        <>
+                                            Followers <br />
+                                            <strong>
+                                                {followersCount}
+                                            </strong>
+                                        </>
                                     }
                                 </Button>
-
+                                {/* </div> */}
+                                {/* <div className='d-flex flex-row flex-sm-column'> */}
+                                {/* <Button
+                                        onClick={async () => {
+                                            handleShowFollowingModal();
+                                            await loadFollowing()
+                                        }}
+                                        className='user-profile__follow-numbers-text pe-0'
+                                    >
+                                        {followingCount === null ?
+                                            null
+                                            :
+                                            'Following'
+                                        }
+                                    </Button> */}
                                 <Button
                                     onClick={async () => {
                                         handleShowFollowingModal();
                                         await loadFollowing()
                                     }}
-                                    className='user-profile__follow-numbers-text'
-                                >
-                                    {followingCount === null ?
-                                        null
-                                        :
-                                        'Following'
-                                    }
-                                </Button>
-                                <Button
-                                    onClick={async () => {
-                                        handleShowFollowingModal();
-                                        await loadFollowing()
-                                    }}
-                                    className='user-profile__follow-numbers-number'
+                                    className='user-profile__follow-numbers-number d-flex flex-column'
                                 >
                                     {followingCount === null ?
                                         <Loading />
                                         :
-                                        <strong>
-                                            {followingCount}
-                                        </strong>
+                                        <>
+                                            Following
+                                            <strong>
+                                                {followingCount}
+                                            </strong>
+                                        </>
                                     }
                                 </Button>
+                                {/* </div> */}
                             </>
                     }
                 </Col>
 
                 {/* Profile Picture Col */}
-                <Col className='w-100 d-flex flex-column justify-content-evenly align-items-center'>
+                <Col
+                    xs={{ span: 6, order: 1 }} // Full width and first on xs
+                    sm={{ span: 4, order: 2 }}
+                    className='d-flex flex-column justify-content-evenly align-items-center'>
                     <div>
                         <img
                             src={avatarUrl ? avatarUrl : defaultAvatar}
@@ -171,6 +185,8 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
 
                 {/* Follow/Block/Report Col */}
                 <Col
+                    xs={{ span: 6, order: 2 }} // Full width and second on xs
+                    sm={{ span: 4, order: 3 }}
                     className='d-flex flex-column justify-content-evenly'
                 >
                     {location.pathname !== '/user/profile' ?
