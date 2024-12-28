@@ -62,6 +62,7 @@
     background-color: rgb(0, 0, 0, 0.0);
     border-color: var(--main-accent-color-hover) !important;
     color: var(--main-text-color);
+    border-radius: var(--main-rounded-corner);
 }
 
 .user-profile__interaction-btn.following {
@@ -555,13 +556,20 @@
     height: 100%;
 }
 
+.user-profile__avatar-col>p {
+    margin-left: 11px;
+}
+
+.user-profile__follow-count-col>button {
+    color: white;
+}
 
 
 @media (max-width: 767px) {
 
     .user-profile {
         max-width: 540px !important;
-        padding: 54px 20px 12px 20px;
+        padding: 54px 20px 0px 20px;
         margin-top: 3px;
         height: 198px;
     }
@@ -634,13 +642,59 @@
         flex-direction: column;
     }
 
+    .user-profile__follow-count-col {
+        flex-direction: column;
+
+    }
+
     .user-profile__follow-block-report-col,
     .user-profile__follow-count-col {
         height: 50%;
     }
 
+    .user-profile__interaction-dropdown>div {
+        border: 0;
+    }
+
+    .user-profile__interaction-dropdown>div,
+    .user-profile__interaction-dropdown>div>a {
+        background-color: transparent !important;
+        border-radius: var(--main-rounded-corner) !important;
+    }
+
+    .user-profile__interaction-btn {
+        background-color: #c6dcd0ff !important;
+    }
+
+
     .user-profile__interaction-dropdown>button {
-        padding: 0;
+        background-color: transparent !important;
+        border-color: var(--main-accent-color) !important;
+        padding-block: 0;
+        padding-inline: 6px;
+        height: 28.81px;
+        border-radius: var(--main-rounded-corner);
+    }
+
+    .user-profile__interaction-dropdown>button:hover {
+        background-color: var(--main-accent-color) !important;
+        border-color: var(--main-accent-color-hover) !important;
+    }
+
+    .user-profile__interaction-dropdown>button:active,
+    .user-profile__interaction-dropdown>button:focus {
+        background-color: var(--main-accent-color-hover) !important;
+        border-color: var(--main-accent-color-hover) !important;
+        box-shadow: none !important;
+    }
+
+    .user-profile__interaction-dropdown>button>i::before {
+        color: var(--main-accent-color-hover);
+    }
+
+    .user-profile__interaction-dropdown>button:active>i::before,
+    .user-profile__interaction-dropdown>button:focus>i::before {
+        color: var(--main-accent-color);
     }
 
     .user-profile__interaction-dropdown>button::after {
@@ -668,9 +722,13 @@
 }
 
 @media (max-width: 549px) {
-    .user-profile__follow-number {
+    /* .user-profile__follow-number {
         font-size: 10pt;
     }
+
+    .user-profile__follow-count-col {
+        flex-direction: column;
+    } */
 }
 
 @media (max-height: 457px) {
