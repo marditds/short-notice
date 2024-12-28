@@ -35,6 +35,8 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
     const [reportReason, setReportReason] = useState(null);
     const [showReportUserConfirmation, setShowReportUserConfirmation] = useState(false);
 
+    const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
+
     const [isExtraSmallScreen, setIsExtraSmallScreen] = useState(window.innerWidth < 576);
 
     const handleShowFollowersModal = () => {
@@ -88,9 +90,22 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
     }
 
     // Screen size check
+
+    //Extra Small
     useEffect(() => {
         const handleResize = () => {
             setIsExtraSmallScreen(window.innerWidth < 576);
+        };
+
+        window.addEventListener('resize', handleResize);
+
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    // Small
+    useEffect(() => {
+        const handleResize = () => {
+            setIsSmallScreen(window.innerWidth < 768);
         };
 
         window.addEventListener('resize', handleResize);
@@ -104,9 +119,9 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
 
                 {/* Folllowes/Following Count Col */}
                 <Col
-                    xs={{ span: 6, order: 3 }}
+                    xs={{ span: 6, order: location.pathname !== '/user/profile' ? 3 : 2 }}
                     sm={{ span: 4, order: 1 }}
-                    className='d-flex flex-sm-column justify-content-evenly user-profile__follow-count-col'>
+                    className={`d-flex flex-sm-column justify-content-evenly user-profile__follow-count-col ${location.pathname !== '/user/profile' && 'h-50'}`}>
                     {
                         isBlocked ?
                             null :
@@ -157,7 +172,7 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                 <Col
                     xs={{ span: 6, order: 1 }}
                     sm={{ span: 4, order: 2 }}
-                    className='d-flex flex-column justify-content-evenly align-items-sm-center align-items-end user-profile__avatar-col'>
+                    className={`d-flex flex-column justify-content-center align-items-sm-center align-items-end user-profile__avatar-col ${location.pathname !== '/user/profile' && 'mt-2'}`}>
                     <div>
                         <img
                             src={avatarUrl ? avatarUrl : defaultAvatar}
@@ -171,7 +186,95 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                 </Col>
 
                 {/* Follow/Block/Report Col */}
-                <Col
+                {location.pathname !== '/user/profile' ?
+                    <Col
+                        xs={{ span: 6, order: 2 }}
+                        sm={{ span: 4, order: 3 }}
+                        className='d-flex justify-content-start flex-sm-column align-items-end justify-content-sm-evenly user-profile__follow-block-report-col'
+                    >
+                        {/* {location.pathname !== '/user/profile' ? */}
+                        <>
+                            {
+                                isBlocked ? null :
+                                    <Button
+                                        className={`user-profile__interaction-btn
+                                ${isFollowing ? 'following' : ''} mb-2 mb-sm-0 ms-sm-auto`}
+                                        onClick={() => handleFollow(currUserId)}
+                                        style={{
+                                            height: 'fit-content', width: 'fit-content',
+                                        }}
+                                    >
+                                        {isFollowingUserLoading ? <Loading /> :
+                                            <>
+                                                {isFollowing ? 'Following' : 'Follow'}
+                                            </>
+                                        }
+                                    </Button>
+                            }
+
+                            {isExtraSmallScreen ?
+                                <Dropdown className='mb-2 mb-sm-0 ms-2 user-profile__interaction-dropdown'>
+                                    <Dropdown.Toggle id='dropdown-block-report'>
+                                        <i className='bi bi-three-dots' />
+                                    </Dropdown.Toggle>
+                                    <Dropdown.Menu className='p-0'>
+                                        <Dropdown.Item className='p-0 mb-1'>
+                                            <Button
+                                                onClick={handleShowBlockModal}
+                                                className='user-profile__interaction-btn'
+                                                style={{
+                                                    height: 'fit-content', width: '100%',
+                                                }}
+                                                disabled={isOtherUserBlocked ? true : false}
+                                            >
+                                                {isOtherUserBlocked ? 'Blocked' : 'Block'}
+                                            </Button>
+                                        </Dropdown.Item>
+                                        <Dropdown.Item className='p-0'>
+                                            <Button
+                                                onClick={handleReportUser}
+                                                className='user-profile__interaction-btn'
+                                                style={{
+                                                    height: 'fit-content', width: '100%',
+                                                }}>
+                                                Report
+                                            </Button>
+                                        </Dropdown.Item>
+                                    </Dropdown.Menu>
+                                </Dropdown>
+                                :
+                                <>
+                                    <Button
+                                        onClick={handleShowBlockModal}
+                                        className='user-profile__interaction-btn'
+                                        style={{
+                                            height: 'fit-content', width: 'fit-content', marginLeft: 'auto'
+                                        }}
+                                        disabled={isOtherUserBlocked ? true : false}
+                                    >
+                                        {isOtherUserBlocked ? 'Blocked' : 'Block'}
+                                    </Button>
+                                    <Button
+                                        onClick={handleReportUser}
+                                        className='user-profile__interaction-btn'
+                                        style={{
+                                            height: 'fit-content', width: 'fit-content', marginLeft: 'auto'
+                                        }}>
+                                        Report
+                                    </Button>
+                                </>
+                            }
+                        </>
+                        {/* //     :
+                        //     null
+                        // } */}
+                    </Col>
+                    :
+                    null
+                }
+
+                {/* Follow/Block/Report Col */}
+                {/* <Col
                     xs={{ span: 6, order: 2 }}
                     sm={{ span: 4, order: 3 }}
                     className='d-flex justify-content-start flex-sm-column align-items-end justify-content-sm-evenly user-profile__follow-block-report-col'
@@ -252,7 +355,8 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                         :
                         null
                     }
-                </Col>
+                </Col> */}
+
                 {isBlocked &&
                     <div style={{ color: 'white', textAlign: 'center' }}>
                         You are not authorzied to view, like, and save the notices shared by {username}.

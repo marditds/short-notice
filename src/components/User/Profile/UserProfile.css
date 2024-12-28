@@ -644,11 +644,9 @@
 
     .user-profile__follow-count-col {
         flex-direction: column;
-
     }
 
-    .user-profile__follow-block-report-col,
-    .user-profile__follow-count-col {
+    .user-profile__follow-block-report-col {
         height: 50%;
     }
 
@@ -728,23 +726,5 @@
 
     .user-profile__follow-count-col {
         flex-direction: column;
-    } */
-}
-
-@media (max-height: 457px) {
-    /* body {
-        background-color: yellow !important;
-    } */
-
-    /* 
-    .notice__edit--modal,
-    .notice__react--modal {
-        padding-block: 20px;
-        padding-inline: 10px !important;
-    }
-
-    .notice__edit--modal>div,
-    .notice__react--modal>div {
-        height: fit-content;
     } */
 }
