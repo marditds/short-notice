@@ -83,7 +83,7 @@ export const Reactions = ({
                         {showLoadMoreBtn ?
                             <Button
                                 onClick={() => handleLoadMoreReactions(notice.$id)}
-                                className='settings__load-blocked-btn'
+                                className='notice__load-reactions-btn'
                                 disabled={isLoadingMoreReactions}
                             >
                                 {isLoadingMoreReactions ?
@@ -92,7 +92,9 @@ export const Reactions = ({
                             </Button>
                             :
                             <Col className="text-center text-muted py-3">
-                                No more reactions
+                                <i className="bi bi-asterisk"></i>
+                                <i className="bi bi-asterisk"></i>
+                                <i className="bi bi-asterisk"></i>
                             </Col>
                         }
                     </div>

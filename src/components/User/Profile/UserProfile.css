@@ -107,7 +107,6 @@
     transition: var(--main-transition-speed);
 }
 
-
 .user-profile__form-control:hover,
 .user-profile__timer-select:hover,
 .notice__edit--modal-form-control:hover {
@@ -126,7 +125,6 @@
 .user-profile__form-control:focus::placeholder {
     color: var(--main-accent-color-hover) !important;
 }
-
 
 .user-profile__form-control:focus,
 .user-profile__timer-select:focus,
@@ -309,6 +307,26 @@
 .notice__username+a:hover,
 .notice__reaction-username+a:hover {
     filter: sepia(1) hue-rotate(100deg) saturate(6) brightness(0.7);
+}
+
+.notices__load-more-notices-btn,
+.notices__load-more-notices-btn:disabled,
+.notice__load-reactions-btn,
+.notice__load-reactions-btn:disabled {
+    background-color: var(--main-accent-color);
+    color: var(--main-text-color);
+    border-color: var(--main-accent-color);
+}
+
+.notices__load-more-notices-btn:hover,
+.notices__load-more-notices-btn:focus,
+.notices__load-more-notices-btn:active,
+.notice__load-reactions-btn:hover,
+.notice__load-reactions-btn:focus,
+.notice__load-reactions-btn:active {
+    background-color: var(--main-accent-color-hover) !important;
+    color: var(--main-text-color) !important;
+    border-color: var(--main-accent-color-hover) !important;
 }
 
 .notice__avatar {

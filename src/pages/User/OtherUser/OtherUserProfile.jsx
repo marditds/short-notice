@@ -608,7 +608,13 @@ const OtherUserProfile = () => {
                                                                 <><Loading size={24} /> Loading...</>
                                                                 : 'Load More'}
                                                         </Button>
-                                                        : 'No more notices'}
+                                                        :
+                                                        <>
+                                                            <i className="bi bi-asterisk"></i>
+                                                            <i className="bi bi-asterisk"></i>
+                                                            <i className="bi bi-asterisk"></i>
+                                                        </>
+                                                    }
                                                 </div>
                                             </>
                                             : 'No notices yet'
@@ -653,7 +659,13 @@ const OtherUserProfile = () => {
                                                                     <><Loading size={24} /> Loading...</>
                                                                     : 'Load More'}
                                                             </Button>
-                                                            : 'No more saves'}
+                                                            :
+                                                            <>
+                                                                <i className="bi bi-asterisk"></i>
+                                                                <i className="bi bi-asterisk"></i>
+                                                                <i className="bi bi-asterisk"></i>
+                                                            </>
+                                                        }
                                                     </div>
                                                 </>
                                                 : 'No saveas yet'
@@ -695,7 +707,13 @@ const OtherUserProfile = () => {
                                                                 <><Loading size={24} /> Loading...</>
                                                                 : 'Load More'}
                                                         </Button>
-                                                        : 'No more likes'}
+                                                        :
+                                                        <>
+                                                            <i className="bi bi-asterisk"></i>
+                                                            <i className="bi bi-asterisk"></i>
+                                                            <i className="bi bi-asterisk"></i>
+                                                        </>
+                                                    }
                                                 </div>
                                             </>
                                             : 'No likes yet'

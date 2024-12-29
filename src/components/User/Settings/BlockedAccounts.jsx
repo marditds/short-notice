@@ -185,7 +185,11 @@ export const BlockedAccounts = () => {
                                 : 'Load More Profiles'}
                         </Button>
                         :
-                        'No more profiles'
+                        <>
+                            <i className="bi bi-asterisk"></i>
+                            <i className="bi bi-asterisk"></i>
+                            <i className="bi bi-asterisk"></i>
+                        </>
                     }</div>
             </Col>
         </Row>

@@ -487,12 +487,19 @@ const UserProfile = () => {
                             <Button
                                 onClick={fetchNotices}
                                 disabled={isLoadingMore || !hasMoreNotices}
+                                className='notices__load-more-notices-btn'
                             >
                                 {isLoadingMore ?
                                     <><Loading size={24} /> Loading...</>
                                     : 'Load More'}
                             </Button>
-                            : 'No more notices'}
+                            :
+                            <>
+                                <i className="bi bi-asterisk"></i>
+                                <i className="bi bi-asterisk"></i>
+                                <i className="bi bi-asterisk"></i>
+                            </>
+                        }
                     </div>
                 </Tab>
 
@@ -522,12 +529,19 @@ const UserProfile = () => {
                             <Button
                                 onClick={() => setOffsetSaveas(offsetSaves + limitSaves)}
                                 disabled={isLoadingMoreSaves || !hasMoreSaves}
+                                className='notices__load-more-notices-btn'
                             >
                                 {isLoadingMoreSaves ?
                                     <><Loading size={24} /> Loading...</>
                                     : 'Load More'}
                             </Button>
-                            : 'No more saves'}
+                            :
+                            <>
+                                <i className="bi bi-asterisk"></i>
+                                <i className="bi bi-asterisk"></i>
+                                <i className="bi bi-asterisk"></i>
+                            </>
+                        }
                     </div>
                 </Tab>
 
@@ -557,12 +571,19 @@ const UserProfile = () => {
                             <Button
                                 onClick={() => setOffsetLikes(offsetLikes + limitLikes)}
                                 disabled={isLoadingMoreLikes || !hasMoreLikes}
+                                className='notices__load-more-notices-btn'
                             >
                                 {isLoadingMoreLikes ?
                                     <><Loading size={24} /> Loading...</>
                                     : 'Load More'}
                             </Button>
-                            : 'No more likes'}
+                            :
+                            <>
+                                <i className="bi bi-asterisk"></i>
+                                <i className="bi bi-asterisk"></i>
+                                <i className="bi bi-asterisk"></i>
+                            </>
+                        }
                     </div>
                 </Tab>
             </Tabs>

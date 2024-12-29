@@ -445,12 +445,20 @@ const UserFeed = () => {
                         }}
                         disabled={(isFeedToggled && (isLoadingMore || !hasMoreGeneralNotices)) ||
                             (!isFeedToggled && (isLoadingMorePersonal || !hasMorePersonalNotices))}
+                        className='notices__load-more-notices-btn'
+
                     >
                         {isLoadingMore || isLoadingMorePersonal ?
                             <><Loading size={24} /> Loading...</>
                             : 'Load More'}
                     </Button>
-                    : 'No more notices'}
+                    :
+                    <>
+                        <i className="bi bi-asterisk"></i>
+                        <i className="bi bi-asterisk"></i>
+                        <i className="bi bi-asterisk"></i>
+                    </>
+                }
             </div>
         </div>
     )

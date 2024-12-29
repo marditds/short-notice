@@ -204,7 +204,11 @@ export const UserSearch = ({ userId }) => {
                             }
                         </Button>
                         :
-                        'No more profiles'
+                        <div className='text-center'>
+                            <i className="bi bi-asterisk"></i>
+                            <i className="bi bi-asterisk"></i>
+                            <i className="bi bi-asterisk"></i>
+                        </div>
                     }
 
                 </Modal.Body>

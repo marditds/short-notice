@@ -409,7 +409,13 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                             </Button>
                         )
                     )}
-                    {!hasMoreFollowers && <p className="text-muted mt-3">No more accounts to load.</p>}
+                    {!hasMoreFollowers &&
+                        <div className='text-center'>
+                            <i className="bi bi-asterisk"></i>
+                            <i className="bi bi-asterisk"></i>
+                            <i className="bi bi-asterisk"></i>
+                        </div>
+                    }
                 </Modal.Body>
             </Modal>
 
@@ -459,7 +465,13 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                             </Button>
                         )
                     )}
-                    {!hasMoreFollowing && <p className="text-muted mt-3">No more accounts to load.</p>}
+                    {!hasMoreFollowing &&
+                        <div className='text-center'>
+                            <i className="bi bi-asterisk"></i>
+                            <i className="bi bi-asterisk"></i>
+                            <i className="bi bi-asterisk"></i>
+                        </div>
+                    }
                 </Modal.Body>
             </Modal>
 
