@@ -116,6 +116,8 @@ export const Notices = ({
 
                 const notice = notices.find(notice => notice.$id === reactingNoticeId);
 
+                console.log('notice', notice);
+
                 if (notice) {
 
                     const currentUser = await getUserAccountByUserId(user_id);
@@ -605,7 +607,7 @@ export const Notices = ({
                             </Row>
                         </Accordion.Header>
                         <Accordion.Body className='notice__reaction'>
-                            {isOtherUserBlocked ? null :
+                            {isOtherUserBlocked || notice.user_id === user_id ? null :
                                 <Row className='m-auto'>
                                     <Col className='px-4'>
                                         <Form>
@@ -616,7 +618,7 @@ export const Notices = ({
                                                     value={reactionText}
                                                     onChange={onReactionTextChange}
                                                     className="user-profile__form-control"
-                                                    placeholder=''
+                                                    placeholder='Your reaction text here'
                                                 />
                                             </Form.Group>
                                         </Form>
@@ -625,7 +627,7 @@ export const Notices = ({
                                             className='notice__react-btn'
                                             disabled={reactionText === '' ? true : false}
                                         >
-                                            {isSendingReactionLoading ? <Loading /> : 'Send'}
+                                            {isSendingReactionLoading ? <Loading /> : 'React'}
                                         </Button>
                                         <hr />
                                     </Col>

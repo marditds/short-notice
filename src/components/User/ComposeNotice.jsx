@@ -66,7 +66,7 @@ export const ComposeNotice = ({ noticeText, setNoticeText, duration, noticeType,
     };
 
     // const hours = Array.from({ length: 7 }, (_, i) => (i + 1) * 24);
-    const hours = [0, 1, 357, 2, 3, 5, 10, 15, 20, 48, 72]
+    const hours = [1, 357, 2, 3, 5, 10, 15, 20, 48, 72]
 
 
     const handleTagSelect = (categoryGroup, tagIndex, tag, isSelected) => {

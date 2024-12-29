@@ -16,7 +16,7 @@ export const NoticeTags = ({ tagCategories, handleTagSelect, selectedTags }) => 
                         <FaAngleDown size={20} className='me-3' />
                         {category.group}
                     </Accordion.Header>
-                    <Accordion.Body className='d-flex justify-content-around w-100'>
+                    <Accordion.Body className='d-flex flex-wrap justify-content-around w-100 user-profile__tags-accordion-body'>
                         {category.tags.map((tag, tagIndex) => (
                             <div key={tag.name}>
                                 <Form.Check
@@ -30,7 +30,7 @@ export const NoticeTags = ({ tagCategories, handleTagSelect, selectedTags }) => 
                                 <label
                                     htmlFor={`custom-radio-${tag.name}`}
                                     onClick={() => handleTagSelect(category.group, tagIndex, tag, category.values[tag.key])}
-                                    className={`user-profile__notice-tag ${selectedTags[tag.key] ? 'tagIsChecked' : ''}`}
+                                    className={`mt-1 mt-sm-0 user-profile__notice-tag ${selectedTags[tag.key] ? 'tagIsChecked' : ''}`}
                                 >
                                     {tag.name}
                                 </label>

@@ -80,7 +80,8 @@
 
 .user-profile__interaction-btn:hover,
 .user-profile__interaction-btn:active,
-.user-profile__interaction-btn:focus {
+.user-profile__interaction-btn:focus,
+.user-profile__interaction-btn:disabled {
     border-color: var(--main-accent-color-hover) !important;
     background-color: var(--main-accent-color-hover) !important;
     box-shadow: none !important;
@@ -98,19 +99,27 @@
     margin: 0px auto 42px 0px;
 }
 
-.user-profile__form-control,
-.user-profile__form-control::placeholder {
-    background-color: rgb(0, 0, 0, 0.2);
+.user-profile__form-control {
+    background-color: transparent;
     color: var(--main-text-color);
     transition: var(--main-transition-speed);
+    border-color: var(--main-text-color);
+    transition: var(--main-transition-speed);
+}
+
+
+.user-profile__form-control:hover,
+.user-profile__timer-select:hover,
+.notice__edit--modal-form-control:hover {
+    border-color: var(--main-accent-color);
 }
 
 .user-profile__form-control,
 .user-profile__timer-select,
 .notice__edit--modal-form-control {
     border-width: 1.5px;
-    /* border-color: transparent; */
     border-style: groove;
+    transition: var(--main-transition-speed);
 
 }
 
@@ -123,8 +132,8 @@
 .user-profile__timer-select:focus,
 .notice__edit--modal-form-control:focus {
     color: var(--main-text-color);
-    background-color: rgb(0, 0, 0, 0.2);
-    border-color: var(--main-accent-color);
+    background-color: rgb(0, 0, 0, 0.1);
+    border-color: var(--main-accent-color-hover);
     border-width: 1.5px;
     box-shadow: none !important;
 }
@@ -586,12 +595,26 @@
     .user-profile__tags-accordion>div>h2>button,
     .user-profile__tags-accordion>div,
     .notices__accordion>div>h2>button,
-    .notices__accordion>div {
+    .user-profile__notify-btn,
+    .user-profile__timer-label,
+    .user-profile__timer-select,
+    .notices__accordion>div,
+    .user-profile__notice-char-counter {
         font-size: var(--mobile-font-size);
     }
 
     .user-profile__avatar {
         height: 75px;
+    }
+
+    .user-profile__tags-accordion>div>h2>button>svg {
+        height: 15px;
+        margin-right: 10px !important;
+    }
+
+    .user-profile__tags-accordion-body {
+        padding-top: 0px;
+        padding-bottom: 10px;
     }
 
     .notice__avatar {
@@ -663,7 +686,6 @@
     .user-profile__interaction-btn {
         background-color: #c6dcd0ff !important;
     }
-
 
     .user-profile__interaction-dropdown>button {
         background-color: transparent !important;
