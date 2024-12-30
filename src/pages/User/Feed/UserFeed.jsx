@@ -84,6 +84,7 @@ const UserFeed = () => {
     const [limit] = useState(10);
     const [lastId, setLastId] = useState(null);
     const [hasMoreGeneralNotices, setHasMoreGeneralNotices] = useState(true);
+    const [isLoadingMoreInitial, setIsLoadingMoreInitial] = useState(false);
     const [isLoadingMore, setIsLoadingMore] = useState(false);
     const [loadMore, setLoadMore] = useState(false);
 
@@ -92,6 +93,7 @@ const UserFeed = () => {
     const [lastIdPersonal, setLastIdPersonal] = useState(null);
     const [hasMorePersonalNotices, setHasMorePersonalNotices] = useState(true);
     const [isLoadingMorePersonal, setIsLoadingMorePersonal] = useState(false);
+    const [isLoadingMorePersonalInitial, setIsLoadingMorePersonalInitial] = useState(false);
     const [loadMorePersonal, setLoadMorePersonal] = useState(false);
 
 
@@ -149,6 +151,9 @@ const UserFeed = () => {
     useEffect(() => {
         const fetchInitialGeneralFeed = async () => {
             try {
+                setIsLoadingMoreInitial(true);
+                setIsLoadingMore(true);
+
                 console.log('Limit:', limit);
                 console.log('Last ID:', lastId);
 
@@ -159,20 +164,23 @@ const UserFeed = () => {
                 const filteredNotices = await filterBlocksFromFeed(notices, user_id);
                 console.log('Filtered notices - general:', filteredNotices);
 
-                const unExpiredNotices = await deleteExpiredNotice(filteredNotices);
+                // const unExpiredNotices = await deleteExpiredNotice(filteredNotices);
 
-                console.log('unExpiredNotices', unExpiredNotices);
+                // console.log('unExpiredNotices', unExpiredNotices);
 
-                await fetchUsersData(unExpiredNotices, setGeneralFeedNotices, avatarUtil);
+                await fetchUsersData(filteredNotices, setGeneralFeedNotices, avatarUtil);
 
                 if (notices.length < limit) {
                     setHasMoreGeneralNotices(false);
                 } else {
                     setHasMoreGeneralNotices(true);
-                    setLastId(unExpiredNotices[unExpiredNotices.length - 1].$id);
+                    setLastId(filteredNotices[filteredNotices.length - 1].$id);
                 }
             } catch (error) {
                 console.error('Error fetching initial feed notices:', error);
+            } finally {
+                setIsLoadingMore(false);
+                setIsLoadingMoreInitial(false);
             }
         };
         if (isFeedToggled && generalFeedNotices.length === 0) {
@@ -196,16 +204,16 @@ const UserFeed = () => {
                 const filteredNotices = await filterBlocksFromFeed(notices, user_id);
                 console.log('Filtered notices - general:', filteredNotices);
 
-                const unExpiredNotices = await deleteExpiredNotice(filteredNotices);
+                // const unExpiredNotices = await deleteExpiredNotice(filteredNotices);
 
-                console.log('unExpiredNotices', unExpiredNotices);
+                // console.log('unExpiredNotices', unExpiredNotices);
 
-                await fetchUsersData(unExpiredNotices, setGeneralFeedNotices, avatarUtil);
+                await fetchUsersData(filteredNotices, setGeneralFeedNotices, avatarUtil);
 
                 if (notices.length < limit) {
                     setHasMoreGeneralNotices(false);
                 } else {
-                    setLastId(unExpiredNotices[unExpiredNotices.length - 1].$id);
+                    setLastId(filteredNotices[filteredNotices.length - 1].$id);
                 }
             } catch (error) {
                 console.error('Error loading more notices:', error);
@@ -223,6 +231,7 @@ const UserFeed = () => {
     useEffect(() => {
         const fetchInitialPersonalFeed = async () => {
             try {
+                setIsLoadingMorePersonalInitial(true);
                 setIsLoadingPersonalFeedNotices(true);
                 setIsLoadingMorePersonal(true);
 
@@ -249,23 +258,24 @@ const UserFeed = () => {
 
                 console.log('filteredNotices - Personal', filteredNotices);
 
-                const unExpiredNotices = await deleteExpiredNotice(filteredNotices);
+                // const unExpiredNotices = await deleteExpiredNotice(filteredNotices);
 
-                console.log('unExpiredNotices', unExpiredNotices);
+                // console.log('unExpiredNotices', unExpiredNotices);
 
-                await fetchUsersData(unExpiredNotices, setPersonalFeedNotices, avatarUtil);
+                await fetchUsersData(filteredNotices, setPersonalFeedNotices, avatarUtil);
 
                 if (usrNtcs.length < limitPersonal) {
                     setHasMorePersonalNotices(false);
                 } else {
                     setHasMorePersonalNotices(true);
-                    setLastIdPersonal(unExpiredNotices[unExpiredNotices.length - 1].$id);
+                    setLastIdPersonal(filteredNotices[filteredNotices.length - 1].$id);
                 }
             } catch (error) {
                 console.error('Error fetching personal feed', error);
             } finally {
                 setIsLoadingPersonalFeedNotices(false);
                 setIsLoadingMorePersonal(false);
+                setIsLoadingMorePersonalInitial(false);
             }
         };
         fetchInitialPersonalFeed();
@@ -295,16 +305,16 @@ const UserFeed = () => {
 
                 console.log('Filtered notices - personal:', filteredNotices);
 
-                const unExpiredNotices = await deleteExpiredNotice(filteredNotices);
+                // const unExpiredNotices = await deleteExpiredNotice(filteredNotices);
 
-                console.log('unExpiredNotices', unExpiredNotices);
+                // console.log('unExpiredNotices', unExpiredNotices);
 
-                await fetchUsersData(unExpiredNotices, setPersonalFeedNotices, avatarUtil);
+                await fetchUsersData(filteredNotices, setPersonalFeedNotices, avatarUtil);
 
                 if (usrNtcs.length < limitPersonal) {
                     setHasMorePersonalNotices(false);
                 } else {
-                    setLastIdPersonal(unExpiredNotices[unExpiredNotices.length - 1].$id);
+                    setLastIdPersonal(filteredNotices[filteredNotices.length - 1].$id);
                 }
             } catch (error) {
                 console.error('Error fetching more personal feed', error);
@@ -451,10 +461,10 @@ const UserFeed = () => {
                                 setLoadMore(true);
                             }
                         }}
-                        disabled={(isFeedToggled && (isLoadingMore || !hasMoreGeneralNotices)) ||
-                            (!isFeedToggled && (isLoadingMorePersonal || !hasMorePersonalNotices))}
-                        className='notices__load-more-notices-btn'
-
+                        // disabled={(isFeedToggled && (isLoadingMore || !hasMoreGeneralNotices)) ||
+                        //     (!isFeedToggled && (isLoadingMorePersonal || !hasMorePersonalNotices)) || isLoadingPersonalFeedNotices}
+                        disabled={(isLoadingPersonalFeedNotices || isLoadingMore || isLoadingMorePersonal) ? true : false}
+                        className={`notices__load-more-notices-btn ${(isLoadingMoreInitial || isLoadingMorePersonalInitial) ? 'd-none' : 'd-block'}`}
                     >
                         {isLoadingMore || isLoadingMorePersonal ?
                             <><Loading size={24} /> Loading...</>

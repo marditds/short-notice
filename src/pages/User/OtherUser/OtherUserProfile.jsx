@@ -232,11 +232,11 @@ const OtherUserProfile = () => {
 
                 console.log('usrNtc', usrNtcs);
 
-                const unExpiredNotices = await deleteExpiredNotice(usrNtcs);
+                // const unExpiredNotices = await deleteExpiredNotice(usrNtcs);
 
-                setOtherUserNotices((preVal) => [...preVal, ...unExpiredNotices]);
+                setOtherUserNotices((preVal) => [...preVal, ...usrNtcs]);
 
-                if (unExpiredNotices?.length < limitNotices) {
+                if (usrNtcs?.length < limitNotices) {
                     setHasMoreNotices(false);
                 } else {
                     setHasMoreNotices(true);
