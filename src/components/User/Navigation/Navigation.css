@@ -260,6 +260,10 @@
         font-size: var(--mobile-font-size) !important;
     }
 
+    .tools__search-field {
+        border: 1px solid var(--main-accent-color);
+    }
+
     .tools__search-btn {
         height: 31px;
         width: 31px;

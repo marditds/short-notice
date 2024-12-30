@@ -48,13 +48,13 @@ export const UserSearch = ({ userId }) => {
 
             // console.log('blockedUsers:', blockedUsers);
 
-            const filteredUsers = users.documents.filter((user) =>
+            const filteredUsers = users?.documents.filter((user) =>
                 !blockedUsers.some((blocked) => user.$id === blocked.blocked_id)
             );
 
-            // console.log('filteredUsers,', filteredUsers);
+            console.log('filteredUsers,', filteredUsers);
 
-            if (filteredUsers) {
+            if (filteredUsers !== undefined) {
                 setUsersResult(prevUsers => {
                     const moreUsers = filteredUsers?.filter(user =>
                         !prevUsers.some(loadedUser => loadedUser.$id === user.$id)
@@ -166,7 +166,7 @@ export const UserSearch = ({ userId }) => {
                         direction='horizontal'
                         className='d-flex flex-wrap justify-content-start'>
                         {isResultLoading ?
-                            <div><Loading size={24} color={'var(--main-text-color)'} /></div>
+                            <div><Loading size={20} color={'var(--main-text-color)'} /></div>
                             :
                             (
                                 usersResult ? usersResult?.map((user) =>

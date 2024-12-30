@@ -1,9 +1,8 @@
 import React from 'react';
-import { Row, Col } from 'react-bootstrap';
 
 export const AccountTypeDesc = ({ accountType }) => {
     return (
-        <>
+        <div className='mt-1'>
             {accountType === 'personal' && (
                 <>
                     <strong>For individual use.
@@ -28,6 +27,6 @@ export const AccountTypeDesc = ({ accountType }) => {
                     </strong>
                 </>
             )}
-        </>
+        </div>
     )
 }

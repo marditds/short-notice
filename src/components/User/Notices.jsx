@@ -706,11 +706,14 @@ export const Notices = ({
             </Modal>
 
             {/* Reaction report modal */}
-            <Modal show={showReportReactionModal} onHide={handleCloseReportReactionModal}>
-                <Modal.Header>
+            <Modal show={showReportReactionModal}
+                onHide={handleCloseReportReactionModal}
+                className='notice__reaction--report--modal p-0'
+            >
+                <Modal.Header className='border-bottom-0'>
                     <Modal.Title>Report Reaction</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>
+                <Modal.Body className='notice__reaction--report--modal-body'>
                     {showReportReactionConfirmation ? (
                         <p>Your report has been successfully submitted!</p>
                     ) : (
@@ -725,19 +728,23 @@ export const Notices = ({
                                         id={category.name}
                                         name='reportReason'
                                         onChange={() => setReportReason(category.key)}
+                                        className='notice__reaction--report--radio'
                                     />
                                 ))}
                             </Form.Group>
                         </Form>
                     )}
                 </Modal.Body>
-                <Modal.Footer>
+                <Modal.Footer className='border-top-0'>
                     {showReportReactionConfirmation ? null : (
                         <>
-                            <Button onClick={handleCloseReportReactionModal}>
+                            <Button onClick={handleCloseReportReactionModal}
+                                className='notice__reaction--report--modal-btn'
+                            >
                                 Cancel
                             </Button>
                             <Button onClick={handleReportReactionSubmission}
+                                className='notice__reaction--report--modal-btn'
                             // disabled={!reportReason}
                             >
                                 Report

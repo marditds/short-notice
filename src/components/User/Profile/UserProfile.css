@@ -238,6 +238,7 @@
 }
 
 .notice__report--radio>input,
+.notice__reaction--report--radio>input,
 .user-profile__report--radio>input {
     transition: var(--main-transition-speed);
     border-radius: 4px !important;
@@ -246,6 +247,8 @@
 
 .notice__report--radio>input:checked,
 .notice__report--radio>input:active,
+.notice__reaction--report--radio>input:checked,
+.notice__reaction--report--radio>input:active,
 .user-profile__report--radio>input:checked,
 .user-profile__report--radio>input:active {
     border: var(--main-accent-color-hover);
@@ -255,6 +258,8 @@
 .user-profile__report--radio>input:checked,
 .notice__report--radio>input:checked,
 .notice__report--modal-btn,
+.notice__reaction--report--radio>input:checked,
+.notice__reaction--report--modal-btn,
 .user-profile__notify-btn,
 .user-profile__notify-btn:focus {
     background-color: var(--main-accent-color) !important;
@@ -267,6 +272,8 @@
 .user-profile__report--radio>input:focus,
 .notice__report--radio>input:active,
 .notice__report--modal-btn:focus,
+.notice__reaction--report--radio>input:active,
+.notice__reaction--report--modal-btn:focus,
 .user-profile__notify-btn:focus {
     background-color: var(--main-accent-color-hover) !important;
     box-shadow: none !important;
@@ -277,6 +284,7 @@
 }
 
 .notice__report--modal-btn:hover,
+.notice__reaction--report--modal-btn:hover,
 .user-profile__notify-btn:hover {
     background-color: var(--main-accent-color-hover) !important;
     color: black !important;
@@ -435,6 +443,7 @@
 .user-profile__report--modal>div,
 .user-profile__following--modal>div,
 .notice__report--modal>div,
+.notice__reaction--report--modal>div,
 .notice__edit--modal>div,
 .notice__react--modal>div,
 .user-profile__block--modal>div {
@@ -449,6 +458,7 @@
 .notice__edit--modal>div>div,
 .notice__react--modal>div>div,
 .notice__report--modal>div>div,
+.notice__reaction--report--modal>div>div,
 .user-profile__following--modal>div>div,
 .user-profile__block--modal>div>div {
     border-color: var(--main-accent-color);
@@ -515,6 +525,7 @@
 .notice__react--modal,
 .notice__edit--modal,
 .notice__report--modal,
+.notice__reaction--report--modal,
 .user-profile__block--modal,
 .user-profile__report--modal {
     z-index: 9002;
@@ -523,6 +534,7 @@
 
 .user-profile__block--modal>div>div,
 .notice__report--modal>div>div,
+.notice__reaction--report--modal>div>div,
 .user-profile__report--modal>div>div,
 .user-profile__following--modal>div>div {
     max-height: 100vh;
@@ -559,12 +571,14 @@
 }
 
 .notice__report--modal-body,
+.notice__reaction--report--modal-body,
 .user-profile__following--modal-body,
 .user-profile__block--modal-body,
 .user-profile__report--modal-body {
     max-height: 600px;
     overflow-y: auto;
 }
+
 
 .user-profile__following--modal-body>div>a {
     padding-inline: 10px;
@@ -590,6 +604,44 @@
 .user-profile__follow-count-col>button {
     color: white;
 }
+
+.user-profile__following--modal-results-expand-btn-icon {
+    font-size: 25px;
+    color: var(--main-accent-color);
+    transition: var(--main-transition-speed);
+}
+
+.user-profile__following--modal-results-expand-btn,
+.user-profile__following--modal-results-expand-btn:disabled {
+    /* margin-top: 15px; */
+    background-color: transparent !important;
+    height: 39.5px !important;
+    padding: 0;
+    border: 1px solid var(--main-accent-color) !important;
+    border-radius: var(--main-rounded-corner) !important;
+    transition: var(--main-transition-speed);
+}
+
+.user-profile__following--modal-results-expand-btn:hover {
+    background-color: transparent;
+    border-color: var(--main-accent-color-hover) !important;
+}
+
+.user-profile__following--modal-results-expand-btn:active {
+    background-color: var(--main-accent-color-hover) !important;
+}
+
+.user-profile__following--modal-results-expand-btn:hover>.user-profile__following--modal-results-expand-btn-icon {
+    color: var(--main-accent-color-hover) !important;
+}
+
+.user-profile__following--modal-results-expand-btn:active>.user-profile__following--modal-results-expand-btn-icon {
+    border-color: var(--main-accent-color);
+    color: var(--main-accent-color) !important;
+}
+
+
+
 
 
 @media (max-width: 767px) {
@@ -655,7 +707,10 @@
         font-size: var(--mobile-icon-size);
     }
 
+    .notices__load-more-notices-btn,
+    .notice__load-reactions-btn,
     .notice__report--modal-btn,
+    .notice__reaction--report--modal-btn,
     .notice__edit--modal-btn,
     .notice__react-btn,
     .user-profile__block--modal-body-btn,
@@ -664,8 +719,11 @@
     }
 
     .notice__report--modal>div>div>.modal-header,
+    .notice__reaction--report--modal>div>div>.modal-header,
     .notice__report--modal-body,
+    .notice__reaction--report--modal,
     .notice__report--modal>div>div>.modal-footer,
+    .notice__reaction--report--modal>div>div>.modal-footer,
     .user-profile__block--modal>div>div>.modal-header,
     .user-profile__block--modal-body,
     .user-profile__report--modal>div>div>.modal-header,

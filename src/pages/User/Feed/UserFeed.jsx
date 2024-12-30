@@ -159,13 +159,17 @@ const UserFeed = () => {
                 const filteredNotices = await filterBlocksFromFeed(notices, user_id);
                 console.log('Filtered notices - general:', filteredNotices);
 
-                await fetchUsersData(filteredNotices, setGeneralFeedNotices, avatarUtil);
+                const unExpiredNotices = await deleteExpiredNotice(filteredNotices);
+
+                console.log('unExpiredNotices', unExpiredNotices);
+
+                await fetchUsersData(unExpiredNotices, setGeneralFeedNotices, avatarUtil);
 
                 if (notices.length < limit) {
                     setHasMoreGeneralNotices(false);
                 } else {
                     setHasMoreGeneralNotices(true);
-                    setLastId(filteredNotices[filteredNotices.length - 1].$id);
+                    setLastId(unExpiredNotices[unExpiredNotices.length - 1].$id);
                 }
             } catch (error) {
                 console.error('Error fetching initial feed notices:', error);
@@ -192,12 +196,16 @@ const UserFeed = () => {
                 const filteredNotices = await filterBlocksFromFeed(notices, user_id);
                 console.log('Filtered notices - general:', filteredNotices);
 
-                await fetchUsersData(filteredNotices, setGeneralFeedNotices, avatarUtil);
+                const unExpiredNotices = await deleteExpiredNotice(filteredNotices);
+
+                console.log('unExpiredNotices', unExpiredNotices);
+
+                await fetchUsersData(unExpiredNotices, setGeneralFeedNotices, avatarUtil);
 
                 if (notices.length < limit) {
                     setHasMoreGeneralNotices(false);
                 } else {
-                    setLastId(filteredNotices[filteredNotices.length - 1].$id);
+                    setLastId(unExpiredNotices[unExpiredNotices.length - 1].$id);
                 }
             } catch (error) {
                 console.error('Error loading more notices:', error);
@@ -433,7 +441,7 @@ const UserFeed = () => {
             }
 
             {/* Load More Button */}
-            <div className="d-flex justify-content-center mt-4">
+            <div className="d-flex justify-content-center my-4">
                 {(!isFeedToggled && hasMorePersonalNotices) || (isFeedToggled && hasMoreGeneralNotices) ?
                     <Button
                         onClick={() => {

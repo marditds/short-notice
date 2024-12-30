@@ -192,7 +192,6 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                         sm={{ span: 4, order: 3 }}
                         className='d-flex justify-content-start flex-sm-column align-items-end justify-content-sm-evenly user-profile__follow-block-report-col'
                     >
-                        {/* {location.pathname !== '/user/profile' ? */}
                         <>
                             {
                                 isBlocked ? null :
@@ -265,97 +264,10 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                                 </>
                             }
                         </>
-                        {/* //     :
-                        //     null
-                        // } */}
                     </Col>
                     :
                     null
                 }
-
-                {/* Follow/Block/Report Col */}
-                {/* <Col
-                    xs={{ span: 6, order: 2 }}
-                    sm={{ span: 4, order: 3 }}
-                    className='d-flex justify-content-start flex-sm-column align-items-end justify-content-sm-evenly user-profile__follow-block-report-col'
-                >
-                    {location.pathname !== '/user/profile' ?
-                        <>
-                            {
-                                isBlocked ? null :
-                                    <Button
-                                        className={`user-profile__interaction-btn
-                                ${isFollowing ? 'following' : ''} mb-2 mb-sm-0 ms-sm-auto`}
-                                        onClick={() => handleFollow(currUserId)}
-                                        style={{
-                                            height: 'fit-content', width: 'fit-content',
-                                        }}
-                                    >
-                                        {isFollowingUserLoading ? <Loading /> :
-                                            <>
-                                                {isFollowing ? 'Following' : 'Follow'}
-                                            </>
-                                        }
-                                    </Button>
-                            }
-
-                            {isExtraSmallScreen ?
-                                <Dropdown className='mb-2 mb-sm-0 ms-2 user-profile__interaction-dropdown'>
-                                    <Dropdown.Toggle id='dropdown-block-report'>
-                                        <i className='bi bi-three-dots' />
-                                    </Dropdown.Toggle>
-                                    <Dropdown.Menu className='p-0'>
-                                        <Dropdown.Item className='p-0 mb-1'>
-                                            <Button
-                                                onClick={handleShowBlockModal}
-                                                className='user-profile__interaction-btn'
-                                                style={{
-                                                    height: 'fit-content', width: '100%',
-                                                }}
-                                                disabled={isOtherUserBlocked ? true : false}
-                                            >
-                                                {isOtherUserBlocked ? 'Blocked' : 'Block'}
-                                            </Button>
-                                        </Dropdown.Item>
-                                        <Dropdown.Item className='p-0'>
-                                            <Button
-                                                onClick={handleReportUser}
-                                                className='user-profile__interaction-btn'
-                                                style={{
-                                                    height: 'fit-content', width: '100%',
-                                                }}>
-                                                Report
-                                            </Button>
-                                        </Dropdown.Item>
-                                    </Dropdown.Menu>
-                                </Dropdown>
-                                :
-                                <>
-                                    <Button
-                                        onClick={handleShowBlockModal}
-                                        className='user-profile__interaction-btn'
-                                        style={{
-                                            height: 'fit-content', width: 'fit-content', marginLeft: 'auto'
-                                        }}
-                                        disabled={isOtherUserBlocked ? true : false}
-                                    >
-                                        {isOtherUserBlocked ? 'Blocked' : 'Block'}
-                                    </Button>
-                                    <Button
-                                        onClick={handleReportUser}
-                                        className='user-profile__interaction-btn'
-                                        style={{
-                                            height: 'fit-content', width: 'fit-content', marginLeft: 'auto'
-                                        }}>
-                                        Report
-                                    </Button>
-                                </>
-                            }
-                        </>
-                        :
-                        null
-                    }
-                </Col> */}
 
                 {isBlocked &&
                     <div style={{ color: 'white', textAlign: 'center' }}>
@@ -371,7 +283,7 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                 className='user-profile__following--modal'
             >
                 <Modal.Header
-                    className='user-profile__following--modal-header w-100'
+                    className='user-profile__following--modal-header w-100 border-bottom-0'
                 >
                     <Modal.Title>{`Follower(s)`}</Modal.Title>
                     <Button
@@ -382,7 +294,7 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                     </Button>
                 </Modal.Header>
                 <Modal.Body
-                    className='user-profile__following--modal-body'
+                    className='user-profile__following--modal-body py-0'
                 >
                     THESE ARE FOLLOWING {username}
                     {followersAccounts && followersAccounts.map((followerAccount) => {
@@ -400,15 +312,6 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                             </div>
                         )
                     })}
-                    {hasMoreFollowers && (
-                        isLoadingMoreFollowers ? (
-                            <div><Loading size={24} /></div>
-                        ) : (
-                            <Button onClick={loadFollowers} className="btn btn-primary mt-3">
-                                Load More
-                            </Button>
-                        )
-                    )}
                     {!hasMoreFollowers &&
                         <div className='text-center'>
                             <i className="bi bi-asterisk"></i>
@@ -417,6 +320,20 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                         </div>
                     }
                 </Modal.Body>
+                <Modal.Footer className='border-top-0'>
+                    {
+                        hasMoreFollowers &&
+                        <Button onClick={loadFollowers}
+                            disabled={isLoadingMoreFollowers ? true : false}
+                            className="w-100 user-profile__following--modal-results-expand-btn">
+                            {
+                                isLoadingMoreFollowers ? (
+                                    <div className='d-block mx-auto w-100'><Loading size={22} color={'var(--main-accent-color-hover)'} /></div>
+                                ) : <i className='bi bi-chevron-down user-profile__following--modal-results-expand-btn-icon' />
+                            }
+                        </Button>
+                    }
+                </Modal.Footer>
             </Modal>
 
             {/* Following modal */}
@@ -426,7 +343,7 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                 className='user-profile__following--modal'
             >
                 <Modal.Header
-                    className='user-profile__following--modal-header w-100'
+                    className='user-profile__following--modal-header w-100 border-bottom-0'
                 >
                     <Modal.Title>Following</Modal.Title>
                     <Button
@@ -437,7 +354,7 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                     </Button>
                 </Modal.Header>
                 <Modal.Body
-                    className='d-grid user-profile__following--modal-body'
+                    className='d-grid user-profile__following--modal-body py-0'
                 >
                     THESE ACCOUNTS ARE FOLLOWED BY {username}
                     {followingAccounts && followingAccounts.map((followingAccount) => {
@@ -456,15 +373,6 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
 
                         )
                     })}
-                    {hasMoreFollowing && (
-                        isLoadingMoreFollowing ? (
-                            <div><Loading size={24} /></div>
-                        ) : (
-                            <Button onClick={loadFollowing} className="btn btn-primary mt-3">
-                                Load More
-                            </Button>
-                        )
-                    )}
                     {!hasMoreFollowing &&
                         <div className='text-center'>
                             <i className="bi bi-asterisk"></i>
@@ -473,6 +381,20 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                         </div>
                     }
                 </Modal.Body>
+                <Modal.Footer className='border-top-0'>
+                    {
+                        hasMoreFollowing &&
+                        <Button onClick={loadFollowing}
+                            disabled={isLoadingMoreFollowing ? true : false}
+                            className="w-100 user-profile__following--modal-results-expand-btn">
+                            {
+                                isLoadingMoreFollowing ? (
+                                    <div className='d-block mx-auto w-100'><Loading size={22} color={'var(--main-accent-color-hover)'} /></div>
+                                ) : <i className='bi bi-chevron-down user-profile__following--modal-results-expand-btn-icon' />
+                            }
+                        </Button>
+                    }
+                </Modal.Footer>
             </Modal>
 
             {/* Block modal */}

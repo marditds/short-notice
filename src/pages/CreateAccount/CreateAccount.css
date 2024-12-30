@@ -65,9 +65,20 @@
     border-radius: var(--main-rounded-corner) !important;
 }
 
+.createUsername__username-field:hover,
+.setPasscode__passcode-field:hover {
+    border-color: var(--main-accent-color) !important;
+}
+
 .createUsername__username-field:focus,
 .setPasscode__passcode-field:focus {
     border-color: var(--main-accent-color-hover) !important;
+}
+
+.setPasscode__passcode-field:disabled {
+    background-color: #6262623b !important;
+    border-color: #6262623b !important;
+    cursor: not-allowed;
 }
 
 .createAccount__btn {
