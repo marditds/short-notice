@@ -2,9 +2,19 @@
     max-width: 1320px !important;
     margin-inline: auto;
     margin-top: 3px;
-    padding: 54px 33px 12px 33px;
+    padding: 54px 33px 012px 33px;
     height: 198px;
     backdrop-filter: blur(4px);
+}
+
+.user-profile__loading,
+.other-user-profile__loading {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: -12px;
+    font-size: var(--pc-font-size);
 }
 
 .user-profile__follow-numbers-text,

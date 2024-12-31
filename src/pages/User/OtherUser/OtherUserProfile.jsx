@@ -521,11 +521,17 @@ const OtherUserProfile = () => {
         console.log('Event Key:', eventKey);
     }, [eventKey])
 
-
-
-
     if (isOtherUserLoading) {
-        return <div className='mt-5'><Loading />Loading {otherUsername}'s profile</div>;
+        // return <div className='mt-5'><Loading />Loading {otherUsername}'s profile</div>;
+        return <div className='other-user-profile__loading'>
+            <div>
+                <Loading />
+                <span className='ms-2'>
+                    Loading {otherUsername}'s profile
+                </span>
+                {/* <Loading /><span className='ms-2'>Loading your profile</span> */}
+            </div>
+        </div>;
     }
 
     if (accountType === 'organization' && accountTypeCheck === false) {

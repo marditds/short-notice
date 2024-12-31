@@ -431,7 +431,12 @@ const UserProfile = () => {
     const classname = `${timerDisplay} ${timerSpacing}`;
 
     if (isLoading) {
-        return <div><Loading />Loading {username}'s profile</div>;
+        return <div className='user-profile__loading'>
+            <div>
+                {/* <Loading />Loading {username}'s profile */}
+                <Loading /><span className='ms-2'>Loading your profile</span>
+            </div>
+        </div>;
     }
 
     return (
