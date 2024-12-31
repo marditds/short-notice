@@ -760,7 +760,7 @@
     }
 
     .user-profile__interaction-btn {
-        background-color: #c6dcd0ff !important;
+        background-color: var(--main-dropdown-bg-color) !important;
     }
 
     .user-profile__interaction-dropdown>button {

@@ -138,7 +138,7 @@ export const BlockedAccounts = () => {
         <Row xs={1} sm={2}>
             <Col>
                 <h4>Blocked Accounts:</h4>
-                <p>You can unblock the accounts by clicking on the 'X' button next to the username.</p>
+                <p>To unblock the account, click on the 'X' button next to the avatar.</p>
             </Col>
             <Col >
                 <div className='d-flex justify-content-start flex-wrap gap-2'>
@@ -152,7 +152,7 @@ export const BlockedAccounts = () => {
                                             {user.username}
                                             < img src={avatarUrl(user.avatar) || defaultAvatar}
                                                 alt="profile_pic"
-                                                className='d-flex settings__blocked-accounts-profile-avatar'
+                                                className='settings__blocked-accounts-profile-avatar'
                                             />
                                             <Button
                                                 onClick={async () => handleDelteBlock(user.$id)}

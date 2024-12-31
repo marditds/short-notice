@@ -2,6 +2,7 @@
 
 :root {
     --main-bg-color: 255, 255, 255;
+    --main-dropdown-bg-color: rgb(198, 220, 208);
     --main-text-color: #000000;
     /* --main-text-color: #ffffff; */
     --main-text-color-selected: #ffffff;

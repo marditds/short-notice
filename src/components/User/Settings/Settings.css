@@ -19,7 +19,14 @@
     clip-path: polygon(0 50%, 100% 100%, 100% 0);
     object-fit: cover;
     object-position: left center;
-    height: 95px;
+}
+
+.setting__avatar-display {
+    height: 85px;
+}
+
+.settings__blocked-accounts-profile-avatar {
+    height: 65px;
 }
 
 .settings__upload-avatar-field {
@@ -147,6 +154,14 @@
     margin-bottom: 16px;
 }
 
+.settings__blocked-accounts-profiles {
+    border: 1px solid;
+    border-color: var(--main-accent-color);
+    border-radius: var(--main-rounded-corner);
+    padding-inline: 10px;
+    padding-block: 5px;
+}
+
 .settings__delete-notices-modal,
 .settings__delete-account-modal {
     z-index: 9002;
@@ -268,9 +283,7 @@
         padding-block: 4px;
     }
 
-    .settings__blocked-accounts-profile-avatar {
-        height: 60px;
-    }
+
 
     .settings__delete-notices-modal-header,
     .settings__delete-notices-modal-footer,
@@ -295,7 +308,6 @@
         margin-bottom: 0;
     }
 
-    .settings__username-col {}
 
     .settings__upload-avatar-field {
         display: flex !important;

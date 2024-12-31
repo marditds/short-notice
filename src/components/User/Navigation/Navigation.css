@@ -9,9 +9,9 @@
 }
 
 
-.tools__search--results-modal {
-    /* height: 100%; */
-}
+/* .tools__search--results-modal { */
+/* height: 100%; */
+/* } */
 
 .tools__search--results-modal>div {
     height: 100%;
@@ -148,13 +148,12 @@
     padding-bottom: 45px;
     height: 43px;
     backdrop-filter: blur(3px);
-
-    /* margin-top: 12px; */
     z-index: 9000;
 }
 
 .userhome__body--profile--tools--dropdown {
     transition: var(--main-transition-speed) !important;
+    backdrop-filter: blur(4px);
 }
 
 .userhome__body--profile--tools--dropdown>button {
@@ -192,8 +191,8 @@
     padding: 0;
     margin-top: -2px;
     color: var(--main-text-color) !important;
-    background-color: transparent;
-    backdrop-filter: blur(5px);
+    background-color: rgba(198, 220, 208, 0.6);
+    backdrop-filter: blur(8px) !important;
     border-color: var(--main-bg-color) !important;
     border-radius: 0 0 var(--main-rounded-corner) var(--main-rounded-corner);
     border-top: 0;
@@ -208,6 +207,8 @@
     text-align: center;
     color: var(--main-text-color) !important;
     transition: var(--main-transition-speed) !important;
+    backdrop-filter: blur(8px) !important;
+
 }
 
 .userhome__body--profile--tools--dropdown>div>a:hover {
