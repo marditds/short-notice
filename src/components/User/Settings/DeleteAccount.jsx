@@ -91,15 +91,27 @@ export const DeleteAccount = () => {
                 </Col>
             </Row>
 
-            <Modal show={showModal} onHide={handleCloseModal}>
-                <Modal.Header closeButton>
+            <Modal show={showModal}
+                onHide={handleCloseModal}
+                className='settings__delete-account-modal'
+            >
+                <Modal.Header
+                    className='settings__delete-account-modal-header border-bottom-0'
+                >
                     <Modal.Title>ARE YOU SURE?</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>
+                <Modal.Body
+                    className='settings__delete-account-modal-body py-1'
+                >
                     Are you sure you want to delete your account? This action is irreversible and all your data will be lost. PERMANENTLY.
                 </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={handleCloseModal} disabled={loading}>
+                <Modal.Footer
+                    className='settings__delete-account-modal-footer border-top-0'
+                >
+                    <Button onClick={handleCloseModal}
+                        disabled={loading}
+                        className='settings__delete-account-btn cancel'
+                    >
                         Cancel
                     </Button>
                     <Button

@@ -12,7 +12,6 @@ export const DeleteAllNotices = () => {
     const [showModal, setShowModal] = useState(false);
     const [loading, setLoading] = useState(false);
 
-
     const handleShowModal = () => setShowModal(true);
 
     const handleCloseModal = () => setShowModal(false);
@@ -41,27 +40,38 @@ export const DeleteAllNotices = () => {
                 <Col className='d-grid align-content-end'>
                     <Button
                         onClick={handleShowModal}
-                        className='settings__delete-account-btn'
+                        className='settings__delete-notices-btn'
                     >
                         Delete All Notices
                     </Button>
                 </Col>
             </Row>
 
-            <Modal show={showModal} onHide={handleCloseModal}>
-                <Modal.Header closeButton>
+            <Modal show={showModal}
+                onHide={handleCloseModal}
+                className='settings__delete-notices-modal'
+            >
+                <Modal.Header
+                    className='border-bottom-0 settings__delete-notices-modal-header'
+                >
                     <Modal.Title>ARE YOU SURE?</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>
+                <Modal.Body
+                    className='settings__delete-notices-modal-body py-1'
+                >
                     Are you sure you want to delete your notices? This action is irreversible and all your data will be lost. PERMANENTLY.
                 </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={handleCloseModal} disabled={loading}>
+                <Modal.Footer className='d-flex just align-items-center border-top-0 settings__delete-notices-modal-footer'>
+                    <Button
+                        onClick={handleCloseModal}
+                        disabled={loading}
+                        className='settings__delete-notices-btn cancel'
+                    >
                         Cancel
                     </Button>
                     <Button
                         onClick={confirmAllNoticesDeletion}
-                        className='settings__delete-account-btn'
+                        className='settings__delete-notices-btn'
                     >
                         {loading ? <Loading /> : 'Yes, Delete All Notices'}
                     </Button>

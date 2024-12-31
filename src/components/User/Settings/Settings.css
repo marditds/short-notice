@@ -142,30 +142,92 @@
 }
 
 .settings__update-interests-btn,
-.settings__load-blocked-btn,
-.settings__delete-account-btn {
+.settings__load-blocked-btn {
     max-width: fit-content;
     margin-bottom: 16px;
 }
 
-.settings__blocked-accounts-profiles {
+.settings__delete-notices-modal,
+.settings__delete-account-modal {
+    z-index: 9002;
+}
+
+.settings__delete-notices-modal>div,
+.settings__delete-account-modal>div {
+    margin-block: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.settings__delete-notices-modal>div>div,
+.settings__delete-account-modal>div>div {
+    max-height: 100vh;
+    border-color: var(--main-accent-color) !important;
+}
+
+.settings__delete-notices-modal-body,
+.settings__delete-account-modal-body {
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+.settings__delete-notices-btn,
+.settings__delete-account-btn {
+    max-width: fit-content;
+    box-shadow: none !important;
+    height: 36px;
+    border-radius: var(--main-rounded-corner) !important;
+}
+
+.settings__delete-notices-btn.cancel,
+.settings__delete-account-btn.cancel {
+    background-color: var(--main-accent-color) !important;
+    border-color: var(--main-accent-color) !important;
+    color: var(--main-text-color);
+    border: 1px solid;
+    transition: var(--main-transition-speed) !important;
+}
+
+.settings__delete-notices-btn.cancel:hover,
+.settings__delete-notices-btn.cancel:active,
+.settings__delete-account-btn.cancel:hover,
+.settings__delete-account-btn.cancel:active {
+    background-color: var(--main-accent-color) !important;
+    border-width: 1px !important;
+    border-style: solid;
+    border-color: var(--main-accent-color-hover) !important;
+    color: var(--main-text-color);
+}
+
+.settings__delete-notices-btn.cancel:focus,
+.settings__delete-account-btn.cancel:focus {
+    background-color: var(--main-accent-color-hover) !important;
+
+}
+
+
+.settings__blocked-anotices-profiles {
     padding-inline: 12px;
     padding-block: 8px;
     border: 1px solid var(--main-accent-color);
     border-radius: var(--main-rounded-corner);
     background-color: transparent;
-    /* cursor: pointer; */
     transition: var(--main-transition-speed);
 }
 
-.settings__delete-account-btn,
-.settings__delete-account-btn:focus {
+.settings__delete-notices-btn,
+.settings__delete-account-btn {
     background-color: var(--main-caution-color) !important;
     color: white;
     border: none;
 }
 
-.settings__delete-account-btn:hover {
+.settings__delete-notices-btn:hover,
+.settings__delete-account-btn:hover,
+.settings__delete-notices-btn:focus,
+.settings__delete-account-btn:focus {
     background-color: var(--main-caution-color-hover) !important;
 }
 
@@ -193,7 +255,7 @@
     .settings__update-username-btn,
     .settings__update-interests-btn,
     .settings__load-blocked-btn,
-    .settings__delete-account-btn,
+    .settings__delete-notices-btn,
     .settings__delete-account-btn {
         font-size: var(--mobile-font-size) !important;
         height: 31px;
@@ -208,6 +270,13 @@
 
     .settings__blocked-accounts-profile-avatar {
         height: 60px;
+    }
+
+    .settings__delete-notices-modal-header,
+    .settings__delete-notices-modal-footer,
+    .settings__delete-account-modal-header,
+    .settings__delete-account-modal-footer {
+        padding-block: 10px;
     }
 }
 

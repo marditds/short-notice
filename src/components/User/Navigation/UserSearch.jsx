@@ -132,11 +132,11 @@ export const UserSearch = ({ userId }) => {
                 </Button>
                 <Form>
                     <Form.Group controlId="userSearch">
-                        <Form.Label className='visually-hidden'>Search Users</Form.Label>
+                        <Form.Label className='visually-hidden'>Search Username</Form.Label>
                         <Form.Control
                             as="textarea"
                             rows={1}
-                            placeholder='User Search'
+                            placeholder='Username Search'
                             onChange={onUserSearchChange}
                             onKeyDown={handleOnKeyDown}
                             className='tools__search-field'
