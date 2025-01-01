@@ -121,7 +121,7 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                 <Col
                     xs={{ span: 6, order: location.pathname !== '/user/profile' ? 3 : 2 }}
                     sm={{ span: 4, order: 1 }}
-                    className={`d-flex flex-sm-column justify-content-evenly user-profile__follow-count-col ${location.pathname !== '/user/profile' && 'h-50'}`}>
+                    className={`d-flex flex-sm-column justify-content-evenly user-profile__follow-count-col ${location.pathname !== '/user/profile' && isExtraSmallScreen ? 'h-50' : ''}`}>
                     {
                         isBlocked ?
                             null :
@@ -172,7 +172,7 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                 <Col
                     xs={{ span: 6, order: 1 }}
                     sm={{ span: 4, order: 2 }}
-                    className={`d-flex flex-column justify-content-center align-items-sm-center align-items-end user-profile__avatar-col ${location.pathname !== '/user/profile' && 'mt-2'}`}>
+                    className={`d-flex flex-column justify-content-center align-items-sm-center align-items-end user-profile__avatar-col ${location.pathname !== '/user/profile' && isExtraSmallScreen ? 'pt-3' : ''}`}>
                     <div>
                         <img
                             src={avatarUrl ? avatarUrl : defaultAvatar}

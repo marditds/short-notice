@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Container, Nav, Navbar, NavDropdown, Dropdown, DropdownButton } from 'react-bootstrap';
+import { Container, Nav, Navbar, NavDropdown, Image } from 'react-bootstrap';
 import { PiDotsThreeOutlineVertical } from "react-icons/pi";
 import { UserSearch } from './UserSearch';
 import snLogo from '../../../assets/sn_long.png'
@@ -18,41 +18,41 @@ export const Navigation = ({ googleLogout, removeSession, setIsLoggedIn, setGoog
                 '>
                 <Container fluid className='d-flex'>
                     <Navbar.Brand href='./feed' className='mt-auto mb-auto ms-2'>
-                        <img src={snLogo} alt='short_notice_logo' height={23} className='navigation__logo' />
+                        <Image src={snLogo} alt='short_notice_logo' className='navigation__logo' fluid />
                     </Navbar.Brand>
 
 
                     <UserSearch userId={userId} />
 
-                    <DropdownButton
+                    <NavDropdown
                         drop='down'
                         id="dropdown-basic-button"
                         className='ms-auto userhome__body--profile--tools--dropdown'
                         title={<PiDotsThreeOutlineVertical
                             size={30}
                         />}>
-                        <Dropdown.Item
+                        <NavDropdown.Item
                             as={Link}
                             to='/user/feed'
                             className='userhome__body--btn w-100'
                         >
                             Feed
-                        </Dropdown.Item>
-                        <Dropdown.Item
+                        </NavDropdown.Item>
+                        <NavDropdown.Item
                             as={Link}
                             to='/user/profile'
                             className='userhome__body--btn w-100'
                         >
                             Profile
-                        </Dropdown.Item>
-                        <Dropdown.Item
+                        </NavDropdown.Item>
+                        <NavDropdown.Item
                             as={Link}
                             to='/user/settings'
                             className='userhome__body--btn w-100'
                         >
                             Settings
-                        </Dropdown.Item>
-                        <Dropdown.Item
+                        </NavDropdown.Item>
+                        <NavDropdown.Item
                             as={Link}
                             to='/'
                             onClick={
@@ -69,8 +69,8 @@ export const Navigation = ({ googleLogout, removeSession, setIsLoggedIn, setGoog
                             className='userhome__body--btn w-100'
                         >
                             Log out
-                        </Dropdown.Item>
-                    </DropdownButton>
+                        </NavDropdown.Item>
+                    </NavDropdown>
                 </Container>
             </Nav>
         </>

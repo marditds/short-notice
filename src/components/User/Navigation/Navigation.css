@@ -6,6 +6,7 @@
 
 .navigation__logo {
     filter: drop-shadow(0px 0px 5px rgb(255, 255, 255));
+    max-height: 23px;
 }
 
 
@@ -152,39 +153,42 @@
 }
 
 .userhome__body--profile--tools--dropdown {
-    transition: var(--main-transition-speed) !important;
+    /* transition: var(--main-transition-speed) !important; */
     backdrop-filter: blur(4px);
+    animation: none !important;
 }
 
-.userhome__body--profile--tools--dropdown>button {
+.userhome__body--profile--tools--dropdown>a {
     padding: 0;
     background-color: transparent !important;
+    color: var(--main-accent-color) !important;
     border-radius: 0;
     border-top: 0 !important;
     border-bottom: 0 !important;
     border-left: 2px solid transparent !important;
     border-right: 2px solid transparent !important;
-    transition: var(--main-transition-speed) !important;
+    /* transition: var(--main-transition-speed) !important; */
+    animation: none !important;
     box-shadow: none !important;
 }
 
-.userhome__body--profile--tools--dropdown>button:hover,
-.userhome__body--profile--tools--dropdown>button:active,
-.userhome__body--profile--tools--dropdown>button:focus {
+.userhome__body--profile--tools--dropdown>a:hover,
+.userhome__body--profile--tools--dropdown>a:active,
+.userhome__body--profile--tools--dropdown>a:focus {
     color: var(--main-accent-color-hover) !important;
-    transition: var(--main-transition-speed) !important;
-
+    /* transition: var(--main-transition-speed) !important; */
 }
 
-.userhome__body--profile--tools--dropdown>button::after {
+.userhome__body--profile--tools--dropdown>a::after {
     display: none !important;
 }
 
-.userhome__body--profile--tools--dropdown>button.btn.show {
+.userhome__body--profile--tools--dropdown>a.btn.show {
     border-left: 2px solid var(--main-accent-color) !important;
     border-right: 2px solid var(--main-accent-color) !important;
     border-radius: 0;
-    transition: var(--main-transition-speed) !important;
+    /* transition: var(--main-transition-speed) !important; */
+    animation: none !important;
 }
 
 .userhome__body--profile--tools--dropdown>div {
@@ -246,6 +250,7 @@
     border: 2px solid var(--main-accent-color);
     border-radius: var(--main-rounded-corner) !important;
     resize: none;
+    text-wrap: none !important;
     transition: var(--main-transition-speed);
 }
 

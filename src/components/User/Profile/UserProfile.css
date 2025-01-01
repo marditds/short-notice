@@ -364,7 +364,11 @@
 .user-profile__notice-tab>li>button {
     color: var(--main-text-color);
     background-color: var(--main-bg-color) 0.5 !important;
-    backdrop-filter: blur(3px)
+    backdrop-filter: blur(3px);
+    border-top-left-radius: var(--main-rounded-corner) !important;
+    border-top-right-radius: var(--main-rounded-corner) !important;
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
 }
 
 .user-profile__notice-tab>li>button:hover {
