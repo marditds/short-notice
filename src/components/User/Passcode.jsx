@@ -22,24 +22,24 @@ export const Passcode = ({ passcode, setPasscode, checkPasscode }) => {
     };
 
     return (
-        <div>
+        <div className='user-profile__organization-passcode'>
             <Form>
                 <Form.Group
-                    className="mt-5 mb-3"
-                    controlId="formBusinessPasscode">
+                    controlId="formOrganizationPasscode">
                     <Form.Label>Passcode: </Form.Label>
                     <Form.Control
                         type="password"
                         value={passcode}
                         onChange={onPasscodeChange}
                         onKeyDown={handleKeyDown}
+                        className='user-profile__organization-passcode-field'
                     />
                 </Form.Group>
-
                 <Button
                     variant="primary"
                     onClick={checkPasscode}
                     disabled={passcode.length < 6}
+                    className='user-profile__organization-passcode-btn ms-2'
                 >
                     Submit
                 </Button>

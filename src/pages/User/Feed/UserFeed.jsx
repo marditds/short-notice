@@ -451,7 +451,7 @@ const UserFeed = () => {
             }
 
             {/* Load More Button */}
-            <div className="d-flex justify-content-center my-4">
+            <div className="d-flex justify-content-center">
                 {(!isFeedToggled && hasMorePersonalNotices) || (isFeedToggled && hasMoreGeneralNotices) ?
                     <Button
                         onClick={() => {
@@ -464,18 +464,18 @@ const UserFeed = () => {
                         // disabled={(isFeedToggled && (isLoadingMore || !hasMoreGeneralNotices)) ||
                         //     (!isFeedToggled && (isLoadingMorePersonal || !hasMorePersonalNotices)) || isLoadingPersonalFeedNotices}
                         disabled={(isLoadingPersonalFeedNotices || isLoadingMore || isLoadingMorePersonal) ? true : false}
-                        className={`notices__load-more-notices-btn ${(isLoadingMoreInitial || isLoadingMorePersonalInitial) ? 'd-none' : 'd-block'}`}
+                        className={` my-4 notices__load-more-notices-btn ${(isLoadingMoreInitial || isLoadingMorePersonalInitial) ? 'd-none' : 'd-block'}`}
                     >
                         {isLoadingMore || isLoadingMorePersonal ?
                             <><Loading size={24} /> Loading...</>
                             : 'Load More'}
                     </Button>
                     :
-                    <>
+                    <div className='my-4'>
                         <i className="bi bi-asterisk"></i>
                         <i className="bi bi-asterisk"></i>
                         <i className="bi bi-asterisk"></i>
-                    </>
+                    </div>
                 }
             </div>
         </div>

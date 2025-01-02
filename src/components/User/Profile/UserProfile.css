@@ -328,6 +328,11 @@
 }
 
 .notices__load-more-notices-btn,
+.notices__end-asterisks {
+    margin-bottom: 40px;
+}
+
+.notices__load-more-notices-btn,
 .notices__load-more-notices-btn:disabled,
 .notice__load-reactions-btn,
 .notice__load-reactions-btn:disabled {
@@ -497,7 +502,8 @@
 .notice__edit--modal-btn,
 .notice__react-btn,
 .user-profile__block--modal-body-btn,
-.user-profile__report--modal-btn {
+.user-profile__report--modal-btn,
+.user-profile__organization-passcode-btn {
     background-color: var(--main-accent-color) !important;
     color: black !important;
     border: transparent;
@@ -511,7 +517,9 @@
 .user-profile__block--modal-body-btn:hover,
 .user-profile__block--modal-body-btn:focus,
 .user-profile__report--modal-btn:hover,
-.user-profile__report--modal-btn:focus {
+.user-profile__report--modal-btn:focus,
+.user-profile__organization-passcode-btn:hover,
+.user-profile__organization-passcode-btn:focus {
     background-color: var(--main-accent-color-hover) !important;
     color: black !important;
     border: transparent;
@@ -654,6 +662,41 @@
     color: var(--main-accent-color) !important;
 }
 
+.user-profile__organization-passcode {
+    height: calc(100% - 12px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.user-profile__organization-passcode>form {
+    display: flex;
+    justify-content: center;
+    align-items: end;
+}
+
+.user-profile__organization-passcode-field {
+    box-shadow: none !important;
+    transition: var(--main-transition-speed) !important;
+    font-size: var(--pc-font-size);
+    height: 40px;
+    border-radius: var(--main-rounded-corner);
+}
+
+.user-profile__organization-passcode-field:hover {
+    border-color: var(--main-accent-color);
+}
+
+.user-profile__organization-passcode-field:active,
+.user-profile__organization-passcode-field:focus {
+    border-color: var(--main-accent-color-hover);
+}
+
+.user-profile__organization-passcode-btn {
+    height: 40px;
+    font-size: var(--pc-font-size);
+    border-radius: var(--main-rounded-corner);
+}
 
 
 
@@ -675,6 +718,7 @@
         font-size: 12.5pt;
     }
 
+    .user-profile__organization-passcode-btn,
     .user-profile__interaction-btn,
     .user-profile__tags-accordion>div>h2>button,
     .user-profile__tags-accordion>div,
@@ -683,8 +727,14 @@
     .user-profile__timer-label,
     .user-profile__timer-select,
     .notices__accordion>div,
-    .user-profile__notice-char-counter {
+    .user-profile__notice-char-counter,
+    .user-profile__report--modal-btn {
         font-size: var(--mobile-font-size);
+    }
+
+    .user-profile__organization-passcode-field,
+    .user-profile__organization-passcode-btn {
+        height: 31px;
     }
 
     .user-profile__avatar {

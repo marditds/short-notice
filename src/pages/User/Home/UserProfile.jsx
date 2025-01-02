@@ -10,6 +10,7 @@ import useNotices from '../../../lib/hooks/useNotices.js';
 import { ComposeNotice } from '../../../components/User/ComposeNotice';
 import { Loading } from '../../../components/Loading/Loading.jsx';
 import '../../../components/User/Profile/UserProfile.css';
+import { EndAsterisks } from '../../../components/User/EndAsterisks.jsx';
 
 
 const UserProfile = () => {
@@ -487,23 +488,19 @@ const UserProfile = () => {
                         getReactionsForNotice={getReactionsForNotice}
                         getUserAccountByUserId={getUserAccountByUserId}
                     />
-                    <div className="d-flex justify-content-center mt-4">
+                    <div className="d-flex justify-content-center">
                         {hasMoreNotices ?
                             <Button
                                 onClick={fetchNotices}
                                 disabled={isLoadingMore || !hasMoreNotices}
-                                className='notices__load-more-notices-btn'
+                                className='mt-3 notices__load-more-notices-btn'
                             >
                                 {isLoadingMore ?
                                     <><Loading size={24} /> Loading...</>
                                     : 'Load More'}
                             </Button>
                             :
-                            <>
-                                <i className="bi bi-asterisk"></i>
-                                <i className="bi bi-asterisk"></i>
-                                <i className="bi bi-asterisk"></i>
-                            </>
+                            <EndAsterisks componentName='notices' />
                         }
                     </div>
                 </Tab>
@@ -541,11 +538,7 @@ const UserProfile = () => {
                                     : 'Load More'}
                             </Button>
                             :
-                            <>
-                                <i className="bi bi-asterisk"></i>
-                                <i className="bi bi-asterisk"></i>
-                                <i className="bi bi-asterisk"></i>
-                            </>
+                            <EndAsterisks componentName='notices' />
                         }
                     </div>
                 </Tab>
@@ -583,11 +576,7 @@ const UserProfile = () => {
                                     : 'Load More'}
                             </Button>
                             :
-                            <>
-                                <i className="bi bi-asterisk"></i>
-                                <i className="bi bi-asterisk"></i>
-                                <i className="bi bi-asterisk"></i>
-                            </>
+                            <EndAsterisks componentName='notices' />
                         }
                     </div>
                 </Tab>
