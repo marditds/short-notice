@@ -9,6 +9,7 @@ import { useUnblockedNotices } from '../../../lib/utils/blockFilter';
 import { Button } from 'react-bootstrap';
 import { Loading } from '../../../components/Loading/Loading';
 import { FeedHeader } from '../../../components/User/Feed/FeedHeader/FeedHeader';
+import { EndAsterisks } from '../../../components/User/EndAsterisks';
 
 const UserFeed = () => {
 
@@ -472,9 +473,7 @@ const UserFeed = () => {
                     </Button>
                     :
                     <div className='my-4'>
-                        <i className="bi bi-asterisk"></i>
-                        <i className="bi bi-asterisk"></i>
-                        <i className="bi bi-asterisk"></i>
+                        <EndAsterisks />
                     </div>
                 }
             </div>

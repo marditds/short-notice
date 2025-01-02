@@ -11,6 +11,7 @@ import useNotices from '../../../lib/hooks/useNotices.js';
 import { useUnblockedNotices } from '../../../lib/utils/blockFilter.js';
 import { Passcode } from '../../../components/User/Passcode.jsx';
 import { Loading } from '../../../components/Loading/Loading.jsx';
+import { EndAsterisks } from '../../../components/User/EndAsterisks.jsx';
 
 
 
@@ -615,11 +616,7 @@ const OtherUserProfile = () => {
                                                                 : 'Load More'}
                                                         </Button>
                                                         :
-                                                        <>
-                                                            <i className="bi bi-asterisk"></i>
-                                                            <i className="bi bi-asterisk"></i>
-                                                            <i className="bi bi-asterisk"></i>
-                                                        </>
+                                                        <EndAsterisks componentName='notices' />
                                                     }
                                                 </div>
                                             </>
@@ -666,11 +663,7 @@ const OtherUserProfile = () => {
                                                                     : 'Load More'}
                                                             </Button>
                                                             :
-                                                            <>
-                                                                <i className="bi bi-asterisk"></i>
-                                                                <i className="bi bi-asterisk"></i>
-                                                                <i className="bi bi-asterisk"></i>
-                                                            </>
+                                                            <EndAsterisks componentName='notices' />
                                                         }
                                                     </div>
                                                 </>
@@ -714,11 +707,7 @@ const OtherUserProfile = () => {
                                                                 : 'Load More'}
                                                         </Button>
                                                         :
-                                                        <>
-                                                            <i className="bi bi-asterisk"></i>
-                                                            <i className="bi bi-asterisk"></i>
-                                                            <i className="bi bi-asterisk"></i>
-                                                        </>
+                                                        <EndAsterisks componentName='notices' />
                                                     }
                                                 </div>
                                             </>

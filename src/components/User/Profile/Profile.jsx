@@ -5,6 +5,7 @@ import { getAvatarUrl } from '../../../lib/utils/avatarUtils.js';
 import defaultAvatar from '../../../assets/default.png';
 import { SlClose } from "react-icons/sl";
 import { Loading } from '../../Loading/Loading.jsx';
+import { EndAsterisks } from '../EndAsterisks.jsx';
 
 export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUserId, followingCount, followersCount, isFollowing, followingAccounts, followersAccounts, isFollowingUserLoading, isBlocked, isOtherUserBlocked, handleUserReport, hasMoreFollowing, hasMoreFollowers, loadFollowing, loadFollowers, isLoadingMoreFollowing, isLoadingMoreFollowers }) => {
 
@@ -313,10 +314,8 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                         )
                     })}
                     {!hasMoreFollowers &&
-                        <div className='text-center'>
-                            <i className="bi bi-asterisk"></i>
-                            <i className="bi bi-asterisk"></i>
-                            <i className="bi bi-asterisk"></i>
+                        <div className='text-center mt-4'>
+                            <EndAsterisks />
                         </div>
                     }
                 </Modal.Body>
@@ -374,10 +373,8 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                         )
                     })}
                     {!hasMoreFollowing &&
-                        <div className='text-center'>
-                            <i className="bi bi-asterisk"></i>
-                            <i className="bi bi-asterisk"></i>
-                            <i className="bi bi-asterisk"></i>
+                        <div className='text-center mt-4'>
+                            <EndAsterisks />
                         </div>
                     }
                 </Modal.Body>
