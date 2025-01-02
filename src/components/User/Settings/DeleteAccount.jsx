@@ -110,13 +110,13 @@ export const DeleteAccount = () => {
                 >
                     <Button onClick={handleCloseModal}
                         disabled={loading}
-                        className='settings__delete-account-btn cancel'
+                        className='settings__delete-account-btn final cancel d-flex justify-content-center align-items-center'
                     >
                         Cancel
                     </Button>
                     <Button
                         onClick={confirmDeletion}
-                        className='settings__delete-account-btn'
+                        className='settings__delete-account-btn final d-flex justify-content-center align-items-center'
                     >
                         {loading ? <Loading /> : 'Yes, Delete My Account'}
                     </Button>

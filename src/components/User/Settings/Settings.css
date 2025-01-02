@@ -54,13 +54,10 @@
     border: 0 !important;
 }
 
-
-
 .settings__delete-avatar-btn,
 .settings__update-username-btn,
 .settings__update-interests-btn,
 .settings__load-blocked-btn,
-/* .settings__unblocked-btn, */
 .settings__delete-avatar-btn:focus,
 .settings__update-username-btn:focus,
 .settings__load-blocked-btn:focus,
@@ -70,6 +67,10 @@
     border: none;
     border-radius: var(--main-rounded-corner) !important;
     width: fit-content;
+}
+
+.settings-blocked__end-asterisks {
+    margin-top: 16px;
 }
 
 .settings__unblocked-btn:hover>svg {
@@ -283,13 +284,23 @@
         padding-block: 4px;
     }
 
-
-
     .settings__delete-notices-modal-header,
     .settings__delete-notices-modal-footer,
     .settings__delete-account-modal-header,
     .settings__delete-account-modal-footer {
         padding-block: 10px;
+    }
+
+    .settings__delete-notices-modal-footer,
+    .settings__delete-account-modal-footer {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .settings__delete-notices-btn.final,
+    .settings__delete-account-btn.final {
+        margin-inline: 0;
+        min-width: calc(50% - 6px) !important;
     }
 }
 

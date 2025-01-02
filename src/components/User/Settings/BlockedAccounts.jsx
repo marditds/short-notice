@@ -6,6 +6,7 @@ import { getAvatarUrl as avatarUrl } from '../../../lib/utils/avatarUtils';
 import defaultAvatar from '../../../assets/default.png';
 import { Loading } from '../../Loading/Loading';
 import { AiFillCloseCircle } from "react-icons/ai";
+import { EndAsterisks } from '../EndAsterisks';
 
 export const BlockedAccounts = () => {
 
@@ -185,11 +186,9 @@ export const BlockedAccounts = () => {
                                 : 'Load More Profiles'}
                         </Button>
                         :
-                        <>
-                            <i className="bi bi-asterisk"></i>
-                            <i className="bi bi-asterisk"></i>
-                            <i className="bi bi-asterisk"></i>
-                        </>
+                        <div className='text-center'>
+                            <EndAsterisks componentName='settings-blocked' />
+                        </div>
                     }</div>
             </Col>
         </Row>

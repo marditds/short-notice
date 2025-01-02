@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Profile } from '../../../components/User/Profile/Profile.jsx';
 import { Notices } from '../../../components/User/Notices';
-import { Tabs, Tab, Form, Modal, Button } from 'react-bootstrap';
+import { Row, Col, Tabs, Tab, Form, Modal, Button } from 'react-bootstrap';
 import { useUserContext } from '../../../lib/context/UserContext';
 import useUserInfo from '../../../lib/hooks/useUserInfo.js';
 import { getAvatarUrl as avatarUtil } from '../../../lib/utils/avatarUtils.js';
@@ -496,7 +496,7 @@ const UserProfile = () => {
                                 className='mt-3 notices__load-more-notices-btn'
                             >
                                 {isLoadingMore ?
-                                    <><Loading size={24} /> Loading...</>
+                                    <><Loading size={18} /> Loading...</>
                                     : 'Load More'}
                             </Button>
                             :
@@ -611,20 +611,21 @@ const UserProfile = () => {
                     className='notice__edit--modal-footer'
                 >
                     <Button
+
                         onClick={handleCloseEditModal}
                         className='notice__edit--modal-btn'
                     >
                         Cancel
                     </Button>
                     <Button
+
                         onClick={handleSaveEdit}
                         className='notice__edit--modal-btn'
                     >
-                        Save</Button>
+                        Save
+                    </Button>
                 </Modal.Footer>
             </Modal>
-            {/* </div> */}
-
 
             <Modal show={showDeleteModal}
                 onHide={handleCloseDeleteModal}>

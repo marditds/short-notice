@@ -3,6 +3,7 @@ import { useLocation, Link } from 'react-router-dom';
 import { Row, Col, Button, Modal, Form, Dropdown } from 'react-bootstrap';
 import { getAvatarUrl } from '../../../lib/utils/avatarUtils.js';
 import defaultAvatar from '../../../assets/default.png';
+import { isExtraSmallScreen } from '../../../lib/utils/screenUtils.js';
 import { SlClose } from "react-icons/sl";
 import { Loading } from '../../Loading/Loading.jsx';
 import { EndAsterisks } from '../EndAsterisks.jsx';
@@ -35,10 +36,6 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
     const [showReportUserModal, setShowReportUserModal] = useState(false);
     const [reportReason, setReportReason] = useState(null);
     const [showReportUserConfirmation, setShowReportUserConfirmation] = useState(false);
-
-    const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
-
-    const [isExtraSmallScreen, setIsExtraSmallScreen] = useState(window.innerWidth < 576);
 
     const handleShowFollowersModal = () => {
         setShowFollowersModal(true);
@@ -89,30 +86,6 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
         setShowReportUserModal(false);
         setReportReason(null);
     }
-
-    // Screen size check
-
-    //Extra Small
-    useEffect(() => {
-        const handleResize = () => {
-            setIsExtraSmallScreen(window.innerWidth < 576);
-        };
-
-        window.addEventListener('resize', handleResize);
-
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
-
-    // Small
-    useEffect(() => {
-        const handleResize = () => {
-            setIsSmallScreen(window.innerWidth < 768);
-        };
-
-        window.addEventListener('resize', handleResize);
-
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
 
     return (
         <div className='user-profile__body'>

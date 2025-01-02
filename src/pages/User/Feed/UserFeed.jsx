@@ -468,7 +468,7 @@ const UserFeed = () => {
                         className={` my-4 notices__load-more-notices-btn ${(isLoadingMoreInitial || isLoadingMorePersonalInitial) ? 'd-none' : 'd-block'}`}
                     >
                         {isLoadingMore || isLoadingMorePersonal ?
-                            <><Loading size={24} /> Loading...</>
+                            <><Loading size={16} /> Loading...</>
                             : 'Load More'}
                     </Button>
                     :

@@ -7,6 +7,7 @@ import { Button, Form, Modal, Stack } from 'react-bootstrap';
 import { CgSearch } from "react-icons/cg";
 import { SlClose } from "react-icons/sl";
 import { Loading } from '../../Loading/Loading';
+import { EndAsterisks } from '../EndAsterisks';
 
 export const UserSearch = ({ userId }) => {
 
@@ -205,9 +206,7 @@ export const UserSearch = ({ userId }) => {
                         </Button>
                         :
                         <div className='text-center'>
-                            <i className="bi bi-asterisk"></i>
-                            <i className="bi bi-asterisk"></i>
-                            <i className="bi bi-asterisk"></i>
+                            <EndAsterisks componentName='tools__search' />
                         </div>
                     }
 

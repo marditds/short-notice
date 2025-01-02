@@ -329,7 +329,7 @@
 
 .notices__load-more-notices-btn,
 .notices__end-asterisks {
-    margin-bottom: 40px;
+    margin-bottom: 50px;
 }
 
 .notices__load-more-notices-btn,
@@ -796,6 +796,20 @@
         padding: 10px;
     }
 
+    .notice__edit--modal-body {
+        padding-block: 0px;
+    }
+
+    .notice__edit--modal-footer {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .notice__edit--modal-btn {
+        width: calc(50% - 6px);
+        margin-inline: 0;
+    }
+
 }
 
 @media (max-width: 575px) {
@@ -879,6 +893,9 @@
         margin-right: 0px !important;
     }
 
+    .notices__load-more-notices-btn {
+        width: 100%;
+    }
 }
 
 @media (max-width: 549px) {

@@ -61,17 +61,17 @@ export const DeleteAllNotices = () => {
                 >
                     Are you sure you want to delete your notices? This action is irreversible and all your data will be lost. PERMANENTLY.
                 </Modal.Body>
-                <Modal.Footer className='d-flex just align-items-center border-top-0 settings__delete-notices-modal-footer'>
+                <Modal.Footer className='d-flex align-items-center border-top-0 settings__delete-notices-modal-footer'>
                     <Button
                         onClick={handleCloseModal}
                         disabled={loading}
-                        className='settings__delete-notices-btn cancel'
+                        className='settings__delete-notices-btn final cancel d-flex justify-content-center align-items-center'
                     >
                         Cancel
                     </Button>
                     <Button
                         onClick={confirmAllNoticesDeletion}
-                        className='settings__delete-notices-btn'
+                        className='settings__delete-notices-btn final d-flex justify-content-center align-items-center'
                     >
                         {loading ? <Loading /> : 'Yes, Delete All Notices'}
                     </Button>
