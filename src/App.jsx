@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, Outlet } from 'react-router-dom';
 import PreLogin from './pages/PreLogin/PreLogin.jsx';
 import CreateAccount from './pages/CreateAccount/CreateAccount.jsx';
@@ -63,6 +63,8 @@ function App() {
     mainSetUp();
   }, [navigate]);
 
+  const [isServerDown, setIsServerDown] = useState(false);
+
 
   const checkUsernameInDatabase = async (email) => {
     try {
@@ -81,6 +83,9 @@ function App() {
       }
     } catch (error) {
       console.error('Error checking username:', error);
+      if (error.code === 500) {
+        setIsServerDown(true);
+      }
     }
   };
 
@@ -238,6 +243,25 @@ function App() {
 
   };
 
+
+
+  if (isServerDown === true) {
+    return (
+      <div className='d-flex justify-content-center' style={{ fontSize: '20px', marginTop: '200px', maxWidth: 'calc(100% - 20px)', marginLeft: 'auto', marginRight: 'auto' }}>
+        <p className=' text-wrap text-center'>
+          The server is under maintanence.
+          <br />
+          👷‍♂️🚧
+          <br />
+          We apologize for any inconvinience.
+          <br />
+          🙏
+          <br />
+          Please try again later.
+        </p>
+      </div>
+    )
+  }
 
 
 

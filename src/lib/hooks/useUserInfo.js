@@ -27,6 +27,7 @@ const useUserInfo = (data) => {
         fetchUserId();
     }, [data]);
 
+
     const registerUser = async (id, email, username) => {
         try {
             const newAuthUsr = await registerAuthUser(id, email, username);

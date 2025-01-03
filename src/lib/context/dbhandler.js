@@ -4,27 +4,33 @@ const client = new Client()
     .setEndpoint(import.meta.env.VITE_ENDPOINT)
     .setProject(import.meta.env.VITE_PROJECT);
 
+console.log('client - dbhandler.js', client);
+
 export const account = new Account(client);
 
 console.log('account - dbhandler.js', account);
 
 const functions = new Functions(client);
 
+console.log('functions - dbhandler.js', functions);
+
 export default client;
 
 const storage = new Storage(client);
 export const databases = new Databases(client);
 
+console.log('databases - dbhandler.js', databases);
 
-export const users = await databases.listDocuments(
-    import.meta.env.VITE_DATABASE,
-    import.meta.env.VITE_USERS_COLLECTION
-);
 
-export const notices = await databases.listDocuments(
-    import.meta.env.VITE_DATABASE,
-    import.meta.env.VITE_NOTICES_COLLECTION
-);
+// const users = await databases.listDocuments(
+//     import.meta.env.VITE_DATABASE,
+//     import.meta.env.VITE_USERS_COLLECTION
+// );
+
+// const notices = await databases.listDocuments(
+//     import.meta.env.VITE_DATABASE,
+//     import.meta.env.VITE_NOTICES_COLLECTION
+// );
 
 
 export const uploadAvatar = async (file) => {

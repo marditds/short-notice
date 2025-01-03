@@ -3,7 +3,7 @@ import { useLocation, Link } from 'react-router-dom';
 import { Row, Col, Button, Modal, Form, Dropdown } from 'react-bootstrap';
 import { getAvatarUrl } from '../../../lib/utils/avatarUtils.js';
 import defaultAvatar from '../../../assets/default.png';
-import { isExtraSmallScreen } from '../../../lib/utils/screenUtils.js';
+import { screenUtils } from '../../../lib/utils/screenUtils.js';
 import { SlClose } from "react-icons/sl";
 import { Loading } from '../../Loading/Loading.jsx';
 import { EndAsterisks } from '../EndAsterisks.jsx';
@@ -36,6 +36,8 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
     const [showReportUserModal, setShowReportUserModal] = useState(false);
     const [reportReason, setReportReason] = useState(null);
     const [showReportUserConfirmation, setShowReportUserConfirmation] = useState(false);
+
+    const { isExtraSmallScreen } = screenUtils();
 
     const handleShowFollowersModal = () => {
         setShowFollowersModal(true);
