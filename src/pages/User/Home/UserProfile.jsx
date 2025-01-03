@@ -599,7 +599,7 @@ const UserProfile = () => {
                             <Form.Label>Your Notice Text</Form.Label>
                             <Form.Control
                                 as='textarea'
-                                rows={3}
+                                rows={8}
                                 value={noticeText}
                                 onChange={(e) => setNoticeText(e.target.value)}
                                 className='notice__edit--modal-form-control'
@@ -628,20 +628,33 @@ const UserProfile = () => {
             </Modal>
 
             <Modal show={showDeleteModal}
-                onHide={handleCloseDeleteModal}>
-                <Modal.Header>
+                onHide={handleCloseDeleteModal}
+                className='notice__delete--modal'
+            >
+                <Modal.Header
+                    className='notice__delete--modal-header border-bottom-0'
+                >
                     <Modal.Title>Delete Notice</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>
-                    <h4>Are you sure you want to delete this notice❓</h4>
+                <Modal.Body
+                    className='notice__delete--modal-body'
+                >
+                    <p className='mb-0'>
+                        Are you sure you want to delete this notice❓
+                    </p>
                 </Modal.Body>
-                <Modal.Footer>
-                    <Button onClick={handleCloseDeleteModal}>
+                <Modal.Footer
+                    className='notice__delete--modal-footer border-top-0'
+                >
+                    <Button onClick={handleCloseDeleteModal}
+                        className='notice__delete--modal-btn'
+                    >
                         Cancel
                     </Button>
                     <Button
                         onClick={handleDelete}
                         disabled={isRemovingNotice}
+                        className='notice__delete--modal-btn'
                     >
                         {isRemovingNotice ? <Loading /> : 'Delete'}
                     </Button>

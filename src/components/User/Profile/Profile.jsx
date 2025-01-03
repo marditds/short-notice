@@ -272,7 +272,6 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                 <Modal.Body
                     className='user-profile__following--modal-body py-0'
                 >
-                    THESE ARE FOLLOWING {username}
                     {followersAccounts && followersAccounts.map((followerAccount) => {
                         return (
                             <div key={followerAccount.$id}>
@@ -330,7 +329,6 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                 <Modal.Body
                     className='d-grid user-profile__following--modal-body py-0'
                 >
-                    THESE ACCOUNTS ARE FOLLOWED BY {username}
                     {followingAccounts && followingAccounts.map((followingAccount) => {
                         return (
                             <div key={followingAccount.$id}>
@@ -388,6 +386,8 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                     className='user-profile__block--modal-body'
                 >
                     <p>Are you sure you want to block <strong>{username}</strong>?</p>
+                </Modal.Body>
+                <Modal.Footer className='user-profile__block--modal-footer border-top-0 pt-0'>
                     <Button onClick={() => handleBlock(currUserId)}
                         className='me-2 user-profile__block--modal-body-btn'
                     >
@@ -398,7 +398,7 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                     >
                         Cancel
                     </Button>
-                </Modal.Body>
+                </Modal.Footer>
             </Modal>
 
             {/* User report modal */}

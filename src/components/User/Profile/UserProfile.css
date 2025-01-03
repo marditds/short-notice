@@ -464,6 +464,7 @@
 .notice__report--modal>div,
 .notice__reaction--report--modal>div,
 .notice__edit--modal>div,
+.notice__delete--modal>div,
 .notice__react--modal>div,
 .user-profile__block--modal>div {
     margin-block: 0;
@@ -475,6 +476,7 @@
 
 .user-profile__report--modal>div>div,
 .notice__edit--modal>div>div,
+.notice__delete--modal>div>div,
 .notice__react--modal>div>div,
 .notice__report--modal>div>div,
 .notice__reaction--report--modal>div>div,
@@ -492,6 +494,9 @@
 .notice__edit--modal-header,
 .notice__edit--modal-body,
 .notice__edit--modal-footer,
+.notice__delete--modal-header,
+.notice__delete--modal-body,
+.notice__delete--modal-footer,
 .notice__react--modal-header,
 .notice__react--modal-body,
 .notice__react--modal-footer {
@@ -500,6 +505,7 @@
 }
 
 .notice__edit--modal-btn,
+.notice__delete--modal-btn,
 .notice__react-btn,
 .user-profile__block--modal-body-btn,
 .user-profile__report--modal-btn,
@@ -512,6 +518,8 @@
 
 .notice__edit--modal-btn:hover,
 .notice__edit--modal-btn:focus,
+.notice__delete--modal-btn:hover,
+.notice__delete--modal-btn:focus,
 .notice__react-btn:hover,
 .notice__react-btn:focus,
 .user-profile__block--modal-body-btn:hover,
@@ -546,6 +554,7 @@
 .user-profile__following--modal,
 .notice__react--modal,
 .notice__edit--modal,
+.notice__delete--modal,
 .notice__report--modal,
 .notice__reaction--report--modal,
 .user-profile__block--modal,
@@ -556,6 +565,8 @@
 
 .user-profile__block--modal>div>div,
 .notice__report--modal>div>div,
+.notice__edit--modal>div>div,
+.notice__delete--modal>div>div,
 .notice__reaction--report--modal>div>div,
 .user-profile__report--modal>div>div,
 .user-profile__following--modal>div>div {
@@ -593,6 +604,8 @@
 }
 
 .notice__report--modal-body,
+.notice__edit--modal-body,
+.notice__delete--modal-body,
 .notice__reaction--report--modal-body,
 .user-profile__following--modal-body,
 .user-profile__block--modal-body,
@@ -603,6 +616,9 @@
 
 
 .user-profile__following--modal-body>div>a {
+    font-size: var(--pc-font-size);
+    text-decoration: none;
+    color: var(--main-text-color);
     padding-inline: 10px;
     padding-block: 5px;
     border-bottom: 1px solid var(--main-accent-color-hover);
@@ -610,6 +626,7 @@
 }
 
 .user-profile__following--modal-body>div>a:hover {
+    color: var(--main-accent-color-hover);
     background-color: rgba(255, 255, 255, 0.4) !important;
 }
 
@@ -635,7 +652,6 @@
 
 .user-profile__following--modal-results-expand-btn,
 .user-profile__following--modal-results-expand-btn:disabled {
-    /* margin-top: 15px; */
     background-color: transparent !important;
     height: 39.5px !important;
     padding: 0;
@@ -776,9 +792,12 @@
     .notice__report--modal-btn,
     .notice__reaction--report--modal-btn,
     .notice__edit--modal-btn,
+    .notice__delete--modal-btn,
     .notice__react-btn,
     .user-profile__block--modal-body-btn,
-    .user-profile__form-control {
+    .user-profile__form-control,
+    .user-profile__following--modal-body>div>a,
+    .notice__edit--modal-form-control {
         font-size: var(--mobile-font-size);
     }
 
@@ -792,23 +811,49 @@
     .user-profile__block--modal-body,
     .user-profile__report--modal>div>div>.modal-header,
     .user-profile__report--modal-body,
-    .user-profile__report--modal>div>div>.modal-footer {
+    .user-profile__report--modal>div>div>.modal-footer,
+    .user-profile__block--modal-footer,
+    .user-profile__report--modal-footer {
         padding: 10px;
     }
 
-    .notice__edit--modal-body {
+    .notice__edit--modal-body,
+    .notice__delete--modal-body {
         padding-block: 0px;
     }
 
-    .notice__edit--modal-footer {
+    .notice__report--modal-footer,
+    .notice__edit--modal-footer,
+    .notice__delete--modal-footer,
+    .user-profile__block--modal-footer,
+    .user-profile__report--modal-footer {
         display: flex;
         justify-content: space-between;
     }
 
-    .notice__edit--modal-btn {
-        width: calc(50% - 6px);
+    .notice__report--modal-btn,
+    .notice__edit--modal-btn,
+    .notice__delete--modal-btn,
+    .user-profile__block--modal-body-btn,
+    .user-profile__report--modal-btn {
+        width: calc(50% - 5px);
         margin-inline: 0;
     }
+
+    .user-profile__following--modal-header {
+        padding-bottom: 5px;
+    }
+
+    .notice__report--modal>div>div>div>div,
+    .user-profile__following--modal-header>div,
+    .user-profile__report--modal-header>div,
+    .notice__delete--modal-header>div {
+        font-size: 1.125rem;
+    }
+
+
+
+
 
 }
 

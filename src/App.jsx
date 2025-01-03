@@ -10,6 +10,8 @@ import { createUser, getUserByEmail } from './lib/context/dbhandler.js';
 import { useUserContext } from './lib/context/UserContext';
 import { ID } from 'appwrite';
 import useUserInfo from './lib/hooks/useUserInfo.js';
+import appwrite_logo from '../src/assets/appwrite_logo.svg';
+
 
 function App() {
 
@@ -258,6 +260,17 @@ function App() {
           🙏
           <br />
           Please try again later.
+          <br />
+          <br />
+          To stay updated on the server's availability, please visit
+          <br />
+          <a href='https://status.appwrite.online'>
+            https://status.appwrite.online
+          </a>.
+          <br />
+          <a href='https://status.appwrite.online'>
+            <img src={appwrite_logo} alt='appwrite_logo' height={25} style={{ marginRight: '7px' }} />
+          </a>
         </p>
       </div>
     )

@@ -291,6 +291,12 @@
         padding-block: 10px;
     }
 
+    .settings__delete-notices-modal-header>div,
+    .settings__delete-account-modal-header>div,
+    .notice__edit--modal-header>div {
+        font-size: 1.125rem;
+    }
+
     .settings__delete-notices-modal-footer,
     .settings__delete-account-modal-footer {
         display: flex;
