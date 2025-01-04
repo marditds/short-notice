@@ -11,6 +11,7 @@ import { AiOutlineExclamationCircle } from "react-icons/ai";
 import defaultAvatar from '../../assets/default.png';
 import { Loading } from '../Loading/Loading';
 import { Reactions } from './Reactions';
+import { screenUtils } from '../../lib/utils/screenUtils';
 
 
 export const Notices = ({
@@ -33,6 +34,8 @@ export const Notices = ({
     // handleDeleteReaction
 }) => {
     const location = useLocation();
+
+    const { isSmallScreen } = screenUtils();
 
     const [countdowns, setCountdowns] = useState([]);
 
@@ -513,13 +516,13 @@ export const Notices = ({
                                                     className='ms-auto notice__edit-btn'
                                                     onClick={() => handleEditNotice(notice.$id, notice.text)}
                                                 >
-                                                    <AiFillEdit size={20} />
+                                                    <AiFillEdit size={isSmallScreen ? 16 : 20} />
                                                 </div>
                                                 <div
                                                     className='ms-2 notice__delete-btn'
                                                     onClick={() => handleDeleteNotice(notice.$id)}
                                                 >
-                                                    <CgTrash size={20} />
+                                                    <CgTrash size={isSmallScreen ? 16 : 20} />
 
                                                 </div>
                                             </span>
@@ -611,14 +614,14 @@ export const Notices = ({
                                 <Row className='m-auto'>
                                     <Col className='px-4'>
                                         <Form>
-                                            <Form.Group className='mb-3' controlId='reportNotice'>
+                                            <Form.Group className='mb-3' controlId='reactionField'>
                                                 <Form.Control
                                                     as="textarea"
                                                     rows={3}
                                                     value={reactionText}
                                                     onChange={onReactionTextChange}
                                                     className="user-profile__form-control"
-                                                    placeholder='Your reaction text here'
+                                                    placeholder={`Your reaction text here.`}
                                                 />
                                             </Form.Group>
                                         </Form>

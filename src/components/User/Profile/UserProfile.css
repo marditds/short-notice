@@ -47,11 +47,12 @@
 
 .user-profile__avatar {
     height: 100px;
+    width: 100px;
+    border-radius: var(--main-rounded-corner);
 }
 
-.user-profile__avatar,
-.notice__avatar,
-.notice__reaction-avatar,
+
+/* .notice__reaction-avatar, */
 .follower__avatar,
 .following__avatar,
 .notice__react-modal-avatar {
@@ -129,7 +130,7 @@
     border-width: 1.5px;
     border-style: groove;
     transition: var(--main-transition-speed);
-
+    border-radius: var(--main-rounded-corner);
 }
 
 .user-profile__form-control:focus::placeholder {
@@ -339,6 +340,7 @@
     background-color: var(--main-accent-color);
     color: var(--main-text-color);
     border-color: var(--main-accent-color);
+    border-radius: var(--main-rounded-corner);
 }
 
 .notices__load-more-notices-btn:hover,
@@ -353,7 +355,9 @@
 }
 
 .notice__avatar {
-    height: 70px;
+    height: 55px;
+    width: 55px;
+    border-radius: var(--main-rounded-corner);
 }
 
 .user-profile__notice-tab {
@@ -548,7 +552,9 @@
 .notice__react-modal-avatar,
 .follower__avatar,
 .following__avatar {
-    height: 53px;
+    height: 43px;
+    width: 43px;
+    border-radius: var(--main-rounded-corner);
 }
 
 .user-profile__following--modal,
@@ -634,10 +640,6 @@
 .user-profile__avatar-col,
 .user-profile__follow-count-col {
     height: 100%;
-}
-
-.user-profile__avatar-col>p {
-    margin-left: 11px;
 }
 
 .user-profile__follow-count-col>button {
@@ -755,6 +757,21 @@
 
     .user-profile__avatar {
         height: 75px;
+        width: 75px;
+    }
+
+    .notice__avatar {
+        height: 40px;
+        width: 40px;
+    }
+
+    .notice__reaction-avatar,
+    .notice__react-modal-avatar,
+    .follower__avatar,
+    .following__avatar {
+        height: 33px;
+        width: 33px;
+        border-radius: var(--main-rounded-corner);
     }
 
     .user-profile__tags-accordion>div>h2>button>svg {
@@ -765,10 +782,6 @@
     .user-profile__tags-accordion-body {
         padding-top: 0px;
         padding-bottom: 10px;
-    }
-
-    .notice__avatar {
-        height: 55px;
     }
 
     .notice__reaction-icon-div,

@@ -483,6 +483,7 @@ const UserProfile = () => {
                         notices={userProfileNotices}
                         username={username}
                         eventKey={eventKey}
+                        user_id={user_id}
                         handleEditNotice={handleEditNotice}
                         handleDeleteNotice={handleDeleteNotice}
                         getReactionsForNotice={getReactionsForNotice}
