@@ -79,6 +79,21 @@
     }
 }
 
+@media (max-width: 767px) {
+
+    .home__body h2 {
+        font-size: 1.18rem;
+    }
+
+    .home__body h4 {
+        font-size: 1.125rem;
+    }
+
+    .home__body p, summary {
+        font-size: 10px;
+    }
+}
+
 @media (max-width: 575px) {
     .home__body-container {
         display: grid;

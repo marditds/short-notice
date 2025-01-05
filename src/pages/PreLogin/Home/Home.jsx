@@ -176,8 +176,10 @@ const Home = ({ onSuccess }) => {
                                     >
                                         <div className='px-3 py-2 home__body-features-col-div d-flex flex-column justify-content-between h-100'>
                                             <div className='mt-3'>
-                                                <strong>{feature.title}</strong>
-                                                {feature.description}
+                                                <p className='mb-0'>
+                                                    <strong>{feature.title}</strong>
+                                                    {feature.description}
+                                                </p>
                                             </div>
                                             <div style={{ fontSize: '24pt' }} className='text-center my-3'>{feature.icon}</div>
                                         </div>
@@ -209,7 +211,9 @@ const Home = ({ onSuccess }) => {
                                         className='home__body-organization-perks-col d-flex align-items-stretch'>
                                         <div className='home__body-organization-perks-col-div px-3 py-2 d-flex flex-column justify-content-between h-100'>
                                             <div className='mt-3'>
-                                                <strong>{perk.title} </strong>{perk.description}
+                                                <p className='mb-0'>
+                                                    <strong>{perk.title} </strong>{perk.description}
+                                                </p>
                                             </div>
                                             <div style={{ fontSize: '24pt' }} className='text-center my-3'>{perk.icon}</div>
                                         </div>
@@ -229,9 +233,11 @@ const Home = ({ onSuccess }) => {
                                 >
                                     <div className='home__body-organization-example-col-div px-3 py-2 d-flex flex-column justify-content-between h-100'>
                                         <div className='mt-3'>
-                                            <strong>{example.title}</strong>
-                                            <span>{example.description}</span>
-                                            {example.subtext && <sub><br />{example.subtext}</sub>}
+                                            <p className='mb-0'>
+                                                <strong>{example.title}</strong>
+                                                <span>{example.description}</span>
+                                                {example.subtext && <sub><br />{example.subtext}</sub>}
+                                            </p>
                                         </div>
                                         <div style={{ fontSize: '24pt' }} className="text-center my-3">
                                             {example.icon}
@@ -261,7 +267,9 @@ const Home = ({ onSuccess }) => {
                                                 {step.icon}
                                             </div>
                                             <div className='my-3'>
-                                                <strong>{step.title} </strong>{step.description}
+                                                <p className='mb-0'>
+                                                    <strong>{step.title} </strong>{step.description}
+                                                </p>
                                             </div>
                                         </div>
                                     </Col>
@@ -283,7 +291,10 @@ const Home = ({ onSuccess }) => {
                             </Col>
                             {faq.map((item, index) => (
                                 <Col as='details' xs={12} key={index} className='mb-3'>
-                                    <summary className='fw-bold'>{item.question}</summary>
+
+                                    <summary className='fw-bold'>
+                                        {item.question}
+                                    </summary>
                                     <p className='mt-2'>{item.answer}</p>
                                 </Col>
                             ))}

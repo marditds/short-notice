@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 
 export const screenUtils = () => {
 
+    const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth < 992);
+
     const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
 
     const [isExtraSmallScreen, setIsExtraSmallScreen] = useState(window.innerWidth < 576);
@@ -28,5 +30,16 @@ export const screenUtils = () => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    return { isSmallScreen, isExtraSmallScreen }
+    // Large
+    useEffect(() => {
+        const handleResize = () => {
+            setIsLargeScreen(window.innerWidth < 576);
+        };
+
+        window.addEventListener('resize', handleResize);
+
+        return () => window.removeEventListener('resize', handleResize);
+    }, [])
+
+    return { isLargeScreen, isSmallScreen, isExtraSmallScreen }
 }

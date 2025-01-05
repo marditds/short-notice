@@ -492,7 +492,7 @@ const UserProfile = () => {
                     eventKey='my-notices'
                     title="My Notices"
                 >
-                    {userProfileNotices.length === 0 ?
+                    {userProfileNotices.length !== 0 ?
                         <>
                             <Notices
                                 notices={userProfileNotices}

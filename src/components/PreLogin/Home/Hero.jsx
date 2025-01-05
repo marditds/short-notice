@@ -5,8 +5,11 @@ import { RiSave2Line } from "react-icons/ri";
 import { BsHandThumbsUp } from 'react-icons/bs';
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 import defaultAvatar from '../../../assets/default.png';
+import { screenUtils } from '../../../lib/utils/screenUtils';
 
 export const Hero = () => {
+
+    const { isLargeScreen } = screenUtils();
 
     const [timeLeft, setTimeLeft] = useState(5);
     const [isWaiting, setIsWaiting] = useState(false);
@@ -66,18 +69,17 @@ export const Hero = () => {
                 <Col className='col-md-3 d-flex flex-column justify-content-end'>
 
                     {/* Username and Profile Picture */}
-                    <div className={`d-flex justify-content-end align-items-center mt-auto`}>
-
-                        <p
-                            className='w-100 my-0 text-end notice__username'
-                        >
-                            <strong>Robert</strong>
-                        </p>
+                    <div className={`d-flex flex-column justify-content-end align-items-center mt-auto`}>
                         <img
                             src={defaultAvatar}
                             alt="profilePicture"
                             className='d-flex ms-auto notice__avatar'
                         />
+                        <p
+                            className='w-100 my-0 text-end notice__username'
+                        >
+                            <strong>Robert</strong>
+                        </p>
                     </div>
 
                     {/* Interaction w/ Notice */}
@@ -90,24 +92,24 @@ export const Hero = () => {
                                 <div
                                     className={`notice__reaction-btn ms-2`}
                                 >
-                                    <BsHandThumbsUp size={19} />
+                                    <BsHandThumbsUp size={18} />
 
                                 </div>
                                 <div
                                     className={`notice__reaction-btn ms-2`}
                                 >
-                                    <RiSave2Line size={20} />
+                                    <RiSave2Line size={18} />
                                 </div>
                                 <div
                                     className={`notice__reaction-btn ms-2`}
                                 >
-                                    <BsReply size={23} />
+                                    <BsReply size={18} />
                                 </div>
                                 <div
                                     className='notice__reaction-btn ms-2'
                                 >
                                     <AiOutlineExclamationCircle
-                                        size={22}
+                                        size={18}
                                     />
                                 </div>
                             </div>
