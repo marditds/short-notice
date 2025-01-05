@@ -1,19 +1,26 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Profile } from '../../../components/User/Profile/Profile.jsx';
 import { Notices } from '../../../components/User/Notices';
-import { Row, Col, Tabs, Tab, Form, Modal, Button } from 'react-bootstrap';
+import { Tabs, Tab, Form, Modal, Button } from 'react-bootstrap';
 import { useUserContext } from '../../../lib/context/UserContext';
 import useUserInfo from '../../../lib/hooks/useUserInfo.js';
 import { getAvatarUrl as avatarUtil } from '../../../lib/utils/avatarUtils.js';
 import useUserAvatar from '../../../lib/hooks/useUserAvatar.js';
 import useNotices from '../../../lib/hooks/useNotices.js';
+import { screenUtils } from '../../../lib/utils/screenUtils.js';
 import { ComposeNotice } from '../../../components/User/ComposeNotice';
 import { Loading } from '../../../components/Loading/Loading.jsx';
 import '../../../components/User/Profile/UserProfile.css';
 import { EndAsterisks } from '../../../components/User/EndAsterisks.jsx';
+import { NoticesPlaceholder } from '../../../components/User/NoticesPlaceholder.jsx';
+import { RiSave2Line } from "react-icons/ri";
+import { BsHandThumbsUp } from 'react-icons/bs';
 
 
 const UserProfile = () => {
+
+    const location = useLocation();
 
     const { googleUserData, username } = useUserContext();
 
@@ -62,6 +69,8 @@ const UserProfile = () => {
         fetchAccountsFollowedByUser,
         getBlockedUsersByUser
     } = useUserInfo(googleUserData);
+
+    const { isSmallScreen } = screenUtils();
 
     // const [notices, setNotices] = useState([]);
     const [userProfileNotices, setUserProfileNotices] = useState([]);
@@ -184,7 +193,7 @@ const UserProfile = () => {
 
     // Fetch saves and users' data for saves tab
     useEffect(() => {
-        if (eventKey !== 'my-saves') return;
+        // if (eventKey !== 'my-saves') return;
 
         const fetchSaveNotices = async () => {
             setIsLoadingMoreSaves(true);
@@ -208,11 +217,11 @@ const UserProfile = () => {
 
         };
         fetchSaveNotices();
-    }, [user_id, offsetSaves, eventKey])
+    }, [user_id, offsetSaves])
 
     // Fetch likes and users' data for likes tab 
     useEffect(() => {
-        if (eventKey !== 'my-likes') return;
+        // if (eventKey !== 'my-likes') return;
 
         const fetchLikedNotices = async () => {
             setIsLoadingMoreLikes(true);
@@ -236,7 +245,7 @@ const UserProfile = () => {
             }
         };
         fetchLikedNotices();
-    }, [user_id, offsetLikes, eventKey])
+    }, [user_id, offsetLikes])
 
     useEffect(() => {
         console.log('Hello', username);
@@ -427,6 +436,10 @@ const UserProfile = () => {
         console.log('eventKey', eventKey);
     }, [eventKey])
 
+    useEffect(() => {
+        console.log('userProfileNotices,', userProfileNotices);
+    }, [userProfileNotices])
+
     const timerSpacing = 'mx-2';
     const timerDisplay = 'd-flex';
     const classname = `${timerDisplay} ${timerSpacing}`;
@@ -479,31 +492,37 @@ const UserProfile = () => {
                     eventKey='my-notices'
                     title="My Notices"
                 >
-                    <Notices
-                        notices={userProfileNotices}
-                        username={username}
-                        eventKey={eventKey}
-                        user_id={user_id}
-                        handleEditNotice={handleEditNotice}
-                        handleDeleteNotice={handleDeleteNotice}
-                        getReactionsForNotice={getReactionsForNotice}
-                        getUserAccountByUserId={getUserAccountByUserId}
-                    />
-                    <div className="d-flex justify-content-center">
-                        {hasMoreNotices ?
-                            <Button
-                                onClick={fetchNotices}
-                                disabled={isLoadingMore || !hasMoreNotices}
-                                className='mt-3 notices__load-more-notices-btn'
-                            >
-                                {isLoadingMore ?
-                                    <><Loading size={18} /> Loading...</>
-                                    : 'Load More'}
-                            </Button>
-                            :
-                            <EndAsterisks componentName='notices' />
-                        }
-                    </div>
+                    {userProfileNotices.length === 0 ?
+                        <>
+                            <Notices
+                                notices={userProfileNotices}
+                                username={username}
+                                eventKey={eventKey}
+                                user_id={user_id}
+                                handleEditNotice={handleEditNotice}
+                                handleDeleteNotice={handleDeleteNotice}
+                                getReactionsForNotice={getReactionsForNotice}
+                                getUserAccountByUserId={getUserAccountByUserId}
+                            />
+                            <div className="d-flex justify-content-center">
+                                {hasMoreNotices ?
+                                    <Button
+                                        onClick={fetchNotices}
+                                        disabled={isLoadingMore || !hasMoreNotices}
+                                        className='mt-3 notices__load-more-notices-btn'
+                                    >
+                                        {isLoadingMore ?
+                                            <><Loading size={18} /> Loading...</>
+                                            : 'Load More'}
+                                    </Button>
+                                    :
+                                    <EndAsterisks componentName='notices' />
+                                }
+                            </div>
+                        </>
+                        :
+                        <NoticesPlaceholder location={location} />
+                    }
                 </Tab>
 
                 {/* My Saves */}
@@ -511,37 +530,43 @@ const UserProfile = () => {
                     eventKey='my-saves'
                     title="Saves"
                 >
-                    <Notices
-                        notices={savedNoticesData}
-                        username={username}
-                        likedNotices={likedNotices}
-                        savedNotices={savedNotices}
-                        eventKey={eventKey}
-                        user_id={user_id}
-                        handleLike={handleLike}
-                        handleSave={handleSave}
-                        handleReport={handleReport}
-                        handleReact={handleReact}
-                        getReactionsForNotice={getReactionsForNotice}
-                        getUserAccountByUserId={getUserAccountByUserId}
-                        getReactionByReactionId={getReactionByReactionId}
-                        reportReaction={reportReaction}
-                    />
-                    <div className="d-flex justify-content-center mt-4">
-                        {hasMoreSaves ?
-                            <Button
-                                onClick={() => setOffsetSaveas(offsetSaves + limitSaves)}
-                                disabled={isLoadingMoreSaves || !hasMoreSaves}
-                                className='notices__load-more-notices-btn'
-                            >
-                                {isLoadingMoreSaves ?
-                                    <><Loading size={24} /> Loading...</>
-                                    : 'Load More'}
-                            </Button>
-                            :
-                            <EndAsterisks componentName='notices' />
-                        }
-                    </div>
+                    {savedNoticesData.length !== 0 ?
+                        <>
+                            <Notices
+                                notices={savedNoticesData}
+                                username={username}
+                                likedNotices={likedNotices}
+                                savedNotices={savedNotices}
+                                eventKey={eventKey}
+                                user_id={user_id}
+                                handleLike={handleLike}
+                                handleSave={handleSave}
+                                handleReport={handleReport}
+                                handleReact={handleReact}
+                                getReactionsForNotice={getReactionsForNotice}
+                                getUserAccountByUserId={getUserAccountByUserId}
+                                getReactionByReactionId={getReactionByReactionId}
+                                reportReaction={reportReaction}
+                            />
+                            <div className="d-flex justify-content-center mt-4">
+                                {hasMoreSaves ?
+                                    <Button
+                                        onClick={() => setOffsetSaveas(offsetSaves + limitSaves)}
+                                        disabled={isLoadingMoreSaves || !hasMoreSaves}
+                                        className='notices__load-more-notices-btn'
+                                    >
+                                        {isLoadingMoreSaves ?
+                                            <><Loading size={24} /> Loading...</>
+                                            : 'Load More'}
+                                    </Button>
+                                    :
+                                    <EndAsterisks componentName='notices' />
+                                }
+                            </div>
+                        </>
+                        :
+                        <NoticesPlaceholder location={location} section={'saved'} icon={<RiSave2Line size={!isSmallScreen ? 23 : 18} />} />
+                    }
                 </Tab>
 
                 {/* My Likes */}
@@ -549,37 +574,43 @@ const UserProfile = () => {
                     eventKey='my-likes'
                     title="Likes"
                 >
-                    <Notices
-                        notices={likedNoticesData}
-                        username={username}
-                        likedNotices={likedNotices}
-                        savedNotices={savedNotices}
-                        eventKey={eventKey}
-                        user_id={user_id}
-                        handleLike={handleLike}
-                        handleSave={handleSave}
-                        handleReport={handleReport}
-                        handleReact={handleReact}
-                        getReactionsForNotice={getReactionsForNotice}
-                        getUserAccountByUserId={getUserAccountByUserId}
-                        getReactionByReactionId={getReactionByReactionId}
-                        reportReaction={reportReaction}
-                    />
-                    <div className="d-flex justify-content-center mt-4">
-                        {hasMoreLikes ?
-                            <Button
-                                onClick={() => setOffsetLikes(offsetLikes + limitLikes)}
-                                disabled={isLoadingMoreLikes || !hasMoreLikes}
-                                className='notices__load-more-notices-btn'
-                            >
-                                {isLoadingMoreLikes ?
-                                    <><Loading size={24} /> Loading...</>
-                                    : 'Load More'}
-                            </Button>
-                            :
-                            <EndAsterisks componentName='notices' />
-                        }
-                    </div>
+                    {likedNoticesData.length !== 0 ?
+                        <>
+                            <Notices
+                                notices={likedNoticesData}
+                                username={username}
+                                likedNotices={likedNotices}
+                                savedNotices={savedNotices}
+                                eventKey={eventKey}
+                                user_id={user_id}
+                                handleLike={handleLike}
+                                handleSave={handleSave}
+                                handleReport={handleReport}
+                                handleReact={handleReact}
+                                getReactionsForNotice={getReactionsForNotice}
+                                getUserAccountByUserId={getUserAccountByUserId}
+                                getReactionByReactionId={getReactionByReactionId}
+                                reportReaction={reportReaction}
+                            />
+                            <div className="d-flex justify-content-center mt-4">
+                                {hasMoreLikes ?
+                                    <Button
+                                        onClick={() => setOffsetLikes(offsetLikes + limitLikes)}
+                                        disabled={isLoadingMoreLikes || !hasMoreLikes}
+                                        className='notices__load-more-notices-btn'
+                                    >
+                                        {isLoadingMoreLikes ?
+                                            <><Loading size={24} /> Loading...</>
+                                            : 'Load More'}
+                                    </Button>
+                                    :
+                                    <EndAsterisks componentName='notices' />
+                                }
+                            </div>
+                        </>
+                        :
+                        <NoticesPlaceholder location={location} section={'liked'} icon={<BsHandThumbsUp size={!isSmallScreen ? 21 : 16} />} />
+                    }
                 </Tab>
             </Tabs>
 

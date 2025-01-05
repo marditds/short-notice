@@ -721,7 +721,7 @@ export const Notices = ({
                         <p>Your report has been successfully submitted!</p>
                     ) : (
                         <Form>
-                            <Form.Group className='mb-3' controlId='reportReaction'>
+                            <Form.Group className='' controlId='reportReaction'>
                                 <Form.Label>Reason:</Form.Label>
                                 {reportCategories.map((category) => (
                                     <Form.Check
@@ -738,7 +738,7 @@ export const Notices = ({
                         </Form>
                     )}
                 </Modal.Body>
-                <Modal.Footer className='border-top-0'>
+                <Modal.Footer className='border-top-0 notice__reaction--report--modal-footer'>
                     {showReportReactionConfirmation ? null : (
                         <>
                             <Button onClick={handleCloseReportReactionModal}

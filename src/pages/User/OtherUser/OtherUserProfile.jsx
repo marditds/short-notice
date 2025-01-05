@@ -8,11 +8,14 @@ import useUserInfo from '../../../lib/hooks/useUserInfo.js';
 import { getAvatarUrl as avatarUtil } from '../../../lib/utils/avatarUtils.js';
 import useUserAvatar from '../../../lib/hooks/useUserAvatar.js';
 import useNotices from '../../../lib/hooks/useNotices.js';
+import { screenUtils } from '../../../lib/utils/screenUtils.js';
 import { useUnblockedNotices } from '../../../lib/utils/blockFilter.js';
 import { Passcode } from '../../../components/User/Passcode.jsx';
 import { Loading } from '../../../components/Loading/Loading.jsx';
 import { EndAsterisks } from '../../../components/User/EndAsterisks.jsx';
-
+import { NoticesPlaceholder } from '../../../components/User/NoticesPlaceholder.jsx';
+import { RiSave2Line } from "react-icons/ri";
+import { BsHandThumbsUp } from 'react-icons/bs';
 
 
 
@@ -77,6 +80,8 @@ const OtherUserProfile = () => {
         getPassocdeByBusincessId,
         reportUser
     } = useUserInfo(googleUserData);
+
+    const { isSmallScreen } = screenUtils();
 
     const [accountType, setAccountType] = useState(null);
     const [accountTypeCheck, setAccountTypeCheck] = useState(false);
@@ -620,7 +625,11 @@ const OtherUserProfile = () => {
                                                     }
                                                 </div>
                                             </>
-                                            : 'No notices yet'
+                                            :
+
+                                            <NoticesPlaceholder location={location} otherUsername={otherUsername} />
+
+
                                         )
                                         :
                                         <Loading size={24} />
@@ -667,7 +676,8 @@ const OtherUserProfile = () => {
                                                         }
                                                     </div>
                                                 </>
-                                                : 'No saveas yet'
+                                                :
+                                                <NoticesPlaceholder location={location} otherUsername={otherUsername} section={'saved'} icon={<RiSave2Line size={!isSmallScreen ? 23 : 18} />} />
                                         )
                                         : <Loading size={24} />}
                                 </Tab>
@@ -711,7 +721,8 @@ const OtherUserProfile = () => {
                                                     }
                                                 </div>
                                             </>
-                                            : 'No likes yet'
+                                            :
+                                            <NoticesPlaceholder location={location} otherUsername={otherUsername} section={'saved'} icon={<BsHandThumbsUp size={!isSmallScreen ? 21 : 16} />} />
                                         ) :
                                         <Loading size={20} />}
 

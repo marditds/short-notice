@@ -44,12 +44,11 @@ const CreateAccount = ({ setUser }) => {
     const onPasscodeChange = (e) => {
         const input = e.target.value;
 
-        if (/^\d{0,6}$/.test(input)) {
-            setPasscode(input);
-        }
-
         if (input.length === 6) {
+            setPasscode(input);
             setErrorMessage('');
+        } else {
+            setErrorMessage('Passcode must be exactly 6 characters long.');
         }
     }
 
@@ -67,6 +66,11 @@ const CreateAccount = ({ setUser }) => {
 
         if (username.includes(' ')) {
             setErrorMessage('Username cannot contain spaces. Please remove any spaces.');
+            return;
+        }
+
+        if (username === 'profile') {
+            setErrorMessage('The username \'profile\' is not allowed. Please choose a different username.');
             return;
         }
 

@@ -278,6 +278,12 @@
     transition: var(--main-transition-speed) !important;
 }
 
+.notice__report--radio>input:checked[type=radio],
+.user-profile__report--radio>input:checked[type=radio],
+.notice__reaction--report--radio>input:checked[type=radio] {
+    background-image: none;
+}
+
 .user-profile__report--radio>input:active,
 .user-profile__report--radio>input:focus,
 .notice__report--radio>input:active,
@@ -839,10 +845,12 @@
     }
 
     .notice__edit--modal-body,
-    .notice__delete--modal-body {
+    .notice__delete--modal-body,
+    .notice__reaction--report--modal-body {
         padding-block: 0px;
     }
 
+    .notice__reaction--report--modal-footer,
     .notice__report--modal-footer,
     .notice__edit--modal-footer,
     .notice__delete--modal-footer,
@@ -852,6 +860,7 @@
         justify-content: space-between;
     }
 
+    .notice__reaction--report--modal-btn,
     .notice__report--modal-btn,
     .notice__edit--modal-btn,
     .notice__delete--modal-btn,
@@ -865,6 +874,7 @@
         padding-bottom: 5px;
     }
 
+    .notice__reaction--report--modal>div>div>div>div,
     .notice__report--modal>div>div>div>div,
     .user-profile__following--modal-header>div,
     .user-profile__report--modal-header>div,
