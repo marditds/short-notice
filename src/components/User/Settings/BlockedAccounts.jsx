@@ -160,9 +160,6 @@ export const BlockedAccounts = () => {
                                                 className='p-0 d-flex align-items-center justify-content-center 
                                             settings__unblocked-btn
                                             '
-                                                style={{
-                                                    marginLeft: '12px'
-                                                }}
                                             >
                                                 <AiFillCloseCircle size={24} color='var(--main-accent-color)' />
                                             </Button>

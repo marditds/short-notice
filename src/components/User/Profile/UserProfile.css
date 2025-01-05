@@ -48,7 +48,6 @@
 .user-profile__avatar {
     height: 100px;
     width: 100px;
-    border-radius: var(--main-rounded-corner);
 }
 
 
@@ -357,8 +356,26 @@
 .notice__avatar {
     height: 55px;
     width: 55px;
-    border-radius: var(--main-rounded-corner);
 }
+
+.notice__reaction-avatar,
+.notice__react-modal-avatar,
+.follower__avatar,
+.following__avatar {
+    height: 43px;
+    width: 43px;
+}
+
+.user-profile__avatar,
+.notice__avatar,
+.notice__reaction-avatar,
+.notice__react-modal-avatar,
+.follower__avatar,
+.following__avatar {
+    border-radius: var(--main-rounded-corner);
+    object-fit: cover;
+}
+
 
 .user-profile__notice-tab {
     margin-top: 198px;
@@ -547,15 +564,6 @@
     color: var(--main-accent-color);
 }
 
-
-.notice__reaction-avatar,
-.notice__react-modal-avatar,
-.follower__avatar,
-.following__avatar {
-    height: 43px;
-    width: 43px;
-    border-radius: var(--main-rounded-corner);
-}
 
 .user-profile__following--modal,
 .notice__react--modal,

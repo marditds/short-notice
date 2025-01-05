@@ -74,11 +74,11 @@ export const Avatar = () => {
                 <h4>Update Avatar:</h4>
                 <p className='ms-2 ms-sm-0'>Add, update, or delete your avatar.</p>
             </Col>
-            <Col className='d-flex justify-content-evenly align-items-center mt-2 mt-sm-0'>
+            <Col className='d-flex justify-content-start align-items-center mt-2 mt-sm-0'>
                 <img
                     src={avatarUrl ? avatarUrl : defaultAvatar}
                     alt='user_avatar'
-                    className='me-5 d-flex setting__avatar-display'
+                    className='setting__avatar-display me-3'
                 />
                 <Form as={Row} className='flex-column settings__upload-avatar-form'>
                     <Form.Group as={Col} className="mb-3" controlId="profilePictureUpload">
