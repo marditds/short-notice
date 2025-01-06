@@ -14,8 +14,8 @@ import { Loading } from '../../../components/Loading/Loading.jsx';
 import '../../../components/User/Profile/UserProfile.css';
 import { EndAsterisks } from '../../../components/User/EndAsterisks.jsx';
 import { NoticesPlaceholder } from '../../../components/User/NoticesPlaceholder.jsx';
-import { RiSave2Line } from "react-icons/ri";
-import { BsHandThumbsUp } from 'react-icons/bs';
+// import { RiSave2Line } from "react-icons/ri";
+// import { BsHandThumbsUp } from 'react-icons/bs';
 
 
 const UserProfile = () => {
@@ -565,7 +565,11 @@ const UserProfile = () => {
                             </div>
                         </>
                         :
-                        <NoticesPlaceholder location={location} section={'saved'} icon={<RiSave2Line size={!isSmallScreen ? 23 : 18} />} />
+                        <NoticesPlaceholder location={location} section={'saved'}
+                            icon={
+                                <i className='bi bi-floppy'></i>
+                            }
+                        />
                     }
                 </Tab>
 
@@ -609,7 +613,10 @@ const UserProfile = () => {
                             </div>
                         </>
                         :
-                        <NoticesPlaceholder location={location} section={'liked'} icon={<BsHandThumbsUp size={!isSmallScreen ? 21 : 16} />} />
+                        <NoticesPlaceholder location={location} section={'liked'}
+                            // icon={<BsHandThumbsUp />}
+                            icon={<i className="bi bi-hand-thumbs-up"></i>}
+                        />
                     }
                 </Tab>
             </Tabs>

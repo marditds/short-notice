@@ -92,6 +92,10 @@
     .home__body p, summary {
         font-size: 10px;
     }
+
+    .about__body ul {
+        font-size: var(--mobile-font-size);
+    }
 }
 
 @media (max-width: 575px) {

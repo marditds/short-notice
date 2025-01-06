@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import { BsReply } from "react-icons/bs";
-import { RiSave2Line } from "react-icons/ri";
-import { BsHandThumbsUp } from 'react-icons/bs';
+// import { RiSave2Line } from "react-icons/ri";
+// import { BsHandThumbsUp } from 'react-icons/bs';
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 import defaultAvatar from '../../../assets/default.png';
 import { screenUtils } from '../../../lib/utils/screenUtils';
 
 export const Hero = () => {
-
-    const { isLargeScreen } = screenUtils();
 
     const [timeLeft, setTimeLeft] = useState(5);
     const [isWaiting, setIsWaiting] = useState(false);
@@ -92,13 +90,15 @@ export const Hero = () => {
                                 <div
                                     className={`notice__reaction-btn ms-2`}
                                 >
-                                    <BsHandThumbsUp size={18} />
+                                    {/* <BsHandThumbsUp size={18} /> */}
+                                    <i className="bi bi-hand-thumbs-up" style={{ fontSize: '16px' }}></i>
 
                                 </div>
                                 <div
                                     className={`notice__reaction-btn ms-2`}
                                 >
-                                    <RiSave2Line size={18} />
+                                    {/* <RiSave2Line size={18} /> */}
+                                    <i className='bi bi-floppy' style={{ fontSize: '16px' }}></i>
                                 </div>
                                 <div
                                     className={`notice__reaction-btn ms-2`}

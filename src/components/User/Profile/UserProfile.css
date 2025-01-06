@@ -52,8 +52,8 @@
 
 
 /* .notice__reaction-avatar, */
-.follower__avatar,
-.following__avatar,
+/* .follower__avatar,
+.following__avatar, */
 .notice__react-modal-avatar {
     --r: 8px;
     aspect-ratio: cos(30deg);
@@ -380,8 +380,18 @@
 .following__avatar {
     border-radius: var(--main-rounded-corner);
     object-fit: cover;
+    transition: var(--main-transition-speed);
 }
 
+.notices__accordion-header {
+    transition: var(--main-transition-speed);
+}
+
+.notices__accordion-header:hover>button>div>div>div>a>img,
+.user-profile__following--modal-body>div:hover>a>.follower__avatar,
+.user-profile__following--modal-body>div:hover>a>.following__avatar {
+    filter: sepia(1) hue-rotate(100deg) saturate(6) brightness(0.7);
+}
 
 .user-profile__notice-tab {
     margin-top: 198px;
@@ -919,7 +929,7 @@
 
     .user-profile__interaction-dropdown>button {
         background-color: transparent !important;
-        border-color: var(--main-accent-color) !important;
+        border-color: var(--main-accent-color-hover) !important;
         padding-block: 0;
         padding-inline: 6px;
         height: 28.81px;

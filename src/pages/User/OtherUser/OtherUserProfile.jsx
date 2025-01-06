@@ -14,8 +14,8 @@ import { Passcode } from '../../../components/User/Passcode.jsx';
 import { Loading } from '../../../components/Loading/Loading.jsx';
 import { EndAsterisks } from '../../../components/User/EndAsterisks.jsx';
 import { NoticesPlaceholder } from '../../../components/User/NoticesPlaceholder.jsx';
-import { RiSave2Line } from "react-icons/ri";
-import { BsHandThumbsUp } from 'react-icons/bs';
+// import { RiSave2Line } from "react-icons/ri";
+// import { BsHandThumbsUp } from 'react-icons/bs';
 
 
 
@@ -677,7 +677,11 @@ const OtherUserProfile = () => {
                                                     </div>
                                                 </>
                                                 :
-                                                <NoticesPlaceholder location={location} otherUsername={otherUsername} section={'saved'} icon={<RiSave2Line size={!isSmallScreen ? 23 : 18} />} />
+                                                <NoticesPlaceholder location={location} otherUsername={otherUsername} section={'saved'}
+                                                    icon={
+                                                        <i className='bi bi-floppy'></i>
+                                                    }
+                                                />
                                         )
                                         : <Loading size={24} />}
                                 </Tab>
@@ -722,7 +726,10 @@ const OtherUserProfile = () => {
                                                 </div>
                                             </>
                                             :
-                                            <NoticesPlaceholder location={location} otherUsername={otherUsername} section={'saved'} icon={<BsHandThumbsUp size={!isSmallScreen ? 21 : 16} />} />
+                                            <NoticesPlaceholder location={location} otherUsername={otherUsername} section={'saved'}
+                                                // icon={<BsHandThumbsUp />}
+                                                icon={<i className="bi bi-hand-thumbs-up"></i>}
+                                            />
                                         ) :
                                         <Loading size={20} />}
 

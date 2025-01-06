@@ -5,8 +5,8 @@ import { Row, Col, Modal, Form, Accordion, Button } from 'react-bootstrap';
 import { CgTrash } from 'react-icons/cg';
 import { AiFillEdit } from 'react-icons/ai';
 import { BsReply } from "react-icons/bs";
-import { RiSave2Line, RiSave2Fill } from "react-icons/ri";
-import { BsHandThumbsUp, BsHandThumbsUpFill } from 'react-icons/bs';
+// import { RiSave2Line, RiSave2Fill } from "react-icons/ri";
+// import { BsHandThumbsUp, BsHandThumbsUpFill } from 'react-icons/bs';
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 import defaultAvatar from '../../assets/default.png';
 import { Loading } from '../Loading/Loading';
@@ -460,7 +460,7 @@ export const Notices = ({
                 {notices.map((notice, idx) => (
                     <Accordion.Item eventKey={notice?.$id} key={notice?.$id}>
                         <Accordion.Header
-                            // className='d-flex justify-content-center' 
+                            className='notices__accordion-header'
                             onClick={() => handleAccordionToggle(notice.$id)}
                         >
                             <Row className='w-100 m-auto'>
@@ -552,17 +552,19 @@ export const Notices = ({
                                                             >
                                                                 {likedNotices && likedNotices[notice.$id] ? (
                                                                     <>
-                                                                        <BsHandThumbsUpFill
+                                                                        {/* <BsHandThumbsUpFill
                                                                             className='notice__reaction-btn-fill'
-                                                                        // style={{ fontSize: '50px' }}
+                                                                        style={{ fontSize: '50px' }} 
+                                                                        size={19}
+                                                                        /> */}
 
-                                                                        // size={19}
-                                                                        />
+                                                                        <i className="bi bi-hand-thumbs-up-fill notice__reaction-btn-fill"></i>
                                                                     </>
                                                                 ) : (
-                                                                    <BsHandThumbsUp
+                                                                    // <BsHandThumbsUp
                                                                     // size={19}
-                                                                    />
+                                                                    // />
+                                                                    <i className="bi bi-hand-thumbs-up"></i>
                                                                 )}
                                                             </div>
                                                             <div
@@ -570,15 +572,17 @@ export const Notices = ({
                                                                 className={`notice__reaction-btn ${isOtherUserBlocked ? 'disabled' : ''} ms-2`}
                                                             >
                                                                 {savedNotices && savedNotices[notice.$id] ? (
-                                                                    <RiSave2Fill
-                                                                        className='notice__reaction-btn-fill'
+                                                                    // <RiSave2Fill
+                                                                    // className='notice__reaction-btn-fill'
                                                                     // size={20}
-                                                                    />
+                                                                    // />
+                                                                    <i className="bi bi-floppy-fill notice__reaction-btn-fill"></i>
 
                                                                 ) : (
-                                                                    <RiSave2Line
+                                                                    // <RiSave2Line
                                                                     // size={20} 
-                                                                    />
+                                                                    // />
+                                                                    <i className="bi bi-floppy"></i>
                                                                 )}
                                                             </div>
                                                             <div
