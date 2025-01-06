@@ -7,13 +7,23 @@
     color: var(--main-text-color) !important;
 }
 
+.footer__col>a>svg {
+    font-size: 29px !important;
+}
+
 h5 {
     margin-bottom: 0;
     text-transform: uppercase;
 }
 
-/* @media (max-width: 767px) {
-    .footer__col:nth-child(n + 3) {
-        margin-top: 15px;
+@media (max-width: 767px) {
+    .footer__container h6 {
+        font-size: 10px;
     }
-} */
+
+    .footer__col>a>svg {
+        font-size: 18.125px !important;
+    }
+}
+
+@media (max-width: 575px) {}

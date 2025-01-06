@@ -11,8 +11,11 @@ import { FaHeart } from "react-icons/fa";
 import { AiOutlineSave } from "react-icons/ai";
 import { RiTeamFill } from "react-icons/ri";
 import { RiNumber1, RiNumber2, RiNumber3, RiNumber4 } from "react-icons/ri";
+import { screenUtils } from '../../../lib/utils/screenUtils';
 
 const Home = ({ onSuccess }) => {
+
+    const { isSmallScreen } = screenUtils();
 
     const features = [
         {
@@ -35,9 +38,9 @@ const Home = ({ onSuccess }) => {
             description: 'Like, save, and react to others\' notices.',
             icon: (
                 <span>
-                    <FaHeart color='red' size={28} /> {' '}
-                    <AiOutlineSave size={30} /> {' '}
-                    <BsReply size={38} />
+                    <FaHeart color='red' size={!isSmallScreen ? 28 : 17.5} /> {' '}
+                    <AiOutlineSave size={!isSmallScreen ? 30 : 18.75} /> {' '}
+                    <BsReply size={!isSmallScreen ? 38 : 23.75} />
 
                 </span>
             ),
@@ -77,7 +80,7 @@ const Home = ({ onSuccess }) => {
             title: 'For Teams: ',
             description: 'Keep internal updates secure by requiring team members to enter a passcode to view notices.',
             subtext: '*The notices by the team leaders will also appear in the team members\' personal feed.',
-            icon: <RiTeamFill size={43} />,
+            icon: <RiTeamFill size={!isSmallScreen ? 43 : 26.88} />,
         },
         {
             title: 'For Instructors: ',
@@ -119,7 +122,7 @@ const Home = ({ onSuccess }) => {
         },
         {
             question: 'What sets apart ShortNotice from other similar platforms? Why choose ShortNotice?',
-            answer: 'At ShortNotice, the users will not encounter a cluttered environment. ShortNotice focuses on text-based [continue...]. The goal of the platform is to be an addition to the user\'s daily life and business, and not a distraction. That is why the platform values '
+            answer: 'At ShortNotice, the users will not encounter a cluttered environment. The goal of the platform is to be an addition to the user\'s daily life and business, and not a distraction. That is why the platform values '
         },
         {
             question: 'Can I edit or delete my posts?',
@@ -148,12 +151,14 @@ const Home = ({ onSuccess }) => {
                                     <h2 className='text-center pt-4'>Share updates and ideas in the moment. No distractions. No maintenance. Always current.</h2>
                                 </div>
                                 <Hero />
-                                <div className='d-flex align-items-center justify-content-evenly pt-3'>
-                                    <h4 className='mb-0'>Join with your Google account</h4>
+                                <div className='d-flex flex-column flex-sm-row align-items-center justify-content-evenly pt-3'>
+                                    <h4 className='mb-0 pe-0 pe-sm-2'>Join with your Google account</h4>
 
-                                    <GoogleLoginForm onSuccess={onSuccess}
-                                        subtitle={'More sign in options coming soon!'}
-                                    />
+                                    <span className='mt-3 mt-sm-0'>
+                                        <GoogleLoginForm onSuccess={onSuccess}
+                                            subtitle={'More sign in options coming soon!'}
+                                        />
+                                    </span>
                                 </div>
                             </div>
                         </Col>
@@ -181,7 +186,7 @@ const Home = ({ onSuccess }) => {
                                                     {feature.description}
                                                 </p>
                                             </div>
-                                            <div style={{ fontSize: '24pt' }} className='text-center my-3'>{feature.icon}</div>
+                                            <div style={{ fontSize: !isSmallScreen ? '24pt' : '15pt' }} className='text-center my-3'>{feature.icon}</div>
                                         </div>
 
                                     </Col>
@@ -215,7 +220,7 @@ const Home = ({ onSuccess }) => {
                                                     <strong>{perk.title} </strong>{perk.description}
                                                 </p>
                                             </div>
-                                            <div style={{ fontSize: '24pt' }} className='text-center my-3'>{perk.icon}</div>
+                                            <div style={{ fontSize: !isSmallScreen ? '24pt' : '15pt' }} className='text-center my-3'>{perk.icon}</div>
                                         </div>
                                     </Col>
                                 )
@@ -239,7 +244,7 @@ const Home = ({ onSuccess }) => {
                                                 {example.subtext && <sub><br />{example.subtext}</sub>}
                                             </p>
                                         </div>
-                                        <div style={{ fontSize: '24pt' }} className="text-center my-3">
+                                        <div style={{ fontSize: !isSmallScreen ? '24pt' : '15pt' }} className='text-center my-3'>
                                             {example.icon}
                                         </div>
                                     </div>
@@ -287,7 +292,7 @@ const Home = ({ onSuccess }) => {
                     <div>
                         <Row as='section' aria-labelledby='faq-title' className='faq-section'>
                             <Col xs={12}>
-                                <h2 id='faq-title' className='mb-4'>Frequently Asked Questions</h2>
+                                <h2 id='faq-title' className={!isSmallScreen ? 'mb-4' : 'mb-2'}>Frequently Asked Questions</h2>
                             </Col>
                             {faq.map((item, index) => (
                                 <Col as='details' xs={12} key={index} className='mb-3'>

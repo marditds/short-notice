@@ -26,13 +26,15 @@ const Footer = () => {
         <Container fluid className='footer__container'>
             <Container>
                 {/* LINKS */}
-                <Row md={12} className='pt-5 pt-md-0 pt-md-4 pb-2 justify-content-between'>
+                <Row md={12} className='pt-4 pb-2 pb-sm-4 pt-md-0 pt-md-4  justify-content-between'>
                     {/* <Col>
                         <img src={snLogo} alt='shortnotice_logo' height='26px' />
                     </Col> */}
                     {footerData.navigationLinks.map((nav, index) => {
                         return (
-                            <Col key={index} xs={12} sm={4} md={2} className='footer__col d-flex justify-content-center'>
+                            <Col key={index}
+                                xs={12} sm={4} md={2}
+                                className='footer__col d-flex justify-content-center'>
                                 <Link to={nav.url} className=' text-decoration-none'>
                                     <h6 className='my-1 my-sm-2 my-md-0'>
                                         {nav.name}
@@ -46,7 +48,7 @@ const Footer = () => {
                 </Row>
 
                 {/* SOCIAL */}
-                <Row className='justify-content-center py-2'>
+                <Row className='justify-content-center pb-2 pt-2 pt-sm-0'>
                     {footerData.socialLinks.map((social, index) => {
                         return (
                             <Col xs={1} key={index}
