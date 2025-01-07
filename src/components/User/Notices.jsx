@@ -12,6 +12,7 @@ import defaultAvatar from '../../assets/default.png';
 import { Loading } from '../Loading/Loading';
 import { Reactions } from './Reactions';
 import { screenUtils } from '../../lib/utils/screenUtils';
+import { ComposeReaction } from './ComposeReaction';
 
 
 export const Notices = ({
@@ -108,8 +109,11 @@ export const Notices = ({
     //     }
     // }
 
+    const [reactionCharCount, setReactionCharCount] = useState(0);
+
     const onReactionTextChange = (e) => {
         setReactionText(e.target.value);
+        setReactionCharCount(e.target.value.length);
     }
 
     const handleReactSubmission = async () => {
@@ -164,6 +168,7 @@ export const Notices = ({
                     // }));
 
                     setReactionText('');
+                    setReactionCharCount(0);
                 }
             } catch (error) {
                 setLoadedReactions(prev => ({
@@ -617,25 +622,13 @@ export const Notices = ({
                             {isOtherUserBlocked || notice.user_id === user_id ? null :
                                 <Row className='m-auto'>
                                     <Col className='px-4'>
-                                        <Form>
-                                            <Form.Group className='mb-3' controlId='reactionField'>
-                                                <Form.Control
-                                                    as="textarea"
-                                                    rows={3}
-                                                    value={reactionText}
-                                                    onChange={onReactionTextChange}
-                                                    className="user-profile__form-control"
-                                                    placeholder={`Your reaction text here.`}
-                                                />
-                                            </Form.Group>
-                                        </Form>
-                                        <Button
-                                            onClick={handleReactSubmission}
-                                            className='notice__react-btn'
-                                            disabled={reactionText === '' ? true : false}
-                                        >
-                                            {isSendingReactionLoading ? <Loading /> : 'React'}
-                                        </Button>
+                                        <ComposeReaction
+                                            reactionText={reactionText}
+                                            isSendingReactionLoading={isSendingReactionLoading}
+                                            reactionCharCount={reactionCharCount}
+                                            onReactionTextChange={onReactionTextChange}
+                                            handleReactSubmission={handleReactSubmission}
+                                        />
                                         <hr />
                                     </Col>
                                 </Row>

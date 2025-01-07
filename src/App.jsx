@@ -94,11 +94,23 @@ function App() {
   useEffect(() => {
     if (isLoggedIn && hasUsername) {
       const currentPath = window.location.pathname;
-      if (currentPath === '/' || currentPath === '/user') {
+
+      const pathsToRedirect = ['/', '/sn-plus', '/contact', '/about', '/tos', '/help-center', '/user'];
+
+      if (pathsToRedirect.includes(currentPath)) {
         navigate('/user/feed');
+      } else if (currentPath.startsWith('/user/') && currentPath.split('/').length >= 3) {
+        navigate(currentPath);
       } else {
         navigate(currentPath);
       }
+
+      // if (currentPath === '/' || currentPath === '/user') {
+      // if (currentPath === '/' || currentPath === '/sn-plus' || currentPath === '/contact' || currentPath === '/about' || currentPath === '/tos' || currentPath === '/help-center' || currentPath === '/user') {
+      //   navigate('/user/feed');
+      // } else {
+      //   navigate(currentPath);
+      // }
     }
   }, [isLoggedIn, hasUsername, navigate]);
 

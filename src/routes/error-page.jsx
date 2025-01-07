@@ -1,4 +1,6 @@
 import { useRouteError } from "react-router-dom";
+import { Container, Image } from "react-bootstrap";
+import sn_long from '../assets/sn_long.png';
 
 export default function ErrorPage() {
     const error = useRouteError();
@@ -6,12 +8,21 @@ export default function ErrorPage() {
 
 
     return (
-        <div id="error-page">
-            <h1>Oops!</h1>
-            <p>Sorry, an unexpected error has occurred.</p>
-            <p>
-                <i>{error.statusText || error.message}</i>
-            </p>
-        </div>
+        <>
+            <Container>
+                <div className="my-5 d-flex justify-content-center">
+                    <Image src={sn_long} fluid />
+                </div>
+
+                <div id="error-page" className="mt-5">
+                    <p>
+                        <i>{error.statusText || error.message}</i>
+                    </p>
+                    <p>
+                        Sorry, you have landed on a non-existig path.
+                    </p>
+                </div>
+            </Container>
+        </>
     );
 }
