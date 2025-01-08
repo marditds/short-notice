@@ -26,6 +26,7 @@ const UserProfile = () => {
 
     const [accountType, setAccountType] = useState(null);
     const [noticeText, setNoticeText] = useState('');
+    // const [noticeGif, setNoticeGif] = useState(null);
     const [duration, setDuration] = useState(24);
     const [editingNoticeId, setEditingNoticeId] = useState(null);
     const [showEditModal, setShowEditModal] = useState(false);
@@ -474,8 +475,10 @@ const UserProfile = () => {
                 duration={duration}
                 isAddingNotice={isAddingNotice}
                 noticeText={noticeText}
+                // noticeGif={noticeGif}
                 noticeType={accountType}
                 setNoticeText={setNoticeText}
+                // setNoticeGif={setNoticeGif}
                 setDuration={setDuration}
                 addNotice={addNotice}
             />

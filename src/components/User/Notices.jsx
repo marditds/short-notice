@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { formatDateToLocal, calculateCountdown } from '../../lib/utils/dateUtils';
-import { Row, Col, Modal, Form, Accordion, Button } from 'react-bootstrap';
+import { Row, Col, Modal, Form, Accordion, Button, Image } from 'react-bootstrap';
 import { CgTrash } from 'react-icons/cg';
 import { AiFillEdit } from 'react-icons/ai';
 import { BsReply } from "react-icons/bs";
@@ -9,11 +9,10 @@ import { BsReply } from "react-icons/bs";
 // import { BsHandThumbsUp, BsHandThumbsUpFill } from 'react-icons/bs';
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 import defaultAvatar from '../../assets/default.png';
-import { Loading } from '../Loading/Loading';
+// import { Loading } from '../Loading/Loading';
 import { Reactions } from './Reactions';
 import { screenUtils } from '../../lib/utils/screenUtils';
 import { ComposeReaction } from './ComposeReaction';
-
 
 export const Notices = ({
     notices,
@@ -36,7 +35,7 @@ export const Notices = ({
 }) => {
     const location = useLocation();
 
-    const { isSmallScreen } = screenUtils();
+    const { isSmallScreen, isExtraSmallScreen } = screenUtils();
 
     const [countdowns, setCountdowns] = useState([]);
 
@@ -47,6 +46,7 @@ export const Notices = ({
 
     const [reactingNoticeId, setReactingNoticeId] = useState(null);
     const [reactionText, setReactionText] = useState('');
+    const [reactionGif, setReactionGif] = useState(null);
     const [isSendingReactionLoading, setIsSendingReactionLoading] = useState(false);
 
     const [limit] = useState(5);
@@ -133,7 +133,8 @@ export const Notices = ({
                         $id: `temp-${Date.now()}`,
                         content: reactionText,
                         sender_id: notice.user_id,
-                        $createdAt: new Date().toISOString()
+                        $createdAt: new Date().toISOString(),
+                        reactionGif: reactionGif
                     };
 
                     setLoadedReactions(prev => ({
@@ -157,7 +158,7 @@ export const Notices = ({
                         }
                     }));
 
-                    const res = await handleReact(notice.user_id, reactionText, notice.$id, notice.expiresAt);
+                    const res = await handleReact(notice.user_id, reactionText, notice.$id, notice.expiresAt, reactionGif);
                     console.log('handleReactSubmission', res);
 
                     // setLoadedReactions(prev => ({
@@ -169,6 +170,7 @@ export const Notices = ({
 
                     setReactionText('');
                     setReactionCharCount(0);
+                    setReactionGif(null);
                 }
             } catch (error) {
                 setLoadedReactions(prev => ({
@@ -315,6 +317,7 @@ export const Notices = ({
 
         setShowLoadMoreBtn(true);
         setReactionText('');
+        setReactionGif(null);
 
         console.log('activeNoticeId', activeNoticeId);
         console.log('reactingNoticeId', reactingNoticeId);
@@ -474,6 +477,10 @@ export const Notices = ({
                                 >
                                     <p className='mb-0 text-break'>{notice?.text}</p>
 
+                                    {notice?.noticeGif &&
+                                        <Image src={notice?.noticeGif} className='mt-2 mb-1 mb-sm-2' width={isExtraSmallScreen ? '100%' : (isSmallScreen ? '50%' : '30%')} fluid />
+                                    }
+
                                     <small className='me-auto'>
                                         <span
                                             style={{ color: 'gray' }}
@@ -624,6 +631,8 @@ export const Notices = ({
                                     <Col className='px-4'>
                                         <ComposeReaction
                                             reactionText={reactionText}
+                                            reactionGif={reactionGif}
+                                            setReactionGif={setReactionGif}
                                             isSendingReactionLoading={isSendingReactionLoading}
                                             reactionCharCount={reactionCharCount}
                                             onReactionTextChange={onReactionTextChange}

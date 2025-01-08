@@ -514,7 +514,7 @@ export const getSessionDetails = async () => {
 //     }
 // }
 
-export const createNotice = async ({ user_id, text, timestamp, expiresAt, noticeType, science, technology, engineering, math, literature, history, philosophy, music, medicine, economics, law, polSci, sports
+export const createNotice = async ({ user_id, text, timestamp, expiresAt, noticeType, noticeGif, science, technology, engineering, math, literature, history, philosophy, music, medicine, economics, law, polSci, sports
 }) => {
 
     try {
@@ -541,7 +541,8 @@ export const createNotice = async ({ user_id, text, timestamp, expiresAt, notice
                 economics: economics || false,
                 law: law || false,
                 polSci: polSci || false,
-                sports: sports || false
+                sports: sports || false,
+                noticeGif
             },
             // [
             //     Permission.write(Role.users()),
@@ -1339,7 +1340,7 @@ export const getPersonalFeedAccounts = async (user_id) => {
     }
 }
 
-export const createReaction = async (sender_id, recipient_id, content, timestamp, notice_id, expiresAt) => {
+export const createReaction = async (sender_id, recipient_id, content, timestamp, notice_id, expiresAt, reactionGif) => {
     try {
         const response = await databases.createDocument(
             import.meta.env.VITE_DATABASE,
@@ -1351,7 +1352,8 @@ export const createReaction = async (sender_id, recipient_id, content, timestamp
                 content,
                 timestamp,
                 notice_id,
-                expiresAt
+                expiresAt,
+                reactionGif
             },
             // [
             //     Permission.write(Role.users()),

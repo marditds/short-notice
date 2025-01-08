@@ -455,9 +455,9 @@ const OtherUserProfile = () => {
         }
     }
 
-    const handleReact = async (currUserId, content, notice_id, expiresAt) => {
+    const handleReact = async (currUserId, content, notice_id, expiresAt, reactionGif) => {
         try {
-            const res = await sendReaction(currUserId, content, notice_id, expiresAt);
+            const res = await sendReaction(currUserId, content, notice_id, expiresAt, reactionGif);
             console.log('Success handleReact.');
             return res;
         } catch (error) {

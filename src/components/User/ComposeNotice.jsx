@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
-import { Form, Accordion, Button } from 'react-bootstrap';
+import React, { useEffect, useState } from 'react';
+import { Form, Accordion, Button, Image } from 'react-bootstrap';
 import { NoticeTags } from './NoticeTags';
 import { Loading } from '../Loading/Loading';
+import GifPicker from 'gif-picker-react';
 import { FaAngleDown } from "react-icons/fa6";
 
 export const ComposeNotice = ({ noticeText, setNoticeText, duration, noticeType, setDuration, addNotice, isAddingNotice, onNoticeAdded }) => {
@@ -44,6 +45,9 @@ export const ComposeNotice = ({ noticeText, setNoticeText, duration, noticeType,
     const [charCount, setCharCount] = useState(0);
     const charLimit = 300;
 
+    const [noticeGif, setNoticeGif] = useState(null);
+    const [isGifBtnClicked, setIsGifBtnClicked] = useState(false);
+
     const onTextareaChange = (e) => {
         setNoticeText(e.target.value);
         setCharCount(e.target.value.length);
@@ -52,11 +56,13 @@ export const ComposeNotice = ({ noticeText, setNoticeText, duration, noticeType,
     const handleNotify = async () => {
         if (noticeText.trim()) {
 
-            await addNotice(noticeText, duration, noticeType, selectedTags);
+            await addNotice(noticeText, duration, noticeType, selectedTags, noticeGif);
             // onNoticeAdded(newNotice);
             setNoticeText('');
+            setNoticeGif(null);
             setSelectedTags({});
             setCharCount(0);
+            setDuration(0);
 
             setTagCategories(prevCategories => prevCategories.map(category => ({
                 ...category,
@@ -67,7 +73,6 @@ export const ComposeNotice = ({ noticeText, setNoticeText, duration, noticeType,
 
     // const hours = Array.from({ length: 7 }, (_, i) => (i + 1) * 24);
     const hours = [1, 357, 2, 3, 5, 10, 15, 20, 48, 72]
-
 
     const handleTagSelect = (categoryGroup, tagIndex, tag, isSelected) => {
         setTagCategories(prevCategories => prevCategories.map(category => {
@@ -91,6 +96,14 @@ export const ComposeNotice = ({ noticeText, setNoticeText, duration, noticeType,
         });
     };
 
+    const handleGifBtn = () => {
+        setIsGifBtnClicked((preVal) => !preVal);
+    }
+
+    useEffect(() => {
+        console.log('noticeGif', noticeGif);
+    }, [noticeGif])
+
     const isAnyTagSelected = Object.values(selectedTags).some(Boolean);
 
     return (
@@ -98,25 +111,42 @@ export const ComposeNotice = ({ noticeText, setNoticeText, duration, noticeType,
             <Form.Group
                 className="mb-3 user-profile__form-group"
                 controlId="noticeTextarea">
-                {/* <Form.Label
-                        className="user-profile__form-label">
-                        Got a notice to share?
-                    </Form.Label> */}
                 <Form.Control
                     as="textarea"
                     rows={5}
                     value={noticeText}
                     onChange={onTextareaChange}
-                    className="user-profile__form-control"
-                    placeholder='Got a notice to share?'
+                    className='user-profile__form-control'
+                    placeholder={'Got a notice to share?'}
                 />
+                {noticeGif &&
+                    <Image src={noticeGif} fluid />
+                }
+                <br />
+                <Button className='py-1 px-2'
+                    onClick={handleGifBtn}>
+                    <i className='bi bi-filetype-gif' />
+                </Button>
+                {noticeGif &&
+                    <Button className='py-1 px-2 ms-2' onClick={() => setNoticeGif(null)}>
+                        Delete Gif
+                    </Button>
+                }
+
+                {isGifBtnClicked &&
+                    <GifPicker
+                        tenorApiKey={import.meta.env.VITE_TENOR_API_KEY}
+                        onGifClick={(item) => setNoticeGif(item.url)}
+                    // height="500px" width="50vw"
+                    />
+                }
+
                 <div
                     className={`user-profile__notice-char-counter ${charCount > charLimit && 'extra'}`}
                 >
                     {`${charCount}/${charLimit} characters`}
                 </div>
             </Form.Group>
-
 
             <h6
                 className='mb-2 user-profile__tags-title'>

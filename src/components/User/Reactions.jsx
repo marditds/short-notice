@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Row, Col, Button } from 'react-bootstrap';
+import { Row, Col, Button, Image } from 'react-bootstrap';
 import { getAvatarUrl as avatarUrl } from '../../lib/utils/avatarUtils';
 import { Loading } from '../Loading/Loading';
 import { AiOutlineExclamationCircle } from "react-icons/ai";
@@ -42,6 +42,9 @@ export const Reactions = ({
                                 {/* Reaction Text Col */}
                                 <Col xs={8} sm={9} className=' notice__reaction-text-col text-break'>
                                     {reaction.content}
+                                    {reaction.reactionGif &&
+                                        <Image src={reaction.reactionGif} fluid />
+                                    }
                                 </Col>
 
                                 {/* Profile Picture, Username, and Report Icon Col*/}

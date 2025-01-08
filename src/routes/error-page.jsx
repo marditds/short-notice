@@ -15,11 +15,11 @@ export default function ErrorPage() {
                 </div>
 
                 <div id="error-page" className="mt-5">
-                    <p>
+                    {/* <p>
                         <i>{error.statusText || error.message}</i>
-                    </p>
+                    </p> */}
                     <p>
-                        Sorry, you have landed on a non-existig path.
+                        Sorry. It seems like things broke along the way. 😫
                     </p>
                 </div>
             </Container>

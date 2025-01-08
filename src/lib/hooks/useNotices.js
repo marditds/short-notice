@@ -85,7 +85,7 @@ const useNotices = (googleUserData) => {
     }, [user_id]);
 
 
-    const addNotice = async (text, duration, noticeType, selectedTags) => {
+    const addNotice = async (text, duration, noticeType, selectedTags, noticeGif) => {
 
         if (user_id) {
 
@@ -112,6 +112,8 @@ const useNotices = (googleUserData) => {
                 law: selectedTags['law'] || false,
                 polSci: selectedTags['polSci'] || false,
                 sports: selectedTags['sports'] || false,
+
+                noticeGif
             };
 
             setIsAddingNotice(true);
@@ -445,12 +447,12 @@ const useNotices = (googleUserData) => {
         }
     };
 
-    const sendReaction = async (otherUser_id, content, notice_id, expiresAt) => {
+    const sendReaction = async (otherUser_id, content, notice_id, expiresAt, reactionGif) => {
 
         const now = new Date();
 
         try {
-            const response = createReaction(user_id, otherUser_id, content, now, notice_id, expiresAt);
+            const response = createReaction(user_id, otherUser_id, content, now, notice_id, expiresAt, reactionGif);
             console.log('Success sending reaction');
             return response;
         } catch (error) {
