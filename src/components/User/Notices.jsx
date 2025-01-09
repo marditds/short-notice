@@ -7,7 +7,7 @@ import { AiFillEdit } from 'react-icons/ai';
 import { BsReply } from "react-icons/bs";
 // import { RiSave2Line, RiSave2Fill } from "react-icons/ri";
 // import { BsHandThumbsUp, BsHandThumbsUpFill } from 'react-icons/bs';
-import { AiOutlineExclamationCircle } from "react-icons/ai";
+// import { AiOutlineExclamationCircle } from "react-icons/ai";
 import defaultAvatar from '../../assets/default.png';
 // import { Loading } from '../Loading/Loading';
 import { Reactions } from './Reactions';
@@ -601,9 +601,8 @@ export const Notices = ({
                                                                 // onClick={() => handleReactNotice(notice.$id, notice.username, notice.avatarUrl, notice.text)}
                                                                 className={`notice__reaction-btn ${isOtherUserBlocked ? 'disabled' : ''} ms-2`}
                                                             >
-                                                                <BsReply
-                                                                    size={23}
-                                                                />
+                                                                {/* <BsReply size={23} /> */}
+                                                                <i className="bi bi-reply"></i>
                                                             </div>
                                                             <div
                                                                 onClick={() => handleReportNotice(notice.$id)}

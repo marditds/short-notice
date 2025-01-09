@@ -24,7 +24,7 @@ export const ComposeReaction = ({ reactionText, onReactionTextChange, reactionGi
     return (
         <>
             <Form>
-                <Form.Group className='mb-3' controlId='reactionField'>
+                <Form.Group className='mb-0' controlId='reactionField'>
                     <Form.Control
                         as="textarea"
                         rows={3}
@@ -34,24 +34,31 @@ export const ComposeReaction = ({ reactionText, onReactionTextChange, reactionGi
                         placeholder={`Your reaction text here.`}
                     />
                     {reactionGif &&
-                        <Image src={reactionGif} fluid />
+                        <>
+                            <Image src={reactionGif}
+                                width={!isSmallScreen ? 'auto' : '50%'}
+                                className='mt-2'
+                                fluid />
+                        </>
                     }
-                    <br />
-                    <Button className='py-1 px-2'
-                        onClick={handleGifBtn}>
-                        <i className='bi bi-filetype-gif' />
-                    </Button>
-                    {reactionGif &&
-                        <Button className='py-1 px-2 ms-2' onClick={() => setReactionGif(null)}>
-                            Delete Gif
+
+                    <div className='my-2'>
+                        <Button className='notice__react-gif-btn py-1 px-2'
+                            onClick={handleGifBtn}>
+                            <i className='bi bi-filetype-gif' />
                         </Button>
-                    }
+                        {reactionGif &&
+                            <Button className='notice__react-gif-btn py-1 px-2 ms-2' onClick={() => setReactionGif(null)}>
+                                Remove Gif
+                            </Button>
+                        }
+                    </div>
 
                     {isGifBtnClicked &&
                         <GifPicker
                             tenorApiKey={import.meta.env.VITE_TENOR_API_KEY}
                             onGifClick={(item) => setReactionGif(item.url)}
-                            width='50vw' height='300px'
+                            width={!isSmallScreen ? '50vw' : '80vw'} height='400px'
                         />
                     }
                 </Form.Group>
@@ -63,7 +70,7 @@ export const ComposeReaction = ({ reactionText, onReactionTextChange, reactionGi
             </Form>
             <Button
                 onClick={handleReactSubmission}
-                className='notice__react-btn'
+                className='notice__react-btn mt-2'
                 disabled={reactionText === '' || reactionCharCount > reactionCharLimit ? true : false}
             >
                 {isSendingReactionLoading ? <Loading /> : 'React'}

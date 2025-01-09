@@ -72,7 +72,8 @@ export const Reactions = ({
                                             className='ms-auto mt-sm-1 d-flex d-flex align-items-center notice__reaction-interaction-div notice__reaction-btn'
                                             onClick={() => handleReportReaction(reaction.$id)}
                                         >
-                                            <AiOutlineExclamationCircle />
+                                            <i className="bi bi-exclamation-circle"></i>
+                                            {/* <AiOutlineExclamationCircle /> */}
                                         </div>
                                         :
                                         <div className=' notice__reaction-interaction-div-empty' />

@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Accordion, Button, Image } from 'react-bootstrap';
+import { screenUtils } from '../../lib/utils/screenUtils';
+import { Form, Button, Image } from 'react-bootstrap';
 import { NoticeTags } from './NoticeTags';
 import { Loading } from '../Loading/Loading';
 import GifPicker from 'gif-picker-react';
-import { FaAngleDown } from "react-icons/fa6";
+// import { FaAngleDown } from "react-icons/fa6";
 
 export const ComposeNotice = ({ noticeText, setNoticeText, duration, noticeType, setDuration, addNotice, isAddingNotice, onNoticeAdded }) => {
+
+    const { isSmallScreen } = screenUtils();
 
     const [tagCategories, setTagCategories] = useState([
         {
@@ -120,24 +123,30 @@ export const ComposeNotice = ({ noticeText, setNoticeText, duration, noticeType,
                     placeholder={'Got a notice to share?'}
                 />
                 {noticeGif &&
-                    <Image src={noticeGif} fluid />
+                    <>
+                        <br />
+                        <Image src={noticeGif} width={!isSmallScreen ? 'auto' : '50%'} fluid />
+                    </>
                 }
-                <br />
-                <Button className='py-1 px-2'
-                    onClick={handleGifBtn}>
-                    <i className='bi bi-filetype-gif' />
-                </Button>
-                {noticeGif &&
-                    <Button className='py-1 px-2 ms-2' onClick={() => setNoticeGif(null)}>
-                        Delete Gif
+                {/* <br /> */}
+                <div className='my-2'>
+                    <Button className='notice__gif-btn py-1 px-2'
+                        onClick={handleGifBtn}>
+                        <i className='bi bi-filetype-gif' />
                     </Button>
-                }
+                    {noticeGif &&
+                        <Button className='notice__gif-btn py-1 px-2 ms-2' onClick={() => setNoticeGif(null)}>
+                            Remove Gif
+                        </Button>
+                    }
+                </div>
 
                 {isGifBtnClicked &&
                     <GifPicker
+                        categoryHeight={70}
                         tenorApiKey={import.meta.env.VITE_TENOR_API_KEY}
                         onGifClick={(item) => setNoticeGif(item.url)}
-                    // height="500px" width="50vw"
+                        width={!isSmallScreen ? '50vw' : '80vw'}
                     />
                 }
 
