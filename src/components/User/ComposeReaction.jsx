@@ -36,8 +36,9 @@ export const ComposeReaction = ({ reactionText, onReactionTextChange, reactionGi
                     {reactionGif &&
                         <>
                             <Image src={reactionGif}
-                                width={!isSmallScreen ? 'auto' : '50%'}
-                                className='mt-2 notice__gif'
+                                width={!isSmallScreen ? '30%' : '50%'}
+                                // height='200px'
+                                className='mt-2 ddfdf notice__gif'
                                 fluid />
                         </>
                     }
@@ -70,7 +71,7 @@ export const ComposeReaction = ({ reactionText, onReactionTextChange, reactionGi
             </Form>
             <Button
                 onClick={handleReactSubmission}
-                className='notice__react-btn mt-2'
+                className='notice__reaction-submit-btn mt-2 ms-auto'
                 disabled={reactionText === '' || reactionCharCount > reactionCharLimit ? true : false}
             >
                 {isSendingReactionLoading ? <Loading /> : 'React'}

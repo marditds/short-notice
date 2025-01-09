@@ -54,7 +54,7 @@
 /* .notice__reaction-avatar, */
 /* .follower__avatar,
 .following__avatar, */
-.notice__react-modal-avatar {
+/* .notice__react-modal-avatar {
     --r: 8px;
     aspect-ratio: cos(30deg);
     --_g: calc(tan(60deg)*var(--r)) right var(--r), #000 98%, #0000 101%;
@@ -66,7 +66,7 @@
     clip-path: polygon(0 50%, 100% 100%, 100% 0);
     object-fit: cover;
     object-position: left center;
-}
+} */
 
 .user-profile__interaction-btn {
     background-color: rgb(0, 0, 0, 0.0);
@@ -461,32 +461,32 @@
 
 .notice__edit-btn>svg,
 .notice__delete-btn>svg,
-.notice__react-btn>i::before {
+.notice__reaction-btn>i::before {
     transition: var(--main-transition-speed);
     font-size: 25px !important;
-    /* font-size: var(--pc-icon-size); */
+    font-size: var(--pc-icon-size) !important;
     transition: var(--main-transition-speed);
 }
 
 .notice__edit-btn:hover>svg,
 .notice__delete-btn:hover>svg,
-.notice__react-btn:hover>i::before,
+.notice__reaction-btn:hover>i::before,
 .notice__edit-btn:focus>svg,
 .notice__delete-btn:focus>svg,
-.notice__react-btn:focus>i {
+.notice__reaction-btn:focus>i {
     margin-bottom: 5px !important;
     color: var(--main-accent-color) !important;
     filter: drop-shadow(0px 0px 5px var(--main-accent-color)) !important;
 }
 
-.notice__react-btn.disabled>i,
-.notice__react-btn:hover.disabled>i {
+.notice__reaction-btn.disabled>i,
+.notice__reaction-btn:hover.disabled>i {
     cursor: not-allowed;
     color: var(--main-text-muted) !important;
     filter: none !important;
 }
 
-.notice__react-btn-fill {
+.notice__reaction-btn-fill {
     color: var(--main-accent-color) !important;
 }
 
@@ -506,6 +506,10 @@
     margin-block: 0;
 } */
 
+
+.notice__reaction-submit-btn {
+    width: min-content;
+}
 
 .user-profile__report--modal>div,
 .user-profile__following--modal>div,
@@ -555,14 +559,14 @@
 .notice__react-gif-btn,
 .notice__edit--modal-btn,
 .notice__delete--modal-btn,
-.notice__react-btn,
+.notice__reaction-submit-btn,
 .user-profile__block--modal-body-btn,
 .user-profile__report--modal-btn,
 .user-profile__organization-passcode-btn {
     background-color: var(--main-accent-color) !important;
     color: black !important;
     border: transparent;
-    font-size: var(--pc-font-size);
+    font-size: var(--pc-font-size) !important;
 }
 
 .notice__react-gif-btn:hover,
@@ -570,8 +574,8 @@
 .notice__edit--modal-btn:focus,
 .notice__delete--modal-btn:hover,
 .notice__delete--modal-btn:focus,
-.notice__react-btn:hover,
-.notice__react-btn:focus,
+.notice__reaction-submit-btn:hover,
+.notice__reaction-submit-btn:focus,
 .user-profile__block--modal-body-btn:hover,
 .user-profile__block--modal-body-btn:focus,
 .user-profile__report--modal-btn:hover,
@@ -872,7 +876,7 @@
     .notice__edit-btn>svg,
     .notice__delete-btn>svg,
     .notice__reaction-btn>i::before {
-        font-size: var(--mobile-icon-size);
+        font-size: var(--mobile-icon-size) !important;
     }
 
     .notice__react-gif-btn,
@@ -883,12 +887,12 @@
     .notice__reaction--report--modal-btn,
     .notice__edit--modal-btn,
     .notice__delete--modal-btn,
-    .notice__react-btn,
+    .notice__reaction-submit-btn,
     .user-profile__block--modal-body-btn,
     .user-profile__form-control,
     .user-profile__following--modal-body>div>a,
     .notice__edit--modal-form-control {
-        font-size: var(--mobile-font-size);
+        font-size: var(--mobile-font-size) !important;
     }
 
     .notice__report--modal>div>div>.modal-header,

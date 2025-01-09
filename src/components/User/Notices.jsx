@@ -4,7 +4,7 @@ import { formatDateToLocal, calculateCountdown } from '../../lib/utils/dateUtils
 import { Row, Col, Modal, Form, Accordion, Button, Image } from 'react-bootstrap';
 import { CgTrash } from 'react-icons/cg';
 import { AiFillEdit } from 'react-icons/ai';
-import { BsReply } from "react-icons/bs";
+// import { BsReply } from "react-icons/bs";
 // import { RiSave2Line, RiSave2Fill } from "react-icons/ri";
 // import { BsHandThumbsUp, BsHandThumbsUpFill } from 'react-icons/bs';
 // import { AiOutlineExclamationCircle } from "react-icons/ai";
@@ -318,7 +318,7 @@ export const Notices = ({
         setShowLoadMoreBtn(true);
         setReactionText('');
         setReactionGif(null);
-        setReactionCharCount(0);
+        setReactionCharCount(0)
 
         console.log('activeNoticeId', activeNoticeId);
         console.log('reactingNoticeId', reactingNoticeId);
@@ -479,7 +479,10 @@ export const Notices = ({
                                     <p className='mb-0 text-break'>{notice?.text}</p>
 
                                     {notice?.noticeGif &&
-                                        <Image src={notice?.noticeGif} className='mt-2 mb-1 mb-sm-2' width={isExtraSmallScreen ? '100%' : (isSmallScreen ? '50%' : '30%')} fluid />
+                                        <Image src={notice?.noticeGif}
+                                            className='mt-2 mb-1 mb-sm-2'
+                                            width={isExtraSmallScreen ? '100%' : (isSmallScreen ? '50%' : '30%')}
+                                            fluid />
                                     }
 
                                     <small className='me-auto'>
@@ -629,7 +632,7 @@ export const Notices = ({
                         <Accordion.Body className='notice__reaction'>
                             {isOtherUserBlocked || notice.user_id === user_id ? null :
                                 <Row className='m-auto'>
-                                    <Col className='px-2 px-sm-4'>
+                                    <Col className='px-2 px-sm-4 d-flex flex-column justify-content-end'>
                                         <ComposeReaction
                                             reactionText={reactionText}
                                             reactionGif={reactionGif}
