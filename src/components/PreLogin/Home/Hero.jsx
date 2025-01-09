@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Col } from 'react-bootstrap';
-import { BsReply } from "react-icons/bs";
+// import { BsReply } from "react-icons/bs";
 // import { RiSave2Line } from "react-icons/ri";
 // import { BsHandThumbsUp } from 'react-icons/bs';
-import { AiOutlineExclamationCircle } from "react-icons/ai";
+// import { AiOutlineExclamationCircle } from "react-icons/ai";
 import defaultAvatar from '../../../assets/default.png';
-import { screenUtils } from '../../../lib/utils/screenUtils';
+// import { screenUtils } from '../../../lib/utils/screenUtils';
 
 export const Hero = () => {
 
@@ -103,14 +103,14 @@ export const Hero = () => {
                                 <div
                                     className={`notice__reaction-btn ms-2`}
                                 >
-                                    <BsReply size={18} />
+                                    {/* <BsReply size={18} /> */}
+                                    <i className="bi bi-reply"></i>
                                 </div>
                                 <div
                                     className='notice__reaction-btn ms-2'
                                 >
-                                    <AiOutlineExclamationCircle
-                                        size={18}
-                                    />
+                                    <i class="bi bi-exclamation-circle"></i>
+                                    {/* <AiOutlineExclamationCircle size={18} /> */}
                                 </div>
                             </div>
                             <small className='text-end mt-auto notice__create-date'>

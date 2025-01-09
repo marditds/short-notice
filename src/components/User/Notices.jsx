@@ -532,13 +532,21 @@ export const Notices = ({
                                                     className='ms-auto notice__edit-btn'
                                                     onClick={() => handleEditNotice(notice.$id, notice.text)}
                                                 >
-                                                    <AiFillEdit size={isSmallScreen ? 16 : 20} />
+                                                    <i class='bi bi-pencil'
+                                                    // style={{ fontSize: isSmallScreen ? 12 : 18 }}
+                                                    >
+                                                    </i>
+                                                    {/* <AiFillEdit size={isSmallScreen ? 16 : 20} /> */}
                                                 </div>
                                                 <div
                                                     className='ms-2 notice__delete-btn'
                                                     onClick={() => handleDeleteNotice(notice.$id)}
                                                 >
-                                                    <CgTrash size={isSmallScreen ? 16 : 20} />
+                                                    <i class='bi bi-trash3'
+                                                    // style={{ fontSize: isSmallScreen ? 12 : 18 }}
+                                                    // 
+                                                    ></i>
+                                                    {/* <CgTrash size={isSmallScreen ? 16 : 20} /> */}
 
                                                 </div>
                                             </span>

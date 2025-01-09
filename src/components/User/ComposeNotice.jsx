@@ -147,9 +147,7 @@ export const ComposeNotice = ({ noticeText, setNoticeText, duration, noticeType,
                         tenorApiKey={import.meta.env.VITE_TENOR_API_KEY}
                         onGifClick={(item) => setNoticeGif(item.url)}
                         width={!isSmallScreen ? '50vw' : '80vw'}
-                    >
-                        <TenorImagePreview />
-                    </GifPicker>
+                    />
                 }
 
                 <div
