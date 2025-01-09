@@ -318,6 +318,7 @@ export const Notices = ({
         setShowLoadMoreBtn(true);
         setReactionText('');
         setReactionGif(null);
+        setReactionCharCount(0);
 
         console.log('activeNoticeId', activeNoticeId);
         console.log('reactingNoticeId', reactingNoticeId);
@@ -628,7 +629,7 @@ export const Notices = ({
                         <Accordion.Body className='notice__reaction'>
                             {isOtherUserBlocked || notice.user_id === user_id ? null :
                                 <Row className='m-auto'>
-                                    <Col className='px-4'>
+                                    <Col className='px-2 px-sm-4'>
                                         <ComposeReaction
                                             reactionText={reactionText}
                                             reactionGif={reactionGif}

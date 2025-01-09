@@ -125,7 +125,7 @@ export const ComposeNotice = ({ noticeText, setNoticeText, duration, noticeType,
                 {noticeGif &&
                     <>
                         <br />
-                        <Image src={noticeGif} width={!isSmallScreen ? 'auto' : '50%'} fluid />
+                        <Image src={noticeGif} className='notice__gif' width={!isSmallScreen ? 'auto' : '50%'} fluid />
                     </>
                 }
                 {/* <br /> */}
@@ -147,7 +147,9 @@ export const ComposeNotice = ({ noticeText, setNoticeText, duration, noticeType,
                         tenorApiKey={import.meta.env.VITE_TENOR_API_KEY}
                         onGifClick={(item) => setNoticeGif(item.url)}
                         width={!isSmallScreen ? '50vw' : '80vw'}
-                    />
+                    >
+                        <TenorImagePreview />
+                    </GifPicker>
                 }
 
                 <div

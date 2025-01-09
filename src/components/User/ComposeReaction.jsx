@@ -37,7 +37,7 @@ export const ComposeReaction = ({ reactionText, onReactionTextChange, reactionGi
                         <>
                             <Image src={reactionGif}
                                 width={!isSmallScreen ? 'auto' : '50%'}
-                                className='mt-2'
+                                className='mt-2 notice__gif'
                                 fluid />
                         </>
                     }

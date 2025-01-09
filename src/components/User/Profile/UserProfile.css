@@ -220,7 +220,7 @@
     padding-inline: 10px;
     padding-block: 5px;
     border: 1px solid var(--main-accent-color);
-    border-radius: 7px;
+    border-radius: var(--main-rounded-corner);
     background-color: transparent;
     cursor: pointer;
     transition: var(--main-transition-speed);
@@ -380,6 +380,8 @@
     width: 43px;
 }
 
+.notice__gif,
+.notice__reaction-gif,
 .user-profile__avatar,
 .notice__avatar,
 .notice__reaction-avatar,
@@ -459,32 +461,32 @@
 
 .notice__edit-btn>svg,
 .notice__delete-btn>svg,
-.notice__reaction-btn>i::before {
+.notice__react-btn>i::before {
     transition: var(--main-transition-speed);
-    font-size: var(--pc-icon-size);
+    font-size: 25px !important;
+    /* font-size: var(--pc-icon-size); */
     transition: var(--main-transition-speed);
-
 }
 
 .notice__edit-btn:hover>svg,
 .notice__delete-btn:hover>svg,
-.notice__reaction-btn:hover>i::before,
+.notice__react-btn:hover>i::before,
 .notice__edit-btn:focus>svg,
 .notice__delete-btn:focus>svg,
-.notice__reaction-btn:focus>i {
+.notice__react-btn:focus>i {
     margin-bottom: 5px !important;
     color: var(--main-accent-color) !important;
     filter: drop-shadow(0px 0px 5px var(--main-accent-color)) !important;
 }
 
-.notice__reaction-btn.disabled>i,
-.notice__reaction-btn:hover.disabled>i {
+.notice__react-btn.disabled>i,
+.notice__react-btn:hover.disabled>i {
     cursor: not-allowed;
     color: var(--main-text-muted) !important;
     filter: none !important;
 }
 
-.notice__reaction-btn-fill {
+.notice__react-btn-fill {
     color: var(--main-accent-color) !important;
 }
 
@@ -550,6 +552,7 @@
     border: 0px !important;
 }
 
+.notice__react-gif-btn,
 .notice__edit--modal-btn,
 .notice__delete--modal-btn,
 .notice__react-btn,
@@ -562,6 +565,7 @@
     font-size: var(--pc-font-size);
 }
 
+.notice__react-gif-btn:hover,
 .notice__edit--modal-btn:hover,
 .notice__edit--modal-btn:focus,
 .notice__delete--modal-btn:hover,

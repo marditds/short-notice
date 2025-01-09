@@ -34,7 +34,7 @@ export const Reactions = ({
                 <>
                     {loadedReactions[notice.$id].map((reaction) => (
                         <Col key={reaction.$id}
-                            className='px-4'
+                            className='px-2 px-sm-4'
                         >
                             <Row
                             // className='px-0'
@@ -45,7 +45,7 @@ export const Reactions = ({
                                     {reaction.reactionGif &&
                                         <>
                                             <br />
-                                            <Image src={reaction.reactionGif} fluid />
+                                            <Image src={reaction.reactionGif} className='notice__reaction-gif mt-1 mt-sm-2' fluid />
                                         </>
                                     }
                                 </Col>
@@ -82,8 +82,9 @@ export const Reactions = ({
                                         {formatDateToLocal(reaction.$createdAt)}
                                     </div>
                                 </Col>
+                                <hr className='my-3 my-md-3' />
+
                             </Row>
-                            <hr className='my-2 my-md-3' />
                         </Col>
                     ))}
                     <div>
