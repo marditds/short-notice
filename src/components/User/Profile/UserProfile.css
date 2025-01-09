@@ -439,37 +439,38 @@
 .notice__reaction-btn,
 .notice__edit-btn:hover,
 .notice__delete-btn:hover,
-.notice__reaction-btn,
 .notice__edit-btn:focus,
 .notice__delete-btn:focus,
-.notice__reaction-btn,
 .user-profile__block--modal-body-btn {
     background-color: transparent !important;
     border-color: transparent !important;
     box-shadow: none !important;
     cursor: pointer;
+    transition: var(--main-transition-speed);
 }
 
 .notice__edit-btn>svg,
 .notice__delete-btn>svg,
-.notice__reaction-btn>svg {
+.notice__reaction-btn>i::before {
     transition: var(--main-transition-speed);
     font-size: var(--pc-icon-size);
+    transition: var(--main-transition-speed);
+
 }
 
 .notice__edit-btn:hover>svg,
 .notice__delete-btn:hover>svg,
-.notice__reaction-btn:hover>svg,
+.notice__reaction-btn:hover>i::before,
 .notice__edit-btn:focus>svg,
 .notice__delete-btn:focus>svg,
-.notice__reaction-btn:focus>svg {
-    margin-bottom: 2px;
+.notice__reaction-btn:focus>i {
+    margin-bottom: 5px !important;
     color: var(--main-accent-color) !important;
     filter: drop-shadow(0px 0px 5px var(--main-accent-color)) !important;
 }
 
-.notice__reaction-btn.disabled>svg,
-.notice__reaction-btn:hover.disabled>svg {
+.notice__reaction-btn.disabled>i,
+.notice__reaction-btn:hover.disabled>i {
     cursor: not-allowed;
     color: var(--main-text-muted) !important;
     filter: none !important;
@@ -820,7 +821,7 @@
 
     .notice__edit-btn>svg,
     .notice__delete-btn>svg,
-    .notice__reaction-btn>svg {
+    .notice__reaction-btn>i::before {
         font-size: var(--mobile-icon-size);
     }
 

@@ -43,7 +43,10 @@ export const Reactions = ({
                                 <Col xs={8} sm={9} className=' notice__reaction-text-col text-break'>
                                     {reaction.content}
                                     {reaction.reactionGif &&
-                                        <Image src={reaction.reactionGif} fluid />
+                                        <>
+                                            <br />
+                                            <Image src={reaction.reactionGif} fluid />
+                                        </>
                                     }
                                 </Col>
 

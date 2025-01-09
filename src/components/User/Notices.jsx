@@ -576,7 +576,7 @@ export const Notices = ({
                                                                     // <BsHandThumbsUp
                                                                     // size={19}
                                                                     // />
-                                                                    <i className="bi bi-hand-thumbs-up"></i>
+                                                                    <i className="bi bi-hand-thumbs-up notice__reaction-btn"></i>
                                                                 )}
                                                             </div>
                                                             <div
@@ -594,7 +594,7 @@ export const Notices = ({
                                                                     // <RiSave2Line
                                                                     // size={20} 
                                                                     // />
-                                                                    <i className="bi bi-floppy"></i>
+                                                                    <i className="bi bi-floppy notice__reaction-btn"></i>
                                                                 )}
                                                             </div>
                                                             <div
@@ -602,16 +602,17 @@ export const Notices = ({
                                                                 className={`notice__reaction-btn ${isOtherUserBlocked ? 'disabled' : ''} ms-2`}
                                                             >
                                                                 <BsReply
-                                                                // size={23}
+                                                                    size={23}
                                                                 />
                                                             </div>
                                                             <div
                                                                 onClick={() => handleReportNotice(notice.$id)}
                                                                 className='notice__reaction-btn ms-2'
                                                             >
-                                                                <AiOutlineExclamationCircle
-                                                                // size={22}
-                                                                />
+                                                                <i class="bi bi-exclamation-circle"></i>
+                                                                {/* <AiOutlineExclamationCircle */}
+                                                                {/* size={22} */}
+                                                                {/* /> */}
                                                             </div>
                                                         </div>
                                                     }

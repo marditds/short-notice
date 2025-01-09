@@ -2,8 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Form, Button, Image } from 'react-bootstrap';
 import GifPicker from 'gif-picker-react';
 import { Loading } from '../Loading/Loading';
+import { screenUtils } from '../../lib/utils/screenUtils';
 
 export const ComposeReaction = ({ reactionText, onReactionTextChange, reactionGif, setReactionGif, handleReactSubmission, isSendingReactionLoading, reactionCharCount }) => {
+
+    const { isSmallScreen } = screenUtils();
 
     const reactionCharLimit = 300;
 
@@ -48,7 +51,7 @@ export const ComposeReaction = ({ reactionText, onReactionTextChange, reactionGi
                         <GifPicker
                             tenorApiKey={import.meta.env.VITE_TENOR_API_KEY}
                             onGifClick={(item) => setReactionGif(item.url)}
-                        // height="500px" width="50vw"
+                            width='50vw' height='300px'
                         />
                     }
                 </Form.Group>
