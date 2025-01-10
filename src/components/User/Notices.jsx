@@ -481,7 +481,7 @@ export const Notices = ({
                                     {notice?.noticeGif &&
                                         <Image src={notice?.noticeGif}
                                             className='mt-2 mb-1 mb-sm-2'
-                                            width={isExtraSmallScreen ? '100%' : (isSmallScreen ? '50%' : '30%')}
+                                            width={isExtraSmallScreen ? '100%' : (isSmallScreen ? '60%' : '60%')}
                                             fluid />
                                     }
 
@@ -532,7 +532,7 @@ export const Notices = ({
                                                     className='ms-auto notice__edit-btn'
                                                     onClick={() => handleEditNotice(notice.$id, notice.text)}
                                                 >
-                                                    <i class='bi bi-pencil'
+                                                    <i className='bi bi-pencil'
                                                     // style={{ fontSize: isSmallScreen ? 12 : 18 }}
                                                     >
                                                     </i>
@@ -542,7 +542,7 @@ export const Notices = ({
                                                     className='ms-2 notice__delete-btn'
                                                     onClick={() => handleDeleteNotice(notice.$id)}
                                                 >
-                                                    <i class='bi bi-trash3'
+                                                    <i className='bi bi-trash3'
                                                     // style={{ fontSize: isSmallScreen ? 12 : 18 }}
                                                     // 
                                                     ></i>
@@ -620,7 +620,7 @@ export const Notices = ({
                                                                 onClick={() => handleReportNotice(notice.$id)}
                                                                 className='notice__reaction-btn ms-2'
                                                             >
-                                                                <i class="bi bi-exclamation-circle"></i>
+                                                                <i className="bi bi-exclamation-circle"></i>
                                                                 {/* <AiOutlineExclamationCircle */}
                                                                 {/* size={22} */}
                                                                 {/* /> */}

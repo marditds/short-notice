@@ -65,7 +65,7 @@ export const ComposeNotice = ({ noticeText, setNoticeText, duration, noticeType,
             setNoticeGif(null);
             setSelectedTags({});
             setCharCount(0);
-            setDuration(0);
+            setDuration(24);
 
             setTagCategories(prevCategories => prevCategories.map(category => ({
                 ...category,
@@ -123,10 +123,23 @@ export const ComposeNotice = ({ noticeText, setNoticeText, duration, noticeType,
                     placeholder={'Got a notice to share?'}
                 />
                 {noticeGif &&
-                    <>
-                        <br />
-                        <Image src={noticeGif} className='notice__gif' width={!isSmallScreen ? 'auto' : '50%'} fluid />
-                    </>
+                    <div>
+                        <div className='position-relative'>
+                            <div className='position-absolute d-flex justify-content-end pe-2'
+                                style={{ width: !isSmallScreen ? '30%' : '50%' }}
+                            >
+                                <Button onClick={() => setNoticeGif(null)}
+                                    className='mt-3 notice__remove-gif-btn'
+                                >
+                                    <i class='bi bi-x-square-fill' />
+                                </Button>
+                            </div>
+                            <Image src={noticeGif}
+                                width={!isSmallScreen ? '30%' : '50%'}
+                                className='mt-2 notice__gif'
+                                fluid />
+                        </div>
+                    </div>
                 }
                 {/* <br /> */}
                 <div className='my-2'>
@@ -134,11 +147,11 @@ export const ComposeNotice = ({ noticeText, setNoticeText, duration, noticeType,
                         onClick={handleGifBtn}>
                         <i className='bi bi-filetype-gif' />
                     </Button>
-                    {noticeGif &&
+                    {/* {noticeGif &&
                         <Button className='notice__gif-btn py-1 px-2 ms-2' onClick={() => setNoticeGif(null)}>
                             Remove Gif
                         </Button>
-                    }
+                    } */}
                 </div>
 
                 {isGifBtnClicked &&

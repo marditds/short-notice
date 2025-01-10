@@ -109,7 +109,7 @@ export const Hero = () => {
                                 <div
                                     className='notice__reaction-btn ms-2'
                                 >
-                                    <i class="bi bi-exclamation-circle"></i>
+                                    <i className="bi bi-exclamation-circle"></i>
                                     {/* <AiOutlineExclamationCircle size={18} /> */}
                                 </div>
                             </div>

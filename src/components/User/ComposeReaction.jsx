@@ -33,26 +33,43 @@ export const ComposeReaction = ({ reactionText, onReactionTextChange, reactionGi
                         className="user-profile__form-control"
                         placeholder={`Your reaction text here.`}
                     />
+
+                    <div
+                        className={`mt-2 user-profile__notice-char-counter ${reactionCharCount > reactionCharLimit && 'extra'}`}
+                    >
+                        {`${reactionCharCount}/${reactionCharLimit} characters`}
+                    </div>
+
                     {reactionGif &&
-                        <>
-                            <Image src={reactionGif}
-                                width={!isSmallScreen ? '30%' : '50%'}
-                                // height='200px'
-                                className='mt-2 ddfdf notice__gif'
-                                fluid />
-                        </>
+                        <div>
+                            <div className='position-relative'>
+                                <div className='position-absolute d-flex justify-content-end pe-2'
+                                    style={{ width: !isSmallScreen ? '30%' : '50%' }}
+                                >
+                                    <Button onClick={() => setReactionGif(null)}
+                                        className='mt-3 notice__react-remove-gif-btn'
+                                    >
+                                        <i class='bi bi-x-square-fill' />
+                                    </Button>
+                                </div>
+                                <Image src={reactionGif}
+                                    width={!isSmallScreen ? '30%' : '50%'}
+                                    className='mt-2 notice__gif'
+                                    fluid />
+                            </div>
+                        </div>
                     }
 
-                    <div className='my-2'>
+                    <div className='mt-2'>
                         <Button className='notice__react-gif-btn py-1 px-2'
                             onClick={handleGifBtn}>
                             <i className='bi bi-filetype-gif' />
                         </Button>
-                        {reactionGif &&
+                        {/* {reactionGif &&
                             <Button className='notice__react-gif-btn py-1 px-2 ms-2' onClick={() => setReactionGif(null)}>
                                 Remove Gif
                             </Button>
-                        }
+                        } */}
                     </div>
 
                     {isGifBtnClicked &&
@@ -63,11 +80,6 @@ export const ComposeReaction = ({ reactionText, onReactionTextChange, reactionGi
                         />
                     }
                 </Form.Group>
-                <div
-                    className={`user-profile__notice-char-counter ${reactionCharCount > reactionCharLimit && 'extra'}`}
-                >
-                    {`${reactionCharCount}/${reactionCharLimit} characters`}
-                </div>
             </Form>
             <Button
                 onClick={handleReactSubmission}

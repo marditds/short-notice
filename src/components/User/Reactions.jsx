@@ -2,8 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Row, Col, Button, Image } from 'react-bootstrap';
 import { getAvatarUrl as avatarUrl } from '../../lib/utils/avatarUtils';
+import { screenUtils } from '../../lib/utils/screenUtils';
 import { Loading } from '../Loading/Loading';
-import { AiOutlineExclamationCircle } from "react-icons/ai";
+// import { AiOutlineExclamationCircle } from "react-icons/ai";
 import { formatDateToLocal } from '../../lib/utils/dateUtils';
 
 
@@ -21,6 +22,9 @@ export const Reactions = ({
     handleLoadMoreReactions,
     handleReportReaction,
     user_id }) => {
+
+    const { isExtraSmallScreen, isSmallScreen } = screenUtils();
+
     return (
         <Row className='flex-column w-100'>
 
@@ -45,7 +49,10 @@ export const Reactions = ({
                                     {reaction.reactionGif &&
                                         <>
                                             <br />
-                                            <Image src={reaction.reactionGif} className='notice__reaction-gif mt-1 mt-sm-2' fluid />
+                                            <Image src={reaction.reactionGif}
+                                                className='notice__reaction-gif mt-2 mb-1 mb-sm-2'
+                                                width={isExtraSmallScreen ? '100%' : (isSmallScreen ? '60%' : '60%')}
+                                                fluid />
                                         </>
                                     }
                                 </Col>
