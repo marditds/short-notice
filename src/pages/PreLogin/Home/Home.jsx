@@ -150,8 +150,8 @@ const Home = ({ onSuccess }) => {
                     <Row className='home__body-hero-row'>
                         <Col className='home__body-hero-col d-flex align-items-stretch'>
                             <div className='home__body-hero-col-div px-4 py-5 d-flex flex-column align-items-stretch h-100'>
-                                <div className=' py-5'>
-                                    <h2 className='text-center pt-4'>Share updates and ideas in the moment. No distractions. No maintenance. Always current.</h2>
+                                <div className='py-0 py-md-5'>
+                                    <h2 className='text-center mb-0 pb-5 pb-md-0 '>Share updates and ideas in the moment. No distractions. No maintenance. Always current.</h2>
                                 </div>
                                 <Hero />
                                 <div className='d-flex flex-column flex-sm-row align-items-center justify-content-evenly pt-3'>

@@ -1,22 +1,25 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { screenUtils } from '../../../../lib/utils/screenUtils';
 import { Nav, Navbar } from 'react-bootstrap';
 import snLogo from '../../../../assets/sn_long.png';
 import './NavigationBar.css';
 
 const NavigationBar = ({ children }) => {
 
+    const { isMediumScreen } = screenUtils();
+
     return (
 
-        <Navbar expand='lg' className='px-4 navigationbar' sticky='top'>
+        <Navbar expand='md' className='px-4 navigationbar' sticky='top'>
             <Navbar.Brand href="/">
                 <img src={snLogo} alt='short_notice_logo' height={23} className='navigation__logo' />
             </Navbar.Brand>
             <Navbar.Toggle aria-controls='basic-navbar-nav' />
             <Navbar.Collapse id='basic-navbar-nav abcd'
-                style={{ marginRight: '146px' }}
+                style={{ marginRight: isMediumScreen ? '0px' : '146px' }}
             >
-                <Nav className='ms-auto me-auto'>
+                <Nav className='ms-auto me-lg-auto'>
 
                     <Nav.Link as={Link} to='/' className='me-lg-4'>Home</Nav.Link>
                     {children}

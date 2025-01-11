@@ -2,7 +2,11 @@ import { useState, useEffect } from 'react'
 
 export const screenUtils = () => {
 
-    const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth < 992);
+    const [isExtraLargeScreen, setIsExtraLargeScreen] = useState(window.innerWidth < 1400);
+
+    const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth < 1200);
+
+    const [isMediumScreen, setIsMediumScreen] = useState(window.innerWidth < 992);
 
     const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
 
@@ -30,10 +34,10 @@ export const screenUtils = () => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    // Large
+    // Medium
     useEffect(() => {
         const handleResize = () => {
-            setIsLargeScreen(window.innerWidth < 576);
+            setIsMediumScreen(window.innerWidth < 992);
         };
 
         window.addEventListener('resize', handleResize);
@@ -41,5 +45,27 @@ export const screenUtils = () => {
         return () => window.removeEventListener('resize', handleResize);
     }, [])
 
-    return { isLargeScreen, isSmallScreen, isExtraSmallScreen }
+    // Large
+    useEffect(() => {
+        const handleResize = () => {
+            setIsLargeScreen(window.innerWidth < 1200);
+        };
+
+        window.addEventListener('resize', handleResize);
+
+        return () => window.removeEventListener('resize', handleResize);
+    }, [])
+
+    // Extra Large
+    useEffect(() => {
+        const handleResize = () => {
+            setIsExtraLargeScreen(window.innerWidth < 1400);
+        };
+
+        window.addEventListener('resize', handleResize);
+
+        return () => window.removeEventListener('resize', handleResize);
+    }, [])
+
+    return { isExtraLargeScreen, isLargeScreen, isMediumScreen, isSmallScreen, isExtraSmallScreen }
 }

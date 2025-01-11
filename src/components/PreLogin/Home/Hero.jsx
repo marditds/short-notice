@@ -43,7 +43,7 @@ export const Hero = () => {
     const hideOnExpired = showNoticeSample ? '' : 'visually-hidden';
 
     return (
-        <Row className='w-75 m-auto home__body-hero-sample-row py-3 px-2'>
+        <Row className='m-auto home__body-hero-sample-row py-3 px-2'>
             {/* Text and Countdown Col */}
             {/* {showNoticeSample ? */}
             <>
