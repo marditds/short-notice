@@ -49,7 +49,7 @@ export const ComposeReaction = ({ reactionText, onReactionTextChange, reactionGi
                                     <Button onClick={() => setReactionGif(null)}
                                         className='mt-3 notice__react-remove-gif-btn'
                                     >
-                                        <i class='bi bi-x-square-fill' />
+                                        <i className='bi bi-x-square-fill' />
                                     </Button>
                                 </div>
                                 <Image src={reactionGif}

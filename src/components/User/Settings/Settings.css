@@ -50,6 +50,10 @@
     box-shadow: none;
 }
 
+.settings__upload-avatar-field:hover {
+    border-color: var(--main-accent-color);
+}
+
 .settings__upload-avatar-field:focus,
 .settings__upload-avatar-field:active {
     border-color: var(--main-accent-color-hover);
@@ -62,6 +66,7 @@
     color: transparent !important;
     background-color: transparent !important;
     border: 0 !important;
+    box-shadow: none !important;
 }
 
 .settings__delete-avatar-btn,
@@ -77,18 +82,23 @@
     border: none;
     border-radius: var(--main-rounded-corner) !important;
     width: fit-content;
+    box-shadow: none !important;
 }
 
 .settings-blocked__end-asterisks {
     margin-top: 16px;
 }
 
+.settings__unblocked-btn:focus>svg,
 .settings__unblocked-btn:hover>svg {
     transition: var(--main-transition-speed);
     color: var(--main-accent-color-hover) !important;
 }
 
-
+.settings__delete-avatar-btn:focus,
+.settings__update-username-btn:focus,
+.settings__load-blocked-btn:focus,
+.settings__update-interests-btn:focus,
 .settings__delete-avatar-btn:hover,
 .settings__update-username-btn:hover,
 .settings__update-interests-btn:hover,
@@ -107,13 +117,18 @@
     border-style: groove;
     border-radius: var(--main-rounded-corner);
     transition: var(--main-transition-speed);
-    /* Maximum width is 369px */
-    /* box-sizing: border-box; */
-    /* Ensure padding and border are included in the width */
+}
+
+.settings__username-field:hover {
+    border-color: var(--main-accent-color) !important;
+}
+
+.settings__username-field:active {
+    border-color: var(--main-accent-color-hover) !important;
 }
 
 .settings__username-field:focus {
-    border-color: var(--main-accent-color);
+    border-color: var(--main-accent-color-hover) !important;
     border-width: 1.5px;
     box-shadow: none !important;
 }

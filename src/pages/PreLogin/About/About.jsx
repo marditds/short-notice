@@ -7,13 +7,11 @@ const About = () => {
             <main className='flex-grow-1'>
                 <Container>
                     <p>
-                        Welcome to ShortNotice, the dynamic social media platform where fleeting yet impactful interactions take center stage. ShortNotice empowers users to express their thoughts, share updates, and connect meaningfully in real time—all through text. With every post automatically deleting after a user-selected time limit, ranging from minutes to hours, we embrace the beauty of impermanence, keeping the feed fresh and focused. Free from the noise of endless scrolling or media clutter, ShortNotice prioritizes words and ideas, creating a clean, distraction-free environment.
-
+                        Welcome to ShortNotice, the dynamic social media platform where fleeting yet impactful interactions take center stage. ShortNotice empowers users to express their thoughts, share updates, and connect meaningfully in real time—all through text (and GIFs). With every post automatically deleting after a user-selected time limit, we embrace the beauty of impermanence, keeping the feed fresh and focused. Free from the noise of endless scrolling, ShortNotice prioritizes words and ideas, creating a clean, distraction-free environment.
                     </p>
 
                     <p>
                         At ShortNotice, we encourage thoughtful sharing and reactions without devolving into ongoing threads or debates, keeping interactions concise, focused, and impactful.
-
                     </p>
 
                     <p>
@@ -34,12 +32,10 @@ const About = () => {
 
                     <p>
                         At ShortNotice, we value simplicity, clarity, and purpose-driven communication. By stripping away permanence and focusing on concise exchanges, we foster an environment that encourages authentic, meaningful interactions without the noise of endless discussions. Whether you are building an audience, managing a brand, or streamlining team updates, ShortNotice helps you connect in the moments that matter—before they're gone.
-
                     </p>
 
                     <p>
                         Join us and experience the simplicity of ShortNotice: where every interaction begins and ends with purpose.
-
                     </p>
 
                 </Container>

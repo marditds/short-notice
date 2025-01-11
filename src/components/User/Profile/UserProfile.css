@@ -586,6 +586,10 @@
     cursor: auto !important;
 }
 
+.notice__remove-gif-btn:focus {
+    box-shadow: none !important;
+}
+
 .notice__remove-gif-btn>i,
 .notice__react-remove-gif-btn>i {
     color: var(--main-accent-color);
@@ -594,6 +598,7 @@
 }
 
 .notice__remove-gif-btn>i:hover,
+.notice__remove-gif-btn:focus>i,
 .notice__react-remove-gif-btn>i:hover,
 .notice__react-remove-gif-btn:focus>i {
     color: var(--main-accent-color-hover);

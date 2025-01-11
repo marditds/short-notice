@@ -453,7 +453,7 @@ const useNotices = (googleUserData) => {
 
         try {
             const response = createReaction(user_id, otherUser_id, content, now, notice_id, expiresAt, reactionGif);
-            console.log('Success sending reaction');
+            // console.log('Success sending reaction:', response);
             return response;
         } catch (error) {
             console.error('Failed to send reaction:', error);

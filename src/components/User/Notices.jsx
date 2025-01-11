@@ -158,7 +158,10 @@ export const Notices = ({
                         }
                     }));
 
+                    console.log('reactionGif in Notices.jsx:', reactionGif);
+
                     const res = await handleReact(notice.user_id, reactionText, notice.$id, notice.expiresAt, reactionGif);
+
                     console.log('handleReactSubmission', res);
 
                     // setLoadedReactions(prev => ({

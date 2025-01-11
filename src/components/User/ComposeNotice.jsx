@@ -131,7 +131,7 @@ export const ComposeNotice = ({ noticeText, setNoticeText, duration, noticeType,
                                 <Button onClick={() => setNoticeGif(null)}
                                     className='mt-3 notice__remove-gif-btn'
                                 >
-                                    <i class='bi bi-x-square-fill' />
+                                    <i className='bi bi-x-square-fill' />
                                 </Button>
                             </div>
                             <Image src={noticeGif}

@@ -1360,7 +1360,7 @@ export const createReaction = async (sender_id, recipient_id, content, timestamp
             //     Permission.write(Role.guests())
             // ]
         )
-        console.log('Reaction created successfuly:', response);
+        // console.log('Reaction created successfuly:', response);
         return response;
     } catch (error) {
         console.error('Error creating reaction:', error);

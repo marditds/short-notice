@@ -7,8 +7,11 @@ import { Hero } from '../../../components/PreLogin/Home/Hero';
 import { CallToAction } from '../../../components/PreLogin/Home/CallToAction';
 import { MdOutlinePassword } from "react-icons/md";
 import { BsReply } from "react-icons/bs";
-import { FaHeart } from "react-icons/fa";
-import { AiOutlineSave } from "react-icons/ai";
+// import { FaHeart } from "react-icons/fa";
+import { BsPencil } from "react-icons/bs";
+import { BsHandThumbsUp } from "react-icons/bs";
+import { BsFloppy } from "react-icons/bs";
+// import { AiOutlineSave } from "react-icons/ai";
 import { RiTeamFill } from "react-icons/ri";
 import { RiNumber1, RiNumber2, RiNumber3, RiNumber4 } from "react-icons/ri";
 import { screenUtils } from '../../../lib/utils/screenUtils';
@@ -24,22 +27,22 @@ const Home = ({ onSuccess }) => {
             icon: '⌚'
         },
         {
-            title: 'No Noise, Just Words: ',
-            description: 'No photos, videos, or distractions—just authentic thoughts. Maybe GIFs in the near future 😜.',
+            title: 'No Noise, Just Words (and GIFs 😜): ',
+            description: 'No photos, videos, or distractions—just authentic thoughts.',
             icon: '💭'
         },
         {
             title: 'Edit your notices: ',
             description: 'Need to make changes? No problem. Edit your notices anytime before the timer runs out. It\'s your space, your rules.',
-            icon: '📝'
+            icon: <BsPencil size={!isSmallScreen ? 28 : 17.5} />
         },
         {
             title: 'Interact with others\' notices: ',
             description: 'Like, save, and react to others\' notices.',
             icon: (
                 <span>
-                    <FaHeart color='red' size={!isSmallScreen ? 28 : 17.5} /> {' '}
-                    <AiOutlineSave size={!isSmallScreen ? 30 : 18.75} /> {' '}
+                    <BsHandThumbsUp size={!isSmallScreen ? 28 : 17.5} /> {' '}
+                    <BsFloppy size={!isSmallScreen ? 30 : 18.75} /> {' '}
                     <BsReply size={!isSmallScreen ? 38 : 23.75} />
 
                 </span>

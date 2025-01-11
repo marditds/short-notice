@@ -423,10 +423,9 @@ const UserProfile = () => {
         }
     }
 
-    const handleReact = async (user_id, content, notice_id) => {
+    const handleReact = async (otherUser_id, content, notice_id, expiresAt, reactionGif) => {
         try {
-            const res = await sendReaction(user_id, content, notice_id);
-            console.log('Success handleReact.', res);
+            const res = await sendReaction(otherUser_id, content, notice_id, expiresAt, reactionGif);
             return res;
         } catch (error) {
             console.error('Failed handleReact:', error);
