@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import Header from '../../components/PreLogin/Header/Header';
 import Footer from '../../components/PreLogin/Footer/Footer';
 import { GoogleLoginForm } from '../../components/LoginForm/Google/GoogleLoginForm';
@@ -10,10 +10,12 @@ import TOS from './TOS/TOS';
 import HelpCenter from './HelpCenter/HelpCenter';
 import Contact from './Contact/Contact';
 import './PreLogin.css';
+import HelpCenterData from './HelpCenter/HelpCenterData/HelpCenterData';
 
 const PreLogin = ({ onSuccess }) => {
 
     const location = useLocation();
+    let { helpCenterPath } = useParams();
 
     return (
         <div className='home__body d-flex flex-column justify-content-between min-vh-100'>
@@ -36,6 +38,9 @@ const PreLogin = ({ onSuccess }) => {
             }
             {
                 location.pathname === '/help-center' && <HelpCenter />
+            }
+            {
+                location.pathname === `/help-center/${helpCenterPath}` && <HelpCenterData />
             }
             {
                 location.pathname === '/contact' && <Contact />

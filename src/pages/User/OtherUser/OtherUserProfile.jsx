@@ -8,7 +8,7 @@ import useUserInfo from '../../../lib/hooks/useUserInfo.js';
 import { getAvatarUrl as avatarUtil } from '../../../lib/utils/avatarUtils.js';
 import useUserAvatar from '../../../lib/hooks/useUserAvatar.js';
 import useNotices from '../../../lib/hooks/useNotices.js';
-import { screenUtils } from '../../../lib/utils/screenUtils.js';
+// import { screenUtils } from '../../../lib/utils/screenUtils.js';
 import { useUnblockedNotices } from '../../../lib/utils/blockFilter.js';
 import { Passcode } from '../../../components/User/Passcode.jsx';
 import { Loading } from '../../../components/Loading/Loading.jsx';
@@ -81,7 +81,7 @@ const OtherUserProfile = () => {
         reportUser
     } = useUserInfo(googleUserData);
 
-    const { isSmallScreen } = screenUtils();
+    // const { isSmallScreen } = screenUtils();
 
     const [accountType, setAccountType] = useState(null);
     const [accountTypeCheck, setAccountTypeCheck] = useState(false);
@@ -153,7 +153,6 @@ const OtherUserProfile = () => {
     // Get Other User
     useEffect(() => {
         const getCurrUser = async () => {
-
             try {
                 setIsOtherUserLoading(true);
                 console.log('otherUsername', otherUsername);
