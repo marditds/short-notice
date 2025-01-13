@@ -24,8 +24,9 @@ import UserSettings from './pages/User/Settings/UserSettings.jsx';
 import UserProfile from './pages/User/Home/UserProfile.jsx';
 import UserFeed from './pages/User/Feed/UserFeed.jsx';
 import OtherUserProfile from './pages/User/OtherUser/OtherUserProfile.jsx';
-import HelpCenterData from './pages/PreLogin/HelpCenter/HelpCenterData/HelpCenterData.jsx';
-import GettingStartedData from './pages/PreLogin/HelpCenter/HelpCenterData/GettingStartedData/GettingStartedData.jsx';
+import HelpCenterTitles from './pages/PreLogin/HelpCenter/HelpCenterInfo/HelpCenterTitles.jsx';
+import HelpCenterData from './pages/PreLogin/HelpCenter/HelpCenterInfo/HelpCenterData.jsx';
+
 
 const router = createBrowserRouter([
   {
@@ -54,12 +55,12 @@ const router = createBrowserRouter([
         element: <HelpCenter />,
         children: [
           {
-            path: ':helpCenterPath',
-            element: <HelpCenterData />,
+            path: ':helpCenterTitlesPath',
+            element: <HelpCenterTitles />,
             children: [
               {
-                path: ':gettingStartedPath',
-                element: <GettingStartedData />
+                path: ':helpCenterDataPath',
+                element: <HelpCenterData />
               }
             ]
           }

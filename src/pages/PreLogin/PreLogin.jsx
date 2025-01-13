@@ -10,13 +10,13 @@ import TOS from './TOS/TOS';
 import HelpCenter from './HelpCenter/HelpCenter';
 import Contact from './Contact/Contact';
 import './PreLogin.css';
-import HelpCenterData from './HelpCenter/HelpCenterData/HelpCenterData';
-import GettingStartedData from './HelpCenter/HelpCenterData/GettingStartedData/GettingStartedData';
+import HelpCenterTitles from './HelpCenter/HelpCenterInfo/HelpCenterTitles';
+import HelpCenterData from './HelpCenter/HelpCenterInfo/HelpCenterData';
 
 const PreLogin = ({ onSuccess }) => {
 
     const location = useLocation();
-    let { helpCenterPath, gettingStartedPath } = useParams();
+    let { helpCenterTitlesPath, helpCenterDataPath } = useParams();
 
     return (
         <div className='home__body d-flex flex-column justify-content-between min-vh-100'>
@@ -41,10 +41,10 @@ const PreLogin = ({ onSuccess }) => {
                 location.pathname === '/help-center' && <HelpCenter />
             }
             {
-                location.pathname === `/help-center/${helpCenterPath}` && <HelpCenterData />
+                location.pathname === `/help-center/${helpCenterTitlesPath}` && <HelpCenterTitles />
             }
             {
-                location.pathname === `/help-center/${helpCenterPath}/${gettingStartedPath}` && <GettingStartedData />
+                location.pathname === `/help-center/${helpCenterTitlesPath}/${helpCenterDataPath}` && <HelpCenterData />
             }
             {
                 location.pathname === '/contact' && <Contact />
