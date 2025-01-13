@@ -29,14 +29,14 @@ const HelpCenterTitles = () => {
 
     return (
         <Container>
-            <h4 className='help__center-data-title fw-bold'>
+            <h4 className='help__center-titles-title fw-bold'>
                 {titleMapping[helpCenterTitlesPath] || 'Help Center'}
             </h4>
-            <ListGroup as='ul' className='help__center-data-list'>
+            <ListGroup as='ul' className='help__center-titles-list'>
                 {
                     titlesMap[helpCenterTitlesPath].map((title, idx) => {
                         return (
-                            <ListGroup.Item as={'li'} className='help__center-data-list-item' key={idx}>
+                            <ListGroup.Item as={'li'} className='help__center-titles-list-item' key={idx}>
                                 <Link to={`help-center/${helpCenterTitlesPath}/${title.path}`}>
                                     {title.header}
                                 </Link>

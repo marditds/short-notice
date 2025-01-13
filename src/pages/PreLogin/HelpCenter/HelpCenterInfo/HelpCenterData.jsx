@@ -36,40 +36,32 @@ const HelpCenterData = () => {
             outro: 'By following these steps, you will be able to create your account for ShortNotice.'
         },
         'account-verification': {
-            intro: 'To create a ShortNotice account, follow these steps:',
+            intro: 'For the time being, ShortNotice does not require its users to verify their accounts.',
             steps: [
-                'Click/Tap on "Sign in with Google',
-                'Enter your email or phone number associated with your Google account.',
-                'Click/Tap on "Next."',
-                'Enter your password.',
-                'Click/Tap on "Next."',
-                'Click/Tap on "Continue."'
+                'The users do not need to take any steps to verify their accounts.'
             ],
-            outro: 'By following these steps, you will be able to create your account for ShortNotice.'
+            outro: 'When there is a change, the users will be notified accordingly.'
         },
         'login-information': {
-            intro: 'To create a ShortNotice account, follow these steps:',
+            intro: 'To login to your account, follow these steps:',
             steps: [
                 'Click/Tap on "Sign in with Google',
-                'Enter your email or phone number associated with your Google account.',
+                'Enter your email or phone number associated with your ShortNotice account.',
                 'Click/Tap on "Next."',
                 'Enter your password.',
                 'Click/Tap on "Next."',
                 'Click/Tap on "Continue."'
             ],
-            outro: 'By following these steps, you will be able to create your account for ShortNotice.'
+            outro: 'By following these steps, you will login to your account for ShortNotice.'
         },
         'platform-requirements': {
-            intro: 'To create a ShortNotice account, follow these steps:',
+            intro: 'To access ShortNotice, you will need the following:',
             steps: [
-                'Click/Tap on "Sign in with Google',
-                'Enter your email or phone number associated with your Google account.',
-                'Click/Tap on "Next."',
-                'Enter your password.',
-                'Click/Tap on "Next."',
-                'Click/Tap on "Continue."'
+                'A mobile device or personal compter/laptop.',
+                'Internet collection.',
+                'Either of the modern browsers: Chrome, Opera, Edge, Brave, etc.'
             ],
-            outro: 'By following these steps, you will be able to create your account for ShortNotice.'
+            outro: 'For the time being, you do not need to download ShortNotice from any application stores.'
         }
 
     };
@@ -80,20 +72,24 @@ const HelpCenterData = () => {
 
     return (
         <Container>
-            This is {helpCenterDataPath}.
             <h4> {
                 titleMapping[helpCenterTitlesPath]?.[helpCenterDataPath]
                 || 'Title not found'
             }</h4>
 
             <div>
-                <p>{titlesMap[helpCenterDataPath].intro}</p>
-                <ListGroup>
+                <p className='mb-2'>{titlesMap[helpCenterDataPath].intro}</p>
+                <ListGroup as='ol' className='help__center-data-list'>
                     {titlesMap[helpCenterDataPath].steps.map((step, idx) => (
-                        <ListGroup.Item key={idx}>{step}</ListGroup.Item>
+                        <ListGroup.Item key={idx} as='li' className='help__center-data-list-item aaa'>
+                            <strong>
+                                {titlesMap[helpCenterDataPath].steps.indexOf(step) + 1}.
+                            </strong>
+                            {step}
+                        </ListGroup.Item>
                     ))}
                 </ListGroup>
-                <p>{titlesMap[helpCenterDataPath].outro}</p>
+                <p className='mt-2'>{titlesMap[helpCenterDataPath].outro}</p>
             </div>
 
         </Container>
