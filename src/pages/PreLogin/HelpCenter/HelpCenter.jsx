@@ -1,60 +1,61 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Container, Row, Col, Image } from 'react-bootstrap';
+import { screenUtils } from '../../../lib/utils/screenUtils';
 import sn_small from '../../../assets/sn_long.png';
 
 const HelpCenter = () => {
 
+    const { isSmallScreen } = screenUtils();
+
     const helpCenterHeaders = [
         {
             title: 'Getting Started',
-            description: 'iiiiiiiii',
+            description: 'How to get started in ShortNotice.',
             url: 'getting-started'
         },
         {
             title: 'Manage Account',
-            description: 'jjjjjjjjjjj',
+            description: 'How to manage your ShortNotice account.',
             url: 'manage-account'
         }
     ]
 
     return (
         <Container>
-            <div className='help-center__welcome-msg mb-5'>
+            <div className='help-center__welcome-msg mb-3 mb-sm-4 mb-md-5'>
                 <h2 className='help-center__h2 mb-0'>
                     Hello,
                 </h2>
 
-                <h3 className='help-center__h3'>
-                    You have arrived to
-                    <Image src={sn_small} width={218} className='ms-2' fluid />
+                <h3 className='help-center__h3 text-break'>
+                    You have arrived at
+                    <Image src={sn_small} width={!isSmallScreen ? 218 : 137} className='ms-1 ms-sm-2 help-center__img' fluid />
                     's help center.
                 </h3>
 
                 <h3 className='help-center__h3'>
-                    Here you will find the answers to your questions.
+                    Here, you will find the answers to your questions.
                 </h3>
             </div>
-            <Row className=''>
+
+            <Row xs={1} sm={2} className='h-100'>
                 {
                     helpCenterHeaders.map((header, idx) => {
                         return (
-                            <Col key={idx} className='help-center__header-col'>
-                                <Link to={`../help-center/${header.url}`} className='h-100 help-center__header-a'>
-                                    <div className='help-center__header-inner-div px-3 py-3 text-center'>
-                                        <h4 className='help-center__header-title mb-3'>
-                                            {header.title}
-                                        </h4>
-
-                                        <p className='mb-0'>{header.description}</p>
-                                    </div>
+                            <Col key={idx} className='help-center__header-col d-flex flex-column'>
+                                <Link to={`../help-center/${header.url}`} className='help-center__header-a help-center__header-inner-div d-flex flex-column flex-grow-1 justify-content-evenly px-3 py-3 text-center'>
+                                    <h4 className='help-center__header-title mb-3'>
+                                        {header.title}
+                                    </h4>
+                                    <p className='mb-0'>{header.description}</p>
                                 </Link>
                             </Col>
-
-                        )
+                        );
                     })
                 }
             </Row>
+
             {/* <Outlet /> */}
         </Container>
     )

@@ -15,7 +15,8 @@ const HelpCenterTitles = () => {
         'getting-started': [
             { header: 'How to create a ShortNotice account', path: 'how-to' },
             { header: 'Account verification', path: 'account-verification' },
-            { header: 'Log in/out of your account', path: 'login-information' },
+            { header: 'Log in to your account', path: 'login-information' },
+            { header: 'Log out of your account', path: 'logout-information' },
             { header: 'Requirements to join ShortNotice', path: 'platform-requirements' }
         ],
         'manage-account': [

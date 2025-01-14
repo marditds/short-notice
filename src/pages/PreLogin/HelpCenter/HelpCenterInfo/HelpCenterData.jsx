@@ -10,7 +10,8 @@ const HelpCenterData = () => {
         'getting-started': {
             'how-to': 'How to create a ShortNotice account',
             'account-verification': 'Account verification',
-            'login-information': 'Log in/out of your account',
+            'login-information': 'Log in to your account',
+            'logout-information': 'Logout of your account',
             'platform-requirements': 'Requirements to join ShortNotice'
         },
         'manage-account': {
@@ -24,46 +25,106 @@ const HelpCenterData = () => {
 
     const titlesMap = {
         'how-to': {
-            intro: 'To create a ShortNotice account, follow these steps:',
+            intro: 'To create a ShortNotice account, follow these simple steps:',
             steps: [
-                'Click/Tap on "Sign in with Google',
-                'Enter your email or phone number associated with your Google account.',
-                'Click/Tap on "Next."',
+                'Click or tap "Sign in with Google."',
+                'Enter the email or phone number associated with your Google account.',
+                'Click or tap "Next."',
                 'Enter your password.',
-                'Click/Tap on "Next."',
-                'Click/Tap on "Continue."'
+                'Click or tap "Next."',
+                'Click or tap "Continue."',
+                'Select your account type.',
+                'Enter your username.',
+                'If your account type is "Organization," enter your passcode.',
+                'Click or tap "Done."'
             ],
-            outro: 'By following these steps, you will be able to create your account for ShortNotice.'
+            outro: 'By following these steps, you will successfully create your ShortNotice account.'
         },
         'account-verification': {
-            intro: 'For the time being, ShortNotice does not require its users to verify their accounts.',
+            intro: 'For now, ShortNotice does not require users to verify their accounts.',
             steps: [
-                'The users do not need to take any steps to verify their accounts.'
+                'Users do not need to take any steps to verify their accounts.'
             ],
-            outro: 'When there is a change, the users will be notified accordingly.'
+            outro: 'If there are any changes, users will be notified promptly.'
         },
         'login-information': {
             intro: 'To login to your account, follow these steps:',
             steps: [
-                'Click/Tap on "Sign in with Google',
-                'Enter your email or phone number associated with your ShortNotice account.',
-                'Click/Tap on "Next."',
+                'Click or tap "Sign in with Google."',
+                'Enter the email or phone number associated with your ShortNotice account.',
+                'Click or tap "Next."',
                 'Enter your password.',
-                'Click/Tap on "Next."',
-                'Click/Tap on "Continue."'
+                'Click or tap "Next."',
+                'Click or tap"Continue."'
             ],
-            outro: 'By following these steps, you will login to your account for ShortNotice.'
+            outro: 'By following these steps, you will log in to your ShortNotice account.'
+        },
+        'logout-information': {
+            intro: 'To logout of your account, follow these steps:',
+            steps: [
+                <span>Click or tap the three dots <i className="bi bi-three-dots-vertical"></i> located in the top-right corner of the screen.</span>,
+                'Select "Log out."'
+            ],
+            outro: 'By following these steps, you will log out of your ShortNotice account.'
         },
         'platform-requirements': {
             intro: 'To access ShortNotice, you will need the following:',
             steps: [
                 'A mobile device or personal compter/laptop.',
-                'Internet collection.',
+                'An internet collection.',
                 'Either of the modern browsers: Chrome, Opera, Edge, Brave, etc.'
             ],
-            outro: 'For the time being, you do not need to download ShortNotice from any application stores.'
-        }
-
+            outro: 'For now, you do not need to download ShortNotice from any application stores.'
+        },
+        'email-change': {
+            intro: 'Currently, you cannot change the email associated with your ShortNotice account.',
+            steps: [
+                'To update your email, you will need to create a new account using a different email address.'
+            ],
+            outro: 'If this policy changes, users will be notified promptly.'
+        },
+        'username-change': {
+            intro: 'To change your username, follow these steps:',
+            steps: [
+                <span>
+                    Click or tap the three dots <i className="bi bi-three-dots-vertical"></i> located in the top-right corner of the screen.
+                </span>,
+                'Select "Settings."',
+                'Click or tap the "Username" field in the "Update Username" section.',
+                'Enter your new username',
+                'Click or tap "Update."'
+            ],
+            outro: 'By following these steps, you can successfully change your username.'
+        },
+        'avatar-change': {
+            intro: 'To change your avatar, follow these steps:',
+            steps: [
+                <span>Click or tap the three dots <i className="bi bi-three-dots-vertical"></i> located in the top - right corner of the screen.</span >,
+                'Select "Settings."',
+                'Click or tap the "Upload Avatar" field in the "Update Avatar" section.',
+                'Select your avatar.',
+                'The avatar will update automatically.',
+                <span className='fst-italic'>To <strong>delete</strong> your avatar, Click or tap on "Delete Avatar" in the "Upload Avatar" section.</span>
+            ],
+            outro: 'By following these steps, you can successfully change your avatar.'
+        },
+        'account-visibility': {
+            intro: 'Currently, you cannot change the visibility of your personal account.',
+            steps: [
+                'Accounts for organizations and teams require passcodes. Their notices are not visible to the general public.'
+            ],
+            outro: 'If there are any changes, users will be notified promptly.'
+        },
+        'deleting-account': {
+            intro: 'To delete your ShortNotice account, follow these steps:',
+            steps: [
+                <span>Click or tap the three dots <i className="bi bi-three-dots-vertical"></i> located in the top-right corner of the screen.</span>,
+                'Select "Settings."',
+                'Click or tap "Delete Account" in the "Delete Account" section.',
+                'Click or tap "Yes, Delete My Account."',
+            ],
+            outro: <span>By following these steps, you will be able to delete your ShortNotice account. <strong>This is an irreversible action and cannot be undone.</strong></span>
+        },
     };
 
     useEffect(() => {
@@ -85,7 +146,7 @@ const HelpCenterData = () => {
                             <strong>
                                 {titlesMap[helpCenterDataPath].steps.indexOf(step) + 1}.
                             </strong>
-                            {step}
+                            {'  '}{step}
                         </ListGroup.Item>
                     ))}
                 </ListGroup>

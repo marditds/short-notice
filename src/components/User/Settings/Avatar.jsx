@@ -91,7 +91,7 @@ export const Avatar = () => {
                             )
                             : (
                                 <>
-                                    <Form.Label className='settings__upload-avatar-label'>Upload Profile Picture</Form.Label>
+                                    <Form.Label className='settings__upload-avatar-label'>Upload Avatar</Form.Label>
                                     <Form.Control
                                         type="file"
                                         onChange={handleFileChange}
