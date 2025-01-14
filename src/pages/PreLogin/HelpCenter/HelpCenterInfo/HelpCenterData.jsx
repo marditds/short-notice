@@ -20,6 +20,16 @@ const HelpCenterData = () => {
             'avatar-change': 'Avatar change',
             'account-visibility': 'Account visibility',
             'deleting-account': 'Deleting account'
+        },
+        'navigation-guide': {
+            'compose-notice': 'Compose notice',
+            'edit-notice': 'Edit notice',
+            'delete-notice': 'Delete notice',
+            'post-reaction-to-notices': 'Post reaction to others\' notices',
+            'interact-with-notices': 'Interact with others\' notices',
+            'report-others-notices': 'Report others\' notices',
+            'view-saved-liked': 'View saved and liked notices',
+            'follow-other-users': 'Follow other users'
         }
     };
 
@@ -118,13 +128,97 @@ const HelpCenterData = () => {
         'deleting-account': {
             intro: 'To delete your ShortNotice account, follow these steps:',
             steps: [
-                <span>Click or tap the three dots <i className="bi bi-three-dots-vertical"></i> located in the top-right corner of the screen.</span>,
+                <span>Click or tap the three dots <i className='bi bi-three-dots-vertical'></i> located in the top-right corner of the screen.</span>,
                 'Select "Settings."',
                 'Click or tap "Delete Account" in the "Delete Account" section.',
                 'Click or tap "Yes, Delete My Account."',
             ],
             outro: <span>By following these steps, you will be able to delete your ShortNotice account. <strong>This is an irreversible action and cannot be undone.</strong></span>
         },
+        'compose-notice': {
+            intro: 'To compose a notice, follow these steps:',
+            steps: [
+                <span>Click or tap the three dots <i className="bi bi-three-dots-vertical"></i> located in the top-right corner of the screen.</span>,
+                'Select "Profile."',
+                'Click or tap "Delete Account" on the text field below the avatar.',
+                'Enter your text.',
+                <span>Click or tap on the <i className='bi bi-filetype-gif' /> icon to add a GIF (optional).</span>,
+                <span>Click or tap on one of the accordion buttons to add tags.{' '}<small>At leat one tag is require per notice.</small></span>,
+                'Click or tap the dropdow menu and select the duration which you wish your notice to remain live.',
+                'Click or tap "Notify."',
+            ],
+            outro: <span>By following these steps, you will successfully create a notice that will be visible in the personal feed of the users that follow you.You notice will also be visible in the general feed of the users that have the same intersts as your notices tags. To learn more about setting your interests, click here.</span>
+        },
+        'edit-notice': {
+            intro: 'To edit a notice, follow these steps:',
+            steps: [
+                <span>Click or tap the three dots <i className="bi bi-three-dots-vertical"></i> located in the top-right corner of the screen.</span>,
+                'Select "Profile."',
+                'Find the notice text of which you wish to edit.',
+                <span>Click or tap the pencil <i className='bi bi-pencil' /> icon.</span>,
+                'Modify the text as you wish in the opened modal',
+                'Click or tap "Save."'
+            ],
+            outro: 'By following these steps, you will successfully edit the text of your notice.'
+        },
+        'delete-notice': {
+            intro: 'To delete notice, follow these steps:',
+            steps: [
+                <span>Click or tap the three dots <i className="bi bi-three-dots-vertical"></i> located in the top-right corner of the screen.</span>,
+                'Select "Profile."',
+                'Find the notice you wish to delete.',
+                <span>Click or tap the trash can <i className='bi bi-trash3' /> icon.</span>,
+            ],
+            outro: 'By following these steps, you will successfully delete your notice.'
+        },
+        'post-reaction-to-notices': {
+            intro: 'To post a reaction to others\' notices, follow these steps:',
+            steps: [
+                'Click or tap the notice to which you wish to post a reaction.',
+                'Enter your text in the text filed located below the notice.',
+                <span>Click or tap on the <i className='bi bi-filetype-gif' /> icon to add a GIF (optional).</span>,
+                'Click or tap "React."',
+            ],
+            outro: 'By following these steps, you will successfully post your reaction to the notice(s) shared by others.'
+        },
+        'interact-with-notices': {
+            intro: 'To interact with the notice(s) shared by others, follow these steps:',
+            steps: [
+                'Find the notice you wish to interact with.',
+                <span>Click or tap the thumbs up <i class='bi bi-hand-thumbs-up' /> icon to like the notice.</span>,
+                <span>Click or tap the floppy disk icon <i class='bi bi-floppy' /> to save the notice.</span>
+            ],
+            outro: 'By following these steps, you will successfully interact with the notice(s) shared by others.'
+        },
+        'report-others-notices': {
+            intro: 'To report the notice(s) shared by others, follow these steps:',
+            steps: [
+                'Find the notice you wish to report.',
+                <span>Click or tap the thumbs up <i class='bi bi-hand-thumbs-up' /> icon to like the notice.</span>,
+                <span>Click or tap the exclamation icon <i class='bi bi-exclamation-circle' />.</span>,
+                'Select the reason you believe the notice should be reported for.',
+                'Click or tap "Report."'
+            ],
+            outro: 'By following these steps, you will successfully report the notice(s) shared by others.'
+        },
+        'view-saved-liked': {
+            intro: 'To view your saved and liked notices, follow these steps:',
+            steps: [
+                <span>Click or tap the three dots <i className="bi bi-three-dots-vertical"></i> located in the top-right corner of the screen.</span>,
+                'Select "Profile."',
+                'Click or tap "Saves" to view your saved notices located at the bottom-center of the page.',
+                'Click or tap "Likes" to view your liked notices located at the bottom-right of page.'
+            ],
+            outro: 'By following these steps, you will be able to view your saved and liked notices.'
+        },
+        'follow-other-users': {
+            intro: 'To follow other users, follow these steps:',
+            steps: [
+                'Click or tap the avatar of the user you with to follow',
+                'Click or tap "Follow" located on the right side of the user\s avatar.'
+            ],
+            outro: 'By following these steps, you will follow the other users and their notices will appear in your "Personal Feed."'
+        }
     };
 
     useEffect(() => {

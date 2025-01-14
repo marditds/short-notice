@@ -25,7 +25,17 @@ const HelpCenterTitles = () => {
             { header: 'Avatar change', path: 'avatar-change' },
             { header: 'Account visibility', path: 'account-visibility' },
             { header: 'Deleting account', path: 'deleting-account' }
-        ]
+        ],
+        'navigation-guide': [
+            { header: 'Compose notice', path: 'compose-notice' },
+            { header: 'Edit notice', path: 'edit-notice' },
+            { header: 'Delete notice', path: 'delete-notice' },
+            { header: 'Post reaction to others\' notices', path: 'post-reaction-to-notices' },
+            { header: 'Interact with others\' notices', path: 'interact-with-notices' },
+            { header: 'Report others\' notices', path: 'report-others-notices' },
+            { header: 'View saved and liked notices', path: 'view-saved-liked' },
+            { header: 'Follow other users', path: 'follow-other-users' },
+        ],
     };
 
     return (

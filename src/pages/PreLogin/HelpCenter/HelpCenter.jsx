@@ -12,12 +12,17 @@ const HelpCenter = () => {
         {
             title: 'Getting Started',
             description: 'How to get started in ShortNotice.',
-            url: 'getting-started'
+            path: 'getting-started'
         },
         {
             title: 'Manage Account',
             description: 'How to manage your ShortNotice account.',
-            url: 'manage-account'
+            path: 'manage-account'
+        },
+        {
+            title: 'Navigation Guide',
+            description: 'How to navigate within the ShortNotice environment.',
+            path: 'navigation-guide'
         }
     ]
 
@@ -39,12 +44,12 @@ const HelpCenter = () => {
                 </h3>
             </div>
 
-            <Row xs={1} sm={2} className='h-100'>
+            <Row xs={1} sm={3} className='h-100'>
                 {
                     helpCenterHeaders.map((header, idx) => {
                         return (
                             <Col key={idx} className='help-center__header-col d-flex flex-column'>
-                                <Link to={`../help-center/${header.url}`} className='help-center__header-a help-center__header-inner-div d-flex flex-column flex-grow-1 justify-content-evenly px-3 py-3 text-center'>
+                                <Link to={`../help-center/${header.path}`} className='help-center__header-a help-center__header-inner-div d-flex flex-column flex-grow-1 justify-content-evenly px-3 py-3 text-center'>
                                     <h4 className='help-center__header-title mb-3'>
                                         {header.title}
                                     </h4>
