@@ -82,7 +82,8 @@
 }
 
 .help-center__header-inner-div:hover {
-    background-color: var(--main-accent-color);
+    background-color: var(--main-accent-color-hover);
+    border-color: var(--main-accent-color-hover);
 }
 
 .help-center__header-a {

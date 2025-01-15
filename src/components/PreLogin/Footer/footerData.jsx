@@ -1,6 +1,3 @@
-import { BsTwitterX, BsInstagram, BsFacebook } from "react-icons/bs";
-
-
 export const footerData = {
 
     navigationLinks: [
@@ -14,13 +11,13 @@ export const footerData = {
 
     socialLinks: [
         {
-            id: 3, name: "X", url: "https://x.com", icon: <BsTwitterX />
+            id: 3, name: "X", url: "https://x.com", icon: <i className='bi bi-twitter-x' />
         },
         {
-            id: 2, name: "Instagram", url: "https://instagram.com", icon: <BsInstagram />
+            id: 2, name: "Instagram", url: "https://instagram.com", icon: <i className='bi bi-instagram' />
         },
         {
-            id: 1, name: "Facebook", url: "https://facebook.com", icon: <BsFacebook />
+            id: 1, name: "Facebook", url: "https://facebook.com", icon: <i className='bi bi-facebook' />
         }
     ],
 

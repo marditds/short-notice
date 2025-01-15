@@ -15,16 +15,18 @@ const NavigationBar = ({ children }) => {
             <Navbar.Brand href="/">
                 <img src={snLogo} alt='short_notice_logo' height={23} className='navigation__logo' />
             </Navbar.Brand>
-            <Navbar.Toggle aria-controls='basic-navbar-nav' />
+            <Navbar.Toggle className='navigation__toggle-btn' aria-controls='basic-navbar-nav'>
+                <i className='bi bi-three-dots-vertical navigation__burger-menu' />
+            </Navbar.Toggle>
             <Navbar.Collapse id='basic-navbar-nav abcd'
                 style={{ marginRight: isMediumScreen ? '0px' : '146px' }}
             >
                 <Nav className='ms-auto me-lg-auto'>
 
-                    <Nav.Link as={Link} to='/' className='me-lg-4'>Home</Nav.Link>
+                    <Nav.Link as={Link} to='/' className='me-lg-4 navigation__nav-link'>Home</Nav.Link>
                     {children}
-                    <Nav.Link as={Link} to='/sn-plus' className='ms-lg-4'>SN Plus</Nav.Link>
-                    <Nav.Link as={Link} to='/contact' className='ms-lg-4'>Contact</Nav.Link>
+                    <Nav.Link as={Link} to='/sn-plus' className='ms-lg-4 navigation__nav-link'>SN Plus</Nav.Link>
+                    <Nav.Link as={Link} to='/contact' className='ms-lg-4 navigation__nav-link'>Contact</Nav.Link>
 
                 </Nav>
             </Navbar.Collapse>

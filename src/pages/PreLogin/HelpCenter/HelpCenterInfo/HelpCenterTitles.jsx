@@ -1,44 +1,13 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Container, ListGroup } from 'react-bootstrap';
+import { HelpCenterArrs } from './HelpCenterArrs.jsx';
 
 const HelpCenterTitles = () => {
 
     let { helpCenterTitlesPath } = useParams();
 
-    const titleMapping = {
-        'getting-started': 'Getting Started',
-        'manage-account': 'Manage Account',
-        'navigation-guide': 'Navigation Guide',
-    };
-
-    const titlesMap = {
-        'getting-started': [
-            { header: 'How to create a ShortNotice account', path: 'how-to' },
-            { header: 'Account verification', path: 'account-verification' },
-            { header: 'Log in to your account', path: 'login-information' },
-            { header: 'Log out of your account', path: 'logout-information' },
-            { header: 'Requirements to join ShortNotice', path: 'platform-requirements' }
-        ],
-        'manage-account': [
-            { header: 'Email change', path: 'email-change' },
-            { header: 'Username change', path: 'username-change' },
-            { header: 'Avatar change', path: 'avatar-change' },
-            { header: 'Set/update interests', path: 'set-update-interests' },
-            { header: 'Account visibility', path: 'account-visibility' },
-            { header: 'Deleting account', path: 'deleting-account' }
-        ],
-        'navigation-guide': [
-            { header: 'Create notice', path: 'create-notice' },
-            { header: 'Edit notice', path: 'edit-notice' },
-            { header: 'Delete notice', path: 'delete-notice' },
-            { header: 'Post reaction to others\' notices', path: 'post-reaction-to-notices' },
-            { header: 'Interact with others\' notices', path: 'interact-with-notices' },
-            { header: 'Report others\' notices', path: 'report-others-notices' },
-            { header: 'View saved and liked notices', path: 'view-saved-liked' },
-            { header: 'Follow other users', path: 'follow-other-users' },
-        ],
-    };
+    const { titleMapping, titlesMap } = HelpCenterArrs();
 
     return (
         <Container>

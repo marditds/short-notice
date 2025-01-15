@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Container, Row, Col } from 'react-bootstrap';
 import { footerData } from './footerData.jsx';
-import snLogo from '../../../assets/sn_long.png';
 import './Footer.css';
 
 

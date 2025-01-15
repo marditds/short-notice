@@ -2,29 +2,14 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Container, Row, Col, Image } from 'react-bootstrap';
 import { screenUtils } from '../../../lib/utils/screenUtils';
+import { HelpCenterArrs } from './HelpCenterInfo/HelpCenterArrs.jsx';
 import sn_small from '../../../assets/sn_long.png';
 
 const HelpCenter = () => {
 
     const { isSmallScreen } = screenUtils();
 
-    const helpCenterHeaders = [
-        {
-            title: 'Getting Started',
-            description: 'How to get started in ShortNotice.',
-            path: 'getting-started'
-        },
-        {
-            title: 'Manage Account',
-            description: 'How to manage your ShortNotice account.',
-            path: 'manage-account'
-        },
-        {
-            title: 'Navigation Guide',
-            description: 'How to navigate within the ShortNotice environment.',
-            path: 'navigation-guide'
-        }
-    ]
+    const { helpCenterHeaders } = HelpCenterArrs();
 
     return (
         <Container>
