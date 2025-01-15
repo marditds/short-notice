@@ -149,9 +149,9 @@ const Home = ({ onSuccess }) => {
                     {/* HERO */}
                     <Row className='home__body-hero-row'>
                         <Col className='home__body-hero-col d-flex align-items-stretch'>
-                            <div className='home__body-hero-col-div px-4 py-5 d-flex flex-column align-items-stretch h-100'>
+                            <div className='home__body-hero-col-div px-4 py-4 py-md-5 d-flex flex-column align-items-stretch h-100'>
                                 <div className='py-0 py-md-5'>
-                                    <h2 className='text-center mb-0 pb-5 pb-md-0 '>Share updates and ideas in the moment. No distractions. No maintenance. Always current.</h2>
+                                    <h2 className='text-center mb-0 pb-4 pb-md-0 '>Share updates and ideas in the moment. No distractions. No maintenance. Always current.</h2>
                                 </div>
                                 <Hero />
                                 <div className='d-flex flex-column flex-sm-row align-items-center justify-content-evenly pt-3'>
@@ -183,13 +183,13 @@ const Home = ({ onSuccess }) => {
                                         className='home__body-features-col d-flex align-items-stretch'
                                     >
                                         <div className='px-3 py-2 home__body-features-col-div d-flex flex-column justify-content-between h-100'>
-                                            <div className='mt-3'>
+                                            <div className='mt-1 mt-md-3'>
                                                 <p className='mb-0'>
                                                     <strong>{feature.title}</strong>
                                                     {feature.description}
                                                 </p>
                                             </div>
-                                            <div style={{ fontSize: !isSmallScreen ? '24pt' : '15pt' }} className='text-center my-3'>{feature.icon}</div>
+                                            <div style={{ fontSize: !isSmallScreen ? '24pt' : '15pt' }} className='text-center my-2 my-md-3'>{feature.icon}</div>
                                         </div>
 
                                     </Col>
@@ -218,12 +218,12 @@ const Home = ({ onSuccess }) => {
                                         xs={12} md={6} xl={4}
                                         className='home__body-organization-perks-col d-flex align-items-stretch'>
                                         <div className='home__body-organization-perks-col-div px-3 py-2 d-flex flex-column justify-content-between h-100'>
-                                            <div className='mt-3'>
+                                            <div className='mt-1 mt-md-3'>
                                                 <p className='mb-0'>
                                                     <strong>{perk.title} </strong>{perk.description}
                                                 </p>
                                             </div>
-                                            <div style={{ fontSize: !isSmallScreen ? '24pt' : '15pt' }} className='text-center my-3'>{perk.icon}</div>
+                                            <div style={{ fontSize: !isSmallScreen ? '24pt' : '15pt' }} className='text-center my-2 my-md-3'>{perk.icon}</div>
                                         </div>
                                     </Col>
                                 )
@@ -240,14 +240,14 @@ const Home = ({ onSuccess }) => {
                                     className="home__body-organization-example-col d-flex align-items-stretch"
                                 >
                                     <div className='home__body-organization-example-col-div px-3 py-2 d-flex flex-column justify-content-between h-100'>
-                                        <div className='mt-3'>
+                                        <div className='mt-1 mt-md-3'>
                                             <p className='mb-0'>
                                                 <strong>{example.title}</strong>
                                                 <span>{example.description}</span>
                                                 {example.subtext && <sub><br />{example.subtext}</sub>}
                                             </p>
                                         </div>
-                                        <div style={{ fontSize: !isSmallScreen ? '24pt' : '15pt' }} className='text-center my-3'>
+                                        <div style={{ fontSize: !isSmallScreen ? '24pt' : '15pt' }} className='text-center my-2 my-md-3'>
                                             {example.icon}
                                         </div>
                                     </div>

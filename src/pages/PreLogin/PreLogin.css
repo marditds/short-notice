@@ -116,7 +116,16 @@
 .help__center-titles-list>.help__center-titles-list-item>a:hover {
     color: var(--main-accent-color-hover);
     text-decoration: none;
-    /* font-weight: bold; */
+}
+
+.help-center__data-link {
+    color: var(--main-text-color);
+    background-color: var(--main-accent-color);
+    transition: var(--main-transition-speed);
+}
+
+.help-center__data-link:hover {
+    color: var(--main-accent-color-hover);
 }
 
 @media (min-width: 768px) and (max-width: 991px) {

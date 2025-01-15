@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Container, ListGroup } from 'react-bootstrap';
 
@@ -8,7 +8,8 @@ const HelpCenterTitles = () => {
 
     const titleMapping = {
         'getting-started': 'Getting Started',
-        'manage-account': 'Manage Account'
+        'manage-account': 'Manage Account',
+        'navigation-guide': 'Navigation Guide',
     };
 
     const titlesMap = {
@@ -23,11 +24,12 @@ const HelpCenterTitles = () => {
             { header: 'Email change', path: 'email-change' },
             { header: 'Username change', path: 'username-change' },
             { header: 'Avatar change', path: 'avatar-change' },
+            { header: 'Set/update interests', path: 'set-update-interests' },
             { header: 'Account visibility', path: 'account-visibility' },
             { header: 'Deleting account', path: 'deleting-account' }
         ],
         'navigation-guide': [
-            { header: 'Compose notice', path: 'compose-notice' },
+            { header: 'Create notice', path: 'create-notice' },
             { header: 'Edit notice', path: 'edit-notice' },
             { header: 'Delete notice', path: 'delete-notice' },
             { header: 'Post reaction to others\' notices', path: 'post-reaction-to-notices' },
