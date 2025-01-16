@@ -1,6 +1,22 @@
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 export const HelpCenterArrs = () => {
+
+    const keys = Object.keys(titleDataMapping[helpCenterTitlesPath] || {});
+
+    const [nextTitle, setNextTitle] = useState(null);
+
+    const [previousTitle, setPreviousTitle] = useState(null);
+
+    useEffect(() => {
+        const currentIndex = keys.indexOf(helpCenterDataPath);
+
+        setPreviousTitle(currentIndex > 0 ? keys[currentIndex - 1] : null)
+
+        setNextTitle(currentIndex < keys.length - 1 ? keys[currentIndex + 1] : null);
+
+    }, [helpCenterDataPath])
 
     const helpCenterHeaders = [
         {
@@ -279,5 +295,5 @@ export const HelpCenterArrs = () => {
         }
     };
 
-    return { helpCenterHeaders, titleMapping, titlesMap, titleDataMapping, titlesDataMap }
+    return { helpCenterHeaders, titleMapping, titlesMap, titleDataMapping, titlesDataMap, nextTitle, previousTitle }
 }

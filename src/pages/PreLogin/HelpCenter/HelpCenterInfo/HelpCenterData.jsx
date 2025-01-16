@@ -1,37 +1,37 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { HelpCenterArrs } from './HelpCenterArrs';
-import { Container, Row, Col, ListGroup, Nav } from 'react-bootstrap';
+import { Container, Row, Col, ListGroup, Nav, Button } from 'react-bootstrap';
 
 const HelpCenterData = () => {
 
     let { helpCenterTitlesPath, helpCenterDataPath } = useParams();
 
-    const { titlesMap, titleDataMapping, titlesDataMap } = HelpCenterArrs();
+    const { titleDataMapping, titlesDataMap, nextTitle, previousTitle } = HelpCenterArrs();
+
+    // const keys = Object.keys(titleDataMapping[helpCenterTitlesPath] || {});
+
+    // const [nextTitle, setNextTitle] = useState(null);
+
+    // const [previousTitle, setPreviousTitle] = useState(null);
+
+    // useEffect(() => {
+    //     const currentIndex = keys.indexOf(helpCenterDataPath);
+
+    //     setPreviousTitle(currentIndex > 0 ? keys[currentIndex - 1] : null)
+
+    //     setNextTitle(currentIndex < keys.length - 1 ? keys[currentIndex + 1] : null);
+
+    // }, [helpCenterDataPath])
 
     useEffect(() => {
-        console.log('gettingStartedPath', helpCenterDataPath);
-    }, [helpCenterDataPath])
+        console.log('nextTitle', nextTitle);
+        console.log('previousTitle', previousTitle);
+    }, [titlesDataMap])
 
     return (
         <Container>
             <Row>
-                <Col>
-                    <Nav
-                        onSelect={(selectedKey) => alert(`selected ${selectedKey}`)}
-                        className='flex-column'
-                    >
-                        {titlesMap[helpCenterTitlesPath].map((title, idx) => {
-                            return (
-                                <Nav.Item key={idx}>
-                                    <Nav.Link as={Link} to={`help-center/${helpCenterTitlesPath}/${title.path}`}>
-                                        {title.header}
-                                    </Nav.Link>
-                                </Nav.Item>
-                            )
-                        })}
-                    </Nav>
-                </Col>
                 <Col>
                     <h4> {
                         titleDataMapping[helpCenterTitlesPath]?.[helpCenterDataPath]
@@ -52,6 +52,39 @@ const HelpCenterData = () => {
                         </ListGroup>
                         <p className='mt-2'>{titlesDataMap[helpCenterDataPath].outro}</p>
                     </div>
+                </Col>
+            </Row>
+
+            <Row>
+                <Col>
+                    {previousTitle && (
+                        <div>
+                            <h4 className='mb-0'>Previous</h4>
+                            <Button as={Link}
+                                to={`help-center/${helpCenterTitlesPath}/${previousTitle}`}
+                                className='help-center__title-switch-btn px-0'
+                            >
+                                <i class='bi bi-arrow-left me-1 me-md-2' />
+                                {titleDataMapping[helpCenterTitlesPath][previousTitle]}
+                            </Button>
+                        </div>
+                    )}
+                </Col>
+                <Col className='d-flex justify-content-end'>
+                    {nextTitle && (
+                        <div>
+                            <h4 className='d-flex justify-content-end mb-0'>Next</h4>
+                            <Button as={Link}
+                                to={`help-center/${helpCenterTitlesPath}/${nextTitle}`}
+                                className='help-center__title-switch-btn px-0'
+                            >
+                                <div className='d-inline'>
+                                    {titleDataMapping[helpCenterTitlesPath][nextTitle]}
+                                    <i class='bi bi-arrow-right ms-1 ms-md-2' />
+                                </div>
+                            </Button>
+                        </div>
+                    )}
                 </Col>
             </Row>
         </Container>
