@@ -1,22 +1,9 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 
 export const HelpCenterArrs = () => {
 
-    const keys = Object.keys(titleDataMapping[helpCenterTitlesPath] || {});
-
-    const [nextTitle, setNextTitle] = useState(null);
-
-    const [previousTitle, setPreviousTitle] = useState(null);
-
-    useEffect(() => {
-        const currentIndex = keys.indexOf(helpCenterDataPath);
-
-        setPreviousTitle(currentIndex > 0 ? keys[currentIndex - 1] : null)
-
-        setNextTitle(currentIndex < keys.length - 1 ? keys[currentIndex + 1] : null);
-
-    }, [helpCenterDataPath])
+    let { helpCenterTitlesPath, helpCenterDataPath } = useParams();
 
     const helpCenterHeaders = [
         {
@@ -36,13 +23,13 @@ export const HelpCenterArrs = () => {
         }
     ];
 
-    const titleMapping = {
+    const sectionTitleByPath = {
         'getting-started': 'Getting Started',
         'manage-account': 'Manage Account',
         'navigation-guide': 'Navigation Guide',
     };
 
-    const titlesMap = {
+    const sectionTopicsByPath = {
         'getting-started': [
             { header: 'How to create a ShortNotice account', path: 'how-to' },
             { header: 'Account verification', path: 'account-verification' },
@@ -70,7 +57,7 @@ export const HelpCenterArrs = () => {
         ],
     };
 
-    const titleDataMapping = {
+    const topicTitleByPath = {
         'getting-started': {
             'how-to': 'How to create a ShortNotice account',
             'account-verification': 'Account verification',
@@ -98,7 +85,7 @@ export const HelpCenterArrs = () => {
         }
     };
 
-    const titlesDataMap = {
+    const topicDetailsByPath = {
         'how-to': {
             intro: 'To create a ShortNotice account, follow these simple steps:',
             steps: [
@@ -295,5 +282,31 @@ export const HelpCenterArrs = () => {
         }
     };
 
-    return { helpCenterHeaders, titleMapping, titlesMap, titleDataMapping, titlesDataMap, nextTitle, previousTitle }
+    const keys = Object.keys(topicTitleByPath[helpCenterTitlesPath] || {});
+
+    const values = Object.values(topicTitleByPath[helpCenterTitlesPath] || {});
+
+    const topicPaths = keys;
+
+    const topicTitles = values;
+
+    const [nextTitle, setNextTitle] = useState(null);
+
+    const [previousTitle, setPreviousTitle] = useState(null);
+
+    useEffect(() => {
+
+        // console.log('keys', keys);
+
+        // console.log('values', values);
+
+        const currentIndex = keys.indexOf(helpCenterDataPath);
+
+        setPreviousTitle(currentIndex > 0 ? keys[currentIndex - 1] : null)
+
+        setNextTitle(currentIndex < keys.length - 1 ? keys[currentIndex + 1] : null);
+
+    }, [helpCenterDataPath])
+
+    return { helpCenterHeaders, sectionTitleByPath, sectionTopicsByPath, topicTitleByPath, topicDetailsByPath, nextTitle, previousTitle, topicTitles, topicPaths }
 }

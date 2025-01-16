@@ -101,6 +101,10 @@
     color: var(--main-text-color-selected);
 }
 
+.help__center-titles-list {
+    min-width: fit-content;
+}
+
 .help__center-titles-list>.help__center-titles-list-item,
 .help__center-data-list>.help__center-data-list-item {
     background-color: transparent !important;
@@ -119,6 +123,10 @@
     text-decoration: none;
 }
 
+.help__center-titles-list-item:first-child {
+    padding-top: 0px !important;
+}
+
 .help-center__data-link {
     color: var(--main-text-color);
     background-color: var(--main-accent-color);
@@ -129,11 +137,20 @@
     color: var(--main-accent-color-hover);
 }
 
-.help-center__title-switch-btn {
+.help-center__offcanvas-btn {
     background-color: transparent !important;
     color: var(--main-text-color) !important;
     border-color: transparent !important;
     font-size: 18px !important;
+}
+
+.help-center__title-switch-btn {
+    background-color: transparent !important;
+    color: var(--main-text-color) !important;
+    border-color: var(--main-accent-color) !important;
+    font-size: 18px !important;
+    transition: var(--main-transition-speed) !important;
+
 }
 
 .help-center__title-switch-btn:hover,
@@ -141,12 +158,36 @@
     box-shadow: none !important;
     /*background-color: var(--main-accent-color-hover) !important; */
     color: var(--main-accent-color-hover) !important;
+    border-color: var(--main-accent-color-hover) !important;
 }
 
-/* .help-center__title-switch-btn:active {
-    background-color: var(--main-accent-color-hover) !important;
-    border-color: var(--main-accent-color-hover) !important; 
-} */
+.help-center__offcanvas-btn {
+    max-width: fit-content;
+    padding-left: 0 !important;
+}
+
+.help-center__offcanvas {
+    max-width: max-content !important;
+}
+
+.help-center__offcanvas-body {
+    display: flex;
+}
+
+.help-center__offcanvas-body>ul {
+    justify-content: center;
+}
+
+.help-center__breadcrumb-link {
+    color: var(--main-text-color) !important;
+    padding-inline: 0 !important;
+}
+
+.help-center__breadcrumb-link:hover,
+.help-center__breadcrumb-link:focus {
+    color: var(--main-accent-color-hover) !important;
+    box-shadow: none !important;
+}
 
 @media (min-width: 768px) and (max-width: 991px) {
     .home__body-container {
