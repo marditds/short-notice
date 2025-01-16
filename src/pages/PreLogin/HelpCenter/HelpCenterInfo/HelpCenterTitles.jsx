@@ -1,8 +1,8 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Container, ListGroup } from 'react-bootstrap';
-import { HelpCenterArrs } from './HelpCenterArrs.jsx';
-import { HelpCenterBreadCrumb } from './HelpCenterBreadCrumb.jsx';
+import { HelpCenterArrs } from '../../../../components/PreLogin/HelpCenter/HelpCenterArrs.jsx';
+import { HelpCenterBreadCrumb } from '../../../../components/PreLogin/HelpCenter/HelpCenterBreadCrumb.jsx';
 
 const HelpCenterTitles = () => {
 

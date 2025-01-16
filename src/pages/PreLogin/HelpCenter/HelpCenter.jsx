@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Container, Row, Col, Image } from 'react-bootstrap';
 import { screenUtils } from '../../../lib/utils/screenUtils';
-import { HelpCenterArrs } from './HelpCenterInfo/HelpCenterArrs.jsx';
+import { HelpCenterArrs } from '../../../components/PreLogin/HelpCenter/HelpCenterArrs.jsx';
 import sn_small from '../../../assets/sn_long.png';
 
 const HelpCenter = () => {

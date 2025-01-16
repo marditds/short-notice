@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { HelpCenterArrs } from './HelpCenterArrs';
+import { HelpCenterArrs } from '../../../../components/PreLogin/HelpCenter/HelpCenterArrs';
 import { Container, Row, Col, ListGroup, Offcanvas, Button } from 'react-bootstrap';
-import { HelpCenterBreadCrumb } from './HelpCenterBreadCrumb';
+import { HelpCenterBreadCrumb } from '../../../../components/PreLogin/HelpCenter/HelpCenterBreadCrumb';
+import { HelpCenterOffcanvas } from '../../../../components/PreLogin/HelpCenter/HelpCenterOffcanvas';
 
 const HelpCenterData = () => {
 
@@ -10,7 +11,7 @@ const HelpCenterData = () => {
 
     const { topicTitleByPath, topicDetailsByPath, nextTitle, previousTitle, sectionTopicsByPath, sectionTitleByPath } = HelpCenterArrs();
 
-    const [showOffcanvas, setShowOffcanvas] = useState(false);
+
 
     useEffect(() => {
         console.log('sectionTitleByPath:', sectionTitleByPath[helpCenterTitlesPath]);
@@ -19,8 +20,7 @@ const HelpCenterData = () => {
 
     }, [topicDetailsByPath]);
 
-    const handleCloseOffcanvas = () => setShowOffcanvas(false);
-    const handleShowOffcanvas = () => setShowOffcanvas(true);
+
 
     return (
         <Container>
@@ -35,28 +35,11 @@ const HelpCenterData = () => {
 
             <div className='d-flex flex-column flex-sm-row'>
 
-                <Button className='d-sm-none help-center__offcanvas-btn' onClick={handleShowOffcanvas}>
-                    <i className='bi bi-list' />
-                </Button>
-
-                <Offcanvas show={showOffcanvas} onHide={handleCloseOffcanvas} className='help-center__offcanvas'>
-                    <Offcanvas.Body className='help-center__offcanvas-body'>
-                        <ListGroup as='ul' className='help__center-titles-list'>
-                            <h6>{sectionTitleByPath[helpCenterTitlesPath]}</h6>
-                            {
-                                sectionTopicsByPath[helpCenterTitlesPath].map((title, idx) => {
-                                    return (
-                                        <ListGroup.Item as={'li'} className='help__center-titles-list-item' key={idx}>
-                                            <Link to={`help-center/${helpCenterTitlesPath}/${title.path}`} onClick={handleCloseOffcanvas}>
-                                                {title.header}
-                                            </Link>
-                                        </ListGroup.Item>
-                                    )
-                                })
-                            }
-                        </ListGroup>
-                    </Offcanvas.Body>
-                </Offcanvas>
+                <HelpCenterOffcanvas
+                    helpCenterTitlesPath={helpCenterTitlesPath}
+                    sectionTitleByPath={sectionTitleByPath}
+                    sectionTopicsByPath={sectionTopicsByPath}
+                />
 
                 <ListGroup as='ul' className='help__center-titles-list d-none d-sm-block'>
                     {

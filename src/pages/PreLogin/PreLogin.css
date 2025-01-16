@@ -198,6 +198,10 @@
     color: var(--main-text-color) !important;
 }
 
+.help__center-titles-list-item>a:hover {
+    color: var(--main-accent-color-hover) !important;
+}
+
 @media (min-width: 768px) and (max-width: 991px) {
     .home__body-container {
         display: grid;
