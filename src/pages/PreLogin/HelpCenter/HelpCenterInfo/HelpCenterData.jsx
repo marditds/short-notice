@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { HelpCenterArrs } from './HelpCenterArrs';
-import { Container, Row, Col, ListGroup, Offcanvas, Nav, Breadcrumb, Button } from 'react-bootstrap';
+import { Container, Row, Col, ListGroup, Offcanvas, Button } from 'react-bootstrap';
 import { HelpCenterBreadCrumb } from './HelpCenterBreadCrumb';
 
 const HelpCenterData = () => {
@@ -42,6 +42,7 @@ const HelpCenterData = () => {
                 <Offcanvas show={showOffcanvas} onHide={handleCloseOffcanvas} className='help-center__offcanvas'>
                     <Offcanvas.Body className='help-center__offcanvas-body'>
                         <ListGroup as='ul' className='help__center-titles-list'>
+                            <h6>{sectionTitleByPath[helpCenterTitlesPath]}</h6>
                             {
                                 sectionTopicsByPath[helpCenterTitlesPath].map((title, idx) => {
                                     return (
@@ -104,13 +105,15 @@ const HelpCenterData = () => {
                                 <Button as={Link}
                                     to={`help-center/${helpCenterTitlesPath}/${previousTitle}`}
                                     className='help-center__title-switch-btn
-                                       d-flex justify-content-start
-                                        ps-2 py-3 flex-grow-1'
+                                       d-flex flex-column justify-content-center 
+                                        ps-2 py-3 flex-grow-1 h-100'
                                 >
-                                    <i className='bi bi-arrow-left me-1 me-md-2 d-flex align-items-center' />
-                                    <span className='text-start'>
-                                        {topicTitleByPath[helpCenterTitlesPath][previousTitle]}
-                                    </span>
+                                    <div className='d-flex'>
+                                        <i className='bi bi-arrow-left me-1 me-md-2 d-flex align-items-center' />
+                                        <span className='text-start'>
+                                            {topicTitleByPath[helpCenterTitlesPath][previousTitle]}
+                                        </span>
+                                    </div>
                                 </Button>
                             )}
                         </Col>
@@ -119,13 +122,15 @@ const HelpCenterData = () => {
                                 <Button as={Link}
                                     to={`help-center/${helpCenterTitlesPath}/${nextTitle}`}
                                     className='help-center__title-switch-btn 
-                                    d-flex justify-content-end 
-                                    pe-2 py-3 flex-grow-1'
+                                    d-flex flex-column justify-content-center  
+                                    pe-2 py-3 flex-grow-1 h-100'
                                 >
-                                    <span className='text-end'>
-                                        {topicTitleByPath[helpCenterTitlesPath][nextTitle]}
-                                    </span>
-                                    <i className='bi bi-arrow-right ms-1 ms-md-2 d-flex align-items-center' />
+                                    <div className='d-flex justify-content-end '>
+                                        <span className='text-end'>
+                                            {topicTitleByPath[helpCenterTitlesPath][nextTitle]}
+                                        </span>
+                                        <i className='bi bi-arrow-right ms-1 ms-md-2 d-flex align-items-center' />
+                                    </div>
                                 </Button>
                             )}
                         </Col>

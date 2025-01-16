@@ -189,6 +189,15 @@
     box-shadow: none !important;
 }
 
+.help-center__offcanvas-body {
+    background-color: var(--main-dropdown-bg-color);
+    color: var(--main-text-color);
+}
+
+.help__center-titles-list-item>a {
+    color: var(--main-text-color) !important;
+}
+
 @media (min-width: 768px) and (max-width: 991px) {
     .home__body-container {
         display: grid;
