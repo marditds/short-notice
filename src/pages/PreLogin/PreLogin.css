@@ -202,6 +202,18 @@
     color: var(--main-accent-color-hover) !important;
 }
 
+.contact__title,
+.contact__text,
+.contact__email-link {
+    color: var(--main-text-color);
+    transition: var(--main-transition-speed);
+}
+
+.contact__email-link:hover {
+    color: var(--main-accent-color-hover);
+}
+
+
 @media (min-width: 768px) and (max-width: 991px) {
     .home__body-container {
         display: grid;

@@ -1,0 +1,15 @@
+
+
+
+
+
+
+
+
+Any Google account owner can create an account with ShortNotice. 
+ShortNotice collects the registerant's gmail and given name as it appears in Google's servives.
+By using the servives provided by ShortNotice, you take full responsibility for its content. ShortNotice is not responsible for the accuracy and reliablity of the content shared by the users. Simulteneously, ShortNotice reserves the right to remove shared content, and suspend account if deemed neccessary. ShortNotice is not responsible in ensuring the exclusivity of the content shared by users.
+The terms of servives are not final, and they may change in the future. Bu using ShortNotice, the users agree that they are responsible in staying updated witht the terms of servives.
+The users password is the same as their Google account's passowrd. ShortNotice does not provide extra layers of security to the users' accounts. The safety of the users' account is directly related to the stength of the users' Google account password. ShortNotice does not provide multi-factor authentication. ShortNotice is not responsible for the strength of the password of the users' Google account.
+The users cannot move or transfer their ShorNotice account. Each ShortNotice account is tied to a single Google account. ShortNotice is not associated or affiliated with Google.
+By using the services provied by ShortNotice, the users agree with the aforementioned terms. The users are responsible with seeking and familiarzing themeselves with the terms of servies prior to joining the platform.
