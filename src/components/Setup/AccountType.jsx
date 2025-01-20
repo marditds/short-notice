@@ -3,8 +3,12 @@ import { Form, Row, Col } from 'react-bootstrap';
 import { BsFillPersonFill } from "react-icons/bs";
 import { PiBagFill } from "react-icons/pi";
 import { AccountTypeDesc } from './AccountTypeDesc';
+import { screenUtils } from '../../lib/utils/screenUtils';
 
 export const AccountType = ({ setAccountType, accountType }) => {
+
+    const { isSmallScreen } = screenUtils();
+
     const [selectedType, setSelectedType] = useState(null);
 
     const handleSelection = (type) => {
@@ -16,19 +20,19 @@ export const AccountType = ({ setAccountType, accountType }) => {
         {
             type: 'personal',
             label: 'Personal',
-            icon: <BsFillPersonFill size={45} color={selectedType === 'personal' ? 'var(--main-bg-color)' : 'var(--main-text-color)'} style={{ transition: 'var(--main-transition-speed)' }} />,
+            icon: <BsFillPersonFill size={!isSmallScreen ? 45 : 38} color={selectedType === 'personal' ? 'var(--main-bg-color)' : 'var(--main-text-color)'} style={{ transition: 'var(--main-transition-speed)' }} />,
             disabled: false,
         },
         {
             type: 'business',
             label: 'Business',
-            icon: <PiBagFill size={45} color={selectedType === 'personal' ? 'var(--main-bg-color)' : 'var(--main-text-color)'} style={{ transition: 'var(--main-transition-speed)' }} />,
+            icon: <PiBagFill size={!isSmallScreen ? 45 : 38} color={selectedType === 'personal' ? 'var(--main-bg-color)' : 'var(--main-text-color)'} style={{ transition: 'var(--main-transition-speed)' }} />,
             disabled: false,
         },
         {
             type: 'organization',
             label: 'Organization',
-            icon: <i className="bi bi-diagram-3-fill" style={{ color: selectedType === 'organization' ? 'var(--main-bg-color)' : 'var(--main-text-color)', fontSize: '45px', transition: 'var(--main-transition-speed)' }}></i>,
+            icon: <i className='bi bi-diagram-3-fill' style={{ color: selectedType === 'organization' ? 'var(--main-bg-color)' : 'var(--main-text-color)', fontSize: !isSmallScreen ? '45px' : '38px', transition: 'var(--main-transition-speed)' }}></i>,
             disabled: false,
         },
     ];

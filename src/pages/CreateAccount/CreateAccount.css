@@ -94,6 +94,35 @@
     background-color: var(--main-accent-color-hover) !important;
 }
 
+.createAccount__btn:active,
+.createAccount__btn:focus {
+    background-color: var(--main-accent-color-hover) !important;
+    box-shadow: none !important;
+}
+
+.createUsername__checkbox>label>span {
+    display: flex;
+    /* vertical-align: middle; */
+}
+
+.createUsername__checkbox button {
+    background-color: transparent;
+    border: 0;
+    padding: 0;
+    height: 20px;
+    color: var(--main-accent-color);
+    transition: var(--main-transition-speed) !important;
+}
+
+.createUsername__checkbox button:hover,
+.createUsername__checkbox button:active,
+.createUsername__checkbox button:focus {
+    background-color: transparent !important;
+    border: 0 !important;
+    color: var(--main-accent-color-hover) !important;
+    box-shadow: none !important;
+}
+
 .createUsername__checkbox>input:active,
 .createUsername__checkbox>input:focus {
     box-shadow: none;
@@ -117,12 +146,36 @@
 
     .createUsername__container,
     .createUsername__username-field,
-    .createAccount__btn {
+    .createAccount__btn,
+    .createUsername__checkbox button {
         font-size: var(--mobile-font-size) !important;
     }
 
     .setPasscode__passcode-field {
         max-height: 29px;
+
+    }
+
+    .createUsername__checkbox {
+        min-height: 20px !important;
+        display: flex !important;
+        align-items: center;
+        /* place-items: center; */
+        /* margin-top: 120px; */
+    }
+
+    .createUsername__checkbox>input {
+        margin-top: 0px;
+    }
+
+    .createUsername__checkbox>label>span {
+        display: flex;
+        align-items: center;
+        margin-left: 6px;
+    }
+
+    .createUsername__checkbox>label>span>button {
+        display: inline;
     }
 }
 
