@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export const footerData = {
 
     navigationLinks: [
@@ -22,6 +24,8 @@ export const footerData = {
     ],
 
     copyright: `© ${new Date().getFullYear()} ShortNotice. All rights reserved.`,
+
+    developer: <span>Developed by <Link target='_blank' to='https://marditds.netlify.app'>Mardit DerSoukiassian</Link>.</span>
 
 };
 

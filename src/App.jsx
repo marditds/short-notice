@@ -293,7 +293,7 @@ function App() {
   return (
     <>
       {isLoggedIn ? (
-        hasUsername ? (
+        !hasUsername ? (
           <Outlet
             context={{
               googleUserData, setGoogleUserData,

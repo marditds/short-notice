@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { googleLogout } from '@react-oauth/google';
 import { Container, Stack, Row, Col, Form, Button, Alert, } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
@@ -29,9 +29,15 @@ const CreateAccount = ({ setUser }) => {
 
     const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
 
+    const [captchaKey, setCaptchaKey] = useState(null);
+
     const [errorMessage, setErrorMessage] = useState('');
 
     const [passcode, setPasscode] = useState('');
+
+    const [tosCheck, setTosCheck] = useState(false);
+
+    const [privacyPolicyCheck, setPrivacyPolicyCheck] = useState(false);
 
     const onUsernameChange = (e) => {
         console.log('Input changed:', e.target.value);
@@ -50,6 +56,14 @@ const CreateAccount = ({ setUser }) => {
         } else {
             setErrorMessage('Passcode must be exactly 6 characters long.');
         }
+    }
+
+    const handleTOSCheck = () => {
+        setTosCheck(preVal => !preVal)
+    }
+
+    const handlePrivacyPolicyCheck = () => {
+        setPrivacyPolicyCheck(preVal => !preVal)
     }
 
     const handleDoneClick = async () => {
@@ -114,20 +128,38 @@ const CreateAccount = ({ setUser }) => {
     };
 
     const onCaptchaChange = (value) => {
-        if (value) {
+
+        if (value || value !== null) {
+            console.log(value);
+            setCaptchaKey(value);
             setIsCaptchaVerified(true);
         }
+
+        if (value === null) {
+            setIsCaptchaVerified(false);
+        }
+
     };
+
+    useEffect(() => {
+        console.log('captchaKey:', captchaKey);
+        if (isCaptchaVerified === false) {
+            setCaptchaKey(null);
+        }
+    }, [captchaKey, isCaptchaVerified])
+
+
 
     return (
         <Container className='
         createUsername__container 
         '>
-            <Form>
+            <Form className='my-5 my-sm-0'>
                 <Stack gap={3}>
 
                     <AccountType setAccountType={setAccountType} accountType={accountType} />
 
+                    {/* Text Fields */}
                     <Row xs={1} sm={2} className='align-items-end'>
                         <Col>
                             <CreateUsername accountType={accountType} username={username} onUsernameChange={onUsernameChange} />
@@ -138,17 +170,49 @@ const CreateAccount = ({ setUser }) => {
                             <SetPasscode accountType={accountType} passcode={passcode} onPasscodeChange={onPasscodeChange} />
                         </Col>
                     </Row>
+
+                    <Row className='flex-column'>
+                        {/* TOS */}
+                        <Col>
+                            <Form.Check
+                                label='I have read and understood the terms of services.'
+                                type='checkbox'
+                                id='tosCheckbox'
+                                onChange={handleTOSCheck}
+                                className='createUsername__checkbox'
+                            />
+                        </Col>
+
+                        {/* PRivacy Policy */}
+                        <Col>
+                            <Form.Check
+                                label='I have read and understood the privacy policy.'
+                                type='checkbox'
+                                id='privacyPolicyCheckbox'
+                                onChange={handlePrivacyPolicyCheck}
+                                className='createUsername__checkbox'
+                            />
+                        </Col>
+                    </Row>
+
+                    {/* ReCAPTCHA */}
                     <div className='mb-3'>
                         <ReCAPTCHA
+                            className='hakobos'
                             sitekey={import.meta.env.VITE_CAPTCHA_SITE_KEY}
-                            onChange={onCaptchaChange}
+                            onChange={(value) => onCaptchaChange(value)}
+                            onExpired={() => setIsCaptchaVerified(false)}
+                            onErrored={() => {
+                                setIsCaptchaVerified(false);
+                                setErrorMessage('ReCAPTCHA verification failed. Please try again.');
+                            }}
                         />
                     </div>
 
-                    <div className='d-flex justify-content-between justify-content-sm-start'>
+                    <div className='mb-5 mb-sm-0 d-flex justify-content-between justify-content-sm-start'>
                         <Button
                             onClick={handleDoneClick}
-                            disabled={!isCaptchaVerified || !username || username.trim() === '' || (accountType === 'organization' && passcode.length !== 6)}
+                            disabled={!isCaptchaVerified || !username || username.trim() === '' || username.includes(' ') || username === 'profile' || (accountType === 'organization' && passcode.length !== 6) || tosCheck !== true || privacyPolicyCheck !== true}
                             className='createAccount__btn'
                         >
                             Done

@@ -2,6 +2,7 @@
     display: grid;
     align-items: center;
     height: 100vh !important;
+    color: var(--main-text-color);
 }
 
 .createUsername__accountType--radio {
@@ -91,6 +92,18 @@
 
 .createAccount__btn:hover {
     background-color: var(--main-accent-color-hover) !important;
+}
+
+.createUsername__checkbox>input:active,
+.createUsername__checkbox>input:focus {
+    box-shadow: none;
+    border-color: var(--main-text-color) !important;
+}
+
+.createUsername__checkbox>input:checked {
+    background-color: var(--main-accent-color);
+    border-color: var(--main-accent-color) !important;
+
 }
 
 @media (min-width:576px) and (max-width: 767px) {

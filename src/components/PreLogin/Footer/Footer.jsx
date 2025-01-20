@@ -61,11 +61,13 @@ const Footer = () => {
                 </Row>
 
                 {/* COPYRIGHT */}
-                <Row md={12} className='justify-content-center pt-2 pb-4'>
+                <Row md={12} className='flex-column justify-content-center pt-2 pb-4'>
                     <Col className='footer__col d-flex justify-content-center'>
                         {footerData.copyright}
                     </Col>
-
+                    <Col className='footer__col d-flex justify-content-center'>
+                        {footerData.developer}
+                    </Col>
                 </Row>
             </Container>
         </Container>
