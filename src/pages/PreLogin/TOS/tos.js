@@ -1,11 +1,11 @@
 export const tos = [
     {
-        title: "Account Creation",
-        description: "Any Google account owner can create an account with ShortNotice. By registering, users agree to provide accurate and complete information as requested during the registration process. ShortNotice collects the registrant's Gmail address and given name as it appears in Google's services."
-    },
-    {
         title: "Scope of Service",
         description: "ShortNotice is a personal project and not a product of a large or well-established organization. As such, users should not expect the same level of infrastructure, security, or feature set typically provided by major social media platforms. While every reasonable effort is made to ensure the reliability of the platform, ShortNotice cannot guarantee advanced security features or comprehensive protections against potential risks. Users are encouraged to use strong passwords and exercise caution when sharing sensitive information."
+    },
+    {
+        title: "Account Creation",
+        description: "Any Google account owner can create an account with ShortNotice. By registering, users agree to provide the email account and the given name associted with their Google account. ShortNotice collects the registrant's Gmail address and given name as it appears in Google's services."
     },
     {
         title: "Content Responsibility",
@@ -20,8 +20,8 @@ export const tos = [
         description: "ShortNotice does not guarantee or enforce the exclusivity of content shared by its users. Users are advised to ensure that they have the necessary rights and permissions to share any content on the platform."
     },
     {
-        title: "Terms Updates",
-        description: "These Terms of Service are subject to change without prior notice. By continuing to use ShortNotice after any changes, users agree to the updated terms. Users are responsible for reviewing the Terms of Service periodically to stay informed of any updates."
+        title: "Third-Party Affiliation and Services",
+        description: "ShortNotice is not affiliated, associated, or endorsed by Google. Any use of Google's authentication services is subject to Google's terms and policies. ShortNotice relies on Appwrite, a third-party backend platform, for data storage, management, and other backend services. Any complications, outages, or disruptions resulting from issues with Appwrite are beyond ShortNotice's control.             ShortNotice is not responsible for any loss of data, downtime, or other inconveniences caused by Appwrite's performance, maintenance, or outages. Users acknowledge and accept that the availability and performance of ShortNotice's services are partially dependent on Appwrite's infrastructure."
     },
     {
         title: "Security and Account Access",
@@ -32,8 +32,8 @@ export const tos = [
         description: "ShortNotice accounts are non-transferable and are tied to a single Google account. Users cannot move or transfer their ShortNotice accounts to another individual or Google account."
     },
     {
-        title: "Third-Party Affiliation",
-        description: "ShortNotice is not affiliated, associated, or endorsed by Google. Any use of Google's authentication services is subject to Google's terms and policies."
+        title: "Terms Updates",
+        description: "These Terms of Service are subject to change without prior notice. By continuing to use ShortNotice after any changes, users agree to the updated terms. Users are responsible for reviewing the Terms of Service periodically to stay informed of any updates."
     },
     {
         title: "Acceptance of Terms",
