@@ -10,7 +10,8 @@ import ReCAPTCHA from 'react-google-recaptcha';
 import { CreateUsername } from '../../components/Setup/CreateUsername';
 import { SetPasscode } from '../../components/Setup/SetPasscode';
 import useUserInfo from '../../lib/hooks/useUserInfo';
-import { tos } from '../PreLogin/TOS/tos';
+import { tosData } from '../PreLogin/TOS/tosData';
+import { reportCategories } from '../../components/PreLogin/ComunityGuidelines/communityGuidelines';
 
 const CreateAccount = ({ setUser }) => {
 
@@ -41,6 +42,7 @@ const CreateAccount = ({ setUser }) => {
     const [privacyPolicyCheck, setPrivacyPolicyCheck] = useState(false);
 
     const [showTOSModal, setShowTOSModal] = useState(false);
+    const [showCommGuideModal, setShowCommGuideModal] = useState(false);
     const [showPrivacyModal, setShowPrivacyModal] = useState(false);
 
     const onUsernameChange = (e) => {
@@ -153,6 +155,14 @@ const CreateAccount = ({ setUser }) => {
         setShowTOSModal(false);
     }
 
+    const handleShowCommGuideModal = () => {
+        setShowCommGuideModal(true);
+    }
+
+    const handleCloseCommGuideModal = () => {
+        setShowCommGuideModal(false);
+    }
+
     const handleShowPrivacyModal = () => {
         setShowPrivacyModal(true);
     }
@@ -195,7 +205,18 @@ const CreateAccount = ({ setUser }) => {
                         {/* TOS */}
                         <Col>
                             <Form.Check
-                                label={<span>I have read and understood the <Button onClick={handleShowTOSModal} className='ms-1'>terms of services</Button>.</span>}
+                                label={
+                                    <span>
+                                        I have read and agree to the
+                                        <Button onClick={handleShowTOSModal} className='ms-1'>
+                                            Terms of Services
+                                        </Button>
+                                        and
+                                        <Button onClick={handleShowCommGuideModal} className='ms-1'>
+                                            Community Guidelines
+                                        </Button>
+                                        .
+                                    </span>}
                                 type='checkbox'
                                 id='tosCheckbox'
                                 onChange={handleTOSCheck}
@@ -208,7 +229,7 @@ const CreateAccount = ({ setUser }) => {
                         {/* PRivacy Policy */}
                         <Col>
                             <Form.Check
-                                label={<span>I have read and understood the <Button onClick={handleShowPrivacyModal} className='ms-1'>privacy policy</Button>.</span>}
+                                label={<span>I have read and agree to the <Button onClick={handleShowPrivacyModal} className='ms-1'>Privacy Policy</Button>.</span>}
                                 type='checkbox'
                                 id='privacyPolicyCheckbox'
                                 onChange={handlePrivacyPolicyCheck}
@@ -268,7 +289,7 @@ const CreateAccount = ({ setUser }) => {
                 <Modal.Body className='createAccount__tos-modal-body px-0 px-md-2'>
                     <ListGroup className='createAccount__tos-list-group'>
                         {
-                            tos.map((term, idx) => {
+                            tosData.map((term, idx) => {
                                 return (
                                     <ListGroup.Item key={idx} className='createAccount__tos-list-item'>
                                         <h5>{idx + 1}. {term.title}</h5>
@@ -281,6 +302,34 @@ const CreateAccount = ({ setUser }) => {
                 </Modal.Body>
                 <Modal.Footer>
                     <Button onClick={handleCloseTOSModal} className='mx-0 createAccount__btn'>
+                        Close
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+
+            {/* Community Guidelines */}
+            <Modal show={showCommGuideModal} onHide={handleCloseCommGuideModal} className='createAccount__tos-modal'>
+                <Modal.Header>
+                    <Modal.Title>
+                        <h4 className='mb-0'>Community Guidelines</h4>
+                    </Modal.Title>
+                </Modal.Header>
+                <Modal.Body className='createAccount__tos-modal-body px-0 px-md-2'>
+                    <ListGroup className='createAccount__tos-list-group'>
+                        {
+                            reportCategories.map((category, idx) => {
+                                return (
+                                    <ListGroup.Item key={idx} className='createAccount__tos-list-item'>
+                                        <h5>{idx + 1}. {term.title}</h5>
+                                        <p>{category.name}</p>
+                                    </ListGroup.Item>
+                                )
+                            })
+                        }
+                    </ListGroup>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button onClick={handleCloseCommGuideModal} className='mx-0 createAccount__btn'>
                         Close
                     </Button>
                 </Modal.Footer>

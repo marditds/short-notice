@@ -8,6 +8,7 @@ import About from './About/About';
 import SNPlus from './SNPlus/SNPlus';
 import TOS from './TOS/TOS';
 import Privacy from './Privacy/Privacy';
+import CommunityGuidelines from './CommunityGuidelines/CommunityGuidelines';
 import HelpCenter from './HelpCenter/HelpCenter';
 import Contact from './Contact/Contact';
 import './PreLogin.css';
@@ -40,6 +41,9 @@ const PreLogin = ({ onSuccess }) => {
             }
             {
                 location.pathname === '/privacy' && <Privacy />
+            }
+            {
+                location.pathname === '/community-guidelines' && <CommunityGuidelines />
             }
             {
                 location.pathname === '/help-center' && <HelpCenter />

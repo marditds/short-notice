@@ -1,4 +1,4 @@
-export const tos = [
+export const tosData = [
     {
         title: "Scope of Service",
         description: "ShortNotice is a personal project and not a product of a large or well-established organization. As such, users should not expect the same level of infrastructure, security, or feature set typically provided by major social media platforms. While every reasonable effort is made to ensure the reliability of the platform, ShortNotice cannot guarantee advanced security features or comprehensive protections against potential risks. Users are encouraged to use strong passwords and exercise caution when sharing sensitive information."
@@ -21,7 +21,7 @@ export const tos = [
     },
     {
         title: "Third-Party Affiliation and Services",
-        description: "ShortNotice is not affiliated, associated, or endorsed by Google. Any use of Google's authentication services is subject to Google's terms and policies. ShortNotice relies on Appwrite, a third-party backend platform, for data storage, management, and other backend services. Any complications, outages, or disruptions resulting from issues with Appwrite are beyond ShortNotice's control.             ShortNotice is not responsible for any loss of data, downtime, or other inconveniences caused by Appwrite's performance, maintenance, or outages. Users acknowledge and accept that the availability and performance of ShortNotice's services are partially dependent on Appwrite's infrastructure."
+        description: "ShortNotice is not affiliated with, associated with, or endorsed by Google. Any use of Google's authentication services is subject to Google's terms and policies. ShortNotice relies on Appwrite, a third-party backend platform, for data storage, management, and other backend services. Any complications, outages, or disruptions resulting from issues with Appwrite are beyond ShortNotice's control.             ShortNotice is not responsible for any loss of data, downtime, or other inconveniences caused by Appwrite's performance, maintenance, or outages. Users acknowledge and accept that the availability and performance of ShortNotice's services are partially dependent on Appwrite's infrastructure."
     },
     {
         title: "Security and Account Access",

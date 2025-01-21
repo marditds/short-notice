@@ -7,6 +7,7 @@ import { screenUtils } from '../../../lib/utils/screenUtils.js';
 import { SlClose } from "react-icons/sl";
 import { Loading } from '../../Loading/Loading.jsx';
 import { EndAsterisks } from '../EndAsterisks.jsx';
+import { reportCategories } from '../../PreLogin/ComunityGuidelines/communityGuidelines.js';
 
 export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUserId, followingCount, followersCount, isFollowing, followingAccounts, followersAccounts, isFollowingUserLoading, isBlocked, isOtherUserBlocked, handleUserReport, hasMoreFollowing, hasMoreFollowers, loadFollowing, loadFollowers, isLoadingMoreFollowing, isLoadingMoreFollowers }) => {
 
@@ -16,23 +17,24 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
     const [showFollowingModal, setShowFollowingModal] = useState(false);
     const [showBlockModal, setShowBlockModal] = useState(false);
 
-    const reportCategories = [
-        { name: "Hate speech", key: "HATE" },
-        { name: "Harassment or bullying", key: "BULLY" },
-        { name: "Violence or harmful behavior", key: "VIOL" },
-        { name: "Misinformation or false information", key: "MISINFO" },
-        { name: "Nudity or sexual content", key: "SEX" },
-        { name: "Spam or misleading content", key: "SPAM" },
-        { name: "Intellectual property violations", key: "COPYRIGHT" },
-        { name: "Self-harm or suicide", key: "SELF" },
-        { name: "Terrorism or extremism", key: "TERROR" },
-        { name: "Scams or fraud", key: "SCAM" },
-        { name: "Impersonation or fake accounts", key: "FAKE" },
-        { name: "Graphic or violent content", key: "GRPHIC" },
-        { name: "Child exploitation", key: "CHILD" },
-        { name: "Privacy violation", key: "PRIV" },
-        { name: "Animal abuse", key: "ANIM" }
-    ];
+    // const reportCategories = [
+    //     { name: "Hate speech", key: "HATE" },
+    //     { name: "Harassment or bullying", key: "BULLY" },
+    //     { name: "Violence or harmful behavior", key: "VIOL" },
+    //     { name: "Misinformation or false information", key: "MISINFO" },
+    //     { name: "Nudity or sexual content", key: "SEX" },
+    //     { name: "Spam or misleading content", key: "SPAM" },
+    //     { name: "Intellectual property violations", key: "COPYRIGHT" },
+    //     { name: "Self-harm or suicide", key: "SELF" },
+    //     { name: "Terrorism or extremism", key: "TERROR" },
+    //     { name: "Scams or fraud", key: "SCAM" },
+    //     { name: "Impersonation or fake accounts", key: "FAKE" },
+    //     { name: "Graphic or violent content", key: "GRPHIC" },
+    //     { name: "Child exploitation", key: "CHILD" },
+    //     { name: "Privacy violation", key: "PRIV" },
+    //     { name: "Animal abuse", key: "ANIM" }
+    // ];
+
     const [showReportUserModal, setShowReportUserModal] = useState(false);
     const [reportReason, setReportReason] = useState(null);
     const [showReportUserConfirmation, setShowReportUserConfirmation] = useState(false);

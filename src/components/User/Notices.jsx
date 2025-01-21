@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { formatDateToLocal, calculateCountdown } from '../../lib/utils/dateUtils';
+import { reportCategories } from '../PreLogin/ComunityGuidelines/communityGuidelines';
 import { Row, Col, Modal, Form, Accordion, Button, Image } from 'react-bootstrap';
-import { CgTrash } from 'react-icons/cg';
-import { AiFillEdit } from 'react-icons/ai';
+// import { CgTrash } from 'react-icons/cg';
+// import { AiFillEdit } from 'react-icons/ai';
 // import { BsReply } from "react-icons/bs";
 // import { RiSave2Line, RiSave2Fill } from "react-icons/ri";
 // import { BsHandThumbsUp, BsHandThumbsUpFill } from 'react-icons/bs';
@@ -61,23 +62,24 @@ export const Notices = ({
     const [loadedReactions, setLoadedReactions] = useState({});
     const [activeNoticeId, setActiveNoticeId] = useState(null);
 
-    const reportCategories = [
-        { name: "Hate speech", key: "HATE" },
-        { name: "Harassment or bullying", key: "BULLY" },
-        { name: "Violence or harmful behavior", key: "VIOL" },
-        { name: "Misinformation or false information", key: "MISINFO" },
-        { name: "Nudity or sexual content", key: "SEX" },
-        { name: "Spam or misleading content", key: "SPAM" },
-        { name: "Intellectual property violations", key: "COPYRIGHT" },
-        { name: "Self-harm or suicide", key: "SELF" },
-        { name: "Terrorism or extremism", key: "TERROR" },
-        { name: "Scams or fraud", key: "SCAM" },
-        { name: "Impersonation or fake accounts", key: "FAKE" },
-        { name: "Graphic or violent content", key: "GRPHIC" },
-        { name: "Child exploitation", key: "CHILD" },
-        { name: "Privacy violation", key: "PRIV" },
-        { name: "Animal abuse", key: "ANIM" }
-    ];
+    // const reportCategories = [
+    //     { name: "Hate speech", key: "HATE" },
+    //     { name: "Harassment or bullying", key: "BULLY" },
+    //     { name: "Violence or harmful behavior", key: "VIOL" },
+    //     { name: "Misinformation or false information", key: "MISINFO" },
+    //     { name: "Nudity or sexual content", key: "SEX" },
+    //     { name: "Spam or misleading content", key: "SPAM" },
+    //     { name: "Intellectual property violations", key: "COPYRIGHT" },
+    //     { name: "Self-harm or suicide", key: "SELF" },
+    //     { name: "Terrorism or extremism", key: "TERROR" },
+    //     { name: "Scams or fraud", key: "SCAM" },
+    //     { name: "Impersonation or fake accounts", key: "FAKE" },
+    //     { name: "Graphic or violent content", key: "GRPHIC" },
+    //     { name: "Child exploitation", key: "CHILD" },
+    //     { name: "Privacy violation", key: "PRIV" },
+    //     { name: "Animal abuse", key: "ANIM" }
+    // ];
+
     const [showReportModal, setShowReportModal] = useState(false);
     const [reportingNoticeId, setReprotingNoticeId] = useState(null);
     const [reportReason, setReportReason] = useState(null);

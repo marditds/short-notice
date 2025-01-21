@@ -27,6 +27,7 @@ import OtherUserProfile from './pages/User/OtherUser/OtherUserProfile.jsx';
 import HelpCenterTitles from './pages/PreLogin/HelpCenter/HelpCenterInfo/HelpCenterTitles.jsx';
 import HelpCenterData from './pages/PreLogin/HelpCenter/HelpCenterInfo/HelpCenterData.jsx';
 import Privacy from './pages/PreLogin/Privacy/Privacy.jsx';
+import CommunityGuidelines from './pages/PreLogin/CommunityGuidelines/CommunityGuidelines.jsx';
 
 
 const router = createBrowserRouter([
@@ -54,6 +55,10 @@ const router = createBrowserRouter([
       {
         path: '/privacy',
         element: <Privacy />
+      },
+      {
+        path: '/community-guidelines',
+        element: <CommunityGuidelines />
       },
       {
         path: '/help-center',

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Row, Col, ListGroup } from 'react-bootstrap';
-import { tos } from './tos.js';
+import { tosData } from './tosData';
 
 const TOS = () => {
     return (
@@ -9,7 +9,7 @@ const TOS = () => {
                 <Col className={'tos__col'}>
                     <ListGroup as={'ol'} className={'my-3 my-md-5 tos__list-group'}>
                         {
-                            tos.map((term, idx) => {
+                            tosData.map((term, idx) => {
                                 return (
                                     <ListGroup.Item key={idx} as={'li'} className={'tos__list-group-item'}>
                                         <h5 className='mb-1'>{idx + 1}. {term.title}</h5>
