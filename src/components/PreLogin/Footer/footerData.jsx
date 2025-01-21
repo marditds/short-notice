@@ -7,6 +7,7 @@ export const footerData = {
         { name: "About", url: "/about" },
         { name: "SN Plus", url: "/sn-plus" },
         { name: "Terms of Service", url: "/tos" },
+        { name: "Privacy Policy", url: "/privacy" },
         { name: "Help Center", url: "/help-center" },
         { name: "Contact", url: "/contact" }
     ],

@@ -26,6 +26,7 @@ import UserFeed from './pages/User/Feed/UserFeed.jsx';
 import OtherUserProfile from './pages/User/OtherUser/OtherUserProfile.jsx';
 import HelpCenterTitles from './pages/PreLogin/HelpCenter/HelpCenterInfo/HelpCenterTitles.jsx';
 import HelpCenterData from './pages/PreLogin/HelpCenter/HelpCenterInfo/HelpCenterData.jsx';
+import Privacy from './pages/PreLogin/Privacy/Privacy.jsx';
 
 
 const router = createBrowserRouter([
@@ -49,6 +50,10 @@ const router = createBrowserRouter([
       {
         path: '/tos',
         element: <TOS />
+      },
+      {
+        path: '/privacy',
+        element: <Privacy />
       },
       {
         path: '/help-center',

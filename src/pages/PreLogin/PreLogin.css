@@ -213,6 +213,11 @@
     color: var(--main-accent-color-hover);
 }
 
+.tos__list-group>li {
+    background-color: transparent !important;
+    border: 0px !important;
+}
+
 
 @media (min-width: 768px) and (max-width: 991px) {
     .home__body-container {
@@ -236,6 +241,10 @@
 
     .home__body h3 {
         font-size: 1.09375rem;
+    }
+
+    .home__body h4 {
+        font-size: 1.125rem;
     }
 
     .home__body h4 {

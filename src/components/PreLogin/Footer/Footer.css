@@ -12,6 +12,10 @@
     color: var(--main-accent-color-hover) !important;
 }
 
+.footer__col>a>h6 {
+    width: max-content;
+}
+
 .footer__col>a>i {
     font-size: 29px !important;
     transition: var(--main-transition-speed);

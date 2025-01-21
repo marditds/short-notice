@@ -32,10 +32,10 @@ const Footer = () => {
                     {footerData.navigationLinks.map((nav, index) => {
                         return (
                             <Col key={index}
-                                xs={12} sm={4} md={2}
+                                xs={12} sm={3} xl={1}
                                 className='footer__col d-flex justify-content-center'>
-                                <Link to={nav.url} className=' text-decoration-none'>
-                                    <h6 className='my-1 my-sm-2 my-md-0'>
+                                <Link to={nav.url} className='text-decoration-none'>
+                                    <h6 className='my-1 my-sm-2 my-xl-0'>
                                         {nav.name}
                                     </h6>
                                 </Link>
