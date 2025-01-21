@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { googleLogout } from '@react-oauth/google';
-import { Container, Stack, Row, Col, Form, Button, Alert, Modal } from 'react-bootstrap';
+import { Container, Stack, Row, Col, Form, Button, Alert, Modal, ListGroup } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useUserContext } from '../../lib/context/UserContext';
 import { getUserByUsername } from '../../lib/context/dbhandler';
@@ -10,6 +10,7 @@ import ReCAPTCHA from 'react-google-recaptcha';
 import { CreateUsername } from '../../components/Setup/CreateUsername';
 import { SetPasscode } from '../../components/Setup/SetPasscode';
 import useUserInfo from '../../lib/hooks/useUserInfo';
+import { tos } from '../PreLogin/TOS/tos';
 
 const CreateAccount = ({ setUser }) => {
 
@@ -258,13 +259,28 @@ const CreateAccount = ({ setUser }) => {
             </Form>
 
             {/* TOS Modal */}
-            <Modal show={showTOSModal} onHide={handleCloseTOSModal}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Modal heading</Modal.Title>
+            <Modal show={showTOSModal} onHide={handleCloseTOSModal} className='createAccount__tos-modal'>
+                <Modal.Header>
+                    <Modal.Title>
+                        <h4 className='mb-0'>Terms of Service</h4>
+                    </Modal.Title>
                 </Modal.Header>
-                <Modal.Body>Woohoo, you are reading this text in a modal!</Modal.Body>
+                <Modal.Body className='createAccount__tos-modal-body px-0 px-md-2'>
+                    <ListGroup className='createAccount__tos-list-group'>
+                        {
+                            tos.map((term, idx) => {
+                                return (
+                                    <ListGroup.Item key={idx} className='createAccount__tos-list-item'>
+                                        <h5>{idx + 1}. {term.title}</h5>
+                                        <p>{term.description}</p>
+                                    </ListGroup.Item>
+                                )
+                            })
+                        }
+                    </ListGroup>
+                </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={handleCloseTOSModal}>
+                    <Button onClick={handleCloseTOSModal} className='mx-0 createAccount__btn'>
                         Close
                     </Button>
                 </Modal.Footer>

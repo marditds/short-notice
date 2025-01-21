@@ -17,6 +17,7 @@
     --mobile-font-size: 10px;
     --pc-icon-size: 20px;
     --mobile-icon-size: 14px;
+    --mobile-h4-size: 0.9375rem;
     --mobile-h5-size: 0.78125rem;
     /* --mobile-icon-size: 16px; */
     /* --primary-font-family: 'Poppins', sans-serif; */
@@ -51,6 +52,10 @@ body {
 
     body {
         font-size: var(--mobile-font-size) !important;
+    }
+
+    h4 {
+        font-size: var(--mobile-h4-size) !important;
     }
 
     h5 {

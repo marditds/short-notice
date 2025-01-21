@@ -135,6 +135,33 @@
 
 }
 
+.createAccount__tos-modal {
+    padding-inline: 15px !important;
+}
+
+.createAccount__tos-modal>.modal-dialog {
+    min-width: 100%;
+    margin: 0px;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.createAccount__tos-modal>.modal-dialog>.modal-content {
+    border-radius: var(--main-rounded-corner) !important;
+    max-height: 100vh;
+}
+
+.createAccount__tos-modal-body {
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+.createAccount__tos-list-item {
+    border: 0px !important;
+}
+
 @media (min-width:576px) and (max-width: 767px) {
     .createUsername__accountType--radio {
         width: 160px;
@@ -153,7 +180,6 @@
 
     .setPasscode__passcode-field {
         max-height: 29px;
-
     }
 
     .createUsername__checkbox {
@@ -188,6 +214,15 @@
     .createAccount__btn {
         min-width: 49%;
     }
+
+    .createAccount__tos-modal {
+        padding-inline: 8px !important;
+    }
+
+    /* .createAccount__tos-modal>.modal-dialog>.modal-content {
+        border-radius: var(--main-rounded-corner) !important;
+        max-height: 100vh;
+    } */
 }
 
 
