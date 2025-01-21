@@ -213,6 +213,8 @@
     color: var(--main-accent-color-hover);
 }
 
+
+.privacyPolicy__list-group>li,
 .tos__list-group>li {
     background-color: transparent !important;
     border: 0px !important;
