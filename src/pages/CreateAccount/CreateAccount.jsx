@@ -11,7 +11,7 @@ import { CreateUsername } from '../../components/Setup/CreateUsername';
 import { SetPasscode } from '../../components/Setup/SetPasscode';
 import useUserInfo from '../../lib/hooks/useUserInfo';
 import { tosData } from '../PreLogin/TOS/tosData';
-import { reportCategories } from '../../components/PreLogin/ComunityGuidelines/communityGuidelines';
+import { reportCategories, commGuideParags } from '../../components/PreLogin/ComunityGuidelines/communityGuidelines';
 
 const CreateAccount = ({ setUser }) => {
 
@@ -208,7 +208,7 @@ const CreateAccount = ({ setUser }) => {
                                 label={
                                     <span>
                                         I have read and agree to the
-                                        <Button onClick={handleShowTOSModal} className='ms-1'>
+                                        <Button onClick={handleShowTOSModal} className='mx-1'>
                                             Terms of Services
                                         </Button>
                                         and
@@ -254,6 +254,7 @@ const CreateAccount = ({ setUser }) => {
                         />
                     </div>
 
+                    {/* Create Account Buttons */}
                     <div className='mb-5 mb-sm-0 d-flex justify-content-between justify-content-sm-start'>
                         <Button
                             onClick={handleDoneClick}
@@ -309,26 +310,34 @@ const CreateAccount = ({ setUser }) => {
 
             {/* Community Guidelines */}
             <Modal show={showCommGuideModal} onHide={handleCloseCommGuideModal} className='createAccount__tos-modal'>
-                <Modal.Header>
+                <Modal.Header className='border-bottom-0 pb-0 px-0 px-md-2'>
                     <Modal.Title>
-                        <h4 className='mb-0'>Community Guidelines</h4>
+                        <h4 className='mb-0 mx-3'>Community Guidelines</h4>
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body className='createAccount__tos-modal-body px-0 px-md-2'>
+                    <p className='mb-1 mx-3'>
+                        {commGuideParags[0]}
+                    </p>
+                    <p className='mb-1 mx-3'>
+                        {commGuideParags[1]}
+                    </p>
                     <ListGroup className='createAccount__tos-list-group'>
                         {
                             reportCategories.map((category, idx) => {
                                 return (
                                     <ListGroup.Item key={idx} className='createAccount__tos-list-item'>
-                                        <h5>{idx + 1}. {term.title}</h5>
-                                        <p>{category.name}</p>
+                                        {idx + 1}. {category.name}
                                     </ListGroup.Item>
                                 )
                             })
                         }
                     </ListGroup>
+                    <p className='mb-1 mx-3'>
+                        {commGuideParags[2]}
+                    </p>
                 </Modal.Body>
-                <Modal.Footer>
+                <Modal.Footer className='border-top-0 pt-0'>
                     <Button onClick={handleCloseCommGuideModal} className='mx-0 createAccount__btn'>
                         Close
                     </Button>

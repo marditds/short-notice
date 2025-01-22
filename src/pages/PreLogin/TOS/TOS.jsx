@@ -5,9 +5,10 @@ import { tosData } from './tosData';
 const TOS = () => {
     return (
         <Container className={'tos__contianer'}>
-            <Row className={'tos__row'}>
+            <Row className={'tos__row my-3 my-md-5'}>
                 <Col className={'tos__col'}>
-                    <ListGroup as={'ol'} className={'my-3 my-md-5 tos__list-group'}>
+                    <h4 className='px-3 mb-1'>Terms of Service</h4>
+                    <ListGroup as={'ol'} className={'tos__list-group'}>
                         {
                             tosData.map((term, idx) => {
                                 return (

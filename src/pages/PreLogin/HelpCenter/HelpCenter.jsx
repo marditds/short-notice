@@ -25,7 +25,7 @@ const HelpCenter = () => {
                 </h3>
 
                 <h3 className='help-center__h3'>
-                    Here, you will find the answers to your questions.
+                    {' '}Here, you will find the answers to your questions.
                 </h3>
             </div>
 
