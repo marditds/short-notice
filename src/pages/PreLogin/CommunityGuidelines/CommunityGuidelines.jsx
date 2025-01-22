@@ -11,10 +11,10 @@ const CommunityGuidelines = () => {
                         Community Guidelines
                     </h4>
                     <p className='mb-1 px-3'>
-                        ShortNotice is committed to fostering a respectful and safe environment. Users must adhere to the following guidelines when posting content or interacting with others on the platform.
+                        {commGuideParags.intro}
                     </p>
                     <p className='mb-1 px-3'>
-                        Users may report content or accounts under the following categories:
+                        {commGuideParags.pargraph}
                     </p>
 
                     <ListGroup as={'ol'} className='commGuide__list-group'>
@@ -30,7 +30,7 @@ const CommunityGuidelines = () => {
                     </ListGroup>
 
                     <p className='mb-1 px-3'>
-                        Violations of these guidelines may result in content removal or account suspension at ShortNotice's discretion. Users are encouraged to review these guidelines regularly to remain informed about acceptable behavior on the platform.
+                        {commGuideParags.outro}
                     </p>
                 </Col>
             </Row>
