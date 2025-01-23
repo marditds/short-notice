@@ -10,6 +10,7 @@ export const footerData = {
         { name: "Privacy Policy", url: "/privacy" },
         { name: "Community Guidelines", url: "/community-guidelines" },
         { name: "Help Center", url: "/help-center" },
+        { name: "Attributions", url: "/attributions" },
         { name: "Contact", url: "/contact" }
     ],
 

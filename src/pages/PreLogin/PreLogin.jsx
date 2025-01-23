@@ -14,6 +14,7 @@ import Contact from './Contact/Contact';
 import './PreLogin.css';
 import HelpCenterTitles from './HelpCenter/HelpCenterInfo/HelpCenterTitles';
 import HelpCenterData from './HelpCenter/HelpCenterInfo/HelpCenterData';
+import Attributions from './Attributions/Attributions';
 
 const PreLogin = ({ onSuccess }) => {
 
@@ -53,6 +54,9 @@ const PreLogin = ({ onSuccess }) => {
             }
             {
                 location.pathname === `/help-center/${helpCenterTitlesPath}/${helpCenterDataPath}` && <HelpCenterData />
+            }
+            {
+                location.pathname === `/attributions` && <Attributions />
             }
             {
                 location.pathname === '/contact' && <Contact />

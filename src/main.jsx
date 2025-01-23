@@ -28,6 +28,7 @@ import HelpCenterTitles from './pages/PreLogin/HelpCenter/HelpCenterInfo/HelpCen
 import HelpCenterData from './pages/PreLogin/HelpCenter/HelpCenterInfo/HelpCenterData.jsx';
 import Privacy from './pages/PreLogin/Privacy/Privacy.jsx';
 import CommunityGuidelines from './pages/PreLogin/CommunityGuidelines/CommunityGuidelines.jsx';
+import Attributions from './pages/PreLogin/Attributions/Attributions.jsx';
 
 
 const router = createBrowserRouter([
@@ -75,6 +76,10 @@ const router = createBrowserRouter([
             ]
           }
         ]
+      },
+      {
+        path: '/attributions',
+        element: <Attributions />
       },
       {
         path: '/contact',
