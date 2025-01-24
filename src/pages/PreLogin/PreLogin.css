@@ -220,6 +220,17 @@
     border: 0px !important;
 }
 
+.attributions__attribute-p>span>a,
+.attributions__attribute-link {
+    text-decoration: none !important;
+    color: var(--main-text-color);
+    transition: var(--main-transition-speed);
+}
+
+.attributions__attribute-p>span>a:hover,
+.attributions__attribute-link:hover {
+    color: var(--main-accent-color-hover);
+}
 
 @media (min-width: 768px) and (max-width: 991px) {
     .home__body-container {

@@ -19,7 +19,7 @@ const NavigationBar = ({ children }) => {
                 <i className='bi bi-three-dots-vertical navigation__burger-menu' />
             </Navbar.Toggle>
             <Navbar.Collapse id='basic-navbar-nav abcd'
-                style={{ marginRight: isMediumScreen ? '0px' : '146px' }}
+                style={{ marginRight: isMediumScreen ? '0px' : '165.5px' }}
             >
                 <Nav className='ms-auto me-lg-auto'>
 
