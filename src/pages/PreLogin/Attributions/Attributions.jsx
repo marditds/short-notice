@@ -10,8 +10,9 @@ const Attributions = () => {
     let { isSmallScreen } = screenUtils();
 
     return (
-        <Container>
-            <Row className='my-5'>
+        <Container className='d-grid gap-5'>
+            <Row className='mt-5'>
+                <h3 className='mb-3'>Attributions</h3>
                 {
                     attributesData.map((attribute, idx) => {
                         return (
@@ -39,6 +40,15 @@ const Attributions = () => {
                     })
                 }
 
+            </Row>
+            <Row className='my-2'>
+                <Col>
+                    <p>
+                        <strong>Disclaimer</strong>: ShortNotice is neither sponsored by nor affiliated with any of the services mentioned on this page.
+
+                    </p>
+
+                </Col>
             </Row>
         </Container >
     )
