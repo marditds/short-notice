@@ -24,7 +24,7 @@ export const footerData = {
         { name: "Privacy Policy", url: "/privacy" }
     ],
 
-    copyright: `© ${new Date().getFullYear()} ShortNotice. All rights reserved.`,
+    copyright: `© ${new Date().getFullYear()} ShortNotice.newLine All rights reserved.`,
 
     developer: <span>Developed by <Link target='_blank' to='https://marditds.netlify.app'>Mardit DerSoukiassian</Link>.</span>
 };

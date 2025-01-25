@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import Header from '../../components/PreLogin/Header/Header';
 import Footer from '../../components/PreLogin/Footer/Footer';
@@ -19,7 +19,12 @@ import Attributions from './Attributions/Attributions';
 const PreLogin = ({ onSuccess }) => {
 
     const location = useLocation();
+
     let { helpCenterTitlesPath, helpCenterDataPath } = useParams();
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [location]);
 
     return (
         <div className='home__body d-flex flex-column justify-content-between min-vh-100'>

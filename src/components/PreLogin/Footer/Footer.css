@@ -32,6 +32,10 @@ h5 {
     text-transform: uppercase;
 }
 
+.footer__logo {
+    width: 149.5px;
+}
+
 @media (max-width: 767px) {
     .footer__container h6 {
         font-size: 10px;
@@ -40,6 +44,18 @@ h5 {
     .footer__col>a>i {
         font-size: 18.125px !important;
     }
+
+    .footer__logo {
+        width: 130px;
+    }
 }
 
-@media (max-width: 575px) {}
+@media (max-width: 575px) {
+    .footer__logo {
+        width: 110px;
+    }
+
+    /* .footer__col {
+        padding-inline: 0 !important;
+    } */
+}

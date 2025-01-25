@@ -50,7 +50,7 @@ body {
 
 @media (max-width: 767px) {
 
-    body {
+    body, p, details {
         font-size: var(--mobile-font-size) !important;
     }
 
