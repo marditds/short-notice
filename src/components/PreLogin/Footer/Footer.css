@@ -5,7 +5,9 @@
 .footer__container h5,
 .footer__container a {
     color: var(--main-text-color) !important;
-    transition: var(--main-transition-speed);
+    transition: var(--main-transition-speed) !important;
+    text-decoration: none;
+
 }
 
 .footer__container a:hover {
