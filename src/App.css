@@ -17,6 +17,8 @@
     --mobile-font-size: 10px;
     --pc-icon-size: 20px;
     --mobile-icon-size: 14px;
+    --pc-loading-spinner-size: 24px;
+    --mobile-loading-spinner-size: 20px;
     --mobile-h4-size: 0.9375rem;
     --mobile-h5-size: 0.78125rem;
     /* --mobile-icon-size: 16px; */

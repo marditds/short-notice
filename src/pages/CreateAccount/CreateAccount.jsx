@@ -208,13 +208,13 @@ const CreateAccount = ({ setUser }) => {
                         <Col>
                             <Form.Check
                                 label={
-                                    <span>
+                                    <span className='createAccount__form-check-text'>
                                         I have read and agree to the
-                                        <Button onClick={handleShowTOSModal} className='mx-1'>
+                                        <Button onClick={handleShowTOSModal} className='mx-1 createAccount__form-check-text-btn'>
                                             Terms of Services
                                         </Button>
                                         and
-                                        <Button onClick={handleShowCommGuideModal} className='ms-1'>
+                                        <Button onClick={handleShowCommGuideModal} className='ms-1 createAccount__form-check-text-btn'>
                                             Community Guidelines
                                         </Button>
                                         .

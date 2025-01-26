@@ -162,6 +162,15 @@
     border: 0px !important;
 }
 
+.createAccount__form-check-text {
+    display: inline !important;
+}
+
+.createAccount__form-check-text-btn {
+    display: inline-block !important;
+    white-space: nowrap;
+}
+
 @media (min-width:576px) and (max-width: 767px) {
     .createUsername__accountType--radio {
         width: 160px;
@@ -223,6 +232,12 @@
         border-radius: var(--main-rounded-corner) !important;
         max-height: 100vh;
     } */
+}
+
+@media (max-width: 397px) {
+    .createAccount__form-check-text-btn {
+        display: block;
+    }
 }
 
 

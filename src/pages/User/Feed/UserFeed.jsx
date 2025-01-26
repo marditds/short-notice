@@ -6,12 +6,15 @@ import { getAvatarUrl as avatarUtil } from '../../../lib/utils/avatarUtils';
 import { Notices } from '../../../components/User/Notices';
 import { useUnblockedNotices } from '../../../lib/utils/blockFilter';
 // import { deleteExpired } from '../../../lib/utils/deleteExpired';
+import { screenUtils } from '../../../lib/utils/screenUtils';
 import { Button } from 'react-bootstrap';
 import { Loading } from '../../../components/Loading/Loading';
 import { FeedHeader } from '../../../components/User/Feed/FeedHeader/FeedHeader';
 import { EndAsterisks } from '../../../components/User/EndAsterisks';
 
 const UserFeed = () => {
+
+    const { isSmallScreen, isMediumScreen } = screenUtils();
 
     const [tagCategories, setTagCategories] = useState([
         {
@@ -413,12 +416,14 @@ const UserFeed = () => {
 
     // Render loading state while data is being fetched
     if (
-        (isLoadingPersonalFeedNotices)
+        (!isLoadingPersonalFeedNotices)
         // &&
         // (personalFeedNotices.length === 0 || generalFeedNotices.length === 0)
     ) {
-        return <div className='mt-5'>
-            <Loading size={24} />{`Loading your feed...`}
+        return <div className='pt-5 h-100 user-feed__loading-div'>
+            <div>
+                <Loading /><span className='ms-2'>{`Loading your feed...`}</span>
+            </div>
         </div>;
     }
 

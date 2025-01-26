@@ -5,6 +5,13 @@
     padding-top: 62px;
 }
 
+.user-feed__loading-div {
+    height: 100%;
+    display: grid;
+    place-items: center;
+    margin-inline: auto;
+}
+
 .user-feed__feed-guide-btn {
     background-color: var(--main-accent-color);
     border-color: var(--main-accent-color);

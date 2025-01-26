@@ -1,4 +1,5 @@
 .loading__icon {
+    font-size: var(--pc-loading-spinner-size);
     animation: spin 0.5s infinite linear !important;
 }
 
@@ -15,4 +16,10 @@
     to {
         transform: rotate(360deg);
     } */
+}
+
+@media (max-width: 768px) {
+    .loading__icon {
+        font-size: var(--mobile-loading-spinner-size);
+    }
 }
