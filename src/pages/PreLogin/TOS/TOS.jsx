@@ -7,7 +7,7 @@ const TOS = () => {
         <Container className={'tos__contianer'}>
             <Row className={'tos__row my-3 my-md-5'}>
                 <Col className={'tos__col'}>
-                    <h4 className='px-3 mb-1'>Terms of Service</h4>
+                    <h4 className='px-sm-3 mb-1'>Terms of Service</h4>
                     <ListGroup as={'ol'} className={'tos__list-group'}>
                         {
                             tosData.map((term, idx) => {

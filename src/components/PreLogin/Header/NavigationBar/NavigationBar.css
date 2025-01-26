@@ -56,3 +56,13 @@
         height: 65px;
     }
 }
+
+@media (max-width: 575px) {
+    .navigationbar {
+        padding-inline: 12px !important;
+    }
+
+    .navigation__burger-menu {
+        font-size: 25px;
+    }
+}

@@ -283,6 +283,12 @@
     .help-center__header-col+.help-center__header-col {
         margin-top: 16px;
     }
+
+    .commGuide__list-group>li,
+    .privacyPolicy__list-group>li,
+    .tos__list-group>li {
+        padding-inline: 0px;
+    }
 }
 
 @media (max-width: 439px) {

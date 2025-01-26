@@ -3,11 +3,11 @@ import { Container } from 'react-bootstrap';
 
 const About = () => {
     return (
-        <div className='about__body'>
+        <div className='about__body mt-5 mt-xl-0'>
             <main className='flex-grow-1'>
                 <Container>
                     <p>
-                        Welcome to ShortNotice, the dynamic social media platform where fleeting yet impactful interactions take center stage. ShortNotice empowers users to express their thoughts, share updates, and connect meaningfully in real time—all through text (and GIFs). With every post automatically deleting after a user-selected time limit, we embrace the beauty of impermanence, keeping the feed fresh and focused. Free from the noise of endless scrolling, ShortNotice prioritizes words and ideas, creating a clean, distraction-free environment.
+                        Welcome to ShortNotice, the dynamic platform where fleeting yet impactful interactions take center stage. ShortNotice empowers users to express their thoughts, share updates, and connect meaningfully in real time—all through text (and GIFs). With every post automatically deleting after a user-selected time limit, we embrace the beauty of impermanence, keeping the feed fresh and focused. Free from the noise of endless scrolling, ShortNotice prioritizes words and ideas, creating a clean, distraction-free environment.
                     </p>
 
                     <p>

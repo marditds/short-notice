@@ -80,20 +80,6 @@ const Footer = () => {
                         }
                     </Col>
 
-                    {/* SUPPORT */}
-                    <Col className='footer__col'>
-                        <h4>Support</h4>
-                        {
-                            footerData.support.map((supportData, idx) => {
-                                return (
-                                    <Link key={idx} to={supportData.url}>
-                                        <h6>{supportData.name}</h6>
-                                    </Link>
-                                )
-                            })
-                        }
-                    </Col>
-
                     {/* EXPLORE */}
                     <Col className='footer__col'>
                         <h4>Explore</h4>
@@ -116,6 +102,21 @@ const Footer = () => {
                                 return (
                                     <Link key={idx} to={legalData.url}>
                                         <h6>{legalData.name}</h6>
+                                    </Link>
+                                )
+                            })
+                        }
+                    </Col>
+
+
+                    {/* SUPPORT */}
+                    <Col className='footer__col'>
+                        <h4>Support</h4>
+                        {
+                            footerData.support.map((supportData, idx) => {
+                                return (
+                                    <Link key={idx} to={supportData.url}>
+                                        <h6>{supportData.name}</h6>
                                     </Link>
                                 )
                             })

@@ -7,13 +7,13 @@ const CommunityGuidelines = () => {
         <Container>
             <Row className='flex-column my-3 my-sm-5'>
                 <Col>
-                    <h4 className='px-3'>
+                    <h4 className='px-md-3'>
                         Community Guidelines
                     </h4>
-                    <p className='mb-1 px-3'>
+                    <p className='mb-1 px-md-3'>
                         {commGuideParags.intro}
                     </p>
-                    <p className='mb-1 px-3'>
+                    <p className='mb-1 px-md-3'>
                         {commGuideParags.pargraph}
                     </p>
 
@@ -29,7 +29,7 @@ const CommunityGuidelines = () => {
                         }
                     </ListGroup>
 
-                    <p className='mb-1 px-3'>
+                    <p className='mb-1 px-md-3'>
                         {commGuideParags.outro}
                     </p>
                 </Col>

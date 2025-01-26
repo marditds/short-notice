@@ -13,7 +13,7 @@ const HelpCenter = () => {
 
     return (
         <Container>
-            <div className='help-center__welcome-msg mb-3 mb-sm-4 mb-md-5'>
+            <div className='help-center__welcome-msg mt-4 mt-sm-5 mt-lg-0 mb-3 mb-sm-4 mb-md-5'>
                 <h2 className='help-center__h2 mb-0'>
                     Hello,
                 </h2>

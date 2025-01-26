@@ -1,19 +1,19 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { screenUtils } from '../../../../lib/utils/screenUtils';
-import { Nav, Navbar } from 'react-bootstrap';
+import { Nav, Navbar, Image } from 'react-bootstrap';
 import snLogo from '../../../../assets/sn_long.png';
 import './NavigationBar.css';
 
 const NavigationBar = ({ children }) => {
 
-    const { isMediumScreen } = screenUtils();
+    const { isSmallScreen, isMediumScreen } = screenUtils();
 
     return (
 
-        <Navbar expand='md' className='px-4 navigationbar' sticky='top'>
+        <Navbar expand='md' className=' px-sm-4 navigationbar' sticky='top'>
             <Navbar.Brand href="/">
-                <img src={snLogo} alt='short_notice_logo' height={23} className='navigation__logo' />
+                <Image src={snLogo} alt='short_notice_logo' height={!isSmallScreen ? '23px' : '20px'} className='navigation__logo' />
             </Navbar.Brand>
             <Navbar.Toggle className='navigation__toggle-btn' aria-controls='basic-navbar-nav'>
                 <i className='bi bi-three-dots-vertical navigation__burger-menu' />

@@ -10,7 +10,7 @@ const PrivacyPolicy = () => {
         <Container className='privacyPolicy__container'>
             <Row className='privacyPolicy__row my-3 my-sm-5'>
                 <Col className='privacyPolicy__col'>
-                    <h4 className='mb-0 px-3'>Privacy Policy</h4>
+                    <h4 className='px-sm-3 mb-0'>Privacy Policy</h4>
                     <ListGroup as={'ul'} className='privacyPolicy__list-group'>
                         {
                             privacyPolicyData.map((privacyPolicy, idx) => {

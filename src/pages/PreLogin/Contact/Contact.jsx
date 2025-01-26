@@ -30,7 +30,7 @@ const Contact = () => {
 
     return (
         <Container>
-            <h2 className='contact__title'>Contact</h2>
+            <h2 className='contact__title mb-0 mt-5 mt-lg-0'>Contact</h2>
 
             <p className='contact__text mb-1'>If you have any questions, concerns, or comments, please send a text message <i className='bi bi-chat-left-dots fs-5' /> to (818)690-0919.
             </p>
