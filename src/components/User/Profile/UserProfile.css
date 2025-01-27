@@ -273,6 +273,8 @@
     box-shadow: none !important;
 }
 
+.user-profile__load-more-notices-btn,
+.user-profile__load-more-notices-btn:focus,
 .notice__react-gif-btn,
 .notice__gif-btn,
 .user-profile__report--radio>input:checked,
@@ -349,8 +351,7 @@
     filter: sepia(1) hue-rotate(100deg) saturate(6) brightness(0.7);
 }
 
-.notices__load-more-notices-btn,
-.notices__end-asterisks {
+.notices__load-more-notices-btn {
     margin-bottom: 50px;
 }
 
@@ -882,6 +883,7 @@
         font-size: 12.5pt;
     }
 
+    .user-profile__load-more-notices-btn,
     .user-profile__organization-passcode-btn,
     .user-profile__interaction-btn,
     .user-profile__tags-accordion>div>h2>button,

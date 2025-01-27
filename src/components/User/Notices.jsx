@@ -483,7 +483,7 @@ export const Notices = ({
 
                                     {notice?.noticeGif &&
                                         <Image src={notice?.noticeGif}
-                                            className='mt-2 mb-1 mb-sm-2'
+                                            className='mt-2 mb-1 mb-sm-2 notice__gif'
                                             width={isExtraSmallScreen ? '100%' : (isSmallScreen ? '60%' : '60%')}
                                             fluid />
                                     }

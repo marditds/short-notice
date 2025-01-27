@@ -506,7 +506,7 @@ const UserProfile = () => {
                                 getReactionsForNotice={getReactionsForNotice}
                                 getUserAccountByUserId={getUserAccountByUserId}
                             />
-                            <div className="d-flex justify-content-center">
+                            <div className="d-flex justify-content-center my-4">
                                 {hasMoreNotices ?
                                     <Button
                                         onClick={fetchNotices}
