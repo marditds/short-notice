@@ -153,12 +153,12 @@ export const UserSearch = ({ userId }) => {
                 style={{ zIndex: '9999999' }}
                 className='tools__search--results-modal'
             >
-                <Modal.Header className='w-100'>
+                <Modal.Header className='w-100 pb-0 pb-md-3'>
                     <Modal.Title>Showing results for "{searchUsername}"</Modal.Title>
                     <Button
                         className='ms-auto p-0 tools__search--results-modal-close-btn'
                         onClick={handleCloseSeachUsersModal}>
-                        <SlClose size={32} />
+                        <SlClose />
                     </Button>
                 </Modal.Header>
                 <Modal.Body className='tools__search--results-modal-body'>
@@ -167,7 +167,9 @@ export const UserSearch = ({ userId }) => {
                         direction='horizontal'
                         className='d-flex flex-wrap justify-content-start'>
                         {isResultLoading ?
-                            <div><Loading size={20} color={'var(--main-text-color)'} /></div>
+                            <div className='d-block mx-auto'>
+                                <Loading size={20} color={'var(--main-text-color)'} />
+                            </div>
                             :
                             (
                                 usersResult ? usersResult?.map((user) =>

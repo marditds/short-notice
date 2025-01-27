@@ -1,7 +1,7 @@
 .user-profile {
     max-width: 1320px !important;
     margin-inline: auto;
-    margin-top: 3px;
+    margin-top: 25px;
     padding: 54px 33px 012px 33px;
     height: 198px;
     backdrop-filter: blur(4px);
@@ -105,7 +105,7 @@
 }
 
 .user-profile__form {
-    margin-top: 198px;
+    margin-top: 230px;
 }
 
 .user-profile__form+ul+div {
@@ -418,7 +418,7 @@
 }
 
 .user-profile__notice-tab+div {
-    margin: 198px auto 42px auto;
+    margin: 230px auto 42px auto;
 }
 
 .user-profile__notice-tab>li>button {
@@ -849,6 +849,19 @@
     border-radius: var(--main-rounded-corner);
 }
 
+.user-profile__following--modal,
+.tools__search--results-modal,
+.modal-backdrop {
+    transition: opacity 0.3s ease-in !important;
+}
+
+.modal-backdrop {
+    opacity: 0.9 !important;
+    background-color: var(--main-dropdown-bg-color);
+    /* background-color: var(--main-text-color); */
+    /* background-color: var(--main-accent-color-hover); */
+}
+
 
 
 
@@ -880,7 +893,7 @@
     .notices__accordion>div,
     .user-profile__notice-char-counter,
     .user-profile__report--modal-btn {
-        font-size: var(--mobile-font-size);
+        font-size: var(--mobile-font-size) !important;
     }
 
     .user-profile__organization-passcode-field,

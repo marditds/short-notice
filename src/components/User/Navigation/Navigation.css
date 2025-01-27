@@ -47,6 +47,7 @@
 .tools__search--results-modal-close-btn>svg {
     color: var(--main-accent-color);
     transition: var(--main-transition-speed);
+    font-size: 32px;
 }
 
 .tools__search--results-modal-close-btn:hover>svg {
@@ -303,5 +304,10 @@
 
     .userhome__body--profile--tools--dropdown>div>a {
         font-size: var(--mobile-font-size);
+    }
+
+    .tools__search--results-expand-btn-icon,
+    .tools__search--results-modal-close-btn>svg {
+        font-size: var(--pc-icon-size);
     }
 }

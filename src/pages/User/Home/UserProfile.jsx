@@ -8,7 +8,7 @@ import useUserInfo from '../../../lib/hooks/useUserInfo.js';
 import { getAvatarUrl as avatarUtil } from '../../../lib/utils/avatarUtils.js';
 import useUserAvatar from '../../../lib/hooks/useUserAvatar.js';
 import useNotices from '../../../lib/hooks/useNotices.js';
-import { screenUtils } from '../../../lib/utils/screenUtils.js';
+// import { screenUtils } from '../../../lib/utils/screenUtils.js';
 import { ComposeNotice } from '../../../components/User/ComposeNotice';
 import { Loading } from '../../../components/Loading/Loading.jsx';
 import '../../../components/User/Profile/UserProfile.css';
@@ -71,7 +71,7 @@ const UserProfile = () => {
         getBlockedUsersByUser
     } = useUserInfo(googleUserData);
 
-    const { isSmallScreen } = screenUtils();
+    // const { isSmallScreen } = screenUtils();
 
     // const [notices, setNotices] = useState([]);
     const [userProfileNotices, setUserProfileNotices] = useState([]);

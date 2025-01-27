@@ -416,7 +416,7 @@ const UserFeed = () => {
 
     // Render loading state while data is being fetched
     if (
-        (!isLoadingPersonalFeedNotices)
+        (isLoadingPersonalFeedNotices)
         // &&
         // (personalFeedNotices.length === 0 || generalFeedNotices.length === 0)
     ) {
@@ -453,7 +453,14 @@ const UserFeed = () => {
                         reportReaction={reportReaction}
                     />
                     :
-                    <><Loading size={24} />Loading {feedType} feed.</>
+                    <div className='h-100 user-feed__loading-div my-5'>
+                        <div className='my-5'>
+                            <Loading />
+                            <span className='ms-2'>
+                                Loading {feedType} feed...
+                            </span>
+                        </div>
+                    </div>
             }
 
             {/* Load More Button */}
