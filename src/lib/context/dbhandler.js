@@ -1015,6 +1015,9 @@ export const getUserLikes = async (user_id) => {
                 Query.orderDesc('$createdAt')
             ]
         );
+
+        console.log('getUserLikes', response.documents);
+
         return response.documents;
     } catch (error) {
         // console.error('Error fetching user likes:', error);

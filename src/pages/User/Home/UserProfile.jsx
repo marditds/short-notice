@@ -94,12 +94,14 @@ const UserProfile = () => {
     const [offsetSaves, setOffsetSaveas] = useState(0);
     const [hasMoreSaves, setHasMoreSaves] = useState(true);
     const [isLoadingMoreSaves, setIsLoadingMoreSaves] = useState(false);
+    const [isSavesLoaded, setIsSavesLoaded] = useState(false);
 
     // Likes Tab
     const [limitLikes] = useState(10);
     const [offsetLikes, setOffsetLikes] = useState(0);
     const [hasMoreLikes, setHasMoreLikes] = useState(true);
     const [isLoadingMoreLikes, setIsLoadingMoreLikes] = useState(false);
+    const [isLikesLoaded, setIsLikesLoaded] = useState(false);
 
     // Following
     const [limitFollowing] = useState(11);
@@ -194,8 +196,6 @@ const UserProfile = () => {
 
     // Fetch saves and users' data for saves tab
     useEffect(() => {
-        // if (eventKey !== 'my-saves') return;
-
         const fetchSaveNotices = async () => {
             setIsLoadingMoreSaves(true);
             try {
@@ -217,8 +217,25 @@ const UserProfile = () => {
             }
 
         };
-        fetchSaveNotices();
-    }, [user_id, offsetSaves])
+
+        if (isSavesLoaded === true) {
+            fetchSaveNotices();
+        }
+    }, [user_id, offsetSaves, isSavesLoaded])
+
+    useEffect(() => {
+        if (eventKey === 'my-saves') {
+            setIsSavesLoaded(true);
+        }
+    }, [eventKey])
+
+
+    // On select save tab
+    const handleOnSavesTabSelect = () => {
+        console.log('Hakobos:', isSavesLoaded);
+
+        // setIsSavesLoaded(true);
+    }
 
     // Fetch likes and users' data for likes tab 
     useEffect(() => {
@@ -245,8 +262,11 @@ const UserProfile = () => {
                 setIsLoadingMoreLikes(false);
             }
         };
-        fetchLikedNotices();
-    }, [user_id, offsetLikes])
+
+        // if (eventKey === 'my-likes' && !isLikesLoaded) {
+        //     fetchLikedNotices();
+        // }
+    }, [user_id, offsetLikes, isLikesLoaded])
 
     useEffect(() => {
         console.log('Hello', username);
@@ -506,7 +526,7 @@ const UserProfile = () => {
                                 getReactionsForNotice={getReactionsForNotice}
                                 getUserAccountByUserId={getUserAccountByUserId}
                             />
-                            <div className="d-flex justify-content-center my-4">
+                            <div className="d-flex justify-content-center mt-4 pb-5">
                                 {hasMoreNotices ?
                                     <Button
                                         onClick={fetchNotices}
@@ -550,7 +570,7 @@ const UserProfile = () => {
                                 getReactionByReactionId={getReactionByReactionId}
                                 reportReaction={reportReaction}
                             />
-                            <div className="d-flex justify-content-center mt-4">
+                            <div className='d-flex justify-content-center mt-4 pb-5'>
                                 {hasMoreSaves ?
                                     <Button
                                         onClick={() => setOffsetSaveas(offsetSaves + limitSaves)}
@@ -598,7 +618,7 @@ const UserProfile = () => {
                                 getReactionByReactionId={getReactionByReactionId}
                                 reportReaction={reportReaction}
                             />
-                            <div className="d-flex justify-content-center mt-4">
+                            <div className='d-flex justify-content-center mt-4 pb-5'>
                                 {hasMoreLikes ?
                                     <Button
                                         onClick={() => setOffsetLikes(offsetLikes + limitLikes)}
