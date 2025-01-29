@@ -223,24 +223,8 @@ const UserProfile = () => {
         }
     }, [user_id, offsetSaves, isSavesLoaded])
 
-    useEffect(() => {
-        if (eventKey === 'my-saves') {
-            setIsSavesLoaded(true);
-        }
-    }, [eventKey])
-
-
-    // On select save tab
-    const handleOnSavesTabSelect = () => {
-        console.log('Hakobos:', isSavesLoaded);
-
-        // setIsSavesLoaded(true);
-    }
-
     // Fetch likes and users' data for likes tab 
     useEffect(() => {
-        // if (eventKey !== 'my-likes') return;
-
         const fetchLikedNotices = async () => {
             setIsLoadingMoreLikes(true);
             try {
@@ -262,11 +246,20 @@ const UserProfile = () => {
                 setIsLoadingMoreLikes(false);
             }
         };
-
-        // if (eventKey === 'my-likes' && !isLikesLoaded) {
-        //     fetchLikedNotices();
-        // }
+        if (isLikesLoaded === true) {
+            fetchLikedNotices();
+        }
     }, [user_id, offsetLikes, isLikesLoaded])
+
+    // The Saves and Likes data don't fetch unless isLoaded === true
+    useEffect(() => {
+        if (eventKey === 'my-saves') {
+            setIsSavesLoaded(true);
+        } else if (eventKey === 'my-likes') {
+            setIsLikesLoaded(true);
+        }
+    }, [eventKey]);
+
 
     useEffect(() => {
         console.log('Hello', username);

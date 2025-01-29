@@ -111,12 +111,14 @@ const OtherUserProfile = () => {
     const [offsetSaves, setOffsetSaves] = useState(0);
     const [hasMoreSaves, setHasMoreSaves] = useState(true);
     const [isLoadingMoreSaves, setIsLoadingMoreSaves] = useState(false);
+    const [isSavesLoaded, setIsSavesLoaded] = useState(false);
 
     // Likes Tab
     const [limitLikes] = useState(5);
     const [offsetLikes, setOffsetLikes] = useState(0);
     const [hasMoreLikes, setHasMoreLikes] = useState(true);
     const [isLoadingMoreLikes, setIsLoadingMoreLikes] = useState(false);
+    const [isLikesLoaded, setIsLikesLoaded] = useState(false);
 
     // Following
     const [limitFollowing] = useState(11);
@@ -257,7 +259,7 @@ const OtherUserProfile = () => {
         callFunctionIfNotBlocked(fetchNotices);
     }, [currUserId, offsetNotices])
 
-    // Reset the notices and offset by currUserId change
+    // Reset the notices/saves/likes and offset by currUserId change
     useEffect(() => {
         setOffsetNotices(0);
         setOtherUserNotices([]);
@@ -279,7 +281,7 @@ const OtherUserProfile = () => {
     // Fetch saves and users' data for saves tab 
     useEffect(() => {
         const fetchSaveNotices = async () => {
-            // if (eventKey !== 'saves') return;
+
             setIsLoadingMoreSaves(true);
 
             try {
@@ -310,15 +312,17 @@ const OtherUserProfile = () => {
                 setIsLoadingMoreSaves(false);
             }
         };
-        // setOffsetSaves(0);
-        // setSavedNoticesData([]);
-        callFunctionIfNotBlocked(fetchSaveNotices);
+
+        if (isSavesLoaded === true) {
+            callFunctionIfNotBlocked(fetchSaveNotices);
+        }
+
     }, [currUserId, offsetSaves])
 
     // Fetch likes and users' data for likes tab  
     useEffect(() => {
         const fetchLikedNotices = async () => {
-            // if (eventKey !== 'likes') return;
+
             setIsLoadingMoreLikes(true);
 
             try {
@@ -346,10 +350,21 @@ const OtherUserProfile = () => {
                 setIsLoadingMoreLikes(false);
             }
         };
-        // setOffsetLikes(0);
-        // setLikedNoticesData([]);
-        callFunctionIfNotBlocked(fetchLikedNotices);
+
+        if (isLikesLoaded === true) {
+            callFunctionIfNotBlocked(fetchLikedNotices);
+        }
+
     }, [currUserId, offsetLikes])
+
+    // The Saves and Likes data don't fetch unless isLoaded === true
+    useEffect(() => {
+        if (eventKey === 'saves') {
+            setIsSavesLoaded(true);
+        } else if (eventKey === 'likes') {
+            setIsLikesLoaded(true);
+        }
+    }, [eventKey]);
 
     useEffect(() => {
         console.log('isLoadingMoreLikes updated:', isLoadingMoreLikes);
