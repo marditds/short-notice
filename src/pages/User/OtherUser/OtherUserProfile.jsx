@@ -112,6 +112,7 @@ const OtherUserProfile = () => {
     const [hasMoreSaves, setHasMoreSaves] = useState(true);
     const [isLoadingMoreSaves, setIsLoadingMoreSaves] = useState(false);
     const [isSavesLoaded, setIsSavesLoaded] = useState(false);
+    const [isSavesLoading, setIsSavesLoading] = useState(false);
 
     // Likes Tab
     const [limitLikes] = useState(5);
@@ -119,6 +120,7 @@ const OtherUserProfile = () => {
     const [hasMoreLikes, setHasMoreLikes] = useState(true);
     const [isLoadingMoreLikes, setIsLoadingMoreLikes] = useState(false);
     const [isLikesLoaded, setIsLikesLoaded] = useState(false);
+    const [isLikesLoading, setIsLikesLoading] = useState(false);
 
     // Following
     const [limitFollowing] = useState(11);
@@ -270,9 +272,16 @@ const OtherUserProfile = () => {
     }, [currUserId])
 
     // Call function only if user is not blocked
-    const callFunctionIfNotBlocked = (functionName) => {
+    const callFunctionIfNotBlocked = (functionName, setLoadingStateFunction) => {
         if (isBlocked === false) {
-            functionName();
+            setLoadingStateFunction(true);
+            try {
+                functionName();
+            } catch (error) {
+                console.log('Error running function:', error);
+            } finally {
+                setLoadingStateFunction(false);
+            }
         } else {
             console.log('This user blocked you.');
         }
@@ -314,7 +323,7 @@ const OtherUserProfile = () => {
         };
 
         if (isSavesLoaded === true) {
-            callFunctionIfNotBlocked(fetchSaveNotices);
+            callFunctionIfNotBlocked(fetchSaveNotices, setIsSavesLoading);
         }
 
     }, [currUserId, offsetSaves, isSavesLoaded])
@@ -350,7 +359,7 @@ const OtherUserProfile = () => {
         };
 
         if (isLikesLoaded === true) {
-            callFunctionIfNotBlocked(fetchLikedNotices);
+            callFunctionIfNotBlocked(fetchLikedNotices, setIsLikesLoading);
         }
 
     }, [currUserId, offsetLikes, isLikesLoaded])
@@ -663,47 +672,48 @@ const OtherUserProfile = () => {
                                     title="Saves"
                                 >
                                     {
-                                        // !isLoadingMoreSaves ? (
-                                        savedNoticesData.length !== 0 ?
-                                            <>
-                                                <Notices
-                                                    notices={savedNoticesData}
-                                                    user_id={user_id}
-                                                    likedNotices={likedNotices}
-                                                    savedNotices={savedNotices}
-                                                    eventKey={eventKey}
-                                                    handleLike={handleLike}
-                                                    handleSave={handleSave}
-                                                    handleReport={handleReport}
-                                                    handleReact={handleReact}
-                                                    getReactionsForNotice={getReactionsForNotice}
-                                                    getUserAccountByUserId={getUserAccountByUserId}
-                                                    getReactionByReactionId={getReactionByReactionId}
-                                                    reportReaction={reportReaction}
-                                                />
-                                                <div className="d-flex justify-content-center pt-4 pb-5">
-                                                    {hasMoreSaves ?
-                                                        <Button
-                                                            onClick={() => setOffsetSaves(offsetSaves + limitSaves)}
-                                                            disabled={isLoadingMoreSaves || !hasMoreSaves}
-                                                            className='user-profile__load-more-notices-btn'
-                                                        >
-                                                            {isLoadingMoreSaves ?
-                                                                <><Loading size={24} /> Loading...</>
-                                                                : 'Load More'}
-                                                        </Button>
-                                                        :
-                                                        <EndAsterisks componentName='notices' />
+                                        !isSavesLoading ?
+                                            (savedNoticesData.length !== 0 ?
+                                                <>
+                                                    <Notices
+                                                        notices={savedNoticesData}
+                                                        user_id={user_id}
+                                                        likedNotices={likedNotices}
+                                                        savedNotices={savedNotices}
+                                                        eventKey={eventKey}
+                                                        handleLike={handleLike}
+                                                        handleSave={handleSave}
+                                                        handleReport={handleReport}
+                                                        handleReact={handleReact}
+                                                        getReactionsForNotice={getReactionsForNotice}
+                                                        getUserAccountByUserId={getUserAccountByUserId}
+                                                        getReactionByReactionId={getReactionByReactionId}
+                                                        reportReaction={reportReaction}
+                                                    />
+                                                    <div className="d-flex justify-content-center pt-4 pb-5">
+                                                        {hasMoreSaves ?
+                                                            <Button
+                                                                onClick={() => setOffsetSaves(offsetSaves + limitSaves)}
+                                                                disabled={isLoadingMoreSaves || !hasMoreSaves}
+                                                                className='user-profile__load-more-notices-btn'
+                                                            >
+                                                                {isLoadingMoreSaves ?
+                                                                    <><Loading size={24} /> Loading...</>
+                                                                    : 'Load More'}
+                                                            </Button>
+                                                            :
+                                                            <EndAsterisks componentName='notices' />
+                                                        }
+                                                    </div>
+                                                </>
+                                                :
+                                                <NoticesPlaceholder location={location} otherUsername={otherUsername} section={'saved'}
+                                                    icon={
+                                                        <i className='bi bi-floppy'></i>
                                                     }
-                                                </div>
-                                            </>
-                                            :
-                                            <NoticesPlaceholder location={location} otherUsername={otherUsername} section={'saved'}
-                                                icon={
-                                                    <i className='bi bi-floppy'></i>
-                                                }
-                                            />
-                                        // ) : <Loading size={24} />
+                                                />
+                                            )
+                                            : <Loading />
                                     }
                                 </Tab>
 
@@ -713,47 +723,48 @@ const OtherUserProfile = () => {
                                     title="Likes"
                                 >
                                     {
-                                        // !isLoadingMoreLikes ? (
-                                        likedNoticesData.length !== 0 ?
-                                            <>
-                                                <Notices
-                                                    notices={likedNoticesData}
-                                                    user_id={user_id}
-                                                    likedNotices={likedNotices}
-                                                    savedNotices={savedNotices}
-                                                    eventKey={eventKey}
-                                                    handleLike={handleLike}
-                                                    handleSave={handleSave}
-                                                    handleReport={handleReport}
-                                                    handleReact={handleReact}
-                                                    getReactionsForNotice={getReactionsForNotice}
-                                                    getUserAccountByUserId={getUserAccountByUserId}
-                                                    getReactionByReactionId={getReactionByReactionId}
-                                                    reportReaction={reportReaction}
+                                        !isLikesLoading ? (
+                                            likedNoticesData.length !== 0 ?
+                                                <>
+                                                    <Notices
+                                                        notices={likedNoticesData}
+                                                        user_id={user_id}
+                                                        likedNotices={likedNotices}
+                                                        savedNotices={savedNotices}
+                                                        eventKey={eventKey}
+                                                        handleLike={handleLike}
+                                                        handleSave={handleSave}
+                                                        handleReport={handleReport}
+                                                        handleReact={handleReact}
+                                                        getReactionsForNotice={getReactionsForNotice}
+                                                        getUserAccountByUserId={getUserAccountByUserId}
+                                                        getReactionByReactionId={getReactionByReactionId}
+                                                        reportReaction={reportReaction}
 
+                                                    />
+                                                    <div className="d-flex justify-content-center pt-4 pb-5">
+                                                        {hasMoreLikes ?
+                                                            <Button
+                                                                onClick={() => setOffsetLikes(offsetLikes + limitLikes)}
+                                                                disabled={isLoadingMoreLikes || !hasMoreLikes}
+                                                                className='user-profile__load-more-notices-btn'
+                                                            >
+                                                                {isLoadingMoreLikes ?
+                                                                    <><Loading size={24} /> Loading...</>
+                                                                    : 'Load More'}
+                                                            </Button>
+                                                            :
+                                                            <EndAsterisks componentName='notices' />
+                                                        }
+                                                    </div>
+                                                </>
+                                                :
+                                                <NoticesPlaceholder location={location} otherUsername={otherUsername} section={'saved'}
+                                                    // icon={<BsHandThumbsUp />}
+                                                    icon={<i className="bi bi-hand-thumbs-up"></i>}
                                                 />
-                                                <div className="d-flex justify-content-center pt-4 pb-5">
-                                                    {hasMoreLikes ?
-                                                        <Button
-                                                            onClick={() => setOffsetLikes(offsetLikes + limitLikes)}
-                                                            disabled={isLoadingMoreLikes || !hasMoreLikes}
-                                                            className='user-profile__load-more-notices-btn'
-                                                        >
-                                                            {isLoadingMoreLikes ?
-                                                                <><Loading size={24} /> Loading...</>
-                                                                : 'Load More'}
-                                                        </Button>
-                                                        :
-                                                        <EndAsterisks componentName='notices' />
-                                                    }
-                                                </div>
-                                            </>
-                                            :
-                                            <NoticesPlaceholder location={location} otherUsername={otherUsername} section={'saved'}
-                                                // icon={<BsHandThumbsUp />}
-                                                icon={<i className="bi bi-hand-thumbs-up"></i>}
-                                            />
-                                        // ) : <Loading size={20} />
+                                        )
+                                            : <Loading />
                                     }
 
                                 </Tab>
