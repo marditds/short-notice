@@ -317,14 +317,12 @@ const OtherUserProfile = () => {
             callFunctionIfNotBlocked(fetchSaveNotices);
         }
 
-    }, [currUserId, offsetSaves])
+    }, [currUserId, offsetSaves, isSavesLoaded])
 
     // Fetch likes and users' data for likes tab  
     useEffect(() => {
         const fetchLikedNotices = async () => {
-
             setIsLoadingMoreLikes(true);
-
             try {
                 const allLikedNotices = await getAllLikedNotices(currUserId, limitLikes, offsetLikes);
 
@@ -355,7 +353,7 @@ const OtherUserProfile = () => {
             callFunctionIfNotBlocked(fetchLikedNotices);
         }
 
-    }, [currUserId, offsetLikes])
+    }, [currUserId, offsetLikes, isLikesLoaded])
 
     // The Saves and Likes data don't fetch unless isLoaded === true
     useEffect(() => {
