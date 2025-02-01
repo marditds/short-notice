@@ -105,7 +105,6 @@ const OtherUserProfile = () => {
     const [offsetNotices, setOffsetNotices] = useState(0);
     const [hasMoreNotices, setHasMoreNotices] = useState(true);
     const [isLoadingMore, setIsLoadingMore] = useState(false);
-    const [isNoticesLoading, setIsNoticesLoading] = useState(false);
 
     // Saves Tab
     const [limitSaves] = useState(5);
@@ -113,7 +112,7 @@ const OtherUserProfile = () => {
     const [hasMoreSaves, setHasMoreSaves] = useState(true);
     const [isLoadingMoreSaves, setIsLoadingMoreSaves] = useState(false);
     const [isSavesClicked, setIsSavesClicked] = useState(false);
-    const [isSavesLoading, setIsSavesLoading] = useState(false);
+    const [isLoadingSaves, setIsLoadingSaves] = useState(false);
 
     // Likes Tab
     const [limitLikes] = useState(5);
@@ -121,7 +120,7 @@ const OtherUserProfile = () => {
     const [hasMoreLikes, setHasMoreLikes] = useState(true);
     const [isLoadingMoreLikes, setIsLoadingMoreLikes] = useState(false);
     const [isLikesClicked, setIsLikesClicked] = useState(false);
-    const [isLikesLoading, setIsLikesLoading] = useState(false);
+    const [isLoadingLikes, setIsLoadingLikes] = useState(false);
 
     // Following
     const [limitFollowing] = useState(11);
@@ -259,7 +258,7 @@ const OtherUserProfile = () => {
         };
         // setOffsetNotices(0);
         // setOtherUserNotices([]);
-        callFunctionIfNotBlocked(fetchNotices, setIsNoticesLoading);
+        callFunctionIfNotBlocked(fetchNotices);
     }, [currUserId, offsetNotices])
 
     // Reset the notices/saves/likes and offset by currUserId change
@@ -273,15 +272,12 @@ const OtherUserProfile = () => {
     }, [currUserId])
 
     // Call function only if user is not blocked
-    const callFunctionIfNotBlocked = async (functionName, setLoadingStateFunction) => {
+    const callFunctionIfNotBlocked = async (functionName) => {
         if (isBlocked === false) {
-            setLoadingStateFunction(true);
             try {
                 await functionName();
             } catch (error) {
                 console.log('Error running function:', error);
-            } finally {
-                setLoadingStateFunction(false);
             }
         } else {
             console.log('This user blocked you.');
@@ -292,7 +288,11 @@ const OtherUserProfile = () => {
     useEffect(() => {
         const fetchSaveNotices = async () => {
 
-            setIsLoadingMoreSaves(true);
+            if (offsetSaves === 0) {
+                setIsLoadingSaves(true);
+            } else {
+                setIsLoadingMoreSaves(true);
+            }
 
             try {
                 console.log('currUserId - allSavedNotices', currUserId);
@@ -319,12 +319,15 @@ const OtherUserProfile = () => {
             } catch (error) {
                 console.error('Error fetching saves - ', error);
             } finally {
+                if (offsetSaves === 0) {
+                    setIsLoadingSaves(false);
+                }
                 setIsLoadingMoreSaves(false);
             }
         };
 
         if (isSavesClicked === true) {
-            callFunctionIfNotBlocked(fetchSaveNotices, setIsSavesLoading);
+            callFunctionIfNotBlocked(fetchSaveNotices);
         }
 
     }, [currUserId, offsetSaves, isSavesClicked])
@@ -332,7 +335,13 @@ const OtherUserProfile = () => {
     // Fetch likes and users' data for likes tab  
     useEffect(() => {
         const fetchLikedNotices = async () => {
-            setIsLoadingMoreLikes(true);
+
+            if (offsetLikes === 0) {
+                setIsLoadingLikes(true);
+            } else {
+                setIsLoadingMoreLikes(true);
+            }
+
             try {
                 const allLikedNotices = await getAllLikedNotices(currUserId, limitLikes, offsetLikes);
 
@@ -355,12 +364,15 @@ const OtherUserProfile = () => {
             } catch (error) {
                 console.error('Error fetching likes - ', error);
             } finally {
+                if (offsetLikes === 0) {
+                    setIsLoadingLikes(false);
+                }
                 setIsLoadingMoreLikes(false);
             }
         };
 
         if (isLikesClicked === true) {
-            callFunctionIfNotBlocked(fetchLikedNotices, setIsLikesLoading);
+            callFunctionIfNotBlocked(fetchLikedNotices);
         }
 
     }, [currUserId, offsetLikes, isLikesClicked])
@@ -628,48 +640,45 @@ const OtherUserProfile = () => {
                                     title="Notices"
                                 >
                                     {
-                                        !isNoticesLoading ?
-                                            (otherUserNotices?.length !== 0 ?
-                                                <>
-                                                    <Notices
-                                                        notices={otherUserNotices}
-                                                        likedNotices={likedNotices}
-                                                        savedNotices={savedNotices}
-                                                        reactions={noticesReactions}
-                                                        eventKey={eventKey}
-                                                        user_id={user_id}
-                                                        isOtherUserBlocked={isOtherUserBlocked}
-                                                        handleLike={handleLike}
-                                                        handleSave={handleSave}
-                                                        handleReport={handleReport}
-                                                        handleReact={handleReact}
-                                                        getReactionsForNotice={getReactionsForNotice}
-                                                        getUserAccountByUserId={getUserAccountByUserId}
-                                                        getReactionByReactionId={getReactionByReactionId}
-                                                        reportReaction={reportReaction}
-                                                    />
-                                                    <div className="d-flex justify-content-center my-4 pb-5">
-                                                        {hasMoreNotices ?
-                                                            <Button
-                                                                onClick={() => setOffsetNotices(offsetNotices + limitNotices)}
-                                                                disabled={isLoadingMore || !hasMoreNotices}
-                                                                className='user-profile__load-more-notices-btn'
-                                                            >
-                                                                {isLoadingMore ?
-                                                                    <><Loading size={24} /> Loading...</>
-                                                                    : 'Load More'}
-                                                            </Button>
-                                                            :
-                                                            <EndAsterisks componentName='notices' />
-                                                        }
-                                                    </div>
-                                                </>
-                                                :
-                                                <NoticesPlaceholder location={location}
-                                                    otherUsername={otherUsername}
+                                        otherUserNotices?.length !== 0 ?
+                                            <>
+                                                <Notices
+                                                    notices={otherUserNotices}
+                                                    likedNotices={likedNotices}
+                                                    savedNotices={savedNotices}
+                                                    reactions={noticesReactions}
+                                                    eventKey={eventKey}
+                                                    user_id={user_id}
+                                                    isOtherUserBlocked={isOtherUserBlocked}
+                                                    handleLike={handleLike}
+                                                    handleSave={handleSave}
+                                                    handleReport={handleReport}
+                                                    handleReact={handleReact}
+                                                    getReactionsForNotice={getReactionsForNotice}
+                                                    getUserAccountByUserId={getUserAccountByUserId}
+                                                    getReactionByReactionId={getReactionByReactionId}
+                                                    reportReaction={reportReaction}
                                                 />
-                                            )
-                                            : <Loading />
+                                                <div className="d-flex justify-content-center my-4 pb-5">
+                                                    {hasMoreNotices ?
+                                                        <Button
+                                                            onClick={() => setOffsetNotices(offsetNotices + limitNotices)}
+                                                            disabled={isLoadingMore || !hasMoreNotices}
+                                                            className='user-profile__load-more-notices-btn'
+                                                        >
+                                                            {isLoadingMore ?
+                                                                <><Loading size={24} /> Loading...</>
+                                                                : 'Load More'}
+                                                        </Button>
+                                                        :
+                                                        <EndAsterisks componentName='notices' />
+                                                    }
+                                                </div>
+                                            </>
+                                            :
+                                            <NoticesPlaceholder location={location}
+                                                otherUsername={otherUsername}
+                                            />
                                     }
 
                                 </Tab>
@@ -681,8 +690,7 @@ const OtherUserProfile = () => {
                                 >
                                     {
                                         savedNoticesData.length !== 0 ?
-
-                                            (isSavesLoading !== true ?
+                                            (!isLoadingSaves ?
                                                 <>
                                                     <Notices
                                                         notices={savedNoticesData}
@@ -715,15 +723,16 @@ const OtherUserProfile = () => {
                                                         }
                                                     </div>
                                                 </>
-                                                : <Loading />
-                                            )
+                                                :
+                                                <NoticesPlaceholder location={location} otherUsername={otherUsername} section={'saved'}
+                                                    icon={
+                                                        <i className='bi bi-floppy'></i>
+                                                    }
+                                                />)
                                             :
-                                            <NoticesPlaceholder location={location} otherUsername={otherUsername} section={'saved'}
-                                                icon={
-                                                    <i className='bi bi-floppy'></i>
-                                                }
-                                            />
-
+                                            <div className='d-flex justify-content-center'>
+                                                <Loading /><span className='ms-2'>Loading {otherUsername}'s saves...</span>
+                                            </div>
                                     }
                                 </Tab>
 
@@ -733,8 +742,8 @@ const OtherUserProfile = () => {
                                     title="Likes"
                                 >
                                     {
-                                        isLikesLoading === false ? (
-                                            likedNoticesData.length !== 0 ?
+                                        likedNoticesData.length !== 0 ?
+                                            (!isLoadingLikes ?
                                                 <>
                                                     <Notices
                                                         notices={likedNoticesData}
@@ -773,8 +782,10 @@ const OtherUserProfile = () => {
                                                     // icon={<BsHandThumbsUp />}
                                                     icon={<i className="bi bi-hand-thumbs-up"></i>}
                                                 />
-                                        )
-                                            : <Loading />
+                                            ) :
+                                            <div className='d-flex justify-content-center'>
+                                                <Loading /><span className='ms-2'>Loading {otherUsername}'s likes...</span>
+                                            </div>
                                     }
 
                                 </Tab>
