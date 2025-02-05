@@ -302,6 +302,7 @@
     background-color: var(--main-accent-color) !important;
     color: black !important;
     border: transparent;
+    border-radius: var(--main-rounded-corner);
     transition: var(--main-transition-speed) !important;
 }
 
