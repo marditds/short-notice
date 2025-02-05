@@ -89,7 +89,7 @@ export const Reactions = ({
                                         {formatDateToLocal(reaction.$createdAt)}
                                     </div>
                                 </Col>
-                                <hr className='my-3 my-md-3' />
+                                <hr className='my-2 my-md-3' />
 
                             </Row>
                         </Col>
@@ -106,7 +106,7 @@ export const Reactions = ({
                                     : 'Load More Reactions'}
                             </Button>
                             :
-                            <Col className="text-center text-muted py-3">
+                            <Col className='text-center text-muted py-2 py-md-3'>
                                 <i className="bi bi-asterisk"></i>
                                 <i className="bi bi-asterisk"></i>
                                 <i className="bi bi-asterisk"></i>

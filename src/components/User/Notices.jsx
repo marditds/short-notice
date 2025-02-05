@@ -131,8 +131,9 @@ export const Notices = ({
 
                     const currentUser = await getUserAccountByUserId(user_id);
 
+                    const tempId = `temp-${Date.now()}`;
                     const tempReaction = {
-                        $id: `temp-${Date.now()}`,
+                        $id: tempId,
                         content: reactionText,
                         sender_id: notice.user_id,
                         $createdAt: new Date().toISOString(),
@@ -170,6 +171,34 @@ export const Notices = ({
                     //         reaction.$id === tempReaction.$id ? res : reaction
                     //     )
                     // }));
+
+                    setLoadedReactions(prev => ({
+                        ...prev,
+                        [reactingNoticeId]: prev[reactingNoticeId].map(reaction =>
+                            reaction.$id === tempId ? {
+                                ...res,
+                                sender_id: user_id
+                            } : reaction
+                        )
+                    }));
+
+                    setReactionUsernameMap(prev => ({
+                        ...prev,
+                        [reactingNoticeId]: {
+                            ...prev[reactingNoticeId],
+                            [user_id]: currentUser.username,
+                            [res.$id]: currentUser.username
+                        }
+                    }));
+
+                    setReactionAvatarMap(prev => ({
+                        ...prev,
+                        [reactingNoticeId]: {
+                            ...prev[reactingNoticeId],
+                            [user_id]: currentUser.avatar,
+                            [res.$id]: currentUser.avatar
+                        }
+                    }));
 
                     setReactionText('');
                     setReactionCharCount(0);
@@ -286,11 +315,23 @@ export const Notices = ({
 
             console.log('ReactionAvatarMap', reactionAvatarMap);
 
+            // setLoadedReactions(prev => ({
+            //     ...prev,
+            //     [noticeId]: [
+            //         ...(prev[noticeId] || []),
+            //         ...(noticeReactions?.documents || [])
+            //     ]
+            // }));
+
             setLoadedReactions(prev => ({
                 ...prev,
                 [noticeId]: [
                     ...(prev[noticeId] || []),
-                    ...(noticeReactions?.documents || [])
+                    ...noticeReactions.documents.filter(newReaction =>
+                        !prev[noticeId]?.some(existingReaction =>
+                            existingReaction.$id === newReaction.$id
+                        )
+                    )
                 ]
             }));
 

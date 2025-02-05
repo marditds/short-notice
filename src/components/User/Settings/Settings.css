@@ -51,12 +51,12 @@
 }
 
 .settings__upload-avatar-field:hover {
-    border-color: var(--main-accent-color);
+    border-color: var(--main-accent-color-hover);
 }
 
 .settings__upload-avatar-field:focus,
 .settings__upload-avatar-field:active {
-    border-color: var(--main-accent-color-hover);
+    border-color: var(--main-accent-color);
 }
 
 .settings__unblocked-btn,
@@ -120,15 +120,15 @@
 }
 
 .settings__username-field:hover {
-    border-color: var(--main-accent-color) !important;
+    border-color: var(--main-accent-color-hover) !important;
 }
 
 .settings__username-field:active {
-    border-color: var(--main-accent-color-hover) !important;
+    border-color: var(--main-accent-color) !important;
 }
 
 .settings__username-field:focus {
-    border-color: var(--main-accent-color-hover) !important;
+    border-color: var(--main-accent-color) !important;
     border-width: 1.5px;
     box-shadow: none !important;
 }
@@ -344,6 +344,10 @@
         margin-inline: 0;
         min-width: calc(50% - 6px) !important;
     }
+
+    .settings__update-interests-tag-col {
+        margin: 5px
+    }
 }
 
 @media (max-width: 575px) {
@@ -376,4 +380,6 @@
     .settings__update-username-btn-col {
         padding-inline: 0;
     }
+
+
 }
