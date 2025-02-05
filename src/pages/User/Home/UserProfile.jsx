@@ -152,7 +152,6 @@ const UserProfile = () => {
 
     // function for fetching notices
     const fetchNotices = async () => {
-        // fetchUserNotices(user_id, setNotices);
         setIsLoadingMore(true);
         try {
             const usrNtcs = await fetchUserNotices(user_id, limit, lastId);
@@ -161,10 +160,14 @@ const UserProfile = () => {
 
             if (usrNtcs.length > 0) {
 
-                setUserProfileNotices((prevNotices) => [
-                    ...prevNotices,
-                    ...usrNtcs,
-                ]);
+                if (lastId !== 0) {
+                    setUserProfileNotices((prevNotices) => [
+                        ...prevNotices,
+                        ...usrNtcs,
+                    ]);
+                } else {
+                    setUserProfileNotices(usrNtcs);
+                }
 
                 setLastId(usrNtcs[usrNtcs.length - 1].$id);
 
@@ -190,10 +193,15 @@ const UserProfile = () => {
     // Display notice in UI immediately after it is added 
     useEffect(() => {
         if (latestNotice && Object.keys(latestNotice).length > 0) {
-            setUserProfileNotices((prevNotices) => [
-                latestNotice,
-                ...prevNotices
-            ]);
+
+            setUserProfileNotices((prevNotices) => {
+
+                const noticeExists = prevNotices.some(notice => notice.$id === latestNotice.$id);
+                if (!noticeExists) {
+                    return [latestNotice, ...prevNotices];
+                }
+                return prevNotices;
+            });
         }
     }, [latestNotice])
 
@@ -667,6 +675,7 @@ const UserProfile = () => {
                 </Tab>
             </Tabs>
 
+            {/* Edit Notice Modal */}
             <Modal show={showEditModal}
                 onHide={handleCloseEditModal}
                 className='notice__edit--modal'
@@ -712,6 +721,7 @@ const UserProfile = () => {
                 </Modal.Footer>
             </Modal>
 
+            {/* Delete Notice Modal */}
             <Modal show={showDeleteModal}
                 onHide={handleCloseDeleteModal}
                 className='notice__delete--modal'

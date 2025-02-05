@@ -34,7 +34,7 @@ const PreLogin = ({ onSuccess }) => {
                 />
             </Header>
             {
-                location.pathname === '/' && <Home />
+                location.pathname === '/' && <Home onSuccess={onSuccess} />
             }
             {
                 location.pathname === '/about' && <About />

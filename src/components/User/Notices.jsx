@@ -257,7 +257,6 @@ export const Notices = ({
                 return;
             }
 
-
             const usersIds = noticeReactions.documents.map((reaction) => reaction.sender_id);
 
             console.log('usersIds', usersIds);
@@ -316,6 +315,7 @@ export const Notices = ({
         }
     };
 
+    // Reset reaction content and load more button
     useEffect(() => {
 
         setShowLoadMoreBtn(true);
@@ -661,8 +661,8 @@ export const Notices = ({
                                 <Reactions
                                     notice={notice}
                                     defaultAvatar={defaultAvatar}
-                                    isLoadingMoreReactions={isLoadingMoreReactions}
                                     loadedReactions={loadedReactions}
+                                    isLoadingMoreReactions={isLoadingMoreReactions}
                                     loadingStates={loadingStates}
                                     reactionAvatarMap={reactionAvatarMap}
                                     reactionUsernameMap={reactionUsernameMap}
