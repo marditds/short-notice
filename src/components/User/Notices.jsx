@@ -6,7 +6,7 @@ import defaultAvatar from '../../assets/default.png';
 import { Reactions } from './Reactions';
 import { screenUtils } from '../../lib/utils/screenUtils';
 import { ComposeReaction } from './ComposeReaction';
-import { ReportModal } from './ReportModal';
+import { ReportModal } from './Modals';
 
 export const Notices = ({
     notices,
@@ -606,59 +606,38 @@ export const Notices = ({
                                                             <div
                                                                 className={`notice__reaction-btn ${isOtherUserBlocked ? 'disabled' : ''} ms-2`}
                                                                 onClick={() => {
-                                                                    isOtherUserBlocked ? console.log(`YOU are blocked`) : handleLike(notice);
+                                                                    isOtherUserBlocked ? console.log(`YOU are blocked`) : handleLike(notice.$id, notice.user_id);
                                                                 }}
                                                             >
                                                                 {likedNotices && likedNotices[notice.$id] ? (
                                                                     <>
-                                                                        {/* <BsHandThumbsUpFill
-                                                                            className='notice__reaction-btn-fill'
-                                                                        style={{ fontSize: '50px' }} 
-                                                                        size={19}
-                                                                        /> */}
-
-                                                                        <i className="bi bi-hand-thumbs-up-fill notice__reaction-btn-fill"></i>
+                                                                        <i className='bi bi-hand-thumbs-up-fill notice__reaction-btn-fill'></i>
                                                                     </>
                                                                 ) : (
-                                                                    // <BsHandThumbsUp
-                                                                    // size={19}
-                                                                    // />
-                                                                    <i className="bi bi-hand-thumbs-up notice__reaction-btn"></i>
+                                                                    <i className='bi bi-hand-thumbs-up notice__reaction-btn'></i>
                                                                 )}
                                                             </div>
                                                             <div
-                                                                onClick={() => handleSave(notice)}
+                                                                onClick={() => handleSave(notice.$id, notice.user_id)}
                                                                 className={`notice__reaction-btn ${isOtherUserBlocked ? 'disabled' : ''} ms-2`}
                                                             >
                                                                 {savedNotices && savedNotices[notice.$id] ? (
-                                                                    // <RiSave2Fill
-                                                                    // className='notice__reaction-btn-fill'
-                                                                    // size={20}
-                                                                    // />
-                                                                    <i className="bi bi-floppy-fill notice__reaction-btn-fill"></i>
+                                                                    <i className='bi bi-floppy-fill notice__reaction-btn-fill'></i>
 
                                                                 ) : (
-                                                                    // <RiSave2Line
-                                                                    // size={20} 
-                                                                    // />
-                                                                    <i className="bi bi-floppy notice__reaction-btn"></i>
+                                                                    <i className='bi bi-floppy notice__reaction-btn'></i>
                                                                 )}
                                                             </div>
                                                             <div
-                                                                // onClick={() => handleReactNotice(notice.$id, notice.username, notice.avatarUrl, notice.text)}
                                                                 className={`notice__reaction-btn ${isOtherUserBlocked ? 'disabled' : ''} ms-2`}
                                                             >
-                                                                {/* <BsReply size={23} /> */}
-                                                                <i className="bi bi-reply"></i>
+                                                                <i className='bi bi-reply'></i>
                                                             </div>
                                                             <div
                                                                 onClick={() => onReportNoticeClick(notice.$id)}
                                                                 className='notice__reaction-btn ms-2'
                                                             >
-                                                                <i className="bi bi-exclamation-circle"></i>
-                                                                {/* <AiOutlineExclamationCircle */}
-                                                                {/* size={22} */}
-                                                                {/* /> */}
+                                                                <i className='bi bi-exclamation-circle'></i>
                                                             </div>
                                                         </div>
                                                     }

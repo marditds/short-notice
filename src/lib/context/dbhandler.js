@@ -1574,7 +1574,7 @@ export const updatePassocde = async (user_id, passcode) => {
     }
 }
 
-export const getPassocdeByBusincessId = async (user_id) => {
+export const getPassocdeByOrganizationId = async (user_id) => {
     try {
         const response = await databases.listDocuments(
             import.meta.env.VITE_DATABASE,

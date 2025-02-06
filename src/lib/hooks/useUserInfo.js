@@ -1,11 +1,14 @@
 import { useState, useEffect, useCallback } from 'react';
-import { createBlock, getBlockedUsersByUser as fetchBlockedUsersByUser, getBlockedUsersByUserByBatch as fetchBlockedUsersByUserByBatch, getUsersBlockingUser as fetchUsersBlockingUser, removeBlockUsingBlockedId, checkIdExistsInAuth, checkEmailExistsInAuth as checkEmailInAuthFromServer, registerAuthUser, getUserById, getUserByIdQuery as fetchUserByIdQuery, deleteAuthUser, createUserSession, getSessionDetails as fetchSessionDetails, deleteUserSession, updateUser, updateAuthUser, deleteUser, getUserByUsername as fetchUserByUsername, getAllUsersByString as fetchAllUsersByString, deleteAllNotices, deleteAllReactions, removeAllSaves, removeAllLikes, removeAllFollows, getUsersDocument, createFollow, unfollow, getUserFollowingsById, getUserFollowersById, followedByUserCount, followingTheUserCount, getPersonalFeedAccounts as fetchPersonalFeedAccounts, createPassocde, updatePassocde, getPassocdeByBusincessId as fetchPassocdeByBusincessId, createUserReport, getFollowStatus as fetchFollowStatus } from '../context/dbhandler';
+import { useNavigate } from 'react-router-dom';
+import { createBlock, getBlockedUsersByUser as fetchBlockedUsersByUser, getBlockedUsersByUserByBatch as fetchBlockedUsersByUserByBatch, getUsersBlockingUser as fetchUsersBlockingUser, removeBlockUsingBlockedId, checkIdExistsInAuth, checkEmailExistsInAuth as checkEmailInAuthFromServer, registerAuthUser, getUserById, getUserByIdQuery as fetchUserByIdQuery, deleteAuthUser, createUserSession, getSessionDetails as fetchSessionDetails, deleteUserSession, updateUser, updateAuthUser, deleteUser, getUserByUsername as fetchUserByUsername, getAllUsersByString as fetchAllUsersByString, deleteAllNotices, deleteAllReactions, removeAllSaves, removeAllLikes, removeAllFollows, getUsersDocument, createFollow, unfollow, getUserFollowingsById, getUserFollowersById, followedByUserCount, followingTheUserCount, getPersonalFeedAccounts as fetchPersonalFeedAccounts, createPassocde, updatePassocde, getPassocdeByOrganizationId as fetchPassocdeByOrganizationId, createUserReport, getFollowStatus as fetchFollowStatus } from '../context/dbhandler';
 import { useUserContext } from '../context/UserContext';
 import { UserId } from '../../components/User/UserId';
 
 const useUserInfo = (data) => {
 
     const { setUsername } = useUserContext();
+    const navigate = useNavigate();
+
     const [userId, setUserId] = useState(null);
 
     const [following, setFollowing] = useState({});
@@ -217,6 +220,15 @@ const useUserInfo = (data) => {
         }
     }
 
+    const handleFollow = async (currUserId) => {
+        try {
+            await followUser(currUserId);
+            setIsFollowing(prevState => !prevState);
+        } catch (error) {
+            console.error('Failed to follow/unfollow user:', error);
+        }
+    }
+
     const unfollowUser = async (otherUser_id) => {
         try {
             await unfollow(userId, otherUser_id);
@@ -390,9 +402,9 @@ const useUserInfo = (data) => {
         }
     }
 
-    const getPassocdeByBusincessId = async (userId) => {
+    const getPassocdeByOrganizationId = async (userId) => {
         try {
-            const res = await fetchPassocdeByBusincessId(userId);
+            const res = await fetchPassocdeByOrganizationId(userId);
             return res.documents;
         } catch (error) {
             console.error('Error fetching passcode:', error);
@@ -408,6 +420,16 @@ const useUserInfo = (data) => {
             return res;
         } catch (error) {
             console.error('Error making block:', error);
+        }
+    }
+
+    const handleBlock = async (currUserId) => {
+        try {
+            await makeBlock(currUserId);
+            await unfollowUser(currUserId);
+            navigate('/user/feed');
+        } catch (error) {
+            console.error('Failed to block user:', error);
         }
     }
 
@@ -458,7 +480,7 @@ const useUserInfo = (data) => {
         }
     }
 
-    const reportUser = async (reported_id, reason) => {
+    const handleUserReport = async (reported_id, reason) => {
         try {
             await createUserReport(reported_id, reason, userId);
             console.log('Reporting user successful!');
@@ -480,6 +502,7 @@ const useUserInfo = (data) => {
         // followersAccounts,
         // followingAccounts,
         makeBlock,
+        handleBlock,
         getBlockedUsersByUser,
         getBlockedUsersByUserByBatch,
         getUsersBlockingUser,
@@ -497,6 +520,7 @@ const useUserInfo = (data) => {
         getUsersData,
         fetchUsersData,
         followUser,
+        handleFollow,
         unfollowUser,
         getFollowStatus,
         setIsFollowing,
@@ -510,8 +534,8 @@ const useUserInfo = (data) => {
         getUserByIdQuery,
         makePasscode,
         editPasscode,
-        getPassocdeByBusincessId,
-        reportUser
+        getPassocdeByOrganizationId,
+        handleUserReport
     }
 }
 

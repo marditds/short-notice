@@ -60,10 +60,10 @@ const UserFeed = () => {
         savedNotices,
         getInterests,
         getFeedNotices,
-        saveNotice,
+        handleSave,
         handleReportNotice,
-        likeNotice,
-        sendReaction,
+        handleLike,
+        handleReact,
         getReactionsForNotice,
         getReactionByReactionId,
         reportReaction,
@@ -178,7 +178,7 @@ const UserFeed = () => {
                     setHasMoreGeneralNotices(false);
                 } else {
                     setHasMoreGeneralNotices(true);
-                    setLastId(filteredNotices[filteredNotices.length - 1].$id);
+                    setLastId(filteredNotices[filteredNotices.length - 1]?.$id);
                 }
             } catch (error) {
                 console.error('Error fetching initial feed notices:', error);
@@ -217,7 +217,7 @@ const UserFeed = () => {
                 if (notices.length < limit) {
                     setHasMoreGeneralNotices(false);
                 } else {
-                    setLastId(filteredNotices[filteredNotices.length - 1].$id);
+                    setLastId(filteredNotices[filteredNotices.length - 1]?.$id);
                 }
             } catch (error) {
                 console.error('Error loading more notices:', error);
@@ -347,52 +347,6 @@ const UserFeed = () => {
     //     }));
 
     // };
-
-    //Fetch reactions to feed notices  
-    // useEffect(() => {
-    //     try {
-    //         fetchReactionsForNotices(feedNotices, setNoticesReactions);
-    //     } catch (error) {
-    //         console.error(error);
-    //     }
-
-    // }, [feedNotices])
-
-
-    const handleSave = async (notice) => {
-        try {
-            await saveNotice(notice.$id, notice.user_id, user_id);
-        } catch (error) {
-            console.error('Error creating save entry:', error);
-        }
-    };
-
-    const handleLike = async (notice) => {
-        try {
-            await likeNotice(notice.$id, notice.user_id, user_id)
-        } catch (error) {
-            console.error('Could not like notice');
-        }
-    }
-
-    // const handleReportNotice = async (notice_id, author_id, reason, noticeText) => {
-    //     try {
-    //         await reportNotice(notice_id, author_id, reason, noticeText);
-    //         return 'Report success';
-    //     } catch (error) {
-    //         console.error('Could not report notice');
-    //     }
-    // }
-
-    const handleReact = async (currUserId, content, notice_id, expiresAt, reactionGif) => {
-        try {
-            const res = await sendReaction(currUserId, content, notice_id, expiresAt, reactionGif);
-            console.log('Success handleReact.');
-            return res;
-        } catch (error) {
-            console.error('Failed handleReact:', error);
-        }
-    }
 
     const handleFeedToggle = () => {
         setIsFeedToggled((prev) => !prev);

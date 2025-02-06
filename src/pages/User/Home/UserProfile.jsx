@@ -14,6 +14,7 @@ import { Loading } from '../../../components/Loading/Loading.jsx';
 import '../../../components/User/Profile/UserProfile.css';
 import { EndAsterisks } from '../../../components/User/EndAsterisks.jsx';
 import { NoticesPlaceholder } from '../../../components/User/NoticesPlaceholder.jsx';
+import { ModifyModal } from '../../../components/User/Modals.jsx';
 // import { RiSave2Line } from "react-icons/ri";
 // import { BsHandThumbsUp } from 'react-icons/bs';
 
@@ -44,12 +45,14 @@ const UserProfile = () => {
         isRemovingNotice,
         addNotice,
         editNotice,
+        handleSaveEdit,
         removeNotice,
+        handleDelete,
         setRemovingNoticeId,
-        likeNotice,
-        saveNotice,
+        handleLike,
+        handleSave,
         handleReportNotice,
-        sendReaction,
+        handleReact,
         fetchUserNotices,
         getAllLikedNotices,
         getAllSavedNotices,
@@ -378,55 +381,10 @@ const UserProfile = () => {
         setShowEditModal(true);
     };
 
-    const handleSaveEdit = async () => {
-        if (editingNoticeId && noticeText.trim()) {
-            console.log('EditingNoticeId + noticeText', { editingNoticeId, noticeText });
-
-            const noticeToUpdate = userProfileNotices.find(notice => notice.$id === editingNoticeId);
-
-            console.log('noticeToUpdate', noticeToUpdate);
-
-            let updatedNotice = null;
-            if (noticeToUpdate) {
-                updatedNotice = {
-                    ...noticeToUpdate,
-                    text: noticeText
-                };
-
-                const updtdntc = await editNotice(editingNoticeId, updatedNotice.text);
-
-                console.log('editingNoticeId', editingNoticeId);
-
-                console.log('updtdntc.text', updtdntc.text);
-
-                setUserProfileNotices(prevNotices =>
-                    prevNotices.map((notice) =>
-                        notice.$id === editingNoticeId ?
-                            { ...notice, text: updtdntc.text } : notice)
-                );
-
-                setEditingNoticeId(null);
-                setNoticeText('');
-                setShowEditModal(false);
-            }
-
-        }
-    };
-
     const handleDeleteNotice = (noticeId) => {
         console.log('RemovingNoticeId', noticeId);
         setRemovingNoticeId(noticeId);
         setShowDeleteModal(true);
-    }
-
-    const handleDelete = async () => {
-        if (removingNoticeId) {
-            console.log('removingNoticeId', removingNoticeId);
-            await removeNotice(removingNoticeId);
-            setUserProfileNotices(prevNotices => prevNotices.filter(notice => notice.$id !== removingNoticeId));
-            setRemovingNoticeId(null);
-            setShowDeleteModal(false);
-        }
     }
 
     const handleCloseEditModal = () => {
@@ -438,40 +396,6 @@ const UserProfile = () => {
     const handleCloseDeleteModal = () => {
         setShowDeleteModal(false);
         setRemovingNoticeId(null);
-    }
-
-    const handleLike = async (notice) => {
-        try {
-            await likeNotice(notice.$id, notice.user_id);
-        } catch (error) {
-            console.error('Error creating like entry:', error);
-        }
-    }
-
-    const handleSave = async (notice) => {
-        try {
-            await saveNotice(notice.$id, notice.user_id, user_id);
-        } catch (error) {
-            console.error('Error creating save entry:', error);
-        }
-    };
-
-    // const handleReportNotice = async (notice_id, author_id, reason, noticeText) => {
-    //     try {
-    //         await reportNotice(notice_id, author_id, reason, noticeText);
-    //         return 'Report success';
-    //     } catch (error) {
-    //         console.error('Could not report notice');
-    //     }
-    // }
-
-    const handleReact = async (otherUser_id, content, notice_id, expiresAt, reactionGif) => {
-        try {
-            const res = await sendReaction(otherUser_id, content, notice_id, expiresAt, reactionGif);
-            return res;
-        } catch (error) {
-            console.error('Failed handleReact:', error);
-        }
     }
 
     useEffect(() => {
@@ -682,85 +606,24 @@ const UserProfile = () => {
             </Tabs>
 
             {/* Edit Notice Modal */}
-            <Modal show={showEditModal}
-                onHide={handleCloseEditModal}
-                className='notice__edit--modal'
-            >
-                <Modal.Header
-                    className='notice__edit--modal-header'
-                >
-                    <Modal.Title>Edit Notice</Modal.Title>
-                </Modal.Header>
-                <Modal.Body
-                    className='notice__edit--modal-body'
-                >
-                    <Form>
-                        <Form.Group className='mb-3' controlId='editNotice'>
-                            <Form.Label>Your Notice Text</Form.Label>
-                            <Form.Control
-                                as='textarea'
-                                rows={8}
-                                value={noticeText}
-                                onChange={(e) => setNoticeText(e.target.value)}
-                                className='notice__edit--modal-form-control'
-                            />
-                        </Form.Group>
-                    </Form>
-                </Modal.Body>
-                <Modal.Footer
-                    className='notice__edit--modal-footer'
-                >
-                    <Button
-
-                        onClick={handleCloseEditModal}
-                        className='notice__edit--modal-btn'
-                    >
-                        Cancel
-                    </Button>
-                    <Button
-
-                        onClick={handleSaveEdit}
-                        className='notice__edit--modal-btn'
-                    >
-                        Save
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+            <ModifyModal
+                showModifyModal={showEditModal}
+                noticeText={noticeText}
+                modifyModalTitle={'Edit'}
+                setNoticeText={setNoticeText}
+                handleCloseModifyModal={handleCloseEditModal}
+                handleSaveEdit={() => handleSaveEdit(editingNoticeId, noticeText, userProfileNotices, setUserProfileNotices, setEditingNoticeId, setNoticeText, setShowEditModal)}
+            />
 
             {/* Delete Notice Modal */}
-            <Modal show={showDeleteModal}
-                onHide={handleCloseDeleteModal}
-                className='notice__delete--modal'
-            >
-                <Modal.Header
-                    className='notice__delete--modal-header border-bottom-0'
-                >
-                    <Modal.Title>Delete Notice</Modal.Title>
-                </Modal.Header>
-                <Modal.Body
-                    className='notice__delete--modal-body'
-                >
-                    <p className='mb-0'>
-                        Are you sure you want to delete this notice❓
-                    </p>
-                </Modal.Body>
-                <Modal.Footer
-                    className='notice__delete--modal-footer border-top-0'
-                >
-                    <Button onClick={handleCloseDeleteModal}
-                        className='notice__delete--modal-btn'
-                    >
-                        Cancel
-                    </Button>
-                    <Button
-                        onClick={handleDelete}
-                        disabled={isRemovingNotice}
-                        className='notice__delete--modal-btn'
-                    >
-                        {isRemovingNotice ? <Loading /> : 'Delete'}
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+            <ModifyModal
+                showModifyModal={showDeleteModal}
+                isRemovingNotice={isRemovingNotice}
+                modifyModalTitle={'Delete'}
+                handleCloseModifyModal={handleCloseDeleteModal}
+                handleDelete={() => handleDelete(setUserProfileNotices, setShowDeleteModal)}
+            />
+
         </>
     )
 }

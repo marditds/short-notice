@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { useParams, redirect, useNavigate, useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { Profile } from '../../../components/User/Profile/Profile.jsx';
 import { Notices } from '../../../components/User/Notices.jsx';
-import { Tabs, Tab, Form, Modal, Button } from 'react-bootstrap';
+import { Tabs, Tab, Button } from 'react-bootstrap';
 import { useUserContext } from '../../../lib/context/UserContext.jsx';
 import useUserInfo from '../../../lib/hooks/useUserInfo.js';
 import { getAvatarUrl as avatarUtil } from '../../../lib/utils/avatarUtils.js';
@@ -14,9 +14,6 @@ import { Passcode } from '../../../components/User/Passcode.jsx';
 import { Loading } from '../../../components/Loading/Loading.jsx';
 import { EndAsterisks } from '../../../components/User/EndAsterisks.jsx';
 import { NoticesPlaceholder } from '../../../components/User/NoticesPlaceholder.jsx';
-// import { RiSave2Line } from "react-icons/ri";
-// import { BsHandThumbsUp } from 'react-icons/bs';
-
 
 
 const OtherUserProfile = () => {
@@ -36,24 +33,16 @@ const OtherUserProfile = () => {
         likedNotices,
         savedNotices,
         noticesReactions,
-        // saveReactions,
-        // likedReactions,
-        likeNotice,
-        saveNotice,
+        handleLike,
+        handleSave,
         handleReportNotice,
         getNoticeByUserId,
         getAllLikedNotices,
         getAllSavedNotices,
-        deleteExpiredNotice,
-        // fetchUserNotices,
-        sendReaction,
+        handleReact,
         getReactionsForNotice,
         getReactionByReactionId,
         reportReaction
-        // fetchReactionsForNotices,
-        // setNoticesReactions,
-        // setSaveReactions,
-        // setLikedReactions
     } = useNotices(googleUserData);
 
     const { filterBlocksFromLikesSaves } = useUnblockedNotices();
@@ -64,21 +53,19 @@ const OtherUserProfile = () => {
         isFollowing,
         followersCount,
         followingCount,
-        makeBlock,
+        handleBlock,
         getUserByUsername,
         getUserAccountByUserId,
         fetchUsersData,
         getBlockedUsersByUser,
-        followUser,
-        unfollowUser,
+        handleFollow,
         getFollowStatus,
-        setIsFollowing,
         getfollwedByUserCount,
         getFollowingTheUserCount,
         fetchAccountsFollowingTheUser,
         fetchAccountsFollowedByUser,
-        getPassocdeByBusincessId,
-        reportUser
+        getPassocdeByOrganizationId,
+        handleUserReport
     } = useUserInfo(googleUserData);
 
     // const { isSmallScreen } = screenUtils();
@@ -472,70 +459,6 @@ const OtherUserProfile = () => {
         }
     }, [currUserId]);
 
-    const handleLike = async (notice) => {
-        try {
-            await likeNotice(notice.$id, notice.user_id);
-        } catch (error) {
-            console.error('Could not like notice');
-        }
-    }
-
-    const handleSave = async (notice) => {
-        try {
-            await saveNotice(notice.$id, notice.user_id);
-        } catch (error) {
-            console.error('Error creating save entry:', error);
-        }
-    };
-
-    // const handleReportNotice = async (notice_id, author_id, reason, noticeText) => {
-    //     try {
-    //         await reportNotice(notice_id, author_id, reason, noticeText);
-    //         return 'Report success';
-    //     } catch (error) {
-    //         console.error('Could not report notice');
-    //     }
-    // }
-
-    const handleReact = async (currUserId, content, notice_id, expiresAt, reactionGif) => {
-        try {
-            const res = await sendReaction(currUserId, content, notice_id, expiresAt, reactionGif);
-            console.log('Success handleReact.');
-            return res;
-        } catch (error) {
-            console.error('Failed handleReact:', error);
-        }
-    }
-
-    const handleFollow = async (currUserId) => {
-        try {
-            await followUser(currUserId);
-            setIsFollowing(prevState => !prevState);
-        } catch (error) {
-            console.error('Failed to follow/unfollow user:', error);
-        }
-    }
-
-    const handleBlock = async (currUserId) => {
-        try {
-            await makeBlock(currUserId);
-            await unfollowUser(currUserId);
-            navigate('/user/feed');
-        } catch (error) {
-            console.error('Failed to block user:', error);
-        }
-    }
-
-    // Reporting user
-    const handleUserReport = async (reported_id, reason) => {
-        try {
-            await reportUser(reported_id, reason);
-            console.log('Reporting user successful!');
-        } catch (error) {
-            console.error('Error reporting user', error);
-        }
-    }
-
     const timerSpacing = 'mx-2';
     const timerDisplay = 'd-flex';
     const classname = `${timerDisplay} ${timerSpacing}`;
@@ -544,7 +467,7 @@ const OtherUserProfile = () => {
         try {
             console.log('accountTypeCheck', accountTypeCheck);
 
-            const psscd = await getPassocdeByBusincessId(currUserId);
+            const psscd = await getPassocdeByOrganizationId(currUserId);
 
             console.log('psscd', psscd[0].passcode);
             localStorage.setItem('passcode', passcode);

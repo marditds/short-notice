@@ -158,6 +158,41 @@ const useNotices = (googleUserData) => {
         return updtNtc;
     };
 
+    const handleSaveEdit = async (editingNoticeId, noticeText, userProfileNotices, setUserProfileNotices, setEditingNoticeId, setNoticeText, setShowEditModal) => {
+        if (editingNoticeId && noticeText.trim()) {
+            console.log('EditingNoticeId + noticeText', { editingNoticeId, noticeText });
+
+            const noticeToUpdate = userProfileNotices.find(notice => notice.$id === editingNoticeId);
+
+            console.log('noticeToUpdate', noticeToUpdate);
+
+            let updatedNotice = null;
+            if (noticeToUpdate) {
+                updatedNotice = {
+                    ...noticeToUpdate,
+                    text: noticeText
+                };
+
+                const updtdntc = await editNotice(editingNoticeId, updatedNotice.text);
+
+                console.log('editingNoticeId', editingNoticeId);
+
+                console.log('updtdntc.text', updtdntc.text);
+
+                setUserProfileNotices(prevNotices =>
+                    prevNotices.map((notice) =>
+                        notice.$id === editingNoticeId ?
+                            { ...notice, text: updtdntc.text } : notice)
+                );
+
+                setEditingNoticeId(null);
+                setNoticeText('');
+                setShowEditModal(false);
+            }
+
+        }
+    };
+
     const removeNotice = async (noticeId) => {
 
         console.log('Attempting to delete notice with ID:', noticeId);
@@ -186,6 +221,16 @@ const useNotices = (googleUserData) => {
         }
 
     };
+
+    const handleDelete = async (setUserProfileNotices, setShowDeleteModal) => {
+        if (removingNoticeId) {
+            console.log('removingNoticeId', removingNoticeId);
+            await removeNotice(removingNoticeId);
+            setUserProfileNotices(prevNotices => prevNotices.filter(notice => notice.$id !== removingNoticeId));
+            setRemovingNoticeId(null);
+            setShowDeleteModal(false);
+        }
+    }
 
     const removeAllNoticesByUser = async (user_id) => {
         try {
@@ -326,7 +371,7 @@ const useNotices = (googleUserData) => {
         }
     }
 
-    const saveNotice = async (notice_id, author_id) => {
+    const handleSave = async (notice_id, author_id) => {
         try {
             if (savedNotices[notice_id]) {
                 await removeSave(savedNotices[notice_id]);
@@ -347,7 +392,7 @@ const useNotices = (googleUserData) => {
         }
     }
 
-    const likeNotice = async (notice_id, author_id) => {
+    const handleLike = async (notice_id, author_id) => {
         try {
             if (likedNotices[notice_id]) {
                 await removeLike(likedNotices[notice_id]);
@@ -447,7 +492,7 @@ const useNotices = (googleUserData) => {
         }
     };
 
-    const sendReaction = async (otherUser_id, content, notice_id, expiresAt, reactionGif) => {
+    const handleReact = async (otherUser_id, content, notice_id, expiresAt, reactionGif) => {
 
         const now = new Date();
 
@@ -558,7 +603,9 @@ const useNotices = (googleUserData) => {
         likedReactions,
         addNotice,
         editNotice,
+        handleSaveEdit,
         removeNotice,
+        handleDelete,
         deleteExpiredNotice,
         getFeedNotices,
         fetchUserNotices,
@@ -567,17 +614,17 @@ const useNotices = (googleUserData) => {
         getInterests,
         setRemovingNoticeId,
         updateInterests,
-        saveNotice,
+        handleSave,
         getAllLikedNotices,
         getNoticeByUserId,
         getAllLikesByNoticeId,
         getAllSavedNotices,
         handleReportNotice,
-        likeNotice,
+        handleLike,
         setLikedNotices,
         removeAllNoticesByUser,
         removeAllReactionsByUser,
-        sendReaction,
+        handleReact,
         removeReaction,
         getReactionsForNotice,
         getReactionByReactionId,
