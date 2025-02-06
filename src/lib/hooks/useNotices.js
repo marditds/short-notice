@@ -437,7 +437,7 @@ const useNotices = (googleUserData) => {
         }
     };
 
-    const reportNotice = async (notice_id, author_id, reason, noticeText) => {
+    const handleReportNotice = async (notice_id, author_id, reason, noticeText) => {
         try {
             await createReport(notice_id, author_id, reason, user_id, noticeText);
             console.log('Notice reported successfully!');
@@ -572,7 +572,7 @@ const useNotices = (googleUserData) => {
         getNoticeByUserId,
         getAllLikesByNoticeId,
         getAllSavedNotices,
-        reportNotice,
+        handleReportNotice,
         likeNotice,
         setLikedNotices,
         removeAllNoticesByUser,

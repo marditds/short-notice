@@ -60,16 +60,16 @@ const UserFeed = () => {
         savedNotices,
         getInterests,
         getFeedNotices,
-        removeNotice,
-        deleteExpiredNotice,
         saveNotice,
-        reportNotice,
+        handleReportNotice,
         likeNotice,
         sendReaction,
         getReactionsForNotice,
         getReactionByReactionId,
         reportReaction,
         getNoticesByUser,
+        // removeNotice,
+        // deleteExpiredNotice,
         // noticesReactions, 
         // fetchReactionsForNotices,
         // setNoticesReactions
@@ -375,14 +375,14 @@ const UserFeed = () => {
         }
     }
 
-    const handleReport = async (notice_id, author_id, reason, noticeText) => {
-        try {
-            await reportNotice(notice_id, author_id, reason, noticeText);
-            return 'Report success';
-        } catch (error) {
-            console.error('Could not report notice');
-        }
-    }
+    // const handleReportNotice = async (notice_id, author_id, reason, noticeText) => {
+    //     try {
+    //         await reportNotice(notice_id, author_id, reason, noticeText);
+    //         return 'Report success';
+    //     } catch (error) {
+    //         console.error('Could not report notice');
+    //     }
+    // }
 
     const handleReact = async (currUserId, content, notice_id, expiresAt, reactionGif) => {
         try {
@@ -445,7 +445,7 @@ const UserFeed = () => {
                         savedNotices={savedNotices}
                         handleLike={handleLike}
                         handleSave={handleSave}
-                        handleReport={handleReport}
+                        handleReportNotice={handleReportNotice}
                         handleReact={handleReact}
                         getReactionsForNotice={getReactionsForNotice}
                         getUserAccountByUserId={getUserAccountByUserId}

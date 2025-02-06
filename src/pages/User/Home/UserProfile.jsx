@@ -48,7 +48,7 @@ const UserProfile = () => {
         setRemovingNoticeId,
         likeNotice,
         saveNotice,
-        reportNotice,
+        handleReportNotice,
         sendReaction,
         fetchUserNotices,
         getAllLikedNotices,
@@ -94,7 +94,7 @@ const UserProfile = () => {
     const [offsetSaves, setOffsetSaveas] = useState(0);
     const [hasMoreSaves, setHasMoreSaves] = useState(true);
     const [isLoadingMoreSaves, setIsLoadingMoreSaves] = useState(false);
-    const [isSavesLoaded, setIsSavesLoaded] = useState(false);
+    const [isSavesClicked, setIsSavesClicked] = useState(false);
     const [isLoadingSaves, setIsLoadingSaves] = useState(false);
 
     // Likes Tab
@@ -102,7 +102,7 @@ const UserProfile = () => {
     const [offsetLikes, setOffsetLikes] = useState(0);
     const [hasMoreLikes, setHasMoreLikes] = useState(true);
     const [isLoadingMoreLikes, setIsLoadingMoreLikes] = useState(false);
-    const [isLikesLoaded, setIsLikesLoaded] = useState(false);
+    const [isLikesClicked, setIsLikesClicked] = useState(false);
     const [isLoadingLikes, setIsLoadingLikes] = useState(false);
 
 
@@ -238,10 +238,10 @@ const UserProfile = () => {
 
         };
 
-        if (isSavesLoaded === true) {
+        if (isSavesClicked === true) {
             fetchSaveNotices();
         }
-    }, [user_id, offsetSaves, isSavesLoaded])
+    }, [user_id, offsetSaves, isSavesClicked])
 
     // Fetch likes and users' data for likes tab 
     useEffect(() => {
@@ -275,17 +275,17 @@ const UserProfile = () => {
                 setIsLoadingMoreLikes(false);
             }
         };
-        if (isLikesLoaded === true) {
+        if (isLikesClicked === true) {
             fetchLikedNotices();
         }
-    }, [user_id, offsetLikes, isLikesLoaded])
+    }, [user_id, offsetLikes, isLikesClicked])
 
-    // The Saves and Likes data don't fetch unless isLoaded === true
+    // The Saves and Likes data don't fetch unless isClicked === true
     useEffect(() => {
         if (eventKey === 'my-saves') {
-            setIsSavesLoaded(true);
+            setIsSavesClicked(true);
         } else if (eventKey === 'my-likes') {
-            setIsLikesLoaded(true);
+            setIsLikesClicked(true);
         }
     }, [eventKey]);
 
@@ -456,14 +456,14 @@ const UserProfile = () => {
         }
     };
 
-    const handleReport = async (notice_id, author_id, reason, noticeText) => {
-        try {
-            await reportNotice(notice_id, author_id, reason, noticeText);
-            return 'Report success';
-        } catch (error) {
-            console.error('Could not report notice');
-        }
-    }
+    // const handleReportNotice = async (notice_id, author_id, reason, noticeText) => {
+    //     try {
+    //         await reportNotice(notice_id, author_id, reason, noticeText);
+    //         return 'Report success';
+    //     } catch (error) {
+    //         console.error('Could not report notice');
+    //     }
+    // }
 
     const handleReact = async (otherUser_id, content, notice_id, expiresAt, reactionGif) => {
         try {
@@ -547,6 +547,9 @@ const UserProfile = () => {
                                 handleDeleteNotice={handleDeleteNotice}
                                 getReactionsForNotice={getReactionsForNotice}
                                 getUserAccountByUserId={getUserAccountByUserId}
+                                getReactionByReactionId={getReactionByReactionId}
+                                handleReportNotice={handleReportNotice}
+                                reportReaction={reportReaction}
                             />
                             <div className="d-flex justify-content-center mt-4 pb-5">
                                 {hasMoreNotices ?
@@ -574,8 +577,9 @@ const UserProfile = () => {
                     eventKey='my-saves'
                     title="Saves"
                 >
-                    {savedNoticesData.length !== 0 ?
-                        (!isLoadingSaves ?
+
+                    {!isLoadingSaves ?
+                        (savedNoticesData.length !== 0 ?
                             <>
                                 <Notices
                                     notices={savedNoticesData}
@@ -586,7 +590,7 @@ const UserProfile = () => {
                                     user_id={user_id}
                                     handleLike={handleLike}
                                     handleSave={handleSave}
-                                    handleReport={handleReport}
+                                    handleReportNotice={handleReportNotice}
                                     handleReact={handleReact}
                                     getReactionsForNotice={getReactionsForNotice}
                                     getUserAccountByUserId={getUserAccountByUserId}
@@ -614,12 +618,14 @@ const UserProfile = () => {
                                 icon={
                                     <i className='bi bi-floppy'></i>
                                 }
-                            />)
+                            />
+                        )
                         :
                         <div className='d-flex justify-content-center'>
                             <Loading /><span className='ms-2'>Loading your saves...</span>
                         </div>
                     }
+
                 </Tab>
 
                 {/* My Likes */}
@@ -627,8 +633,8 @@ const UserProfile = () => {
                     eventKey='my-likes'
                     title="Likes"
                 >
-                    {likedNoticesData.length !== 0 ?
-                        (!isLoadingLikes ?
+                    {!isLoadingLikes ?
+                        (likedNoticesData.length !== 0 ?
                             <>
                                 <Notices
                                     notices={likedNoticesData}
@@ -639,7 +645,7 @@ const UserProfile = () => {
                                     user_id={user_id}
                                     handleLike={handleLike}
                                     handleSave={handleSave}
-                                    handleReport={handleReport}
+                                    handleReportNotice={handleReportNotice}
                                     handleReact={handleReact}
                                     getReactionsForNotice={getReactionsForNotice}
                                     getUserAccountByUserId={getUserAccountByUserId}

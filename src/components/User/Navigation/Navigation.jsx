@@ -28,9 +28,7 @@ export const Navigation = ({ googleLogout, removeSession, setIsLoggedIn, setGoog
                         drop='down'
                         id="dropdown-basic-button"
                         className='ms-auto userhome__body--profile--tools--dropdown'
-                        title={<PiDotsThreeOutlineVertical
-                            size={30}
-                        />}>
+                        title={<i className='bi bi-three-dots-vertical navigation__three-dots'></i>}>
                         <NavDropdown.Item
                             as={Link}
                             to='/user/feed'

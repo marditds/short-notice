@@ -259,13 +259,14 @@
 }
 
 .tools__search-field {
-    border: 2px solid var(--main-accent-color);
+    border: 1px solid var(--main-accent-color);
     border-radius: var(--main-rounded-corner) !important;
     resize: none;
     text-wrap: none !important;
     transition: var(--main-transition-speed);
 }
 
+.tools__search-field:hover,
 .tools__search-field:focus {
     border-color: var(--main-accent-color-hover);
     box-shadow: none;
@@ -273,6 +274,10 @@
 
 .tools__search__end-asterisks {
     margin-top: 16px;
+}
+
+.navigation__three-dots {
+    font-size: 25px;
 }
 
 @media (max-width: 767px) {

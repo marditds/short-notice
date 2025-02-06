@@ -1,26 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { formatDateToLocal, calculateCountdown } from '../../lib/utils/dateUtils';
-import { reportCategories } from '../PreLogin/ComunityGuidelines/communityGuidelines';
-import { Row, Col, Modal, Form, Accordion, Button, Image } from 'react-bootstrap';
-// import { CgTrash } from 'react-icons/cg';
-// import { AiFillEdit } from 'react-icons/ai';
-// import { BsReply } from "react-icons/bs";
-// import { RiSave2Line, RiSave2Fill } from "react-icons/ri";
-// import { BsHandThumbsUp, BsHandThumbsUpFill } from 'react-icons/bs';
-// import { AiOutlineExclamationCircle } from "react-icons/ai";
+import { Row, Col, Accordion, Image } from 'react-bootstrap';
 import defaultAvatar from '../../assets/default.png';
-// import { Loading } from '../Loading/Loading';
 import { Reactions } from './Reactions';
 import { screenUtils } from '../../lib/utils/screenUtils';
 import { ComposeReaction } from './ComposeReaction';
+import { ReportModal } from './ReportModal';
 
 export const Notices = ({
     notices,
     handleEditNotice,
     handleDeleteNotice,
     handleSave,
-    handleReport,
+    handleReportNotice,
     handleLike,
     handleReact,
     eventKey,
@@ -39,11 +32,6 @@ export const Notices = ({
     const { isSmallScreen, isExtraSmallScreen } = screenUtils();
 
     const [countdowns, setCountdowns] = useState([]);
-
-    // const [showReactModal, setShowReactModal] = useState(false);
-    // const [noticeUsername, setNoticeUsername] = useState(null);
-    // const [noticeAvatarUrl, setNoticeAvatarUrl] = useState(null);
-    // const [noticeText, setNoticeText] = useState(null);
 
     const [reactingNoticeId, setReactingNoticeId] = useState(null);
     const [reactionText, setReactionText] = useState('');
@@ -223,7 +211,7 @@ export const Notices = ({
     // }
 
     // Repoting Notice
-    const handleReportNotice = (noticeId) => {
+    const onReportNoticeClick = (noticeId) => {
         setReprotingNoticeId(noticeId);
         setShowReportModal(true);
         setShowReportConfirmation(false);
@@ -237,7 +225,7 @@ export const Notices = ({
                 const notice = notices.find(notice => notice.$id === reportingNoticeId);
 
                 if (notice) {
-                    await handleReport(notice.$id, notice.user_id, reportReason, notice.text);
+                    await handleReportNotice(notice.$id, notice.user_id, reportReason, notice.text);
 
                     setShowReportConfirmation(true);
                     setTimeout(() => {
@@ -466,11 +454,9 @@ export const Notices = ({
 
         if (reportReason && reportingReactionId) {
             try {
-
                 const reaction = await getReactionByReactionId(reportingReactionId);
 
                 console.log('Reported!', reaction);
-
 
                 if (reaction) {
                     await reportReaction(reaction.$id, reaction.sender_id, reportReason, reaction.content);
@@ -666,7 +652,7 @@ export const Notices = ({
                                                                 <i className="bi bi-reply"></i>
                                                             </div>
                                                             <div
-                                                                onClick={() => handleReportNotice(notice.$id)}
+                                                                onClick={() => onReportNoticeClick(notice.$id)}
                                                                 className='notice__reaction-btn ms-2'
                                                             >
                                                                 <i className="bi bi-exclamation-circle"></i>
@@ -725,164 +711,22 @@ export const Notices = ({
             </Accordion>
 
             {/* Notice report modal */}
-            <Modal show={showReportModal}
-                onHide={handleCloseReportModal}
-                className='notice__report--modal p-0'
-            >
-                <Modal.Header className='border-bottom-0'>
-                    <Modal.Title>Report Notice</Modal.Title>
-                </Modal.Header>
-                <Modal.Body className='notice__report--modal-body py-0'>
-                    {showReportConfirmation ? (
-                        <p>Your report has been successfully submitted!</p>
-                    ) : (
-                        <Form
-                            className='notice__report--modal-form'
-                        >
-                            <Form.Group className='mb-3' controlId='reportNotice'>
-                                <Form.Label>Please select a reason:</Form.Label>
-                                {reportCategories.map((category) => (
-                                    <Form.Check
-                                        key={category.key}
-                                        type='radio'
-                                        label={category.name}
-                                        id={category.name}
-                                        name='reportReason'
-                                        onChange={() => setReportReason(category.key)}
-                                        className='notice__report--radio'
-                                    />
-                                ))}
-                            </Form.Group>
-                        </Form>
-                    )}
-                </Modal.Body>
-                <Modal.Footer className='border-top-0 notice__report--modal-footer'>
-                    {showReportConfirmation ? null : (
-                        <>
-                            <Button onClick={handleCloseReportModal}
-                                className='notice__report--modal-btn'
-                            >
-                                Cancel
-                            </Button>
-                            <Button onClick={handleReportSubmission}
-                                className='notice__report--modal-btn'
-                            // disabled={!reportReason}
-                            >
-                                Report
-                            </Button>
-                        </>
-                    )}
-                </Modal.Footer>
-            </Modal>
+            <ReportModal
+                handleCloseReportModalFunction={handleCloseReportModal}
+                handleReportSubmissionFunction={handleReportSubmission}
+                setReportReason={setReportReason}
+                showReportConfirmationCheck={showReportConfirmation}
+                showReportModalFunction={showReportModal}
+            />
 
             {/* Reaction report modal */}
-            <Modal show={showReportReactionModal}
-                onHide={handleCloseReportReactionModal}
-                className='notice__reaction--report--modal p-0'
-            >
-                <Modal.Header className='border-bottom-0'>
-                    <Modal.Title>Report Reaction</Modal.Title>
-                </Modal.Header>
-                <Modal.Body className='notice__reaction--report--modal-body'>
-                    {showReportReactionConfirmation ? (
-                        <p>Your report has been successfully submitted!</p>
-                    ) : (
-                        <Form>
-                            <Form.Group className='' controlId='reportReaction'>
-                                <Form.Label>Reason:</Form.Label>
-                                {reportCategories.map((category) => (
-                                    <Form.Check
-                                        key={category.key}
-                                        type='radio'
-                                        label={category.name}
-                                        id={category.name}
-                                        name='reportReason'
-                                        onChange={() => setReportReason(category.key)}
-                                        className='notice__reaction--report--radio'
-                                    />
-                                ))}
-                            </Form.Group>
-                        </Form>
-                    )}
-                </Modal.Body>
-                <Modal.Footer className='border-top-0 notice__reaction--report--modal-footer'>
-                    {showReportReactionConfirmation ? null : (
-                        <>
-                            <Button onClick={handleCloseReportReactionModal}
-                                className='notice__reaction--report--modal-btn'
-                            >
-                                Cancel
-                            </Button>
-                            <Button onClick={handleReportReactionSubmission}
-                                className='notice__reaction--report--modal-btn'
-                            // disabled={!reportReason}
-                            >
-                                Report
-                            </Button>
-                        </>
-                    )}
-                </Modal.Footer>
-            </Modal>
-
-            {/* Reaction modal */}
-            {/* <Modal show={showReactModal}
-                onHide={handleCloseReactModal}
-                className='notice__react--modal'
-            >
-                <Modal.Header className='d-grid notice__react--modal-header pb-0 pt-4'>
-                    <Row className='align-items-center'>
-                        <Col xs={9} sm={10} className='d-flex mt-auto mb-auto align-items-center h-100'>
-                            <p className='mb-0 text-start notice__username text-break'>
-                                {noticeText}
-                            </p>
-                        </Col>
-                        <Col xs={3} sm={2}>
-                            <img
-                                src={noticeAvatarUrl || defaultAvatar}
-                                alt="Profile"
-                                className='d-flex ms-auto notice__react-modal-avatar'
-                            />
-                            <p className='mb-0 text-end'><strong>{noticeUsername}</strong></p>
-                        </Col>
-                    </Row>
-                </Modal.Header>
-
-                <Modal.Body
-                    className='notice__react--modal-body'
-                >
-                    <Form>
-                        <Form.Group className='mb-3' controlId='reportNotice'>
-                            <Form.Control
-                                as="textarea"
-                                rows={3}
-                                value={reactionText}
-                                onChange={onReactionTextChange}
-                                className="user-profile__form-control"
-                                placeholder=''
-                            />
-                        </Form.Group>
-                    </Form>
-                    ❗ For the time being, you do not have the option of deleting your reactions to notices. Please use this feature wisely.
-
-                </Modal.Body>
-                <Modal.Footer
-                    className='notice__react--modal-footer pt-0'
-                >
-                    <Button
-                        onClick={handleCloseReactModal}
-                        className='notice__react--modal-btn'
-                    >
-                        Cancel
-                    </Button>
-                    <Button
-                        onClick={handleReactSubmission}
-                        className='notice__react--modal-btn'
-                        disabled={reactionText === '' ? true : false}
-                    >
-                        {isSendingReactionLoading ? <Loading /> : 'Send'}
-                    </Button>
-                </Modal.Footer>
-            </Modal> */}
+            <ReportModal
+                handleCloseReportModalFunction={handleCloseReportReactionModal}
+                handleReportSubmissionFunction={handleReportReactionSubmission}
+                setReportReason={setReportReason}
+                showReportConfirmationCheck={showReportReactionConfirmation}
+                showReportModalFunction={showReportReactionModal}
+            />
 
         </>
     );
