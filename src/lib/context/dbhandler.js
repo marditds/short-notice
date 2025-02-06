@@ -653,18 +653,72 @@ export const getAllNotices = async () => {
     }
 }
 
-export const getFilteredNotices = async (selectedTags, limit, lastId) => {
+// export const getFilteredNotices = async (selectedTags, limit, lastId) => {
+//     try {
+//         if (typeof selectedTags !== 'object' || selectedTags === null) {
+//             throw new Error('selectedTags must be an object');
+//         }
+
+//         const queryList = Object.keys(selectedTags)
+//             .filter(tagKey => selectedTags[tagKey] === true)
+//             .map(tagKey => Query.equal(tagKey, true));
+
+//         const queries = [
+//             Query.notEqual('noticeType', ['organization']),
+//             Query.limit(limit),
+//             Query.orderDesc('timestamp'),
+//         ];
+
+//         // Add the cursor query if lastId exists
+//         if (lastId) {
+//             queries.push(Query.cursorAfter(lastId));
+//         }
+
+//         // Add additional filters based on selectedTags
+//         if (queryList.length === 1) {
+//             queries.push(queryList[0]);
+//         } else if (queryList.length > 1) {
+//             queries.push(Query.or(queryList));
+//         }
+
+//         const notices = await databases.listDocuments(
+//             import.meta.env.VITE_DATABASE,
+//             import.meta.env.VITE_NOTICES_COLLECTION,
+//             queries
+//         );
+
+//         return notices.documents;
+//     } catch (error) {
+//         console.error('Error fetching filtered notices:', error);
+//     }
+// };
+
+export const getFilteredNotices = async (selectedTags, limit, lastId, userId) => {
     try {
         if (typeof selectedTags !== 'object' || selectedTags === null) {
             throw new Error('selectedTags must be an object');
         }
 
+        // Get blocked users and users blocking current user
+        const [blockedUsers, usersBlockingMe] = await Promise.all([
+            getBlockedUsersByUser(userId),
+            getUsersBlockingUser(userId)
+        ]);
+
+        // Combine all user IDs to exclude
+        const blockedIds = blockedUsers.map(user => user.blocked_id);
+        const blockingIds = usersBlockingMe.map(user => user.blocker_id);
+        const allBlockedIds = [...new Set([...blockedIds, ...blockingIds])];
+
+        // Build tag queries
         const queryList = Object.keys(selectedTags)
             .filter(tagKey => selectedTags[tagKey] === true)
             .map(tagKey => Query.equal(tagKey, true));
 
         const queries = [
             Query.notEqual('noticeType', ['organization']),
+            // Add block filter if there are blocked users
+            ...(allBlockedIds.length > 0 ? [Query.notEqual('user_id', allBlockedIds)] : []),
             Query.limit(limit),
             Query.orderDesc('timestamp'),
         ];
@@ -692,7 +746,6 @@ export const getFilteredNotices = async (selectedTags, limit, lastId) => {
         console.error('Error fetching filtered notices:', error);
     }
 };
-
 
 
 export const updateNotice = async (noticeId, newText) => {

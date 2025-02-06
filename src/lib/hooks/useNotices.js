@@ -280,7 +280,7 @@ const useNotices = (googleUserData) => {
 
     const getFeedNotices = async (selectedTags, limit, lastId) => {
         try {
-            const notices = await getFilteredNotices(selectedTags, limit, lastId);
+            const notices = await getFilteredNotices(selectedTags, limit, lastId, user_id);
             console.log('notices - getFeedNotices', notices);
             return notices;
         } catch (error) {

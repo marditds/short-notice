@@ -168,9 +168,16 @@ const UserFeed = () => {
                 const filteredNotices = await filterBlocksFromFeed(notices, user_id);
                 console.log('Filtered notices - general:', filteredNotices);
 
+                if (filteredNotices.length === 0 && notices.length === limit) {
+                    // Fetch next batch since this batch was completely filtered out
+                    return fetchInitialGeneralFeed(notices[notices.length - 1]?.$id);
+                }
+
                 // const unExpiredNotices = await deleteExpiredNotice(filteredNotices);
 
                 // console.log('unExpiredNotices', unExpiredNotices);
+
+
 
                 await fetchUsersData(filteredNotices, setGeneralFeedNotices, avatarUtil);
 
@@ -180,6 +187,7 @@ const UserFeed = () => {
                     setHasMoreGeneralNotices(true);
                     setLastId(filteredNotices[filteredNotices.length - 1]?.$id);
                 }
+
             } catch (error) {
                 console.error('Error fetching initial feed notices:', error);
             } finally {
@@ -187,6 +195,67 @@ const UserFeed = () => {
                 setIsLoadingMoreInitial(false);
             }
         };
+
+        // const fetchInitialGeneralFeed = async () => {
+        //     const fetchBatchRecursively = async (currentLastId = null, accumulator = []) => {
+        //         try {
+        //             setIsLoadingMoreInitial(true);
+        //             setIsLoadingMore(true);
+
+        //             console.log('Fetching batch with Limit:', limit, 'Last ID:', currentLastId);
+
+        //             const notices = await getFeedNotices(selectedTags, limit, currentLastId);
+        //             console.log('Fetched notices:', notices);
+
+        //             if (notices.length === 0) {
+        //                 // No more notices to fetch
+        //                 setHasMoreGeneralNotices(false);
+        //                 return accumulator;
+        //             }
+
+        //             const filteredNotices = await filterBlocksFromFeed(notices, user_id);
+        //             console.log('Filtered notices - general:', filteredNotices);
+
+        //             if (filteredNotices.length === 0 && notices.length === limit) {
+        //                 // All notices were filtered out, but there might be more
+        //                 // Recursively fetch the next batch
+        //                 const nextLastId = notices[notices.length - 1].$id;
+        //                 return fetchBatchRecursively(nextLastId, accumulator);
+        //             }
+
+        //             // Combine with previously accumulated notices
+        //             const combinedNotices = [...accumulator, ...filteredNotices];
+
+        //             // If we don't have enough notices yet and there might be more
+        //             if (combinedNotices.length < limit && notices.length === limit) {
+        //                 const nextLastId = notices[notices.length - 1].$id;
+        //                 return fetchBatchRecursively(nextLastId, combinedNotices);
+        //             }
+
+        //             // We have enough notices or reached the end
+        //             setHasMoreGeneralNotices(notices.length === limit);
+        //             return combinedNotices;
+        //         } catch (error) {
+        //             console.error('Error in recursive fetch:', error);
+        //             return accumulator;
+        //         }
+        //     };
+
+        //     try {
+        //         const finalNotices = await fetchBatchRecursively();
+
+        //         if (finalNotices.length > 0) {
+        //             await fetchUsersData(finalNotices, setGeneralFeedNotices, avatarUtil);
+        //             setLastId(finalNotices[finalNotices.length - 1]?.$id);
+        //         }
+        //     } catch (error) {
+        //         console.error('Error fetching initial feed notices:', error);
+        //     } finally {
+        //         setIsLoadingMore(false);
+        //         setIsLoadingMoreInitial(false);
+        //     }
+        // };
+
         if (isFeedToggled && generalFeedNotices.length === 0) {
             fetchInitialGeneralFeed();
         }
@@ -226,6 +295,65 @@ const UserFeed = () => {
                 setLoadMore(false);
             }
         };
+
+        // const fetchSubsequentGeneralFeed = async () => {
+        //     const fetchBatchRecursively = async (currentLastId, accumulator = []) => {
+        //         try {
+        //             console.log('Limit:', limit);
+        //             console.log('Last ID:', currentLastId);
+
+        //             const notices = await getFeedNotices(selectedTags, limit, currentLastId);
+        //             console.log('Fetched notices:', notices);
+
+        //             if (notices.length === 0) {
+        //                 setHasMoreGeneralNotices(false);
+        //                 return accumulator;
+        //             }
+
+        //             const filteredNotices = await filterBlocksFromFeed(notices, user_id);
+        //             console.log('Filtered notices - general:', filteredNotices);
+
+        //             if (filteredNotices.length === 0 && notices.length === limit) {
+        //                 // All notices were filtered out, but there might be more
+        //                 // Recursively fetch the next batch
+        //                 const nextLastId = notices[notices.length - 1].$id;
+        //                 return fetchBatchRecursively(nextLastId, accumulator);
+        //             }
+
+        //             // Combine with previously accumulated notices
+        //             const combinedNotices = [...accumulator, ...filteredNotices];
+
+        //             // If we haven't gotten enough notices yet and there might be more
+        //             if (combinedNotices.length < limit && notices.length === limit) {
+        //                 const nextLastId = notices[notices.length - 1].$id;
+        //                 return fetchBatchRecursively(nextLastId, combinedNotices);
+        //             }
+
+        //             setHasMoreGeneralNotices(notices.length === limit);
+        //             return combinedNotices;
+        //         } catch (error) {
+        //             console.error('Error in recursive fetch:', error);
+        //             return accumulator;
+        //         }
+        //     };
+
+        //     try {
+        //         setIsLoadingMore(true);
+
+        //         const finalNotices = await fetchBatchRecursively(lastId);
+
+        //         if (finalNotices.length > 0) {
+        //             await fetchUsersData(finalNotices, setGeneralFeedNotices, avatarUtil);
+        //             setLastId(finalNotices[finalNotices.length - 1]?.$id);
+        //         }
+        //     } catch (error) {
+        //         console.error('Error loading more notices:', error);
+        //     } finally {
+        //         setIsLoadingMore(false);
+        //         setLoadMore(false);
+        //     }
+        // };
+
         if (isFeedToggled && loadMore) {
             fetchSubsequentGeneralFeed();
         }
