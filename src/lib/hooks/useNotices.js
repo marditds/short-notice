@@ -16,6 +16,7 @@ const useNotices = (googleUserData) => {
     const [isAddingNotice, setIsAddingNotice] = useState(false);
     const [isRemovingNotice, setIsRemovingNotice] = useState(false);
     const [removingNoticeId, setRemovingNoticeId] = useState(null);
+    const [isSavingEdit, setIsSavingEdit] = useState(false);
 
     const { filterBlocksFromLikesSaves } = useUnblockedNotices();
 
@@ -150,16 +151,25 @@ const useNotices = (googleUserData) => {
     }, [latestNotice])
 
     const editNotice = async (noticeId, newText) => {
+        setIsSavingEdit(true);
+        try {
+            const updtNtc = await updateNotice(noticeId, newText);
 
-        const updtNtc = await updateNotice(noticeId, newText);
+            console.log('updtNtc', updtNtc);
 
-        console.log('updtNtc', updtNtc);
-
-        return updtNtc;
+            return updtNtc;
+        }
+        catch (error) {
+            console.error('Error updating the notice:', error);
+        } finally {
+            setIsSavingEdit(false);
+        }
     };
 
     const handleSaveEdit = async (editingNoticeId, noticeText, userProfileNotices, setUserProfileNotices, setEditingNoticeId, setNoticeText, setShowEditModal) => {
+
         if (editingNoticeId && noticeText.trim()) {
+
             console.log('EditingNoticeId + noticeText', { editingNoticeId, noticeText });
 
             const noticeToUpdate = userProfileNotices.find(notice => notice.$id === editingNoticeId);
@@ -184,12 +194,10 @@ const useNotices = (googleUserData) => {
                         notice.$id === editingNoticeId ?
                             { ...notice, text: updtdntc.text } : notice)
                 );
-
                 setEditingNoticeId(null);
                 setNoticeText('');
                 setShowEditModal(false);
             }
-
         }
     };
 
@@ -596,6 +604,7 @@ const useNotices = (googleUserData) => {
         likedNotices,
         isLoading,
         isAddingNotice,
+        isSavingEdit,
         isRemovingNotice,
         removingNoticeId,
         noticesReactions,

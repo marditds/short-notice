@@ -594,6 +594,9 @@
     border: 0px !important;
 }
 
+.notice__edit--modal-header {
+    padding: 12px;
+}
 
 .notice__react-remove-gif-btn,
 .notice__remove-gif-btn {
@@ -637,6 +640,7 @@
     background-color: var(--main-accent-color) !important;
     color: black !important;
     border: transparent;
+    border-radius: var(--main-rounded-corner);
     font-size: var(--pc-font-size) !important;
 }
 
@@ -1007,6 +1011,7 @@
     .notice__delete--modal-body,
     .notice__reaction--report--modal-body {
         padding-block: 0px;
+        padding-inline: 12px;
     }
 
     .notice__reaction--report--modal-footer,

@@ -42,6 +42,7 @@ const UserProfile = () => {
         isLoading,
         isAddingNotice,
         removingNoticeId,
+        isSavingEdit,
         isRemovingNotice,
         addNotice,
         editNotice,
@@ -609,6 +610,7 @@ const UserProfile = () => {
             <ModifyModal
                 showModifyModal={showEditModal}
                 noticeText={noticeText}
+                isSavingEdit={isSavingEdit}
                 modifyModalTitle={'Edit'}
                 setNoticeText={setNoticeText}
                 handleCloseModifyModal={handleCloseEditModal}

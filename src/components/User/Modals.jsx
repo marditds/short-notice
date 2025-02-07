@@ -62,7 +62,7 @@ export const ReportModal = ({
     )
 }
 
-export const ModifyModal = ({ modifyModalTitle, showModifyModal, handleCloseModifyModal, handleSaveEdit, noticeText, setNoticeText, handleDelete, isRemovingNotice }) => {
+export const ModifyModal = ({ modifyModalTitle, showModifyModal, handleCloseModifyModal, handleSaveEdit, noticeText, setNoticeText, handleDelete, isRemovingNotice, isSavingEdit }) => {
     return (
         <Modal show={showModifyModal}
             onHide={handleCloseModifyModal}
@@ -79,7 +79,7 @@ export const ModifyModal = ({ modifyModalTitle, showModifyModal, handleCloseModi
                 {
                     modifyModalTitle === 'Edit' &&
                     <Form>
-                        <Form.Group className='mb-3' controlId='editNotice'>
+                        <Form.Group className='mb-0 mb-md-3' controlId='editNotice'>
                             <Form.Label>Your Notice Text</Form.Label>
                             <Form.Control
                                 as='textarea'
@@ -122,7 +122,7 @@ export const ModifyModal = ({ modifyModalTitle, showModifyModal, handleCloseModi
                     disabled={isRemovingNotice}
                     className='notice__edit--modal-btn'
                 >
-                    {modifyModalTitle === 'Edit' && 'Save'}
+                    {isSavingEdit ? <Loading /> : (modifyModalTitle === 'Edit' && 'Save')}
                     {isRemovingNotice ? <Loading /> : (modifyModalTitle === 'Delete' && 'Delete')}
                 </Button>
             </Modal.Footer>

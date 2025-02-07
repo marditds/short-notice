@@ -99,11 +99,13 @@ const useUserInfo = (data) => {
 
     const handleDeleteUser = async () => {
         try {
-            await deleteAllNotices(userId);
-            await deleteAllReactions(userId);
-            await removeAllSaves(userId);
-            await removeAllLikes(userId);
-            await removeAllFollows(userId)
+            await Promise.allSettled([
+                deleteAllNotices(userId),
+                deleteAllReactions(userId),
+                removeAllSaves(userId),
+                removeAllLikes(userId),
+                removeAllFollows(userId)
+            ]);
             await deleteUser(userId);
             await deleteAuthUser(userId);
             // await deleteUserSession();
@@ -111,7 +113,6 @@ const useUserInfo = (data) => {
 
         } catch (error) {
             console.error('Error deleting user:', error);
-
         }
     }
 
