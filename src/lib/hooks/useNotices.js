@@ -420,9 +420,9 @@ const useNotices = (googleUserData) => {
 
             console.log('userLikes', userLikes);
 
-            const noticesWithoutTwoWayBlock = await filterBlocksFromLikesSaves(userLikes, user_id);
+            // const noticesWithoutTwoWayBlock = await filterBlocksFromLikesSaves(userLikes, user_id);
 
-            const likedNoticeIds = noticesWithoutTwoWayBlock.map(like => like.notice_id);
+            const likedNoticeIds = userLikes.map(like => like.notice_id);
 
             return await fetchAllLikedNotices(likedNoticeIds, limit, offset);
 
@@ -467,9 +467,9 @@ const useNotices = (googleUserData) => {
             console.log('userSaves', userSaves);
 
 
-            const noticesWithoutTwoWayBlock = await filterBlocksFromLikesSaves(userSaves, user_id);
+            // const noticesWithoutTwoWayBlock = await filterBlocksFromLikesSaves(userSaves, user_id);
 
-            const saveNoticeIds = noticesWithoutTwoWayBlock.map(save => save.notice_id);
+            const saveNoticeIds = userSaves.map(save => save.notice_id);
 
             console.log('savedNoticeIds', saveNoticeIds);
 

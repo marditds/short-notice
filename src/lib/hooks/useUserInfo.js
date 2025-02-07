@@ -238,6 +238,15 @@ const useUserInfo = (data) => {
         }
     }
 
+    const getUnfollowedByOtherUser = async (otherUser_id) => {
+        try {
+            await unfollow(otherUser_id, userId);
+            console.log('Getting unfollowed successful');
+        } catch (error) {
+            console.error('Error getting unfollowed by other user', error);
+        }
+    }
+
     // User follows them
     const getfollwedByUserCount = async (id) => {
         try {
@@ -255,6 +264,11 @@ const useUserInfo = (data) => {
             const followedByUser = await getUserFollowingsById(id, limit, offset);
             console.log('followedByUser,', followedByUser);
 
+            if (!followedByUser || followedByUser.length === 0) {
+                console.warn('No followed by user found for user:', id);
+                return [];
+            }
+
             const followedByUserIds = followedByUser.map((user) => user.otherUser_id);
             console.log('followedByUserIds,', followedByUserIds);
 
@@ -262,9 +276,15 @@ const useUserInfo = (data) => {
 
             console.log('allFollowings', allFollowings);
 
+            if (!allFollowings || !allFollowings.documents) {
+                console.warn('No follower data found for user IDs:', followedByUserIds);
+                return [];
+            }
+
             const accountsFollowedByUser = followedByUserIds.map((userId) =>
                 allFollowings.documents.find((user) => user.$id === userId)
-            );
+            )
+                .filter(Boolean);
 
             console.log('accountsFollowedByUser', accountsFollowedByUser);
 
@@ -309,6 +329,11 @@ const useUserInfo = (data) => {
             const followingTheUser = await getUserFollowersById(id, limit, offset);
             console.log('followingTheUser,', followingTheUser);
 
+            if (!followingTheUser || followingTheUser.length === 0) {
+                console.warn('No followers found for user:', id);
+                return [];
+            }
+
             const followingTheUserIds = followingTheUser.map((user) => user.user_id);
             console.log('followingTheUserIds,', followingTheUserIds);
 
@@ -316,9 +341,14 @@ const useUserInfo = (data) => {
 
             console.log('allFollowers', allFollowers);
 
-            const accountsFollowingTheUser = followingTheUserIds.map((userId) =>
-                allFollowers.documents.find((user) => user.$id === userId)
-            );
+            if (!allFollowers || !allFollowers.documents) {
+                console.warn('No follower data found for user IDs:', followingTheUserIds);
+                return [];
+            }
+
+            const accountsFollowingTheUser = followingTheUserIds
+                .map((userId) => allFollowers.documents.find((user) => user.$id === userId))
+                .filter(Boolean);
 
             console.log('accountsFollowedByUser', accountsFollowingTheUser);
 
@@ -326,6 +356,7 @@ const useUserInfo = (data) => {
 
         } catch (error) {
             console.error('Failed to fetch user followers:', error);
+            return [];
         }
     }
 
@@ -425,8 +456,13 @@ const useUserInfo = (data) => {
 
     const handleBlock = async (currUserId) => {
         try {
-            await makeBlock(currUserId);
-            await unfollowUser(currUserId);
+            const blockPromise = makeBlock(currUserId);
+            const unfollowPromise = unfollowUser(currUserId);
+            const getUnfollowedPromise = getUnfollowedByOtherUser(currUserId);
+
+            await blockPromise;
+            await Promise.allSettled([unfollowPromise, getUnfollowedPromise]);
+
             navigate('/user/feed');
         } catch (error) {
             console.error('Failed to block user:', error);
