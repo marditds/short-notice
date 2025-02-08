@@ -1054,7 +1054,37 @@ export const removeAllLikesForNotice = async (notice_id) => {
 }
 
 // The like icon + user's likes tab
-export const getUserLikes = async (user_id) => {
+// export const getUserLikes = async (user_id) => {
+//     try {
+//         const [blockedUsers, usersBlockingMe] = await Promise.all([
+//             getBlockedUsersByUser(user_id),
+//             getUsersBlockingUser(user_id)
+//         ]);
+
+//         const blockedIds = blockedUsers.map(user => user.blocked_id);
+//         const blockingIds = usersBlockingMe.map(user => user.blocker_id);
+//         const allBlockedIds = [...new Set([...blockedIds, ...blockingIds])];
+
+//         const response = await databases.listDocuments(
+//             import.meta.env.VITE_DATABASE,
+//             import.meta.env.VITE_LIKES_COLLECTION,
+//             [
+//                 Query.equal('user_id', user_id),
+//                 ...(allBlockedIds.length > 0 ? allBlockedIds.map(id => Query.notEqual('author_id', id)) : []),
+//                 Query.orderDesc('$createdAt')
+//             ]
+//         );
+
+//         console.log('getUserLikes', response.documents);
+
+//         return response.documents;
+//     } catch (error) {
+//         // console.error('Error fetching user likes:', error);
+//         return [];
+//     }
+// };
+
+export const getUserLikes = async (user_id, noticeIdsInFeed) => {
     try {
         const [blockedUsers, usersBlockingMe] = await Promise.all([
             getBlockedUsersByUser(user_id),
@@ -1065,24 +1095,32 @@ export const getUserLikes = async (user_id) => {
         const blockingIds = usersBlockingMe.map(user => user.blocker_id);
         const allBlockedIds = [...new Set([...blockedIds, ...blockingIds])];
 
+        if (!Array.isArray(noticeIdsInFeed) || noticeIdsInFeed.length === 0) {
+            return [];
+        }
+
         const response = await databases.listDocuments(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_LIKES_COLLECTION,
             [
                 Query.equal('user_id', user_id),
+                Query.equal('notice_id', noticeIdsInFeed), // Fetch only relevant liked notices
                 ...(allBlockedIds.length > 0 ? allBlockedIds.map(id => Query.notEqual('author_id', id)) : []),
                 Query.orderDesc('$createdAt')
             ]
         );
 
-        console.log('getUserLikes', response.documents);
+        console.log('Filtered getUserLikes', response.documents);
 
         return response.documents;
     } catch (error) {
-        // console.error('Error fetching user likes:', error);
+        console.error('Error fetching user likes:', error);
         return [];
     }
 };
+
+
+
 
 // The full notice
 export const getAllLikedNotices = async (likedNoticeIds, limit, offset) => {
@@ -1125,8 +1163,38 @@ export const getAllLikesByNoticeId = async (notice_id) => {
 }
 
 // The save icon + user's saves tab
-export const getUserSaves = async (user_id) => {
+// export const getUserSaves = async (user_id) => {
+//     try {
+
+//         const [blockedUsers, usersBlockingMe] = await Promise.all([
+//             getBlockedUsersByUser(user_id),
+//             getUsersBlockingUser(user_id)
+//         ]);
+
+//         const blockedIds = blockedUsers.map(user => user.blocked_id);
+//         const blockingIds = usersBlockingMe.map(user => user.blocker_id);
+//         const allBlockedIds = [...new Set([...blockedIds, ...blockingIds])];
+
+//         const response = await databases.listDocuments(
+//             import.meta.env.VITE_DATABASE,
+//             import.meta.env.VITE_SAVES_COLLECTION,
+//             [
+//                 Query.equal('user_id', user_id),
+//                 ...(allBlockedIds.length > 0 ? allBlockedIds.map(id => Query.notEqual('author_id', id)) : []),
+//                 Query.orderDesc('$createdAt')
+//             ]
+//         )
+//         return response.documents;
+//     } catch (error) {
+//         console.error('Error getting saves:', error);
+//     }
+// }
+
+export const getUserSaves = async (user_id, noticeIdsInFeed) => {
     try {
+        if (!Array.isArray(noticeIdsInFeed) || noticeIdsInFeed.length === 0) {
+            return [];
+        }
 
         const [blockedUsers, usersBlockingMe] = await Promise.all([
             getBlockedUsersByUser(user_id),
@@ -1137,20 +1205,29 @@ export const getUserSaves = async (user_id) => {
         const blockingIds = usersBlockingMe.map(user => user.blocker_id);
         const allBlockedIds = [...new Set([...blockedIds, ...blockingIds])];
 
+        const queries = [
+            Query.equal('user_id', user_id),
+            Query.equal('notice_id', noticeIdsInFeed),
+            ...(allBlockedIds.length > 0 ? allBlockedIds.map(id => Query.notEqual('author_id', id)) : []),
+            Query.orderDesc('$createdAt')
+        ];
+
         const response = await databases.listDocuments(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_SAVES_COLLECTION,
-            [
-                Query.equal('user_id', user_id),
-                ...(allBlockedIds.length > 0 ? allBlockedIds.map(id => Query.notEqual('author_id', id)) : []),
-                Query.orderDesc('$createdAt')
-            ]
-        )
+            queries
+        );
+
         return response.documents;
     } catch (error) {
         console.error('Error getting saves:', error);
+        return [];
     }
-}
+};
+
+
+
+
 
 // The full notice
 export const getAllSavedNotices = async (saveNoticeIds, limit, offset) => {

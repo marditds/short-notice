@@ -856,12 +856,12 @@
 }
 
 .user-profile__organization-passcode-field:hover {
-    border-color: var(--main-accent-color);
+    border-color: var(--main-accent-color-hover);
 }
 
 .user-profile__organization-passcode-field:active,
 .user-profile__organization-passcode-field:focus {
-    border-color: var(--main-accent-color-hover);
+    border-color: var(--main-accent-color);
 }
 
 .user-profile__organization-passcode-btn {

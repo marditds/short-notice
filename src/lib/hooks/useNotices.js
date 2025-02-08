@@ -7,6 +7,7 @@ const useNotices = (googleUserData) => {
     const [user_id, setUserId] = useState(null);
     // const [userNotices, setUserNotices] = useState([]);
     const [latestNotice, setLatestNotice] = useState({});
+    const [feedNotices, setFeedNotices] = useState([]);
     const [savedNotices, setSaveNotices] = useState([]);
     const [likedNotices, setLikedNotices] = useState({});
     const [noticesReactions, setNoticesReactions] = useState([]);
@@ -44,46 +45,94 @@ const useNotices = (googleUserData) => {
     }, [googleUserData]);
 
     // Fetch User Saves
+    // useEffect(() => {
+    //     const fetchUserSaves = async () => {
+    //         try {
+    //             const userSaves = await getUserSaves(user_id);
+
+    //             const saveNoticesMap = {};
+    //             userSaves.forEach(save => {
+    //                 saveNoticesMap[save.notice_id] = save.$id;
+    //             });
+    //             setSaveNotices(saveNoticesMap);
+    //         } catch (error) {
+    //             console.error('Error fetching user saves:', error);
+    //         }
+    //     };
+
+    //     if (user_id) {
+    //         fetchUserSaves();
+    //     }
+    // }, [user_id]);
     useEffect(() => {
         const fetchUserSaves = async () => {
             try {
-                const userSaves = await getUserSaves(user_id);
+                if (!user_id || feedNotices.length === 0) return;
 
-                const saveNoticesMap = {};
-                userSaves.forEach(save => {
-                    saveNoticesMap[save.notice_id] = save.$id;
+                const noticeIdsInFeed = feedNotices.map(notice => notice.$id);
+                const userSaves = await getUserSaves(user_id, noticeIdsInFeed);
+
+                setSaveNotices(prevSaves => {
+                    const updatedSaves = { ...prevSaves };
+                    userSaves.forEach(save => {
+                        updatedSaves[save.notice_id] = save.$id;
+                    });
+                    return updatedSaves;
                 });
-                setSaveNotices(saveNoticesMap);
             } catch (error) {
                 console.error('Error fetching user saves:', error);
             }
         };
 
-        if (user_id) {
-            fetchUserSaves();
-        }
-    }, [user_id]);
+        fetchUserSaves();
+    }, [user_id, feedNotices]);
+
+
 
     // Fetch User Likes
+    // useEffect(() => {
+    //     const fetchUserLikes = async () => {
+    //         try {
+    //             const userLikes = await getUserLikes(user_id);
+
+    //             const likedNoticesMap = {};
+    //             userLikes.forEach(like => {
+    //                 likedNoticesMap[like.notice_id] = like.$id;
+    //             });
+    //             setLikedNotices(likedNoticesMap);
+    //         } catch (error) {
+    //             console.error('Error fetching user likes:', error);
+    //         }
+    //     };
+    //     if (user_id) {
+    //         fetchUserLikes();
+    //     }
+    // }, [user_id]);
+
     useEffect(() => {
         const fetchUserLikes = async () => {
             try {
-                const userLikes = await getUserLikes(user_id);
+                if (!user_id || feedNotices.length === 0) return;
 
-                const likedNoticesMap = {};
-                userLikes.forEach(like => {
-                    likedNoticesMap[like.notice_id] = like.$id;
+                const noticeIdsInFeed = feedNotices.map(notice => notice.$id);
+                const userLikes = await getUserLikes(user_id, noticeIdsInFeed);
+
+                setLikedNotices(prevLikes => {
+                    const updatedLikes = { ...prevLikes };
+                    userLikes.forEach(like => {
+                        updatedLikes[like.notice_id] = like.$id;
+                    });
+                    return updatedLikes;
                 });
-                setLikedNotices(likedNoticesMap);
             } catch (error) {
                 console.error('Error fetching user likes:', error);
             }
         };
 
-        if (user_id) {
-            fetchUserLikes();
-        }
-    }, [user_id]);
+        fetchUserLikes();
+    }, [user_id, feedNotices]);
+
+
 
 
     const addNotice = async (text, duration, noticeType, selectedTags, noticeGif) => {
@@ -290,6 +339,7 @@ const useNotices = (googleUserData) => {
         try {
             const notices = await getFilteredNotices(selectedTags, limit, lastId, user_id);
             console.log('notices - getFeedNotices', notices);
+            setFeedNotices(notices);
             return notices;
         } catch (error) {
             console.error('Error fetching filtered notices:', error);
@@ -474,18 +524,14 @@ const useNotices = (googleUserData) => {
 
             console.log('userSaves', userSaves);
 
-
             // const noticesWithoutTwoWayBlock = await filterBlocksFromLikesSaves(userSaves, user_id);
 
             const saveNoticeIds = userSaves.map(save => save.notice_id);
 
-            console.log('savedNoticeIds', saveNoticeIds);
-
-
             return await fetchAllSavedNotices(saveNoticeIds, limit, offset);
 
         } catch (error) {
-            // console.error('Error fetching all save notices:', error);
+            console.error('Error fetching all save notices:', error);
             return [];
         }
     };

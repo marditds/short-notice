@@ -73,6 +73,9 @@ const OtherUserProfile = () => {
     const [accountType, setAccountType] = useState(null);
     const [accountTypeCheck, setAccountTypeCheck] = useState(false);
     const [passcode, setPasscode] = useState('');
+    const [isCheckingPasscode, setIsCheckingPasscode] = useState(false);
+    const [isPasscodeIncorrect, setIsPasscodeIncorrect] = useState(false);
+
 
     const [isOtherUserLoading, setIsOtherUserLoading] = useState(false);
     const [isBlocked, setIsBlocked] = useState(false);
@@ -245,7 +248,16 @@ const OtherUserProfile = () => {
         };
         // setOffsetNotices(0);
         // setOtherUserNotices([]);
-        callFunctionIfNotBlocked(fetchNotices);
+        if (accountType === 'organization' && accountTypeCheck === true) {
+            callFunctionIfNotBlocked(fetchNotices);
+        } else {
+            return;
+        }
+
+        if (accountType !== 'organization') {
+            callFunctionIfNotBlocked(fetchNotices);
+        }
+
     }, [currUserId, offsetNotices])
 
     // Reset the notices/saves/likes and offset by currUserId change
@@ -338,11 +350,11 @@ const OtherUserProfile = () => {
 
                 console.log('noticesWithoutTypeOrganization', noticesWithoutTypeOrganization);
 
-                const filteredNotices = await filterBlocksFromLikesSaves(noticesWithoutTypeOrganization, user_id);
+                // const filteredNotices = await filterBlocksFromLikesSaves(noticesWithoutTypeOrganization, user_id);
 
-                await fetchUsersData(filteredNotices, setLikedNoticesData, avatarUtil);
+                await fetchUsersData(noticesWithoutTypeOrganization, setLikedNoticesData, avatarUtil);
 
-                if (filteredNotices?.length < limitLikes) {
+                if (noticesWithoutTypeOrganization?.length < limitLikes) {
                     setHasMoreLikes(false);
                 } else {
                     setHasMoreLikes(true);
@@ -463,7 +475,9 @@ const OtherUserProfile = () => {
     const timerDisplay = 'd-flex';
     const classname = `${timerDisplay} ${timerSpacing}`;
 
+    // checking passocde for organization
     const checkPasscode = async () => {
+        setIsCheckingPasscode(true);
         try {
             console.log('accountTypeCheck', accountTypeCheck);
 
@@ -476,10 +490,15 @@ const OtherUserProfile = () => {
 
             if (psscd[0].passcode === passcode) {
                 setAccountTypeCheck(true);
+                setIsPasscodeIncorrect(false);
+            } else {
+                setIsPasscodeIncorrect(true);
             }
 
         } catch (error) {
             console.error('Error checking passcode:', error);
+        } finally {
+            setIsCheckingPasscode(false);
         }
     }
 
@@ -515,6 +534,8 @@ const OtherUserProfile = () => {
     if (accountType === 'organization' && accountTypeCheck === false) {
         return <Passcode
             passcode={passcode}
+            isCheckingPasscode={isCheckingPasscode}
+            isPasscodeIncorrect={isPasscodeIncorrect}
             setPasscode={setPasscode}
             checkPasscode={checkPasscode}
         />
