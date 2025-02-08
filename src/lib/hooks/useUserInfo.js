@@ -298,13 +298,20 @@ const useUserInfo = (data) => {
 
     const getPersonalFeedAccounts = async (user_id) => {
         try {
-            const allUsers = await getUsersData();
+            // const allUsers = await getUsersData();
 
-            const accntIds = await fetchPersonalFeedAccounts(user_id);
+            // console.log('ALL USERS:', allUsers);
 
-            const accountsFollowedByUser = accntIds.documents.map((followed) => {
-                return allUsers.documents.find((user) => user.$id === followed.otherUser_id);
-            }).filter(Boolean);
+
+            // const accntIds = await fetchPersonalFeedAccounts(user_id);
+
+            const accountsFollowedByUser = await fetchPersonalFeedAccounts(user_id);
+
+            // console.log('ACCNTIDS:', accntIds);
+
+            // const accountsFollowedByUser = accntIds.documents.map((followed) => {
+            //     return allUsers.documents.find((user) => user.$id === followed.otherUser_id);
+            // }).filter(Boolean);
 
             return accountsFollowedByUser;
 

@@ -1474,6 +1474,20 @@ export const getFollowStatus = async (user_id, otherUser_id) => {
     }
 }
 
+// export const getUserByIdQuery = async (user_id) => {
+//     try {
+//         const response = await databases.listDocuments(
+//             import.meta.env.VITE_DATABASE,
+//             import.meta.env.VITE_USERS_COLLECTION,
+//             [Query.equal('$id', user_id)]
+//         );
+//         return response;
+//     } catch (error) {
+//         // console.error('Error fetching user by ID:', error);
+//         throw error;
+//     }
+// };
+
 export const getPersonalFeedAccounts = async (user_id) => {
     try {
         const res = await databases.listDocuments(
@@ -1483,7 +1497,19 @@ export const getPersonalFeedAccounts = async (user_id) => {
                 Query.equal('user_id', user_id)
             ]
         )
-        return res;
+
+        console.log("LET'S SEEEE:", res);
+
+        const otherUserIds = res.documents.map(otherUser => otherUser.otherUser_id)
+
+        console.log("OTHERUSERIDS:", otherUserIds);
+
+        const personalFeedUserAccnts = await getUserByIdQuery(otherUserIds);
+
+        console.log("OTHERUSERACCNTS:", personalFeedUserAccnts);
+
+        return personalFeedUserAccnts.documents;
+
     } catch (error) {
         console.error('Error getting personal feed acounts:', error);
     }

@@ -7,7 +7,7 @@ const useNotices = (googleUserData) => {
     const [user_id, setUserId] = useState(null);
     // const [userNotices, setUserNotices] = useState([]);
     const [latestNotice, setLatestNotice] = useState({});
-    const [feedNotices, setFeedNotices] = useState([]);
+    const [generalFeedNotices, setGeneralFeedNotices] = useState([]);
     const [savedNotices, setSaveNotices] = useState([]);
     const [likedNotices, setLikedNotices] = useState({});
     const [noticesReactions, setNoticesReactions] = useState([]);
@@ -67,9 +67,9 @@ const useNotices = (googleUserData) => {
     useEffect(() => {
         const fetchUserSaves = async () => {
             try {
-                if (!user_id || feedNotices.length === 0) return;
+                if (!user_id || generalFeedNotices.length === 0) return;
 
-                const noticeIdsInFeed = feedNotices.map(notice => notice.$id);
+                const noticeIdsInFeed = generalFeedNotices.map(notice => notice.$id);
                 const userSaves = await getUserSaves(user_id, noticeIdsInFeed);
 
                 setSaveNotices(prevSaves => {
@@ -85,7 +85,7 @@ const useNotices = (googleUserData) => {
         };
 
         fetchUserSaves();
-    }, [user_id, feedNotices]);
+    }, [user_id, generalFeedNotices]);
 
 
 
@@ -112,9 +112,9 @@ const useNotices = (googleUserData) => {
     useEffect(() => {
         const fetchUserLikes = async () => {
             try {
-                if (!user_id || feedNotices.length === 0) return;
+                if (!user_id || generalFeedNotices.length === 0) return;
 
-                const noticeIdsInFeed = feedNotices.map(notice => notice.$id);
+                const noticeIdsInFeed = generalFeedNotices.map(notice => notice.$id);
                 const userLikes = await getUserLikes(user_id, noticeIdsInFeed);
 
                 setLikedNotices(prevLikes => {
@@ -130,7 +130,7 @@ const useNotices = (googleUserData) => {
         };
 
         fetchUserLikes();
-    }, [user_id, feedNotices]);
+    }, [user_id, generalFeedNotices]);
 
 
 
@@ -339,7 +339,7 @@ const useNotices = (googleUserData) => {
         try {
             const notices = await getFilteredNotices(selectedTags, limit, lastId, user_id);
             console.log('notices - getFeedNotices', notices);
-            setFeedNotices(notices);
+            setGeneralFeedNotices(notices);
             return notices;
         } catch (error) {
             console.error('Error fetching filtered notices:', error);
