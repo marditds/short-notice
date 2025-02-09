@@ -56,9 +56,16 @@ const UserFeed = () => {
 
     const {
         user_id,
+        personalFeedLikedNotices,
+        personalFeedSavedNotices,
         likedNotices,
         savedNotices,
+        setLikedNotices,
+        setPersonalFeedLikedNotices,
+        setPersonalFeedSavedNotices,
+        setSavedNotices,
         getInterests,
+        getPersonalFeedNotices,
         getFeedNotices,
         handleSave,
         handleReportNotice,
@@ -165,13 +172,6 @@ const UserFeed = () => {
 
                 console.log('Fetched notices:', notices);
 
-                // const filteredNotices = await filterBlocksFromFeed(notices, user_id);
-                // console.log('Filtered notices - general:', filteredNotices);
-
-                // const unExpiredNotices = await deleteExpiredNotice(filteredNotices);
-
-                // console.log('unExpiredNotices', unExpiredNotices);
-
                 await fetchUsersData(notices, setGeneralFeedNotices, avatarUtil);
 
                 if (notices.length < limit) {
@@ -188,66 +188,6 @@ const UserFeed = () => {
                 setIsLoadingMoreInitial(false);
             }
         };
-
-        // const fetchInitialGeneralFeed = async () => {
-        //     const fetchBatchRecursively = async (currentLastId = null, accumulator = []) => {
-        //         try {
-        //             setIsLoadingMoreInitial(true);
-        //             setIsLoadingMore(true);
-
-        //             console.log('Fetching batch with Limit:', limit, 'Last ID:', currentLastId);
-
-        //             const notices = await getFeedNotices(selectedTags, limit, currentLastId);
-        //             console.log('Fetched notices:', notices);
-
-        //             if (notices.length === 0) {
-        //                 // No more notices to fetch
-        //                 setHasMoreGeneralNotices(false);
-        //                 return accumulator;
-        //             }
-
-        //             const filteredNotices = await filterBlocksFromFeed(notices, user_id);
-        //             console.log('Filtered notices - general:', filteredNotices);
-
-        //             if (filteredNotices.length === 0 && notices.length === limit) {
-        //                 // All notices were filtered out, but there might be more
-        //                 // Recursively fetch the next batch
-        //                 const nextLastId = notices[notices.length - 1].$id;
-        //                 return fetchBatchRecursively(nextLastId, accumulator);
-        //             }
-
-        //             // Combine with previously accumulated notices
-        //             const combinedNotices = [...accumulator, ...filteredNotices];
-
-        //             // If we don't have enough notices yet and there might be more
-        //             if (combinedNotices.length < limit && notices.length === limit) {
-        //                 const nextLastId = notices[notices.length - 1].$id;
-        //                 return fetchBatchRecursively(nextLastId, combinedNotices);
-        //             }
-
-        //             // We have enough notices or reached the end
-        //             setHasMoreGeneralNotices(notices.length === limit);
-        //             return combinedNotices;
-        //         } catch (error) {
-        //             console.error('Error in recursive fetch:', error);
-        //             return accumulator;
-        //         }
-        //     };
-
-        //     try {
-        //         const finalNotices = await fetchBatchRecursively();
-
-        //         if (finalNotices.length > 0) {
-        //             await fetchUsersData(finalNotices, setGeneralFeedNotices, avatarUtil);
-        //             setLastId(finalNotices[finalNotices.length - 1]?.$id);
-        //         }
-        //     } catch (error) {
-        //         console.error('Error fetching initial feed notices:', error);
-        //     } finally {
-        //         setIsLoadingMore(false);
-        //         setIsLoadingMoreInitial(false);
-        //     }
-        // };
 
         if (isFeedToggled && generalFeedNotices.length === 0) {
             fetchInitialGeneralFeed();
@@ -267,13 +207,6 @@ const UserFeed = () => {
                 const notices = await getFeedNotices(selectedTags, limit, lastId);
                 console.log('Fetched notices:', notices);
 
-                // const filteredNotices = await filterBlocksFromFeed(notices, user_id);
-                // console.log('Filtered notices - general:', filteredNotices);
-
-                // const unExpiredNotices = await deleteExpiredNotice(filteredNotices);
-
-                // console.log('unExpiredNotices', unExpiredNotices);
-
                 await fetchUsersData(notices, setGeneralFeedNotices, avatarUtil);
 
                 if (notices.length < limit) {
@@ -289,64 +222,6 @@ const UserFeed = () => {
             }
         };
 
-        // const fetchSubsequentGeneralFeed = async () => {
-        //     const fetchBatchRecursively = async (currentLastId, accumulator = []) => {
-        //         try {
-        //             console.log('Limit:', limit);
-        //             console.log('Last ID:', currentLastId);
-
-        //             const notices = await getFeedNotices(selectedTags, limit, currentLastId);
-        //             console.log('Fetched notices:', notices);
-
-        //             if (notices.length === 0) {
-        //                 setHasMoreGeneralNotices(false);
-        //                 return accumulator;
-        //             }
-
-        //             const filteredNotices = await filterBlocksFromFeed(notices, user_id);
-        //             console.log('Filtered notices - general:', filteredNotices);
-
-        //             if (filteredNotices.length === 0 && notices.length === limit) {
-        //                 // All notices were filtered out, but there might be more
-        //                 // Recursively fetch the next batch
-        //                 const nextLastId = notices[notices.length - 1].$id;
-        //                 return fetchBatchRecursively(nextLastId, accumulator);
-        //             }
-
-        //             // Combine with previously accumulated notices
-        //             const combinedNotices = [...accumulator, ...filteredNotices];
-
-        //             // If we haven't gotten enough notices yet and there might be more
-        //             if (combinedNotices.length < limit && notices.length === limit) {
-        //                 const nextLastId = notices[notices.length - 1].$id;
-        //                 return fetchBatchRecursively(nextLastId, combinedNotices);
-        //             }
-
-        //             setHasMoreGeneralNotices(notices.length === limit);
-        //             return combinedNotices;
-        //         } catch (error) {
-        //             console.error('Error in recursive fetch:', error);
-        //             return accumulator;
-        //         }
-        //     };
-
-        //     try {
-        //         setIsLoadingMore(true);
-
-        //         const finalNotices = await fetchBatchRecursively(lastId);
-
-        //         if (finalNotices.length > 0) {
-        //             await fetchUsersData(finalNotices, setGeneralFeedNotices, avatarUtil);
-        //             setLastId(finalNotices[finalNotices.length - 1]?.$id);
-        //         }
-        //     } catch (error) {
-        //         console.error('Error loading more notices:', error);
-        //     } finally {
-        //         setIsLoadingMore(false);
-        //         setLoadMore(false);
-        //     }
-        // };
-
         if (isFeedToggled && loadMore) {
             fetchSubsequentGeneralFeed();
         }
@@ -360,32 +235,11 @@ const UserFeed = () => {
                 setIsLoadingPersonalFeedNotices(true);
                 setIsLoadingMorePersonal(true);
 
-                const followedByUser = await getPersonalFeedAccounts(user_id);
-                console.log('followedByUser', followedByUser);
-
-                const followedUserIds = followedByUser.map((user) => user.$id);
-
-                console.log('followedUserIds', followedUserIds);
-
-                const allNotices = await getNoticesByUser(followedUserIds, limitPersonal, null);
+                const allNotices = await getPersonalFeedNotices(limitPersonal, null);
 
                 console.log('allNotices', allNotices);
 
                 let usrNtcs = allNotices.flat();
-
-                console.log('notices BEFORE filtering:', usrNtcs);
-
-                // const filteredNotices = await filterBlocksFromFeed(usrNtcs, user_id);
-
-                // console.log('Filtered notices - personal:', filteredNotices);
-
-                // filteredNotices.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-
-                // console.log('filteredNotices - Personal', filteredNotices);
-
-                // const unExpiredNotices = await deleteExpiredNotice(filteredNotices);
-
-                // console.log('unExpiredNotices', unExpiredNotices);
 
                 await fetchUsersData(usrNtcs, setPersonalFeedNotices, avatarUtil);
 
@@ -414,25 +268,11 @@ const UserFeed = () => {
             try {
                 setIsLoadingMorePersonal(true);
 
-                const followedByUser = await getPersonalFeedAccounts(user_id);
-
-                const followedUserIds = followedByUser.map((user) => user.$id);
-
-                console.log('followedUserIds', followedUserIds);
-
-                const allNotices = await getNoticesByUser(followedUserIds, limitPersonal, lastIdPersonal);
+                const allNotices = await getPersonalFeedNotices(limitPersonal, lastIdPersonal);
 
                 console.log('allNotices', allNotices);
 
                 let usrNtcs = allNotices.flat();
-
-                // const filteredNotices = await filterBlocksFromFeed(usrNtcs, user_id);
-
-                // console.log('Filtered notices - personal:', filteredNotices);
-
-                // const unExpiredNotices = await deleteExpiredNotice(filteredNotices);
-
-                // console.log('unExpiredNotices', unExpiredNotices);
 
                 await fetchUsersData(usrNtcs, setPersonalFeedNotices, avatarUtil);
 
@@ -516,10 +356,12 @@ const UserFeed = () => {
                     <Notices
                         notices={notices}
                         user_id={user_id}
-                        likedNotices={likedNotices}
-                        savedNotices={savedNotices}
+                        likedNotices={!isFeedToggled ? personalFeedLikedNotices : likedNotices}
+                        savedNotices={!isFeedToggled ? personalFeedSavedNotices : savedNotices}
                         handleLike={handleLike}
+                        setLikedNotices={!isFeedToggled ? setPersonalFeedLikedNotices : setLikedNotices}
                         handleSave={handleSave}
+                        setSavedNotices={!isFeedToggled ? setPersonalFeedSavedNotices : setSavedNotices}
                         handleReportNotice={handleReportNotice}
                         handleReact={handleReact}
                         getReactionsForNotice={getReactionsForNotice}

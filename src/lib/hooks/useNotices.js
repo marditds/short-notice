@@ -1,15 +1,27 @@
 import { useState, useEffect, useCallback } from 'react';
-import { createNotice, getUserNotices, updateNotice, deleteNotice, saveDeletedNoticeId, deleteAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSave, getUserSaves, removeSave, createReport, createLike, removeLike, getUserLikes, getAllLikedNotices as fetchAllLikedNotices, getAllLikesByNoticeId as fetchAllLikesByNoticeId, getAllSavedNotices as fetchAllSavedNotices, createReaction, deleteReaction, getAllReactionsBySenderId as fetchAllReactionsBySenderId, getAllReactions as fetchAllReactions, getAllReactionsByRecipientId as fetchAllReactionsByRecipientId, getNoticeByNoticeId as fetchNoticeByNoticeId, getAllReactionsByNoticeId as fetchAllReactionsByNoticeId, getReactionByReactionId as fetchReactionByReactionId, deleteAllReactions, createReactionReport, getNoticeByUserId as fetchNoticeByUserId, removeAllSavesForNotice, removeAllLikesForNotice } from '../../lib/context/dbhandler';
+import { createNotice, getUserNotices, updateNotice, deleteNotice, saveDeletedNoticeId, deleteAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSave, getUserSaves, removeSave, createReport, createLike, removeLike, getUserLikes, getAllLikedNotices as fetchAllLikedNotices, getAllLikesByNoticeId as fetchAllLikesByNoticeId, getUserLikesNotInFeed, getAllSavedNotices as fetchAllSavedNotices, createReaction, deleteReaction, getAllReactionsBySenderId as fetchAllReactionsBySenderId, getAllReactions as fetchAllReactions, getAllReactionsByRecipientId as fetchAllReactionsByRecipientId, getNoticeByNoticeId as fetchNoticeByNoticeId, getAllReactionsByNoticeId as fetchAllReactionsByNoticeId, getReactionByReactionId as fetchReactionByReactionId, deleteAllReactions, createReactionReport, getNoticeByUserId as fetchNoticeByUserId, removeAllSavesForNotice, removeAllLikesForNotice } from '../../lib/context/dbhandler';
+import useUserInfo from './useUserInfo.js';
 import { UserId } from '../../components/User/UserId.jsx';
 import { useUnblockedNotices } from '../utils/blockFilter.js';
 
 const useNotices = (googleUserData) => {
+
+    const { getPersonalFeedAccounts } = useUserInfo();
+
     const [user_id, setUserId] = useState(null);
+    const [fellowUserId, setFellowUserId] = useState(null)
+
     // const [userNotices, setUserNotices] = useState([]);
     const [latestNotice, setLatestNotice] = useState({});
     const [generalFeedNotices, setGeneralFeedNotices] = useState([]);
-    const [savedNotices, setSaveNotices] = useState([]);
+    const [personalFeedNotices, setPersonalFeedNotices] = useState([]);
+
+    const [personalFeedLikedNotices, setPersonalFeedLikedNotices] = useState({});
+    const [personalFeedSavedNotices, setPersonalFeedSavedNotices] = useState({});
+
+    const [savedNotices, setSavedNotices] = useState([]);
     const [likedNotices, setLikedNotices] = useState({});
+
     const [noticesReactions, setNoticesReactions] = useState([]);
     const [saveReactions, setSaveReactions] = useState([]);
     const [likedReactions, setLikedReactions] = useState([]);
@@ -44,26 +56,7 @@ const useNotices = (googleUserData) => {
 
     }, [googleUserData]);
 
-    // Fetch User Saves
-    // useEffect(() => {
-    //     const fetchUserSaves = async () => {
-    //         try {
-    //             const userSaves = await getUserSaves(user_id);
-
-    //             const saveNoticesMap = {};
-    //             userSaves.forEach(save => {
-    //                 saveNoticesMap[save.notice_id] = save.$id;
-    //             });
-    //             setSaveNotices(saveNoticesMap);
-    //         } catch (error) {
-    //             console.error('Error fetching user saves:', error);
-    //         }
-    //     };
-
-    //     if (user_id) {
-    //         fetchUserSaves();
-    //     }
-    // }, [user_id]);
+    // Fetch User Saves for general feed
     useEffect(() => {
         const fetchUserSaves = async () => {
             try {
@@ -72,7 +65,7 @@ const useNotices = (googleUserData) => {
                 const noticeIdsInFeed = generalFeedNotices.map(notice => notice.$id);
                 const userSaves = await getUserSaves(user_id, noticeIdsInFeed);
 
-                setSaveNotices(prevSaves => {
+                setSavedNotices(prevSaves => {
                     const updatedSaves = { ...prevSaves };
                     userSaves.forEach(save => {
                         updatedSaves[save.notice_id] = save.$id;
@@ -87,28 +80,31 @@ const useNotices = (googleUserData) => {
         fetchUserSaves();
     }, [user_id, generalFeedNotices]);
 
+    // Fetch user saves for personal feed
+    useEffect(() => {
+        const fetchPersonalFeedSaves = async () => {
+            try {
+                if (!user_id || personalFeedNotices.length === 0) return;
 
+                const noticeIdsInFeed = personalFeedNotices.map(notice => notice.$id);
+                const userSaves = await getUserSaves(user_id, noticeIdsInFeed);
 
-    // Fetch User Likes
-    // useEffect(() => {
-    //     const fetchUserLikes = async () => {
-    //         try {
-    //             const userLikes = await getUserLikes(user_id);
+                setPersonalFeedSavedNotices(prevSaves => {
+                    const updatedSaves = { ...prevSaves };
+                    userSaves.forEach(save => {
+                        updatedSaves[save.notice_id] = save.$id;
+                    });
+                    return updatedSaves;
+                });
+            } catch (error) {
+                console.error('Error fetching personal feed saves:', error);
+            }
+        };
 
-    //             const likedNoticesMap = {};
-    //             userLikes.forEach(like => {
-    //                 likedNoticesMap[like.notice_id] = like.$id;
-    //             });
-    //             setLikedNotices(likedNoticesMap);
-    //         } catch (error) {
-    //             console.error('Error fetching user likes:', error);
-    //         }
-    //     };
-    //     if (user_id) {
-    //         fetchUserLikes();
-    //     }
-    // }, [user_id]);
+        fetchPersonalFeedSaves();
+    }, [user_id, personalFeedNotices]);
 
+    // Fetch user likes for general feed 
     useEffect(() => {
         const fetchUserLikes = async () => {
             try {
@@ -131,6 +127,94 @@ const useNotices = (googleUserData) => {
 
         fetchUserLikes();
     }, [user_id, generalFeedNotices]);
+
+    // Fetch user likes for personal feed
+    useEffect(() => {
+        const fetchPersonalFeedLikes = async () => {
+            try {
+                if (!user_id || personalFeedNotices.length === 0) return;
+
+                const noticeIdsInFeed = personalFeedNotices.map(notice => notice.$id);
+                const userLikes = await getUserLikes(user_id, noticeIdsInFeed);
+
+                setPersonalFeedLikedNotices(prevLikes => {
+                    const updatedLikes = { ...prevLikes };
+                    userLikes.forEach(like => {
+                        updatedLikes[like.notice_id] = like.$id;
+                    });
+                    return updatedLikes;
+                });
+            } catch (error) {
+                console.error('Error fetching personal feed likes:', error);
+            }
+        };
+
+        fetchPersonalFeedLikes();
+    }, [user_id, personalFeedNotices]);
+
+
+    // Fetch user likes for fellow users notices
+    // MAYBE A FULL, SEPARATE FUNCTION FOR FETCHING THE LIKED IN FELLOW USER ACCOUNT WITH PARAMS AND EVERYTHING. IE personalFeedNotices AS PARAM IN FELLOW USER PROFILE
+
+    const fetchAndSetLikes = async (setLikesFunc) => {
+
+        const lkdNtcs = await fetchUserLikes(nstNtcsIds);
+
+        setLikesFunc(prevLikes => {
+            const updatedLikes = { ...prevLikes };
+            lkdNtcs.forEach(like => {
+                updatedLikes[like.notice_id] = like.$id;
+            });
+            return updatedLikes;
+        });
+    }
+
+
+    useEffect(() => {
+        const fetchLikesOnFellowUsersNoticesInTheirProfile = async () => {
+            try {
+                if (!user_id || !fellowUserId) return;
+
+                const noticeIdsInFeed = personalFeedNotices.map(notice => notice.$id);
+                const userLikes = await getUserLikes(user_id, noticeIdsInFeed);
+
+            } catch (error) {
+                console.error('Error fetching personal feed likes:', error);
+            }
+        };
+
+        fetchLikesOnFellowUsersNoticesInTheirProfile();
+    }, [user_id, fellowUserId]);
+
+
+
+    const fetchUserLikes = async (noticeIdsInProfile) => {
+        try {
+            const res = await getUserLikes(user_id, noticeIdsInProfile);
+
+            console.log('FETCH USER LIKES', res);
+
+            return res;
+        } catch (error) {
+            console.error('Error fetching likes in profile:', error);
+        }
+    }
+
+    const fetchUserSaves = async (noticeIdsInProfile) => {
+        try {
+            const res = await getUserSaves(user_id, noticeIdsInProfile);
+
+            console.log('FETCH USER SAVES', res);
+
+            return res;
+        } catch (error) {
+            console.error('Error fetching SAVES in profile:', error);
+        }
+    }
+
+
+
+
 
 
 
@@ -346,6 +430,26 @@ const useNotices = (googleUserData) => {
         }
     };
 
+    const getPersonalFeedNotices = async (limit, lastId) => {
+        try {
+
+            const accountsFollowedByUser = await getPersonalFeedAccounts(user_id);
+
+            const idsForAccountsFollowedByUser = accountsFollowedByUser.map((user) => user.$id);
+
+            const notices = await getNoticesByUser(idsForAccountsFollowedByUser, limit, lastId);
+
+            console.log('PERSONAL FEED NOTICES', notices);
+
+            setPersonalFeedNotices(notices);
+
+            return notices;
+
+        } catch (error) {
+            console.error('Error fetching personal feed notices:', error);
+        }
+    }
+
     const getNoticesByUser = useCallback(async (user_id, limit, lastId) => {
         try {
             const response = await getUserNotices(user_id, limit, lastId);
@@ -429,18 +533,18 @@ const useNotices = (googleUserData) => {
         }
     }
 
-    const handleSave = async (notice_id, author_id) => {
+    const handleSave = async (notice_id, author_id, savedNoticesArr, setSaveFunc) => {
         try {
-            if (savedNotices[notice_id]) {
-                await removeSave(savedNotices[notice_id]);
-                setSaveNotices((prevSaves) => {
+            if (savedNoticesArr[notice_id]) {
+                await removeSave(savedNoticesArr[notice_id]);
+                setSaveFunc((prevSaves) => {
                     const updatedSaves = { ...prevSaves };
                     delete updatedSaves[notice_id];
                     return updatedSaves;
                 });
             } else {
                 const newSave = await createSave(notice_id, author_id, user_id);
-                setSaveNotices((prevSave) => ({
+                setSaveFunc((prevSave) => ({
                     ...prevSave,
                     [notice_id]: newSave.$id,
                 }));
@@ -450,18 +554,18 @@ const useNotices = (googleUserData) => {
         }
     }
 
-    const handleLike = async (notice_id, author_id) => {
+    const handleLike = async (notice_id, author_id, likedNoticesArr, setLikeFunc) => {
         try {
-            if (likedNotices[notice_id]) {
-                await removeLike(likedNotices[notice_id]);
-                setLikedNotices((prevLikes) => {
+            if (likedNoticesArr[notice_id]) {
+                await removeLike(likedNoticesArr[notice_id]);
+                setLikeFunc((prevLikes) => {
                     const updatedLikes = { ...prevLikes };
                     delete updatedLikes[notice_id];
                     return updatedLikes;
                 });
             } else {
                 const newLike = await createLike(notice_id, author_id, user_id);
-                setLikedNotices((prevLikes) => ({
+                setLikeFunc((prevLikes) => ({
                     ...prevLikes,
                     [notice_id]: newLike.$id,
                 }));
@@ -474,7 +578,7 @@ const useNotices = (googleUserData) => {
     const getAllLikedNotices = async (userId, limit, offset) => {
         try {
 
-            const userLikes = await getUserLikes(userId);
+            const userLikes = await getUserLikesNotInFeed(userId);
 
             console.log('userLikes', userLikes);
 
@@ -646,6 +750,8 @@ const useNotices = (googleUserData) => {
         user_id,
         // userNotices,
         latestNotice,
+        personalFeedLikedNotices,
+        personalFeedSavedNotices,
         savedNotices,
         likedNotices,
         isLoading,
@@ -656,6 +762,7 @@ const useNotices = (googleUserData) => {
         noticesReactions,
         saveReactions,
         likedReactions,
+        setFellowUserId,
         addNotice,
         editNotice,
         handleSaveEdit,
@@ -663,13 +770,18 @@ const useNotices = (googleUserData) => {
         handleDelete,
         deleteExpiredNotice,
         getFeedNotices,
+        getPersonalFeedNotices,
         fetchUserNotices,
         getNoticesByUser,
         getNoticeByNoticeId,
+        fetchUserLikes,
+        fetchUserSaves,
         getInterests,
         setRemovingNoticeId,
         updateInterests,
         handleSave,
+        setPersonalFeedSavedNotices,
+        setSavedNotices,
         getAllLikedNotices,
         getNoticeByUserId,
         getAllLikesByNoticeId,
@@ -677,6 +789,7 @@ const useNotices = (googleUserData) => {
         handleReportNotice,
         handleLike,
         setLikedNotices,
+        setPersonalFeedLikedNotices,
         removeAllNoticesByUser,
         removeAllReactionsByUser,
         handleReact,

@@ -30,9 +30,10 @@ const OtherUserProfile = () => {
 
     const {
         user_id,
-        likedNotices,
-        savedNotices,
+        // likedNotices,
+        // savedNotices,
         noticesReactions,
+        setFellowUserId,
         handleLike,
         handleSave,
         handleReportNotice,
@@ -42,7 +43,9 @@ const OtherUserProfile = () => {
         handleReact,
         getReactionsForNotice,
         getReactionByReactionId,
-        reportReaction
+        reportReaction,
+        fetchUserLikes,
+        fetchUserSaves
     } = useNotices(googleUserData);
 
     const { filterBlocksFromLikesSaves } = useUnblockedNotices();
@@ -95,6 +98,10 @@ const OtherUserProfile = () => {
     const [offsetNotices, setOffsetNotices] = useState(0);
     const [hasMoreNotices, setHasMoreNotices] = useState(true);
     const [isLoadingMore, setIsLoadingMore] = useState(false);
+    const [likedNotices, setLikedNotices] = useState([]);
+    const [savedNotices, setSavedNotices] = useState([]);
+    const [isLoadingNotices, setIsLoadingNotices] = useState(false);
+
 
     // Saves Tab
     const [limitSaves] = useState(5);
@@ -191,6 +198,8 @@ const OtherUserProfile = () => {
                     // Only update if different to prevent unnecessary re-renders
                     setCurrUserId((prevId) => (prevId !== otherUser.$id ? otherUser.$id : prevId));
 
+                    setFellowUserId((prevId) => (prevId !== otherUser.$id ? otherUser.$id : prevId));
+
                     setAccountType(otherUser.accountType)
                 } else {
                     console.error(`User with username "${otherUsername}" not found.`);
@@ -224,16 +233,45 @@ const OtherUserProfile = () => {
     // Fetch notices for other user 
     useEffect(() => {
         setIsLoadingMore(true);
+
         const fetchNotices = async () => {
+
+            if (offsetNotices === 0) {
+                setIsLoadingNotices(true);
+            } else {
+                setIsLoadingMore(true);
+            }
+
             try {
                 const usrNtcs = await getNoticeByUserId(currUserId, limitNotices, offsetNotices);
 
-                console.log('usrNtc', usrNtcs);
+                console.log('HAKOBOS', usrNtcs);
 
-                // const unExpiredNotices = await deleteExpiredNotice(usrNtcs);
+                const nstNtcsIds = usrNtcs.map(ntc => ntc.$id);
+
+                console.log('nstNtcsIds', nstNtcsIds);
+
+                const lkdNtcs = await fetchUserLikes(nstNtcsIds);
+
+                setLikedNotices(prevLikes => {
+                    const updatedLikes = { ...prevLikes };
+                    lkdNtcs.forEach(like => {
+                        updatedLikes[like.notice_id] = like.$id;
+                    });
+                    return updatedLikes;
+                });
+
+                const svdNtcs = await fetchUserSaves(nstNtcsIds);
+
+                setSavedNotices(prevSaves => {
+                    const updatedSaves = { ...prevSaves };
+                    svdNtcs.forEach(save => {
+                        updatedSaves[save.notice_id] = save.$id;
+                    });
+                    return updatedSaves;
+                });
 
                 setOtherUserNotices((preVal) => [...preVal, ...usrNtcs]);
-
 
                 if (usrNtcs?.length < limitNotices) {
                     setHasMoreNotices(false);
@@ -243,20 +281,23 @@ const OtherUserProfile = () => {
             } catch (error) {
                 console.error('Error fetching notices - ', error);
             } finally {
+                if (offsetNotices === 0) {
+                    setIsLoadingNotices(false);
+                }
                 setIsLoadingMore(false);
             }
         };
         // setOffsetNotices(0);
         // setOtherUserNotices([]);
-        if (accountType === 'organization' && accountTypeCheck === true) {
-            callFunctionIfNotBlocked(fetchNotices);
-        } else {
-            return;
-        }
+        // if (accountType === 'organization' && accountTypeCheck === true) {
+        //     callFunctionIfNotBlocked(fetchNotices);
+        // } else {
+        //     return;
+        // }
 
-        if (accountType !== 'organization') {
-            callFunctionIfNotBlocked(fetchNotices);
-        }
+        // if (accountType !== 'organization') {
+        callFunctionIfNotBlocked(fetchNotices);
+        // }
 
     }, [currUserId, offsetNotices])
 
@@ -583,8 +624,8 @@ const OtherUserProfile = () => {
                                     eventKey='notices'
                                     title="Notices"
                                 >
-                                    {
-                                        otherUserNotices?.length !== 0 ?
+                                    {!isLoadingNotices ?
+                                        (otherUserNotices?.length !== 0 ?
                                             <>
                                                 <Notices
                                                     notices={otherUserNotices}
@@ -595,7 +636,9 @@ const OtherUserProfile = () => {
                                                     user_id={user_id}
                                                     isOtherUserBlocked={isOtherUserBlocked}
                                                     handleLike={handleLike}
+                                                    setLikedNotices={setLikedNotices}
                                                     handleSave={handleSave}
+                                                    setSavedNotices={setSavedNotices}
                                                     handleReportNotice={handleReportNotice}
                                                     handleReact={handleReact}
                                                     getReactionsForNotice={getReactionsForNotice}
@@ -623,6 +666,10 @@ const OtherUserProfile = () => {
                                             <NoticesPlaceholder location={location}
                                                 otherUsername={otherUsername}
                                             />
+                                        ) :
+                                        <div className='d-flex justify-content-center'>
+                                            <Loading /><span className='ms-2'>Loading {otherUsername}'s notices...</span>
+                                        </div>
                                     }
 
                                 </Tab>
