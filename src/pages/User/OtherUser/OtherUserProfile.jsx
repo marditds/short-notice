@@ -689,7 +689,9 @@ const OtherUserProfile = () => {
                                                     savedNotices={savedNotices}
                                                     eventKey={eventKey}
                                                     handleLike={handleLike}
+                                                    setLikedNotices={setLikedNotices}
                                                     handleSave={handleSave}
+                                                    setSavedNotices={setSavedNotices}
                                                     handleReportNotice={handleReportNotice}
                                                     handleReact={handleReact}
                                                     getReactionsForNotice={getReactionsForNotice}
@@ -742,6 +744,8 @@ const OtherUserProfile = () => {
                                                     eventKey={eventKey}
                                                     handleLike={handleLike}
                                                     handleSave={handleSave}
+                                                    setLikedNotices={setLikedNotices}
+                                                    setSavedNotices={setSavedNotices}
                                                     handleReportNotice={handleReportNotice}
                                                     handleReact={handleReact}
                                                     getReactionsForNotice={getReactionsForNotice}

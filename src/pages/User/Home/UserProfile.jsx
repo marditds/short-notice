@@ -44,6 +44,10 @@ const UserProfile = () => {
         removingNoticeId,
         isSavingEdit,
         isRemovingNotice,
+        fetchUserSaves,
+        fetchUserLikes,
+        setLikedNotices,
+        setSavedNotices,
         addNotice,
         editNotice,
         handleSaveEdit,
@@ -224,6 +228,28 @@ const UserProfile = () => {
 
                 console.log('allSavedNotices', allSavedNotices);
 
+                const nstNtcsIds = allSavedNotices.map(ntc => ntc.$id);
+
+                const svdNtcs = await fetchUserSaves(nstNtcsIds);
+
+                setSavedNotices(prevSaves => {
+                    const updatedSaves = { ...prevSaves };
+                    svdNtcs.forEach(save => {
+                        updatedSaves[save.notice_id] = save.$id;
+                    });
+                    return updatedSaves;
+                });
+
+                const lkdNtcs = await fetchUserLikes(nstNtcsIds);
+
+                setLikedNotices(prevLikes => {
+                    const updatedLikes = { ...prevLikes };
+                    lkdNtcs.forEach(like => {
+                        updatedLikes[like.notice_id] = like.$id;
+                    });
+                    return updatedLikes;
+                });
+
                 if (allSavedNotices?.length < limit) {
                     setHasMoreSaves(false);
                 } else {
@@ -261,6 +287,28 @@ const UserProfile = () => {
                 const allLikedNotices = await getAllLikedNotices(user_id, limitLikes, offsetLikes);
 
                 console.log('allLikedNotices - UserProfile.jsx', allLikedNotices);
+
+                const nstNtcsIds = allLikedNotices.map(ntc => ntc.$id);
+
+                const svdNtcs = await fetchUserSaves(nstNtcsIds);
+
+                setSavedNotices(prevSaves => {
+                    const updatedSaves = { ...prevSaves };
+                    svdNtcs.forEach(save => {
+                        updatedSaves[save.notice_id] = save.$id;
+                    });
+                    return updatedSaves;
+                });
+
+                const lkdNtcs = await fetchUserLikes(user_id, nstNtcsIds);
+
+                setLikedNotices(prevLikes => {
+                    const updatedLikes = { ...prevLikes };
+                    lkdNtcs.forEach(like => {
+                        updatedLikes[like.notice_id] = like.$id;
+                    });
+                    return updatedLikes;
+                });
 
                 await fetchUsersData(allLikedNotices, setLikedNoticesData, avatarUtil);
 
@@ -515,6 +563,8 @@ const UserProfile = () => {
                                     user_id={user_id}
                                     handleLike={handleLike}
                                     handleSave={handleSave}
+                                    setLikedNotices={setLikedNotices}
+                                    setSavedNotices={setSavedNotices}
                                     handleReportNotice={handleReportNotice}
                                     handleReact={handleReact}
                                     getReactionsForNotice={getReactionsForNotice}
@@ -570,6 +620,8 @@ const UserProfile = () => {
                                     user_id={user_id}
                                     handleLike={handleLike}
                                     handleSave={handleSave}
+                                    setLikedNotices={setLikedNotices}
+                                    setSavedNotices={setSavedNotices}
                                     handleReportNotice={handleReportNotice}
                                     handleReact={handleReact}
                                     getReactionsForNotice={getReactionsForNotice}

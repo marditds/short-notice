@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { createNotice, getUserNotices, updateNotice, deleteNotice, saveDeletedNoticeId, deleteAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSave, getUserSaves, removeSave, createReport, createLike, removeLike, getUserLikes, getAllLikedNotices as fetchAllLikedNotices, getAllLikesByNoticeId as fetchAllLikesByNoticeId, getUserLikesNotInFeed, getAllSavedNotices as fetchAllSavedNotices, createReaction, deleteReaction, getAllReactionsBySenderId as fetchAllReactionsBySenderId, getAllReactions as fetchAllReactions, getAllReactionsByRecipientId as fetchAllReactionsByRecipientId, getNoticeByNoticeId as fetchNoticeByNoticeId, getAllReactionsByNoticeId as fetchAllReactionsByNoticeId, getReactionByReactionId as fetchReactionByReactionId, deleteAllReactions, createReactionReport, getNoticeByUserId as fetchNoticeByUserId, removeAllSavesForNotice, removeAllLikesForNotice } from '../../lib/context/dbhandler';
+import { createNotice, getUserNotices, updateNotice, deleteNotice, saveDeletedNoticeId, deleteAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSave, getUserSaves, removeSave, createReport, createLike, removeLike, getUserLikes, getAllLikedNotices as fetchAllLikedNotices, getAllLikesByNoticeId as fetchAllLikesByNoticeId, getUserLikesNotInFeed, getUserSavesNotInFeed, getAllSavedNotices as fetchAllSavedNotices, createReaction, deleteReaction, getAllReactionsBySenderId as fetchAllReactionsBySenderId, getAllReactions as fetchAllReactions, getAllReactionsByRecipientId as fetchAllReactionsByRecipientId, getNoticeByNoticeId as fetchNoticeByNoticeId, getAllReactionsByNoticeId as fetchAllReactionsByNoticeId, getReactionByReactionId as fetchReactionByReactionId, deleteAllReactions, createReactionReport, getNoticeByUserId as fetchNoticeByUserId, removeAllSavesForNotice, removeAllLikesForNotice } from '../../lib/context/dbhandler';
 import useUserInfo from './useUserInfo.js';
 import { UserId } from '../../components/User/UserId.jsx';
 import { useUnblockedNotices } from '../utils/blockFilter.js';
@@ -152,24 +152,6 @@ const useNotices = (googleUserData) => {
         fetchPersonalFeedLikes();
     }, [user_id, personalFeedNotices]);
 
-
-    // Fetch user likes for fellow users notices
-    // MAYBE A FULL, SEPARATE FUNCTION FOR FETCHING THE LIKED IN FELLOW USER ACCOUNT WITH PARAMS AND EVERYTHING. IE personalFeedNotices AS PARAM IN FELLOW USER PROFILE
-
-    const fetchAndSetLikes = async (setLikesFunc) => {
-
-        const lkdNtcs = await fetchUserLikes(nstNtcsIds);
-
-        setLikesFunc(prevLikes => {
-            const updatedLikes = { ...prevLikes };
-            lkdNtcs.forEach(like => {
-                updatedLikes[like.notice_id] = like.$id;
-            });
-            return updatedLikes;
-        });
-    }
-
-
     useEffect(() => {
         const fetchLikesOnFellowUsersNoticesInTheirProfile = async () => {
             try {
@@ -185,38 +167,6 @@ const useNotices = (googleUserData) => {
 
         fetchLikesOnFellowUsersNoticesInTheirProfile();
     }, [user_id, fellowUserId]);
-
-
-
-    const fetchUserLikes = async (noticeIdsInProfile) => {
-        try {
-            const res = await getUserLikes(user_id, noticeIdsInProfile);
-
-            console.log('FETCH USER LIKES', res);
-
-            return res;
-        } catch (error) {
-            console.error('Error fetching likes in profile:', error);
-        }
-    }
-
-    const fetchUserSaves = async (noticeIdsInProfile) => {
-        try {
-            const res = await getUserSaves(user_id, noticeIdsInProfile);
-
-            console.log('FETCH USER SAVES', res);
-
-            return res;
-        } catch (error) {
-            console.error('Error fetching SAVES in profile:', error);
-        }
-    }
-
-
-
-
-
-
 
 
     const addNotice = async (text, duration, noticeType, selectedTags, noticeGif) => {
@@ -575,6 +525,30 @@ const useNotices = (googleUserData) => {
         }
     };
 
+    const fetchUserLikes = async (user_id, noticeIdsInProfile) => {
+        try {
+            const res = await getUserLikes(user_id, noticeIdsInProfile);
+
+            console.log('FETCH USER LIKES', res);
+
+            return res;
+        } catch (error) {
+            console.error('Error fetching likes in profile:', error);
+        }
+    }
+
+    const fetchUserSaves = async (user_id, noticeIdsInProfile) => {
+        try {
+            const res = await getUserSaves(user_id, noticeIdsInProfile);
+
+            console.log('FETCH USER SAVES', res);
+
+            return res;
+        } catch (error) {
+            console.error('Error fetching SAVES in profile:', error);
+        }
+    }
+
     const getAllLikedNotices = async (userId, limit, offset) => {
         try {
 
@@ -624,7 +598,7 @@ const useNotices = (googleUserData) => {
     const getAllSavedNotices = async (userId, limit, offset) => {
         try {
 
-            const userSaves = await getUserSaves(userId);
+            const userSaves = await getUserSavesNotInFeed(userId);
 
             console.log('userSaves', userSaves);
 

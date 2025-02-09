@@ -172,6 +172,10 @@ const useUserInfo = (data) => {
     const fetchUsersData = async (notices, setNotices, getAvatarUrl) => {
         try {
             const allUsersData = await getUsersData();
+
+            console.log('WHAT IS THIS???', allUsersData);
+
+
             const updatedNotices = await Promise.all(
                 notices.map(async (notice) => {
                     const user = allUsersData.documents.find((user) => user.$id === notice.user_id);

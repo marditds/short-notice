@@ -1104,7 +1104,7 @@ export const getUserLikes = async (user_id, noticeIdsInFeed) => {
             import.meta.env.VITE_LIKES_COLLECTION,
             [
                 Query.equal('user_id', user_id),
-                Query.equal('notice_id', noticeIdsInFeed), // Fetch only relevant liked notices
+                Query.equal('notice_id', noticeIdsInFeed),
                 ...(allBlockedIds.length > 0 ? allBlockedIds.map(id => Query.notEqual('author_id', id)) : []),
                 Query.orderDesc('$createdAt')
             ]
@@ -1135,6 +1135,7 @@ export const getUserLikesNotInFeed = async (user_id) => {
             import.meta.env.VITE_LIKES_COLLECTION,
             [
                 Query.equal('user_id', user_id),
+                // Query.equal('notice_id', noticeIdsInProfile),
                 ...(allBlockedIds.length > 0 ? allBlockedIds.map(id => Query.notEqual('author_id', id)) : []),
                 Query.orderDesc('$createdAt')
             ]
@@ -1170,6 +1171,9 @@ export const getAllLikedNotices = async (likedNoticeIds, limit, offset) => {
                 Query.orderDesc('$createdAt')
             ]
         );
+
+        console.log('getAllLikedNoticesAAAAAAAAAA', allLikedNotices.documents);
+
         return allLikedNotices.documents;
     } catch (error) {
         console.error('Error fetching all liked notices:', error);
@@ -1255,7 +1259,32 @@ export const getUserSaves = async (user_id, noticeIdsInFeed) => {
     }
 };
 
+export const getUserSavesNotInFeed = async (user_id) => {
+    try {
 
+        const [blockedUsers, usersBlockingMe] = await Promise.all([
+            getBlockedUsersByUser(user_id),
+            getUsersBlockingUser(user_id)
+        ]);
+
+        const blockedIds = blockedUsers.map(user => user.blocked_id);
+        const blockingIds = usersBlockingMe.map(user => user.blocker_id);
+        const allBlockedIds = [...new Set([...blockedIds, ...blockingIds])];
+
+        const response = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_SAVES_COLLECTION,
+            [
+                Query.equal('user_id', user_id),
+                ...(allBlockedIds.length > 0 ? allBlockedIds.map(id => Query.notEqual('author_id', id)) : []),
+                Query.orderDesc('$createdAt')
+            ]
+        )
+        return response.documents;
+    } catch (error) {
+        console.error('Error getting saves:', error);
+    }
+}
 
 
 
