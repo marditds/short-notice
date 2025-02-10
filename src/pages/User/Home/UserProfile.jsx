@@ -230,7 +230,7 @@ const UserProfile = () => {
 
                 const nstNtcsIds = allSavedNotices.map(ntc => ntc.$id);
 
-                const svdNtcs = await fetchUserSaves(nstNtcsIds);
+                const svdNtcs = await fetchUserSaves(user_id, nstNtcsIds);
 
                 setSavedNotices(prevSaves => {
                     const updatedSaves = { ...prevSaves };
@@ -240,7 +240,7 @@ const UserProfile = () => {
                     return updatedSaves;
                 });
 
-                const lkdNtcs = await fetchUserLikes(nstNtcsIds);
+                const lkdNtcs = await fetchUserLikes(user_id, nstNtcsIds);
 
                 setLikedNotices(prevLikes => {
                     const updatedLikes = { ...prevLikes };
@@ -290,7 +290,7 @@ const UserProfile = () => {
 
                 const nstNtcsIds = allLikedNotices.map(ntc => ntc.$id);
 
-                const svdNtcs = await fetchUserSaves(nstNtcsIds);
+                const svdNtcs = await fetchUserSaves(user_id, nstNtcsIds);
 
                 setSavedNotices(prevSaves => {
                     const updatedSaves = { ...prevSaves };

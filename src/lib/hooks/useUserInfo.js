@@ -171,10 +171,11 @@ const useUserInfo = (data) => {
 
     const fetchUsersData = async (notices, setNotices, getAvatarUrl) => {
         try {
-            const allUsersData = await getUsersData();
+            const ntcIds = notices.map((notice) => notice.user_id);
+            console.log('NTCIDS???', ntcIds);
 
-            console.log('WHAT IS THIS???', allUsersData);
-
+            const allUsersData = await getUserByIdQuery(ntcIds);
+            console.log('allUsersData???', allUsersData);
 
             const updatedNotices = await Promise.all(
                 notices.map(async (notice) => {
@@ -188,7 +189,6 @@ const useUserInfo = (data) => {
             );
             if (JSON.stringify(updatedNotices) !== JSON.stringify(notices)) {
                 setNotices(prevNotices => {
-                    // Filter out duplicates before appending
                     const nonDuplicateNotices = updatedNotices.filter(newNotice =>
                         !prevNotices.some(existingNotice => existingNotice.$id === newNotice.$id)
                     );

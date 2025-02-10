@@ -525,49 +525,6 @@ const useNotices = (googleUserData) => {
         }
     };
 
-    const fetchUserLikes = async (user_id, noticeIdsInProfile) => {
-        try {
-            const res = await getUserLikes(user_id, noticeIdsInProfile);
-
-            console.log('FETCH USER LIKES', res);
-
-            return res;
-        } catch (error) {
-            console.error('Error fetching likes in profile:', error);
-        }
-    }
-
-    const fetchUserSaves = async (user_id, noticeIdsInProfile) => {
-        try {
-            const res = await getUserSaves(user_id, noticeIdsInProfile);
-
-            console.log('FETCH USER SAVES', res);
-
-            return res;
-        } catch (error) {
-            console.error('Error fetching SAVES in profile:', error);
-        }
-    }
-
-    const getAllLikedNotices = async (userId, limit, offset) => {
-        try {
-
-            const userLikes = await getUserLikesNotInFeed(userId);
-
-            console.log('userLikes', userLikes);
-
-            // const noticesWithoutTwoWayBlock = await filterBlocksFromLikesSaves(userLikes, user_id);
-
-            const likedNoticeIds = userLikes.map(like => like.notice_id);
-
-            return await fetchAllLikedNotices(likedNoticeIds, limit, offset);
-
-        } catch (error) {
-            console.error('Error fetching all liked notices:', error);
-            return [];
-        }
-    };
-
     const getNoticeByUserId = async (id, limit, offset) => {
         try {
             console.log('LIMIT - useNotice', limit);
@@ -595,18 +552,65 @@ const useNotices = (googleUserData) => {
         }
     }
 
+    // For saves icon 
+    const fetchUserSaves = async (user_id, noticeIds) => {
+        try {
+            const res = await getUserSaves(user_id, noticeIds);
+
+            console.log('FETCH USER SAVES', res);
+
+            return res;
+        } catch (error) {
+            console.error('Error fetching SAVES in profile:', error);
+        }
+    }
+
+    // For likes icon
+    const fetchUserLikes = async (user_id, noticeIds) => {
+        try {
+            const res = await getUserLikes(user_id, noticeIds);
+
+            console.log('FETCH USER LIKES', res);
+
+            return res;
+        } catch (error) {
+            console.error('Error fetching likes in profile:', error);
+        }
+    }
+
+    // For likes tab
+    const getAllLikedNotices = async (userId, limit, offset) => {
+        try {
+
+            const userLikes = await getUserLikesNotInFeed(userId, limit, offset);
+
+            console.log('useNotice - getUserLikesNotInFeed', userLikes);
+
+            const likedNoticeIds = userLikes.map(like => like.notice_id);
+
+            console.log('useNotice - likedNoticeIds', likedNoticeIds);
+
+            return await fetchAllLikedNotices(likedNoticeIds);
+
+        } catch (error) {
+            console.error('Error fetching all liked notices:', error);
+            return [];
+        }
+    };
+
+    // For saves tab
     const getAllSavedNotices = async (userId, limit, offset) => {
         try {
 
-            const userSaves = await getUserSavesNotInFeed(userId);
+            const userSaves = await getUserSavesNotInFeed(userId, limit, offset);
 
             console.log('userSaves', userSaves);
 
-            // const noticesWithoutTwoWayBlock = await filterBlocksFromLikesSaves(userSaves, user_id);
-
             const saveNoticeIds = userSaves.map(save => save.notice_id);
 
-            return await fetchAllSavedNotices(saveNoticeIds, limit, offset);
+            console.log('saveNoticeIds', saveNoticeIds);
+
+            return await fetchAllSavedNotices(saveNoticeIds);
 
         } catch (error) {
             console.error('Error fetching all save notices:', error);

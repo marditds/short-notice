@@ -251,7 +251,7 @@ const OtherUserProfile = () => {
 
                 console.log('nstNtcsIds', nstNtcsIds);
 
-                const lkdNtcs = await fetchUserLikes(nstNtcsIds);
+                const lkdNtcs = await fetchUserLikes(user_id, nstNtcsIds);
 
                 setLikedNotices(prevLikes => {
                     const updatedLikes = { ...prevLikes };
@@ -261,7 +261,7 @@ const OtherUserProfile = () => {
                     return updatedLikes;
                 });
 
-                const svdNtcs = await fetchUserSaves(nstNtcsIds);
+                const svdNtcs = await fetchUserSaves(user_id, nstNtcsIds);
 
                 setSavedNotices(prevSaves => {
                     const updatedSaves = { ...prevSaves };
@@ -345,17 +345,15 @@ const OtherUserProfile = () => {
 
                 console.log('noticesWithoutTypeOrganization', noticesWithoutTypeOrganization);
 
-                const filteredNotices = await filterBlocksFromLikesSaves(noticesWithoutTypeOrganization, user_id);
-
-                if (filteredNotices?.length < limitSaves) {
+                if (allSavedNotices?.length < limitSaves) {
                     setHasMoreSaves(false);
                 } else {
                     setHasMoreSaves(true);
                 }
 
-                console.log('SAVE - filteredNotices', filteredNotices);
+                console.log('SAVE - noticesWithoutTypeOrganization', noticesWithoutTypeOrganization);
 
-                await fetchUsersData(filteredNotices, setSavedNoticesData, avatarUtil);
+                await fetchUsersData(noticesWithoutTypeOrganization, setSavedNoticesData, avatarUtil);
             } catch (error) {
                 console.error('Error fetching saves - ', error);
             } finally {
@@ -391,11 +389,9 @@ const OtherUserProfile = () => {
 
                 console.log('noticesWithoutTypeOrganization', noticesWithoutTypeOrganization);
 
-                // const filteredNotices = await filterBlocksFromLikesSaves(noticesWithoutTypeOrganization, user_id);
-
                 await fetchUsersData(noticesWithoutTypeOrganization, setLikedNoticesData, avatarUtil);
 
-                if (noticesWithoutTypeOrganization?.length < limitLikes) {
+                if (allLikedNotices?.length < limitLikes) {
                     setHasMoreLikes(false);
                 } else {
                     setHasMoreLikes(true);
