@@ -288,18 +288,38 @@ const useNotices = (googleUserData) => {
 
         console.log('Attempting to delete notice with ID:', noticeId);
 
+        if (!noticeId) {
+            console.error("Invalid notice ID");
+            return;
+        }
+
         setIsRemovingNotice(true);
         setRemovingNoticeId(noticeId);
 
         try {
-            if (noticeId) {
-                await removeAllSavesForNotice(noticeId);
 
-                await removeAllLikesForNotice(noticeId);
+            const [deleteNoticeRes, likesRes, savesRes] = await Promise.allSettled([
+                deleteNotice(noticeId),
+                removeAllSavesForNotice(noticeId),
+                removeAllLikesForNotice(noticeId)
+            ])
 
+            if (deleteNoticeRes.status === "fulfilled") {
+                console.log("Notice deleted successfully:", noticeId);
+                return deleteNoticeRes.value; // Return deleted notice details
+            } else {
+                console.error("Error deleting notice:", deleteNoticeRes.reason);
             }
-            const removedNotice = await deleteNotice(noticeId);
-            return removedNotice;
+
+            // Log errors for likes & saves deletion (optional)
+            if (likesRes.status === "rejected") {
+                console.error("Error deleting likes:", likesRes.reason);
+            }
+            if (savesRes.status === "rejected") {
+                console.error("Error deleting saves:", savesRes.reason);
+            }
+            // const removedNotice = await deleteNotice(noticeId);
+            // return removedNotice;
         } catch (error) {
             if (error.code === 404) {
                 console.log('Notice already deleted or does not exist:', noticeId);
@@ -310,7 +330,6 @@ const useNotices = (googleUserData) => {
             setRemovingNoticeId(null);
             setIsRemovingNotice(false);
         }
-
     };
 
     const handleDelete = async (setUserProfileNotices, setShowDeleteModal) => {
@@ -416,33 +435,6 @@ const useNotices = (googleUserData) => {
         try {
             const usrNotices = await getNoticesByUser(id, limit, lastId);
 
-            // setNotices(prevNotices => {
-            //     const newNotices = usrNotices.filter(notice =>
-            //         !prevNotices.some(existingNotice => existingNotice.$id === notice.$id)
-            //     );
-
-            //     console.log('FETCHED NTCS:', newNotices);
-
-            //     return [...prevNotices, ...newNotices];
-            // });
-
-            // const now = new Date().getTime();
-
-            // setNotices(prevNotices =>
-            //     prevNotices.filter(notice => {
-            //         if (notice.expiresAt) {
-            //             const expiresAtDate = new Date(notice.expiresAt);
-            //             expiresAtDate.setHours(expiresAtDate.getHours() + 8); // Adjusting the 8-hour difference
-
-            //             if (expiresAtDate <= now) {
-            //                 deleteNotice(notice.$id);
-            //                 return false;
-            //             }
-            //         }
-            //         return true;
-            //     })
-            // );
-
             console.log('usrNotices - useNotices:', usrNotices);
 
             return usrNotices;
@@ -454,7 +446,7 @@ const useNotices = (googleUserData) => {
 
     const getNoticeByNoticeId = async (notice_id) => {
         try {
-            const res = fetchNoticeByNoticeId(notice_id);
+            const res = await fetchNoticeByNoticeId(notice_id);
 
             console.log('Success fetching notices by notice_id', res);
             return res;
@@ -532,9 +524,6 @@ const useNotices = (googleUserData) => {
             const res = await fetchNoticeByUserId(id, limit, offset);
 
             console.log('NOTICES:', res);
-
-            // setUserNotices(res);
-            // setUserNotices((preVal) => [...preVal, ...res]);
 
             return res;
         } catch (error) {
@@ -633,7 +622,7 @@ const useNotices = (googleUserData) => {
         const now = new Date();
 
         try {
-            const response = createReaction(user_id, otherUser_id, content, now, notice_id, expiresAt, reactionGif);
+            const response = await createReaction(user_id, otherUser_id, content, now, notice_id, expiresAt, reactionGif);
             // console.log('Success sending reaction:', response);
             return response;
         } catch (error) {

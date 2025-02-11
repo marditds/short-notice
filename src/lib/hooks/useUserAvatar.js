@@ -34,10 +34,7 @@ const useUserAvatar = (userId) => {
                         console.log(`Retrying fetch... (${retries} attempts left)`);
                         setTimeout(() => retryFetch(retries - 1, delay), delay);
                     }
-                    // else {
-                    //     console.error('Error fetching user profile picture:', error);
-                    //     setAvatarUrl('');
-                    // }
+
                 }
             };
             retryFetch();

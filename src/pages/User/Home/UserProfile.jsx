@@ -228,27 +228,39 @@ const UserProfile = () => {
 
                 console.log('allSavedNotices', allSavedNotices);
 
-                const nstNtcsIds = allSavedNotices.map(ntc => ntc.$id);
+                const ntcsIds = allSavedNotices.map(ntc => ntc.$id);
 
-                const svdNtcs = await fetchUserSaves(user_id, nstNtcsIds);
+                const [svdNtcs, lkdNtcs] = await Promise.allSettled([
+                    fetchUserSaves(user_id, ntcsIds),
+                    fetchUserLikes(user_id, ntcsIds)
+                ]);
 
-                setSavedNotices(prevSaves => {
-                    const updatedSaves = { ...prevSaves };
-                    svdNtcs.forEach(save => {
-                        updatedSaves[save.notice_id] = save.$id;
+                if (svdNtcs.status === 'fulfilled') {
+                    setSavedNotices(prevSaves => {
+                        const updatedSaves = { ...prevSaves };
+                        svdNtcs.value.forEach(save => {
+                            updatedSaves[save.notice_id] = save.$id;
+                        });
+                        return updatedSaves;
                     });
-                    return updatedSaves;
-                });
+                } else {
+                    console.error('Error fetching saved notices:', svdNtcs.reason);
+                }
 
-                const lkdNtcs = await fetchUserLikes(user_id, nstNtcsIds);
-
-                setLikedNotices(prevLikes => {
-                    const updatedLikes = { ...prevLikes };
-                    lkdNtcs.forEach(like => {
-                        updatedLikes[like.notice_id] = like.$id;
+                if (lkdNtcs.status === 'fulfilled') {
+                    setLikedNotices(prevLikes => {
+                        const updatedLikes = { ...prevLikes };
+                        lkdNtcs.value.forEach(like => {
+                            updatedLikes[like.notice_id] = like.$id;
+                        });
+                        return updatedLikes;
                     });
-                    return updatedLikes;
-                });
+                } else {
+                    console.error('Error fetching liked notices:', lkdNtcs.reason);
+                }
+
+                // Data populating the notice
+                await fetchUsersData(allSavedNotices, setSavedNoticesData, avatarUtil);
 
                 if (allSavedNotices?.length < limit) {
                     setHasMoreSaves(false);
@@ -256,7 +268,6 @@ const UserProfile = () => {
                     setHasMoreSaves(true);
                 }
 
-                await fetchUsersData(allSavedNotices, setSavedNoticesData, avatarUtil);
             } catch (error) {
                 console.error('Error fetching saves - ', error);
             } finally {
@@ -265,7 +276,6 @@ const UserProfile = () => {
                 }
                 setIsLoadingMoreSaves(false);
             }
-
         };
 
         if (isSavesClicked === true) {
@@ -288,28 +298,38 @@ const UserProfile = () => {
 
                 console.log('allLikedNotices - UserProfile.jsx', allLikedNotices);
 
-                const nstNtcsIds = allLikedNotices.map(ntc => ntc.$id);
+                const ntcsIds = allLikedNotices.map(ntc => ntc.$id);
 
-                const svdNtcs = await fetchUserSaves(user_id, nstNtcsIds);
+                const [svdNtcsRes, lkdNtcsRes] = await Promise.allSettled([
+                    fetchUserSaves(user_id, ntcsIds),
+                    fetchUserLikes(user_id, ntcsIds)
+                ]);
 
-                setSavedNotices(prevSaves => {
-                    const updatedSaves = { ...prevSaves };
-                    svdNtcs.forEach(save => {
-                        updatedSaves[save.notice_id] = save.$id;
+                if (svdNtcsRes.status === 'fulfilled') {
+                    setSavedNotices(prevSaves => {
+                        const updatedSaves = { ...prevSaves };
+                        svdNtcsRes.value.forEach(save => {
+                            updatedSaves[save.notice_id] = save.$id;
+                        });
+                        return updatedSaves;
                     });
-                    return updatedSaves;
-                });
+                } else {
+                    console.error('Error fetching saved notices:', svdNtcsRes.reason);
+                }
 
-                const lkdNtcs = await fetchUserLikes(user_id, nstNtcsIds);
-
-                setLikedNotices(prevLikes => {
-                    const updatedLikes = { ...prevLikes };
-                    lkdNtcs.forEach(like => {
-                        updatedLikes[like.notice_id] = like.$id;
+                if (lkdNtcsRes.status === 'fulfilled') {
+                    setLikedNotices(prevLikes => {
+                        const updatedLikes = { ...prevLikes };
+                        lkdNtcsRes.value.forEach(like => {
+                            updatedLikes[like.notice_id] = like.$id;
+                        });
+                        return updatedLikes;
                     });
-                    return updatedLikes;
-                });
+                } else {
+                    console.error('Error fetching liked notices:', lkdNtcsRes.reason);
+                }
 
+                // Data populating the notice
                 await fetchUsersData(allLikedNotices, setLikedNoticesData, avatarUtil);
 
                 if (allLikedNotices?.length < limit) {
@@ -340,7 +360,6 @@ const UserProfile = () => {
             setIsLikesClicked(true);
         }
     }, [eventKey]);
-
 
     useEffect(() => {
         console.log('Hello', username);

@@ -118,7 +118,7 @@ const useUserInfo = (data) => {
 
     const checkingIdInAuth = async () => {
         try {
-            const res = checkIdExistsInAuth();
+            const res = await checkIdExistsInAuth();
             return res;
         } catch (error) {
             console.error('Error checkingIdInAuth:', res);
@@ -456,12 +456,12 @@ const useUserInfo = (data) => {
 
     const handleBlock = async (currUserId) => {
         try {
-            const blockPromise = makeBlock(currUserId);
-            const unfollowPromise = unfollowUser(currUserId);
-            const getUnfollowedPromise = getUnfollowedByOtherUser(currUserId);
+            await makeBlock(currUserId);
 
-            await blockPromise;
-            await Promise.allSettled([unfollowPromise, getUnfollowedPromise]);
+            await Promise.allSettled([
+                unfollowUser(currUserId),
+                getUnfollowedByOtherUser(currUserId)
+            ]);
 
             navigate('/user/feed');
         } catch (error) {

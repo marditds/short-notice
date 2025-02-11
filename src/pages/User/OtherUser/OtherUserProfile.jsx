@@ -158,51 +158,54 @@ const OtherUserProfile = () => {
                 setIsOtherUserLoading(true);
                 console.log('otherUsername', otherUsername);
 
-                const otherUser = await getUserByUsername(otherUsername);
+                const [otherUserRes, userRes] = await Promise.allSettled([
+                    getUserByUsername(otherUsername),
+                    getUserByUsername(username)
+                ]);
 
-                console.log('otherUser:', otherUser);
+                if (otherUserRes.status === 'fulfilled' && userRes.status === 'fulfilled') {
+                    const otherUser = otherUserRes.value;
+                    const user = userRes.value;
 
-                const user = await getUserByUsername(username);
+                    console.log('otherUser:', otherUser);
+                    console.log('user:', user);
 
-                console.log('user:', user);
+                    const [blckdByOtherUserRes, blckdByUserRes] = await Promise.allSettled([
+                        getBlockedUsersByUser(otherUser.$id),
+                        getBlockedUsersByUser(user.$id)
+                    ]);
 
-                const blckdByOtherUser = await getBlockedUsersByUser(otherUser.$id);
+                    if (blckdByOtherUserRes.status === 'fulfilled') {
+                        const blckdByOtherUser = blckdByOtherUserRes.value;
+                        console.log(`blckdLst by ${otherUser.username}:`, blckdByOtherUser);
 
-                console.log(`blckdLst by ${otherUser.username}:`, blckdByOtherUser);
-
-                const blckdByUser = await getBlockedUsersByUser(user.$id);
-
-                console.log(`blckdLst by ${user.username}:`, blckdByUser);
-
-                // Checking if the other user has blocked user 
-                if (blckdByOtherUser.length !== 0) {
-                    const blockdByOtherUser = blckdByOtherUser.filter((blocked) => blocked.blocked_id === user.$id);
-
-                    if (blockdByOtherUser.length !== 0 || null) {
-                        console.log('blockedId', blockdByOtherUser);
-                        setIsBlocked(true);
+                        if (blckdByOtherUser.some(blocked => blocked.blocked_id === user.$id)) {
+                            console.log('blockedId', blckdByOtherUser);
+                            setIsBlocked(true);
+                        }
+                    } else {
+                        console.error('Error fetching blocked users by otherUser:', blckdByOtherUserRes.reason);
                     }
-                }
 
-                // Checking if user has blocked the other user 
-                if (blckdByUser.length !== 0) {
-                    const blockdByUser = blckdByUser.filter((blocked) => blocked.blocked_id === otherUser.$id);
+                    if (blckdByUserRes.status === 'fulfilled') {
+                        const blckdByUser = blckdByUserRes.value;
+                        console.log(`blckdLst by ${user.username}:`, blckdByUser);
 
-                    if (blockdByUser.length !== 0 || null) {
-                        console.log('blockerId', blockdByUser);
-                        setIsOtherUserBlocked(true);
+                        if (blckdByUser.some(blocked => blocked.blocked_id === otherUser.$id)) {
+                            console.log('blockerId', blckdByUser);
+                            setIsOtherUserBlocked(true);
+                        }
+                    } else {
+                        console.error('Error fetching blocked users by user:', blckdByUserRes.reason);
                     }
-                }
 
-                if (otherUser) {
-                    // Only update if different to prevent unnecessary re-renders
-                    setCurrUserId((prevId) => (prevId !== otherUser.$id ? otherUser.$id : prevId));
-
-                    setFellowUserId((prevId) => (prevId !== otherUser.$id ? otherUser.$id : prevId));
-
-                    setAccountType(otherUser.accountType)
+                    if (otherUser) {
+                        setCurrUserId(prevId => (prevId !== otherUser.$id ? otherUser.$id : prevId));
+                        setFellowUserId(prevId => (prevId !== otherUser.$id ? otherUser.$id : prevId));
+                        setAccountType(otherUser.accountType);
+                    }
                 } else {
-                    console.error(`User with username "${otherUsername}" not found.`);
+                    console.error('Error fetching users:', otherUserRes.reason || userRes.reason);
                 }
 
             } catch (error) {
@@ -247,29 +250,46 @@ const OtherUserProfile = () => {
 
                 console.log('HAKOBOS', usrNtcs);
 
-                const nstNtcsIds = usrNtcs.map(ntc => ntc.$id);
+                if (!usrNtcs.length) {
+                    console.log("No new notices found.");
+                    setHasMoreNotices(false);
+                    return;
+                }
 
-                console.log('nstNtcsIds', nstNtcsIds);
+                const ntcsIds = usrNtcs.map(ntc => ntc.$id);
 
-                const lkdNtcs = await fetchUserLikes(user_id, nstNtcsIds);
+                console.log('nstNtcsIds', ntcsIds);
 
-                setLikedNotices(prevLikes => {
-                    const updatedLikes = { ...prevLikes };
-                    lkdNtcs.forEach(like => {
-                        updatedLikes[like.notice_id] = like.$id;
+                const [lkdNtcsRes, svdNtcsRes] = await Promise.allSettled([
+                    fetchUserLikes(user_id, ntcsIds),
+                    fetchUserSaves(user_id, ntcsIds)
+                ]);
+
+                if (lkdNtcsRes.status === 'fulfilled') {
+
+                    const lkdNtcs = lkdNtcsRes.value;
+
+                    setLikedNotices(prevLikes => {
+                        const updatedLikes = { ...prevLikes };
+                        lkdNtcs.forEach(like => {
+                            updatedLikes[like.notice_id] = like.$id;
+                        });
+                        return updatedLikes;
                     });
-                    return updatedLikes;
-                });
+                }
 
-                const svdNtcs = await fetchUserSaves(user_id, nstNtcsIds);
+                if (svdNtcsRes.status === 'fulfilled') {
 
-                setSavedNotices(prevSaves => {
-                    const updatedSaves = { ...prevSaves };
-                    svdNtcs.forEach(save => {
-                        updatedSaves[save.notice_id] = save.$id;
+                    const svdNtcs = svdNtcsRes.value;
+
+                    setSavedNotices(prevSaves => {
+                        const updatedSaves = { ...prevSaves };
+                        svdNtcs.forEach(save => {
+                            updatedSaves[save.notice_id] = save.$id;
+                        });
+                        return updatedSaves;
                     });
-                    return updatedSaves;
-                });
+                }
 
                 setOtherUserNotices((preVal) => [...preVal, ...usrNtcs]);
 
@@ -287,17 +307,8 @@ const OtherUserProfile = () => {
                 setIsLoadingMore(false);
             }
         };
-        // setOffsetNotices(0);
-        // setOtherUserNotices([]);
-        // if (accountType === 'organization' && accountTypeCheck === true) {
-        //     callFunctionIfNotBlocked(fetchNotices);
-        // } else {
-        //     return;
-        // }
 
-        // if (accountType !== 'organization') {
         callFunctionIfNotBlocked(fetchNotices);
-        // }
 
     }, [currUserId, offsetNotices])
 
