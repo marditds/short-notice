@@ -41,13 +41,19 @@ export const DeleteAccount = () => {
         setLoading(true);
 
         try {
+
+            let handleDeleteAvatarPromise = Promise.resolve();
+
             if (avatarUrl) {
                 const fileId = extractFileIdFromUrl(avatarUrl);
-                await handleDeleteAvatarFromStrg(fileId);
-                setAvatarUrl('');
+                handleDeleteAvatarPromise = handleDeleteAvatarFromStrg(fileId)
+                    .then(() => setAvatarUrl(''))
+                    .catch((err) => console.error("Error deleting avatar:", err));
             }
 
-            await handleDeleteUser();
+            const handleDeleteUserPromise = handleDeleteUser();
+
+            await Promise.allSettled([handleDeleteAvatarPromise, handleDeleteUserPromise]);
 
             googleLogout();
 
@@ -63,7 +69,6 @@ export const DeleteAccount = () => {
         } catch (error) {
             console.error('User not deleted:', error);
         }
-
     }
 
     const handleShowModal = () => setShowModal(true);
@@ -79,7 +84,7 @@ export const DeleteAccount = () => {
             <Row xs={1} sm={2}>
                 <Col>
                     <h4>Delete Account:</h4>
-                    <p>WARNING: Deleting your account will result in the loss of all data, which cannot be recovered. Please proceed with caution.</p>
+                    <p className='mb-2 mb-sm-0'>WARNING: Deleting your account will result in the loss of all data, which cannot be recovered. Please proceed with caution.</p>
                 </Col>
                 <Col className='d-grid align-content-end'>
                     <Button

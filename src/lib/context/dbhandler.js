@@ -34,6 +34,9 @@ console.log('databases - dbhandler.js', databases);
 
 
 export const uploadAvatar = async (file) => {
+
+    console.log('dbhandler - uploadAvatar', file);
+
     try {
         const response = await storage.createFile(
             import.meta.env.VITE_AVATAR_BUCKET,

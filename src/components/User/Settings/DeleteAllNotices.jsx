@@ -35,7 +35,7 @@ export const DeleteAllNotices = () => {
             <Row xs={1} sm={2}>
                 <Col>
                     <h4>Delete All Notices:</h4>
-                    <p>WARNING: Deleting your notices will result in the loss of all data, which cannot be recovered. Please proceed with caution.</p>
+                    <p className='mb-2 mb-sm-0'>WARNING: Deleting your notices will result in the loss of all data, which cannot be recovered. Please proceed with caution.</p>
                 </Col>
                 <Col className='d-grid align-content-end'>
                     <Button

@@ -269,6 +269,8 @@ const OtherUserProfile = () => {
 
                     const lkdNtcs = lkdNtcsRes.value;
 
+                    console.log('lkdNtcs - OG NOTICES', lkdNtcs);
+
                     setLikedNotices(prevLikes => {
                         const updatedLikes = { ...prevLikes };
                         lkdNtcs.forEach(like => {
@@ -281,6 +283,8 @@ const OtherUserProfile = () => {
                 if (svdNtcsRes.status === 'fulfilled') {
 
                     const svdNtcs = svdNtcsRes.value;
+
+                    console.log('svdNtcs - OG NOTICES', svdNtcs);
 
                     setSavedNotices(prevSaves => {
                         const updatedSaves = { ...prevSaves };
@@ -356,6 +360,39 @@ const OtherUserProfile = () => {
 
                 console.log('noticesWithoutTypeOrganization', noticesWithoutTypeOrganization);
 
+                const ntcsIds = noticesWithoutTypeOrganization.map(ntc => ntc.$id);
+
+                const [lkdNtcsRes, svdNtcsRes] = await Promise.allSettled([
+                    fetchUserLikes(user_id, ntcsIds),
+                    fetchUserSaves(user_id, ntcsIds)
+                ]);
+
+                if (lkdNtcsRes.status === 'fulfilled') {
+
+                    const lkdNtcs = lkdNtcsRes.value;
+
+                    setLikedNotices(prevLikes => {
+                        const updatedLikes = { ...prevLikes };
+                        lkdNtcs.forEach(like => {
+                            updatedLikes[like.notice_id] = like.$id;
+                        });
+                        return updatedLikes;
+                    });
+                }
+
+                if (svdNtcsRes.status === 'fulfilled') {
+
+                    const svdNtcs = svdNtcsRes.value;
+
+                    setSavedNotices(prevSaves => {
+                        const updatedSaves = { ...prevSaves };
+                        svdNtcs.forEach(save => {
+                            updatedSaves[save.notice_id] = save.$id;
+                        });
+                        return updatedSaves;
+                    });
+                }
+
                 if (allSavedNotices?.length < limitSaves) {
                     setHasMoreSaves(false);
                 } else {
@@ -399,6 +436,39 @@ const OtherUserProfile = () => {
                 const noticesWithoutTypeOrganization = allLikedNotices.filter((likedNotice) => likedNotice.noticeType !== 'organization');
 
                 console.log('noticesWithoutTypeOrganization', noticesWithoutTypeOrganization);
+
+                const ntcsIds = noticesWithoutTypeOrganization.map(ntc => ntc.$id);
+
+                const [lkdNtcsRes, svdNtcsRes] = await Promise.allSettled([
+                    fetchUserLikes(user_id, ntcsIds),
+                    fetchUserSaves(user_id, ntcsIds)
+                ]);
+
+                if (lkdNtcsRes.status === 'fulfilled') {
+
+                    const lkdNtcs = lkdNtcsRes.value;
+
+                    setLikedNotices(prevLikes => {
+                        const updatedLikes = { ...prevLikes };
+                        lkdNtcs.forEach(like => {
+                            updatedLikes[like.notice_id] = like.$id;
+                        });
+                        return updatedLikes;
+                    });
+                }
+
+                if (svdNtcsRes.status === 'fulfilled') {
+
+                    const svdNtcs = svdNtcsRes.value;
+
+                    setSavedNotices(prevSaves => {
+                        const updatedSaves = { ...prevSaves };
+                        svdNtcs.forEach(save => {
+                            updatedSaves[save.notice_id] = save.$id;
+                        });
+                        return updatedSaves;
+                    });
+                }
 
                 await fetchUsersData(noticesWithoutTypeOrganization, setLikedNoticesData, avatarUtil);
 

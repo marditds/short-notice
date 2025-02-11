@@ -81,6 +81,7 @@ const useUserAvatar = (userId) => {
         if (file) {
 
             setIsUploading(true);
+            console.log('Avatar uploading starting...');
 
             try {
                 const fileId = await uploadAvatar(file);
@@ -95,6 +96,8 @@ const useUserAvatar = (userId) => {
                 console.error('Profile picture upload failed:', error);
             } finally {
                 setIsUploading(false);
+                console.log('Avatar uploading done.');
+
             }
         }
     }

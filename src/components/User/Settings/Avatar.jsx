@@ -35,20 +35,23 @@ export const Avatar = () => {
 
 
     const handleFileChange = async (e) => {
+
+        console.log('Changing avatar...');
+
         const file = e.target.files[0];
 
         if (!file) return;
 
         if (avatarUrl) {
-
             const fileId = extractFileIdFromUrl(avatarUrl);
-            await handleDeleteAvatarFromStrg(fileId);
-            await handleAvatarUpload(e);
+            await Promise.allSettled([
+                handleDeleteAvatarFromStrg(fileId),
+                handleAvatarUpload(e)
+            ]);
         } else {
-            handleAvatarUpload(e);
+            await handleAvatarUpload(e);
         }
     };
-
 
     const handleDeleteAvatar = async (user_id) => {
 
@@ -57,8 +60,12 @@ export const Avatar = () => {
         try {
             if (avatarUrl) {
                 const fileId = extractFileIdFromUrl(avatarUrl);
-                await handleDeleteAvatarFromStrg(fileId);
-                await handleDeleteAvatarFromDoc(user_id);
+
+                await Promise.allSettled([
+                    handleDeleteAvatarFromStrg(fileId),
+                    handleDeleteAvatarFromDoc(user_id)
+                ]);
+
                 setAvatarUrl('');
             }
         } catch (error) {
@@ -81,7 +88,7 @@ export const Avatar = () => {
                     className='setting__avatar-display me-3'
                 />
                 <Form as={Row} className='flex-column settings__upload-avatar-form'>
-                    <Form.Group as={Col} className="mb-3" controlId="profilePictureUpload">
+                    <Form.Group as={Col} className="mb-2 mb-md-3" controlId="profilePictureUpload">
 
                         {isUploading ?
                             (
@@ -91,7 +98,7 @@ export const Avatar = () => {
                             )
                             : (
                                 <>
-                                    <Form.Label className='settings__upload-avatar-label'>Upload Avatar</Form.Label>
+                                    <Form.Label className='settings__upload-avatar-label mb-1 mb-md-2'>Upload Avatar</Form.Label>
                                     <Form.Control
                                         type="file"
                                         onChange={handleFileChange}

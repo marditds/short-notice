@@ -345,6 +345,7 @@
         min-width: calc(50% - 6px) !important;
     }
 
+    .settings__update-interests-btn,
     .settings__update-interests-tag-col {
         margin: 5px
     }
