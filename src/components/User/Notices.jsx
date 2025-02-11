@@ -56,10 +56,13 @@ export const Notices = ({
     const [reportingNoticeId, setReprotingNoticeId] = useState(null);
     const [reportReason, setReportReason] = useState(null);
     const [showReportConfirmation, setShowReportConfirmation] = useState(false);
+    const [isProcessingNoticeReport, setIsProcessingNoticeReport] = useState(false);
 
     const [showReportReactionModal, setShowReportReactionModal] = useState(false);
     const [reportingReactionId, setReportingReactionId] = useState(null);
     const [showReportReactionConfirmation, setShowReportReactionConfirmation] = useState(false);
+    const [isProcessingReactionReport, setIsProcessingReactionReport] = useState(false);
+
 
     useEffect(() => {
         const intervalId = setInterval(() => {
@@ -69,19 +72,6 @@ export const Notices = ({
 
         return () => clearInterval(intervalId);
     }, [notices]);
-
-    // Reacting to a notice
-    // const handleReactNotice = (noticeId, noticeUsername, noticeAvatarUrl, noticeText) => {
-    //     if (reactingNoticeId === noticeId) {
-    //         setReactingNoticeId(null);
-    //     } else {
-    //         setReactingNoticeId(noticeId);
-    //         setShowReactionTextField(true);
-    //         setNoticeText(noticeText);
-    //         setNoticeUsername(noticeUsername);
-    //         setNoticeAvatarUrl(noticeAvatarUrl);
-    //     }
-    // }
 
     const [reactionCharCount, setReactionCharCount] = useState(0);
 
@@ -135,15 +125,6 @@ export const Notices = ({
 
                     const res = await handleReact(notice.user_id, reactionText, notice.$id, notice.expiresAt, reactionGif);
 
-                    // console.log('handleReactSubmission', res);
-
-                    // setLoadedReactions(prev => ({
-                    //     ...prev,
-                    //     [reactingNoticeId]: prev[reactingNoticeId].map(reaction =>
-                    //         reaction.$id === tempReaction.$id ? res : reaction
-                    //     )
-                    // }));
-
                     setLoadedReactions(prev => ({
                         ...prev,
                         [reactingNoticeId]: prev[reactingNoticeId].map(reaction =>
@@ -190,10 +171,6 @@ export const Notices = ({
         }
     };
 
-    // const handleCloseReactModal = () => {
-    //     setShowReactModal(false);
-    // }
-
     // Repoting Notice
     const onReportNoticeClick = (noticeId) => {
         setReprotingNoticeId(noticeId);
@@ -204,6 +181,7 @@ export const Notices = ({
     const handleReportSubmission = async () => {
 
         if (reportReason && reportingNoticeId) {
+            setIsProcessingNoticeReport(true);
             try {
 
                 const notice = notices.find(notice => notice.$id === reportingNoticeId);
@@ -218,6 +196,8 @@ export const Notices = ({
                 }
             } catch (error) {
                 console.error("Error reporting notice:", error);
+            } finally {
+                setIsProcessingNoticeReport(false);
             }
         }
     };
@@ -227,7 +207,7 @@ export const Notices = ({
         setReportReason(null);
     }
 
-    // Fetching and listing reactions and related user info 
+    // Setting user info for reactions
     const updateReactionMaps = (users, noticeId, usernameMap, avatarMap) => {
         const updatedUsernameMap = { ...usernameMap[noticeId] };
         const updatedAvatarMap = { ...avatarMap[noticeId] };
@@ -286,14 +266,6 @@ export const Notices = ({
             console.log('ReactionUsernameMap', reactionUsernameMap);
 
             console.log('ReactionAvatarMap', reactionAvatarMap);
-
-            // setLoadedReactions(prev => ({
-            //     ...prev,
-            //     [noticeId]: [
-            //         ...(prev[noticeId] || []),
-            //         ...(noticeReactions?.documents || [])
-            //     ]
-            // }));
 
             setLoadedReactions(prev => ({
                 ...prev,
@@ -437,6 +409,7 @@ export const Notices = ({
     const handleReportReactionSubmission = async () => {
 
         if (reportReason && reportingReactionId) {
+            setIsProcessingReactionReport(true);
             try {
                 const reaction = await getReactionByReactionId(reportingReactionId);
 
@@ -452,6 +425,8 @@ export const Notices = ({
                 }
             } catch (error) {
                 console.error("Error reporting notice:", error);
+            } finally {
+                setIsProcessingReactionReport(false);
             }
         }
     };
@@ -678,6 +653,7 @@ export const Notices = ({
                 handleCloseReportModalFunction={handleCloseReportModal}
                 handleReportSubmissionFunction={handleReportSubmission}
                 setReportReason={setReportReason}
+                isProcessing={isProcessingNoticeReport}
                 showReportConfirmationCheck={showReportConfirmation}
                 showReportModalFunction={showReportModal}
             />
@@ -687,6 +663,7 @@ export const Notices = ({
                 handleCloseReportModalFunction={handleCloseReportReactionModal}
                 handleReportSubmissionFunction={handleReportReactionSubmission}
                 setReportReason={setReportReason}
+                isProcessing={isProcessingReactionReport}
                 showReportConfirmationCheck={showReportReactionConfirmation}
                 showReportModalFunction={showReportReactionModal}
             />

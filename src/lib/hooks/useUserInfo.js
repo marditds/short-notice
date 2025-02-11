@@ -19,6 +19,8 @@ const useUserInfo = (data) => {
     const [isInitialFollowCheckLoading, setIsInitialFollowCheckLoading] = useState(true);
     const [isFollowing, setIsFollowing] = useState(false);
 
+    const [isProcessingBlock, setIsProcessingBlock] = useState(false);
+
 
     useEffect(() => {
         const fetchUserId = async () => {
@@ -350,7 +352,7 @@ const useUserInfo = (data) => {
                 .map((userId) => allFollowers.documents.find((user) => user.$id === userId))
                 .filter(Boolean);
 
-            console.log('accountsFollowedByUser', accountsFollowingTheUser);
+            console.log('accountsFollowingTheUser', accountsFollowingTheUser);
 
             return accountsFollowingTheUser;
 
@@ -455,6 +457,7 @@ const useUserInfo = (data) => {
     }
 
     const handleBlock = async (currUserId) => {
+        setIsProcessingBlock(true);
         try {
             await makeBlock(currUserId);
 
@@ -466,6 +469,8 @@ const useUserInfo = (data) => {
             navigate('/user/feed');
         } catch (error) {
             console.error('Failed to block user:', error);
+        } finally {
+            setIsProcessingBlock(false);
         }
     }
 
@@ -535,6 +540,7 @@ const useUserInfo = (data) => {
         isFollowing,
         followersCount,
         followingCount,
+        isProcessingBlock,
         // followersAccounts,
         // followingAccounts,
         makeBlock,

@@ -4,9 +4,6 @@ import useNotices from '../../../lib/hooks/useNotices';
 import useUserInfo from '../../../lib/hooks/useUserInfo';
 import { getAvatarUrl as avatarUtil } from '../../../lib/utils/avatarUtils';
 import { Notices } from '../../../components/User/Notices';
-import { useUnblockedNotices } from '../../../lib/utils/blockFilter';
-// import { deleteExpired } from '../../../lib/utils/deleteExpired';
-import { screenUtils } from '../../../lib/utils/screenUtils';
 import { Button } from 'react-bootstrap';
 import { Loading } from '../../../components/Loading/Loading';
 import { FeedHeader } from '../../../components/User/Feed/FeedHeader/FeedHeader';
@@ -14,7 +11,6 @@ import { EndAsterisks } from '../../../components/User/EndAsterisks';
 
 const UserFeed = () => {
 
-    const { isSmallScreen, isMediumScreen } = screenUtils();
 
     const [tagCategories, setTagCategories] = useState([
         {
@@ -83,7 +79,6 @@ const UserFeed = () => {
     } = useNotices(googleUserData);
 
     const { fetchUsersData, getUserAccountByUserId, getPersonalFeedAccounts } = useUserInfo(googleUserData);
-    const { filterBlocksFromFeed } = useUnblockedNotices();
 
     const [generalFeedNotices, setGeneralFeedNotices] = useState([]);
     const [personalFeedNotices, setPersonalFeedNotices] = useState([]);

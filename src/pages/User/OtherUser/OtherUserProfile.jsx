@@ -56,6 +56,7 @@ const OtherUserProfile = () => {
         isFollowing,
         followersCount,
         followingCount,
+        isProcessingBlock,
         handleBlock,
         getUserByUsername,
         getUserAccountByUserId,
@@ -684,6 +685,7 @@ const OtherUserProfile = () => {
                     hasMoreFollowing={hasMoreFollowing}
                     isLoadingMoreFollowing={isLoadingMoreFollowing}
                     isLoadingMoreFollowers={isLoadingMoreFollowers}
+                    isProcessingBlock={isProcessingBlock}
                 />
                 <>
                     {!isBlocked ?

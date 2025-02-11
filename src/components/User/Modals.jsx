@@ -1,14 +1,19 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { reportCategories } from '../PreLogin/ComunityGuidelines/communityGuidelines';
 import { Modal, Form, Button } from 'react-bootstrap';
 import { Loading } from '../Loading/Loading';
+import { SlClose } from "react-icons/sl";
+import { EndAsterisks } from './EndAsterisks';
+
 
 export const ReportModal = ({
     showReportModalFunction,
     handleCloseReportModalFunction,
     showReportConfirmationCheck,
     handleReportSubmissionFunction,
-    setReportReason }) => {
+    setReportReason,
+    isProcessing }) => {
     return (
         <Modal show={showReportModalFunction}
             onHide={handleCloseReportModalFunction}
@@ -53,7 +58,7 @@ export const ReportModal = ({
                             className='notice__report--modal-btn'
                         // disabled={!reportReason}
                         >
-                            Report
+                            {isProcessing ? <Loading /> : 'Report'}
                         </Button>
                     </>
                 )}
@@ -125,6 +130,123 @@ export const ModifyModal = ({ modifyModalTitle, showModifyModal, handleCloseModi
                     {isSavingEdit ? <Loading /> : (modifyModalTitle === 'Edit' && 'Save')}
                     {isRemovingNotice ? <Loading /> : (modifyModalTitle === 'Delete' && 'Delete')}
                 </Button>
+            </Modal.Footer>
+        </Modal>
+    )
+}
+
+export const BlockModal = ({
+    username,
+    currUserId,
+    showBlockModalFunction,
+    handleCloseBlockModalFunction,
+    handleBlock,
+    isProcessing
+}) => {
+    return (
+        <Modal
+            show={showBlockModalFunction}
+            onHide={handleCloseBlockModalFunction}
+            className='user-profile__block--modal'
+        >
+            <Modal.Header
+                className='justify-content-end border-bottom-0 user-profile__block--modal-header pb-0 w-100'
+            >
+                <Button
+                    onClick={handleCloseBlockModalFunction}
+                >
+                    <SlClose size={24} className='' />
+                </Button>
+            </Modal.Header>
+            <Modal.Body
+                className='user-profile__block--modal-body'
+            >
+                <p>Are you sure you want to block <strong>{username}</strong>?</p>
+            </Modal.Body>
+            <Modal.Footer className='user-profile__block--modal-footer border-top-0 pt-0'>
+                <Button onClick={() => handleBlock(currUserId)}
+                    className='me-2 user-profile__block--modal-body-btn'
+                >
+                    {isProcessing ? <Loading /> : 'Yes'}
+                </Button>
+                <Button onClick={handleCloseBlockModalFunction}
+                    className='user-profile__block--modal-body-btn'
+                >
+                    Cancel
+                </Button>
+            </Modal.Footer>
+        </Modal>
+    )
+}
+
+export const FollowModal = ({
+    showFollowModal, handleCloseFollowModal, followModalTitle, getAvatarUrl, loadFollowers, loadFollowing, isLoadingMoreFollow, hasMoreFollow, defaultAvatar, followAccounts
+}) => {
+    return (
+        <Modal
+            show={showFollowModal}
+            onHide={handleCloseFollowModal}
+            className='user-profile__following--modal'
+        >
+            <Modal.Header
+                className='user-profile__following--modal-header w-100 border-bottom-0'
+            >
+                <Modal.Title>{followModalTitle}</Modal.Title>
+                <Button
+                    onClick={handleCloseFollowModal}
+                    className='ms-auto'
+                >
+                    <SlClose size={24} />
+                </Button>
+            </Modal.Header>
+            <Modal.Body
+                className='user-profile__following--modal-body py-0'
+            >
+                {followAccounts && followAccounts.map((followAccount) => {
+                    return (
+                        <div key={followAccount.$id}>
+                            <Link
+                                to={`/user/${followAccount.username}`}
+                                className='w-100 d-flex justify-content-between align-items-center'
+                                onClick={handleCloseFollowModal}
+                            >
+                                {followAccount.username}
+                                <img src={getAvatarUrl(followAccount.avatar) || defaultAvatar}
+                                    className='follower__avatar' />
+                            </Link>
+                        </div>
+                    )
+                })}
+                {!hasMoreFollow &&
+                    <div className='text-center mt-4'>
+                        <EndAsterisks />
+                    </div>
+                }
+            </Modal.Body>
+            <Modal.Footer className='border-top-0'>
+                {
+                    hasMoreFollow &&
+                    <Button onClick={
+                        () => {
+                            if (followModalTitle === 'Followers') {
+                                loadFollowers();
+                            }
+                            if (followModalTitle === 'Following') {
+                                loadFollowing();
+                            }
+                        }
+                    }
+                        disabled={isLoadingMoreFollow ? true : false}
+                        className="w-100 user-profile__following--modal-results-expand-btn">
+                        {
+                            isLoadingMoreFollow ? (
+                                <div className='d-block mx-auto w-100'>
+                                    <Loading size={22} color={'var(--main-accent-color-hover)'} />
+                                </div>
+                            ) : <i className='bi bi-chevron-down user-profile__following--modal-results-expand-btn-icon' />
+                        }
+                    </Button>
+                }
             </Modal.Footer>
         </Modal>
     )

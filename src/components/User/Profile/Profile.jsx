@@ -4,12 +4,13 @@ import { Row, Col, Button, Modal, Form, Dropdown } from 'react-bootstrap';
 import { getAvatarUrl } from '../../../lib/utils/avatarUtils.js';
 import defaultAvatar from '../../../assets/default.png';
 import { screenUtils } from '../../../lib/utils/screenUtils.js';
+import { BlockModal, ReportModal, FollowModal } from '../Modals.jsx';
 import { SlClose } from "react-icons/sl";
 import { Loading } from '../../Loading/Loading.jsx';
 import { EndAsterisks } from '../EndAsterisks.jsx';
 import { reportCategories } from '../../PreLogin/ComunityGuidelines/communityGuidelines.js';
 
-export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUserId, followingCount, followersCount, isFollowing, followingAccounts, followersAccounts, isFollowingUserLoading, isBlocked, isOtherUserBlocked, handleUserReport, hasMoreFollowing, hasMoreFollowers, loadFollowing, loadFollowers, isLoadingMoreFollowing, isLoadingMoreFollowers }) => {
+export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUserId, followingCount, followersCount, isFollowing, followingAccounts, followersAccounts, isFollowingUserLoading, isBlocked, isOtherUserBlocked, handleUserReport, hasMoreFollowing, hasMoreFollowers, loadFollowing, loadFollowers, isLoadingMoreFollowing, isLoadingMoreFollowers, isProcessingBlock }) => {
 
     const location = useLocation();
 
@@ -17,27 +18,10 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
     const [showFollowingModal, setShowFollowingModal] = useState(false);
     const [showBlockModal, setShowBlockModal] = useState(false);
 
-    // const reportCategories = [
-    //     { name: "Hate speech", key: "HATE" },
-    //     { name: "Harassment or bullying", key: "BULLY" },
-    //     { name: "Violence or harmful behavior", key: "VIOL" },
-    //     { name: "Misinformation or false information", key: "MISINFO" },
-    //     { name: "Nudity or sexual content", key: "SEX" },
-    //     { name: "Spam or misleading content", key: "SPAM" },
-    //     { name: "Intellectual property violations", key: "COPYRIGHT" },
-    //     { name: "Self-harm or suicide", key: "SELF" },
-    //     { name: "Terrorism or extremism", key: "TERROR" },
-    //     { name: "Scams or fraud", key: "SCAM" },
-    //     { name: "Impersonation or fake accounts", key: "FAKE" },
-    //     { name: "Graphic or violent content", key: "GRPHIC" },
-    //     { name: "Child exploitation", key: "CHILD" },
-    //     { name: "Privacy violation", key: "PRIV" },
-    //     { name: "Animal abuse", key: "ANIM" }
-    // ];
-
     const [showReportUserModal, setShowReportUserModal] = useState(false);
     const [reportReason, setReportReason] = useState(null);
     const [showReportUserConfirmation, setShowReportUserConfirmation] = useState(false);
+    const [isProcessingReport, setIsProcessingReport] = useState(false);
 
     const { isExtraSmallScreen } = screenUtils();
 
@@ -73,6 +57,8 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
 
     const handleReportUserSubmission = async () => {
         if (reportReason) {
+            setIsProcessingReport(true);
+
             try {
                 await handleUserReport(currUserId, reportReason);
 
@@ -82,6 +68,8 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                 }, 2000);
             } catch (error) {
                 console.error("Error reporting user:", error);
+            } finally {
+                setIsProcessingReport(false);
             }
         }
     };
@@ -257,202 +245,50 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
             </Row>
 
             {/* Followers modal */}
-            <Modal
-                show={showFollowersModal}
-                onHide={handleCloseFollowersModal}
-                className='user-profile__following--modal'
-            >
-                <Modal.Header
-                    className='user-profile__following--modal-header w-100 border-bottom-0'
-                >
-                    <Modal.Title>{`Follower(s)`}</Modal.Title>
-                    <Button
-                        onClick={handleCloseFollowersModal}
-                        className='ms-auto'
-                    >
-                        <SlClose size={24} />
-                    </Button>
-                </Modal.Header>
-                <Modal.Body
-                    className='user-profile__following--modal-body py-0'
-                >
-                    {followersAccounts && followersAccounts.map((followerAccount) => {
-                        return (
-                            <div key={followerAccount.$id}>
-                                <Link
-                                    to={`/user/${followerAccount.username}`}
-                                    className='w-100 d-flex justify-content-between align-items-center'
-                                    onClick={handleCloseFollowersModal}
-                                >
-                                    {followerAccount.username}
-                                    <img src={getAvatarUrl(followerAccount.avatar) || defaultAvatar}
-                                        className='follower__avatar' />
-                                </Link>
-                            </div>
-                        )
-                    })}
-                    {!hasMoreFollowers &&
-                        <div className='text-center mt-4'>
-                            <EndAsterisks />
-                        </div>
-                    }
-                </Modal.Body>
-                <Modal.Footer className='border-top-0'>
-                    {
-                        hasMoreFollowers &&
-                        <Button onClick={loadFollowers}
-                            disabled={isLoadingMoreFollowers ? true : false}
-                            className="w-100 user-profile__following--modal-results-expand-btn">
-                            {
-                                isLoadingMoreFollowers ? (
-                                    <div className='d-block mx-auto w-100'><Loading size={22} color={'var(--main-accent-color-hover)'} /></div>
-                                ) : <i className='bi bi-chevron-down user-profile__following--modal-results-expand-btn-icon' />
-                            }
-                        </Button>
-                    }
-                </Modal.Footer>
-            </Modal>
+            <FollowModal
+                followModalTitle={'Followers'}
+                showFollowModal={showFollowersModal}
+                defaultAvatar={defaultAvatar}
+                followAccounts={followersAccounts}
+                hasMoreFollow={hasMoreFollowers}
+                isLoadingMoreFollow={isLoadingMoreFollowers}
+                loadFollowers={loadFollowers}
+                getAvatarUrl={getAvatarUrl}
+                handleCloseFollowModal={handleCloseFollowersModal}
+            />
 
             {/* Following modal */}
-            <Modal
-                show={showFollowingModal}
-                onHide={handleCloseFollowingModal}
-                className='user-profile__following--modal'
-            >
-                <Modal.Header
-                    className='user-profile__following--modal-header w-100 border-bottom-0'
-                >
-                    <Modal.Title>Following</Modal.Title>
-                    <Button
-                        onClick={handleCloseFollowingModal}
-                        className='ms-auto'
-                    >
-                        <SlClose size={24} />
-                    </Button>
-                </Modal.Header>
-                <Modal.Body
-                    className='d-grid user-profile__following--modal-body py-0'
-                >
-                    {followingAccounts && followingAccounts.map((followingAccount) => {
-                        return (
-                            <div key={followingAccount.$id}>
-                                <Link
-                                    to={`/user/${followingAccount.username}`}
-                                    className='w-100 d-flex justify-content-between align-items-center'
-                                    onClick={handleCloseFollowingModal}
-                                >
-                                    {followingAccount.username}
-                                    <img src={getAvatarUrl(followingAccount.avatar) || defaultAvatar}
-                                        className='following__avatar' />
-                                </Link>
-                            </div>
-
-                        )
-                    })}
-                    {!hasMoreFollowing &&
-                        <div className='text-center mt-4'>
-                            <EndAsterisks />
-                        </div>
-                    }
-                </Modal.Body>
-                <Modal.Footer className='border-top-0'>
-                    {
-                        hasMoreFollowing &&
-                        <Button onClick={loadFollowing}
-                            disabled={isLoadingMoreFollowing ? true : false}
-                            className="w-100 user-profile__following--modal-results-expand-btn">
-                            {
-                                isLoadingMoreFollowing ? (
-                                    <div className='d-block mx-auto w-100'><Loading size={22} color={'var(--main-accent-color-hover)'} /></div>
-                                ) : <i className='bi bi-chevron-down user-profile__following--modal-results-expand-btn-icon' />
-                            }
-                        </Button>
-                    }
-                </Modal.Footer>
-            </Modal>
+            <FollowModal
+                followModalTitle={'Following'}
+                showFollowModal={showFollowingModal}
+                defaultAvatar={defaultAvatar}
+                followAccounts={followingAccounts}
+                hasMoreFollow={hasMoreFollowing}
+                isLoadingMoreFollow={isLoadingMoreFollowing}
+                loadFollowers={loadFollowing}
+                getAvatarUrl={getAvatarUrl}
+                handleCloseFollowModal={handleCloseFollowingModal}
+            />
 
             {/* Block modal */}
-            <Modal
-                show={showBlockModal}
-                onHide={handleCloseBlockModal}
-                className='user-profile__block--modal'
-            >
-                <Modal.Header
-                    className='justify-content-end border-bottom-0 user-profile__block--modal-header pb-0 w-100'
-                >
-                    <Button
-                        onClick={handleCloseBlockModal}
-                    >
-                        <SlClose size={24} className='' />
-                    </Button>
-                </Modal.Header>
-                <Modal.Body
-                    className='user-profile__block--modal-body'
-                >
-                    <p>Are you sure you want to block <strong>{username}</strong>?</p>
-                </Modal.Body>
-                <Modal.Footer className='user-profile__block--modal-footer border-top-0 pt-0'>
-                    <Button onClick={() => handleBlock(currUserId)}
-                        className='me-2 user-profile__block--modal-body-btn'
-                    >
-                        Yes
-                    </Button>
-                    <Button onClick={handleCloseBlockModal}
-                        className='user-profile__block--modal-body-btn'
-                    >
-                        Cancel
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+            <BlockModal
+                username={username}
+                currUserId={currUserId}
+                showBlockModalFunction={showBlockModal}
+                isProcessing={isProcessingBlock}
+                handleBlock={handleBlock}
+                handleCloseBlockModalFunction={handleCloseBlockModal}
+            />
 
-            {/* User report modal */}
-            <Modal show={showReportUserModal}
-                onHide={handleCloseReportUserModal}
-                className='user-profile__report--modal'
-            >
-                <Modal.Header className='border-bottom-0 user-profile__report--modal-header'>
-                    <Modal.Title>Report User</Modal.Title>
-                </Modal.Header>
-                <Modal.Body className='user-profile__report--modal-body py-0'>
-                    {showReportUserConfirmation ? (
-                        <p>Your report has been successfully submitted!</p>
-                    ) : (
-                        <Form>
-                            <Form.Group className='mb-3' controlId='reportNotice'>
-                                <Form.Label>Reason:</Form.Label>
-                                {reportCategories.map((category) => (
-                                    <Form.Check
-                                        key={category.key}
-                                        type='radio'
-                                        label={category.name}
-                                        id={category.name}
-                                        name='reportReason'
-                                        onChange={() => setReportReason(category.key)}
-                                        className='user-profile__report--radio'
-                                    />
-                                ))}
-                            </Form.Group>
-                        </Form>
-                    )}
-                </Modal.Body>
-                <Modal.Footer className='user-profile__report--modal-footer border-top-0'>
-                    {showReportUserConfirmation ? null : (
-                        <>
-                            <Button onClick={handleCloseReportUserModal}
-                                className='user-profile__report--modal-btn'
-                            >
-                                Cancel
-                            </Button>
-                            <Button onClick={handleReportUserSubmission}
-                                // disabled={!reportReason}
-                                className='user-profile__report--modal-btn'
-                            >
-                                Report
-                            </Button>
-                        </>
-                    )}
-                </Modal.Footer>
-            </Modal>
+            {/* User report modal */}.
+            <ReportModal
+                showReportModalFunction={showReportUserModal}
+                showReportConfirmationCheck={showReportUserConfirmation}
+                isProcessing={isProcessingReport}
+                setReportReason={setReportReason}
+                handleCloseReportModalFunction={handleCloseReportUserModal}
+                handleReportSubmissionFunction={handleReportUserSubmission}
+            />
 
         </div >
     )
