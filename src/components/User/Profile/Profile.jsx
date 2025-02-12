@@ -95,7 +95,7 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                                         handleShowFollowersModal();
                                         loadFollowers()
                                     }}
-                                    className='user-profile__follow-number d-flex flex-row flex-sm-column p-0'
+                                    className='user-profile__follow-number d-flex flex-row flex-sm-column align-items-start p-0'
                                 >
                                     {followersCount === null ?
                                         <Loading />
@@ -114,7 +114,7 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                                         handleShowFollowingModal();
                                         await loadFollowing()
                                     }}
-                                    className='user-profile__follow-number d-flex flex-row flex-sm-column p-0'
+                                    className='user-profile__follow-number d-flex flex-row flex-sm-column align-items-start p-0'
                                 >
                                     {followingCount === null ?
                                         <Loading />
@@ -156,18 +156,19 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                     <Col
                         xs={{ span: 6, order: 2 }}
                         sm={{ span: 4, order: 3 }}
-                        className='d-flex justify-content-start flex-sm-column align-items-end justify-content-sm-evenly user-profile__follow-block-report-col'
+                        className='d-flex justify-content-start flex-sm-column align-items-end justify-content-sm-center user-profile__follow-block-report-col'
                     >
                         <>
                             {
                                 isBlocked ? null :
                                     <Button
                                         className={`user-profile__interaction-btn
-                                ${isFollowing ? 'following' : ''} mb-2 mb-sm-0 ms-sm-auto`}
+                                ${isFollowing ? 'following' : ''} mb-2 ms-sm-auto`}
                                         onClick={() => handleFollow(currUserId)}
                                         style={{
                                             height: 'fit-content', width: 'fit-content',
                                         }}
+                                        disabled={isOtherUserBlocked ? true : false}
                                     >
                                         {isFollowingUserLoading ? <Loading /> :
                                             <>
@@ -221,7 +222,7 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                                     </Button>
                                     <Button
                                         onClick={handleReportUser}
-                                        className='user-profile__interaction-btn'
+                                        className='user-profile__interaction-btn mt-2'
                                         style={{
                                             height: 'fit-content', width: 'fit-content', marginLeft: 'auto'
                                         }}>
