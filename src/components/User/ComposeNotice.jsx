@@ -4,45 +4,10 @@ import { Form, Button, Image } from 'react-bootstrap';
 import { NoticeTags } from './NoticeTags';
 import { Loading } from '../Loading/Loading';
 import GifPicker from 'gif-picker-react';
-// import { FaAngleDown } from "react-icons/fa6";
 
-export const ComposeNotice = ({ noticeText, setNoticeText, duration, noticeType, setDuration, addNotice, isAddingNotice, onNoticeAdded }) => {
+export const ComposeNotice = ({ noticeText, setNoticeText, duration, noticeType, setDuration, addNotice, isAddingNotice, tagCategories, setTagCategories }) => {
 
     const { isSmallScreen } = screenUtils();
-
-    const [tagCategories, setTagCategories] = useState([
-        {
-            group: 'STEM',
-            tags: [
-                { name: 'Science', key: 'science' },
-                { name: 'Technology', key: 'technology' },
-                { name: 'Engineering', key: 'engineering' },
-                { name: 'Math', key: 'math' }
-            ],
-            values: [false, false, false, false]
-        },
-        {
-            group: 'Humanities and Arts',
-            tags: [
-                { name: 'Literature', key: 'literature' },
-                { name: 'History', key: 'history' },
-                { name: 'Philosophy', key: 'philosophy' },
-                { name: 'Music', key: 'music' }
-            ],
-            values: [false, false, false, false]
-        },
-        {
-            group: 'Social Sciences and Professions',
-            tags: [
-                { name: 'Medicine', key: 'medicine' },
-                { name: 'Economics', key: 'economics' },
-                { name: 'Law', key: 'law' },
-                { name: 'Political Science', key: 'polSci' },
-                { name: 'Sports', key: 'sports' }
-            ],
-            values: [false, false, false, false, false]
-        }
-    ]);
 
     const [selectedTags, setSelectedTags] = useState({});
     const [charCount, setCharCount] = useState(0);
@@ -60,7 +25,7 @@ export const ComposeNotice = ({ noticeText, setNoticeText, duration, noticeType,
         if (noticeText.trim()) {
 
             await addNotice(noticeText, duration, noticeType, selectedTags, noticeGif);
-            // onNoticeAdded(newNotice);
+
             setNoticeText('');
             setNoticeGif(null);
             setSelectedTags({});

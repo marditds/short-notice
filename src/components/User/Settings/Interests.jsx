@@ -6,40 +6,9 @@ import { Loading } from '../../Loading/Loading';
 
 export const Interests = () => {
 
-    const [tagCategories, setTagCategories] = useState([
-        {
-            group: 'STEM',
-            tags: [
-                { name: 'Science', key: 'science' },
-                { name: 'Technology', key: 'technology' },
-                { name: 'Engineering', key: 'engineering' },
-                { name: 'Math', key: 'math' }
-            ]
-        },
-        {
-            group: 'Humanities and Arts',
-            tags: [
-                { name: 'Literature', key: 'literature' },
-                { name: 'History', key: 'history' },
-                { name: 'Philosophy', key: 'philosophy' },
-                { name: 'Music', key: 'music' }
-            ]
-        },
-        {
-            group: 'Social Sciences and Professions',
-            tags: [
-                { name: 'Medicine', key: 'medicine' },
-                { name: 'Economics', key: 'economics' },
-                { name: 'Law', key: 'law' },
-                { name: 'Political Science', key: 'polSci' },
-                { name: 'Sports', key: 'sports' }
-            ]
-        }
-    ]);
-
     const [selectedTags, setSelectedTags] = useState({});
     const { googleUserData } = useUserContext();
-    const { user_id, updateInterests, getInterests } = useNotices(googleUserData);
+    const { user_id, tagCategories, updateInterests, getInterests } = useNotices(googleUserData);
     const [isUpdating, setIsUpdating] = useState(false);
 
     useEffect(() => {

@@ -31,6 +31,40 @@ const useNotices = (googleUserData) => {
     const [removingNoticeId, setRemovingNoticeId] = useState(null);
     const [isSavingEdit, setIsSavingEdit] = useState(false);
 
+    const [tagCategories, setTagCategories] = useState([
+        {
+            group: 'STEM',
+            tags: [
+                { name: 'Science', key: 'science' },
+                { name: 'Technology', key: 'technology' },
+                { name: 'Engineering', key: 'engineering' },
+                { name: 'Math', key: 'math' }
+            ],
+            values: [false, false, false, false]
+        },
+        {
+            group: 'Humanities and Arts',
+            tags: [
+                { name: 'Literature', key: 'literature' },
+                { name: 'History', key: 'history' },
+                { name: 'Philosophy', key: 'philosophy' },
+                { name: 'Music', key: 'music' }
+            ],
+            values: [false, false, false, false]
+        },
+        {
+            group: 'Social Sciences and Professions',
+            tags: [
+                { name: 'Medicine', key: 'medicine' },
+                { name: 'Economics', key: 'economics' },
+                { name: 'Law', key: 'law' },
+                { name: 'Political Science', key: 'polSci' },
+                { name: 'Sports', key: 'sports' }
+            ],
+            values: [false, false, false, false, false]
+        }
+    ]);
+
     // const { filterBlocksFromLikesSaves } = useUnblockedNotices();
 
     // Fetch User Identity
@@ -731,6 +765,8 @@ const useNotices = (googleUserData) => {
         noticesReactions,
         saveReactions,
         likedReactions,
+        tagCategories,
+        setTagCategories,
         setFellowUserId,
         addNotice,
         editNotice,

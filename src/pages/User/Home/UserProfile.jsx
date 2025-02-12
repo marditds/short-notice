@@ -15,7 +15,6 @@ import { EndAsterisks } from '../../../components/User/EndAsterisks.jsx';
 import { NoticesPlaceholder } from '../../../components/User/NoticesPlaceholder.jsx';
 import { ModifyModal } from '../../../components/User/Modals.jsx';
 
-
 const UserProfile = () => {
 
     const location = useLocation();
@@ -41,6 +40,8 @@ const UserProfile = () => {
         removingNoticeId,
         isSavingEdit,
         isRemovingNotice,
+        tagCategories,
+        setTagCategories,
         fetchUserSaves,
         fetchUserLikes,
         setLikedNotices,
@@ -510,6 +511,8 @@ const UserProfile = () => {
                 noticeText={noticeText}
                 // noticeGif={noticeGif}
                 noticeType={accountType}
+                tagCategories={tagCategories}
+                setTagCategories={setTagCategories}
                 setNoticeText={setNoticeText}
                 // setNoticeGif={setNoticeGif}
                 setDuration={setDuration}

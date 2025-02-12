@@ -387,7 +387,6 @@ const useUserInfo = (data) => {
         }
     }
 
-
     const getUserAccountByUserId = async (userId) => {
         try {
             const accnt = await getUserById(userId);

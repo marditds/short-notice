@@ -11,41 +11,6 @@ import { EndAsterisks } from '../../../components/User/EndAsterisks';
 
 const UserFeed = () => {
 
-
-    const [tagCategories, setTagCategories] = useState([
-        {
-            group: 'STEM',
-            tags: [
-                { name: 'Science', key: 'science' },
-                { name: 'Technology', key: 'technology' },
-                { name: 'Engineering', key: 'engineering' },
-                { name: 'Math', key: 'math' }
-            ],
-            values: [false, false, false, false]
-        },
-        {
-            group: 'Humanities and Arts',
-            tags: [
-                { name: 'Literature', key: 'literature' },
-                { name: 'History', key: 'history' },
-                { name: 'Philosophy', key: 'philosophy' },
-                { name: 'Music', key: 'music' }
-            ],
-            values: [false, false, false, false]
-        },
-        {
-            group: 'Social Sciences and Professions',
-            tags: [
-                { name: 'Medicine', key: 'medicine' },
-                { name: 'Economics', key: 'economics' },
-                { name: 'Law', key: 'law' },
-                { name: 'Political Science', key: 'polSci' },
-                { name: 'Sports', key: 'sports' }
-            ],
-            values: [false, false, false, false, false]
-        }
-    ]);
-
     const [selectedTags, setSelectedTags] = useState({});
     const [isTagSelected, setIsTagSelected] = useState(false);
     const { googleUserData } = useUserContext();
@@ -56,6 +21,8 @@ const UserFeed = () => {
         personalFeedSavedNotices,
         likedNotices,
         savedNotices,
+        tagCategories,
+        setTagCategories,
         setLikedNotices,
         setPersonalFeedLikedNotices,
         setPersonalFeedSavedNotices,
@@ -78,7 +45,7 @@ const UserFeed = () => {
         // setNoticesReactions
     } = useNotices(googleUserData);
 
-    const { fetchUsersData, getUserAccountByUserId, getPersonalFeedAccounts } = useUserInfo(googleUserData);
+    const { fetchUsersData, getUserAccountByUserId } = useUserInfo(googleUserData);
 
     const [generalFeedNotices, setGeneralFeedNotices] = useState([]);
     const [personalFeedNotices, setPersonalFeedNotices] = useState([]);
