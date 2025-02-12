@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { createBlock, getBlockedUsersByUser as fetchBlockedUsersByUser, getBlockedUsersByUserByBatch as fetchBlockedUsersByUserByBatch, getUsersBlockingUser as fetchUsersBlockingUser, removeBlockUsingBlockedId, checkIdExistsInAuth, checkEmailExistsInAuth as checkEmailInAuthFromServer, registerAuthUser, getUserById, getUserByIdQuery as fetchUserByIdQuery, deleteAuthUser, createUserSession, getSessionDetails as fetchSessionDetails, deleteUserSession, updateUser, updateAuthUser, deleteUser, getUserByUsername as fetchUserByUsername, getAllUsersByString as fetchAllUsersByString, deleteAllNotices, deleteAllReactions, removeAllSaves, removeAllLikes, removeAllFollows, getUsersDocument, createFollow, unfollow, getUserFollowingsById, getUserFollowersById, followedByUserCount, followingTheUserCount, getPersonalFeedAccounts as fetchPersonalFeedAccounts, createPassocde, updatePassocde, getPassocdeByOrganizationId as fetchPassocdeByOrganizationId, createUserReport, getFollowStatus as fetchFollowStatus } from '../context/dbhandler';
+import { createBlock, getBlockedUsersByUser as fetchBlockedUsersByUser, getBlockedUsersByUserByBatch as fetchBlockedUsersByUserByBatch, getUsersBlockingUser as fetchUsersBlockingUser, removeBlockUsingBlockedId, checkIdExistsInAuth, checkEmailExistsInAuth as checkEmailInAuthFromServer, registerAuthUser, getUserById, getUserByIdQuery as fetchUserByIdQuery, deleteAuthUser, createUserSession, getSessionDetails as fetchSessionDetails, deleteUserSession, updateUser, updateAuthUser, deleteUser, getUserByUsername as fetchUserByUsername, getAllUsersByString as fetchAllUsersByString, deleteAllNotices, deleteAllReactions, removeAllSaves, removeAllLikes, removeAllFollows, getUsersDocument, createFollow, unfollow, getUserFollowingsById, getUserFollowersById, followedByUserCount, followingTheUserCount, getPersonalFeedAccounts as fetchPersonalFeedAccounts, createPassocde, updatePassocde, getPassocdeByOrganizationId as fetchPassocdeByOrganizationId, createUserReport, getFollowStatus as fetchFollowStatus, isUserBlockedByOtherUser, isOtherUserBlockedByUser } from '../context/dbhandler';
 import { useUserContext } from '../context/UserContext';
 import { UserId } from '../../components/User/UserId';
 
@@ -510,6 +510,28 @@ const useUserInfo = (data) => {
         }
     }
 
+    const checkIsOtherUserBlockedByUser = async (user_id, otherUser_id) => {
+        console.log('Starting checkIsOtherUserBlockedByUser...');
+
+        try {
+            const res = await isOtherUserBlockedByUser(user_id, otherUser_id);
+            return res;
+        } catch (error) {
+            console.error('Error getting block status:', error);
+        }
+    }
+
+    const checkIsUserBlockedByOtherUser = async (otherUser_id, user_id) => {
+        console.log('Starting checkIsUserBlockedByOtherUser...');
+
+        try {
+            const res = await isUserBlockedByOtherUser(otherUser_id, user_id);
+            return res;
+        } catch (error) {
+            console.error('Error getting block status:', error);
+        }
+    }
+
     const deleteBlockUsingBlockedId = async (blocked_id) => {
         try {
             console.log('blocked_id', blocked_id);
@@ -543,6 +565,8 @@ const useUserInfo = (data) => {
         isProcessingBlock,
         // followersAccounts,
         // followingAccounts,
+        checkIsOtherUserBlockedByUser,
+        checkIsUserBlockedByOtherUser,
         makeBlock,
         handleBlock,
         getBlockedUsersByUser,

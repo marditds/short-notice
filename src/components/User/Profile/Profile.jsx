@@ -1,14 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { useLocation, Link } from 'react-router-dom';
-import { Row, Col, Button, Modal, Form, Dropdown } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import { Row, Col, Button, Dropdown } from 'react-bootstrap';
 import { getAvatarUrl } from '../../../lib/utils/avatarUtils.js';
 import defaultAvatar from '../../../assets/default.png';
 import { screenUtils } from '../../../lib/utils/screenUtils.js';
 import { BlockModal, ReportModal, FollowModal } from '../Modals.jsx';
-import { SlClose } from "react-icons/sl";
 import { Loading } from '../../Loading/Loading.jsx';
-import { EndAsterisks } from '../EndAsterisks.jsx';
-import { reportCategories } from '../../PreLogin/ComunityGuidelines/communityGuidelines.js';
 
 export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUserId, followingCount, followersCount, isFollowing, followingAccounts, followersAccounts, isFollowingUserLoading, isBlocked, isOtherUserBlocked, handleUserReport, hasMoreFollowing, hasMoreFollowers, loadFollowing, loadFollowers, isLoadingMoreFollowing, isLoadingMoreFollowers, isProcessingBlock }) => {
 
@@ -88,6 +85,7 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                     xs={{ span: 6, order: location.pathname !== '/user/profile' ? 3 : 2 }}
                     sm={{ span: 4, order: 1 }}
                     className={`d-flex flex-sm-column ${location.pathname !== '/user/profile' && isExtraSmallScreen ? 'justify-content-sm-evenly' : 'justify-content-center'}  user-profile__follow-count-col ${location.pathname !== '/user/profile' && isExtraSmallScreen ? 'h-50' : ''}`}>
+
                     {
                         isBlocked ?
                             null :
@@ -237,11 +235,7 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                     null
                 }
 
-                {isBlocked &&
-                    <div style={{ color: 'white', textAlign: 'center' }}>
-                        You are not authorzied to view, like, and save the notices shared by {username}.
-                    </div>
-                }
+
             </Row>
 
             {/* Followers modal */}

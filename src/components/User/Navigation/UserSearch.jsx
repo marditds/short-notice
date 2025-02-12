@@ -45,19 +45,19 @@ export const UserSearch = ({ userId }) => {
 
             console.log('users:', users);
 
-            const blockedUsers = await getBlockedUsersByUser(userId);
+            // const blockedUsers = await getBlockedUsersByUser(userId);
 
             // console.log('blockedUsers:', blockedUsers);
 
-            const filteredUsers = users?.documents.filter((user) =>
-                !blockedUsers.some((blocked) => user.$id === blocked.blocked_id)
-            );
+            // const filteredUsers = users?.documents.filter((user) =>
+            // !blockedUsers.some((blocked) => user.$id === blocked.blocked_id)
+            // );
 
-            console.log('filteredUsers,', filteredUsers);
+            // console.log('filteredUsers,', filteredUsers);
 
-            if (filteredUsers !== undefined) {
+            if (users.documents !== undefined) {
                 setUsersResult(prevUsers => {
-                    const moreUsers = filteredUsers?.filter(user =>
+                    const moreUsers = users.documents?.filter(user =>
                         !prevUsers.some(loadedUser => loadedUser.$id === user.$id)
                     );
                     return [...prevUsers, ...moreUsers];
@@ -65,6 +65,16 @@ export const UserSearch = ({ userId }) => {
             } else {
                 return 'No results';
             }
+            // if (filteredUsers !== undefined) {
+            //     setUsersResult(prevUsers => {
+            //         const moreUsers = filteredUsers?.filter(user =>
+            //             !prevUsers.some(loadedUser => loadedUser.$id === user.$id)
+            //         );
+            //         return [...prevUsers, ...moreUsers];
+            //     });
+            // } else {
+            //     return 'No results';
+            // }
             if (users?.documents.length < limit) {
                 setHasMoreProfiles(false);
             } else {

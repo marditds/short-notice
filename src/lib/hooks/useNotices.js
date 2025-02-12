@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { createNotice, getUserNotices, updateNotice, deleteNotice, saveDeletedNoticeId, deleteAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSave, getUserSaves, removeSave, createReport, createLike, removeLike, getUserLikes, getAllLikedNotices as fetchAllLikedNotices, getAllLikesByNoticeId as fetchAllLikesByNoticeId, getUserLikesNotInFeed, getUserSavesNotInFeed, getAllSavedNotices as fetchAllSavedNotices, createReaction, deleteReaction, getAllReactionsBySenderId as fetchAllReactionsBySenderId, getAllReactions as fetchAllReactions, getAllReactionsByRecipientId as fetchAllReactionsByRecipientId, getNoticeByNoticeId as fetchNoticeByNoticeId, getAllReactionsByNoticeId as fetchAllReactionsByNoticeId, getReactionByReactionId as fetchReactionByReactionId, deleteAllReactions, createReactionReport, getNoticeByUserId as fetchNoticeByUserId, removeAllSavesForNotice, removeAllLikesForNotice } from '../../lib/context/dbhandler';
 import useUserInfo from './useUserInfo.js';
 import { UserId } from '../../components/User/UserId.jsx';
-import { useUnblockedNotices } from '../utils/blockFilter.js';
+// import { useUnblockedNotices } from '../utils/blockFilter.js';
 
 const useNotices = (googleUserData) => {
 
@@ -31,7 +31,7 @@ const useNotices = (googleUserData) => {
     const [removingNoticeId, setRemovingNoticeId] = useState(null);
     const [isSavingEdit, setIsSavingEdit] = useState(false);
 
-    const { filterBlocksFromLikesSaves } = useUnblockedNotices();
+    // const { filterBlocksFromLikesSaves } = useUnblockedNotices();
 
     // Fetch User Identity
     useEffect(() => {
@@ -568,10 +568,12 @@ const useNotices = (googleUserData) => {
     }
 
     // For likes tab
-    const getAllLikedNotices = async (userId, limit, offset) => {
+    const getAllLikedNotices = async (userId, visitor_id, limit, offset) => {
         try {
 
-            const userLikes = await getUserLikesNotInFeed(userId, limit, offset);
+            console.log('Starting getAllLikedNotices in unseNotices.js');
+
+            const userLikes = await getUserLikesNotInFeed(userId, visitor_id, limit, offset);
 
             console.log('useNotice - getUserLikesNotInFeed', userLikes);
 
@@ -588,10 +590,10 @@ const useNotices = (googleUserData) => {
     };
 
     // For saves tab
-    const getAllSavedNotices = async (userId, limit, offset) => {
+    const getAllSavedNotices = async (userId, visitor_id, limit, offset) => {
         try {
 
-            const userSaves = await getUserSavesNotInFeed(userId, limit, offset);
+            const userSaves = await getUserSavesNotInFeed(userId, visitor_id, limit, offset);
 
             console.log('userSaves', userSaves);
 

@@ -198,10 +198,15 @@ export const getUserByUsername = async (username) => {
 };
 
 export const getAllUsersByString = async (str, limit, cursorAfter) => {
+
+    // getBlockedUsersByUser(blocker_id)
+    // getUsersBlockingUser(blocked_id)
+
     try {
         const queryParams = [
             Query.contains('username', str),
             Query.limit(limit),
+            // Query.notEqual('$id', blocked_id)
         ];
 
         if (cursorAfter) {
@@ -215,6 +220,7 @@ export const getAllUsersByString = async (str, limit, cursorAfter) => {
         );
 
         if (userList.total > 0) {
+            console.log('BBBBBLOCK LIIIIISTTTTTTTTTT:', userList);
             return userList;
         }
 
@@ -1092,19 +1098,30 @@ export const getUserLikes = async (user_id, noticeIds) => {
     }
 };
 
-export const getUserLikesNotInFeed = async (user_id, limit, offset) => {
+export const getUserLikesNotInFeed = async (user_id, visitor_id, limit, offset) => {
+
     try {
         const [blockedUsers, usersBlockingMe] = await Promise.all([
-            getBlockedUsersByUser(user_id),
-            getUsersBlockingUser(user_id)
+            getBlockedUsersByUser(visitor_id),
+            getUsersBlockingUser(visitor_id)
         ]);
 
-        const blockedIds = blockedUsers.map(user => user.blocked_id);
-        const blockingIds = usersBlockingMe.map(user => user.blocker_id);
-        const allBlockedIds = [...new Set([...blockedIds, ...blockingIds])];
+        // const asd = await isUserBlockedByOtherUser(otherUser_id, user_id);
 
-        console.log('dbhandler - limit', limit);
-        console.log('dbhandler - offset', offset);
+        const blockedIds = blockedUsers.map(user => user.blocked_id);
+        const blockerIds = usersBlockingMe.map(user => user.blocker_id);
+        const allBlockedIds = [...new Set([...blockedIds, ...blockerIds])];
+
+        console.log('dbhandler - getUserLikesNotInFeed blockedIds', blockedIds);
+        console.log('dbhandler - getUserLikesNotInFeed blockerIds', blockerIds);
+
+        // const asdasda = await getBlockedUsersByUserTwo(allBlockedIds)
+
+        console.log('EEEEEEEEEEEEEEEEEEEE', allBlockedIds);
+
+
+        console.log('dbhandler - getUserLikesNotInFeed limit', limit);
+        console.log('dbhandler - getUserLikesNotInFeed offset', offset);
 
         const response = await databases.listDocuments(
             import.meta.env.VITE_DATABASE,
@@ -1211,12 +1228,12 @@ export const getUserSaves = async (user_id, noticeIds) => {
     }
 };
 
-export const getUserSavesNotInFeed = async (user_id, limit, offset) => {
+export const getUserSavesNotInFeed = async (user_id, visitor_id, limit, offset) => {
     try {
 
         const [blockedUsers, usersBlockingMe] = await Promise.all([
-            getBlockedUsersByUser(user_id),
-            getUsersBlockingUser(user_id)
+            getBlockedUsersByUser(visitor_id),
+            getUsersBlockingUser(visitor_id)
         ]);
 
         const blockedIds = blockedUsers.map(user => user.blocked_id);
@@ -1796,6 +1813,22 @@ export const getBlockedUsersByUser = async (blocker_id) => {
     }
 }
 
+export const getBlockedUsersByUserTwo = async (user_id) => {
+    try {
+        const res = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_BLOCKS_COLLECTION,
+            [
+                Query.equal('blocker_id', user_id)
+            ]
+        )
+        console.log('Blocked users:', res.documents);
+        return res.documents;
+    } catch (error) {
+        console.error('Error getting blocked users:', error);
+    }
+}
+
 export const getBlockedUsersByUserByBatch = async (blocker_id, limit, offset) => {
     try {
         const res = await databases.listDocuments(
@@ -1814,7 +1847,6 @@ export const getBlockedUsersByUserByBatch = async (blocker_id, limit, offset) =>
     }
 }
 
-
 export const getUsersBlockingUser = async (blocked_id) => {
     try {
         const res = await databases.listDocuments(
@@ -1828,6 +1860,60 @@ export const getUsersBlockingUser = async (blocked_id) => {
         return res.documents;
     } catch (error) {
         console.error('Error getting users:', error);
+    }
+}
+
+export const isOtherUserBlockedByUser = async (user_id, otherUser_id) => {
+    console.log('Starting isOtherUserBlockedByUser...');
+
+    try {
+        const res = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_BLOCKS_COLLECTION,
+            [
+                Query.and([
+                    Query.equal('blocker_id', user_id),
+                    Query.equal('blocked_id', otherUser_id)
+                ])
+            ]
+        )
+
+        console.log('RESULT isOtherUserBlockedByUser', res.documents);
+
+        if (res.documents.length > 0) {
+            console.log('Other user is blocked!', res.documents);
+            return true;
+        }
+        return false;
+    } catch (error) {
+        console.error('Error getting block status:', error);
+    }
+}
+
+export const isUserBlockedByOtherUser = async (otherUser_id, user_id) => {
+    console.log('Starting isUserBlockedByOtherUser...');
+
+    try {
+        const res = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_BLOCKS_COLLECTION,
+            [
+                Query.and([
+                    Query.equal('blocker_id', otherUser_id),
+                    Query.equal('blocked_id', user_id)
+                ])
+            ]
+        )
+
+        console.log('RESULT isUserBlockedByOtherUser', res.documents);
+
+        if (res.documents.length > 0) {
+            console.log('isOtherUserBlockedByUser', res.documents);
+            return true;
+        }
+        return false;
+    } catch (error) {
+        console.error('Error getting block status:', error);
     }
 }
 

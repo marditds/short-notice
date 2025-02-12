@@ -8,7 +8,6 @@ import useUserInfo from '../../../lib/hooks/useUserInfo.js';
 import { getAvatarUrl as avatarUtil } from '../../../lib/utils/avatarUtils.js';
 import useUserAvatar from '../../../lib/hooks/useUserAvatar.js';
 import useNotices from '../../../lib/hooks/useNotices.js';
-// import { screenUtils } from '../../../lib/utils/screenUtils.js';
 import { useUnblockedNotices } from '../../../lib/utils/blockFilter.js';
 import { Passcode } from '../../../components/User/Passcode.jsx';
 import { Loading } from '../../../components/Loading/Loading.jsx';
@@ -57,11 +56,13 @@ const OtherUserProfile = () => {
         followersCount,
         followingCount,
         isProcessingBlock,
+        checkIsOtherUserBlockedByUser,
+        checkIsUserBlockedByOtherUser,
         handleBlock,
         getUserByUsername,
         getUserAccountByUserId,
         fetchUsersData,
-        getBlockedUsersByUser,
+        // getBlockedUsersByUser,
         handleFollow,
         getFollowStatus,
         getfollwedByUserCount,
@@ -168,36 +169,37 @@ const OtherUserProfile = () => {
                     const otherUser = otherUserRes.value;
                     const user = userRes.value;
 
-                    console.log('otherUser:', otherUser);
-                    console.log('user:', user);
+                    console.log('otherUser useEffect OtherUserProfile:', otherUser, otherUser.$id);
+                    console.log('user useEffect OtherUserProfile:', user, user.$id);
 
-                    const [blckdByOtherUserRes, blckdByUserRes] = await Promise.allSettled([
-                        getBlockedUsersByUser(otherUser.$id),
-                        getBlockedUsersByUser(user.$id)
+                    const [
+                        isOtherUserBlockedByUserRes,
+                        isUserBlockedByOtherUserRes
+                    ] = await Promise.allSettled([
+                        checkIsOtherUserBlockedByUser(user.$id, otherUser.$id),
+                        checkIsUserBlockedByOtherUser(otherUser.$id, user.$id),
                     ]);
 
-                    if (blckdByOtherUserRes.status === 'fulfilled') {
-                        const blckdByOtherUser = blckdByOtherUserRes.value;
-                        console.log(`blckdLst by ${otherUser.username}:`, blckdByOtherUser);
+                    if (isOtherUserBlockedByUserRes.status === 'fulfilled') {
+                        const blckdByUser = isOtherUserBlockedByUserRes.value;
 
-                        if (blckdByOtherUser.some(blocked => blocked.blocked_id === user.$id)) {
-                            console.log('blockedId', blckdByOtherUser);
-                            setIsBlocked(true);
-                        }
-                    } else {
-                        console.error('Error fetching blocked users by otherUser:', blckdByOtherUserRes.reason);
-                    }
-
-                    if (blckdByUserRes.status === 'fulfilled') {
-                        const blckdByUser = blckdByUserRes.value;
-                        console.log(`blckdLst by ${user.username}:`, blckdByUser);
-
-                        if (blckdByUser.some(blocked => blocked.blocked_id === otherUser.$id)) {
-                            console.log('blockerId', blckdByUser);
+                        if (blckdByUser === true) {
+                            console.log('isOtherUserBlocked ', blckdByUser);
                             setIsOtherUserBlocked(true);
                         }
                     } else {
-                        console.error('Error fetching blocked users by user:', blckdByUserRes.reason);
+                        console.error('Error fetching blocked users by otherUser:', isOtherUserBlockedByUserRes.reason);
+                    }
+
+                    if (isUserBlockedByOtherUserRes.status === 'fulfilled') {
+                        const blckdByOtherUser = isUserBlockedByOtherUserRes.value;
+
+                        if (blckdByOtherUser === true) {
+                            console.log('isUserBlockedByOtherUser ', blckdByOtherUser);
+                            setIsBlocked(true);
+                        }
+                    } else {
+                        console.error('Error fetching blocked users by user:', isUserBlockedByOtherUserRes.reason);
                     }
 
                     if (otherUser) {
@@ -353,7 +355,7 @@ const OtherUserProfile = () => {
             try {
                 console.log('currUserId - allSavedNotices', currUserId);
 
-                const allSavedNotices = await getAllSavedNotices(currUserId, limitSaves, offsetSaves);
+                const allSavedNotices = await getAllSavedNotices(currUserId, user_id, limitSaves, offsetSaves);
 
                 console.log('allSavedNotices', allSavedNotices);
 
@@ -430,7 +432,7 @@ const OtherUserProfile = () => {
             }
 
             try {
-                const allLikedNotices = await getAllLikedNotices(currUserId, limitLikes, offsetLikes);
+                const allLikedNotices = await getAllLikedNotices(currUserId, user_id, limitLikes, offsetLikes);
 
                 console.log('allLikedNotices', allLikedNotices);
 
@@ -863,7 +865,13 @@ const OtherUserProfile = () => {
                                 </Tab>
                             </Tabs>
                         </>
-                        : null}
+                        :
+
+                        <div style={{ color: 'white', textAlign: 'center', marginTop: '223px' }}>
+                            You are not authorzied to view, like, and save the notices shared by {username}.
+                        </div>
+
+                    }
                 </>
             </>
         </>

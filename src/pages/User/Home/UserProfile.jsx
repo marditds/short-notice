@@ -2,21 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Profile } from '../../../components/User/Profile/Profile.jsx';
 import { Notices } from '../../../components/User/Notices';
-import { Tabs, Tab, Form, Modal, Button } from 'react-bootstrap';
+import { Tabs, Tab, Button } from 'react-bootstrap';
 import { useUserContext } from '../../../lib/context/UserContext';
 import useUserInfo from '../../../lib/hooks/useUserInfo.js';
 import { getAvatarUrl as avatarUtil } from '../../../lib/utils/avatarUtils.js';
 import useUserAvatar from '../../../lib/hooks/useUserAvatar.js';
 import useNotices from '../../../lib/hooks/useNotices.js';
-// import { screenUtils } from '../../../lib/utils/screenUtils.js';
 import { ComposeNotice } from '../../../components/User/ComposeNotice';
 import { Loading } from '../../../components/Loading/Loading.jsx';
 import '../../../components/User/Profile/UserProfile.css';
 import { EndAsterisks } from '../../../components/User/EndAsterisks.jsx';
 import { NoticesPlaceholder } from '../../../components/User/NoticesPlaceholder.jsx';
 import { ModifyModal } from '../../../components/User/Modals.jsx';
-// import { RiSave2Line } from "react-icons/ri";
-// import { BsHandThumbsUp } from 'react-icons/bs';
 
 
 const UserProfile = () => {
@@ -155,7 +152,7 @@ const UserProfile = () => {
                 console.error('Error fetching blocked users', error);
             }
         }
-        fetchBlockedUsersByUser();
+        // fetchBlockedUsersByUser();
     }, [user_id])
 
     // function for fetching notices
@@ -224,7 +221,7 @@ const UserProfile = () => {
             }
 
             try {
-                const allSavedNotices = await getAllSavedNotices(user_id, limitSaves, offsetSaves);
+                const allSavedNotices = await getAllSavedNotices(user_id, user_id, limitSaves, offsetSaves);
 
                 console.log('allSavedNotices', allSavedNotices);
 
@@ -287,6 +284,9 @@ const UserProfile = () => {
     useEffect(() => {
         const fetchLikedNotices = async () => {
 
+            console.log('Starting fetchLikedNotices in UserProfile.jsx');
+
+
             if (offsetLikes === 0) {
                 setIsLoadingLikes(true);
             } else {
@@ -294,7 +294,7 @@ const UserProfile = () => {
             }
 
             try {
-                const allLikedNotices = await getAllLikedNotices(user_id, limitLikes, offsetLikes);
+                const allLikedNotices = await getAllLikedNotices(user_id, user_id, limitLikes, offsetLikes);
 
                 console.log('allLikedNotices - UserProfile.jsx', allLikedNotices);
 
