@@ -241,6 +241,8 @@ const useNotices = (googleUserData) => {
 
                 setLatestNotice(createdNotice);
                 console.log('THIS WILL BE THE LATEST NOTICE:', createdNotice);
+                console.log('expiresAt', expiresAt);
+
 
                 return createdNotice;
 

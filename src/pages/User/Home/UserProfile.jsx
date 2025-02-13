@@ -506,16 +506,16 @@ const UserProfile = () => {
             />
 
             <ComposeNotice
-                duration={duration}
+                // duration={duration}
                 isAddingNotice={isAddingNotice}
                 noticeText={noticeText}
                 // noticeGif={noticeGif}
                 noticeType={accountType}
-                tagCategories={tagCategories}
-                setTagCategories={setTagCategories}
+                // tagCategories={tagCategories}
+                // setTagCategories={setTagCategories}
                 setNoticeText={setNoticeText}
                 // setNoticeGif={setNoticeGif}
-                setDuration={setDuration}
+                // setDuration={setDuration}
                 addNotice={addNotice}
             />
 

@@ -866,11 +866,18 @@ const OtherUserProfile = () => {
                             </Tabs>
                         </>
                         :
-
                         <div style={{ color: 'white', textAlign: 'center', marginTop: '223px' }}>
-                            You are not authorzied to view, like, and save the notices shared by {username}.
+                            {/* <i class='bi bi-sign-dead-end-fill user-profile__blocked-icon' /> */}
+                            {/* <i class='bi bi-sign-dead-end user-profile__blocked-icon' /> */}
+                            <i class='bi bi-ban user-profile__blocked-icon' />
+                            <br />
+                            <p className='mb-0 user-profile__blocked-text'>
+                                U-uh... what did you do? <span className='user-profile__blocked-text-icon'>👀</span>
+                                <br />
+                                <strong>{otherUsername}</strong> has blocked you from accessing their account.
+                            </p>
+                            {/* <br /> */}
                         </div>
-
                     }
                 </>
             </>

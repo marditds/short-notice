@@ -495,6 +495,16 @@
     box-shadow: none;
 }
 
+.user-profile__blocked-icon {
+    font-size: 85px;
+    color: var(--main-text-color);
+}
+
+.user-profile__blocked-text {
+    color: var(--main-text-color) !important;
+}
+
+.user-profile__blocked-text-icon,
 .notice__react-gif-btn>i,
 .notice__react-remove-gif-btn>i,
 .notice__remove-gif-btn>i,
@@ -966,6 +976,11 @@
         height: 5px;
     }
 
+    .user-profile__blocked-icon {
+        font-size: 60px;
+    }
+
+    .user-profile__blocked-text-icon,
     .notice__react-gif-btn>i,
     .notice__react-remove-gif-btn>i,
     .notice__remove-gif-btn>i,

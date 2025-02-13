@@ -179,7 +179,7 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                             }
 
                             {isExtraSmallScreen ?
-                                <Dropdown className='mb-2 mb-sm-0 ms-2 user-profile__interaction-dropdown'>
+                                <Dropdown className='mb-2 mb-sm-0 ms-0 user-profile__interaction-dropdown'>
                                     <Dropdown.Toggle id='dropdown-block-report'>
                                         <i className='bi bi-three-dots' />
                                     </Dropdown.Toggle>
@@ -260,7 +260,7 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                 followAccounts={followingAccounts}
                 hasMoreFollow={hasMoreFollowing}
                 isLoadingMoreFollow={isLoadingMoreFollowing}
-                loadFollowers={loadFollowing}
+                loadFollowing={loadFollowing}
                 getAvatarUrl={getAvatarUrl}
                 handleCloseFollowModal={handleCloseFollowingModal}
             />

@@ -1,11 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { screenUtils } from '../../lib/utils/screenUtils';
+import useNotices from '../../lib/hooks/useNotices';
 import { Form, Button, Image } from 'react-bootstrap';
 import { NoticeTags } from './NoticeTags';
 import { Loading } from '../Loading/Loading';
 import GifPicker from 'gif-picker-react';
 
-export const ComposeNotice = ({ noticeText, setNoticeText, duration, noticeType, setDuration, addNotice, isAddingNotice, tagCategories, setTagCategories }) => {
+export const ComposeNotice = ({ noticeText, setNoticeText,
+    // duration, 
+    noticeType,
+    // setDuration, 
+    addNotice, isAddingNotice }) => {
+
+    const { tagCategories, setTagCategories } = useNotices();
 
     const { isSmallScreen } = screenUtils();
 
@@ -15,6 +22,9 @@ export const ComposeNotice = ({ noticeText, setNoticeText, duration, noticeType,
 
     const [noticeGif, setNoticeGif] = useState(null);
     const [isGifBtnClicked, setIsGifBtnClicked] = useState(false);
+
+    const [duration, setDuration] = useState(24);
+
 
     const onTextareaChange = (e) => {
         setNoticeText(e.target.value);

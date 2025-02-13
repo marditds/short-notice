@@ -30,6 +30,7 @@
     cursor: pointer;
 }
 
+.user-feed__compose-btn,
 .user-feed__refresh-btn {
     background-color: var(--main-accent-color);
     border-color: var(--main-accent-color);
@@ -40,6 +41,8 @@
     justify-content: center;
 }
 
+.user-feed__compose-btn:hover,
+.user-feed__compose-btn:active,
 .user-feed__refresh-btn:hover,
 .user-feed__refresh-btn:active {
     background-color: var(--main-accent-color-hover) !important;
@@ -73,6 +76,13 @@
     background-color: white !important;
     border-color: var(--main-accent-color);
     background-image: url('../../../assets/square-fill.svg') !important;
+}
+
+.user-feed__compose-btn {
+    z-index: 9999;
+    bottom: 30px;
+    right: 40px;
+    position: fixed;
 }
 
 @media (max-width: 767px) {

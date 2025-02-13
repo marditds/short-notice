@@ -7,13 +7,13 @@ import { Notices } from '../../../components/User/Notices';
 import { Button } from 'react-bootstrap';
 import { Loading } from '../../../components/Loading/Loading';
 import { FeedHeader } from '../../../components/User/Feed/FeedHeader/FeedHeader';
+import { ComposeNoticeModal } from '../../../components/User/Modals';
+import { ComposeNotice } from '../../../components/User/ComposeNotice';
 import { EndAsterisks } from '../../../components/User/EndAsterisks';
 
 const UserFeed = () => {
 
-    const [selectedTags, setSelectedTags] = useState({});
-    const [isTagSelected, setIsTagSelected] = useState(false);
-    const { googleUserData } = useUserContext();
+    const { googleUserData, username } = useUserContext();
 
     const {
         user_id,
@@ -21,6 +21,7 @@ const UserFeed = () => {
         personalFeedSavedNotices,
         likedNotices,
         savedNotices,
+        isAddingNotice,
         tagCategories,
         setTagCategories,
         setLikedNotices,
@@ -37,6 +38,7 @@ const UserFeed = () => {
         getReactionsForNotice,
         getReactionByReactionId,
         reportReaction,
+        addNotice,
         getNoticesByUser,
         // removeNotice,
         // deleteExpiredNotice,
@@ -45,7 +47,12 @@ const UserFeed = () => {
         // setNoticesReactions
     } = useNotices(googleUserData);
 
-    const { fetchUsersData, getUserAccountByUserId } = useUserInfo(googleUserData);
+    const { fetchUsersData, getUserAccountByUserId, getUserByUsername } = useUserInfo(googleUserData);
+
+    const [accountType, setAccountType] = useState(null);
+
+    const [selectedTags, setSelectedTags] = useState({});
+    const [isTagSelected, setIsTagSelected] = useState(false);
 
     const [generalFeedNotices, setGeneralFeedNotices] = useState([]);
     const [personalFeedNotices, setPersonalFeedNotices] = useState([]);
@@ -69,9 +76,26 @@ const UserFeed = () => {
     const [isLoadingMorePersonalInitial, setIsLoadingMorePersonalInitial] = useState(false);
     const [loadMorePersonal, setLoadMorePersonal] = useState(false);
 
+    //Compose Notice
+    const [noticeText, setNoticeText] = useState('');
+    const [showComposeNoticeModalFunction, setShowComposeNoticeModalFunction] = useState(false);
+
 
     const notices = !isFeedToggled ? personalFeedNotices : generalFeedNotices;
     const feedType = !isFeedToggled ? 'personal' : 'general';
+
+    // Fetch account type by username
+    useEffect(() => {
+        const fetchUserByUserame = async () => {
+            try {
+                const usr = await getUserByUsername(username);
+                setAccountType(usr.accountType);
+            } catch (error) {
+                console.log('Error creating notice', error);
+            }
+        }
+        fetchUserByUserame();
+    }, [username])
 
     // Fetch User's interests  
     useEffect(() => {
@@ -305,7 +329,7 @@ const UserFeed = () => {
     }
 
     return (
-        <div style={{ marginTop: '100px' }}>
+        <div style={{ marginTop: '100px' }} className=' position-relative'>
 
             <FeedHeader
                 isTagSelected={isTagSelected}
@@ -368,6 +392,34 @@ const UserFeed = () => {
                     </div>
                 }
             </div>
+
+            {/* Compose Notice Button */}
+            <Button
+                onClick={() => setShowComposeNoticeModalFunction(true)}
+                className='user-feed__compose-btn'
+            >
+                <i class='bi bi-plus-square' />
+            </Button>
+
+            {/* Compose Notice Modal */}
+            <ComposeNoticeModal
+                showComposeNoticeModalFunction={showComposeNoticeModalFunction}
+                handleCloseComposeNoticeModalFunction={() => setShowComposeNoticeModalFunction(false)}
+            >
+                <ComposeNotice
+                    // duration={duration}
+                    isAddingNotice={isAddingNotice}
+                    noticeText={noticeText}
+                    // noticeGif={noticeGif}
+                    noticeType={accountType}
+                    // tagCategories={tagCategories}
+                    // setTagCategories={setTagCategories}
+                    setNoticeText={setNoticeText}
+                    // setNoticeGif={setNoticeGif}
+                    // setDuration={setDuration}
+                    addNotice={addNotice}
+                />
+            </ComposeNoticeModal>
         </div>
     )
 }

@@ -50,6 +50,10 @@ body {
     color: black;
 }
 
+p {
+    color: var(--main-text-color);
+}
+
 @media (max-width: 767px) {
 
     body, p, details {
