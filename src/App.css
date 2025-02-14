@@ -68,4 +68,8 @@ p {
         font-size: var(--mobile-h5-size);
     }
 
+    h6 {
+        font-size: var(--mobile-font-size)
+    }
+
 }

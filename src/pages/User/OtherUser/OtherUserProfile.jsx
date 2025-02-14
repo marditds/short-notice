@@ -691,7 +691,7 @@ const OtherUserProfile = () => {
                 />
                 <>
                     {!isBlocked ?
-                        <>
+                        <div style={{ marginTop: '187px' }}>
                             <Tabs
                                 activeKey={eventKey}
                                 defaultActiveKey='notices'
@@ -864,7 +864,7 @@ const OtherUserProfile = () => {
 
                                 </Tab>
                             </Tabs>
-                        </>
+                        </div>
                         :
                         <div style={{ color: 'white', textAlign: 'center', marginTop: '223px' }}>
                             {/* <i class='bi bi-sign-dead-end-fill user-profile__blocked-icon' /> */}

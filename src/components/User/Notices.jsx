@@ -602,7 +602,7 @@ export const Notices = ({
                                                     }
                                                 </>
                                             }
-                                            <small className='text-end mt-auto notice__create-date'>
+                                            <small className='text-end mt-auto notice__create-date text-nowrap'>
                                                 {formatDateToLocal(notice.timestamp)}
                                             </small>
                                         </div>

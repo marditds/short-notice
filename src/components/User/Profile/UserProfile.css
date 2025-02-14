@@ -104,9 +104,6 @@
     box-shadow: none !important;
 }
 
-.user-profile__form {
-    /* margin-top: 230px; */
-}
 
 .user-profile__form+ul+div {
     margin: 0px auto 42px 0px;
@@ -730,21 +727,26 @@
     padding: 0;
 }
 
-.user-profile__following--modal-header>button>svg,
-.user-profile__block--modal-header>button>svg {
+.user-profile__following--modal-header>button>i,
+.user-profile__block--modal-header>button>i {
     color: var(--main-accent-color);
     transition: var(--main-transition-speed) !important;
-
+    font-size: var(--pc-icon-size) !important;
+    height: 20px;
+    width: 20px;
+    display: flex;
+    border-radius: 5px;
 }
 
-.user-profile__following--modal-header>button:hover>svg,
-.user-profile__following--modal-header>button:active>svg,
-.user-profile__following--modal-header>button:focus>svg,
-.user-profile__block--modal-header>button:hover>svg,
-.user-profile__block--modal-header>button:active>svg,
-.user-profile__block--modal-header>button:focus>svg {
-    color: var(--main-accent-color-hover)
+.user-profile__following--modal-header>button:hover>i,
+.user-profile__following--modal-header>button:active>i,
+.user-profile__following--modal-header>button:focus>i,
+.user-profile__block--modal-header>button:hover>i,
+.user-profile__block--modal-header>button:active>i,
+.user-profile__block--modal-header>button:focus>i {
+    background-color: var(--main-accent-color-hover);
 }
+
 
 .notice__report--modal-body,
 .notice__compose--modal-body,
@@ -805,8 +807,10 @@
     border-color: var(--main-accent-color-hover) !important;
 }
 
+.user-profile__following--modal-results-expand-btn:focus,
 .user-profile__following--modal-results-expand-btn:active {
     background-color: var(--main-accent-color-hover) !important;
+    box-shadow: none !important;
 }
 
 .user-profile__following--modal-results-expand-btn:hover>.user-profile__following--modal-results-expand-btn-icon {
@@ -1089,7 +1093,12 @@
         font-size: var(--mobile-font-size) !important;
     }
 
-
+    .user-profile__following--modal-header>button>i,
+    .user-profile__block--modal-header>button>i {
+        font-size: var(--mobile-icon-size) !important;
+        height: 14px;
+        width: 14px;
+    }
 
 }
 

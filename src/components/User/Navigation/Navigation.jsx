@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { Container, Nav, Navbar, NavDropdown, Image, Button } from 'react-bootstrap';
 // import { PiDotsThreeOutlineVertical } from "react-icons/pi";
 import { UserSearch } from './UserSearch';
+import { screenUtils } from '../../../lib/utils/screenUtils';
 import snLogo from '../../../assets/sn_long.png'
 import { ComposeNoticeModal } from '../Modals';
 import { ComposeNotice } from '../ComposeNotice';
@@ -23,6 +24,8 @@ export const Navigation = ({
         isAddingNotice,
         addNotice,
     } = useNotices(googleUserData);
+
+    const { isSmallScreen } = screenUtils();
 
     //Compose Notice
     const [noticeText, setNoticeText] = useState('');
@@ -51,7 +54,7 @@ export const Navigation = ({
                                 {/* Compose Notice Button */}
                                 <Button
                                     onClick={() => setShowComposeNoticeModalFunction(true)}
-                                    className='user-feed__compose-btn ms-auto'
+                                    className='navigation__compose-btn my-auto ms-auto'
                                 >
                                     <i class='bi bi-plus-square' />
                                 </Button>
@@ -76,7 +79,8 @@ export const Navigation = ({
                     <NavDropdown
                         drop='down'
                         id="dropdown-basic-button"
-                        className={`${location.pathname === '/user/profile' ? 'ms-auto' : 'ms-2'} userhome__body--profile--tools--dropdown`}
+                        className={`my-auto ${location.pathname === '/user/profile' ? 'ms-auto' : (isSmallScreen ? 'ms-0' : 'ms-2')} userhome__body--profile--tools--dropdown`}
+                        // className={`my-auto ${location.pathname === '/user/profile' ? 'ms-auto' : 'ms-2'} userhome__body--profile--tools--dropdown`}
                         title={<i className='bi bi-three-dots-vertical navigation__three-dots'></i>}>
                         <NavDropdown.Item
                             as={Link}

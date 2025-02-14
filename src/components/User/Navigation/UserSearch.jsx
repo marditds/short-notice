@@ -130,10 +130,11 @@ export const UserSearch = ({ userId }) => {
 
     return (
         <>
-            <div className='d-flex align-items-center'>
+            <div className='mx-2 justify-content-center d-flex align-items-center'>
                 <Button
                     onClick={handleShowSearchUsersModal}
-                    className='ms-3 me-1 px-2 tools__search-btn'
+                    // className=' tools__search-btn'
+                    className='me-2 px-2 tools__search-btn'
                     disabled={searchUsername === '' ? true : false}
                 >
                     <CgSearch
@@ -168,7 +169,8 @@ export const UserSearch = ({ userId }) => {
                     <Button
                         className='ms-auto p-0 tools__search--results-modal-close-btn'
                         onClick={handleCloseSeachUsersModal}>
-                        <SlClose />
+                        <i class='bi bi-x-square' />
+                        {/* <SlClose /> */}
                     </Button>
                 </Modal.Header>
                 <Modal.Body className='tools__search--results-modal-body'>
