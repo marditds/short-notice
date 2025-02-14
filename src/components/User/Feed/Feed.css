@@ -78,12 +78,7 @@
     background-image: url('../../../assets/square-fill.svg') !important;
 }
 
-.user-feed__compose-btn {
-    z-index: 9999;
-    bottom: 30px;
-    right: 40px;
-    position: fixed;
-}
+
 
 @media (max-width: 767px) {
 

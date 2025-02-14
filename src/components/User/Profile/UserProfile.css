@@ -105,7 +105,7 @@
 }
 
 .user-profile__form {
-    margin-top: 230px;
+    /* margin-top: 230px; */
 }
 
 .user-profile__form+ul+div {
@@ -295,6 +295,7 @@
 .user-profile__report--radio>input:checked,
 .notice__report--radio>input:checked,
 .notice__report--modal-btn,
+.notice__compose--modal-btn,
 .notice__reaction--report--radio>input:checked,
 .notice__reaction--report--modal-btn,
 .user-profile__notify-btn,
@@ -316,6 +317,7 @@
 .user-profile__report--radio>input:focus,
 .notice__report--radio>input:active,
 .notice__report--modal-btn:focus,
+.notice__compose--modal-btn:focus,
 .notice__reaction--report--radio>input:active,
 .notice__reaction--report--modal-btn:focus,
 .user-profile__notify-btn:focus,
@@ -331,6 +333,7 @@
     color: black;
 }
 
+.notice__compose--modal-btn:hover,
 .notice__report--modal-btn:hover,
 .notice__reaction--report--modal-btn:hover,
 .user-profile__notify-btn:hover,
@@ -429,13 +432,13 @@
 }
 
 .user-profile__notice-tab {
-    margin-top: 198px;
+    /* margin-top: 198px; */
     max-width: 1320px !important;
     margin: 198px auto 0 auto;
 }
 
 .user-profile__notice-tab+div {
-    margin: 230px auto 42px auto;
+    margin: 0px auto 42px auto;
 }
 
 .user-profile__notice-tab>li>button {
@@ -562,6 +565,7 @@
 .user-profile__report--modal>div,
 .user-profile__following--modal>div,
 .notice__report--modal>div,
+.notice__compose--modal>div,
 .notice__reaction--report--modal>div,
 .notice__edit--modal>div,
 .notice__delete--modal>div,
@@ -574,11 +578,16 @@
     height: 100%;
 }
 
+.notice__compose--modal>div {
+    max-width: 700px !important;
+}
+
 .user-profile__report--modal>div>div,
 .notice__edit--modal>div>div,
 .notice__delete--modal>div>div,
 .notice__react--modal>div>div,
 .notice__report--modal>div>div,
+.notice__compose--modal>div>div,
 .notice__reaction--report--modal>div>div,
 .user-profile__following--modal>div>div,
 .user-profile__block--modal>div>div {
@@ -688,6 +697,7 @@
 .notice__edit--modal,
 .notice__delete--modal,
 .notice__report--modal,
+.notice__compose--modal,
 .notice__reaction--report--modal,
 .user-profile__block--modal,
 .user-profile__report--modal {
@@ -697,6 +707,7 @@
 
 .user-profile__block--modal>div>div,
 .notice__report--modal>div>div,
+.notice__compose--modal>div>div,
 .notice__edit--modal>div>div,
 .notice__delete--modal>div>div,
 .notice__reaction--report--modal>div>div,
@@ -736,6 +747,7 @@
 }
 
 .notice__report--modal-body,
+.notice__compose--modal-body,
 .notice__edit--modal-body,
 .notice__delete--modal-body,
 .notice__reaction--report--modal-body,
@@ -995,6 +1007,7 @@
     .notices__load-more-notices-btn,
     .notice__load-reactions-btn,
     .notice__report--modal-btn,
+    .notice__compose--modal-btn,
     .notice__reaction--report--modal-btn,
     .notice__edit--modal-btn,
     .notice__delete--modal-btn,
@@ -1007,10 +1020,13 @@
     }
 
     .notice__report--modal>div>div>.modal-header,
+    .notice__compose--modal>div>div>.modal-header,
     .notice__reaction--report--modal>div>div>.modal-header,
     .notice__report--modal-body,
+    .notice__compose--modal-body,
     .notice__reaction--report--modal,
     .notice__report--modal>div>div>.modal-footer,
+    .notice__compose--modal>div>div>.modal-footer,
     .notice__reaction--report--modal>div>div>.modal-footer,
     .user-profile__block--modal>div>div>.modal-header,
     .user-profile__block--modal-body,
@@ -1031,6 +1047,7 @@
 
     .notice__reaction--report--modal-footer,
     .notice__report--modal-footer,
+    .notice__compose--modal-footer,
     .notice__edit--modal-footer,
     .notice__delete--modal-footer,
     .user-profile__block--modal-footer,
@@ -1041,6 +1058,7 @@
 
     .notice__reaction--report--modal-btn,
     .notice__report--modal-btn,
+    .notice__compose--modal-btn,
     .notice__edit--modal-btn,
     .notice__delete--modal-btn,
     .user-profile__block--modal-body-btn,
@@ -1055,6 +1073,7 @@
 
     .notice__reaction--report--modal>div>div>div>div,
     .notice__report--modal>div>div>div>div,
+    .notice__compose--modal>div>div>div>div,
     .user-profile__following--modal-header>div,
     .user-profile__report--modal-header>div,
     .notice__delete--modal-header>div {

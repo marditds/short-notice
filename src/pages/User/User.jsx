@@ -5,6 +5,7 @@ import { Navigation } from '../../components/User/Navigation/Navigation';
 import { googleLogout } from '@react-oauth/google';
 import { useUserContext } from '../../lib/context/UserContext';
 import useUserInfo from '../../lib/hooks/useUserInfo';
+import useNotices from '../../lib/hooks/useNotices';
 import { Loading } from '../../components/Loading/Loading';
 import '../../components/User/Navigation/Navigation.css';
 
@@ -12,11 +13,14 @@ const User = () => {
 
     const { setGoogleUserData,
         setIsLoggedIn,
+        accountType,
         username,
         googleUserData,
         isLoading } = useUserContext();
 
     const { userId, removeSession } = useUserInfo(googleUserData);
+
+
 
     useEffect(() => {
         console.log('googleUserData:', googleUserData);
@@ -37,11 +41,13 @@ const User = () => {
     return (
         <Container className='userhome__body'>
             <Navigation
+                googleUserData={googleUserData}
                 userId={userId}
                 removeSession={removeSession}
                 googleLogout={googleLogout}
                 setGoogleUserData={setGoogleUserData}
                 setIsLoggedIn={setIsLoggedIn}
+                accountType={accountType}
             />
             <Outlet />
 

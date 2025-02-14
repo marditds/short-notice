@@ -6,7 +6,7 @@ import { UserId } from '../../components/User/UserId';
 
 const useUserInfo = (data) => {
 
-    const { setUsername } = useUserContext();
+    const { username, setUsername } = useUserContext();
     const navigate = useNavigate();
 
     const [userId, setUserId] = useState(null);
@@ -553,6 +553,7 @@ const useUserInfo = (data) => {
 
 
 
+
     return {
         userId,
         isFollowingUserLoading,
@@ -562,6 +563,7 @@ const useUserInfo = (data) => {
         followersCount,
         followingCount,
         isProcessingBlock,
+        username,
         // followersAccounts,
         // followingAccounts,
         checkIsOtherUserBlockedByUser,

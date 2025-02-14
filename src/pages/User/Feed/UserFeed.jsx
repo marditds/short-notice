@@ -393,33 +393,6 @@ const UserFeed = () => {
                 }
             </div>
 
-            {/* Compose Notice Button */}
-            <Button
-                onClick={() => setShowComposeNoticeModalFunction(true)}
-                className='user-feed__compose-btn'
-            >
-                <i class='bi bi-plus-square' />
-            </Button>
-
-            {/* Compose Notice Modal */}
-            <ComposeNoticeModal
-                showComposeNoticeModalFunction={showComposeNoticeModalFunction}
-                handleCloseComposeNoticeModalFunction={() => setShowComposeNoticeModalFunction(false)}
-            >
-                <ComposeNotice
-                    // duration={duration}
-                    isAddingNotice={isAddingNotice}
-                    noticeText={noticeText}
-                    // noticeGif={noticeGif}
-                    noticeType={accountType}
-                    // tagCategories={tagCategories}
-                    // setTagCategories={setTagCategories}
-                    setNoticeText={setNoticeText}
-                    // setNoticeGif={setNoticeGif}
-                    // setDuration={setDuration}
-                    addNotice={addNotice}
-                />
-            </ComposeNoticeModal>
         </div>
     )
 }

@@ -1,12 +1,32 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { Container, Nav, Navbar, NavDropdown, Image } from 'react-bootstrap';
-import { PiDotsThreeOutlineVertical } from "react-icons/pi";
+import React, { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { Container, Nav, Navbar, NavDropdown, Image, Button } from 'react-bootstrap';
+// import { PiDotsThreeOutlineVertical } from "react-icons/pi";
 import { UserSearch } from './UserSearch';
 import snLogo from '../../../assets/sn_long.png'
+import { ComposeNoticeModal } from '../Modals';
+import { ComposeNotice } from '../ComposeNotice';
+import useNotices from '../../../lib/hooks/useNotices';
 
-export const Navigation = ({ googleLogout, removeSession, setIsLoggedIn, setGoogleUserData, userId }) => {
+export const Navigation = ({
+    googleUserData,
+    userId,
+    removeSession,
+    googleLogout,
+    setGoogleUserData,
+    setIsLoggedIn,
+    accountType }) => {
 
+    const location = useLocation();
+
+    const {
+        isAddingNotice,
+        addNotice,
+    } = useNotices(googleUserData);
+
+    //Compose Notice
+    const [noticeText, setNoticeText] = useState('');
+    const [showComposeNoticeModalFunction, setShowComposeNoticeModalFunction] = useState(false);
 
     return (
         <>
@@ -24,10 +44,39 @@ export const Navigation = ({ googleLogout, removeSession, setIsLoggedIn, setGoog
 
                     <UserSearch userId={userId} />
 
+
+                    {
+                        location.pathname === '/user/profile' ? null :
+                            <>
+                                {/* Compose Notice Button */}
+                                <Button
+                                    onClick={() => setShowComposeNoticeModalFunction(true)}
+                                    className='user-feed__compose-btn ms-auto'
+                                >
+                                    <i class='bi bi-plus-square' />
+                                </Button>
+
+                                {/* Compose Notice Modal */}
+                                <ComposeNoticeModal
+                                    showComposeNoticeModalFunction={showComposeNoticeModalFunction}
+                                    handleCloseComposeNoticeModalFunction={() => setShowComposeNoticeModalFunction(false)}
+                                >
+                                    <ComposeNotice
+                                        isAddingNotice={isAddingNotice}
+                                        noticeText={noticeText}
+                                        noticeType={accountType}
+                                        setNoticeText={setNoticeText}
+                                        addNotice={addNotice}
+                                    />
+                                </ComposeNoticeModal>
+                            </>
+                    }
+
+
                     <NavDropdown
                         drop='down'
                         id="dropdown-basic-button"
-                        className='ms-auto userhome__body--profile--tools--dropdown'
+                        className={`${location.pathname === '/user/profile' ? 'ms-auto' : 'ms-2'} userhome__body--profile--tools--dropdown`}
                         title={<i className='bi bi-three-dots-vertical navigation__three-dots'></i>}>
                         <NavDropdown.Item
                             as={Link}

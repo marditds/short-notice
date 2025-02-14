@@ -262,12 +262,12 @@ export const ComposeNoticeModal = ({
     return (
         <Modal show={showComposeNoticeModalFunction}
             onHide={handleCloseComposeNoticeModalFunction}
-            className='notice__report--modal p-0'
+            className='notice__compose--modal p-0'
         >
             <Modal.Header className='border-bottom-0' closeButton>
                 <Modal.Title>Compose Notice</Modal.Title>
             </Modal.Header>
-            <Modal.Body className='notice__report--modal-body py-0'>
+            <Modal.Body className='notice__compose--modal-body py-0'>
                 {children}
             </Modal.Body>
             {/* <Modal.Footer className='border-top-0 notice__report--modal-footer'>

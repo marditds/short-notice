@@ -505,19 +505,21 @@ const UserProfile = () => {
                 isLoadingMoreFollowers={isLoadingMoreFollowers}
             />
 
-            <ComposeNotice
-                // duration={duration}
-                isAddingNotice={isAddingNotice}
-                noticeText={noticeText}
-                // noticeGif={noticeGif}
-                noticeType={accountType}
-                // tagCategories={tagCategories}
-                // setTagCategories={setTagCategories}
-                setNoticeText={setNoticeText}
-                // setNoticeGif={setNoticeGif}
-                // setDuration={setDuration}
-                addNotice={addNotice}
-            />
+            <div style={{ marginTop: '190px' }}>
+                <ComposeNotice
+                    // duration={duration}
+                    isAddingNotice={isAddingNotice}
+                    noticeText={noticeText}
+                    // noticeGif={noticeGif}
+                    noticeType={accountType}
+                    // tagCategories={tagCategories}
+                    // setTagCategories={setTagCategories}
+                    setNoticeText={setNoticeText}
+                    // setNoticeGif={setNoticeGif}
+                    // setDuration={setDuration}
+                    addNotice={addNotice}
+                />
+            </div>
 
             <Tabs
                 defaultActiveKey="my-notices"

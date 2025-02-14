@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { screenUtils } from '../../lib/utils/screenUtils';
 import useNotices from '../../lib/hooks/useNotices';
 import { Form, Button, Image } from 'react-bootstrap';
@@ -12,9 +13,11 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
     // setDuration, 
     addNotice, isAddingNotice }) => {
 
+    const location = useLocation();
+
     const { tagCategories, setTagCategories } = useNotices();
 
-    const { isSmallScreen } = screenUtils();
+    const { isSmallScreen, isMediumScreen } = screenUtils();
 
     const [selectedTags, setSelectedTags] = useState({});
     const [charCount, setCharCount] = useState(0);
@@ -85,7 +88,7 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
     const isAnyTagSelected = Object.values(selectedTags).some(Boolean);
 
     return (
-        <Form className='mb-3 user-profile__form'>
+        <Form className='user-profile__form'>
             <Form.Group
                 className="mb-3 user-profile__form-group"
                 controlId="noticeTextarea">
@@ -116,6 +119,11 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
                         </div>
                     </div>
                 }
+                <div
+                    className={`user-profile__notice-char-counter ${charCount > charLimit && 'extra'}`}
+                >
+                    {`${charCount}/${charLimit} characters`}
+                </div>
                 {/* <br /> */}
                 <div className='my-2'>
                     <Button className='notice__gif-btn py-1 px-2'
@@ -134,15 +142,9 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
                         categoryHeight={70}
                         tenorApiKey={import.meta.env.VITE_TENOR_API_KEY}
                         onGifClick={(item) => setNoticeGif(item.url)}
-                        width={!isSmallScreen ? '50vw' : '80vw'}
+                        width={!isSmallScreen ? (!isMediumScreen && location.pathname === '/user/profile' ? '50%' : '80%') : '100%'}
                     />
                 }
-
-                <div
-                    className={`user-profile__notice-char-counter ${charCount > charLimit && 'extra'}`}
-                >
-                    {`${charCount}/${charLimit} characters`}
-                </div>
             </Form.Group>
 
             <h6
@@ -156,10 +158,10 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
                 selectedTags={selectedTags}
             />
 
-            <br />
+            {/* <br /> */}
 
             <div
-                className='d-flex align-items-center user-profile__timer-settings'>
+                className='my-4 d-flex align-items-center user-profile__timer-settings'>
                 <h6
                     className='mb-0 user-profile__timer-label'>
                     Set Notice Timer
