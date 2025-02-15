@@ -37,7 +37,7 @@ const User = () => {
     }
 
     return (
-        <Container fluid className='w-100'>
+        <Container fluid className='w-100 p-0 px-lg-1'>
             <Navigation
                 googleUserData={googleUserData}
                 userId={userId}
@@ -49,27 +49,12 @@ const User = () => {
             />
 
             {/* <div className={` position-relative ${(location.pathname === '/user/feed' && isExtraLargeScreen) ? 'd-block' : 'd-none'}`} style={{ marginTop: '88px' }}>
-                <div className='position-fixed w-25'>
-                    {
-                        !isInterestsLoading
-                            ?
-                            <InterestsTags
-                                tagCategories={tagCategories}
-                                selectedTags={selectedTags}
-                                isInterestsUpdating={isInterestsUpdating}
-                                toggleInterestsTag={toggleInterestsTag}
-                                updateInterests={updateInterests}
-                            />
-                            :
-                            <Loading />
-                    }
-
-                </div>
+               
             </div> */}
 
             <Container
                 className='userhome__body'
-                style={{ maxWidth: location.pathname === '/user/feed' ? '100%' : '1320px' }}
+                style={{ maxWidth: location.pathname !== '/user/feed' ? '1320px' : '100%' }}
             // className={`${location.pathname === '/user/feed' && 'ms-xxl-0 me-xxl-0 w-100'} `}
             >
                 {/* <Container className='userhome__body'

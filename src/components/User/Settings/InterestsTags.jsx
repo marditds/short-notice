@@ -1,8 +1,11 @@
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 import { Col, Button } from 'react-bootstrap';
 import { Loading } from '../../Loading/Loading';
 
-export const InterestsTags = ({ tagCategories, toggleInterestsTag, selectedTags, updateInterests, isInterestsUpdating }) => {
+export const InterestsTags = ({ tagCategories, toggleInterestsTag, selectedTags, updateInterests, handleRefresh, isInterestsUpdating }) => {
+
+    const location = useLocation();
 
     const allTags = tagCategories.flatMap(category => category.tags);
 
@@ -27,7 +30,15 @@ export const InterestsTags = ({ tagCategories, toggleInterestsTag, selectedTags,
                     ))}
                 </div>
                 <Button
-                    onClick={updateInterests}
+                    onClick={() => {
+                        if (location.pathname !== '/user/feed') {
+                            updateInterests();
+                        } else {
+                            updateInterests();
+                            handleRefresh();
+                        }
+                    }
+                    }
                     className='settings__update-interests-btn'
                 >
                     {isInterestsUpdating ? <Loading /> : 'Update Interests'}

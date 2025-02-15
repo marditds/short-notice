@@ -48,7 +48,7 @@ const UserFeed = () => {
 
     const { fetchUsersData, getUserAccountByUserId } = useUserInfo(googleUserData);
 
-    const { isExtraLargeScreen } = screenUtils();
+    const { isLargeScreen, isExtraLargeScreen } = screenUtils();
 
 
     // const [selectedTags, setSelectedTags] = useState({});
@@ -312,7 +312,7 @@ const UserFeed = () => {
         // (personalFeedNotices.length === 0 || generalFeedNotices.length === 0)
     ) {
         return <div className='pt-5 h-100 user-feed__loading-div'>
-            <div className='mt-5'>
+            <div>
                 <Loading /><span className='ms-2'>{`Loading your feed...`}</span>
             </div>
         </div>;
@@ -329,7 +329,7 @@ const UserFeed = () => {
 
             {/* Feed tag selection */}
             <div className='w-100 d-flex'>
-                <div className={`position-relative  ${isExtraLargeScreen ? ' d-block' : 'd-none'}`}>
+                <div className='position-relative d-xl-block d-none'>
                     <Row className='flex-column position-fixed w-25'>
                         {
                             !isInterestsLoading
@@ -340,18 +340,21 @@ const UserFeed = () => {
                                     isInterestsUpdating={isInterestsUpdating}
                                     toggleInterestsTag={toggleInterestsTag}
                                     updateInterests={updateInterests}
+                                    handleRefresh={handleRefresh}
                                 />
                                 :
                                 <Loading />
                         }
                         <Col>
-                            <i class='bi bi-exclamation-square' /> Ineterest tags are applicable to your general feed only.
+                            <p className='mb-0' style={{ marginLeft: '10px' }}>
+                                <i class='bi bi-info-square' /> Ineterest tags are applicable to your general feed only.
+                            </p>
                         </Col>
                     </Row>
                 </div>
 
                 {/* Feed Notices */}
-                <div className={`${isExtraLargeScreen ? 'w-75' : 'w-100'} ms-auto`}>
+                <div className={`${!isLargeScreen ? 'w-75' : 'w-100'} ms-auto`}>
                     {
                         notices.length !== 0 ?
                             <Notices
