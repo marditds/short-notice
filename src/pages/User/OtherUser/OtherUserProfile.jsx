@@ -867,9 +867,9 @@ const OtherUserProfile = () => {
                         </div>
                         :
                         <div style={{ color: 'white', textAlign: 'center', marginTop: '223px' }}>
-                            {/* <i class='bi bi-sign-dead-end-fill user-profile__blocked-icon' /> */}
-                            {/* <i class='bi bi-sign-dead-end user-profile__blocked-icon' /> */}
-                            <i class='bi bi-ban user-profile__blocked-icon' />
+                            {/* <i className='bi bi-sign-dead-end-fill user-profile__blocked-icon' /> */}
+                            {/* <i className='bi bi-sign-dead-end user-profile__blocked-icon' /> */}
+                            <i className='bi bi-ban user-profile__blocked-icon' />
                             <br />
                             <p className='mb-0 user-profile__blocked-text'>
                                 U-uh... what did you do? <span className='user-profile__blocked-text-icon'>👀</span>

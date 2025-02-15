@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from 'react';
+import { Row, Col } from 'react-bootstrap';
 import { useUserContext } from '../../../lib/context/UserContext';
 import useNotices from '../../../lib/hooks/useNotices';
 import useUserInfo from '../../../lib/hooks/useUserInfo';
 import { getAvatarUrl as avatarUtil } from '../../../lib/utils/avatarUtils';
+import { screenUtils } from '../../../lib/utils/screenUtils';
 import { Notices } from '../../../components/User/Notices';
 import { Button } from 'react-bootstrap';
 import { Loading } from '../../../components/Loading/Loading';
 import { FeedHeader } from '../../../components/User/Feed/FeedHeader/FeedHeader';
-import { ComposeNoticeModal } from '../../../components/User/Modals';
-import { ComposeNotice } from '../../../components/User/ComposeNotice';
 import { EndAsterisks } from '../../../components/User/EndAsterisks';
+import { InterestsTags } from '../../../components/User/Settings/InterestsTags';
 
 const UserFeed = () => {
 
-    const { googleUserData, username } = useUserContext();
+    const { googleUserData } = useUserContext();
 
     const {
         user_id,
@@ -21,10 +22,15 @@ const UserFeed = () => {
         personalFeedSavedNotices,
         likedNotices,
         savedNotices,
-        isAddingNotice,
+        isInterestsLoading,
         tagCategories,
-        setTagCategories,
+        isInterestsUpdating,
+        selectedTags,
+        setSelectedTags,
+        toggleInterestsTag,
+        updateInterests,
         setLikedNotices,
+        fetchUserInterests,
         setPersonalFeedLikedNotices,
         setPersonalFeedSavedNotices,
         setSavedNotices,
@@ -37,21 +43,15 @@ const UserFeed = () => {
         handleReact,
         getReactionsForNotice,
         getReactionByReactionId,
-        reportReaction,
-        addNotice,
-        getNoticesByUser,
-        // removeNotice,
-        // deleteExpiredNotice,
-        // noticesReactions, 
-        // fetchReactionsForNotices,
-        // setNoticesReactions
+        reportReaction
     } = useNotices(googleUserData);
 
-    const { fetchUsersData, getUserAccountByUserId, getUserByUsername } = useUserInfo(googleUserData);
+    const { fetchUsersData, getUserAccountByUserId } = useUserInfo(googleUserData);
 
-    const [accountType, setAccountType] = useState(null);
+    const { isExtraLargeScreen } = screenUtils();
 
-    const [selectedTags, setSelectedTags] = useState({});
+
+    // const [selectedTags, setSelectedTags] = useState({});
     const [isTagSelected, setIsTagSelected] = useState(false);
 
     const [generalFeedNotices, setGeneralFeedNotices] = useState([]);
@@ -76,26 +76,10 @@ const UserFeed = () => {
     const [isLoadingMorePersonalInitial, setIsLoadingMorePersonalInitial] = useState(false);
     const [loadMorePersonal, setLoadMorePersonal] = useState(false);
 
-    //Compose Notice
-    const [noticeText, setNoticeText] = useState('');
-    const [showComposeNoticeModalFunction, setShowComposeNoticeModalFunction] = useState(false);
-
-
     const notices = !isFeedToggled ? personalFeedNotices : generalFeedNotices;
     const feedType = !isFeedToggled ? 'personal' : 'general';
 
-    // Fetch account type by username
-    useEffect(() => {
-        const fetchUserByUserame = async () => {
-            try {
-                const usr = await getUserByUsername(username);
-                setAccountType(usr.accountType);
-            } catch (error) {
-                console.log('Error creating notice', error);
-            }
-        }
-        fetchUserByUserame();
-    }, [username])
+
 
     // Fetch User's interests  
     useEffect(() => {
@@ -115,6 +99,12 @@ const UserFeed = () => {
 
         fetchUserInterests();
     }, [user_id, tagCategories]);
+
+    // Fetch user interests tags
+    useEffect(() => {
+        fetchUserInterests();
+    }, [user_id, tagCategories]);
+
 
     // Fetch selected tags
     useEffect(() => {
@@ -322,77 +312,103 @@ const UserFeed = () => {
         // (personalFeedNotices.length === 0 || generalFeedNotices.length === 0)
     ) {
         return <div className='pt-5 h-100 user-feed__loading-div'>
-            <div>
+            <div className='mt-5'>
                 <Loading /><span className='ms-2'>{`Loading your feed...`}</span>
             </div>
         </div>;
     }
 
     return (
-        <div style={{ marginTop: '100px' }} className=' position-relative'>
-
+        <div style={{ marginTop: '100px' }} className='position-relative w-100'>
             <FeedHeader
                 isTagSelected={isTagSelected}
                 isFeedToggled={isFeedToggled}
                 handleFeedToggle={handleFeedToggle}
                 handleRefresh={handleRefresh}
             />
-            {
-                notices.length !== 0 ?
-                    <Notices
-                        notices={notices}
-                        user_id={user_id}
-                        likedNotices={!isFeedToggled ? personalFeedLikedNotices : likedNotices}
-                        savedNotices={!isFeedToggled ? personalFeedSavedNotices : savedNotices}
-                        handleLike={handleLike}
-                        setLikedNotices={!isFeedToggled ? setPersonalFeedLikedNotices : setLikedNotices}
-                        handleSave={handleSave}
-                        setSavedNotices={!isFeedToggled ? setPersonalFeedSavedNotices : setSavedNotices}
-                        handleReportNotice={handleReportNotice}
-                        handleReact={handleReact}
-                        getReactionsForNotice={getReactionsForNotice}
-                        getUserAccountByUserId={getUserAccountByUserId}
-                        getReactionByReactionId={getReactionByReactionId}
-                        reportReaction={reportReaction}
-                    />
-                    :
-                    <div className='h-100 user-feed__loading-div my-5'>
-                        <div className='my-5'>
-                            <Loading />
-                            <span className='ms-2'>
-                                Loading {feedType} feed...
-                            </span>
-                        </div>
-                    </div>
-            }
 
-            {/* Load More Button */}
-            <div className="d-flex justify-content-center">
-                {(!isFeedToggled && hasMorePersonalNotices) || (isFeedToggled && hasMoreGeneralNotices) ?
-                    <Button
-                        onClick={() => {
-                            if (!isFeedToggled) {
-                                setLoadMorePersonal(true);
-                            } else {
-                                setLoadMore(true);
-                            }
-                        }}
-                        // disabled={(isFeedToggled && (isLoadingMore || !hasMoreGeneralNotices)) ||
-                        //     (!isFeedToggled && (isLoadingMorePersonal || !hasMorePersonalNotices)) || isLoadingPersonalFeedNotices}
-                        disabled={(isLoadingPersonalFeedNotices || isLoadingMore || isLoadingMorePersonal) ? true : false}
-                        className={` my-4 notices__load-more-notices-btn ${(isLoadingMoreInitial || isLoadingMorePersonalInitial) ? 'd-none' : 'd-block'}`}
-                    >
-                        {isLoadingMore || isLoadingMorePersonal ?
-                            <><Loading size={16} /> Loading...</>
-                            : 'Load More'}
-                    </Button>
-                    :
-                    <div className='my-4'>
-                        <EndAsterisks />
+            {/* Feed tag selection */}
+            <div className='w-100 d-flex'>
+                <div className={`position-relative  ${isExtraLargeScreen ? ' d-block' : 'd-none'}`}>
+                    <Row className='flex-column position-fixed w-25'>
+                        {
+                            !isInterestsLoading
+                                ?
+                                <InterestsTags
+                                    tagCategories={tagCategories}
+                                    selectedTags={selectedTags}
+                                    isInterestsUpdating={isInterestsUpdating}
+                                    toggleInterestsTag={toggleInterestsTag}
+                                    updateInterests={updateInterests}
+                                />
+                                :
+                                <Loading />
+                        }
+                        <Col>
+                            <i class='bi bi-exclamation-square' /> Ineterest tags are applicable to your general feed only.
+                        </Col>
+                    </Row>
+                </div>
+
+                {/* Feed Notices */}
+                <div className={`${isExtraLargeScreen ? 'w-75' : 'w-100'} ms-auto`}>
+                    {
+                        notices.length !== 0 ?
+                            <Notices
+                                notices={notices}
+                                user_id={user_id}
+                                likedNotices={!isFeedToggled ? personalFeedLikedNotices : likedNotices}
+                                savedNotices={!isFeedToggled ? personalFeedSavedNotices : savedNotices}
+                                handleLike={handleLike}
+                                setLikedNotices={!isFeedToggled ? setPersonalFeedLikedNotices : setLikedNotices}
+                                handleSave={handleSave}
+                                setSavedNotices={!isFeedToggled ? setPersonalFeedSavedNotices : setSavedNotices}
+                                handleReportNotice={handleReportNotice}
+                                handleReact={handleReact}
+                                getReactionsForNotice={getReactionsForNotice}
+                                getUserAccountByUserId={getUserAccountByUserId}
+                                getReactionByReactionId={getReactionByReactionId}
+                                reportReaction={reportReaction}
+                            />
+                            :
+                            <div className='h-100 user-feed__loading-div my-5'>
+                                <div className='my-5'>
+                                    <Loading />
+                                    <span className='ms-2'>
+                                        Loading {feedType} feed...
+                                    </span>
+                                </div>
+                            </div>
+                    }
+
+                    {/* Load More Button */}
+                    <div className="d-flex justify-content-center">
+                        {(!isFeedToggled && hasMorePersonalNotices) || (isFeedToggled && hasMoreGeneralNotices) ?
+                            <Button
+                                onClick={() => {
+                                    if (!isFeedToggled) {
+                                        setLoadMorePersonal(true);
+                                    } else {
+                                        setLoadMore(true);
+                                    }
+                                }}
+                                // disabled={(isFeedToggled && (isLoadingMore || !hasMoreGeneralNotices)) ||
+                                //     (!isFeedToggled && (isLoadingMorePersonal || !hasMorePersonalNotices)) || isLoadingPersonalFeedNotices}
+                                disabled={(isLoadingPersonalFeedNotices || isLoadingMore || isLoadingMorePersonal) ? true : false}
+                                className={` my-4 notices__load-more-notices-btn ${(isLoadingMoreInitial || isLoadingMorePersonalInitial) ? 'd-none' : 'd-block'}`}
+                            >
+                                {isLoadingMore || isLoadingMorePersonal ?
+                                    <><Loading size={16} /> Loading...</>
+                                    : 'Load More'}
+                            </Button>
+                            :
+                            <div className='my-4'>
+                                <EndAsterisks />
+                            </div>
+                        }
                     </div>
-                }
+                </div>
             </div>
-
         </div>
     )
 }

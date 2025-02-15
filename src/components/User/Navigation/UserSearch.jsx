@@ -169,7 +169,7 @@ export const UserSearch = ({ userId }) => {
                     <Button
                         className='ms-auto p-0 tools__search--results-modal-close-btn'
                         onClick={handleCloseSeachUsersModal}>
-                        <i class='bi bi-x-square' />
+                        <i className='bi bi-x-square' />
                         {/* <SlClose /> */}
                     </Button>
                 </Modal.Header>

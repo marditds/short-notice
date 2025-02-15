@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 
 export const screenUtils = () => {
 
-    const [isExtraLargeScreen, setIsExtraLargeScreen] = useState(window.innerWidth < 1400);
+    const [isExtraLargeScreen, setIsExtraLargeScreen] = useState(window.innerWidth > 1400);
 
     const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth < 1200);
 
@@ -59,7 +59,7 @@ export const screenUtils = () => {
     // Extra Large
     useEffect(() => {
         const handleResize = () => {
-            setIsExtraLargeScreen(window.innerWidth < 1400);
+            setIsExtraLargeScreen(window.innerWidth > 1400);
         };
 
         window.addEventListener('resize', handleResize);

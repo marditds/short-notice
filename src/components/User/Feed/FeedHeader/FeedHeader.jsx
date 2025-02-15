@@ -8,15 +8,15 @@ import '../Feed.css'
 
 export const FeedHeader = ({ isTagSelected, isFeedToggled, handleFeedToggle, handleRefresh }) => {
     return (
-        <Row className='fixed-top ms-auto me-auto user-feed__header'>
-            <Col
+        <Row className='fixed-top w-100 ms-auto me-auto user-feed__header'>
+            {/* <Col
                 className={!isTagSelected ? 'd-block' : 'd-none'}
             >
                 <GeneralFeedGuide
                     isTagSelected={isTagSelected}
                 />
-            </Col>
-            <Col>
+            </Col> */}
+            <Col className='w-100'>
                 <FeedToggle
                     isFeedToggled={isFeedToggled}
                     handleFeedToggle={handleFeedToggle}

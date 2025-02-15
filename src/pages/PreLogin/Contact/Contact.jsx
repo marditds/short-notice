@@ -54,12 +54,12 @@ const Contact = () => {
                         <div className="col">
                             <input type="text" name="name" className="form-control" placeholder="Full Name" required />
                         </div>
-                        <div class="col">
+                        <div className="col">
                             <input type="email" name="email" className="form-control" placeholder="Email Address" required />
                         </div>
                     </div>
                 </div>
-                <div class="form-group">
+                <div className="form-group">
                     <textarea placeholder="Your Message" className="form-control" name="message" rows="10" required></textarea>
                 </div>
 

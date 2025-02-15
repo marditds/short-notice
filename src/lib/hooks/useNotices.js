@@ -31,6 +31,10 @@ const useNotices = (googleUserData) => {
     const [removingNoticeId, setRemovingNoticeId] = useState(null);
     const [isSavingEdit, setIsSavingEdit] = useState(false);
 
+    const [selectedTags, setSelectedTags] = useState({});
+    const [isInterestsLoading, setIsInterestsLoading] = useState(false);
+
+    const [isInterestsUpdating, setIsInterestsUpdating] = useState(false);
     const [tagCategories, setTagCategories] = useState([
         {
             group: 'STEM',
@@ -492,16 +496,6 @@ const useNotices = (googleUserData) => {
         }
     }
 
-    const updateInterests = async (user_id, selectedTags) => {
-        try {
-            const interests = await updateUserInterests(user_id, selectedTags);
-            return interests;
-        } catch (error) {
-            console.error('Error updating user interests:', error);
-
-        }
-    }
-
     const getInterests = async (user_id) => {
         try {
             const interests = await getUserInterests(user_id);
@@ -510,6 +504,61 @@ const useNotices = (googleUserData) => {
             console.error('Error gettin user interests:', error);
         }
     }
+
+    const updateInterests = async () => {
+        setIsInterestsUpdating(true);
+        if (user_id) {
+            try {
+                const interests = await updateUserInterests(user_id, selectedTags);
+                console.log('Interests updated:', interests);
+                return interests;
+            } catch (error) {
+                console.error('Error updating user interests:', error);
+            } finally {
+                setIsInterestsUpdating(false);
+            }
+        } else {
+            console.error('User ID not found');
+        }
+    }
+
+    const fetchUserInterests = async () => {
+        setIsInterestsLoading(true);
+        if (user_id) {
+            try {
+                const userInterests = await getInterests(user_id);
+                if (userInterests) {
+                    const newSelectedTags = {};
+                    tagCategories.forEach(category => {
+                        category.tags.forEach(tag => {
+                            newSelectedTags[tag.key] = userInterests[tag.key] || false;
+                        });
+                    });
+                    setSelectedTags(newSelectedTags);
+                }
+            } catch (error) {
+                console.error('Error fetching user interests:', error);
+                if (error.code === 404) {
+                    const newSelectedTags = {};
+                    tagCategories.forEach(category => {
+                        category.tags.forEach(tag => {
+                            newSelectedTags[tag.key] = false;
+                        });
+                    });
+                    setSelectedTags(newSelectedTags);
+                }
+            } finally {
+                setIsInterestsLoading(false);
+            }
+        }
+    };
+
+    const toggleInterestsTag = (tagKey) => {
+        setSelectedTags(prevSelectedTags => ({
+            ...prevSelectedTags,
+            [tagKey]: !prevSelectedTags[tagKey]
+        }));
+    };
 
     const handleSave = async (notice_id, author_id, savedNoticesArr, setSaveFunc) => {
         try {
@@ -768,7 +817,13 @@ const useNotices = (googleUserData) => {
         saveReactions,
         likedReactions,
         tagCategories,
+        isInterestsLoading,
+        isInterestsUpdating,
+        selectedTags,
         setTagCategories,
+        fetchUserInterests,
+        toggleInterestsTag,
+        setSelectedTags,
         setFellowUserId,
         addNotice,
         editNotice,

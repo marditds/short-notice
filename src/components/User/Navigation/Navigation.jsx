@@ -56,7 +56,7 @@ export const Navigation = ({
                                     onClick={() => setShowComposeNoticeModalFunction(true)}
                                     className='navigation__compose-btn my-auto ms-auto'
                                 >
-                                    <i class='bi bi-plus-square' />
+                                    <i className='bi bi-plus-square' />
                                 </Button>
 
                                 {/* Compose Notice Modal */}

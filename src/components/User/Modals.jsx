@@ -155,7 +155,7 @@ export const BlockModal = ({
                 <Button
                     onClick={handleCloseBlockModalFunction}
                 >
-                    <i class='bi bi-x-square' />
+                    <i className='bi bi-x-square' />
                 </Button>
             </Modal.Header>
             <Modal.Body
@@ -196,7 +196,7 @@ export const FollowModal = ({
                     onClick={handleCloseFollowModal}
                     className='ms-auto'
                 >
-                    <i class='bi bi-x-square' />
+                    <i className='bi bi-x-square' />
                 </Button>
             </Modal.Header>
             <Modal.Body
@@ -269,7 +269,7 @@ export const ComposeNoticeModal = ({
                     Compose Notice
                 </Modal.Title>
                 <Button onClick={handleCloseComposeNoticeModalFunction} className='ms-auto me-0 p-0 notice__compose--close-btn'>
-                    <i class='bi bi-x-square' />
+                    <i className='bi bi-x-square' />
                 </Button>
             </Modal.Header>
             <Modal.Body className='notice__compose--modal-body py-0'>

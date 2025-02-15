@@ -1,11 +1,10 @@
 import React, { useEffect } from 'react';
-import { Outlet, Navigate } from 'react-router-dom';
+import { Outlet, Navigate, useLocation } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
 import { Navigation } from '../../components/User/Navigation/Navigation';
 import { googleLogout } from '@react-oauth/google';
 import { useUserContext } from '../../lib/context/UserContext';
 import useUserInfo from '../../lib/hooks/useUserInfo';
-import useNotices from '../../lib/hooks/useNotices';
 import { Loading } from '../../components/Loading/Loading';
 import '../../components/User/Navigation/Navigation.css';
 
@@ -18,8 +17,9 @@ const User = () => {
         googleUserData,
         isLoading } = useUserContext();
 
-    const { userId, removeSession } = useUserInfo(googleUserData);
+    const location = useLocation();
 
+    const { userId, removeSession } = useUserInfo(googleUserData);
 
 
     useEffect(() => {
@@ -27,19 +27,17 @@ const User = () => {
     }, [googleUserData])
 
 
+
     if (isLoading) {
-        // console.log('Rendering loading state');
         return <Loading />;
     }
 
     if (!isLoading && (!username || !googleUserData)) {
-        // console.log('Redirecting to home due to missing data');
         return <Navigate to="/" />;
     }
 
-    // console.log('Rendering User component');
     return (
-        <Container className='userhome__body'>
+        <Container fluid className='w-100'>
             <Navigation
                 googleUserData={googleUserData}
                 userId={userId}
@@ -49,8 +47,39 @@ const User = () => {
                 setIsLoggedIn={setIsLoggedIn}
                 accountType={accountType}
             />
-            <Outlet />
 
+            {/* <div className={` position-relative ${(location.pathname === '/user/feed' && isExtraLargeScreen) ? 'd-block' : 'd-none'}`} style={{ marginTop: '88px' }}>
+                <div className='position-fixed w-25'>
+                    {
+                        !isInterestsLoading
+                            ?
+                            <InterestsTags
+                                tagCategories={tagCategories}
+                                selectedTags={selectedTags}
+                                isInterestsUpdating={isInterestsUpdating}
+                                toggleInterestsTag={toggleInterestsTag}
+                                updateInterests={updateInterests}
+                            />
+                            :
+                            <Loading />
+                    }
+
+                </div>
+            </div> */}
+
+            <Container
+                className='userhome__body'
+                style={{ maxWidth: location.pathname === '/user/feed' ? '100%' : '1320px' }}
+            // className={`${location.pathname === '/user/feed' && 'ms-xxl-0 me-xxl-0 w-100'} `}
+            >
+                {/* <Container className='userhome__body'
+              ${location.pathname === '/user/feed' ? (isExtraLargeScreen ? 'w-75' : 'w-100') : 'w-100'} userhome__body`}
+              > */}
+
+
+                <Outlet />
+
+            </Container>
         </Container>
     );
 }

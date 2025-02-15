@@ -3,7 +3,7 @@ import { Form, Row, Col, Button } from 'react-bootstrap';
 
 export const FeedToggle = ({ isFeedToggled, handleFeedToggle, handleRefresh }) => {
     return (
-        <Form className='d-flex justify-content-center align-items-center'
+        <Form className='d-flex justify-content-center align-items-center w-100'
         >
             <Form.Group as={Row} className='align-items-center'>
                 <Col xs='auto' className='d-flex align-items-center'>
