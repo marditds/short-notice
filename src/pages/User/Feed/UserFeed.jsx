@@ -53,8 +53,11 @@ const UserFeed = () => {
 
     // const [selectedTags, setSelectedTags] = useState({});
     const [isTagSelected, setIsTagSelected] = useState(false);
+    const [isAnyTagSelected, setIsAnyTagSelected] = useState(false);
 
     const [generalFeedNotices, setGeneralFeedNotices] = useState([]);
+    const [isLoadingGeneralFeedNotices, setIsLoadingGeneralFeedNotices] = useState(false);
+
     const [personalFeedNotices, setPersonalFeedNotices] = useState([]);
     const [isLoadingPersonalFeedNotices, setIsLoadingPersonalFeedNotices] = useState(false);
 
@@ -137,29 +140,45 @@ const UserFeed = () => {
     // Fetch feed (general)-(initial)
     useEffect(() => {
         const fetchInitialGeneralFeed = async () => {
+
             try {
+                setIsLoadingGeneralFeedNotices(true)
                 setIsLoadingMoreInitial(true);
                 setIsLoadingMore(true);
 
                 console.log('Limit:', limit);
                 console.log('Last ID:', lastId);
 
-                const notices = await getFeedNotices(selectedTags, limit, null);
+                const abc = Object.values(selectedTags).some(tagKey => tagKey === true);
 
-                console.log('Fetched notices:', notices);
+                console.log('RRRRRRRRRRRRRR:', abc);
 
-                await fetchUsersData(notices, setGeneralFeedNotices, avatarUtil);
+                setIsAnyTagSelected(Object.values(selectedTags).some(tagKey => tagKey === true));
 
-                if (notices.length < limit) {
+
+
+                // if (isAnyTagSelected === false) {
+                //     setGeneralFeedNotices([]);
+                //     return;
+                // }
+
+                const feedNotices = await getFeedNotices(selectedTags, limit, null);
+
+                console.log('Fetched notices:', feedNotices);
+
+                await fetchUsersData(feedNotices, setGeneralFeedNotices, avatarUtil);
+
+                if (feedNotices.length < limit) {
                     setHasMoreGeneralNotices(false);
                 } else {
                     setHasMoreGeneralNotices(true);
-                    setLastId(notices[notices.length - 1]?.$id);
+                    setLastId(feedNotices[feedNotices.length - 1]?.$id);
                 }
 
             } catch (error) {
                 console.error('Error fetching initial feed notices:', error);
             } finally {
+                setIsLoadingGeneralFeedNotices(false)
                 setIsLoadingMore(false);
                 setIsLoadingMoreInitial(false);
             }
@@ -327,8 +346,9 @@ const UserFeed = () => {
                 handleRefresh={handleRefresh}
             />
 
-            {/* Feed tag selection */}
             <div className='w-100 d-flex'>
+
+                {/* Feed tag selection */}
                 <div className='position-relative d-xl-block d-none'>
                     <Row className='flex-column position-fixed w-25'>
                         {
@@ -345,10 +365,13 @@ const UserFeed = () => {
                                 :
                                 <Loading />
                         }
+                        {/* <Col> */}
+                        <p className='mb-0' style={{ marginLeft: '10px' }}>
+                            <i className='bi bi-info-square' /> Ineterest tags are applicable to your general feed only.
+                        </p>
+                        {/* </Col> */}
                         <Col>
-                            <p className='mb-0' style={{ marginLeft: '10px' }}>
-                                <i class='bi bi-info-square' /> Ineterest tags are applicable to your general feed only.
-                            </p>
+
                         </Col>
                     </Row>
                 </div>
@@ -356,7 +379,7 @@ const UserFeed = () => {
                 {/* Feed Notices */}
                 <div className={`${!isLargeScreen ? 'w-75' : 'w-100'} ms-auto`}>
                     {
-                        notices.length !== 0 ?
+                        (!isFeedToggled && isLoadingPersonalFeedNotices) || !isLoadingGeneralFeedNotices ?
                             <Notices
                                 notices={notices}
                                 user_id={user_id}
@@ -384,6 +407,12 @@ const UserFeed = () => {
                             </div>
                     }
 
+                    {/* isAnyTagSelected === false ?
+                    <div>
+                        <p> To view notices in your general feed, please update your interests in your setting.</p>
+                    </div> : */}
+
+
                     {/* Load More Button */}
                     <div className="d-flex justify-content-center">
                         {(!isFeedToggled && hasMorePersonalNotices) || (isFeedToggled && hasMoreGeneralNotices) ?
@@ -395,8 +424,6 @@ const UserFeed = () => {
                                         setLoadMore(true);
                                     }
                                 }}
-                                // disabled={(isFeedToggled && (isLoadingMore || !hasMoreGeneralNotices)) ||
-                                //     (!isFeedToggled && (isLoadingMorePersonal || !hasMorePersonalNotices)) || isLoadingPersonalFeedNotices}
                                 disabled={(isLoadingPersonalFeedNotices || isLoadingMore || isLoadingMorePersonal) ? true : false}
                                 className={` my-4 notices__load-more-notices-btn ${(isLoadingMoreInitial || isLoadingMorePersonalInitial) ? 'd-none' : 'd-block'}`}
                             >

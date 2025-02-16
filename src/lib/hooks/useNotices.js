@@ -430,6 +430,8 @@ const useNotices = (googleUserData) => {
 
     const getFeedNotices = async (selectedTags, limit, lastId) => {
         try {
+            console.log('SELECTED TAGS IN useNotices:', selectedTags);
+
             const notices = await getFilteredNotices(selectedTags, limit, lastId, user_id);
             console.log('notices - getFeedNotices', notices);
             setGeneralFeedNotices(notices);
