@@ -157,8 +157,7 @@ const UserFeed = () => {
 
 
 
-                // if (isAnyTagSelected === false) {
-                //     setGeneralFeedNotices([]);
+                // if (isAnyTagSelected === false) { 
                 //     return;
                 // }
 
@@ -198,6 +197,10 @@ const UserFeed = () => {
 
                 console.log('Limit:', limit);
                 console.log('Last ID:', lastId);
+
+                // if (isAnyTagSelected === false) { 
+                //     return;
+                // }
 
                 const notices = await getFeedNotices(selectedTags, limit, lastId);
                 console.log('Fetched notices:', notices);
@@ -407,10 +410,67 @@ const UserFeed = () => {
                             </div>
                     }
 
-                    {/* isAnyTagSelected === false ?
-                    <div>
-                        <p> To view notices in your general feed, please update your interests in your setting.</p>
-                    </div> : */}
+                    {/* {isFeedToggled ? (
+                        isLoadingGeneralFeedNotices ? (
+                            <div className='text-center my-5'>
+                                <Loading />
+                                <p className='mt-2'>Loading general feed...</p>
+                            </div>
+                        ) : isAnyTagSelected ? (
+                            generalFeedNotices.length > 0 ? (
+                                <Notices
+                                    notices={generalFeedNotices}
+                                    user_id={user_id}
+                                    likedNotices={likedNotices}
+                                    savedNotices={savedNotices}
+                                    handleLike={handleLike}
+                                    setLikedNotices={setLikedNotices}
+                                    handleSave={handleSave}
+                                    setSavedNotices={setSavedNotices}
+                                    handleReportNotice={handleReportNotice}
+                                    handleReact={handleReact}
+                                    getReactionsForNotice={getReactionsForNotice}
+                                    getUserAccountByUserId={getUserAccountByUserId}
+                                    getReactionByReactionId={getReactionByReactionId}
+                                    reportReaction={reportReaction}
+                                />
+                            ) : (
+                                <div className='text-center my-5'>
+                                    <p>The general feed is currently empty.</p>
+                                </div>
+                            )
+                        ) : (
+                            <div className='text-center my-5'>
+                                <p>To view notices in your general feed, please update your interests in your settings.</p>
+                            </div>
+                        )
+                    ) : isLoadingPersonalFeedNotices ? (
+                        <div className='text-center my-5'>
+                            <Loading />
+                            <p className='mt-2'>Loading personal feed...</p>
+                        </div>
+                    ) : personalFeedNotices.length > 0 ? (
+                        <Notices
+                            notices={personalFeedNotices}
+                            user_id={user_id}
+                            likedNotices={personalFeedLikedNotices}
+                            savedNotices={personalFeedSavedNotices}
+                            handleLike={handleLike}
+                            setLikedNotices={setPersonalFeedLikedNotices}
+                            handleSave={handleSave}
+                            setSavedNotices={setPersonalFeedSavedNotices}
+                            handleReportNotice={handleReportNotice}
+                            handleReact={handleReact}
+                            getReactionsForNotice={getReactionsForNotice}
+                            getUserAccountByUserId={getUserAccountByUserId}
+                            getReactionByReactionId={getReactionByReactionId}
+                            reportReaction={reportReaction}
+                        />
+                    ) : (
+                        <div className='text-center my-5'>
+                            <p>Your personal feed is empty.</p>
+                        </div>
+                    )} */}
 
 
                     {/* Load More Button */}
@@ -425,7 +485,7 @@ const UserFeed = () => {
                                     }
                                 }}
                                 disabled={(isLoadingPersonalFeedNotices || isLoadingMore || isLoadingMorePersonal) ? true : false}
-                                className={` my-4 notices__load-more-notices-btn ${(isLoadingMoreInitial || isLoadingMorePersonalInitial) ? 'd-none' : 'd-block'}`}
+                                className={` my-4 notices__load-more-notices-btn ${(isLoadingMoreInitial || isLoadingMorePersonalInitial || !isAnyTagSelected || generalFeedNotices.length < 0) ? 'd-none' : 'd-block'}`}
                             >
                                 {isLoadingMore || isLoadingMorePersonal ?
                                     <><Loading size={16} /> Loading...</>
