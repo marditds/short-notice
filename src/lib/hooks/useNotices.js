@@ -32,6 +32,7 @@ const useNotices = (googleUserData) => {
     const [isSavingEdit, setIsSavingEdit] = useState(false);
 
     const [selectedTags, setSelectedTags] = useState({});
+    const [isAnyTagSelected, setIsAnyTagSelected] = useState(false);
     const [isInterestsLoading, setIsInterestsLoading] = useState(false);
 
     const [isInterestsUpdating, setIsInterestsUpdating] = useState(false);
@@ -432,6 +433,15 @@ const useNotices = (googleUserData) => {
         try {
             console.log('SELECTED TAGS IN useNotices:', selectedTags);
 
+            // const chakop = Object.values(selectedTags).filter((tagValue) => tagValue === false);
+
+            // console.log('chakop:', chakop);
+
+            // if (chakop.length === 13) {
+            //     setGeneralFeedNotices([]);
+            //     return;
+            // };
+
             const notices = await getFilteredNotices(selectedTags, limit, lastId, user_id);
             console.log('notices - getFeedNotices', notices);
             setGeneralFeedNotices(notices);
@@ -513,6 +523,7 @@ const useNotices = (googleUserData) => {
             try {
                 const interests = await updateUserInterests(user_id, selectedTags);
                 console.log('Interests updated:', interests);
+                setIsAnyTagSelected(Object.values(interests).some(tagKey => tagKey === true));
                 return interests;
             } catch (error) {
                 console.error('Error updating user interests:', error);
@@ -822,6 +833,8 @@ const useNotices = (googleUserData) => {
         isInterestsLoading,
         isInterestsUpdating,
         selectedTags,
+        isAnyTagSelected,
+        setIsAnyTagSelected,
         setTagCategories,
         fetchUserInterests,
         toggleInterestsTag,

@@ -708,6 +708,14 @@ export const getFilteredNotices = async (selectedTags, limit, lastId, userId) =>
             throw new Error('selectedTags must be an object');
         }
 
+        const unselectedTags = Object.values(selectedTags).filter((tagValue) => tagValue === false);
+
+        console.log('unselectedTags:', unselectedTags);
+
+        if (unselectedTags.length === 13) {
+            return [];
+        };
+
         const [blockedUsers, usersBlockingMe] = await Promise.all([
             getBlockedUsersByUser(userId),
             getUsersBlockingUser(userId)
@@ -1120,6 +1128,7 @@ export const getUserLikesNotInFeed = async (user_id, visitor_id, limit, offset) 
         console.log('EEEEEEEEEEEEEEEEEEEE', allBlockedIds);
 
 
+        console.log('dbhandler - getUserLikesNotInFeed user_id', user_id);
         console.log('dbhandler - getUserLikesNotInFeed limit', limit);
         console.log('dbhandler - getUserLikesNotInFeed offset', offset);
 

@@ -6,7 +6,7 @@ import '../Feed.css'
 
 
 
-export const FeedHeader = ({ isTagSelected, isFeedToggled, handleFeedToggle, handleRefresh }) => {
+export const FeedHeader = ({ isTagSelected, isFeedToggled, handleFeedToggle, handleRefresh, isAnyTagSelected }) => {
     return (
         <Row className='fixed-top w-100 ms-auto me-auto user-feed__header'>
             {/* <Col
@@ -18,6 +18,8 @@ export const FeedHeader = ({ isTagSelected, isFeedToggled, handleFeedToggle, han
             </Col> */}
             <Col className='w-100'>
                 <FeedToggle
+                    isTagSelected={isTagSelected}
+                    isAnyTagSelected={isAnyTagSelected}
                     isFeedToggled={isFeedToggled}
                     handleFeedToggle={handleFeedToggle}
                     handleRefresh={handleRefresh}

@@ -434,7 +434,7 @@ const OtherUserProfile = () => {
             try {
                 const allLikedNotices = await getAllLikedNotices(currUserId, user_id, limitLikes, offsetLikes);
 
-                console.log('allLikedNotices', allLikedNotices);
+                console.log('allLikedNotices - OtherUserProfile', allLikedNotices);
 
                 const noticesWithoutTypeOrganization = allLikedNotices.filter((likedNotice) => likedNotice.noticeType !== 'organization');
 

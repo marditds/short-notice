@@ -30,6 +30,10 @@
     cursor: pointer;
 }
 
+.user-feed__toggle-label.toggle-label-muted {
+    color: var(--main-text-muted);
+}
+
 .user-feed__compose-btn,
 .user-feed__refresh-btn {
     background-color: var(--main-accent-color);

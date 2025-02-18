@@ -3,7 +3,16 @@ import { useLocation } from 'react-router-dom';
 import { Col, Button } from 'react-bootstrap';
 import { Loading } from '../../Loading/Loading';
 
-export const InterestsTags = ({ tagCategories, toggleInterestsTag, selectedTags, updateInterests, handleRefresh, isInterestsUpdating }) => {
+export const InterestsTags = ({
+    tagCategories,
+    toggleInterestsTag,
+    selectedTags,
+    updateInterests,
+    handleRefresh,
+    isInterestsUpdating,
+    isAnyTagSelected,
+    handleFeedToggle,
+    setIsAnyTagSelected }) => {
 
     const location = useLocation();
 
@@ -34,8 +43,18 @@ export const InterestsTags = ({ tagCategories, toggleInterestsTag, selectedTags,
                         if (location.pathname !== '/user/feed') {
                             updateInterests();
                         } else {
-                            updateInterests();
-                            handleRefresh();
+                            if (isAnyTagSelected) {
+                                updateInterests();
+                                handleRefresh();
+                            } else {
+                                updateInterests();
+                                console.log('Stating handleFeedToggle().');
+
+                                handleFeedToggle();
+
+                                console.log('Finishing handleFeedToggle().');
+
+                            }
                         }
                     }
                     }

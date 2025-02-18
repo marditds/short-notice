@@ -26,6 +26,8 @@ const UserFeed = () => {
         tagCategories,
         isInterestsUpdating,
         selectedTags,
+        isAnyTagSelected,
+        setIsAnyTagSelected,
         setSelectedTags,
         toggleInterestsTag,
         updateInterests,
@@ -53,13 +55,13 @@ const UserFeed = () => {
 
     // const [selectedTags, setSelectedTags] = useState({});
     const [isTagSelected, setIsTagSelected] = useState(false);
-    const [isAnyTagSelected, setIsAnyTagSelected] = useState(false);
+    // const [isAnyTagSelected, setIsAnyTagSelected] = useState(false);
 
     const [generalFeedNotices, setGeneralFeedNotices] = useState([]);
     const [isLoadingGeneralFeedNotices, setIsLoadingGeneralFeedNotices] = useState(false);
 
     const [personalFeedNotices, setPersonalFeedNotices] = useState([]);
-    const [isLoadingPersonalFeedNotices, setIsLoadingPersonalFeedNotices] = useState(false);
+    const [isLoadingPersonalFeedNotices, setIsLoadingPersonalFeedNotices] = useState(true);
 
     const [isFeedToggled, setIsFeedToggled] = useState(false);
 
@@ -82,7 +84,10 @@ const UserFeed = () => {
     const notices = !isFeedToggled ? personalFeedNotices : generalFeedNotices;
     const feedType = !isFeedToggled ? 'personal' : 'general';
 
+    useEffect(() => {
+        console.log('isFeedToggled STATUS:', isFeedToggled);
 
+    }, [isFeedToggled])
 
     // Fetch User's interests  
     useEffect(() => {
@@ -90,6 +95,10 @@ const UserFeed = () => {
             if (user_id) {
                 try {
                     const userInterests = await getInterests(user_id);
+
+                    console.log('DRAMATIC:', userInterests);
+
+                    setIsAnyTagSelected(Object.values(userInterests).some(tagKey => tagKey === true));
 
                     if (userInterests) {
                         setSelectedTags(userInterests);
@@ -103,13 +112,13 @@ const UserFeed = () => {
         fetchUserInterests();
     }, [user_id, tagCategories]);
 
-    // Fetch user interests tags
+    // Fetch user interests tags from DB
     useEffect(() => {
         fetchUserInterests();
     }, [user_id, tagCategories]);
 
 
-    // Fetch selected tags
+    // Fetch selected tags for UI
     useEffect(() => {
         try {
             const falseVal = Object.values(selectedTags).filter((tag) => tag === false);
@@ -137,6 +146,10 @@ const UserFeed = () => {
         }
     }, [selectedTags])
 
+    useEffect(() => {
+        console.log('isAnyTagSelected', isAnyTagSelected);
+    }, [isAnyTagSelected])
+
     // Fetch feed (general)-(initial)
     useEffect(() => {
         const fetchInitialGeneralFeed = async () => {
@@ -152,14 +165,6 @@ const UserFeed = () => {
                 const abc = Object.values(selectedTags).some(tagKey => tagKey === true);
 
                 console.log('RRRRRRRRRRRRRR:', abc);
-
-                setIsAnyTagSelected(Object.values(selectedTags).some(tagKey => tagKey === true));
-
-
-
-                // if (isAnyTagSelected === false) { 
-                //     return;
-                // }
 
                 const feedNotices = await getFeedNotices(selectedTags, limit, null);
 
@@ -190,17 +195,16 @@ const UserFeed = () => {
 
     // Fetch feed (general)-(subsequent) 
     useEffect(() => {
+
         if (!loadMore) return;
+
         const fetchSubsequentGeneralFeed = async () => {
+
             try {
                 setIsLoadingMore(true);
 
                 console.log('Limit:', limit);
                 console.log('Last ID:', lastId);
-
-                // if (isAnyTagSelected === false) { 
-                //     return;
-                // }
 
                 const notices = await getFeedNotices(selectedTags, limit, lastId);
                 console.log('Fetched notices:', notices);
@@ -231,7 +235,7 @@ const UserFeed = () => {
             try {
                 setIsLoadingMorePersonalInitial(true);
                 setIsLoadingPersonalFeedNotices(true);
-                setIsLoadingMorePersonal(true);
+                // setIsLoadingMorePersonal(true);
 
                 const allNotices = await getPersonalFeedNotices(limitPersonal, null);
 
@@ -251,7 +255,7 @@ const UserFeed = () => {
                 console.error('Error fetching personal feed', error);
             } finally {
                 setIsLoadingPersonalFeedNotices(false);
-                setIsLoadingMorePersonal(false);
+                // setIsLoadingMorePersonal(false);
                 setIsLoadingMorePersonalInitial(false);
             }
         };
@@ -308,8 +312,20 @@ const UserFeed = () => {
     // };
 
     const handleFeedToggle = () => {
-        setIsFeedToggled((prev) => !prev);
+        // console.log('STATUS isAnyTagSelected 1', isAnyTagSelected); 
+        if (isAnyTagSelected === true) {
+            // console.log('STATUS isAnyTagSelected 2', isAnyTagSelected);
+            setIsFeedToggled((prev) => !prev);
+        } else {
+            // console.log('STATUS isAnyTagSelected 3', isAnyTagSelected);
+            setIsFeedToggled(false);
+            setGeneralFeedNotices([]);
+        }
     };
+
+    // useEffect(() => {
+    //     handleFeedToggle();
+    // }, [isAnyTagSelected === false])
 
     const handleRefresh = () => {
         if (isFeedToggled) {
@@ -328,22 +344,23 @@ const UserFeed = () => {
     };
 
     // Render loading state while data is being fetched
-    if (
-        (isLoadingPersonalFeedNotices)
-        // &&
-        // (personalFeedNotices.length === 0 || generalFeedNotices.length === 0)
-    ) {
-        return <div className='pt-5 h-100 user-feed__loading-div'>
-            <div>
-                <Loading /><span className='ms-2'>{`Loading your feed...`}</span>
-            </div>
-        </div>;
-    }
+    // if (
+    // (isLoadingPersonalFeedNotices)
+    // &&
+    // (personalFeedNotices.length === 0 || generalFeedNotices.length === 0)
+    // ) {
+    //     return <div className='pt-5 h-100 user-feed__loading-div'>
+    //         <div>
+    //             <Loading /><span className='ms-2'>{`Loading your feed...`}</span>
+    //         </div>
+    //     </div>;
+    // }
 
     return (
         <div style={{ marginTop: '100px' }} className='position-relative w-100'>
             <FeedHeader
                 isTagSelected={isTagSelected}
+                isAnyTagSelected={isAnyTagSelected}
                 isFeedToggled={isFeedToggled}
                 handleFeedToggle={handleFeedToggle}
                 handleRefresh={handleRefresh}
@@ -361,8 +378,11 @@ const UserFeed = () => {
                                     tagCategories={tagCategories}
                                     selectedTags={selectedTags}
                                     isInterestsUpdating={isInterestsUpdating}
+                                    isAnyTagSelected={isAnyTagSelected}
                                     toggleInterestsTag={toggleInterestsTag}
                                     updateInterests={updateInterests}
+                                    // setIsAnyTagSelected={setIsAnyTagSelected}
+                                    handleFeedToggle={handleFeedToggle}
                                     handleRefresh={handleRefresh}
                                 />
                                 :
@@ -382,83 +402,16 @@ const UserFeed = () => {
                 {/* Feed Notices */}
                 <div className={`${!isLargeScreen ? 'w-75' : 'w-100'} ms-auto`}>
                     {
-                        (!isFeedToggled && isLoadingPersonalFeedNotices) || !isLoadingGeneralFeedNotices ?
-                            <Notices
-                                notices={notices}
-                                user_id={user_id}
-                                likedNotices={!isFeedToggled ? personalFeedLikedNotices : likedNotices}
-                                savedNotices={!isFeedToggled ? personalFeedSavedNotices : savedNotices}
-                                handleLike={handleLike}
-                                setLikedNotices={!isFeedToggled ? setPersonalFeedLikedNotices : setLikedNotices}
-                                handleSave={handleSave}
-                                setSavedNotices={!isFeedToggled ? setPersonalFeedSavedNotices : setSavedNotices}
-                                handleReportNotice={handleReportNotice}
-                                handleReact={handleReact}
-                                getReactionsForNotice={getReactionsForNotice}
-                                getUserAccountByUserId={getUserAccountByUserId}
-                                getReactionByReactionId={getReactionByReactionId}
-                                reportReaction={reportReaction}
-                            />
-                            :
-                            <div className='h-100 user-feed__loading-div my-5'>
-                                <div className='my-5'>
-                                    <Loading />
-                                    <span className='ms-2'>
-                                        Loading {feedType} feed...
-                                    </span>
-                                </div>
-                            </div>
-                    }
-
-                    {/* {isFeedToggled ? (
-                        isLoadingGeneralFeedNotices ? (
-                            <div className='text-center my-5'>
-                                <Loading />
-                                <p className='mt-2'>Loading general feed...</p>
-                            </div>
-                        ) : isAnyTagSelected ? (
-                            generalFeedNotices.length > 0 ? (
-                                <Notices
-                                    notices={generalFeedNotices}
-                                    user_id={user_id}
-                                    likedNotices={likedNotices}
-                                    savedNotices={savedNotices}
-                                    handleLike={handleLike}
-                                    setLikedNotices={setLikedNotices}
-                                    handleSave={handleSave}
-                                    setSavedNotices={setSavedNotices}
-                                    handleReportNotice={handleReportNotice}
-                                    handleReact={handleReact}
-                                    getReactionsForNotice={getReactionsForNotice}
-                                    getUserAccountByUserId={getUserAccountByUserId}
-                                    getReactionByReactionId={getReactionByReactionId}
-                                    reportReaction={reportReaction}
-                                />
-                            ) : (
-                                <div className='text-center my-5'>
-                                    <p>The general feed is currently empty.</p>
-                                </div>
-                            )
-                        ) : (
-                            <div className='text-center my-5'>
-                                <p>To view notices in your general feed, please update your interests in your settings.</p>
-                            </div>
-                        )
-                    ) : isLoadingPersonalFeedNotices ? (
-                        <div className='text-center my-5'>
-                            <Loading />
-                            <p className='mt-2'>Loading personal feed...</p>
-                        </div>
-                    ) : personalFeedNotices.length > 0 ? (
+                        (!isLoadingPersonalFeedNotices || !isLoadingGeneralFeedNotices) &&
                         <Notices
-                            notices={personalFeedNotices}
+                            notices={notices}
                             user_id={user_id}
-                            likedNotices={personalFeedLikedNotices}
-                            savedNotices={personalFeedSavedNotices}
+                            likedNotices={!isFeedToggled ? personalFeedLikedNotices : likedNotices}
+                            savedNotices={!isFeedToggled ? personalFeedSavedNotices : savedNotices}
                             handleLike={handleLike}
-                            setLikedNotices={setPersonalFeedLikedNotices}
+                            setLikedNotices={!isFeedToggled ? setPersonalFeedLikedNotices : setLikedNotices}
                             handleSave={handleSave}
-                            setSavedNotices={setPersonalFeedSavedNotices}
+                            setSavedNotices={!isFeedToggled ? setPersonalFeedSavedNotices : setSavedNotices}
                             handleReportNotice={handleReportNotice}
                             handleReact={handleReact}
                             getReactionsForNotice={getReactionsForNotice}
@@ -466,11 +419,37 @@ const UserFeed = () => {
                             getReactionByReactionId={getReactionByReactionId}
                             reportReaction={reportReaction}
                         />
-                    ) : (
-                        <div className='text-center my-5'>
-                            <p>Your personal feed is empty.</p>
+                        // :
+                        // <div className='h-100 user-feed__loading-div my-5'>
+                        //     <div className='my-5'>
+                        //         <Loading />
+                        //         <span className='ms-2'>
+                        //             Loading {feedType} feed...
+                        //         </span>
+                        //     </div>
+                        // </div>
+                    }
+                    {
+                        (isLoadingPersonalFeedNotices || isLoadingGeneralFeedNotices) &&
+                        <div className='h-100 user-feed__loading-div my-5'>
+                            <div className='my-5'>
+                                <Loading />
+                                <span className='ms-2'>
+                                    Loading {feedType} feed...
+                                </span>
+                            </div>
                         </div>
-                    )} */}
+                    }
+                    {
+                        !isAnyTagSelected && isFeedToggled ?
+                            <div>
+                                <p>
+                                    BAREV
+                                </p>
+                            </div>
+                            :
+                            null
+                    }
 
 
                     {/* Load More Button */}
@@ -484,8 +463,8 @@ const UserFeed = () => {
                                         setLoadMore(true);
                                     }
                                 }}
-                                disabled={(isLoadingPersonalFeedNotices || isLoadingMore || isLoadingMorePersonal) ? true : false}
-                                className={` my-4 notices__load-more-notices-btn ${(isLoadingMoreInitial || isLoadingMorePersonalInitial || !isAnyTagSelected || generalFeedNotices.length < 0) ? 'd-none' : 'd-block'}`}
+                                disabled={(isLoadingMore || isLoadingMorePersonal) ? true : false}
+                                className={` my-4 notices__load-more-notices-btn ${(isLoadingMoreInitial || isLoadingMorePersonalInitial) ? 'd-none' : 'd-block'}`}
                             >
                                 {isLoadingMore || isLoadingMorePersonal ?
                                     <><Loading size={16} /> Loading...</>
@@ -493,7 +472,8 @@ const UserFeed = () => {
                             </Button>
                             :
                             <div className='my-4'>
-                                <EndAsterisks />
+                                {!isFeedToggled && <EndAsterisks />}
+                                {(isFeedToggled && isAnyTagSelected) && <EndAsterisks />}
                             </div>
                         }
                     </div>

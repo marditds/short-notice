@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form, Row, Col, Button } from 'react-bootstrap';
 
-export const FeedToggle = ({ isFeedToggled, handleFeedToggle, handleRefresh }) => {
+export const FeedToggle = ({ isFeedToggled, handleFeedToggle, handleRefresh, isAnyTagSelected, isTagSelected }) => {
     return (
         <Form className='d-flex justify-content-center align-items-center w-100'
         >
@@ -22,6 +22,7 @@ export const FeedToggle = ({ isFeedToggled, handleFeedToggle, handleRefresh }) =
                         type='switch'
                         id='feed-switch'
                         label=''
+                        disabled={!isAnyTagSelected}
                         checked={isFeedToggled}
                         onChange={handleFeedToggle}
                         className='d-flex justify-content-center user-feed__toggle-btn'
@@ -29,7 +30,7 @@ export const FeedToggle = ({ isFeedToggled, handleFeedToggle, handleRefresh }) =
                 </Col>
 
                 <Col xs='auto' className='d-flex align-items-center'>
-                    <Form.Label onClick={isFeedToggled ? null : handleFeedToggle} className='mb-0 user-feed__toggle-label'>General Feed</Form.Label>
+                    <Form.Label onClick={isFeedToggled || !isAnyTagSelected ? null : handleFeedToggle} className={`mb-0 user-feed__toggle-label ${!isAnyTagSelected && 'toggle-label-muted'}`}>General Feed</Form.Label>
                     <Button
                         className='py-0 px-1 mx-1 user-feed__refresh-btn'
                         style={{ visibility: isFeedToggled ? 'visible' : 'hidden', height: '26px' }}
