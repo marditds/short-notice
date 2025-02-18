@@ -8,9 +8,15 @@ import { Loading } from '../../Loading/Loading';
 export const Interests = () => {
 
     const { googleUserData } = useUserContext();
-    const { user_id, tagCategories, isInterestsUpdating, selectedTags, fetchUserInterests, updateInterests,
+    const { user_id,
+        tagCategories,
+        isInterestsUpdating,
+        selectedTags,
+        isInterestsLoading,
+        fetchUserInterests,
+        updateInterests,
         toggleInterestsTag,
-        isInterestsLoading
+        deselectAllInterestTags
     } = useNotices(googleUserData);
 
     useEffect(() => {
@@ -33,6 +39,7 @@ export const Interests = () => {
                         isInterestsUpdating={isInterestsUpdating}
                         selectedTags={selectedTags}
                         toggleInterestsTag={toggleInterestsTag}
+                        deselectAllInterestTags={deselectAllInterestTags}
                         updateInterests={updateInterests}
                     />
                     :

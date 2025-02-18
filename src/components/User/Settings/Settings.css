@@ -273,6 +273,12 @@
     background-color: var(--main-caution-color-hover) !important;
 }
 
+@media (max-width: 1399px) {
+    .settings__update-interests-btn:nth-child(2) {
+        margin-top: 0;
+    }
+}
+
 
 @media (max-width: 767px) {
 

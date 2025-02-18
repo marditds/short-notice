@@ -6,13 +6,14 @@ import { Loading } from '../../Loading/Loading';
 export const InterestsTags = ({
     tagCategories,
     toggleInterestsTag,
+    deselectAllInterestTags,
     selectedTags,
     updateInterests,
     handleRefresh,
     isInterestsUpdating,
     isAnyTagSelected,
-    handleFeedToggle,
-    setIsAnyTagSelected }) => {
+    // handleFeedToggle
+}) => {
 
     const location = useLocation();
 
@@ -38,30 +39,38 @@ export const InterestsTags = ({
                         </div>
                     ))}
                 </div>
-                <Button
-                    onClick={() => {
-                        if (location.pathname !== '/user/feed') {
-                            updateInterests();
-                        } else {
-                            if (isAnyTagSelected) {
+                <div className='d-xxl-flex d-grid'>
+                    <Button
+                        onClick={() => {
+                            if (location.pathname !== '/user/feed') {
                                 updateInterests();
-                                handleRefresh();
                             } else {
-                                updateInterests();
-                                console.log('Stating handleFeedToggle().');
+                                if (isAnyTagSelected) {
+                                    updateInterests();
+                                    handleRefresh();
+                                }
+                                else {
+                                    updateInterests();
+                                    // console.log('Stating handleFeedToggle().');
 
-                                handleFeedToggle();
+                                    // handleFeedToggle();
 
-                                console.log('Finishing handleFeedToggle().');
+                                    // console.log('Finishing handleFeedToggle().');
 
+                                }
                             }
                         }
-                    }
-                    }
-                    className='settings__update-interests-btn'
-                >
-                    {isInterestsUpdating ? <Loading /> : 'Update Interests'}
-                </Button>
+                        }
+                        className='settings__update-interests-btn'
+                    >
+                        {isInterestsUpdating ? <Loading /> : 'Update Interests'}
+                    </Button>
+                    <Button onClick={deselectAllInterestTags}
+                        className='settings__update-interests-btn'
+                    >
+                        Deselect All
+                    </Button>
+                </div>
             </div>
         </Col>
     )

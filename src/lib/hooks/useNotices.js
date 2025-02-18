@@ -573,6 +573,10 @@ const useNotices = (googleUserData) => {
         }));
     };
 
+    const deselectAllInterestTags = () => {
+        setSelectedTags({});
+    }
+
     const handleSave = async (notice_id, author_id, savedNoticesArr, setSaveFunc) => {
         try {
             if (savedNoticesArr[notice_id]) {
@@ -838,6 +842,7 @@ const useNotices = (googleUserData) => {
         setTagCategories,
         fetchUserInterests,
         toggleInterestsTag,
+        deselectAllInterestTags,
         setSelectedTags,
         setFellowUserId,
         addNotice,

@@ -30,6 +30,7 @@ const UserFeed = () => {
         setIsAnyTagSelected,
         setSelectedTags,
         toggleInterestsTag,
+        deselectAllInterestTags,
         updateInterests,
         setLikedNotices,
         fetchUserInterests,
@@ -382,8 +383,9 @@ const UserFeed = () => {
                                     toggleInterestsTag={toggleInterestsTag}
                                     updateInterests={updateInterests}
                                     // setIsAnyTagSelected={setIsAnyTagSelected}
-                                    handleFeedToggle={handleFeedToggle}
+                                    // handleFeedToggle={handleFeedToggle}
                                     handleRefresh={handleRefresh}
+                                    deselectAllInterestTags={deselectAllInterestTags}
                                 />
                                 :
                                 <Loading />
@@ -399,8 +401,8 @@ const UserFeed = () => {
                     </Row>
                 </div>
 
-                {/* Feed Notices */}
                 <div className={`${!isLargeScreen ? 'w-75' : 'w-100'} ms-auto`}>
+                    {/* Feed notices */}
                     {
                         (!isLoadingPersonalFeedNotices || !isLoadingGeneralFeedNotices) &&
                         <Notices
@@ -419,16 +421,9 @@ const UserFeed = () => {
                             getReactionByReactionId={getReactionByReactionId}
                             reportReaction={reportReaction}
                         />
-                        // :
-                        // <div className='h-100 user-feed__loading-div my-5'>
-                        //     <div className='my-5'>
-                        //         <Loading />
-                        //         <span className='ms-2'>
-                        //             Loading {feedType} feed...
-                        //         </span>
-                        //     </div>
-                        // </div>
                     }
+
+                    {/* Loading component */}
                     {
                         (isLoadingPersonalFeedNotices || isLoadingGeneralFeedNotices) &&
                         <div className='h-100 user-feed__loading-div my-5'>
@@ -440,17 +435,18 @@ const UserFeed = () => {
                             </div>
                         </div>
                     }
+
+                    {/* Tag selection message */}
                     {
                         !isAnyTagSelected && isFeedToggled ?
-                            <div>
-                                <p>
-                                    BAREV
+                            <div className='h-100'>
+                                <p className='text-center'>
+                                    {`To view notices in your general feed, you must select at least one interest tag in your ${isExtraLargeScreen ? 'side menu' : 'settings'}`}.
                                 </p>
                             </div>
                             :
                             null
                     }
-
 
                     {/* Load More Button */}
                     <div className="d-flex justify-content-center">
