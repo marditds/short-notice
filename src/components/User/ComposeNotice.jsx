@@ -100,6 +100,15 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
                     className='user-profile__form-control'
                     placeholder={'Got a notice to share?'}
                 />
+
+                {/* Character count */}
+                <div
+                    className={`user-profile__notice-char-counter ${charCount > charLimit && 'extra'}`}
+                >
+                    {`${charCount}/${charLimit} characters`}
+                </div>
+
+                {/* GIF */}
                 {noticeGif &&
                     <div>
                         <div className='position-relative'>
@@ -119,22 +128,13 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
                         </div>
                     </div>
                 }
-                <div
-                    className={`user-profile__notice-char-counter ${charCount > charLimit && 'extra'}`}
-                >
-                    {`${charCount}/${charLimit} characters`}
-                </div>
-                {/* <br /> */}
+
+                {/* GIF Button */}
                 <div className='my-2'>
                     <Button className='notice__gif-btn py-1 px-2'
                         onClick={handleGifBtn}>
                         <i className='bi bi-filetype-gif' />
                     </Button>
-                    {/* {noticeGif &&
-                        <Button className='notice__gif-btn py-1 px-2 ms-2' onClick={() => setNoticeGif(null)}>
-                            Remove Gif
-                        </Button>
-                    } */}
                 </div>
 
                 {isGifBtnClicked &&
@@ -147,6 +147,7 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
                 }
             </Form.Group>
 
+            {/* Tags */}
             <h6
                 className='mb-2 user-profile__tags-title'>
                 Add tags: <span className='small' style={{ color: 'gray' }}>At least 1 required.</span>
@@ -158,8 +159,7 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
                 selectedTags={selectedTags}
             />
 
-            {/* <br /> */}
-
+            {/* Timer */}
             <div
                 className='my-4 d-flex align-items-center user-profile__timer-settings'>
                 <h6
