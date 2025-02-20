@@ -46,12 +46,15 @@ const UserFeed = () => {
         handleReact,
         getReactionsForNotice,
         getReactionByReactionId,
-        reportReaction
+        reportReaction,
+        onGemeniRun
     } = useNotices(googleUserData);
 
     const { fetchUsersData, getUserAccountByUserId } = useUserInfo(googleUserData);
 
     const { isLargeScreen, isExtraLargeScreen } = screenUtils();
+
+    const [geminiRes, setGeminiRes] = useState('');
 
 
     // const [selectedTags, setSelectedTags] = useState({});
@@ -344,6 +347,14 @@ const UserFeed = () => {
         }
     };
 
+    const onGemeniRunClick = () => {
+        const geminiResult = onGemeniRun();
+
+        geminiResult.then(res => setGeminiRes(res));
+
+        // setGeminiRes(geminiResult);
+    };
+
     // Render loading state while data is being fetched
     // if (
     // (isLoadingPersonalFeedNotices)
@@ -396,7 +407,12 @@ const UserFeed = () => {
                         </p>
                         {/* </Col> */}
                         <Col>
-
+                            <p>
+                                <Button onClick={onGemeniRunClick}>Generate Result</Button> <br />
+                                {
+                                    geminiRes
+                                }
+                            </p>
                         </Col>
                     </Row>
                 </div>
