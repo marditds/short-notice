@@ -17,6 +17,8 @@ const useNotices = (googleUserData) => {
     const [generalFeedNotices, setGeneralFeedNotices] = useState([]);
     const [personalFeedNotices, setPersonalFeedNotices] = useState([]);
 
+    const [lastThreeNoticesInFeed, setLastThreeNoticesInFeed] = useState([]);
+
     const [personalFeedLikedNotices, setPersonalFeedLikedNotices] = useState({});
     const [personalFeedSavedNotices, setPersonalFeedSavedNotices] = useState({});
 
@@ -93,8 +95,6 @@ const useNotices = (googleUserData) => {
         };
 
         obtainUserById();
-
-        // onGemeniRun();
 
     }, [googleUserData]);
 
@@ -446,7 +446,16 @@ const useNotices = (googleUserData) => {
             // };
 
             const notices = await getFilteredNotices(selectedTags, limit, lastId, user_id);
-            console.log('notices - getFeedNotices', notices);
+            console.log('useNotices - getFeedNotices', notices);
+
+            const lstThrNtcsInFd = notices.map((notice) => notice.text);
+
+            for (let i = 0; i < 3; i++) {
+                console.log('THIS IS notice #' + (i + 1) + ': ' + lstThrNtcsInFd[i]);
+
+                setLastThreeNoticesInFeed((preVal) => [...preVal, lstThrNtcsInFd[i]])
+            }
+
             setGeneralFeedNotices(notices);
             return notices;
         } catch (error) {
@@ -821,7 +830,10 @@ const useNotices = (googleUserData) => {
     }
 
     const onGemeniRun = async () => {
-        const geminiRes = await runGemini('What does deghin mean in Armenian?');
+
+        const promptTxt = `Read the texts and summarize your feelings in 300 characters. You may include emojis, but they must be within the character limit. Including emojis is optional. ${lastThreeNoticesInFeed[0]}, ${lastThreeNoticesInFeed[1]}, ${lastThreeNoticesInFeed[2]}`;
+
+        const geminiRes = await runGemini(promptTxt);
 
         console.log('geminiRes - useNotices:', geminiRes);
 
@@ -849,6 +861,8 @@ const useNotices = (googleUserData) => {
         isInterestsUpdating,
         selectedTags,
         isAnyTagSelected,
+        lastThreeNoticesInFeed,
+        setLastThreeNoticesInFeed,
         setIsAnyTagSelected,
         setTagCategories,
         fetchUserInterests,

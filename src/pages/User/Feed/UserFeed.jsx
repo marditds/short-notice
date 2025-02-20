@@ -17,6 +17,7 @@ const UserFeed = () => {
     const { googleUserData } = useUserContext();
 
     const {
+        lastThreeNoticesInFeed,
         user_id,
         personalFeedLikedNotices,
         personalFeedSavedNotices,
@@ -27,6 +28,7 @@ const UserFeed = () => {
         isInterestsUpdating,
         selectedTags,
         isAnyTagSelected,
+        setLastThreeNoticesInFeed,
         setIsAnyTagSelected,
         setSelectedTags,
         toggleInterestsTag,
@@ -335,6 +337,7 @@ const UserFeed = () => {
         if (isFeedToggled) {
             // Refresh General Feed
             setGeneralFeedNotices([]);
+            setLastThreeNoticesInFeed([]);
             setLastId(null);
             setHasMoreGeneralNotices(true);
             setLoadMore(true);
