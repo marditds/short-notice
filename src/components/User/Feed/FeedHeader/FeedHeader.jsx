@@ -15,26 +15,27 @@ export const FeedHeader = ({ isTagSelected, isFeedToggled, handleFeedToggle, han
 
     return (
         <>
-            <div>
-                <Row className='fixed-top w-100 ms-auto me-auto user-feed__header'>
-                    <Col>
-                        <FeedToggle
-                            isTagSelected={isTagSelected}
-                            isAnyTagSelected={isAnyTagSelected}
-                            isFeedToggled={isFeedToggled}
-                            handleFeedToggle={handleFeedToggle}
-                            handleRefresh={handleRefresh}
-                        />
-                    </Col>
-                </Row>
-            </div>
+            <Row className='fixed-top w-100 ms-auto me-auto user-feed__header'>
+                <Col>
+                    <FeedToggle
+                        isTagSelected={isTagSelected}
+                        isAnyTagSelected={isAnyTagSelected}
+                        isFeedToggled={isFeedToggled}
+                        handleFeedToggle={handleFeedToggle}
+                        handleRefresh={handleRefresh}
+                    />
+                </Col>
+            </Row>
+
 
             {/* Side section */}
             <Row className='position-relative'>
                 {/* Feed tag selection */}
-                {/* <Col className='d-xl-block d-none w-25 flex-column' style={{ top: '0', Height: '100vh', overflowY: 'auto', position: 'sticky' }}> */}
-                <Col xs={3} className='flex-column d-xl-block d-none' style={{ top: '0', height: '100vh', overflowY: 'auto', position: 'sticky' }}>
-                    <div>{sideContent}</div>
+                <Col xs={3} className='flex-column d-xl-block d-none fixed-top w-25'
+                    style={{
+                        position: 'sticky', top: '100px', height: 'calc(100vh - 100px)', overflowY: 'auto'
+                    }}>
+                    {sideContent}
                 </Col>
 
                 {/* Feed Notices */}

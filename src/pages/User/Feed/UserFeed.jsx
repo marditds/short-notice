@@ -376,32 +376,30 @@ const UserFeed = () => {
 
     return (
         // <div style={{ marginTop: '100px' }} className='position-relative w-100'>
-        <div style={{ marginTop: '100px' }} className='w-100'>
+        <div style={{ marginTop: '80px' }} className='w-100'>
             <FeedHeader
                 isTagSelected={isTagSelected}
                 isAnyTagSelected={isAnyTagSelected}
                 isFeedToggled={isFeedToggled}
                 handleFeedToggle={handleFeedToggle}
                 handleRefresh={handleRefresh}
-                sideContent={<>
-                    {
-                        !isInterestsLoading
-                            ?
-                            <InterestsTags
-                                tagCategories={tagCategories}
-                                selectedTags={selectedTags}
-                                isInterestsUpdating={isInterestsUpdating}
-                                isAnyTagSelected={isAnyTagSelected}
-                                toggleInterestsTag={toggleInterestsTag}
-                                updateInterests={updateInterests}
-                                // setIsAnyTagSelected={setIsAnyTagSelected}
-                                // handleFeedToggle={handleFeedToggle}
-                                handleRefresh={handleRefresh}
-                                deselectAllInterestTags={deselectAllInterestTags}
-                            />
-                            :
-                            <Loading />
-                    }
+                sideContent={<> {!isInterestsLoading
+                    ?
+                    <InterestsTags
+                        tagCategories={tagCategories}
+                        selectedTags={selectedTags}
+                        isInterestsUpdating={isInterestsUpdating}
+                        isAnyTagSelected={isAnyTagSelected}
+                        toggleInterestsTag={toggleInterestsTag}
+                        updateInterests={updateInterests}
+                        // setIsAnyTagSelected={setIsAnyTagSelected}
+                        // handleFeedToggle={handleFeedToggle}
+                        handleRefresh={handleRefresh}
+                        deselectAllInterestTags={deselectAllInterestTags}
+                    />
+                    :
+                    <Loading />
+                }
 
                     <p className='mb-0' style={{ marginLeft: '10px' }}>
                         <i className='bi bi-info-square' /> Ineterest tags are applicable to your general feed only.
