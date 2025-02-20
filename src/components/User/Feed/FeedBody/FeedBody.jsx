@@ -1,17 +1,12 @@
 import React from 'react';
 import { Row, Col } from 'react-bootstrap';
 import { FeedToggle } from './FeedToggle';
-import { screenUtils } from '../../../../lib/utils/screenUtils';
-import '../Feed.css'
-import { Loading } from '../../../Loading/Loading';
-import { ComposeNotice } from '../../ComposeNotice';
-import { InterestsTags } from '../../Settings/InterestsTags';
+import '../Feed.css';
 
 
 
-export const FeedHeader = ({ isTagSelected, isFeedToggled, handleFeedToggle, handleRefresh, isAnyTagSelected, sideContent, noticesSection, children }) => {
+export const FeedBody = ({ isTagSelected, isFeedToggled, handleFeedToggle, handleRefresh, isAnyTagSelected, sideContent, children }) => {
 
-    const { isLargeScreen } = screenUtils();
 
     return (
         <>

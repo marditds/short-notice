@@ -11,7 +11,7 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
     // duration, 
     noticeType,
     // setDuration, 
-    addNotice, isAddingNotice }) => {
+    addNotice, onGemeniRunClick, isAddingNotice, isGeminiLoading }) => {
 
     const location = useLocation();
 
@@ -129,11 +129,19 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
                     </div>
                 }
 
-                {/* GIF Button */}
+                {/* GIF & AI Button */}
                 <div className='my-2'>
                     <Button className='notice__gif-btn py-1 px-2'
                         onClick={handleGifBtn}>
                         <i className='bi bi-filetype-gif' />
+                    </Button>
+
+                    <Button onClick={onGemeniRunClick}>
+                        {!isGeminiLoading ?
+                            <i className='bi bi-stars notice__' />
+                            :
+                            <Loading />
+                        }
                     </Button>
                 </div>
 

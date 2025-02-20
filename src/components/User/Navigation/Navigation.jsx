@@ -22,7 +22,9 @@ export const Navigation = ({
 
     const {
         isAddingNotice,
+        isGeminiLoading,
         addNotice,
+        onGeminiRunClick
     } = useNotices(googleUserData);
 
     const { isSmallScreen } = screenUtils();
@@ -70,6 +72,9 @@ export const Navigation = ({
                                         noticeType={accountType}
                                         setNoticeText={setNoticeText}
                                         addNotice={addNotice}
+                                        isGeminiLoading={isGeminiLoading}
+                                        onGemeniRunClick={async () => await onGeminiRunClick(setNoticeText)}
+
                                     />
                                 </ComposeNoticeModal>
                             </>

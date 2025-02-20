@@ -8,7 +8,7 @@ import { screenUtils } from '../../../lib/utils/screenUtils';
 import { Notices } from '../../../components/User/Notices';
 import { Button } from 'react-bootstrap';
 import { Loading } from '../../../components/Loading/Loading';
-import { FeedHeader } from '../../../components/User/Feed/FeedHeader/FeedHeader';
+import { FeedBody } from '../../../components/User/Feed/FeedBody/FeedBody';
 import { EndAsterisks } from '../../../components/User/EndAsterisks';
 import { InterestsTags } from '../../../components/User/Settings/InterestsTags';
 import { ComposeNotice } from '../../../components/User/ComposeNotice';
@@ -29,6 +29,9 @@ const UserFeed = () => {
         selectedTags,
         isAnyTagSelected,
         isAddingNotice,
+        isGeminiLoading,
+        onGemeniRun,
+        onGeminiRunClick,
         setLastThreeNoticesInFeed,
         setIsAnyTagSelected,
         setSelectedTags,
@@ -50,15 +53,12 @@ const UserFeed = () => {
         getReactionsForNotice,
         getReactionByReactionId,
         reportReaction,
-        onGemeniRun,
         addNotice,
     } = useNotices(googleUserData);
 
     const { fetchUsersData, getUserAccountByUserId } = useUserInfo(googleUserData);
 
     const { isLargeScreen, isExtraLargeScreen } = screenUtils();
-
-    const [geminiRes, setGeminiRes] = useState('');
 
     const [noticeText, setNoticeText] = useState('');
 
@@ -353,14 +353,6 @@ const UserFeed = () => {
         }
     };
 
-    const onGemeniRunClick = () => {
-        const geminiResult = onGemeniRun();
-
-        geminiResult.then(res => setGeminiRes(res));
-
-        // setGeminiRes(geminiResult);
-    };
-
     // Render loading state while data is being fetched
     // if (
     // (isLoadingPersonalFeedNotices)
@@ -377,7 +369,7 @@ const UserFeed = () => {
     return (
         // <div style={{ marginTop: '100px' }} className='position-relative w-100'>
         <div style={{ marginTop: '80px' }} className='w-100'>
-            <FeedHeader
+            <FeedBody
                 isTagSelected={isTagSelected}
                 isAnyTagSelected={isAnyTagSelected}
                 isFeedToggled={isFeedToggled}
@@ -405,19 +397,20 @@ const UserFeed = () => {
                         <i className='bi bi-info-square' /> Ineterest tags are applicable to your general feed only.
                     </p>
 
-                    <Col>
+                    <Col style={{ marginInline: '10px' }}>
                         <p>
-                            <Button onClick={onGemeniRunClick}>Generate Result</Button> <br />
-                            {
-                                geminiRes
-                            }
+                            {/* <Button onClick={onGeminiRunClick}>
+                                <i className='bi bi-stars notice__' />
+                            </Button> <br /> */}
                         </p>
                         <ComposeNotice
-                            addNotice={addNotice}
-                            isAddingNotice={isAddingNotice}
-                            noticeType={accountType}
                             noticeText={noticeText}
+                            noticeType={accountType}
+                            isGeminiLoading={isGeminiLoading}
+                            isAddingNotice={isAddingNotice}
                             setNoticeText={setNoticeText}
+                            addNotice={addNotice}
+                            onGemeniRunClick={async () => await onGeminiRunClick(setNoticeText)}
                         />
                     </Col>
                 </>
@@ -498,7 +491,7 @@ const UserFeed = () => {
                 </div>
 
 
-            </FeedHeader>
+            </FeedBody>
 
 
 

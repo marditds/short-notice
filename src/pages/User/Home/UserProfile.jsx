@@ -41,7 +41,9 @@ const UserProfile = () => {
         isSavingEdit,
         isRemovingNotice,
         tagCategories,
+        isGeminiLoading,
         setTagCategories,
+        onGeminiRunClick,
         fetchUserSaves,
         fetchUserLikes,
         setLikedNotices,
@@ -507,17 +509,19 @@ const UserProfile = () => {
 
             <div style={{ marginTop: '190px' }}>
                 <ComposeNotice
-                    // duration={duration}
                     isAddingNotice={isAddingNotice}
                     noticeText={noticeText}
-                    // noticeGif={noticeGif}
                     noticeType={accountType}
-                    // tagCategories={tagCategories}
-                    // setTagCategories={setTagCategories}
+                    isGeminiLoading={isGeminiLoading}
                     setNoticeText={setNoticeText}
-                    // setNoticeGif={setNoticeGif}
-                    // setDuration={setDuration}
                     addNotice={addNotice}
+                    onGemeniRunClick={async () => await onGeminiRunClick(setNoticeText)}
+                // tagCategories={tagCategories}
+                // noticeGif={noticeGif}
+                // duration={duration} 
+                // setTagCategories={setTagCategories}
+                // setNoticeGif={setNoticeGif}
+                // setDuration={setDuration} 
                 />
             </div>
 

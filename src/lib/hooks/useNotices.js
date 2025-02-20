@@ -18,6 +18,9 @@ const useNotices = (googleUserData) => {
     const [personalFeedNotices, setPersonalFeedNotices] = useState([]);
 
     const [lastThreeNoticesInFeed, setLastThreeNoticesInFeed] = useState([]);
+    const [geminiRes, setGeminiRes] = useState('');
+    const [isGeminiLoading, setIsGeminiLoading] = useState(false);
+
 
     const [personalFeedLikedNotices, setPersonalFeedLikedNotices] = useState({});
     const [personalFeedSavedNotices, setPersonalFeedSavedNotices] = useState({});
@@ -831,13 +834,40 @@ const useNotices = (googleUserData) => {
 
     const onGemeniRun = async () => {
 
-        const promptTxt = `Read the texts and summarize your feelings in 300 characters. You may include emojis, but they must be within the character limit. Including emojis is optional. ${lastThreeNoticesInFeed[0]}, ${lastThreeNoticesInFeed[1]}, ${lastThreeNoticesInFeed[2]}`;
+        try {
+            setIsGeminiLoading(true);
 
-        const geminiRes = await runGemini(promptTxt);
+            console.log('lastThreeNoticesInFeed[0]', lastThreeNoticesInFeed[0]);
+            console.log('lastThreeNoticesInFeed[0]', lastThreeNoticesInFeed[1]);
+            console.log('lastThreeNoticesInFeed[0]', lastThreeNoticesInFeed[2]);
 
-        console.log('geminiRes - useNotices:', geminiRes);
 
-        return geminiRes;
+            const promptTxt = `Read the texts and summarize your feelings in 300 characters or less. You may include emojis, but they must be within the character limit. Including emojis is optional. Do not acknowledge that your are reading texts. Do not acknowledge that your are following a command. ${lastThreeNoticesInFeed[0]}, ${lastThreeNoticesInFeed[1]}, ${lastThreeNoticesInFeed[2]}`;
+
+            const geminiResult = await runGemini(promptTxt);
+
+            console.log('geminiRes - useNotices:', geminiResult);
+
+            console.log(typeof (geminiResult));
+
+            setGeminiRes(geminiResult);
+
+            return geminiResult;
+        } catch (error) {
+            console.error('Error running Gemini:', error);
+        } finally {
+            setIsGeminiLoading(false);
+        }
+    }
+
+    const onGeminiRunClick = async (setNoticeText) => {
+        const aws = await onGemeniRun();
+
+        console.log(typeof (aws));
+
+        console.log('AWWWWWWS', aws);
+
+        setNoticeText(aws);
     }
 
     return {
@@ -862,6 +892,8 @@ const useNotices = (googleUserData) => {
         selectedTags,
         isAnyTagSelected,
         lastThreeNoticesInFeed,
+        geminiRes,
+        isGeminiLoading,
         setLastThreeNoticesInFeed,
         setIsAnyTagSelected,
         setTagCategories,
@@ -908,7 +940,8 @@ const useNotices = (googleUserData) => {
         setNoticesReactions,
         setSaveReactions,
         setLikedReactions,
-        onGemeniRun
+        onGemeniRun,
+        onGeminiRunClick
     };
 };
 
