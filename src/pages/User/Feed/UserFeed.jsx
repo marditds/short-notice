@@ -11,13 +11,13 @@ import { Loading } from '../../../components/Loading/Loading';
 import { FeedHeader } from '../../../components/User/Feed/FeedHeader/FeedHeader';
 import { EndAsterisks } from '../../../components/User/EndAsterisks';
 import { InterestsTags } from '../../../components/User/Settings/InterestsTags';
+import { ComposeNotice } from '../../../components/User/ComposeNotice';
 
 const UserFeed = () => {
 
-    const { googleUserData } = useUserContext();
+    const { googleUserData, accountType } = useUserContext();
 
     const {
-        lastThreeNoticesInFeed,
         user_id,
         personalFeedLikedNotices,
         personalFeedSavedNotices,
@@ -28,6 +28,7 @@ const UserFeed = () => {
         isInterestsUpdating,
         selectedTags,
         isAnyTagSelected,
+        isAddingNotice,
         setLastThreeNoticesInFeed,
         setIsAnyTagSelected,
         setSelectedTags,
@@ -49,7 +50,8 @@ const UserFeed = () => {
         getReactionsForNotice,
         getReactionByReactionId,
         reportReaction,
-        onGemeniRun
+        onGemeniRun,
+        addNotice,
     } = useNotices(googleUserData);
 
     const { fetchUsersData, getUserAccountByUserId } = useUserInfo(googleUserData);
@@ -58,6 +60,7 @@ const UserFeed = () => {
 
     const [geminiRes, setGeminiRes] = useState('');
 
+    const [noticeText, setNoticeText] = useState('');
 
     // const [selectedTags, setSelectedTags] = useState({});
     const [isTagSelected, setIsTagSelected] = useState(false);
@@ -372,128 +375,135 @@ const UserFeed = () => {
     // }
 
     return (
-        <div style={{ marginTop: '100px' }} className='position-relative w-100'>
+        // <div style={{ marginTop: '100px' }} className='position-relative w-100'>
+        <div style={{ marginTop: '100px' }} className='w-100'>
             <FeedHeader
                 isTagSelected={isTagSelected}
                 isAnyTagSelected={isAnyTagSelected}
                 isFeedToggled={isFeedToggled}
                 handleFeedToggle={handleFeedToggle}
                 handleRefresh={handleRefresh}
-            />
-
-            <div className='w-100 d-flex'>
-
-                {/* Feed tag selection */}
-                <div className='position-relative d-xl-block d-none'>
-                    <Row className='flex-column position-fixed w-25'>
-                        {
-                            !isInterestsLoading
-                                ?
-                                <InterestsTags
-                                    tagCategories={tagCategories}
-                                    selectedTags={selectedTags}
-                                    isInterestsUpdating={isInterestsUpdating}
-                                    isAnyTagSelected={isAnyTagSelected}
-                                    toggleInterestsTag={toggleInterestsTag}
-                                    updateInterests={updateInterests}
-                                    // setIsAnyTagSelected={setIsAnyTagSelected}
-                                    // handleFeedToggle={handleFeedToggle}
-                                    handleRefresh={handleRefresh}
-                                    deselectAllInterestTags={deselectAllInterestTags}
-                                />
-                                :
-                                <Loading />
-                        }
-                        {/* <Col> */}
-                        <p className='mb-0' style={{ marginLeft: '10px' }}>
-                            <i className='bi bi-info-square' /> Ineterest tags are applicable to your general feed only.
-                        </p>
-                        {/* </Col> */}
-                        <Col>
-                            <p>
-                                <Button onClick={onGemeniRunClick}>Generate Result</Button> <br />
-                                {
-                                    geminiRes
-                                }
-                            </p>
-                        </Col>
-                    </Row>
-                </div>
-
-                <div className={`${!isLargeScreen ? 'w-75' : 'w-100'} ms-auto`}>
-                    {/* Feed notices */}
+                sideContent={<>
                     {
-                        (!isLoadingPersonalFeedNotices || !isLoadingGeneralFeedNotices) &&
-                        <Notices
-                            notices={notices}
-                            user_id={user_id}
-                            likedNotices={!isFeedToggled ? personalFeedLikedNotices : likedNotices}
-                            savedNotices={!isFeedToggled ? personalFeedSavedNotices : savedNotices}
-                            handleLike={handleLike}
-                            setLikedNotices={!isFeedToggled ? setPersonalFeedLikedNotices : setLikedNotices}
-                            handleSave={handleSave}
-                            setSavedNotices={!isFeedToggled ? setPersonalFeedSavedNotices : setSavedNotices}
-                            handleReportNotice={handleReportNotice}
-                            handleReact={handleReact}
-                            getReactionsForNotice={getReactionsForNotice}
-                            getUserAccountByUserId={getUserAccountByUserId}
-                            getReactionByReactionId={getReactionByReactionId}
-                            reportReaction={reportReaction}
-                        />
+                        !isInterestsLoading
+                            ?
+                            <InterestsTags
+                                tagCategories={tagCategories}
+                                selectedTags={selectedTags}
+                                isInterestsUpdating={isInterestsUpdating}
+                                isAnyTagSelected={isAnyTagSelected}
+                                toggleInterestsTag={toggleInterestsTag}
+                                updateInterests={updateInterests}
+                                // setIsAnyTagSelected={setIsAnyTagSelected}
+                                // handleFeedToggle={handleFeedToggle}
+                                handleRefresh={handleRefresh}
+                                deselectAllInterestTags={deselectAllInterestTags}
+                            />
+                            :
+                            <Loading />
                     }
 
-                    {/* Loading component */}
-                    {
-                        (isLoadingPersonalFeedNotices || isLoadingGeneralFeedNotices) &&
-                        <div className='h-100 user-feed__loading-div my-5'>
-                            <div className='my-5'>
-                                <Loading />
-                                <span className='ms-2'>
-                                    Loading {feedType} feed...
-                                </span>
-                            </div>
+                    <p className='mb-0' style={{ marginLeft: '10px' }}>
+                        <i className='bi bi-info-square' /> Ineterest tags are applicable to your general feed only.
+                    </p>
+
+                    <Col>
+                        <p>
+                            <Button onClick={onGemeniRunClick}>Generate Result</Button> <br />
+                            {
+                                geminiRes
+                            }
+                        </p>
+                        <ComposeNotice
+                            addNotice={addNotice}
+                            isAddingNotice={isAddingNotice}
+                            noticeType={accountType}
+                            noticeText={noticeText}
+                            setNoticeText={setNoticeText}
+                        />
+                    </Col>
+                </>
+                }
+            >
+
+
+                {/* Feed notices */}
+                {
+                    (!isLoadingPersonalFeedNotices || !isLoadingGeneralFeedNotices) &&
+                    <Notices
+                        notices={notices}
+                        user_id={user_id}
+                        likedNotices={!isFeedToggled ? personalFeedLikedNotices : likedNotices}
+                        savedNotices={!isFeedToggled ? personalFeedSavedNotices : savedNotices}
+                        handleLike={handleLike}
+                        setLikedNotices={!isFeedToggled ? setPersonalFeedLikedNotices : setLikedNotices}
+                        handleSave={handleSave}
+                        setSavedNotices={!isFeedToggled ? setPersonalFeedSavedNotices : setSavedNotices}
+                        handleReportNotice={handleReportNotice}
+                        handleReact={handleReact}
+                        getReactionsForNotice={getReactionsForNotice}
+                        getUserAccountByUserId={getUserAccountByUserId}
+                        getReactionByReactionId={getReactionByReactionId}
+                        reportReaction={reportReaction}
+                    />
+                }
+
+                {/* Loading component */}
+                {
+                    (isLoadingPersonalFeedNotices || isLoadingGeneralFeedNotices) &&
+                    <div className='h-100 user-feed__loading-div my-5'>
+                        <div className='my-5'>
+                            <Loading />
+                            <span className='ms-2'>
+                                Loading {feedType} feed...
+                            </span>
+                        </div>
+                    </div>
+                }
+
+                {/* Tag selection message */}
+                {
+                    !isAnyTagSelected && isFeedToggled ?
+                        <div className='h-100'>
+                            <p className='text-center'>
+                                {`To view notices in your general feed, you must select at least one interest tag in your ${isExtraLargeScreen ? 'side menu' : 'settings'}`}.
+                            </p>
+                        </div>
+                        :
+                        null
+                }
+
+                {/* Load More Button */}
+                <div className="d-flex justify-content-center">
+                    {(!isFeedToggled && hasMorePersonalNotices) || (isFeedToggled && hasMoreGeneralNotices) ?
+                        <Button
+                            onClick={() => {
+                                if (!isFeedToggled) {
+                                    setLoadMorePersonal(true);
+                                } else {
+                                    setLoadMore(true);
+                                }
+                            }}
+                            disabled={(isLoadingMore || isLoadingMorePersonal) ? true : false}
+                            className={` my-4 notices__load-more-notices-btn ${(isLoadingMoreInitial || isLoadingMorePersonalInitial) ? 'd-none' : 'd-block'}`}
+                        >
+                            {isLoadingMore || isLoadingMorePersonal ?
+                                <><Loading size={16} /> Loading...</>
+                                : 'Load More'}
+                        </Button>
+                        :
+                        <div className='my-4'>
+                            {!isFeedToggled && <EndAsterisks />}
+                            {(isFeedToggled && isAnyTagSelected) && <EndAsterisks />}
                         </div>
                     }
-
-                    {/* Tag selection message */}
-                    {
-                        !isAnyTagSelected && isFeedToggled ?
-                            <div className='h-100'>
-                                <p className='text-center'>
-                                    {`To view notices in your general feed, you must select at least one interest tag in your ${isExtraLargeScreen ? 'side menu' : 'settings'}`}.
-                                </p>
-                            </div>
-                            :
-                            null
-                    }
-
-                    {/* Load More Button */}
-                    <div className="d-flex justify-content-center">
-                        {(!isFeedToggled && hasMorePersonalNotices) || (isFeedToggled && hasMoreGeneralNotices) ?
-                            <Button
-                                onClick={() => {
-                                    if (!isFeedToggled) {
-                                        setLoadMorePersonal(true);
-                                    } else {
-                                        setLoadMore(true);
-                                    }
-                                }}
-                                disabled={(isLoadingMore || isLoadingMorePersonal) ? true : false}
-                                className={` my-4 notices__load-more-notices-btn ${(isLoadingMoreInitial || isLoadingMorePersonalInitial) ? 'd-none' : 'd-block'}`}
-                            >
-                                {isLoadingMore || isLoadingMorePersonal ?
-                                    <><Loading size={16} /> Loading...</>
-                                    : 'Load More'}
-                            </Button>
-                            :
-                            <div className='my-4'>
-                                {!isFeedToggled && <EndAsterisks />}
-                                {(isFeedToggled && isAnyTagSelected) && <EndAsterisks />}
-                            </div>
-                        }
-                    </div>
                 </div>
-            </div>
+
+
+            </FeedHeader>
+
+
+
         </div>
     )
 }
