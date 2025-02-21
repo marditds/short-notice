@@ -275,9 +275,27 @@ export const ComposeNoticeModal = ({
             <Modal.Body className='notice__compose--modal-body py-0'>
                 {children}
             </Modal.Body>
-            {/* <Modal.Footer className='border-top-0 notice__report--modal-footer'>
-                THIS IS MODAL FOOTER.
-            </Modal.Footer> */}
+        </Modal>
+    )
+}
+
+export const InterestsModal = ({ children, showTagsModalFunction, handleCloseTagsModalFunction }) => {
+    return (
+        <Modal show={showTagsModalFunction}
+            onHide={handleCloseTagsModalFunction}
+            className='interests--modal p-0'
+        >
+            <Modal.Header className='border-bottom-0'>
+                <Modal.Title className='w-100'>
+                    <h4>Update Interests:</h4>
+                </Modal.Title>
+                <Button onClick={handleCloseTagsModalFunction} className='ms-auto me-0 p-0 interests--close-btn'>
+                    <i className='bi bi-x-square' />
+                </Button>
+            </Modal.Header>
+            <Modal.Body className='interests--modal-body pt-0'>
+                {children}
+            </Modal.Body>
         </Modal>
     )
 }

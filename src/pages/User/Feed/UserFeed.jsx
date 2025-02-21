@@ -367,7 +367,6 @@ const UserFeed = () => {
     // }
 
     return (
-        // <div style={{ marginTop: '100px' }} className='position-relative w-100'>
         <div style={{ marginTop: '80px' }} className='w-100'>
             <FeedBody
                 isTagSelected={isTagSelected}
@@ -384,8 +383,6 @@ const UserFeed = () => {
                         isAnyTagSelected={isAnyTagSelected}
                         toggleInterestsTag={toggleInterestsTag}
                         updateInterests={updateInterests}
-                        // setIsAnyTagSelected={setIsAnyTagSelected}
-                        // handleFeedToggle={handleFeedToggle}
                         handleRefresh={handleRefresh}
                         deselectAllInterestTags={deselectAllInterestTags}
                     />
@@ -397,7 +394,7 @@ const UserFeed = () => {
                         <i className='bi bi-info-square' /> Ineterest tags are applicable to your general feed only.
                     </p>
                     <hr className='mt-0' />
-                    <Col style={{ marginInline: '10px' }}>
+                    <div style={{ marginInline: '10px' }}>
                         <ComposeNotice
                             noticeText={noticeText}
                             noticeType={accountType}
@@ -407,7 +404,7 @@ const UserFeed = () => {
                             addNotice={addNotice}
                             onGemeniRunClick={async () => await onGeminiRunClick(setNoticeText)}
                         />
-                    </Col>
+                    </div>
                 </>
                 }
             >

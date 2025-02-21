@@ -574,6 +574,7 @@
 .user-profile__following--modal>div,
 .notice__report--modal>div,
 .notice__compose--modal>div,
+.interests--modal>div,
 .notice__reaction--report--modal>div,
 .notice__edit--modal>div,
 .notice__delete--modal>div,
@@ -586,7 +587,8 @@
     height: 100%;
 }
 
-.notice__compose--modal>div {
+.notice__compose--modal>div,
+.interests--modal>div {
     max-width: 700px !important;
 }
 
@@ -596,6 +598,7 @@
 .notice__react--modal>div>div,
 .notice__report--modal>div>div,
 .notice__compose--modal>div>div,
+.interests--modal>div>div,
 .notice__reaction--report--modal>div>div,
 .user-profile__following--modal>div>div,
 .user-profile__block--modal>div>div {
@@ -707,6 +710,7 @@
 .notice__delete--modal,
 .notice__report--modal,
 .notice__compose--modal,
+.interests--modal,
 .notice__reaction--report--modal,
 .user-profile__block--modal,
 .user-profile__report--modal {
@@ -717,6 +721,7 @@
 .user-profile__block--modal>div>div,
 .notice__report--modal>div>div,
 .notice__compose--modal>div>div,
+.interests--modal>div>div,
 .notice__edit--modal>div>div,
 .notice__delete--modal>div>div,
 .notice__reaction--report--modal>div>div,
@@ -762,6 +767,7 @@
 
 .notice__report--modal-body,
 .notice__compose--modal-body,
+.interests--modal-body,
 .notice__edit--modal-body,
 .notice__delete--modal-body,
 .notice__reaction--report--modal-body,
@@ -1038,12 +1044,15 @@
 
     .notice__report--modal>div>div>.modal-header,
     .notice__compose--modal>div>div>.modal-header,
+    .interests--modal>div>div>.modal-header,
     .notice__reaction--report--modal>div>div>.modal-header,
     .notice__report--modal-body,
     .notice__compose--modal-body,
+    .interests--modal-body,
     .notice__reaction--report--modal,
     .notice__report--modal>div>div>.modal-footer,
     .notice__compose--modal>div>div>.modal-footer,
+    .interests--modal>div>div>.modal-footer,
     .notice__reaction--report--modal>div>div>.modal-footer,
     .user-profile__block--modal>div>div>.modal-header,
     .user-profile__block--modal-body,
@@ -1065,6 +1074,7 @@
     .notice__reaction--report--modal-footer,
     .notice__report--modal-footer,
     .notice__compose--modal-footer,
+    .interests--modal-footer,
     .notice__edit--modal-footer,
     .notice__delete--modal-footer,
     .user-profile__block--modal-footer,
@@ -1091,6 +1101,7 @@
     .notice__reaction--report--modal>div>div>div>div,
     .notice__report--modal>div>div>div>div,
     .notice__compose--modal>div>div>div>div,
+    .interests--modal>div>div>div>div,
     .user-profile__following--modal-header>div,
     .user-profile__report--modal-header>div,
     .notice__delete--modal-header>div {
@@ -1113,6 +1124,12 @@
         width: 14px;
     }
 
+}
+
+@media (max-width: 767px) {
+    .settings__update-interests-tag {
+        font-size: var(--mobile-font-size) !important;
+    }
 }
 
 @media (max-width: 575px) {

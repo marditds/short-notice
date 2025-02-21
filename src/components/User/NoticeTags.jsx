@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 import { Accordion, Form } from 'react-bootstrap';
 import { FaAngleDown } from "react-icons/fa6";
 
@@ -6,7 +7,7 @@ import { FaAngleDown } from "react-icons/fa6";
 
 export const NoticeTags = ({ tagCategories, handleTagSelect, selectedTags }) => {
 
-
+    const location = useLocation();
 
     return (
         <Accordion defaultActiveKey={['0']} className='user-profile__tags-accordion'>
@@ -30,7 +31,7 @@ export const NoticeTags = ({ tagCategories, handleTagSelect, selectedTags }) => 
                                 <label
                                     htmlFor={`custom-radio-${tag.name}`}
                                     onClick={() => handleTagSelect(category.group, tagIndex, tag, category.values[tag.key])}
-                                    className={`mt-1 mt-sm-0 user-profile__notice-tag ${selectedTags[tag.key] ? 'tagIsChecked' : ''}`}
+                                    className={`${location.pathname === '/user/profile/' ? 'mt-1 mt-sm-0' : 'mt-1'} user-profile__notice-tag ${selectedTags[tag.key] ? 'tagIsChecked' : ''}`}
                                 >
                                     {tag.name}
                                 </label>

@@ -159,7 +159,7 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
             {/* Tags */}
             <h6
                 className='mb-2 user-profile__tags-title'>
-                Add tags: <span className='small' style={{ color: 'gray' }}>At least 1 required.</span>
+                Add tags <i className='bi bi-tag' />: <span className='small' style={{ color: 'gray' }}>At least 1 required.</span>
             </h6>
 
             <NoticeTags
@@ -178,7 +178,7 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
 
                 <Form.Select
                     aria-label="notice-timer-hh"
-                    className='w-25 mx-2 user-profile__timer-select'
+                    className='w-25 ms-2 me-1 user-profile__timer-select'
                     value={duration}
                     onChange={(e) => setDuration(Number(e.target.value))}
                 >
@@ -189,7 +189,7 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
                     ))}
 
                 </Form.Select>
-                <span>hrs</span>
+                <span className='me-1'>hrs</span>
 
                 <Button
                     onClick={handleNotify}

@@ -27,5 +27,3 @@ export async function runGemini(prompt) {
     console.log(result.response.text());
     return result.response.text();
 }
-
-// export default runGemini;
