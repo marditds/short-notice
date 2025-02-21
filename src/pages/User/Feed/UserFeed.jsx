@@ -393,16 +393,11 @@ const UserFeed = () => {
                     <Loading />
                 }
 
-                    <p className='mb-0' style={{ marginLeft: '10px' }}>
+                    <p className='mb-3' style={{ marginLeft: '10px' }}>
                         <i className='bi bi-info-square' /> Ineterest tags are applicable to your general feed only.
                     </p>
-
+                    <hr className='mt-0' />
                     <Col style={{ marginInline: '10px' }}>
-                        <p>
-                            {/* <Button onClick={onGeminiRunClick}>
-                                <i className='bi bi-stars notice__' />
-                            </Button> <br /> */}
-                        </p>
                         <ComposeNotice
                             noticeText={noticeText}
                             noticeType={accountType}

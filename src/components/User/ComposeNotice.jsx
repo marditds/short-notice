@@ -136,9 +136,10 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
                         <i className='bi bi-filetype-gif' />
                     </Button>
 
-                    <Button onClick={onGemeniRunClick}>
+                    <Button className='notice__ai-btn ms-2 py-1 px-2'
+                        onClick={onGemeniRunClick}>
                         {!isGeminiLoading ?
-                            <i className='bi bi-stars notice__' />
+                            <i className='bi bi-stars' />
                             :
                             <Loading />
                         }

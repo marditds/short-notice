@@ -289,6 +289,7 @@
 .user-profile__load-more-notices-btn:focus,
 .notice__react-gif-btn,
 .notice__gif-btn,
+.notice__ai-btn,
 .user-profile__report--radio>input:checked,
 .notice__report--radio>input:checked,
 .notice__report--modal-btn,
@@ -303,6 +304,12 @@
     border-radius: var(--main-rounded-corner);
     transition: var(--main-transition-speed) !important;
 }
+
+/* .notice__gif-btn,
+.notice__ai-btn {
+    height: 38px;
+    width: 38px;
+} */
 
 .notice__report--radio>input:checked[type=radio],
 .user-profile__report--radio>input:checked[type=radio],
@@ -320,8 +327,10 @@
 .user-profile__notify-btn:focus,
 .notice__react-gif-btn:focus,
 .notice__gif-btn:focus,
+.notice__ai-btn:focus,
 .notice__react-gif-btn:active,
-.notice__gif-btn:active {
+.notice__gif-btn:active,
+.notice__ai-btn:active {
     background-color: var(--main-accent-color-hover) !important;
     box-shadow: none !important;
 }
@@ -334,7 +343,8 @@
 .notice__report--modal-btn:hover,
 .notice__reaction--report--modal-btn:hover,
 .user-profile__notify-btn:hover,
-.notice__gif-btn:hover {
+.notice__gif-btn:hover,
+.notice__ai-btn:hover {
     background-color: var(--main-accent-color-hover) !important;
     color: black !important;
 
@@ -509,6 +519,7 @@
 .notice__react-remove-gif-btn>i,
 .notice__remove-gif-btn>i,
 .notice__gif-btn>i,
+.notice__ai-btn>i,
 .notice__edit-btn>i,
 .notice__delete-btn>i,
 .notice__reaction-btn>i::before {
@@ -643,7 +654,8 @@
 .notice__react-gif-btn>i,
 .notice__react-remove-gif-btn>i,
 .notice__remove-gif-btn>i,
-.notice__gif-btn>i {
+.notice__gif-btn>i,
+.notice__ai-btn>i {
     font-size: 20px;
 }
 
@@ -1001,6 +1013,7 @@
     .notice__react-remove-gif-btn>i,
     .notice__remove-gif-btn>i,
     .notice__gif-btn>i,
+    .notice__ai-btn>i,
     .notice__edit-btn>i,
     .notice__delete-btn>i,
     .notice__reaction-btn>i::before {

@@ -178,7 +178,7 @@
 .settings__update-interests-btn,
 .settings__load-blocked-btn {
     max-width: fit-content;
-    margin-bottom: 16px;
+    margin-bottom: 10px;
 }
 
 .settings__blocked-accounts-profiles {

@@ -30,7 +30,9 @@ export const FeedBody = ({ isTagSelected, isFeedToggled, handleFeedToggle, handl
                     style={{
                         position: 'sticky', top: '100px', height: 'calc(100vh - 100px)', overflowY: 'auto'
                     }}>
+                    {/* <Row> */}
                     {sideContent}
+                    {/* </Row> */}
                 </Col>
 
                 {/* Feed Notices */}

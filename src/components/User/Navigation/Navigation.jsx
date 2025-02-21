@@ -27,7 +27,7 @@ export const Navigation = ({
         onGeminiRunClick
     } = useNotices(googleUserData);
 
-    const { isSmallScreen } = screenUtils();
+    const { isSmallScreen, isExtraLargeScreen, isLargeScreen } = screenUtils();
 
     //Compose Notice
     const [noticeText, setNoticeText] = useState('');
@@ -56,9 +56,10 @@ export const Navigation = ({
                                 {/* Compose Notice Button */}
                                 <Button
                                     onClick={() => setShowComposeNoticeModalFunction(true)}
-                                    className='navigation__compose-btn my-auto ms-auto'
+                                    className='navigation__compose-btn d-xl-none d-block my-auto 
+                                    ms-auto'
                                 >
-                                    <i className='bi bi-plus-square' />
+                                    <i className='bi bi-plus-square d-flex justify-content-center align-items-center' />
                                 </Button>
 
                                 {/* Compose Notice Modal */}
@@ -84,9 +85,19 @@ export const Navigation = ({
                     <NavDropdown
                         drop='down'
                         id="dropdown-basic-button"
-                        className={`my-auto ${location.pathname === '/user/profile' ? 'ms-auto' : (isSmallScreen ? 'ms-0' : 'ms-2')} userhome__body--profile--tools--dropdown`}
+                        className={`my-auto userhome__body--profile--tools--dropdown 
+                            ${location.pathname === '/user/profile' ? 'ms-auto' :
+                                (!isLargeScreen ? 'ms-auto' : 'ms-2')
+
+                            }
+                            `}
+
+                        // className={`my-auto ms-auto
+                        //     ${location.pathname === '/user/profile' ? 'ms-auto' : (isSmallScreen ? 'ms-0' : 'ms-2')}
+                        //      userhome__body--profile--tools--dropdown`}
+
                         // className={`my-auto ${location.pathname === '/user/profile' ? 'ms-auto' : 'ms-2'} userhome__body--profile--tools--dropdown`}
-                        title={<i className='bi bi-three-dots-vertical navigation__three-dots'></i>}>
+                        title={<i className='bi bi-three-dots-vertical navigation__three-dots d-flex justify-content-center align-items-center' />}>
                         <NavDropdown.Item
                             as={Link}
                             to='/user/feed'
