@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import useUserInfo from '../../../lib/hooks/useUserInfo';
 import { getAvatarUrl as avatarUrl } from '../../../lib/utils/avatarUtils';
 import defaultAvatar from '../../../assets/default.png';
+import { screenUtils } from '../../../lib/utils/screenUtils';
 import { Button, Form, Modal, Stack } from 'react-bootstrap';
 import { CgSearch } from "react-icons/cg";
 import { SlClose } from "react-icons/sl";
@@ -11,8 +12,9 @@ import { EndAsterisks } from '../EndAsterisks';
 
 export const UserSearch = ({ userId }) => {
 
-
     const { getAllUsersByString, getBlockedUsersByUser } = useUserInfo();
+
+    const { isExtraSmallScreen } = screenUtils();
 
     const [searchUsername, setSearchUsername] = useState('');
     const [usersResult, setUsersResult] = useState([]);
@@ -31,11 +33,17 @@ export const UserSearch = ({ userId }) => {
         }
     };
 
-    const fetchSearchResults = async () => {
+    const fetchSearchResults = async (newSearchTerm = false) => {
         if (!lastId) {
             setIsResultLoading(true);
         }
+
+        if (newSearchTerm = true && lastId === null) {
+            setUsersResult([]);
+        }
+
         setIsLoadingMore(true);
+
         try {
             console.log('userIdasasas:', userId);
             console.log('limit:', limit);
@@ -44,16 +52,6 @@ export const UserSearch = ({ userId }) => {
             const users = await getAllUsersByString(searchUsername, limit, lastId);
 
             console.log('users:', users);
-
-            // const blockedUsers = await getBlockedUsersByUser(userId);
-
-            // console.log('blockedUsers:', blockedUsers);
-
-            // const filteredUsers = users?.documents.filter((user) =>
-            // !blockedUsers.some((blocked) => user.$id === blocked.blocked_id)
-            // );
-
-            // console.log('filteredUsers,', filteredUsers);
 
             if (users.documents !== undefined) {
                 setUsersResult(prevUsers => {
@@ -65,22 +63,15 @@ export const UserSearch = ({ userId }) => {
             } else {
                 return 'No results';
             }
-            // if (filteredUsers !== undefined) {
-            //     setUsersResult(prevUsers => {
-            //         const moreUsers = filteredUsers?.filter(user =>
-            //             !prevUsers.some(loadedUser => loadedUser.$id === user.$id)
-            //         );
-            //         return [...prevUsers, ...moreUsers];
-            //     });
-            // } else {
-            //     return 'No results';
-            // }
+
             if (users?.documents.length < limit) {
                 setHasMoreProfiles(false);
+                setLastId(null);
             } else {
                 setHasMoreProfiles(true);
                 setLastId(users.documents[users.documents.length - 1].$id);
             }
+
         } catch (error) {
             console.error('Error listing users:', error);
         } finally {
@@ -94,21 +85,26 @@ export const UserSearch = ({ userId }) => {
     }, [lastId])
 
     const handleShowSearchUsersModal = async () => {
-        setShow(true);
-        await fetchSearchResults();
+        if (!isExtraSmallScreen) {
+            setShow(true);
+        }
+        await fetchSearchResults(true);
+
     };
 
     const handleLoadMoreProfiles = () => {
-        fetchSearchResults();
+        fetchSearchResults(false);
     }
 
     const handleCloseSeachUsersModal = () => {
         setShow(false)
         setLastId(null);
+        setSearchUsername('');
         setUsersResult([]);
     };
 
     const handleOnKeyDown = (e) => {
+
         if (
             !e.key.match(/^[a-zA-Z]$/) &&
             e.key !== "Backspace" &&
@@ -122,6 +118,7 @@ export const UserSearch = ({ userId }) => {
 
         if (e.key === "Enter") {
             e.preventDefault();
+            console.log(e.key)
             if (searchUsername.trim() !== "") {
                 handleShowSearchUsersModal();
             }
@@ -130,17 +127,15 @@ export const UserSearch = ({ userId }) => {
 
     return (
         <>
+            {/* Search Bar */}
             <div className='mx-2 justify-content-center d-flex align-items-center'>
                 <Button
                     onClick={handleShowSearchUsersModal}
                     // className=' tools__search-btn'
                     className='me-2 px-2 tools__search-btn'
-                    disabled={searchUsername === '' ? true : false}
+                    disabled={(!isExtraSmallScreen && searchUsername === '') ? true : false}
                 >
-                    <CgSearch
-                        size={24}
-                        color={'var(--main-text-color)'}
-                    />
+                    <i className='bi bi-search' style={{ color: 'var(--main-text-color)' }} />
                 </Button>
                 <Form>
                     <Form.Group controlId="userSearch">
@@ -149,9 +144,10 @@ export const UserSearch = ({ userId }) => {
                             as="textarea"
                             rows={1}
                             placeholder='Username Search'
+                            value={searchUsername}
                             onChange={onUserSearchChange}
                             onKeyDown={handleOnKeyDown}
-                            className='tools__search-field'
+                            className='tools__search-field d-none d-sm-block'
                         />
                     </Form.Group>
                 </Form>
@@ -165,15 +161,38 @@ export const UserSearch = ({ userId }) => {
                 className='tools__search--results-modal'
             >
                 <Modal.Header className='w-100 pb-0 pb-md-3'>
-                    <Modal.Title>Showing results for "{searchUsername}"</Modal.Title>
+                    <Modal.Title>Search Username</Modal.Title>
                     <Button
                         className='ms-auto p-0 tools__search--results-modal-close-btn'
                         onClick={handleCloseSeachUsersModal}>
                         <i className='bi bi-x-square' />
-                        {/* <SlClose /> */}
                     </Button>
                 </Modal.Header>
                 <Modal.Body className='tools__search--results-modal-body'>
+                    <div className='d-flex'>
+                        <Form className='w-100'>
+                            <Form.Group controlId="userSearch">
+                                <Form.Label className='visually-hidden'>Search Username</Form.Label>
+                                <Form.Control
+                                    as="textarea"
+                                    rows={1}
+                                    placeholder='Username Search'
+                                    value={searchUsername}
+                                    onChange={onUserSearchChange}
+                                    onKeyDown={handleOnKeyDown}
+                                    className='tools__search-field w-100 mb-2'
+                                />
+                            </Form.Group>
+                        </Form>
+                        <Button
+                            onClick={() => fetchSearchResults(true)}
+                            className='ms-2 px-2 tools__search-btn'
+                            disabled={(!isExtraSmallScreen && searchUsername === '') ? true : false}
+                        >
+                            <i className='bi bi-search' />
+                        </Button>
+                    </div>
+
                     <Stack
                         gap={3}
                         direction='horizontal'
@@ -206,23 +225,26 @@ export const UserSearch = ({ userId }) => {
                         }
                     </Stack>
 
-                    {hasMoreProfiles ?
-                        <Button
-                            onClick={handleLoadMoreProfiles}
-                            disabled={isLoadingMore || !hasMoreProfiles}
-                            className='w-100 tools__search--results-expand-btn'
-                        >
-                            {isLoadingMore ?
-                                <Loading size={24} color={'var(--main-accent-color)'} />
+                    {usersResult.length !== 0 ?
+                        (
+                            hasMoreProfiles ?
+                                <Button
+                                    onClick={handleLoadMoreProfiles}
+                                    disabled={isLoadingMore || !hasMoreProfiles}
+                                    className='w-100 tools__search--results-expand-btn'
+                                >
+                                    {isLoadingMore ?
+                                        <Loading size={24} color={'var(--main-accent-color)'} />
+                                        :
+                                        <i className='bi bi-chevron-down tools__search--results-expand-btn-icon'></i>
+                                    }
+                                </Button>
                                 :
-                                <i className='bi bi-chevron-down tools__search--results-expand-btn-icon'></i>
-                            }
-                        </Button>
-                        :
-                        <div className='text-center'>
-                            <EndAsterisks componentName='tools__search' />
-                        </div>
-                    }
+                                <div className='text-center'>
+                                    <EndAsterisks componentName='tools__search' />
+                                </div>
+                        )
+                        : null}
 
                 </Modal.Body>
 
