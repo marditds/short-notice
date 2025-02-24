@@ -16,64 +16,73 @@ export const UserSearch = () => {
 
     const { isExtraSmallScreen } = screenUtils();
 
-    const [searchUsernameInUI, setSearchUsernameInUI] = useState('');
-    const [searchTerm, setSearchTerm] = useState('');
-    const [usersResult, setUsersResult] = useState([]);
+    const [navSrchUsrmInUI, setNavSrchUsrmInUI] = useState('');
+    const [modalSrchUsrmInUI, setModalSrchUsrmInUI] = useState('');
+
+    // const [searchTerm, setSearchTerm] = useState('');
+    const [navUsersResult, setNavUsersResult] = useState([]);
+    const [modalUsersResult, setModalUsersResult] = useState([]);
     const [show, setShow] = useState(false);
     const [isResultLoading, setIsResultLoading] = useState(false);
 
-    const [limit] = useState(7);
+    // nav
+    const [navLimit] = useState(7);
     const [lastId, setLastId] = useState(null);
     const [hasMoreProfiles, setHasMoreProfiles] = useState(true);
     const [isLoadingMore, setIsLoadingMore] = useState(false);
 
-    const onUserSearchChange = (e) => {
+    // modal
+    const [modalLimit] = useState(7);
+    const [lastModalId, setModalLastId] = useState(null);
+    const [hasModalMoreProfiles, setHasModalMoreProfiles] = useState(true);
+    const [isModalLoadingMore, setIsModalLoadingMore] = useState(false);
+
+    const onNavFieldUserSearchChange = (e) => {
+        setModalSrchUsrmInUI('');
         const value = e.target.value;
         if (/^[a-zA-Z]*$/.test(value)) {
-            setSearchUsernameInUI(value);
+            setNavSrchUsrmInUI(value);
         }
     };
 
-    const fetchSearchResults = async (newSearchTerm = false, searchTerm) => {
+    const onModalUserSearchChange = (e) => {
+        setNavSrchUsrmInUI('');
+        setModalLastId(null);
+        const value = e.target.value;
+        if (/^[a-zA-Z]*$/.test(value)) {
+            setModalSrchUsrmInUI(value);
+        }
+    };
+
+    // Fetch results from nav search
+    const fetchSearchResults = async (searchTerm) => {
         if (!lastId) {
             setIsResultLoading(true);
         }
 
         try {
-            if (newSearchTerm === true) {
-                setUsersResult([]);
-                setLastId(null);
-                console.log('Search terms was new!!!');
-            }
-
             console.log('searchTerm', searchTerm);
-            console.log('newSearchTerm', newSearchTerm);
-            console.log('limit:', limit);
+            console.log('navLimit:', navLimit);
             console.log('lastId:', lastId);
 
-            const users = await getAllUsersByString(searchTerm, limit, lastId);
+            const users = await getAllUsersByString(searchTerm, navLimit, lastId);
 
             console.log('users:', users);
 
             if (users?.documents !== undefined) {
-                if (newSearchTerm === false) {
-                    setUsersResult(prevUsers => {
-                        const moreUsers = users.documents?.filter(user =>
-                            !prevUsers.some(loadedUser => loadedUser.$id === user.$id)
-                        );
-                        return [...prevUsers, ...moreUsers];
-                    });
-                }
-                if (newSearchTerm === true) {
-                    setUsersResult(users.documents);
-                }
+                setNavUsersResult(prevUsers => {
+                    const moreUsers = users.documents?.filter(user =>
+                        !prevUsers.some(loadedUser => loadedUser.$id === user.$id)
+                    );
+                    return [...prevUsers, ...moreUsers];
+                });
             }
 
-            if (users?.documents.length < limit) {
-                console.log('Is users?.documents.length < limit?', users?.documents.length + ', ' + limit);
+            if (users?.documents.length < navLimit) {
+                console.log('Is users?.documents.length < navLimit?', users?.documents.length + ', ' + navLimit);
                 setHasMoreProfiles(false);
             } else {
-                console.log('Is users?.documents.length < limit?', users?.documents.length + ', ' + limit);
+                console.log('Is users?.documents.length < navLimit?', users?.documents.length + ', ' + navLimit);
                 setHasMoreProfiles(true);
                 setLastId(users.documents[users.documents.length - 1].$id);
             }
@@ -85,6 +94,55 @@ export const UserSearch = () => {
         }
     }
 
+    // Fetch results from modal search
+    const fetchModalSearchResults = async (newSearchTerm = false, searchTerm) => {
+        if (!lastModalId) {
+            setIsResultLoading(true);
+        }
+
+        // if (newSearchTerm === true) {
+        //     setModalLastId(null); 
+        // }
+
+        try {
+            console.log('searchTerm', searchTerm);
+            console.log('newSearchTerm', newSearchTerm);
+            console.log('navLimit:', modalLimit);
+            console.log('lastId:', lastModalId);
+
+            const users = await getAllUsersByString(searchTerm, modalLimit, lastModalId);
+
+            console.log('users:', users);
+
+            if (users?.documents !== undefined) {
+                if (newSearchTerm === false) {
+                    setModalUsersResult(prevUsers => {
+                        const moreUsers = users.documents?.filter(user =>
+                            !prevUsers.some(loadedUser => loadedUser.$id === user.$id)
+                        );
+                        return [...prevUsers, ...moreUsers];
+                    });
+                } else {
+                    console.log('LOGGGGG', users.documents);
+                    setModalUsersResult(users.documents);
+                }
+            }
+
+            if (users?.documents.length < modalLimit) {
+                console.log('Is users?.documents.length < navLimit?', users?.documents.length + ', ' + modalLimit);
+                setHasMoreProfiles(false);
+            } else {
+                console.log('Is users?.documents.length < navLimit?', users?.documents.length + ', ' + modalLimit);
+                setHasMoreProfiles(true);
+                setModalLastId(users.documents[users.documents.length - 1].$id);
+            }
+
+        } catch (error) {
+            console.error('Error listing users:', error);
+        } finally {
+            setIsResultLoading(false);
+        }
+    }
 
     useEffect(() => {
         console.log('lastId', lastId);
@@ -92,23 +150,33 @@ export const UserSearch = () => {
 
     const handleShowSearchUsersModal = async () => {
         setShow(true);
-        // setUsersResult([]);
-        // setLastId(null);
-        setSearchTerm(searchUsernameInUI);
-        await fetchSearchResults(true, searchUsernameInUI);
+        console.log('Calling handleShowSearchUsersModal for', navSrchUsrmInUI);
+        await fetchSearchResults(navSrchUsrmInUI);
     };
 
     const handleModalSearch = async () => {
-        if (searchUsernameInUI.trim !== '') {
-            setSearchTerm(searchUsernameInUI);
-            await fetchSearchResults(true, searchUsernameInUI);
-        }
+        setHasMoreProfiles(false);
+        setNavUsersResult([]);
+        setLastId(null);
+        setModalLastId(null);
+        console.log('Calling handleModalSearch for', modalSrchUsrmInUI);
+        await fetchModalSearchResults(true, modalSrchUsrmInUI);
     }
 
     const handleLoadMoreProfiles = async () => {
         try {
             setIsLoadingMore(true);
-            await fetchSearchResults(false, searchTerm);
+
+            if (navSrchUsrmInUI !== '') {
+                console.log('loading for nav');
+                await fetchSearchResults(navSrchUsrmInUI);
+            }
+
+            if (modalSrchUsrmInUI !== '') {
+                console.log('loading for modal');
+                await fetchModalSearchResults(false, modalSrchUsrmInUI);
+            }
+
         } catch (error) {
             console.error('Error fetching results:', error);
         } finally {
@@ -119,9 +187,11 @@ export const UserSearch = () => {
     const handleCloseSeachUsersModal = () => {
         setShow(false)
         setLastId(null);
-        setSearchUsernameInUI('');
-        setSearchTerm('')
-        setUsersResult([]);
+        setNavSrchUsrmInUI('');
+        setModalSrchUsrmInUI('');
+        // setSearchTerm('')
+        setNavUsersResult([]);
+        setModalUsersResult([]);
     };
 
     const handleOnKeyDown = (e) => {
@@ -140,7 +210,7 @@ export const UserSearch = () => {
         if (e.key === "Enter") {
             e.preventDefault();
             console.log(e.key)
-            if (searchUsernameInUI.trim() !== "") {
+            if (navSrchUsrmInUI.trim() !== "") {
                 if (show) {
                     handleModalSearch();
                 } else {
@@ -150,9 +220,7 @@ export const UserSearch = () => {
         }
     }
 
-    const onTestBtnClick = () => {
-        console.log('Test Btn clicked');
-    }
+
 
     return (
         <>
@@ -161,7 +229,7 @@ export const UserSearch = () => {
                 <Button
                     onClick={handleShowSearchUsersModal}
                     className='me-2 px-2 tools__search-btn'
-                    disabled={(!isExtraSmallScreen && searchUsernameInUI === '') ? true : false}
+                    disabled={(!isExtraSmallScreen && navSrchUsrmInUI === '') ? true : false}
                 >
                     <i className='bi bi-search' style={{ color: 'var(--main-text-color)' }} />
                 </Button>
@@ -173,8 +241,8 @@ export const UserSearch = () => {
                             as="textarea"
                             rows={1}
                             placeholder='Username Search'
-                            value={searchUsernameInUI}
-                            onChange={onUserSearchChange}
+                            value={navSrchUsrmInUI}
+                            onChange={onNavFieldUserSearchChange}
                             onKeyDown={handleOnKeyDown}
                             className='tools__search-field d-none d-sm-block'
                         />
@@ -206,8 +274,8 @@ export const UserSearch = () => {
                                     as="textarea"
                                     rows={1}
                                     placeholder='Username Search'
-                                    value={searchUsernameInUI}
-                                    onChange={onUserSearchChange}
+                                    value={modalSrchUsrmInUI}
+                                    onChange={onModalUserSearchChange}
                                     onKeyDown={handleOnKeyDown}
                                     className='tools__search-field w-100 mb-2'
                                 />
@@ -216,7 +284,7 @@ export const UserSearch = () => {
                         <Button
                             onClick={handleModalSearch}
                             className='ms-2 px-2 tools__search-btn'
-                            disabled={(!isExtraSmallScreen && searchUsernameInUI === '') ? true : false}
+                            disabled={(!isExtraSmallScreen && modalSrchUsrmInUI === '') ? true : false}
                         >
                             <i className='bi bi-search' />
                         </Button>
@@ -232,7 +300,7 @@ export const UserSearch = () => {
                             </div>
                             :
                             (
-                                usersResult.length > 0 ? usersResult?.map((user) =>
+                                (navUsersResult.length > 0 || modalUsersResult.length > 0) ? [...navUsersResult, ...modalUsersResult].map((user) =>
                                     <div
                                         key={user.$id}
                                         className='tools__search--search-results-profiles'
@@ -254,7 +322,7 @@ export const UserSearch = () => {
                         }
                     </Stack>
 
-                    {usersResult.length !== 0 ?
+                    {navUsersResult.length !== 0 || modalUsersResult.length !== 0 ?
                         (
                             hasMoreProfiles ?
                                 <Button
