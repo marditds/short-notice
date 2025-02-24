@@ -228,8 +228,6 @@ export const getAllUsersByString = async (str, limit, cursorAfter) => {
 };
 
 
-
-
 const checkUsernameExists = async (username) => {
     try {
         const users = await databases.listDocuments(

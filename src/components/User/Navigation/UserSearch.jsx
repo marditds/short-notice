@@ -10,9 +10,9 @@ import { SlClose } from "react-icons/sl";
 import { Loading } from '../../Loading/Loading';
 import { EndAsterisks } from '../EndAsterisks';
 
-export const UserSearch = ({ userId }) => {
+export const UserSearch = () => {
 
-    const { getAllUsersByString, getBlockedUsersByUser } = useUserInfo();
+    const { getAllUsersByString } = useUserInfo();
 
     const { isExtraSmallScreen } = screenUtils();
 
@@ -92,9 +92,18 @@ export const UserSearch = ({ userId }) => {
 
     const handleShowSearchUsersModal = async () => {
         setShow(true);
+        // setUsersResult([]);
+        // setLastId(null);
         setSearchTerm(searchUsernameInUI);
         await fetchSearchResults(true, searchUsernameInUI);
     };
+
+    const handleModalSearch = async () => {
+        if (searchUsernameInUI.trim !== '') {
+            setSearchTerm(searchUsernameInUI);
+            await fetchSearchResults(true, searchUsernameInUI);
+        }
+    }
 
     const handleLoadMoreProfiles = async () => {
         try {
@@ -132,7 +141,11 @@ export const UserSearch = ({ userId }) => {
             e.preventDefault();
             console.log(e.key)
             if (searchUsernameInUI.trim() !== "") {
-                handleShowSearchUsersModal();
+                if (show) {
+                    handleModalSearch();
+                } else {
+                    handleShowSearchUsersModal();
+                }
             }
         }
     }
@@ -147,13 +160,12 @@ export const UserSearch = ({ userId }) => {
             <div className='mx-2 justify-content-center d-flex align-items-center'>
                 <Button
                     onClick={handleShowSearchUsersModal}
-                    // className=' tools__search-btn'
                     className='me-2 px-2 tools__search-btn'
                     disabled={(!isExtraSmallScreen && searchUsernameInUI === '') ? true : false}
                 >
                     <i className='bi bi-search' style={{ color: 'var(--main-text-color)' }} />
                 </Button>
-                <Button onClick={onTestBtnClick}>Test Btn</Button>
+                {/* <Button onClick={onTestBtnClick}>Test Btn</Button> */}
                 <Form>
                     <Form.Group controlId="userSearch">
                         <Form.Label className='visually-hidden'>Search Username</Form.Label>
@@ -202,7 +214,7 @@ export const UserSearch = ({ userId }) => {
                             </Form.Group>
                         </Form>
                         <Button
-                            onClick={() => fetchSearchResults(true, searchUsernameInUI)}
+                            onClick={handleModalSearch}
                             className='ms-2 px-2 tools__search-btn'
                             disabled={(!isExtraSmallScreen && searchUsernameInUI === '') ? true : false}
                         >
