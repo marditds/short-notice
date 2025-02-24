@@ -16,7 +16,8 @@ export const UserSearch = ({ userId }) => {
 
     const { isExtraSmallScreen } = screenUtils();
 
-    const [searchUsername, setSearchUsername] = useState('');
+    const [searchUsernameInUI, setSearchUsernameInUI] = useState('');
+    const [searchTerm, setSearchTerm] = useState('');
     const [usersResult, setUsersResult] = useState([]);
     const [show, setShow] = useState(false);
     const [isResultLoading, setIsResultLoading] = useState(false);
@@ -29,45 +30,50 @@ export const UserSearch = ({ userId }) => {
     const onUserSearchChange = (e) => {
         const value = e.target.value;
         if (/^[a-zA-Z]*$/.test(value)) {
-            setSearchUsername(value);
+            setSearchUsernameInUI(value);
         }
     };
 
-    const fetchSearchResults = async (newSearchTerm = false) => {
+    const fetchSearchResults = async (newSearchTerm = false, searchTerm) => {
         if (!lastId) {
             setIsResultLoading(true);
         }
 
-        if (newSearchTerm = true && lastId === null) {
-            setUsersResult([]);
-        }
-
-        setIsLoadingMore(true);
-
         try {
-            console.log('userIdasasas:', userId);
+            if (newSearchTerm === true) {
+                setUsersResult([]);
+                setLastId(null);
+                console.log('Search terms was new!!!');
+            }
+
+            console.log('searchTerm', searchTerm);
+            console.log('newSearchTerm', newSearchTerm);
             console.log('limit:', limit);
             console.log('lastId:', lastId);
 
-            const users = await getAllUsersByString(searchUsername, limit, lastId);
+            const users = await getAllUsersByString(searchTerm, limit, lastId);
 
             console.log('users:', users);
 
-            if (users.documents !== undefined) {
-                setUsersResult(prevUsers => {
-                    const moreUsers = users.documents?.filter(user =>
-                        !prevUsers.some(loadedUser => loadedUser.$id === user.$id)
-                    );
-                    return [...prevUsers, ...moreUsers];
-                });
-            } else {
-                return 'No results';
+            if (users?.documents !== undefined) {
+                if (newSearchTerm === false) {
+                    setUsersResult(prevUsers => {
+                        const moreUsers = users.documents?.filter(user =>
+                            !prevUsers.some(loadedUser => loadedUser.$id === user.$id)
+                        );
+                        return [...prevUsers, ...moreUsers];
+                    });
+                }
+                if (newSearchTerm === true) {
+                    setUsersResult(users.documents);
+                }
             }
 
             if (users?.documents.length < limit) {
+                console.log('Is users?.documents.length < limit?', users?.documents.length + ', ' + limit);
                 setHasMoreProfiles(false);
-                setLastId(null);
             } else {
+                console.log('Is users?.documents.length < limit?', users?.documents.length + ', ' + limit);
                 setHasMoreProfiles(true);
                 setLastId(users.documents[users.documents.length - 1].$id);
             }
@@ -76,30 +82,36 @@ export const UserSearch = ({ userId }) => {
             console.error('Error listing users:', error);
         } finally {
             setIsResultLoading(false);
-            setIsLoadingMore(false);
         }
     }
+
 
     useEffect(() => {
         console.log('lastId', lastId);
     }, [lastId])
 
     const handleShowSearchUsersModal = async () => {
-        if (!isExtraSmallScreen) {
-            setShow(true);
-        }
-        await fetchSearchResults(true);
-
+        setShow(true);
+        setSearchTerm(searchUsernameInUI);
+        await fetchSearchResults(true, searchUsernameInUI);
     };
 
-    const handleLoadMoreProfiles = () => {
-        fetchSearchResults(false);
+    const handleLoadMoreProfiles = async () => {
+        try {
+            setIsLoadingMore(true);
+            await fetchSearchResults(false, searchTerm);
+        } catch (error) {
+            console.error('Error fetching results:', error);
+        } finally {
+            setIsLoadingMore(false);
+        }
     }
 
     const handleCloseSeachUsersModal = () => {
         setShow(false)
         setLastId(null);
-        setSearchUsername('');
+        setSearchUsernameInUI('');
+        setSearchTerm('')
         setUsersResult([]);
     };
 
@@ -119,10 +131,14 @@ export const UserSearch = ({ userId }) => {
         if (e.key === "Enter") {
             e.preventDefault();
             console.log(e.key)
-            if (searchUsername.trim() !== "") {
+            if (searchUsernameInUI.trim() !== "") {
                 handleShowSearchUsersModal();
             }
         }
+    }
+
+    const onTestBtnClick = () => {
+        console.log('Test Btn clicked');
     }
 
     return (
@@ -133,10 +149,11 @@ export const UserSearch = ({ userId }) => {
                     onClick={handleShowSearchUsersModal}
                     // className=' tools__search-btn'
                     className='me-2 px-2 tools__search-btn'
-                    disabled={(!isExtraSmallScreen && searchUsername === '') ? true : false}
+                    disabled={(!isExtraSmallScreen && searchUsernameInUI === '') ? true : false}
                 >
                     <i className='bi bi-search' style={{ color: 'var(--main-text-color)' }} />
                 </Button>
+                <Button onClick={onTestBtnClick}>Test Btn</Button>
                 <Form>
                     <Form.Group controlId="userSearch">
                         <Form.Label className='visually-hidden'>Search Username</Form.Label>
@@ -144,7 +161,7 @@ export const UserSearch = ({ userId }) => {
                             as="textarea"
                             rows={1}
                             placeholder='Username Search'
-                            value={searchUsername}
+                            value={searchUsernameInUI}
                             onChange={onUserSearchChange}
                             onKeyDown={handleOnKeyDown}
                             className='tools__search-field d-none d-sm-block'
@@ -177,7 +194,7 @@ export const UserSearch = ({ userId }) => {
                                     as="textarea"
                                     rows={1}
                                     placeholder='Username Search'
-                                    value={searchUsername}
+                                    value={searchUsernameInUI}
                                     onChange={onUserSearchChange}
                                     onKeyDown={handleOnKeyDown}
                                     className='tools__search-field w-100 mb-2'
@@ -185,9 +202,9 @@ export const UserSearch = ({ userId }) => {
                             </Form.Group>
                         </Form>
                         <Button
-                            onClick={() => fetchSearchResults(true)}
+                            onClick={() => fetchSearchResults(true, searchUsernameInUI)}
                             className='ms-2 px-2 tools__search-btn'
-                            disabled={(!isExtraSmallScreen && searchUsername === '') ? true : false}
+                            disabled={(!isExtraSmallScreen && searchUsernameInUI === '') ? true : false}
                         >
                             <i className='bi bi-search' />
                         </Button>
@@ -203,7 +220,7 @@ export const UserSearch = ({ userId }) => {
                             </div>
                             :
                             (
-                                usersResult ? usersResult?.map((user) =>
+                                usersResult.length > 0 ? usersResult?.map((user) =>
                                     <div
                                         key={user.$id}
                                         className='tools__search--search-results-profiles'

@@ -199,14 +199,10 @@ export const getUserByUsername = async (username) => {
 
 export const getAllUsersByString = async (str, limit, cursorAfter) => {
 
-    // getBlockedUsersByUser(blocker_id)
-    // getUsersBlockingUser(blocked_id)
-
     try {
         const queryParams = [
             Query.contains('username', str),
             Query.limit(limit),
-            // Query.notEqual('$id', blocked_id)
         ];
 
         if (cursorAfter) {
@@ -220,7 +216,7 @@ export const getAllUsersByString = async (str, limit, cursorAfter) => {
         );
 
         if (userList.total > 0) {
-            console.log('BBBBBLOCK LIIIIISTTTTTTTTTT:', userList);
+            console.log('dbhandler.js - userList:', userList);
             return userList;
         }
 
@@ -230,6 +226,9 @@ export const getAllUsersByString = async (str, limit, cursorAfter) => {
         return null;
     }
 };
+
+
+
 
 const checkUsernameExists = async (username) => {
     try {
