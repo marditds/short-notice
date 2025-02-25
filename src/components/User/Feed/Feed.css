@@ -47,11 +47,14 @@
 
 .user-feed__compose-btn:hover,
 .user-feed__compose-btn:active,
+.user-feed__compose-btn:focus,
 .user-feed__refresh-btn:hover,
-.user-feed__refresh-btn:active {
+.user-feed__refresh-btn:active,
+.user-feed__refresh-btn:focus {
     background-color: var(--main-accent-color-hover) !important;
     border-color: var(--main-accent-color-hover) !important;
     color: var(--main-text-color) !important;
+    box-shadow: none;
 }
 
 .user-feed__toggle-btn {

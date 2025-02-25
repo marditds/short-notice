@@ -5,8 +5,6 @@ import { getAvatarUrl as avatarUrl } from '../../../lib/utils/avatarUtils';
 import defaultAvatar from '../../../assets/default.png';
 import { screenUtils } from '../../../lib/utils/screenUtils';
 import { Button, Form, Modal, Stack } from 'react-bootstrap';
-import { CgSearch } from "react-icons/cg";
-import { SlClose } from "react-icons/sl";
 import { Loading } from '../../Loading/Loading';
 import { EndAsterisks } from '../EndAsterisks';
 
@@ -16,26 +14,23 @@ export const UserSearch = () => {
 
     const { isExtraSmallScreen } = screenUtils();
 
-    const [navSrchUsrmInUI, setNavSrchUsrmInUI] = useState('');
-    const [modalSrchUsrmInUI, setModalSrchUsrmInUI] = useState('');
-
-    // const [searchTerm, setSearchTerm] = useState('');
-    const [navUsersResult, setNavUsersResult] = useState([]);
-    const [modalUsersResult, setModalUsersResult] = useState([]);
     const [show, setShow] = useState(false);
     const [isResultLoading, setIsResultLoading] = useState(false);
 
     // nav
+    const [navSrchUsrmInUI, setNavSrchUsrmInUI] = useState('');
+    const [navUsersResult, setNavUsersResult] = useState([]);
     const [navLimit] = useState(7);
     const [lastId, setLastId] = useState(null);
-    const [hasMoreProfiles, setHasMoreProfiles] = useState(true);
-    const [isLoadingMore, setIsLoadingMore] = useState(false);
 
     // modal
+    const [modalSrchUsrmInUI, setModalSrchUsrmInUI] = useState('');
+    const [modalUsersResult, setModalUsersResult] = useState([]);
     const [modalLimit] = useState(7);
     const [lastModalId, setModalLastId] = useState(null);
-    const [hasModalMoreProfiles, setHasModalMoreProfiles] = useState(true);
-    const [isModalLoadingMore, setIsModalLoadingMore] = useState(false);
+
+    const [hasMoreProfiles, setHasMoreProfiles] = useState(true);
+    const [isLoadingMore, setIsLoadingMore] = useState(false);
 
     const onNavFieldUserSearchChange = (e) => {
         setModalSrchUsrmInUI('');
@@ -69,13 +64,15 @@ export const UserSearch = () => {
 
             console.log('users:', users);
 
-            if (users?.documents !== undefined) {
+            if (users?.documents !== undefined || users?.documents?.length > 0) {
                 setNavUsersResult(prevUsers => {
                     const moreUsers = users.documents?.filter(user =>
                         !prevUsers.some(loadedUser => loadedUser.$id === user.$id)
                     );
                     return [...prevUsers, ...moreUsers];
                 });
+            } else {
+                setNavUsersResult([]);
             }
 
             if (users?.documents.length < navLimit) {
@@ -100,10 +97,6 @@ export const UserSearch = () => {
             setIsResultLoading(true);
         }
 
-        // if (newSearchTerm === true) {
-        //     setModalLastId(null); 
-        // }
-
         try {
             console.log('searchTerm', searchTerm);
             console.log('newSearchTerm', newSearchTerm);
@@ -114,7 +107,7 @@ export const UserSearch = () => {
 
             console.log('users:', users);
 
-            if (users?.documents !== undefined) {
+            if (users?.documents !== undefined || users?.documents?.length > 0) {
                 if (newSearchTerm === false) {
                     setModalUsersResult(prevUsers => {
                         const moreUsers = users.documents?.filter(user =>
@@ -124,8 +117,10 @@ export const UserSearch = () => {
                     });
                 } else {
                     console.log('LOGGGGG', users.documents);
-                    setModalUsersResult(users.documents);
+                    setModalUsersResult(users?.documents);
                 }
+            } else {
+                setModalUsersResult([]);
             }
 
             if (users?.documents.length < modalLimit) {
@@ -151,7 +146,9 @@ export const UserSearch = () => {
     const handleShowSearchUsersModal = async () => {
         setShow(true);
         console.log('Calling handleShowSearchUsersModal for', navSrchUsrmInUI);
-        await fetchSearchResults(navSrchUsrmInUI);
+        if (navSrchUsrmInUI !== '') {
+            await fetchSearchResults(navSrchUsrmInUI);
+        }
     };
 
     const handleModalSearch = async () => {
@@ -189,13 +186,11 @@ export const UserSearch = () => {
         setLastId(null);
         setNavSrchUsrmInUI('');
         setModalSrchUsrmInUI('');
-        // setSearchTerm('')
         setNavUsersResult([]);
         setModalUsersResult([]);
     };
 
     const handleOnKeyDown = (e) => {
-
         if (
             !e.key.match(/^[a-zA-Z]$/) &&
             e.key !== "Backspace" &&
@@ -210,30 +205,25 @@ export const UserSearch = () => {
         if (e.key === "Enter") {
             e.preventDefault();
             console.log(e.key)
-            if (navSrchUsrmInUI.trim() !== "") {
-                if (show) {
-                    handleModalSearch();
-                } else {
-                    handleShowSearchUsersModal();
-                }
+            if (show) {
+                handleModalSearch();
+            } else {
+                handleShowSearchUsersModal();
             }
         }
     }
 
-
-
     return (
         <>
             {/* Search Bar */}
-            <div className='mx-2 justify-content-center d-flex align-items-center'>
+            <div className='ms-auto ms-sm-2 justify-content-center d-flex align-items-center'>
                 <Button
                     onClick={handleShowSearchUsersModal}
-                    className='me-2 px-2 tools__search-btn'
+                    className='ms-sm-block px-2 tools__search-btn'
                     disabled={(!isExtraSmallScreen && navSrchUsrmInUI === '') ? true : false}
                 >
                     <i className='bi bi-search' style={{ color: 'var(--main-text-color)' }} />
                 </Button>
-                {/* <Button onClick={onTestBtnClick}>Test Btn</Button> */}
                 <Form>
                     <Form.Group controlId="userSearch">
                         <Form.Label className='visually-hidden'>Search Username</Form.Label>
@@ -244,7 +234,7 @@ export const UserSearch = () => {
                             value={navSrchUsrmInUI}
                             onChange={onNavFieldUserSearchChange}
                             onKeyDown={handleOnKeyDown}
-                            className='tools__search-field d-none d-sm-block'
+                            className='tools__search-field d-none d-sm-block ms-2'
                         />
                     </Form.Group>
                 </Form>
@@ -257,7 +247,7 @@ export const UserSearch = () => {
                 style={{ zIndex: '9999999' }}
                 className='tools__search--results-modal'
             >
-                <Modal.Header className='w-100 pb-0 pb-md-3'>
+                <Modal.Header className='w-100 pb-0'>
                     <Modal.Title>Search Username</Modal.Title>
                     <Button
                         className='ms-auto p-0 tools__search--results-modal-close-btn'
@@ -277,7 +267,7 @@ export const UserSearch = () => {
                                     value={modalSrchUsrmInUI}
                                     onChange={onModalUserSearchChange}
                                     onKeyDown={handleOnKeyDown}
-                                    className='tools__search-field w-100 mb-2'
+                                    className='tools__search-field w-100 mb-3'
                                 />
                             </Form.Group>
                         </Form>

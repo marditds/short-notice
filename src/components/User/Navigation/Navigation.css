@@ -157,8 +157,10 @@
     border-color: var(--main-accent-color-hover) !important;
 }
 
-.tools__search--results-expand-btn:active {
+.tools__search--results-expand-btn:active,
+.tools__search--results-expand-btn:focus {
     background-color: var(--main-accent-color-hover) !important;
+    box-shadow: none !important;
 }
 
 .tools__search--results-expand-btn:hover>.tools__search--results-expand-btn-icon {
@@ -262,9 +264,12 @@
     justify-content: center;
 }
 
-.tools__search-btn:hover {
+.tools__search-btn:hover,
+.tools__search-btn:focus,
+.tools__search-btn:active {
     background-color: var(--main-accent-color-hover) !important;
     border: var(--main-accent-color-hover);
+    box-shadow: none !important;
 }
 
 .tools__search-btn:hover>svg {
@@ -295,8 +300,8 @@
 
 .tools__search-btn,
 .navigation__compose-btn {
-    height: 40px;
-    width: 40px;
+    height: 38px;
+    width: 38px;
 }
 
 .navigation__compose-btn {
@@ -334,8 +339,8 @@
 
     .navigation__compose-btn,
     .tools__search-btn {
-        height: 31px;
-        width: 31px;
+        height: 29px;
+        width: 29px;
     }
 
     .tools__search--search-results-profiles {

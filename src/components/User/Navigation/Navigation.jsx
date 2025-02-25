@@ -83,7 +83,8 @@ export const Navigation = ({
                                 <Button
                                     onClick={onShowInterestsTagsClick}
                                     className='navigation__compose-btn d-xl-none d-block my-auto 
-                                    ms-auto'
+                                    ms-sm-auto ms-2
+                                    '
                                 >
                                     <i className='bi bi-tag d-flex justify-content-center align-items-center' />
                                 </Button>
