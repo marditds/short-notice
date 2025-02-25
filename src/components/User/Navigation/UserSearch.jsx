@@ -19,6 +19,7 @@ export const UserSearch = () => {
 
     // nav
     const [srchUsrmInUI, setSrchUsrmInUI] = useState('');
+    const [usrnmPlaceholher, setUsrnmPlaceholher] = useState('');
     const [usersResult, setUsersResult] = useState([]);
     const [limit] = useState(7);
     const [lastId, setLastId] = useState(null);
@@ -88,6 +89,7 @@ export const UserSearch = () => {
         setShow(true);
         console.log('Calling handleShowSearchUsersModal for', srchUsrmInUI);
         if (srchUsrmInUI !== '') {
+            setUsrnmPlaceholher(srchUsrmInUI);
             if (!isExtraSmallScreen) {
                 await fetchSearchResults(true);
             } else {
@@ -101,6 +103,7 @@ export const UserSearch = () => {
         setUsersResult([]);
         setLastId(null);
         console.log('Calling handleModalSearch for', srchUsrmInUI);
+        setUsrnmPlaceholher(srchUsrmInUI);
         await fetchSearchResults(true);
     }
 
@@ -122,6 +125,7 @@ export const UserSearch = () => {
         setShow(false)
         setLastId(null);
         setSrchUsrmInUI('');
+        setUsrnmPlaceholher('');
         setUsersResult([]);
     };
 
@@ -140,11 +144,17 @@ export const UserSearch = () => {
         if (e.key === "Enter") {
             e.preventDefault();
             console.log(e.key)
-            if (show) {
-                handleModalSearch();
-            } else {
-                handleShowSearchUsersModal();
+            if (srchUsrmInUI !== '') {
+                if (show) {
+                    handleModalSearch();
+                } else {
+                    handleShowSearchUsersModal();
+                }
             }
+        }
+
+        if (e.key === "Escape") {
+            setShow(false);
         }
     }
 
@@ -183,7 +193,16 @@ export const UserSearch = () => {
                 className='tools__search--results-modal'
             >
                 <Modal.Header className='w-100 pb-0'>
-                    <Modal.Title>Search Username</Modal.Title>
+                    <Modal.Title>
+                        {isResultLoading ?
+                            `Looking for "${usrnmPlaceholher}"...`
+                            :
+                            usersResult.length > 0 ?
+                                `Results for "${usrnmPlaceholher}"`
+                                :
+                                'Search Username'
+                        }
+                    </Modal.Title>
                     <Button
                         className='ms-auto p-0 tools__search--results-modal-close-btn'
                         onClick={handleCloseSeachUsersModal}>
@@ -209,7 +228,7 @@ export const UserSearch = () => {
                         <Button
                             onClick={handleModalSearch}
                             className='ms-2 px-2 tools__search-btn'
-                            disabled={(!isExtraSmallScreen && srchUsrmInUI === '') ? true : false}
+                            disabled={srchUsrmInUI === '' ? true : false}
                         >
                             <i className='bi bi-search' />
                         </Button>
@@ -225,25 +244,27 @@ export const UserSearch = () => {
                             </div>
                             :
                             (
-                                usersResult.length > 0 ? usersResult.map((user) =>
-                                    <div
-                                        key={user.$id}
-                                        className='tools__search--search-results-profiles'
-                                    >
-                                        <Link to={`../user/${user.username}`}
-                                            className='w-100 d-flex align-items-center justify-content-end'
-                                            onClick={handleCloseSeachUsersModal}
+                                usersResult.length > 0 ?
+                                    usersResult.map((user) =>
+                                        <div
+                                            key={user.$id}
+                                            className='tools__search--search-results-profiles'
                                         >
-                                            {user?.username}
-                                            < img src={avatarUrl(user.avatar) || defaultAvatar}
-                                                alt="Profile"
-                                                className='d-flex tools__search--search-results-profiles-avatar'
-                                            />
-                                        </Link>
-                                    </div>
-                                )
+                                            <Link to={`../user/${user.username}`}
+                                                className='w-100 d-flex align-items-center justify-content-end'
+                                                onClick={handleCloseSeachUsersModal}
+                                            >
+                                                {user?.username}
+                                                < img src={avatarUrl(user.avatar) || defaultAvatar}
+                                                    alt="Profile"
+                                                    className='d-flex tools__search--search-results-profiles-avatar'
+                                                />
+                                            </Link>
+                                        </div>
+                                    )
                                     :
-                                    'No user found')
+                                    usrnmPlaceholher !== '' ? ('No user found') : null
+                            )
                         }
                     </Stack>
 
