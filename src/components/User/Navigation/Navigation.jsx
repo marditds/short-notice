@@ -38,43 +38,28 @@ export const Navigation = ({
         fetchUserInterests
     } = useNotices(googleUserData);
 
-    const { isSmallScreen, isExtraLargeScreen, isLargeScreen } = screenUtils();
-
-    // console.log('NAVIGATION - selectedTags', selectedTags);
-
+    const { isLargeScreen } = screenUtils();
 
     //Compose Notice
     const [noticeText, setNoticeText] = useState('');
     const [showComposeNoticeModalFunction, setShowComposeNoticeModalFunction] = useState(false);
     const [showTagsModalFunction, setShowTagsModalFunction] = useState(false);
 
-    // useEffect(() => {
-    //     fetchUserInterests();
-    // }, [userId, tagCategories]);
-
     const onShowInterestsTagsClick = () => {
         setShowTagsModalFunction(true),
             fetchUserInterests()
         console.log('NAVIGATION - selectedTags', selectedTags);
-
     }
 
     return (
         <>
-            <Nav className='userhome__body--profile--tools 
-                w-100 
-                d-flex 
-                fixed-top
-                
-                '>
+            <Nav className='userhome__body--profile--tools w-100 d-flex fixed-top'>
                 <Container fluid className='d-flex'>
-                    <Navbar.Brand href='./feed' className='mt-auto mb-auto ms-2'>
+                    <Navbar.Brand href='./feed' className='mt-auto mb-auto ms-2 me-2'>
                         <Image src={snLogo} alt='short_notice_logo' className='navigation__logo' fluid />
                     </Navbar.Brand>
 
-
                     <UserSearch userId={userId} />
-
 
                     {
                         location.pathname === '/user/profile' ? null :
@@ -82,9 +67,7 @@ export const Navigation = ({
                                 {/* Update Interests Button */}
                                 <Button
                                     onClick={onShowInterestsTagsClick}
-                                    className='navigation__compose-btn d-xl-none d-block my-auto 
-                                    ms-sm-auto ms-2
-                                    '
+                                    className='navigation__compose-btn d-xl-none d-block my-auto ms-sm-auto ms-2'
                                 >
                                     <i className='bi bi-tag d-flex justify-content-center align-items-center' />
                                 </Button>
@@ -92,8 +75,7 @@ export const Navigation = ({
                                 {/* Compose Notice Button */}
                                 <Button
                                     onClick={() => setShowComposeNoticeModalFunction(true)}
-                                    className='navigation__compose-btn d-xl-none d-block my-auto 
-                                    ms-2'
+                                    className='navigation__compose-btn d-xl-none d-block my-auto ms-2'
                                 >
                                     <i className='bi bi-plus-square d-flex justify-content-center align-items-center' />
                                 </Button>
@@ -111,7 +93,6 @@ export const Navigation = ({
                                         addNotice={addNotice}
                                         isGeminiLoading={isGeminiLoading}
                                         onGemeniRunClick={async () => await onGeminiRunClick(setNoticeText)}
-
                                     />
                                 </ComposeNoticeModal>
 
@@ -132,13 +113,13 @@ export const Navigation = ({
                                             deselectAllInterestTags={deselectAllInterestTags}
                                         />
                                         :
-                                        <div className='d-flex justify-content-center my-2'><Loading /></div>
+                                        <div className='d-flex justify-content-center my-2'>
+                                            <Loading />
+                                        </div>
                                     }
                                 </InterestsModal>
-
                             </>
                     }
-
 
                     <NavDropdown
                         drop='down'
@@ -146,15 +127,8 @@ export const Navigation = ({
                         className={`my-auto userhome__body--profile--tools--dropdown 
                             ${location.pathname === '/user/profile' ? 'ms-auto' :
                                 (!isLargeScreen ? 'ms-auto' : 'ms-2')
-
                             }
                             `}
-
-                        // className={`my-auto ms-auto
-                        //     ${location.pathname === '/user/profile' ? 'ms-auto' : (isSmallScreen ? 'ms-0' : 'ms-2')}
-                        //      userhome__body--profile--tools--dropdown`}
-
-                        // className={`my-auto ${location.pathname === '/user/profile' ? 'ms-auto' : 'ms-2'} userhome__body--profile--tools--dropdown`}
                         title={<i className='bi bi-three-dots-vertical navigation__three-dots d-flex justify-content-center align-items-center' />}>
                         <NavDropdown.Item
                             as={Link}
@@ -184,7 +158,7 @@ export const Navigation = ({
                                 async () => {
                                     await removeSession();
                                     googleLogout();
-                                    setIsLoggedIn(preVal => false);
+                                    setIsLoggedIn(false);
                                     setGoogleUserData(null);
                                     localStorage.removeItem('accessToken');
                                     console.log('Logged out successfully.');
