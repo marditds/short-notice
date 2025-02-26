@@ -358,6 +358,10 @@
         font-size: var(--mobile-font-size);
     }
 
+    .tools__search--results-expand-btn {
+        height: 29px !important;
+    }
+
     .notice__compose--close-btn>i,
     .interests--close-btn>i,
     .navigation__compose-btn>i,

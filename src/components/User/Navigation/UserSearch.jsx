@@ -5,6 +5,8 @@ import { getAvatarUrl as avatarUrl } from '../../../lib/utils/avatarUtils';
 import defaultAvatar from '../../../assets/default.png';
 import { screenUtils } from '../../../lib/utils/screenUtils';
 import { Button, Form, Modal, Stack } from 'react-bootstrap';
+import { UserSearchModal } from '../Modals';
+import { SearchForm } from './SearchForm';
 import { Loading } from '../../Loading/Loading';
 import { EndAsterisks } from '../EndAsterisks';
 
@@ -17,7 +19,6 @@ export const UserSearch = () => {
     const [show, setShow] = useState(false);
     const [isResultLoading, setIsResultLoading] = useState(false);
 
-    // nav
     const [srchUsrmInUI, setSrchUsrmInUI] = useState('');
     const [usrnmPlaceholher, setUsrnmPlaceholher] = useState('');
     const [usersResult, setUsersResult] = useState([]);
@@ -81,10 +82,6 @@ export const UserSearch = () => {
         }
     }
 
-    useEffect(() => {
-        console.log('lastId', lastId);
-    }, [lastId])
-
     const handleShowSearchUsersModal = async () => {
         setShow(true);
         console.log('Calling handleShowSearchUsersModal for', srchUsrmInUI);
@@ -98,6 +95,7 @@ export const UserSearch = () => {
         }
     };
 
+    // Search via the btn in the modal
     const handleModalSearch = async () => {
         setHasMoreProfiles(false);
         setUsersResult([]);
@@ -154,7 +152,7 @@ export const UserSearch = () => {
         }
 
         if (e.key === "Escape") {
-            setShow(false);
+            handleCloseSeachUsersModal();
         }
     }
 
@@ -169,8 +167,14 @@ export const UserSearch = () => {
                 >
                     <i className='bi bi-search' style={{ color: 'var(--main-text-color)' }} />
                 </Button>
-                <Form>
-                    <Form.Group controlId="userSearch">
+                <SearchForm
+                    value={srchUsrmInUI}
+                    onChange={onNavFieldUserSearchChange}
+                    handleOnKeyDown={handleOnKeyDown}
+                    formControlBsClassNames={'d-none d-sm-block ms-2'}
+                />
+                {/* <Form> 
+                     <Form.Group controlId="userSearch">
                         <Form.Label className='visually-hidden'>Search Username</Form.Label>
                         <Form.Control
                             as="textarea"
@@ -182,17 +186,14 @@ export const UserSearch = () => {
                             className='tools__search-field d-none d-sm-block ms-2'
                         />
                     </Form.Group>
-                </Form>
+                </Form> */}
             </div>
 
             {/* Search results */}
-            <Modal
+            <UserSearchModal
                 show={show}
-                onHide={handleCloseSeachUsersModal}
-                style={{ zIndex: '9999999' }}
-                className='tools__search--results-modal'
-            >
-                <Modal.Header className='w-100 pb-0'>
+                handleCloseUserSearchModalFunction={handleCloseSeachUsersModal}
+                modalHeaderContent={<>
                     <Modal.Title>
                         {isResultLoading ?
                             `Looking for "${usrnmPlaceholher}"...`
@@ -208,90 +209,96 @@ export const UserSearch = () => {
                         onClick={handleCloseSeachUsersModal}>
                         <i className='bi bi-x-square' />
                     </Button>
-                </Modal.Header>
-                <Modal.Body className='tools__search--results-modal-body'>
-                    <div className='d-flex'>
-                        <Form className='w-100'>
-                            <Form.Group controlId="userSearch">
-                                <Form.Label className='visually-hidden'>Search Username</Form.Label>
-                                <Form.Control
-                                    as="textarea"
-                                    rows={1}
-                                    placeholder='Username Search'
-                                    value={srchUsrmInUI}
-                                    onChange={onNavFieldUserSearchChange}
-                                    onKeyDown={handleOnKeyDown}
-                                    className='tools__search-field w-100 mb-3'
-                                />
-                            </Form.Group>
-                        </Form>
-                        <Button
-                            onClick={handleModalSearch}
-                            className='ms-2 px-2 tools__search-btn'
-                            disabled={srchUsrmInUI === '' ? true : false}
-                        >
-                            <i className='bi bi-search' />
-                        </Button>
-                    </div>
+                </>}
+            >
+                {/* Modal Body */}
+                <div className='d-flex'>
+                    <SearchForm
+                        className={'w-100'}
+                        value={srchUsrmInUI}
+                        onChange={onNavFieldUserSearchChange}
+                        handleOnKeyDown={handleOnKeyDown}
+                        formControlBsClassNames={'w-100 mb-3'}
+                    />
+                    {/* <Form className='w-100'>
+                        <Form.Group controlId="userSearch">
+                            <Form.Label className='visually-hidden'>Search Username</Form.Label>
+                            <Form.Control
+                                as="textarea"
+                                rows={1}
+                                placeholder='Username Search'
+                                value={srchUsrmInUI}
+                                onChange={onNavFieldUserSearchChange}
+                                onKeyDown={handleOnKeyDown}
+                                className='tools__search-field w-100 mb-3'
+                            />
+                        </Form.Group>
+                    </Form> */}
+                    <Button
+                        onClick={handleModalSearch}
+                        className='ms-2 px-2 tools__search-btn'
+                        disabled={srchUsrmInUI === '' ? true : false}
+                    >
+                        <i className='bi bi-search' />
+                    </Button>
+                </div>
 
-                    <Stack
-                        gap={3}
-                        direction='horizontal'
-                        className='d-flex flex-wrap justify-content-start'>
-                        {isResultLoading ?
-                            <div className='d-block mx-auto'>
-                                <Loading size={20} color={'var(--main-text-color)'} />
-                            </div>
-                            :
-                            (
-                                usersResult.length > 0 ?
-                                    usersResult.map((user) =>
-                                        <div
-                                            key={user.$id}
-                                            className='tools__search--search-results-profiles'
-                                        >
-                                            <Link to={`../user/${user.username}`}
-                                                className='w-100 d-flex align-items-center justify-content-end'
-                                                onClick={handleCloseSeachUsersModal}
-                                            >
-                                                {user?.username}
-                                                < img src={avatarUrl(user.avatar) || defaultAvatar}
-                                                    alt="Profile"
-                                                    className='d-flex tools__search--search-results-profiles-avatar'
-                                                />
-                                            </Link>
-                                        </div>
-                                    )
-                                    :
-                                    usrnmPlaceholher !== '' ? ('No user found') : null
-                            )
-                        }
-                    </Stack>
-
-                    {usersResult.length !== 0 ?
+                <Stack
+                    gap={3}
+                    direction='horizontal'
+                    className='d-flex flex-wrap justify-content-start'>
+                    {isResultLoading ?
+                        <div className='d-block mx-auto'>
+                            <Loading size={20} color={'var(--main-text-color)'} />
+                        </div>
+                        :
                         (
-                            hasMoreProfiles ?
-                                <Button
-                                    onClick={handleLoadMoreProfiles}
-                                    disabled={isLoadingMore || !hasMoreProfiles}
-                                    className='w-100 tools__search--results-expand-btn'
-                                >
-                                    {isLoadingMore ?
-                                        <Loading size={24} color={'var(--main-accent-color)'} />
-                                        :
-                                        <i className='bi bi-chevron-down tools__search--results-expand-btn-icon'></i>
-                                    }
-                                </Button>
+                            usersResult.length > 0 ?
+                                usersResult.map((user) =>
+                                    <div
+                                        key={user.$id}
+                                        className='tools__search--search-results-profiles'
+                                    >
+                                        <Link to={`../user/${user.username}`}
+                                            className='w-100 d-flex align-items-center justify-content-end'
+                                            onClick={handleCloseSeachUsersModal}
+                                        >
+                                            {user?.username}
+                                            < img src={avatarUrl(user.avatar) || defaultAvatar}
+                                                alt="Profile"
+                                                className='d-flex tools__search--search-results-profiles-avatar'
+                                            />
+                                        </Link>
+                                    </div>
+                                )
                                 :
-                                <div className='text-center'>
-                                    <EndAsterisks componentName='tools__search' />
-                                </div>
+                                usrnmPlaceholher !== '' ? ('No user found') : null
                         )
-                        : null}
+                    }
+                </Stack>
 
-                </Modal.Body>
+                {usersResult.length !== 0 ?
+                    (
+                        hasMoreProfiles ?
+                            <Button
+                                onClick={handleLoadMoreProfiles}
+                                disabled={isLoadingMore || !hasMoreProfiles}
+                                className='w-100 tools__search--results-expand-btn'
+                            >
+                                {isLoadingMore ?
+                                    <Loading size={24} color={'var(--main-accent-color)'} />
+                                    :
+                                    <i className='bi bi-chevron-down tools__search--results-expand-btn-icon'></i>
+                                }
+                            </Button>
+                            :
+                            <div className='text-center'>
+                                <EndAsterisks componentName='tools__search' />
+                            </div>
+                    )
+                    : null}
+            </UserSearchModal>
 
-            </Modal>
         </>
     )
 }

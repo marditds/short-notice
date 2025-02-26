@@ -299,3 +299,20 @@ export const InterestsModal = ({ children, showTagsModalFunction, handleCloseTag
         </Modal>
     )
 }
+
+export const UserSearchModal = ({ children, show, handleCloseUserSearchModalFunction, modalHeaderContent }) => {
+    return (
+        <Modal show={show}
+            onHide={handleCloseUserSearchModalFunction}
+            style={{ zIndex: '9999999' }}
+            className='tools__search--results-modal'
+        >
+            <Modal.Header className='w-100 pb-0'>
+                {modalHeaderContent}
+            </Modal.Header>
+            <Modal.Body className='tools__search--results-modal-body'>
+                {children}
+            </Modal.Body>
+        </Modal>
+    )
+}
