@@ -376,9 +376,9 @@ const UserFeed = () => {
                 {/* Tag selection message */}
                 {
                     !isAnyTagSelected && isFeedToggled ?
-                        <div className='h-100'>
+                        <div className='h-100 pt-4'>
                             <p className='text-center'>
-                                {`To view notices in your general feed, you must select at least one interest tag in your ${!isLargeScreen ? 'side menu' : 'navigation bar' + <i className='bi bi-tag d-flex justify-content-center align-items-center' /> + ' or settings'}`}.
+                                {`To view notices in your general feed, you must select at least one interest tag in your ${!isLargeScreen ? 'side menu' : 'settings'}`}.
                             </p>
                         </div>
                         :

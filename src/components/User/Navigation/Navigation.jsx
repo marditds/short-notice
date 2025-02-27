@@ -35,8 +35,7 @@ export const Navigation = ({
         // toggleInterestsTag, 
         // updateInterests,
         // deselectAllInterestTags,
-        // fetchUserInterests,
-
+        // fetchUserInterests
     } = useNotices(googleUserData);
 
     const { isLargeScreen } = screenUtils();
@@ -44,6 +43,41 @@ export const Navigation = ({
     //Compose Notice
     const [noticeText, setNoticeText] = useState('');
     const [showComposeNoticeModalFunction, setShowComposeNoticeModalFunction] = useState(false);
+
+    const dropdownItems = [
+        {
+            title: 'Feed',
+            icon: 'bi bi-rss',
+            onClick: () => console.log('Feed clicked'),
+            url: '/user/feed'
+        },
+        {
+            title: 'Profile',
+            icon: 'bi bi-person-square',
+            onClick: () => console.log('Profile clicked'),
+            url: '/user/profile'
+        },
+        {
+            title: 'Settings',
+            icon: 'bi bi-gear',
+            onClick: () => console.log('Settings clicked'),
+            url: '/user/settings'
+        },
+        {
+            title: 'Log out',
+            icon: 'bi bi-box-arrow-left',
+            onClick: async () => {
+                await removeSession();
+                googleLogout();
+                setIsLoggedIn(false);
+                setGoogleUserData(null);
+                localStorage.removeItem('accessToken');
+                console.log('Logged out successfully.');
+                window.location.href = '/';
+            },
+            url: '/'
+        }
+    ]
 
     // const [showTagsModalFunction, setShowTagsModalFunction] = useState(false);
 
@@ -128,49 +162,27 @@ export const Navigation = ({
                         id="dropdown-basic-button"
                         className={`my-auto userhome__body--profile--tools--dropdown 
                             ${location.pathname === '/user/profile' ? 'ms-auto' :
-                                (!isLargeScreen ? 'ms-auto' : 'ms-0')
+                                (!isLargeScreen ? 'ms-auto' : 'ms-1')
                             }
                             `}
                         title={<i className='bi bi-three-dots-vertical navigation__three-dots d-flex justify-content-center align-items-center' />}>
-                        <NavDropdown.Item
-                            as={Link}
-                            to='/user/feed'
-                            className='userhome__body--btn w-100'
-                        >
-                            Feed
-                        </NavDropdown.Item>
-                        <NavDropdown.Item
-                            as={Link}
-                            to='/user/profile'
-                            className='userhome__body--btn w-100'
-                        >
-                            Profile
-                        </NavDropdown.Item>
-                        <NavDropdown.Item
-                            as={Link}
-                            to='/user/settings'
-                            className='userhome__body--btn w-100'
-                        >
-                            Settings
-                        </NavDropdown.Item>
-                        <NavDropdown.Item
-                            as={Link}
-                            to='/'
-                            onClick={
-                                async () => {
-                                    await removeSession();
-                                    googleLogout();
-                                    setIsLoggedIn(false);
-                                    setGoogleUserData(null);
-                                    localStorage.removeItem('accessToken');
-                                    console.log('Logged out successfully.');
-                                    window.location.href = '/';
-                                }
-                            }
-                            className='userhome__body--btn w-100'
-                        >
-                            Log out
-                        </NavDropdown.Item>
+                        {
+                            dropdownItems.map((dropdownItem, idx) => {
+                                return (
+                                    <NavDropdown.Item
+                                        key={idx}
+                                        as={Link}
+                                        to={dropdownItem.url}
+                                        onClick={dropdownItem.onClick} className='userhome__body--btn w-100'
+                                    >
+                                        <div className='position-relative'>
+                                            <i className={`${dropdownItem.icon} mx-2`} />
+                                            <span>{dropdownItem.title}</span>
+                                        </div>
+                                    </NavDropdown.Item>
+                                )
+                            })
+                        }
                     </NavDropdown>
                 </Container>
             </Nav>

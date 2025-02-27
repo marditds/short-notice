@@ -181,7 +181,6 @@
 }
 
 .userhome__body--profile--tools--dropdown {
-    /* transition: var(--main-transition-speed) !important; */
     backdrop-filter: blur(4px);
     animation: none !important;
 }
@@ -195,7 +194,6 @@
     border-bottom: 0 !important;
     border-left: 2px solid transparent !important;
     border-right: 2px solid transparent !important;
-    /* transition: var(--main-transition-speed) !important; */
     animation: none !important;
     box-shadow: none !important;
 }
@@ -204,7 +202,6 @@
 .userhome__body--profile--tools--dropdown>a:active,
 .userhome__body--profile--tools--dropdown>a:focus {
     color: var(--main-accent-color-hover) !important;
-    /* transition: var(--main-transition-speed) !important; */
 }
 
 .userhome__body--profile--tools--dropdown>a::after {
@@ -215,29 +212,26 @@
     border-left: 2px solid var(--main-accent-color) !important;
     border-right: 2px solid var(--main-accent-color) !important;
     border-radius: 0;
-    /* transition: var(--main-transition-speed) !important; */
     animation: none !important;
 }
 
 .userhome__body--profile--tools--dropdown>div {
     padding: 0;
-    margin-top: -2px;
+    width: fit-content !important;
+    margin-top: 4px;
     color: var(--main-text-color) !important;
     background-color: rgba(198, 220, 208, 0.6);
     backdrop-filter: blur(8px) !important;
     border-color: var(--main-bg-color) !important;
     border-radius: 0 0 var(--main-rounded-corner) var(--main-rounded-corner);
     border-top: 0;
-    width: min-content !important;
     border-bottom: 2px solid var(--main-accent-color) !important;
     border-left: 2px solid var(--main-accent-color) !important;
     border-right: 2px solid var(--main-accent-color) !important;
-    /* transition: var(--main-transition-speed) !important; */
 }
 
 .userhome__body--profile--tools--dropdown>div>a {
     padding: 4px 0;
-    text-align: center;
     font-size: var(--pc-font-size);
     color: var(--main-text-color) !important;
     transition: var(--main-transition-speed) !important;
@@ -352,7 +346,9 @@
         width: 45px;
     }
 
-    /* .userhome__body--profile--tools--dropdown>div {} */
+    .userhome__body--profile--tools--dropdown>div {
+        min-width: 120px !important;
+    }
 
     .userhome__body--profile--tools--dropdown>div>a {
         font-size: var(--mobile-font-size);

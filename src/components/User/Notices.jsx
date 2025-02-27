@@ -504,7 +504,7 @@ export const Notices = ({
                                             </Link>
 
                                             <p
-                                                className='w-100 my-0 text-end notice__username'
+                                                className='w-100 my-0 text-center notice__username'
                                             >
                                                 <Link to={`../${notice.username}`}
                                                     className='text-decoration-none'>
