@@ -5,15 +5,13 @@ import '../Feed.css';
 
 
 
-export const FeedBody = ({ isTagSelected, isFeedToggled, handleFeedToggle, handleRefresh, isAnyTagSelected, sideContent, children }) => {
-
+export const FeedBody = ({ isFeedToggled, handleFeedToggle, handleRefresh, isAnyTagSelected, sideContent, children }) => {
 
     return (
         <>
             <Row className='fixed-top w-100 ms-auto me-auto user-feed__header'>
                 <Col>
                     <FeedToggle
-                        isTagSelected={isTagSelected}
                         isAnyTagSelected={isAnyTagSelected}
                         isFeedToggled={isFeedToggled}
                         handleFeedToggle={handleFeedToggle}
@@ -21,7 +19,6 @@ export const FeedBody = ({ isTagSelected, isFeedToggled, handleFeedToggle, handl
                     />
                 </Col>
             </Row>
-
 
             {/* Side section */}
             <Row className='position-relative'>
@@ -38,7 +35,6 @@ export const FeedBody = ({ isTagSelected, isFeedToggled, handleFeedToggle, handl
                     {children}
                 </Col>
             </Row>
-
         </>
     )
 }

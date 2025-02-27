@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { Row, Col } from 'react-bootstrap';
 import { useUserContext } from '../../../lib/context/UserContext';
 import useNotices from '../../../lib/hooks/useNotices';
 import useUserInfo from '../../../lib/hooks/useUserInfo';
@@ -29,12 +28,10 @@ const UserFeed = () => {
         selectedTags,
         isAnyTagSelected,
         isAddingNotice,
+        fetchedInterests,
         isGeminiLoading,
-        onGemeniRun,
         onGeminiRunClick,
         setLastThreeNoticesInFeed,
-        setIsAnyTagSelected,
-        setSelectedTags,
         toggleInterestsTag,
         deselectAllInterestTags,
         updateInterests,
@@ -43,7 +40,6 @@ const UserFeed = () => {
         setPersonalFeedLikedNotices,
         setPersonalFeedSavedNotices,
         setSavedNotices,
-        getInterests,
         getPersonalFeedNotices,
         getFeedNotices,
         handleSave,
@@ -58,13 +54,9 @@ const UserFeed = () => {
 
     const { fetchUsersData, getUserAccountByUserId } = useUserInfo(googleUserData);
 
-    const { isLargeScreen, isExtraLargeScreen } = screenUtils();
+    const { isLargeScreen } = screenUtils();
 
     const [noticeText, setNoticeText] = useState('');
-
-    // const [selectedTags, setSelectedTags] = useState({});
-    const [isTagSelected, setIsTagSelected] = useState(false);
-    // const [isAnyTagSelected, setIsAnyTagSelected] = useState(false);
 
     const [generalFeedNotices, setGeneralFeedNotices] = useState([]);
     const [isLoadingGeneralFeedNotices, setIsLoadingGeneralFeedNotices] = useState(false);
@@ -93,75 +85,32 @@ const UserFeed = () => {
     const notices = !isFeedToggled ? personalFeedNotices : generalFeedNotices;
     const feedType = !isFeedToggled ? 'personal' : 'general';
 
+    // Fetch user interests tags
+    useEffect(() => {
+        fetchUserInterests();
+    }, [user_id]);
+
     useEffect(() => {
         console.log('isFeedToggled STATUS:', isFeedToggled);
-
     }, [isFeedToggled])
 
-    // Fetch User's interests  
     useEffect(() => {
-        const fetchUserInterests = async () => {
-            if (user_id) {
-                try {
-                    const userInterests = await getInterests(user_id);
-
-                    console.log('DRAMATIC:', userInterests);
-
-                    setIsAnyTagSelected(Object.values(userInterests).some(tagKey => tagKey === true));
-
-                    if (userInterests) {
-                        setSelectedTags(userInterests);
-                    }
-                } catch (error) {
-                    console.error('Error fetching user interests:', error);
-                }
-            }
-        };
-
-        fetchUserInterests();
-    }, [user_id, tagCategories]);
-
-    // Fetch user interests tags from DB
-    useEffect(() => {
-        fetchUserInterests();
-    }, [user_id, tagCategories]);
-
-
-    // Fetch selected tags for UI
-    useEffect(() => {
-        try {
-            const falseVal = Object.values(selectedTags).filter((tag) => tag === false);
-
-            function indexOfAll(array, value) {
-                const indices = [];
-                for (let i = 0; i < array.length; i++) {
-                    if (array[i] === value) {
-                        indices.push(i);
-                    }
-                }
-                return indices;
-            }
-
-            const indices = indexOfAll(falseVal, false);
-            console.log('Indices of false values:', indices.length);
-
-            if (indices.length < 13) {
-                setIsTagSelected(true);
-            } else {
-                setIsTagSelected(false);
-            }
-        } catch (error) {
-            console.error('Error fetching selected tags:', error);
-        }
-    }, [selectedTags])
+        console.log('fetchedInterests:', fetchedInterests);
+    }, [fetchedInterests])
 
     useEffect(() => {
         console.log('isAnyTagSelected', isAnyTagSelected);
     }, [isAnyTagSelected])
 
+    useEffect(() => {
+        console.log("FeedBody detected interest changes:", selectedTags);
+    }, [selectedTags]);
+
     // Fetch feed (general)-(initial)
     useEffect(() => {
         const fetchInitialGeneralFeed = async () => {
+
+            console.log('Selected Tags in fetchInitialGeneralFeed', selectedTags);
 
             try {
                 setIsLoadingGeneralFeedNotices(true)
@@ -308,33 +257,14 @@ const UserFeed = () => {
         console.log('personalFeedNotices:', personalFeedNotices);
     }, [personalFeedNotices])
 
-
-    // const handleTagSelect = (categoryName, tagIndex, tag, isSelected) => {
-
-    //     console.log('Tag:', tag.key);
-
-    //     setSelectedTags(prevTags => ({
-    //         ...prevTags,
-    //         [tag.key]: !prevTags[tag.key]
-    //     }));
-
-    // };
-
     const handleFeedToggle = () => {
-        // console.log('STATUS isAnyTagSelected 1', isAnyTagSelected); 
         if (isAnyTagSelected === true) {
-            // console.log('STATUS isAnyTagSelected 2', isAnyTagSelected);
             setIsFeedToggled((prev) => !prev);
         } else {
-            // console.log('STATUS isAnyTagSelected 3', isAnyTagSelected);
             setIsFeedToggled(false);
             setGeneralFeedNotices([]);
         }
     };
-
-    // useEffect(() => {
-    //     handleFeedToggle();
-    // }, [isAnyTagSelected === false])
 
     const handleRefresh = () => {
         if (isFeedToggled) {
@@ -369,7 +299,6 @@ const UserFeed = () => {
     return (
         <div style={{ marginTop: '80px' }} className='w-100'>
             <FeedBody
-                isTagSelected={isTagSelected}
                 isAnyTagSelected={isAnyTagSelected}
                 isFeedToggled={isFeedToggled}
                 handleFeedToggle={handleFeedToggle}
@@ -383,7 +312,7 @@ const UserFeed = () => {
                         isAnyTagSelected={isAnyTagSelected}
                         toggleInterestsTag={toggleInterestsTag}
                         updateInterests={updateInterests}
-                        handleRefresh={handleRefresh}
+                        onUpdateInterests={handleRefresh}
                         deselectAllInterestTags={deselectAllInterestTags}
                     />
                     :
@@ -409,10 +338,10 @@ const UserFeed = () => {
                 }
             >
 
-
                 {/* Feed notices */}
                 {
-                    (!isLoadingPersonalFeedNotices || !isLoadingGeneralFeedNotices) &&
+                    (!isLoadingPersonalFeedNotices || !isLoadingGeneralFeedNotices)
+                    &&
                     <Notices
                         notices={notices}
                         user_id={user_id}
@@ -449,7 +378,7 @@ const UserFeed = () => {
                     !isAnyTagSelected && isFeedToggled ?
                         <div className='h-100'>
                             <p className='text-center'>
-                                {`To view notices in your general feed, you must select at least one interest tag in your ${isExtraLargeScreen ? 'side menu' : 'settings'}`}.
+                                {`To view notices in your general feed, you must select at least one interest tag in your ${!isLargeScreen ? 'side menu' : 'navigation bar' + <i className='bi bi-tag d-flex justify-content-center align-items-center' /> + ' or settings'}`}.
                             </p>
                         </div>
                         :
@@ -468,24 +397,20 @@ const UserFeed = () => {
                                 }
                             }}
                             disabled={(isLoadingMore || isLoadingMorePersonal) ? true : false}
-                            className={` my-4 notices__load-more-notices-btn ${(isLoadingMoreInitial || isLoadingMorePersonalInitial) ? 'd-none' : 'd-block'}`}
+                            className={`my-4 notices__load-more-notices-btn ${(isLoadingMoreInitial || isLoadingMorePersonalInitial) ? 'd-none' : 'd-block'}`}
                         >
                             {isLoadingMore || isLoadingMorePersonal ?
                                 <><Loading size={16} /> Loading...</>
                                 : 'Load More'}
                         </Button>
                         :
-                        <div className='my-4'>
+                        <div className={`${isAnyTagSelected && 'my-4'}`}>
                             {!isFeedToggled && <EndAsterisks />}
                             {(isFeedToggled && isAnyTagSelected) && <EndAsterisks />}
                         </div>
                     }
                 </div>
-
-
             </FeedBody>
-
-
 
         </div>
     )

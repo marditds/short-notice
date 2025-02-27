@@ -1,5 +1,4 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import { Loading } from '../../Loading/Loading';
 
@@ -9,13 +8,10 @@ export const InterestsTags = ({
     deselectAllInterestTags,
     selectedTags,
     updateInterests,
-    handleRefresh,
+    onUpdateInterests,
     isInterestsUpdating,
-    isAnyTagSelected,
-    // handleFeedToggle
+    isAnyTagSelected
 }) => {
-
-    const location = useLocation();
 
     const allTags = tagCategories.flatMap(category => category.tags);
 
@@ -40,16 +36,9 @@ export const InterestsTags = ({
             <div className='d-xxl-flex d-grid'>
                 <Button
                     onClick={() => {
-                        if (location.pathname !== '/user/feed') {
-                            updateInterests();
-                        } else {
-                            if (isAnyTagSelected) {
-                                updateInterests();
-                                handleRefresh();
-                            }
-                            else {
-                                updateInterests();
-                            }
+                        updateInterests();
+                        if (isAnyTagSelected && onUpdateInterests) {
+                            onUpdateInterests();
                         }
                     }
                     }
@@ -65,4 +54,4 @@ export const InterestsTags = ({
             </div>
         </div>
     )
-}
+} 

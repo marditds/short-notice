@@ -25,17 +25,18 @@ export const Navigation = ({
     const {
         isAddingNotice,
         isGeminiLoading,
-        isInterestsLoading,
-        tagCategories,
-        selectedTags,
-        isInterestsUpdating,
-        isAnyTagSelected,
-        toggleInterestsTag,
         addNotice,
         onGeminiRunClick,
-        updateInterests,
-        deselectAllInterestTags,
-        fetchUserInterests
+        // selectedTags,
+        // isInterestsLoading,
+        // tagCategories,
+        // isInterestsUpdating,
+        // isAnyTagSelected,
+        // toggleInterestsTag, 
+        // updateInterests,
+        // deselectAllInterestTags,
+        // fetchUserInterests,
+
     } = useNotices(googleUserData);
 
     const { isLargeScreen } = screenUtils();
@@ -43,13 +44,14 @@ export const Navigation = ({
     //Compose Notice
     const [noticeText, setNoticeText] = useState('');
     const [showComposeNoticeModalFunction, setShowComposeNoticeModalFunction] = useState(false);
-    const [showTagsModalFunction, setShowTagsModalFunction] = useState(false);
 
-    const onShowInterestsTagsClick = () => {
-        setShowTagsModalFunction(true),
-            fetchUserInterests()
-        console.log('NAVIGATION - selectedTags', selectedTags);
-    }
+    // const [showTagsModalFunction, setShowTagsModalFunction] = useState(false);
+
+    // const onShowInterestsTagsClick = () => {
+    //     setShowTagsModalFunction(true),
+    //         fetchUserInterests()
+    //     console.log('NAVIGATION - selectedTags', selectedTags);
+    // }
 
     return (
         <>
@@ -65,17 +67,17 @@ export const Navigation = ({
                         location.pathname === '/user/profile' ? null :
                             <>
                                 {/* Update Interests Button */}
-                                <Button
+                                {/* <Button
                                     onClick={onShowInterestsTagsClick}
                                     className='navigation__compose-btn d-xl-none d-block my-auto ms-sm-auto ms-2'
                                 >
                                     <i className='bi bi-tag d-flex justify-content-center align-items-center' />
-                                </Button>
+                                </Button> */}
 
                                 {/* Compose Notice Button */}
                                 <Button
                                     onClick={() => setShowComposeNoticeModalFunction(true)}
-                                    className='navigation__compose-btn d-xl-none d-block my-auto ms-2'
+                                    className='navigation__compose-btn d-xl-none d-block my-auto ms-sm-auto ms-2'
                                 >
                                     <i className='bi bi-plus-square d-flex justify-content-center align-items-center' />
                                 </Button>
@@ -97,7 +99,7 @@ export const Navigation = ({
                                 </ComposeNoticeModal>
 
                                 {/* Interests Tags Modal */}
-                                <InterestsModal
+                                {/* <InterestsModal
                                     showTagsModalFunction={showTagsModalFunction}
                                     handleCloseTagsModalFunction={() => setShowTagsModalFunction(false)}
                                 >
@@ -117,7 +119,7 @@ export const Navigation = ({
                                             <Loading />
                                         </div>
                                     }
-                                </InterestsModal>
+                                </InterestsModal> */}
                             </>
                     }
 
@@ -126,7 +128,7 @@ export const Navigation = ({
                         id="dropdown-basic-button"
                         className={`my-auto userhome__body--profile--tools--dropdown 
                             ${location.pathname === '/user/profile' ? 'ms-auto' :
-                                (!isLargeScreen ? 'ms-auto' : 'ms-2')
+                                (!isLargeScreen ? 'ms-auto' : 'ms-0')
                             }
                             `}
                         title={<i className='bi bi-three-dots-vertical navigation__three-dots d-flex justify-content-center align-items-center' />}>

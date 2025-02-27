@@ -37,6 +37,7 @@ const useNotices = (googleUserData) => {
     const [removingNoticeId, setRemovingNoticeId] = useState(null);
     const [isSavingEdit, setIsSavingEdit] = useState(false);
 
+    const [fetchedInterests, setFetchedInterests] = useState({});
     const [selectedTags, setSelectedTags] = useState({});
     const [isAnyTagSelected, setIsAnyTagSelected] = useState(false);
     const [isInterestsLoading, setIsInterestsLoading] = useState(false);
@@ -539,6 +540,7 @@ const useNotices = (googleUserData) => {
                 const interests = await updateUserInterests(user_id, selectedTags);
                 console.log('Interests updated:', interests);
                 setIsAnyTagSelected(Object.values(interests).some(tagKey => tagKey === true));
+                setFetchedInterests(interests);
                 return interests;
             } catch (error) {
                 console.error('Error updating user interests:', error);
@@ -549,6 +551,10 @@ const useNotices = (googleUserData) => {
             console.error('User ID not found');
         }
     }
+
+    useEffect(() => {
+        console.log("🔄 selectedTags changed globally:", selectedTags);
+    }, [selectedTags]);
 
     const fetchUserInterests = async () => {
         setIsInterestsLoading(true);
@@ -563,6 +569,9 @@ const useNotices = (googleUserData) => {
                         });
                     });
                     setSelectedTags(newSelectedTags);
+                    setIsAnyTagSelected(Object.values(userInterests).some(tagKey => tagKey === true));
+                    setFetchedInterests(userInterests);
+                    console.log('fetchUserInterests - useNotices', userInterests);
                 }
             } catch (error) {
                 console.error('Error fetching user interests:', error);
@@ -892,6 +901,7 @@ const useNotices = (googleUserData) => {
         selectedTags,
         isAnyTagSelected,
         lastThreeNoticesInFeed,
+        fetchedInterests,
         geminiRes,
         isGeminiLoading,
         setLastThreeNoticesInFeed,

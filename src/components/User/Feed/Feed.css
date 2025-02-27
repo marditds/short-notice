@@ -50,7 +50,8 @@
 .user-feed__compose-btn:focus,
 .user-feed__refresh-btn:hover,
 .user-feed__refresh-btn:active,
-.user-feed__refresh-btn:focus {
+.user-feed__refresh-btn:focus,
+.user-feed__refresh-btn:disabled {
     background-color: var(--main-accent-color-hover) !important;
     border-color: var(--main-accent-color-hover) !important;
     color: var(--main-text-color) !important;
