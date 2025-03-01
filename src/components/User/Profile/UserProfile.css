@@ -290,7 +290,7 @@
 .notice__react-gif-btn,
 .notice__gif-btn,
 .notice__ai-btn,
-.notice__tepmlate-dropdown-btn,
+.notice__template-dropdown-btn,
 .user-profile__report--radio>input:checked,
 .notice__report--radio>input:checked,
 .notice__report--modal-btn,
@@ -308,7 +308,7 @@
 
 .notice__gif-btn,
 .notice__ai-btn,
-.notice__tepmlate-dropdown-btn {
+.notice__template-dropdown-btn {
     max-height: 38px;
     display: flex;
     justify-content: center;
@@ -321,7 +321,7 @@
     max-width: 38px !important;
 }
 
-.notice__tepmlate-dropdown-btn {
+.notice__template-dropdown-btn {
     width: fit-content !important;
     max-width: fit-content !important;
 }
@@ -343,10 +343,10 @@
 .notice__react-gif-btn:focus,
 .notice__gif-btn:focus,
 .notice__ai-btn:focus,
-.notice__tepmlate-dropdown-btn:focus,
+.notice__template-dropdown-btn:focus,
 .notice__react-gif-btn:active,
 .notice__gif-btn:active,
-.notice__tepmlate-dropdown-btn:active {
+.notice__template-dropdown-btn:active {
     background-color: var(--main-accent-color-hover) !important;
     box-shadow: none !important;
 }
@@ -361,7 +361,7 @@
 .user-profile__notify-btn:hover,
 .notice__gif-btn:hover,
 .notice__ai-btn:hover,
-.notice__tepmlate-dropdown-btn:hover {
+.notice__template-dropdown-btn:hover {
     background-color: var(--main-accent-color-hover) !important;
     color: black !important;
 
@@ -537,7 +537,7 @@
 .notice__remove-gif-btn>i,
 .notice__gif-btn>i,
 .notice__ai-btn>i,
-.notice__tepmlate-dropdown-btn>i,
+.notice__template-dropdown-btn>i,
 .notice__edit-btn>i,
 .notice__delete-btn>i,
 .notice__reaction-btn>i::before {
@@ -677,7 +677,7 @@
 .notice__remove-gif-btn>i,
 .notice__gif-btn>i,
 .notice__ai-btn>i,
-.notice__tepmlate-dropdown-btn>i {
+.notice__template-dropdown-btn>i {
     font-size: 20px;
 }
 
@@ -1040,8 +1040,8 @@
     .notice__remove-gif-btn>i,
     .notice__gif-btn>i,
     .notice__ai-btn>i,
-    .notice__tepmlate-dropdown-btn>i,
-    .notice__tepmlate-dropdown-btn>span,
+    .notice__template-dropdown-btn>i,
+    .notice__template-dropdown-btn>span,
     .notice__edit-btn>i,
     .notice__delete-btn>i,
     .notice__reaction-btn>i::before {
@@ -1050,7 +1050,7 @@
 
     .notice__gif-btn,
     .notice__ai-btn,
-    .notice__tepmlate-dropdown-btn {
+    .notice__template-dropdown-btn {
         max-height: 29px;
     }
 

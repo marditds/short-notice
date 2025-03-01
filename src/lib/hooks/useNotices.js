@@ -553,10 +553,6 @@ const useNotices = (googleUserData) => {
         }
     }
 
-    useEffect(() => {
-        console.log("🔄 selectedTags changed globally:", selectedTags);
-    }, [selectedTags]);
-
     const fetchUserInterests = async () => {
         setIsInterestsLoading(true);
         if (user_id) {

@@ -43,7 +43,25 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
     const handleNotify = async () => {
         if (noticeText.trim()) {
 
-            await addNotice(noticeText, duration, noticeType, selectedTags, noticeGif, noticeUrl);
+            var urlInNotice = noticeUrl;
+
+            console.log('urlInNotice', urlInNotice);
+            console.log('typeof (urlInNotice)', typeof (urlInNotice));
+
+
+            if (noticeUrl !== null) {
+                if (!urlInNotice.startsWith('https://') && !urlInNotice.startsWith('http://')) {
+                    console.log('Adding https!');
+                    urlInNotice = 'https://' + urlInNotice;
+                    setNoticeUrl(null);
+                } else {
+                    console.log('Not adding https!');
+                    urlInNotice = noticeUrl;
+                    setNoticeUrl(null);
+                }
+            }
+
+            await addNotice(noticeText, duration, noticeType, selectedTags, noticeGif, urlInNotice);
 
             setNoticeText('');
             setNoticeGif(null);
@@ -92,17 +110,15 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
         setIsTemplateChecked(preVal => !preVal);
     }
 
-    const handleNoticeUrlChange = (e) => {
-        setNoticeUrl(e.target.value);
+    const onNoticeUrlChange = (e) => {
+        var url = e.target.value.trim();
+
+        if (url === '') {
+            setNoticeUrl(null);
+        } else {
+            setNoticeUrl(url);
+        }
     }
-
-    useEffect(() => {
-        console.log('isTemplateChecked', isTemplateChecked);
-    }, [isTemplateChecked])
-
-    useEffect(() => {
-        console.log('templateSubject', templateSubject);
-    }, [templateSubject])
 
     useEffect(() => {
         console.log('noticeUrl', noticeUrl);
@@ -133,9 +149,10 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
                 <Form.Control
                     type='url'
                     name='noticeURL'
-                    value={noticeUrl}
-                    onChange={handleNoticeUrlChange}
+                    value={noticeUrl ?? ''}
+                    onChange={onNoticeUrlChange}
                     className='user-profile__form-control'
+                    placeholder='https://'
                 />
 
                 {/* Character count & template checkbox */}
@@ -198,29 +215,45 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
                     </Button>
 
                     {isTemplateChecked &&
-                        <Dropdown>
-                            <Dropdown.Toggle className='notice__tepmlate-dropdown-btn' id='dropdown-template'>
-                                <i className='bi bi-paragraph me-1' />
-                                <span>
-                                    Template
-                                </span>
-                            </Dropdown.Toggle>
-                            <Dropdown.Menu>
-                                {
-                                    templateItems.map((templateItem, idx) => {
-                                        return (
-                                            <Dropdown.Item
-                                                key={idx}
-                                                as={'div'}
-                                                onClick={() => setTemplateSubject(templateItem)}
-                                            >
-                                                {templateItem}
-                                            </Dropdown.Item>
-                                        )
-                                    })
-                                }
-                            </Dropdown.Menu>
-                        </Dropdown>}
+                        // <Dropdown>
+                        //     <Dropdown.Toggle className='notice__template-dropdown-btn' id='dropdown-template'>
+                        //         <i className='bi bi-paragraph me-1' />
+                        //         <span>
+                        //             Template
+                        //         </span>
+                        //     </Dropdown.Toggle>
+                        //     <Dropdown.Menu>
+                        //         {
+                        //             templateItems.map((templateItem, idx) => {
+                        //                 return (
+                        //                     <Dropdown.Item
+                        //                         key={idx}
+                        //                         as={'div'}
+                        //                         onClick={() => setTemplateSubject(templateItem)}
+                        //                     >
+                        //                         {templateItem}
+                        //                     </Dropdown.Item>
+                        //                 )
+                        //             })
+                        //         }
+                        //     </Dropdown.Menu>
+                        // </Dropdown>
+                        <Form.Select
+                            className='notice__template-dropdown-btn'
+                            id='dropdown-template'
+                            value={templateSubject || ''} // Ensure controlled input
+                            onChange={(e) => setTemplateSubject(e.target.value)}
+                        >
+                            <option value='' disabled>Select a Template</option>
+                            {templateItems.map((templateItem, idx) => (
+                                <option key={idx} value={templateItem}>
+                                    {templateItem}
+                                </option>
+                            ))}
+                        </Form.Select>
+
+
+                    }
                 </div>
 
                 {isGifBtnClicked &&
