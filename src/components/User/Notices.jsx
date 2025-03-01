@@ -471,6 +471,14 @@ export const Notices = ({
                                         </strong>
                                         {notice?.text}
                                     </p>
+                                    {notice?.noticeUrl &&
+                                        <p>
+                                            <a href={notice?.noticeUrl} target='_blank' rel='noopener noreferrer'>
+                                                {notice?.noticeUrl}
+                                            </a>
+                                        </p>
+                                    }
+
 
                                     {notice?.noticeGif &&
                                         <Image src={notice?.noticeGif}

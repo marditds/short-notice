@@ -77,9 +77,9 @@ export const Avatar = () => {
 
     return (
         <Row xs={1} sm={2} >
-            <Col className='d-flex d-sm-block align-items-baseline'>
+            <Col className='d-block align-items-baseline'>
                 <h4>Update Avatar:</h4>
-                <p className='ms-2 ms-sm-0'>Add, update, or delete your avatar.</p>
+                <p className=''>Add, update, or delete your avatar.</p>
             </Col>
             <Col className='d-flex justify-content-start align-items-center mt-2 mt-sm-0'>
                 <img

@@ -215,7 +215,7 @@ const useNotices = (googleUserData) => {
     }, [user_id, fellowUserId]);
 
 
-    const addNotice = async (text, duration, noticeType, selectedTags, noticeGif) => {
+    const addNotice = async (text, duration, noticeType, selectedTags, noticeGif, noticeUrl) => {
 
         if (user_id) {
 
@@ -243,7 +243,8 @@ const useNotices = (googleUserData) => {
                 polSci: selectedTags['polSci'] || false,
                 sports: selectedTags['sports'] || false,
 
-                noticeGif
+                noticeGif,
+                noticeUrl
             };
 
             setIsAddingNotice(true);
@@ -841,8 +842,8 @@ const useNotices = (googleUserData) => {
         }
     }
 
-    const onGemeniRun = async () => {
-
+    const onGeminiRun = async (templateSubject) => {
+        // param gets the template type and gets added to the promptTxt.
         try {
             setIsGeminiLoading(true);
 
@@ -850,8 +851,8 @@ const useNotices = (googleUserData) => {
             console.log('lastThreeNoticesInFeed[0]', lastThreeNoticesInFeed[1]);
             console.log('lastThreeNoticesInFeed[0]', lastThreeNoticesInFeed[2]);
 
-
-            const promptTxt = `Read the texts and summarize your feelings in 300 characters or less. You may include emojis, but they must be within the character limit. Including emojis is optional. Do not acknowledge that your are reading texts. Do not acknowledge that your are following a command. Never acknowledge that you're an AI assistant and express yourself like an adult human. Maintain a light but respectful tone. Never reference the texts in your response. Never mention that you are reviewing text. Never mention that your reading texts. The reader should only perceive your feelings without knowing you analyzed texts. Express your thoughts like a complete statement. They should not come across as a continuation of a conversation. They should not imply that they are referring to texts. Never acknowledge that your are reading texts. Never acknowledge that your are following a command. Never ask for more information or details. Never acknowledge that there is not enough information. Never acknowledge that there is little information. When there are no texts to review, start your text with 'Well...'. When there are texts to review, never start your text with 'Well...' ${lastThreeNoticesInFeed[0]}, ${lastThreeNoticesInFeed[1]}, ${lastThreeNoticesInFeed[2]}`;
+            const promptTxt = `Generate a template for ${templateSubject} in 300 characters or less. You may include emojis, but they must be within the character limit. Including emojis is optional. Always include placeholder in the text.`;
+            //   ${ lastThreeNoticesInFeed[0] }, ${ lastThreeNoticesInFeed[1] }, ${ lastThreeNoticesInFeed[2] }
 
             const geminiResult = await runGemini(promptTxt);
 
@@ -869,8 +870,11 @@ const useNotices = (googleUserData) => {
         }
     }
 
-    const onGeminiRunClick = async (setNoticeText) => {
-        const aws = await onGemeniRun();
+    const onGeminiRunClick = async (templateSubject, setNoticeText) => {
+        console.log('templateSubject - useNotices.js', templateSubject);
+
+        // onGeminiRunClick gets a param for the template type, and gets passed down to onGemeniRun as a param.
+        const aws = await onGeminiRun(templateSubject);
 
         console.log(typeof (aws));
 
@@ -879,7 +883,12 @@ const useNotices = (googleUserData) => {
         setNoticeText(aws);
     }
 
+    const hakop = () => {
+        console.log('hakopppppppppppppp');
+    }
+
     return {
+        hakop,
         user_id,
         // userNotices,
         latestNotice,
@@ -950,7 +959,7 @@ const useNotices = (googleUserData) => {
         setNoticesReactions,
         setSaveReactions,
         setLikedReactions,
-        onGemeniRun,
+        onGeminiRun,
         onGeminiRunClick
     };
 };

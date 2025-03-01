@@ -51,13 +51,9 @@ export const BlockedAccounts = () => {
             let blockedUsers = [];
 
             for (let i = 0; i < blockedIdArr.length; i++) {
-
                 const usr = await getUserAccountByUserId(blockedIdArr[i]);
-
                 console.log('usr', usr);
-
                 blockedUsers.push(usr);
-
             }
 
             blockedUsers.sort((a, b) => a.username.localeCompare(b.username));
@@ -139,7 +135,7 @@ export const BlockedAccounts = () => {
         <Row xs={1} sm={2}>
             <Col>
                 <h4>Blocked Accounts:</h4>
-                <p>To unblock the account, click on the 'X' button next to the avatar.</p>
+                <p className={blockedUsers.length < 1 && 'mb-0'}>To unblock the account, click on the 'X' button next to the avatar.</p>
             </Col>
             <Col >
                 <div className='d-flex justify-content-start flex-wrap gap-2'>
@@ -169,7 +165,7 @@ export const BlockedAccounts = () => {
                             })
                         )
                     }
-                    {blockedUsers?.length < 1 ? <div>Blocked accounts appear here.</div> : null}
+                    {/* {blockedUsers?.length < 1 ? <div>Blocked accounts appear here.</div> : null} */}
                 </div>
                 <div className='mt-2'>
                     {hasMoreBlockedProfiles ?

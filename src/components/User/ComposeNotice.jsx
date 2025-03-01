@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { screenUtils } from '../../lib/utils/screenUtils';
 import useNotices from '../../lib/hooks/useNotices';
-import { Form, Button, Image } from 'react-bootstrap';
+import { Form, Button, Image, Dropdown } from 'react-bootstrap';
 import { NoticeTags } from './NoticeTags';
 import { Loading } from '../Loading/Loading';
 import GifPicker from 'gif-picker-react';
@@ -11,7 +11,7 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
     // duration, 
     noticeType,
     // setDuration, 
-    addNotice, onGemeniRunClick, isAddingNotice, isGeminiLoading }) => {
+    addNotice, onGeminiRunClick, isAddingNotice, isGeminiLoading }) => {
 
     const location = useLocation();
 
@@ -26,8 +26,14 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
     const [noticeGif, setNoticeGif] = useState(null);
     const [isGifBtnClicked, setIsGifBtnClicked] = useState(false);
 
+    const [isTemplateChecked, setIsTemplateChecked] = useState(false);
+    const [templateSubject, setTemplateSubject] = useState(null);
+
+    const [noticeUrl, setNoticeUrl] = useState(null);
+
     const [duration, setDuration] = useState(24);
 
+    const templateItems = ['Last minute notice', 'Rescheduling', 'Cancellation', 'Anniversary wish', 'New product announcement']
 
     const onTextareaChange = (e) => {
         setNoticeText(e.target.value);
@@ -37,10 +43,11 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
     const handleNotify = async () => {
         if (noticeText.trim()) {
 
-            await addNotice(noticeText, duration, noticeType, selectedTags, noticeGif);
+            await addNotice(noticeText, duration, noticeType, selectedTags, noticeGif, noticeUrl);
 
             setNoticeText('');
             setNoticeGif(null);
+            setNoticeUrl(null);
             setSelectedTags({});
             setCharCount(0);
             setDuration(24);
@@ -81,9 +88,25 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
         setIsGifBtnClicked((preVal) => !preVal);
     }
 
+    const onTemplateCheckboxChange = () => {
+        setIsTemplateChecked(preVal => !preVal);
+    }
+
+    const handleNoticeUrlChange = (e) => {
+        setNoticeUrl(e.target.value);
+    }
+
     useEffect(() => {
-        console.log('noticeGif', noticeGif);
-    }, [noticeGif])
+        console.log('isTemplateChecked', isTemplateChecked);
+    }, [isTemplateChecked])
+
+    useEffect(() => {
+        console.log('templateSubject', templateSubject);
+    }, [templateSubject])
+
+    useEffect(() => {
+        console.log('noticeUrl', noticeUrl);
+    }, [noticeUrl])
 
     const isAnyTagSelected = Object.values(selectedTags).some(Boolean);
 
@@ -92,8 +115,10 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
             <Form.Group
                 className="mb-3 user-profile__form-group"
                 controlId="noticeTextarea">
+
+                {/* Text field */}
                 <Form.Control
-                    as="textarea"
+                    as='textarea'
                     rows={5}
                     value={noticeText}
                     onChange={onTextareaChange}
@@ -101,11 +126,33 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
                     placeholder={'Got a notice to share?'}
                 />
 
-                {/* Character count */}
+                {/* Notice URL */}
+                {/* <Form.Label>
+                    URL:
+                </Form.Label> */}
+                <Form.Control
+                    type='url'
+                    name='noticeURL'
+                    value={noticeUrl}
+                    onChange={handleNoticeUrlChange}
+                    className='user-profile__form-control'
+                />
+
+                {/* Character count & template checkbox */}
                 <div
-                    className={`user-profile__notice-char-counter ${charCount > charLimit && 'extra'}`}
+                    className={`user-profile__notice-char-counter ${charCount > charLimit && 'extra'} d-flex`}
                 >
                     {`${charCount}/${charLimit} characters`}
+
+                    <Form.Check
+                        inline
+                        label='Use template'
+                        type='checkbox'
+                        checked={isTemplateChecked}
+                        onChange={onTemplateCheckboxChange}
+                        className='ms-auto z-1 mb-0 me-0'
+                        style={{ minHeight: '0' }}
+                    />
                 </div>
 
                 {/* GIF */}
@@ -130,20 +177,50 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
                 }
 
                 {/* GIF & AI Button */}
-                <div className='my-2'>
+                <div className='my-2 d-flex'>
                     <Button className='notice__gif-btn py-1 px-2'
                         onClick={handleGifBtn}>
                         <i className='bi bi-filetype-gif' />
                     </Button>
 
-                    <Button className='notice__ai-btn ms-2 py-1 px-2'
-                        onClick={onGemeniRunClick}>
+                    <Button className='notice__ai-btn mx-2 py-1 px-2'
+                        onClick={() => {
+                            console.log('Button clicked, templateSubject:', templateSubject);
+                            onGeminiRunClick(templateSubject);
+                        }}
+                    // onClick={() => onGeminiRunClick()}
+                    >
                         {!isGeminiLoading ?
                             <i className='bi bi-stars' />
                             :
                             <Loading />
                         }
                     </Button>
+
+                    {isTemplateChecked &&
+                        <Dropdown>
+                            <Dropdown.Toggle className='notice__tepmlate-dropdown-btn' id='dropdown-template'>
+                                <i className='bi bi-paragraph me-1' />
+                                <span>
+                                    Template
+                                </span>
+                            </Dropdown.Toggle>
+                            <Dropdown.Menu>
+                                {
+                                    templateItems.map((templateItem, idx) => {
+                                        return (
+                                            <Dropdown.Item
+                                                key={idx}
+                                                as={'div'}
+                                                onClick={() => setTemplateSubject(templateItem)}
+                                            >
+                                                {templateItem}
+                                            </Dropdown.Item>
+                                        )
+                                    })
+                                }
+                            </Dropdown.Menu>
+                        </Dropdown>}
                 </div>
 
                 {isGifBtnClicked &&
@@ -200,6 +277,6 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
                 </Button>
             </div>
 
-        </Form>
+        </Form >
     )
 }

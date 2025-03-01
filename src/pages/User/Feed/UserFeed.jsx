@@ -30,6 +30,7 @@ const UserFeed = () => {
         isAddingNotice,
         fetchedInterests,
         isGeminiLoading,
+        hakop,
         onGeminiRunClick,
         setLastThreeNoticesInFeed,
         toggleInterestsTag,
@@ -331,7 +332,12 @@ const UserFeed = () => {
                             isAddingNotice={isAddingNotice}
                             setNoticeText={setNoticeText}
                             addNotice={addNotice}
-                            onGemeniRunClick={async () => await onGeminiRunClick(setNoticeText)}
+                            onGeminiRunClick={async (templateSubject) => {
+                                console.log('templateSubject - UserFeed.jsx', templateSubject);
+                                await onGeminiRunClick(templateSubject, setNoticeText)
+                            }}
+                        // onGeminiRunClick={hakop}
+                        // onGeminiRunClick={() => hakop()}
                         />
                     </div>
                 </>

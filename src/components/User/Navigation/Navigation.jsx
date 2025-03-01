@@ -38,7 +38,7 @@ export const Navigation = ({
         // fetchUserInterests
     } = useNotices(googleUserData);
 
-    const { isLargeScreen } = screenUtils();
+    const { isLargeScreen, isMediumScreen, isSmallScreen, isExtraSmallScreen } = screenUtils();
 
     //Compose Notice
     const [noticeText, setNoticeText] = useState('');
@@ -98,7 +98,7 @@ export const Navigation = ({
                     <UserSearch userId={userId} />
 
                     {
-                        location.pathname === '/user/profile' ? null :
+                        location.pathname !== '/user/feed' ? null :
                             <>
                                 {/* Update Interests Button */}
                                 {/* <Button
@@ -128,7 +128,10 @@ export const Navigation = ({
                                         setNoticeText={setNoticeText}
                                         addNotice={addNotice}
                                         isGeminiLoading={isGeminiLoading}
-                                        onGemeniRunClick={async () => await onGeminiRunClick(setNoticeText)}
+                                        onGeminiRunClick={async (templateSubject) => {
+                                            console.log('templateSubject - Navigation.jsx', templateSubject);
+                                            await onGeminiRunClick(templateSubject, setNoticeText)
+                                        }}
                                     />
                                 </ComposeNoticeModal>
 
@@ -156,14 +159,12 @@ export const Navigation = ({
                                 </InterestsModal> */}
                             </>
                     }
-
                     <NavDropdown
                         drop='down'
                         id="dropdown-basic-button"
                         className={`my-auto userhome__body--profile--tools--dropdown 
-                            ${location.pathname === '/user/profile' ? 'ms-auto' :
-                                (!isLargeScreen ? 'ms-auto' : 'ms-1')
-                            }
+                            ${(location.pathname === '/user/feed' && !isLargeScreen) ? 'ms-auto' : 'ms-1'} 
+                            ${(location.pathname !== '/user/feed' && !isExtraSmallScreen) ? 'ms-auto' : 'ms-1'}
                             `}
                         title={<i className='bi bi-three-dots-vertical navigation__three-dots d-flex justify-content-center align-items-center' />}>
                         {

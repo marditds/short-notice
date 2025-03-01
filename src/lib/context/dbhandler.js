@@ -519,7 +519,7 @@ export const getSessionDetails = async () => {
 //     }
 // }
 
-export const createNotice = async ({ user_id, text, timestamp, expiresAt, noticeType, noticeGif, science, technology, engineering, math, literature, history, philosophy, music, medicine, economics, law, polSci, sports
+export const createNotice = async ({ user_id, text, timestamp, expiresAt, noticeType, noticeGif, noticeUrl, science, technology, engineering, math, literature, history, philosophy, music, medicine, economics, law, polSci, sports
 }) => {
 
     try {
@@ -547,7 +547,8 @@ export const createNotice = async ({ user_id, text, timestamp, expiresAt, notice
                 law: law || false,
                 polSci: polSci || false,
                 sports: sports || false,
-                noticeGif
+                noticeGif,
+                noticeUrl
             },
             // [
             //     Permission.write(Role.users()),

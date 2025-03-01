@@ -8,6 +8,7 @@ import useUserInfo from '../../../lib/hooks/useUserInfo.js';
 import { getAvatarUrl as avatarUtil } from '../../../lib/utils/avatarUtils.js';
 import useUserAvatar from '../../../lib/hooks/useUserAvatar.js';
 import useNotices from '../../../lib/hooks/useNotices.js';
+import { screenUtils } from '../../../lib/utils/screenUtils.js';
 import { ComposeNotice } from '../../../components/User/ComposeNotice';
 import { Loading } from '../../../components/Loading/Loading.jsx';
 import '../../../components/User/Profile/UserProfile.css';
@@ -20,14 +21,6 @@ const UserProfile = () => {
     const location = useLocation();
 
     const { googleUserData, username } = useUserContext();
-
-    const [accountType, setAccountType] = useState(null);
-    const [noticeText, setNoticeText] = useState('');
-    // const [noticeGif, setNoticeGif] = useState(null);
-    const [duration, setDuration] = useState(24);
-    const [editingNoticeId, setEditingNoticeId] = useState(null);
-    const [showEditModal, setShowEditModal] = useState(false);
-    const [showDeleteModal, setShowDeleteModal] = useState(false);
 
     const {
         user_id,
@@ -44,6 +37,7 @@ const UserProfile = () => {
         isGeminiLoading,
         setTagCategories,
         onGeminiRunClick,
+        hakop,
         fetchUserSaves,
         fetchUserLikes,
         setLikedNotices,
@@ -79,7 +73,15 @@ const UserProfile = () => {
         getBlockedUsersByUser
     } = useUserInfo(googleUserData);
 
-    // const { isSmallScreen } = screenUtils();
+    const { isSmallScreen } = screenUtils();
+
+    const [accountType, setAccountType] = useState(null);
+    const [noticeText, setNoticeText] = useState('');
+    // const [noticeGif, setNoticeGif] = useState(null);
+    // const [duration, setDuration] = useState(24);
+    const [editingNoticeId, setEditingNoticeId] = useState(null);
+    const [showEditModal, setShowEditModal] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
 
     // const [notices, setNotices] = useState([]);
     const [userProfileNotices, setUserProfileNotices] = useState([]);
@@ -507,7 +509,7 @@ const UserProfile = () => {
                 isLoadingMoreFollowers={isLoadingMoreFollowers}
             />
 
-            <div style={{ marginTop: '190px' }}>
+            <div style={{ marginTop: !isSmallScreen ? '190px' : '150px' }}>
                 <ComposeNotice
                     isAddingNotice={isAddingNotice}
                     noticeText={noticeText}
@@ -515,7 +517,11 @@ const UserProfile = () => {
                     isGeminiLoading={isGeminiLoading}
                     setNoticeText={setNoticeText}
                     addNotice={addNotice}
-                    onGemeniRunClick={async () => await onGeminiRunClick(setNoticeText)}
+                    // onGeminiRunClick={hakop}
+                    onGeminiRunClick={async (templateSubject) => {
+                        console.log('templateSubject - UserProfile.jsx', templateSubject);
+                        await onGeminiRunClick(templateSubject, setNoticeText)
+                    }}
                 // tagCategories={tagCategories}
                 // noticeGif={noticeGif}
                 // duration={duration} 

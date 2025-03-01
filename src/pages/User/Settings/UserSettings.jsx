@@ -30,9 +30,9 @@ const UserSettings = () => {
         <Container fluid className='settings'>
             <Stack className='settings__sections'>
                 <Avatar />
-                <hr />
+                <hr className='settings__hr' />
                 <Info accountType={accountType} />
-                <hr />
+                <hr className='settings__hr' />
                 {accountType === 'organization' &&
                     <>
                         <Passcode />
@@ -40,15 +40,15 @@ const UserSettings = () => {
                     </>
                 }
                 <Interests />
-                <hr />
+                <hr className='settings__hr' />
                 <BlockedAccounts />
-                <hr />
+                <hr className='settings__hr' />
                 <DeleteAllNotices />
-                <hr />
+                <hr className='settings__hr' />
                 <Visibility />
-                <hr />
+                <hr className='settings__hr' />
                 <DeleteAccount />
-                <hr />
+                <hr className='settings__hr' />
             </Stack>
         </Container>
     )
