@@ -264,17 +264,6 @@ const useNotices = (googleUserData) => {
             } finally {
                 setIsAddingNotice(false);
             }
-
-            // try {
-            //     const createdNotice = await createNotice(newNotice);
-            //     setUserNotices((prevNotices) => [createdNotice, ...prevNotices]);
-            //     return createdNotice;
-
-            // } catch (error) {
-            //     console.error('Error adding notice:', error);
-            // } finally {
-            //     setIsAddingNotice(false);
-            // }
         }
     };
 
@@ -839,24 +828,27 @@ const useNotices = (googleUserData) => {
     }
 
     const onGeminiRun = async (templateSubject) => {
-        // param gets the template type and gets added to the promptTxt.
+
         try {
             setIsGeminiLoading(true);
 
-            console.log('lastThreeNoticesInFeed[0]', lastThreeNoticesInFeed[0]);
-            console.log('lastThreeNoticesInFeed[0]', lastThreeNoticesInFeed[1]);
-            console.log('lastThreeNoticesInFeed[0]', lastThreeNoticesInFeed[2]);
+            console.log('templateSubject in onGeminiRun', templateSubject);
 
-            const promptTxt = `Generate a template for ${templateSubject} in 300 characters or less. You may include emojis, but they must be within the character limit. Including emojis is optional. Always include placeholder in the text.`;
-            //   ${ lastThreeNoticesInFeed[0] }, ${ lastThreeNoticesInFeed[1] }, ${ lastThreeNoticesInFeed[2] }
+            var geminiResult = '';
 
-            const geminiResult = await runGemini(promptTxt);
+            if (templateSubject !== null) {
+                var promptTxt = `Generate a template for ${templateSubject} in 300 characters or less. You may include emojis, but they must be within the character limit. Including emojis is optional. Always include placeholder(s) in the text.`;
 
-            console.log('geminiRes - useNotices:', geminiResult);
+                geminiResult = await runGemini(promptTxt);
 
-            console.log(typeof (geminiResult));
+                console.log('geminiRes - useNotices:', geminiResult);
 
-            setGeminiRes(geminiResult);
+                console.log(typeof (geminiResult));
+
+                setGeminiRes(geminiResult);
+            } else {
+                geminiResult = 'You must select a template from the provided menu.';
+            }
 
             return geminiResult;
         } catch (error) {
@@ -869,12 +861,7 @@ const useNotices = (googleUserData) => {
     const onGeminiRunClick = async (templateSubject, setNoticeText) => {
         console.log('templateSubject - useNotices.js', templateSubject);
 
-        // onGeminiRunClick gets a param for the template type, and gets passed down to onGemeniRun as a param.
         const aws = await onGeminiRun(templateSubject);
-
-        console.log(typeof (aws));
-
-        console.log('AWWWWWWS', aws);
 
         setNoticeText(aws);
     }

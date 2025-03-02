@@ -472,7 +472,8 @@ export const Notices = ({
                                         {notice?.text}
                                     </p>
                                     {notice?.noticeUrl &&
-                                        <p>
+                                        <p className='notice__link-in-notice-p'>
+
                                             <a href={notice?.noticeUrl} target='_blank' rel='noopener noreferrer'
                                                 className='notice__link-in-notice'
                                             >
