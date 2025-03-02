@@ -119,17 +119,20 @@
 
 .user-profile__form-control:hover,
 .user-profile__timer-select:hover,
+.notice__template-dropdown-btn:hover,
 .notice__edit--modal-form-control:hover {
     border-color: var(--main-accent-color-hover);
 }
 
 .user-profile__form-control,
 .user-profile__timer-select,
+.notice__template-dropdown-btn,
 .notice__edit--modal-form-control {
     border-width: 1.5px;
     border-style: groove;
     transition: var(--main-transition-speed);
     border-radius: var(--main-rounded-corner);
+    background-color: transparent;
 }
 
 .user-profile__form-control:focus::placeholder {
@@ -138,6 +141,7 @@
 
 .user-profile__form-control:focus,
 .user-profile__timer-select:focus,
+.notice__template-dropdown-btn:focus,
 .notice__edit--modal-form-control:focus {
     color: var(--main-text-color);
     background-color: rgb(0, 0, 0, 0.1);
@@ -256,17 +260,38 @@
     background-color: var(--main-accent-color);
 }
 
+.notice__template-dropdown-btn {
+    border-color: var(--main-accent-color);
+    color: var(--main-text-color);
+    max-width: fit-content;
+}
+
+.notice__template-dropdown-btn>option {
+    color: var(--main-text-color);
+}
+
+.notice__template-dropdown-btn:disabled {
+    background-color: rgba(0, 0, 0, 0.1);
+    color: var(--main-text-muted) !important;
+}
+
+.notice__template-dropdown-btn:disabled:hover {
+    border-color: var(--main-accent-color)
+}
+
 .user-profile__timer-select {
     padding-left: 5px;
     padding-right: 0px;
     max-width: 65px;
 }
 
+.notice__template-checkbox>label,
 .notice__report--radio>label,
 .user-profile__report--radio>label {
     cursor: pointer;
 }
 
+.notice__template-checkbox>input,
 .notice__report--radio>input,
 .notice__reaction--report--radio>input,
 .user-profile__report--radio>input {
@@ -275,6 +300,8 @@
     cursor: pointer;
 }
 
+.notice__template-checkbox>input:checked,
+.notice__template-checkbox>input:active,
 .notice__report--radio>input:checked,
 .notice__report--radio>input:active,
 .notice__reaction--report--radio>input:checked,
@@ -290,8 +317,8 @@
 .notice__react-gif-btn,
 .notice__gif-btn,
 .notice__ai-btn,
-.notice__template-dropdown-btn,
 .user-profile__report--radio>input:checked,
+.notice__template-checkbox>input:checked,
 .notice__report--radio>input:checked,
 .notice__report--modal-btn,
 .notice__compose--modal-btn,
@@ -307,8 +334,7 @@
 }
 
 .notice__gif-btn,
-.notice__ai-btn,
-.notice__template-dropdown-btn {
+.notice__ai-btn {
     max-height: 38px;
     display: flex;
     justify-content: center;
@@ -321,9 +347,56 @@
     max-width: 38px !important;
 }
 
-.notice__template-dropdown-btn {
-    width: fit-content !important;
-    max-width: fit-content !important;
+.notice__template-checkbox>label {
+    color: var(--main-text-color);
+    transition: var(--main-transition-speed);
+}
+
+.notice__template-checkbox>input {
+    border-color: var(--main-text-muted);
+    background-color: transparent;
+    transition: var(--main-transition-speed);
+}
+
+.notice__template-checkbox:hover>input,
+.notice__template-checkbox>input:hover {
+    background-color: rgb(0, 0, 0, 0.1);
+}
+
+.notice__template-checkbox>input:checked {
+    background-color: var(--main-accent-color);
+    border-color: var(--main-accent-color);
+}
+
+.notice__template-checkbox>label:hover,
+.notice__template-checkbox>label:focus,
+.notice__template-checkbox>label:active {
+    color: var(--main-accent-color-hover) !important;
+}
+
+.notice__report--radio>input:focus,
+.notice__template-checkbox>input:focus {
+    box-shadow: none !important;
+    background-color: var(--main-accent-color-hover);
+    border-color: var(--main-text-color);
+}
+
+.notice__template-checkbox>input:checked {
+    background-image: url(../../../assets/x.svg) !important;
+}
+
+.notice__template-checkbox>input {
+    color: white !important;
+    fill: white !important;
+}
+
+.notice__report--radio>input[type=checkbox]:checked:focus,
+.notice__template-checkbox>input[type=checkbox]:checked:focus {
+    background-color: var(--main-accent-color-hover) !important;
+}
+
+.notice__template-checkbox input[type="checkbox"]:checked:focus+label {
+    color: var(--main-accent-color-hover) !important;
 }
 
 .notice__report--radio>input:checked[type=radio],
@@ -343,10 +416,8 @@
 .notice__react-gif-btn:focus,
 .notice__gif-btn:focus,
 .notice__ai-btn:focus,
-.notice__template-dropdown-btn:focus,
 .notice__react-gif-btn:active,
-.notice__gif-btn:active,
-.notice__template-dropdown-btn:active {
+.notice__gif-btn:active {
     background-color: var(--main-accent-color-hover) !important;
     box-shadow: none !important;
 }
@@ -360,8 +431,7 @@
 .notice__reaction--report--modal-btn:hover,
 .user-profile__notify-btn:hover,
 .notice__gif-btn:hover,
-.notice__ai-btn:hover,
-.notice__template-dropdown-btn:hover {
+.notice__ai-btn:hover {
     background-color: var(--main-accent-color-hover) !important;
     color: black !important;
 
@@ -422,6 +492,10 @@
 .notice__avatar {
     height: 55px;
     width: 55px;
+}
+
+.notice__link-in-notice {
+    color: var(--main-accent-color-hover);
 }
 
 .notice__reaction-avatar,
@@ -537,7 +611,6 @@
 .notice__remove-gif-btn>i,
 .notice__gif-btn>i,
 .notice__ai-btn>i,
-.notice__template-dropdown-btn>i,
 .notice__edit-btn>i,
 .notice__delete-btn>i,
 .notice__reaction-btn>i::before {
@@ -676,8 +749,7 @@
 .notice__react-remove-gif-btn>i,
 .notice__remove-gif-btn>i,
 .notice__gif-btn>i,
-.notice__ai-btn>i,
-.notice__template-dropdown-btn>i {
+.notice__ai-btn>i {
     font-size: 20px;
 }
 
@@ -976,6 +1048,7 @@
     .user-profile__notify-btn,
     .user-profile__timer-label,
     .user-profile__timer-select,
+    .notice__template-dropdown-btn,
     .notices__accordion>div,
     .user-profile__notice-char-counter,
     .user-profile__report--modal-btn {
@@ -1040,8 +1113,6 @@
     .notice__remove-gif-btn>i,
     .notice__gif-btn>i,
     .notice__ai-btn>i,
-    .notice__template-dropdown-btn>i,
-    .notice__template-dropdown-btn>span,
     .notice__edit-btn>i,
     .notice__delete-btn>i,
     .notice__reaction-btn>i::before {
@@ -1049,8 +1120,7 @@
     }
 
     .notice__gif-btn,
-    .notice__ai-btn,
-    .notice__template-dropdown-btn {
+    .notice__ai-btn {
         max-height: 29px;
     }
 

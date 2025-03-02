@@ -129,7 +129,7 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
     return (
         <Form className='user-profile__form'>
             <Form.Group
-                className="mb-3 user-profile__form-group"
+                className="mb-2 mb-md-3 user-profile__form-group"
                 controlId="noticeTextarea">
 
                 {/* Text field */}
@@ -143,15 +143,12 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
                 />
 
                 {/* Notice URL */}
-                {/* <Form.Label>
-                    URL:
-                </Form.Label> */}
                 <Form.Control
                     type='url'
                     name='noticeURL'
                     value={noticeUrl ?? ''}
                     onChange={onNoticeUrlChange}
-                    className='user-profile__form-control'
+                    className='user-profile__form-control my-2'
                     placeholder='https://'
                 />
 
@@ -159,17 +156,18 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
                 <div
                     className={`user-profile__notice-char-counter ${charCount > charLimit && 'extra'} d-flex`}
                 >
-                    {`${charCount}/${charLimit} characters`}
-
                     <Form.Check
                         inline
-                        label='Use template'
-                        type='checkbox'
+                        id="use-template-checkbox"  // Unique ID
+                        label="Use template"
+                        type="checkbox"
                         checked={isTemplateChecked}
                         onChange={onTemplateCheckboxChange}
-                        className='ms-auto z-1 mb-0 me-0'
-                        style={{ minHeight: '0' }}
+                        className="ms-0 z-1 mb-0 me-0 notice__template-checkbox"
+                        style={{ minHeight: "0" }}
                     />
+
+                    <span className='ms-auto'>{`${charCount}/${charLimit} characters`}</span>
                 </div>
 
                 {/* GIF */}
@@ -193,19 +191,32 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
                     </div>
                 }
 
-                {/* GIF & AI Button */}
+                {/* GIF, AI Button, Template selection */}
                 <div className='my-2 d-flex'>
-                    <Button className='notice__gif-btn py-1 px-2'
-                        onClick={handleGifBtn}>
-                        <i className='bi bi-filetype-gif' />
-                    </Button>
 
+                    {/* Template selection */}
+                    <Form.Select
+                        className='notice__template-dropdown-btn'
+                        id='dropdown-template'
+                        value={templateSubject || ''}
+                        disabled={!isTemplateChecked}
+                        onChange={(e) => setTemplateSubject(e.target.value)}
+                    >
+                        <option value='' disabled>Select a Template</option>
+                        {templateItems.map((templateItem, idx) => (
+                            <option key={idx} value={templateItem}>
+                                {templateItem}
+                            </option>
+                        ))}
+                    </Form.Select>
+
+                    {/* AI Button */}
                     <Button className='notice__ai-btn mx-2 py-1 px-2'
                         onClick={() => {
                             console.log('Button clicked, templateSubject:', templateSubject);
                             onGeminiRunClick(templateSubject);
                         }}
-                    // onClick={() => onGeminiRunClick()}
+                        disabled={!isTemplateChecked}
                     >
                         {!isGeminiLoading ?
                             <i className='bi bi-stars' />
@@ -214,46 +225,12 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
                         }
                     </Button>
 
-                    {isTemplateChecked &&
-                        // <Dropdown>
-                        //     <Dropdown.Toggle className='notice__template-dropdown-btn' id='dropdown-template'>
-                        //         <i className='bi bi-paragraph me-1' />
-                        //         <span>
-                        //             Template
-                        //         </span>
-                        //     </Dropdown.Toggle>
-                        //     <Dropdown.Menu>
-                        //         {
-                        //             templateItems.map((templateItem, idx) => {
-                        //                 return (
-                        //                     <Dropdown.Item
-                        //                         key={idx}
-                        //                         as={'div'}
-                        //                         onClick={() => setTemplateSubject(templateItem)}
-                        //                     >
-                        //                         {templateItem}
-                        //                     </Dropdown.Item>
-                        //                 )
-                        //             })
-                        //         }
-                        //     </Dropdown.Menu>
-                        // </Dropdown>
-                        <Form.Select
-                            className='notice__template-dropdown-btn'
-                            id='dropdown-template'
-                            value={templateSubject || ''} // Ensure controlled input
-                            onChange={(e) => setTemplateSubject(e.target.value)}
-                        >
-                            <option value='' disabled>Select a Template</option>
-                            {templateItems.map((templateItem, idx) => (
-                                <option key={idx} value={templateItem}>
-                                    {templateItem}
-                                </option>
-                            ))}
-                        </Form.Select>
+                    {/* GIF Button */}
+                    <Button className='notice__gif-btn ms-auto py-1 px-2'
+                        onClick={handleGifBtn}>
+                        <i className='bi bi-filetype-gif' />
+                    </Button>
 
-
-                    }
                 </div>
 
                 {isGifBtnClicked &&
