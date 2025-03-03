@@ -1,4 +1,4 @@
-import { StrictMode } from 'react';
+import React, { StrictMode, useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import {
   createBrowserRouter,
@@ -146,17 +146,33 @@ const router = createBrowserRouter([
   },
 ]);
 
+const MainRender = () => {
+  const [clientId, setClientId] = useState(null);
+
+  useEffect(() => {
+    fetch('/netlify/functions/get-token.js') // Call Netlify function to get API key
+      .then((res) => res.json())
+      .then((data) => setClientId(data.token)) // Set clientId when received
+      .catch((err) => console.error('Error fetching token:', err));
+  }, []);
+
+  // Prevent rendering until clientId is loaded
+  if (!clientId) return <p>Loading...</p>;
+
+  return (
+    <StrictMode>
+      <GoogleOAuthProvider clientId={clientId}>
+        <UserProvider>
+          <RouterProvider router={router} />
+        </UserProvider>
+      </GoogleOAuthProvider>
+    </StrictMode>
+  );
+};
+
 createRoot(document.getElementById('root')).render(
 
-
-  <StrictMode>
-    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_API_TOKEN}>
-      <UserProvider>
-        <RouterProvider router={router} />
-      </UserProvider>
-    </GoogleOAuthProvider>
+  <MainRender />
 
 
-  </StrictMode>
-
-)
+);
