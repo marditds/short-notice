@@ -12,7 +12,6 @@ const useNotices = (googleUserData) => {
     const [user_id, setUserId] = useState(null);
     const [fellowUserId, setFellowUserId] = useState(null)
 
-    // const [userNotices, setUserNotices] = useState([]);
     const [latestNotice, setLatestNotice] = useState({});
     const [generalFeedNotices, setGeneralFeedNotices] = useState([]);
     const [personalFeedNotices, setPersonalFeedNotices] = useState([]);
@@ -76,6 +75,33 @@ const useNotices = (googleUserData) => {
             values: [false, false, false, false, false]
         }
     ]);
+    const templateItems = {
+        personal: [
+            'Morning Thoughts',
+            'A Song That Matches My Mood',
+            'Life Hack I Just Discovered!',
+            'One Thing I\'m Grateful for Today',
+            'A Random Fact You Didn\'t Know About Me'
+        ],
+        business: [
+            'Flash Sale Alert',
+            'A Brief Explanation of What\'s Coming',
+            'Customer Shoutout',
+            'Limited-Time Offer',
+            'Question for Customers',
+            'Quick Tip for Using Our Product',
+            'Big Product Announcement'
+        ],
+        organization: [
+            'Important Team Update',
+            'Reminder: Upcoming Meeting Details',
+            'Quick Motivation for the Team',
+            'Shoutout to Team Member',
+            'Policy Change Notice',
+            'Fast Feedback from Team',
+            'Celebrating a Team Win'
+        ]
+    };
 
     // const { filterBlocksFromLikesSaves } = useUnblockedNotices();
 
@@ -888,6 +914,7 @@ const useNotices = (googleUserData) => {
         saveReactions,
         likedReactions,
         tagCategories,
+        templateItems,
         isInterestsLoading,
         isInterestsUpdating,
         selectedTags,

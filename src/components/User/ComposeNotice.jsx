@@ -15,7 +15,7 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
 
     const location = useLocation();
 
-    const { tagCategories, setTagCategories } = useNotices();
+    const { tagCategories, templateItems, setTagCategories } = useNotices();
 
     const { isSmallScreen, isMediumScreen } = screenUtils();
 
@@ -32,8 +32,6 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
     const [noticeUrl, setNoticeUrl] = useState(null);
 
     const [duration, setDuration] = useState(24);
-
-    const templateItems = ['Last minute notice', 'Rescheduling', 'Cancellation', 'Anniversary wish', 'New product announcement']
 
     const onTextareaChange = (e) => {
         setNoticeText(e.target.value);
@@ -156,6 +154,8 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
                 <div
                     className={`user-profile__notice-char-counter ${charCount > charLimit && 'extra'} d-flex`}
                 >
+
+                    {/* Template checkbox */}
                     <Form.Check
                         inline
                         id="use-template-checkbox"  // Unique ID
@@ -167,6 +167,7 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
                         style={{ minHeight: "0" }}
                     />
 
+                    {/* Character count */}
                     <span className='ms-auto'>{`${charCount}/${charLimit} characters`}</span>
                 </div>
 
@@ -203,7 +204,7 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
                         onChange={(e) => setTemplateSubject(e.target.value)}
                     >
                         <option value='' disabled>Select a Template</option>
-                        {templateItems.map((templateItem, idx) => (
+                        {templateItems[noticeType].map((templateItem, idx) => (
                             <option key={idx} value={templateItem}>
                                 {templateItem}
                             </option>
