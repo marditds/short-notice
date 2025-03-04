@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Row, Col, ListGroup } from 'react-bootstrap';
-import { PrivacyData } from '../../../components/PreLogin/Privacy/privacyData';
+import PrivacyData from '../../../components/PreLogin/Privacy/PrivacyData';
 
 const PrivacyPolicy = () => {
 

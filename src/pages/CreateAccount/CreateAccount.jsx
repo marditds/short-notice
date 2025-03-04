@@ -12,7 +12,7 @@ import { SetPasscode } from '../../components/Setup/SetPasscode';
 import useUserInfo from '../../lib/hooks/useUserInfo';
 import { tosData } from '../PreLogin/TOS/tosData';
 import { reportCategories, commGuideParags } from '../../components/PreLogin/ComunityGuidelines/communityGuidelines';
-import { PrivacyData } from '../../components/PreLogin/Privacy/privacyData';
+import PrivacyData from '../../components/PreLogin/Privacy/PrivacyData';
 
 const CreateAccount = ({ setUser }) => {
 

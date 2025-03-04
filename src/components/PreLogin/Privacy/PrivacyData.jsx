@@ -1,4 +1,4 @@
-export const PrivacyData = () => {
+const PrivacyData = () => {
 
   const privacyPolicyData = [
     {
@@ -88,4 +88,5 @@ export const PrivacyData = () => {
   return { privacyPolicyData };
 }
 
+export default PrivacyData;
 

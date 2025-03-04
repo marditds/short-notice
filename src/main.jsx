@@ -171,8 +171,5 @@ const MainRender = () => {
 };
 
 createRoot(document.getElementById('root')).render(
-
   <MainRender />
-
-
 );
