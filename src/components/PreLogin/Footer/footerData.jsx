@@ -1,4 +1,4 @@
-const footerData = {
+export const footerData = {
     company: [
         { name: "About", url: "/about" }
         // { name: "Blog", url: "/blog" }
@@ -25,6 +25,4 @@ const footerData = {
     copyright: `© ${new Date().getFullYear()} ShortNotice.newLine All rights reserved.`,
 
     developer: <span>Developed by <a target='_blank' href='https://marditds.netlify.app'>Mardit DerSoukiassian</a>.</span>
-};
-
-export default footerData;
+}; 
