@@ -1,0 +1,2 @@
+[build]
+  functions = "netlify/functions"  # Ensure Netlify knows where to find functions
