@@ -150,7 +150,7 @@ const MainRender = () => {
   const [clientId, setClientId] = useState(null);
 
   useEffect(() => {
-    fetch('/netlify/functions/get-token.js') // Call Netlify function to get API key
+    fetch('/.netlify/functions/get-token') // Call Netlify function to get API key
       .then((res) => res.json())
       .then((data) => setClientId(data.token)) // Set clientId when received
       .catch((err) => console.error('Error fetching token:', err));
