@@ -1,29 +1,10 @@
 import React, { useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Container, Row, Col, Image } from 'react-bootstrap';
-import { footerData } from './FooterData.jsx';
+import { footerData } from './FooterData';
 import { screenUtils } from '../../../lib/utils/screenUtils.js';
 import snLogo from '../../../assets/sn_long.png';
 import './Footer.css';
-
-
-// About | Contact | Privacy Policy | Terms of Service | Help Center  
-// Follow Us: [Facebook][Twitter][Instagram]  
-// Download our app: [App Store Icon][Google Play Icon]  
-// © 2024 SocialMediaApp.All rights reserved.  
-
-
-
-// --------------------------------------------------
-// | Home | About | Contact | Privacy | Terms | Help |
-//     --------------------------------------------------
-//         Follow Us: [FB][IG][X][YT]
-//         © 2024 SocialApp.All rights reserved.
-// --------------------------------------------------
-
-
-console.log(footerData[2]);
-
 
 const Footer = () => {
 
