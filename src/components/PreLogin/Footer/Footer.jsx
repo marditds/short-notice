@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Container, Row, Col, Image } from 'react-bootstrap';
-import { footerData } from './FooterData';
+import { footerData } from './FooterData.jsx';
 import { screenUtils } from '../../../lib/utils/screenUtils.js';
 import snLogo from '../../../assets/sn_long.png';
 import './Footer.css';
