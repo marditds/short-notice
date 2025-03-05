@@ -72,16 +72,11 @@ export const ComposeReaction = ({ reactionText, onReactionTextChange, reactionGi
                     }
 
                     {/* handleGifBtn */}
-                    <div className='mt-2'>
+                    <div className='my-2'>
                         <Button className='notice__react-gif-btn py-1 px-2'
                             onClick={handleGifBtn}>
                             <i className='bi bi-filetype-gif' />
                         </Button>
-                        {/* {reactionGif &&
-                            <Button className='notice__react-gif-btn py-1 px-2 ms-2' onClick={() => setReactionGif(null)}>
-                                Remove Gif
-                            </Button>
-                        } */}
                     </div>
 
                     {/* GIF picker */}
