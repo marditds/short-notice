@@ -1,29 +1,52 @@
 exports.handler = async (event) => {
-    const params = new URLSearchParams(event.queryStringParameters);
-    const keyType = params.get("key"); // Get requested key from query param
+    try {
+        console.log("Received request:", event.queryStringParameters);
+        const params = new URLSearchParams(event.queryStringParameters);
+        const keyType = params.get("key");
 
-    let response = {};
-
-    switch (keyType) {
-        case "google":
-            response = { token: process.env.GOOGLE_API_TOKEN || "MISSING_GOOGLE_API_TOKEN" };
-            break;
-        case "captcha":
-            response = { token: process.env.CAPTCHA_KEY || "MISSING_CAPTCHA_KEY" };
-            break;
-        case "gemini":
-            response = { token: process.env.GEMINI_API_KEY || "MISSING_GEMINI_API_KEY" };
-            break;
-        default:
+        if (!keyType) {
             return {
                 statusCode: 400,
-                body: JSON.stringify({ error: "Invalid key type requested" })
+                body: JSON.stringify({ error: "Missing key type" })
             };
-    }
+        }
 
-    return {
-        statusCode: 200,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(response)
-    };
+        let response = {};
+        switch (keyType) {
+            case "google":
+                response = { token: process.env.GOOGLE_API_TOKEN || "MISSING_GOOGLE_API_TOKEN" };
+                break;
+            case "captcha":
+                response = { token: process.env.CAPTCHA_KEY || "MISSING_CAPTCHA_KEY" };
+                break;
+            case "gemini":
+                response = { token: process.env.GEMINI_API_KEY || "MISSING_GEMINI_API_KEY" };
+                break;
+            default:
+                return {
+                    statusCode: 400,
+                    body: JSON.stringify({ error: "Invalid key type requested" })
+                };
+        }
+
+        return {
+            statusCode: 200,
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(response)
+        };
+    } catch (error) {
+        console.error("Error in function:", error);
+        return {
+            statusCode: 500,
+            body: JSON.stringify({ error: "Internal Server Error" })
+        };
+    }
 };
+
+// exports.handler = async () => {
+//     return {
+//         statusCode: 200,
+//         headers: { "Content-Type": "application/json" },
+//         body: JSON.stringify({ token: process.env.GOOGLE_API_TOKEN || "MISSING_ENV_VAR" })
+//     };
+// };
