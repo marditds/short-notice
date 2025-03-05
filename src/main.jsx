@@ -10,6 +10,7 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import { jwtDecode } from "jwt-decode";
 import { getUserByEmail } from './lib/context/dbhandler.js';
 import { UserProvider } from './lib/context/UserContext.jsx';
+import { keysProvider } from './lib/context/keysProvider.js';
 import App from './App.jsx';
 import User from './pages/User/User.jsx';
 import Home from './pages/PreLogin/Home/Home.jsx';
@@ -29,6 +30,7 @@ import HelpCenterData from './pages/PreLogin/HelpCenter/HelpCenterInfo/HelpCente
 import Privacy from './pages/PreLogin/Privacy/Privacy.jsx';
 import CommunityGuidelines from './pages/PreLogin/CommunityGuidelines/CommunityGuidelines.jsx';
 import Attributions from './pages/PreLogin/Attributions/Attributions.jsx';
+import { Loading } from './components/Loading/Loading.jsx';
 
 
 const router = createBrowserRouter([
@@ -150,15 +152,18 @@ const MainRender = () => {
 
   const [clientId, setClientId] = useState(null);
 
+  // useEffect(() => {
+  //   fetch('/.netlify/functions/get-tokens?key=google')
+  //     .then((res) => res.json())
+  //     .then((data) => setClientId(data.token))
+  //     .catch((err) => console.error('Error fetching Google tokens:', err));
+  // }, []);
+
   useEffect(() => {
-    // fetch('/.netlify/functions/get-tokens')
-    fetch('/.netlify/functions/get-tokens?key=google')
-      .then((res) => res.json())
-      .then((data) => setClientId(data.token))
-      .catch((err) => console.error('Error fetching Google tokens:', err));
+    keysProvider('google', setClientId);
   }, []);
 
-  if (!clientId) return <p>Loading...</p>;
+  if (!clientId) return <p><Loading /> Loading...</p>;
 
   return (
     <StrictMode>

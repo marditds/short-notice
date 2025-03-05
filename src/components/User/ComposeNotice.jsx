@@ -23,6 +23,8 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
     const [charCount, setCharCount] = useState(0);
     const charLimit = 300;
 
+    const [tenorApiKey, setTenorApiKey] = useState(null);
+
     const [noticeGif, setNoticeGif] = useState(null);
     const [isGifBtnClicked, setIsGifBtnClicked] = useState(false);
 
@@ -117,6 +119,13 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
             setNoticeUrl(url);
         }
     }
+
+    useEffect(() => {
+        fetch('/.netlify/functions/get-tokens?key=tenor')
+            .then((res) => res.json())
+            .then((data) => setTenorApiKey(data.token))
+            .catch((err) => console.error('Error fetching Tenor token:', err));
+    }, []);
 
     useEffect(() => {
         console.log('noticeUrl', noticeUrl);
@@ -234,10 +243,10 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
 
                 </div>
 
-                {isGifBtnClicked &&
+                {(isGifBtnClicked && tenorApiKey) &&
                     <GifPicker
                         categoryHeight={70}
-                        tenorApiKey={import.meta.env.VITE_TENOR_API_KEY}
+                        tenorApiKey={tenorApiKey}
                         onGifClick={(item) => setNoticeGif(item.url)}
                         width={!isSmallScreen ? (!isMediumScreen && location.pathname === '/user/profile' ? '50%' : '80%') : '100%'}
                     />

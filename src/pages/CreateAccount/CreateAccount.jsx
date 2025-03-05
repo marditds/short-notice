@@ -189,10 +189,6 @@ const CreateAccount = ({ setUser }) => {
             .catch((err) => console.error('Error fetching Captcha token:', err));
     }, []);
 
-    if (!siteKey) {
-        return (<><Loading /> Loading...</>)
-    }
-
     return (
         <Container className='
         createUsername__container 
@@ -255,16 +251,20 @@ const CreateAccount = ({ setUser }) => {
 
                     {/* ReCAPTCHA */}
                     <div className='mb-3'>
-                        <ReCAPTCHA
-                            className='hakobos'
-                            sitekey={siteKey}
-                            onChange={(value) => onCaptchaChange(value)}
-                            onExpired={() => setIsCaptchaVerified(false)}
-                            onErrored={() => {
-                                setIsCaptchaVerified(false);
-                                setErrorMessage('ReCAPTCHA verification failed. Please try again.');
-                            }}
-                        />
+                        {
+                            siteKey ?
+                                <ReCAPTCHA
+                                    className='hakobos'
+                                    sitekey={siteKey}
+                                    onChange={(value) => onCaptchaChange(value)}
+                                    onExpired={() => setIsCaptchaVerified(false)}
+                                    onErrored={() => {
+                                        setIsCaptchaVerified(false);
+                                        setErrorMessage('ReCAPTCHA verification failed. Please try again.');
+                                    }}
+                                /> :
+                                <><Loading /> Loading ReCAPTCHA</>
+                        }
                     </div>
 
                     {/* Create Account Buttons */}

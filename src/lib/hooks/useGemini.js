@@ -9,7 +9,7 @@ const useGemini = () => {
         fetch('/.netlify/functions/get-tokens?key=gemini')
             .then((res) => res.json())
             .then((data) => setGenAI(new GoogleGenerativeAI(data.token)))
-            .catch((err) => console.error('Error fetching Google token:', err));
+            .catch((err) => console.error('Error fetching Gemini token:', err));
     }, []);
 
 
