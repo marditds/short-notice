@@ -188,9 +188,6 @@ const CreateAccount = ({ setUser }) => {
             .catch((err) => console.error('Error fetching Captcha token:', err));
     }, []);
 
-
-
-
     return (
         <Container className='
         createUsername__container 
