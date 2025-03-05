@@ -241,13 +241,16 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
 
                 </div>
 
+                {/* Gif picker */}
                 {(isGifBtnClicked && tenorApiKey) &&
-                    <GifPicker
-                        categoryHeight={70}
-                        tenorApiKey={tenorApiKey}
-                        onGifClick={(item) => setNoticeGif(item.url)}
-                        width={!isSmallScreen ? (!isMediumScreen && location.pathname === '/user/profile' ? '50%' : '80%') : '100%'}
-                    />
+                    <div className='d-flex justify-content-end align-items-center'>
+                        <GifPicker
+                            categoryHeight={70}
+                            tenorApiKey={tenorApiKey}
+                            onGifClick={(item) => setNoticeGif(item.url)}
+                            width={!isSmallScreen ? (!isMediumScreen && location.pathname === '/user/profile' ? '50%' : '80%') : '100%'}
+                        />
+                    </div>
                 }
             </Form.Group>
 

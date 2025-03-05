@@ -960,7 +960,7 @@
 .gpr-main {
     border: none !important;
     background-color: var(--main-dropdown-bg-color) !important;
-    margin-left: auto;
+    /* margin-left: auto; */
 }
 
 .gpr-header {

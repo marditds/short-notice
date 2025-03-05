@@ -72,7 +72,7 @@ export const ComposeReaction = ({ reactionText, onReactionTextChange, reactionGi
                     }
 
                     {/* handleGifBtn */}
-                    <div className='mt-2'>
+                    <div className='mt-2 d-flex justify-content-end align-items-center'>
                         <Button className='notice__react-gif-btn py-1 px-2'
                             onClick={handleGifBtn}>
                             <i className='bi bi-filetype-gif' />
@@ -85,12 +85,14 @@ export const ComposeReaction = ({ reactionText, onReactionTextChange, reactionGi
                     </div>
 
                     {/* GIF picker */}
-                    {isGifBtnClicked &&
-                        <GifPicker
-                            tenorApiKey={tenorApiKey}
-                            onGifClick={(item) => setReactionGif(item.url)}
-                            width={!isSmallScreen ? '50vw' : '80vw'} height='400px'
-                        />
+                    {(isGifBtnClicked && tenorApiKey) &&
+                        <div className='d-flex justify-content-start align-items-center'>
+                            <GifPicker
+                                tenorApiKey={tenorApiKey}
+                                onGifClick={(item) => setReactionGif(item.url)}
+                                width={!isSmallScreen ? '50vw' : '80vw'} height='400px'
+                            />
+                        </div>
                     }
                 </Form.Group>
             </Form>
