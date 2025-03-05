@@ -72,7 +72,7 @@ export const ComposeReaction = ({ reactionText, onReactionTextChange, reactionGi
                     }
 
                     {/* handleGifBtn */}
-                    <div className='mt-2 d-flex justify-content-end align-items-center'>
+                    <div className='mt-2'>
                         <Button className='notice__react-gif-btn py-1 px-2'
                             onClick={handleGifBtn}>
                             <i className='bi bi-filetype-gif' />
