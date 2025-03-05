@@ -1,6 +1,14 @@
 exports.handler = async (event) => {
     try {
-        console.log("Received request:", event.queryStringParameters);
+        console.log("Received request:", event);
+
+        if (!event.queryStringParameters) {
+            return {
+                statusCode: 400,
+                body: JSON.stringify({ error: "No query parameters provided" })
+            };
+        }
+
         const params = new URLSearchParams(event.queryStringParameters);
         const keyType = params.get("key");
 
@@ -38,6 +46,7 @@ exports.handler = async (event) => {
         console.error("Error in function:", error);
         return {
             statusCode: 500,
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ error: "Internal Server Error" })
         };
     }

@@ -25,3 +25,5 @@ dist-ssr
 *.sw?
 knownissues.txt
 test.json
+# Local Netlify folder
+.netlify
