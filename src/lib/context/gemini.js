@@ -1,6 +1,16 @@
+import { useEffect } from "react";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+const [geminiKey, setGeminiKey] = useState(null);
+
+useEffect(() => {
+    fetch('/.netlify/functions/get-tokens?key=gemini')
+        .then((res) => res.json())
+        .then((data) => setGeminiKey(data.token))
+        .catch((err) => console.error('Error fetching Google token:', err));
+}, []);
+
+const apiKey = geminiKey;
 const genAI = new GoogleGenerativeAI(apiKey);
 
 const model = genAI.getGenerativeModel({

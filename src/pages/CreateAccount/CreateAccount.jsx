@@ -33,6 +33,7 @@ const CreateAccount = ({ setUser }) => {
     const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
 
     const [captchaKey, setCaptchaKey] = useState(null);
+    const [siteKey, setSiteKey] = useState(null);
 
     const [errorMessage, setErrorMessage] = useState('');
 
@@ -180,6 +181,14 @@ const CreateAccount = ({ setUser }) => {
         }
     }, [captchaKey, isCaptchaVerified])
 
+    useEffect(() => {
+        fetch('/.netlify/functions/get-tokens?key=captcha')
+            .then((res) => res.json())
+            .then((data) => setSiteKey(data.token))
+            .catch((err) => console.error('Error fetching Captcha token:', err));
+    }, []);
+
+
 
 
     return (
@@ -191,7 +200,7 @@ const CreateAccount = ({ setUser }) => {
 
                     <AccountType setAccountType={setAccountType} accountType={accountType} />
 
-                    {/* Text Fields */}
+                    {/* Username and Password */}
                     <Row xs={1} sm={2} className='align-items-end'>
                         <Col>
                             <CreateUsername accountType={accountType} username={username} onUsernameChange={onUsernameChange} />
@@ -246,7 +255,7 @@ const CreateAccount = ({ setUser }) => {
                     <div className='mb-3'>
                         <ReCAPTCHA
                             className='hakobos'
-                            sitekey={import.meta.env.VITE_CAPTCHA_SITE_KEY}
+                            sitekey={siteKey}
                             onChange={(value) => onCaptchaChange(value)}
                             onExpired={() => setIsCaptchaVerified(false)}
                             onErrored={() => {
