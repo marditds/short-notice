@@ -152,10 +152,10 @@ const MainRender = () => {
 
   useEffect(() => {
     // fetch('/.netlify/functions/get-tokens')
-    fetch('/.netlify/functions/get-tokens')
+    fetch('/.netlify/functions/get-tokens?key=google')
       .then((res) => res.json())
       .then((data) => setClientId(data.token))
-      .catch((err) => console.error('Error fetching Google token:', err));
+      .catch((err) => console.error('Error fetching Google tokens:', err));
   }, []);
 
   if (!clientId) return <p>Loading...</p>;

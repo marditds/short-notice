@@ -1,5 +1,5 @@
 [build]
-  functions = "netlify/functions"  # Ensure Netlify knows where to find functions
+  functions = "netlify/functions"
 
 [functions]
-  directory = "netlify/function"
+  directory = "netlify/functions"
