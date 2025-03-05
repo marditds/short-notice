@@ -1,11 +1,3 @@
-// exports.handler = async () => {
-//     return {
-//         statusCode: 200,
-//         headers: { "Content-Type": "application/json" },
-//         body: JSON.stringify({ token: process.env.GOOGLE_API_TOKEN || "MISSING_ENV_VAR" })
-//     };
-// };
-
 exports.handler = async (event) => {
     const params = new URLSearchParams(event.queryStringParameters);
     const keyType = params.get("key"); // Get requested key from query param
@@ -21,6 +13,7 @@ exports.handler = async (event) => {
             break;
         case "gemini":
             response = { token: process.env.GEMINI_API_KEY || "MISSING_GEMINI_API_KEY" };
+            break;
         default:
             return {
                 statusCode: 400,

@@ -147,14 +147,8 @@ const router = createBrowserRouter([
 ]);
 
 const MainRender = () => {
-  const [clientId, setClientId] = useState(null);
 
-  // useEffect(() => {
-  //   fetch('/.netlify/functions/get-token')
-  //     .then((res) => res.json())
-  //     .then((data) => setClientId(data.token))
-  //     .catch((err) => console.error('Error fetching token:', err));
-  // }, []);
+  const [clientId, setClientId] = useState(null);
 
   useEffect(() => {
     fetch('/.netlify/functions/get-tokens?key=google')
