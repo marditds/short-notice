@@ -13,6 +13,7 @@ import useUserInfo from '../../lib/hooks/useUserInfo';
 import { tosData } from '../PreLogin/TOS/tosData';
 import { reportCategories, commGuideParags } from '../../components/PreLogin/ComunityGuidelines/communityGuidelines';
 import PrivacyData from '../../components/PreLogin/Privacy/PrivacyData';
+import { Loading } from '../../components/Loading/Loading';
 
 const CreateAccount = ({ setUser }) => {
 
@@ -187,6 +188,10 @@ const CreateAccount = ({ setUser }) => {
             .then((data) => setSiteKey(data.token))
             .catch((err) => console.error('Error fetching Captcha token:', err));
     }, []);
+
+    if (!siteKey) {
+        return (<><Loading /> Loading...</>)
+    }
 
     return (
         <Container className='
