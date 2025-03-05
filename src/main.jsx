@@ -151,7 +151,7 @@ const MainRender = () => {
   const [clientId, setClientId] = useState(null);
 
   useEffect(() => {
-    fetch('/.netlify/functions/get-tokens?key=google')
+    fetch('/.netlify/functions/get-tokens')
       // fetch('http://localhost:8888/.netlify/functions/get-tokens?key=google')
       .then((res) => res.json())
       .then((data) => setClientId(data.token))
