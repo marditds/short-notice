@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button, Image } from 'react-bootstrap';
 import GifPicker from 'gif-picker-react';
+import { keysProvider } from '../../lib/context/keysProvider';
 import { Loading } from '../Loading/Loading';
 import { screenUtils } from '../../lib/utils/screenUtils';
 
@@ -11,11 +12,17 @@ export const ComposeReaction = ({ reactionText, onReactionTextChange, reactionGi
     const reactionCharLimit = 300;
 
     // const [reactionGif, setReactionGif] = useState(null);
+    const [tenorApiKey, setTenorApiKey] = useState(null);
+
     const [isGifBtnClicked, setIsGifBtnClicked] = useState(false);
 
     const handleGifBtn = () => {
         setIsGifBtnClicked((preVal) => !preVal);
     }
+
+    useEffect(() => {
+        keysProvider('tenor', setTenorApiKey);
+    }, []);
 
     useEffect(() => {
         console.log('reactionGif', reactionGif);
@@ -25,6 +32,8 @@ export const ComposeReaction = ({ reactionText, onReactionTextChange, reactionGi
         <>
             <Form>
                 <Form.Group className='mb-0' controlId='reactionField'>
+
+                    {/* reaction text field */}
                     <Form.Control
                         as="textarea"
                         rows={3}
@@ -34,12 +43,14 @@ export const ComposeReaction = ({ reactionText, onReactionTextChange, reactionGi
                         placeholder={`Your reaction text here.`}
                     />
 
+                    {/* reaction count */}
                     <div
                         className={`mt-2 user-profile__notice-char-counter ${reactionCharCount > reactionCharLimit && 'extra'}`}
                     >
                         {`${reactionCharCount}/${reactionCharLimit} characters`}
                     </div>
 
+                    {/* GIF in UI */}
                     {reactionGif &&
                         <div>
                             <div className='position-relative'>
@@ -60,6 +71,7 @@ export const ComposeReaction = ({ reactionText, onReactionTextChange, reactionGi
                         </div>
                     }
 
+                    {/* handleGifBtn */}
                     <div className='mt-2'>
                         <Button className='notice__react-gif-btn py-1 px-2'
                             onClick={handleGifBtn}>
@@ -72,9 +84,10 @@ export const ComposeReaction = ({ reactionText, onReactionTextChange, reactionGi
                         } */}
                     </div>
 
+                    {/* GIF picker */}
                     {isGifBtnClicked &&
                         <GifPicker
-                            tenorApiKey={import.meta.env.VITE_TENOR_API_KEY}
+                            tenorApiKey={tenorApiKey}
                             onGifClick={(item) => setReactionGif(item.url)}
                             width={!isSmallScreen ? '50vw' : '80vw'} height='400px'
                         />
