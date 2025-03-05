@@ -1,13 +1,15 @@
 import { useState, useEffect, useCallback } from 'react';
 import { createNotice, getUserNotices, updateNotice, deleteNotice, saveDeletedNoticeId, deleteAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSave, getUserSaves, removeSave, createReport, createLike, removeLike, getUserLikes, getAllLikedNotices as fetchAllLikedNotices, getAllLikesByNoticeId as fetchAllLikesByNoticeId, getUserLikesNotInFeed, getUserSavesNotInFeed, getAllSavedNotices as fetchAllSavedNotices, createReaction, deleteReaction, getAllReactionsBySenderId as fetchAllReactionsBySenderId, getAllReactions as fetchAllReactions, getAllReactionsByRecipientId as fetchAllReactionsByRecipientId, getNoticeByNoticeId as fetchNoticeByNoticeId, getAllReactionsByNoticeId as fetchAllReactionsByNoticeId, getReactionByReactionId as fetchReactionByReactionId, deleteAllReactions, createReactionReport, getNoticeByUserId as fetchNoticeByUserId, removeAllSavesForNotice, removeAllLikesForNotice } from '../../lib/context/dbhandler';
-import { runGemini } from '../context/gemini.js';
 import useUserInfo from './useUserInfo.js';
+import useGemini from './useGemini';
 import { UserId } from '../../components/User/UserId.jsx';
 // import { useUnblockedNotices } from '../utils/blockFilter.js';
 
 const useNotices = (googleUserData) => {
 
     const { getPersonalFeedAccounts } = useUserInfo();
+
+    const { runGemini } = useGemini();
 
     const [user_id, setUserId] = useState(null);
     const [fellowUserId, setFellowUserId] = useState(null)
