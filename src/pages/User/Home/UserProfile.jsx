@@ -232,7 +232,7 @@ const UserProfile = () => {
 
                 console.log('allSavedNotices', allSavedNotices);
 
-                const ntcsIds = allSavedNotices.map(ntc => ntc.$id);
+                const ntcsIds = allSavedNotices?.map(ntc => ntc.$id);
 
                 const [svdNtcs, lkdNtcs] = await Promise.allSettled([
                     fetchUserSaves(user_id, ntcsIds),
@@ -305,7 +305,7 @@ const UserProfile = () => {
 
                 console.log('allLikedNotices - UserProfile.jsx', allLikedNotices);
 
-                const ntcsIds = allLikedNotices.map(ntc => ntc.$id);
+                const ntcsIds = allLikedNotices?.map(ntc => ntc.$id);
 
                 const [svdNtcsRes, lkdNtcsRes] = await Promise.allSettled([
                     fetchUserSaves(user_id, ntcsIds),

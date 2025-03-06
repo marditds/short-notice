@@ -66,7 +66,7 @@ export const Notices = ({
 
     useEffect(() => {
         const intervalId = setInterval(() => {
-            const newCountdowns = notices.map(notice => calculateCountdown(notice.expiresAt));
+            const newCountdowns = notices?.map(notice => calculateCountdown(notice.expiresAt));
             setCountdowns(newCountdowns);
         }, 60000);
 
@@ -85,7 +85,7 @@ export const Notices = ({
         if (reactingNoticeId) {
             try {
 
-                const notice = notices.find(notice => notice.$id === reactingNoticeId);
+                const notice = notices?.find(notice => notice.$id === reactingNoticeId);
 
                 console.log('notice', notice);
 
@@ -184,7 +184,7 @@ export const Notices = ({
             setIsProcessingNoticeReport(true);
             try {
 
-                const notice = notices.find(notice => notice.$id === reportingNoticeId);
+                const notice = notices?.find(notice => notice.$id === reportingNoticeId);
 
                 if (notice) {
                     await handleReportNotice(notice.$id, notice.user_id, reportReason, notice.text);
@@ -455,7 +455,7 @@ export const Notices = ({
                 activeKey={activeNoticeId}
                 onSelect={handleAccordionToggle}
             >
-                {notices.map((notice, idx) => (
+                {notices?.map((notice, idx) => (
                     <Accordion.Item eventKey={notice?.$id} key={notice?.$id}>
                         <Accordion.Header
                             className='notices__accordion-header'

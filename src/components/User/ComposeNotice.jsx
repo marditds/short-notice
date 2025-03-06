@@ -71,9 +71,9 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
             setCharCount(0);
             setDuration(24);
 
-            setTagCategories(prevCategories => prevCategories.map(category => ({
+            setTagCategories(prevCategories => prevCategories?.map(category => ({
                 ...category,
-                values: category.values.map(() => false)
+                values: category.values?.map(() => false)
             })));
         }
     };
@@ -82,7 +82,7 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
     // const hours = [1, 357, 2, 3, 5, 10, 15, 20, 48, 72]
 
     const handleTagSelect = (categoryGroup, tagIndex, tag, isSelected) => {
-        setTagCategories(prevCategories => prevCategories.map(category => {
+        setTagCategories(prevCategories => prevCategories?.map(category => {
             if (category.group === categoryGroup) {
                 const newValues = [...category.values];
                 newValues[tagIndex] = !isSelected;
@@ -211,7 +211,7 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
                         onChange={(e) => setTemplateSubject(e.target.value)}
                     >
                         <option value='' disabled>Select a Template</option>
-                        {templateItems[noticeType].map((templateItem, idx) => (
+                        {templateItems[noticeType]?.map((templateItem, idx) => (
                             <option key={idx} value={templateItem}>
                                 {templateItem}
                             </option>
@@ -281,7 +281,7 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
                     onChange={(e) => setDuration(Number(e.target.value))}
                 >
                     <option>0.15</option>
-                    {hours.map(hour => (
+                    {hours?.map(hour => (
                         <option value={hour} key={hour}>
                             {hour}
                         </option>
