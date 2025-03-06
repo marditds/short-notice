@@ -152,13 +152,6 @@ const MainRender = () => {
 
   const [clientId, setClientId] = useState(null);
 
-  // useEffect(() => {
-  //   fetch('/.netlify/functions/get-tokens?key=google')
-  //     .then((res) => res.json())
-  //     .then((data) => setClientId(data.token))
-  //     .catch((err) => console.error('Error fetching Google tokens:', err));
-  // }, []);
-
   useEffect(() => {
     keysProvider('google', setClientId);
   }, []);

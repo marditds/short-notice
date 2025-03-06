@@ -1,20 +1,16 @@
 import { useState, useEffect } from "react";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { keysProvider } from "../context/keysProvider";
 
 const useGemini = () => {
 
-    const [genAI, setGenAI] = useState(null);
+    const [geminiKey, setGeminiKey] = useState(null);
 
     useEffect(() => {
-        fetch('/.netlify/functions/get-tokens?key=gemini')
-            .then((res) => res.json())
-            .then((data) => setGenAI(new GoogleGenerativeAI(data.token)))
-            .catch((err) => console.error('Error fetching Gemini token:', err));
+        keysProvider('gemini', setGeminiKey);
     }, []);
 
-
-    // const apiKey = geminiKey;
-    // const genAI = new GoogleGenerativeAI(apiKey);
+    const genAI = new GoogleGenerativeAI(geminiKey);
 
     const model = genAI ? genAI.getGenerativeModel({
         model: "gemini-2.0-flash",
@@ -30,6 +26,7 @@ const useGemini = () => {
     };
 
     const runGemini = async (prompt) => {
+
         const chatSession = model.startChat({
             generationConfig,
             history: [],

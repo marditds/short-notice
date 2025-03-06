@@ -6,6 +6,7 @@ import { useUserContext } from '../../lib/context/UserContext';
 import { getUserByUsername } from '../../lib/context/dbhandler';
 import { AccountType } from '../../components/Setup/AccountType';
 import './CreateAccount.css';
+import { keysProvider } from '../../lib/context/keysProvider';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { CreateUsername } from '../../components/Setup/CreateUsername';
 import { SetPasscode } from '../../components/Setup/SetPasscode';
@@ -34,7 +35,7 @@ const CreateAccount = ({ setUser }) => {
     const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
 
     const [captchaKey, setCaptchaKey] = useState(null);
-    const [siteKey, setSiteKey] = useState(null);
+    const [captchaSiteKey, setCaptchaSiteKey] = useState(null);
 
     const [errorMessage, setErrorMessage] = useState('');
 
@@ -183,10 +184,7 @@ const CreateAccount = ({ setUser }) => {
     }, [captchaKey, isCaptchaVerified])
 
     useEffect(() => {
-        fetch('/.netlify/functions/get-tokens?key=captcha')
-            .then((res) => res.json())
-            .then((data) => setSiteKey(data.token))
-            .catch((err) => console.error('Error fetching Captcha token:', err));
+        keysProvider('captcha', setCaptchaSiteKey);
     }, []);
 
     return (
@@ -252,10 +250,10 @@ const CreateAccount = ({ setUser }) => {
                     {/* ReCAPTCHA */}
                     <div className='mb-3'>
                         {
-                            siteKey ?
+                            captchaSiteKey ?
                                 <ReCAPTCHA
                                     className='hakobos'
-                                    sitekey={siteKey}
+                                    sitekey={captchaSiteKey}
                                     onChange={(value) => onCaptchaChange(value)}
                                     onExpired={() => setIsCaptchaVerified(false)}
                                     onErrored={() => {

@@ -5,8 +5,8 @@ export default async ({ req, res, log, error }) => {
   // You can use the Appwrite SDK to interact with other services
   // For this example, we're using the Users service
   const client = new Client()
-    .setEndpoint(process.env.APPWRITE_FUNCTION_API_ENDPOINT)
-    .setProject(process.env.APPWRITE_FUNCTION_PROJECT_ID)
+    .setEndpoint(process.env.VITE_ENDPOINT)
+    .setProject(process.env.VITE_PROJECT)
     .setKey(process.env.SHORT_NOTICE_API_KEYS);
 
 

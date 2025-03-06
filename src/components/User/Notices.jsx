@@ -465,12 +465,13 @@ export const Notices = ({
                                 {/* Text and Countdown Col */}
                                 <Col xs={9} className='d-flex justify-content-between flex-column notice__text-countdown-col'
                                 >
-                                    <p className='mb-0 text-break'>
+                                    <p className=' text-break'>
                                         <strong>
                                             {notice?.noticeType === 'business' && notice?.adLabel}{' '}
                                         </strong>
                                         {notice?.text}
                                     </p>
+
                                     {notice?.noticeUrl &&
                                         <p className='notice__link-in-notice-p'>
 
@@ -485,7 +486,7 @@ export const Notices = ({
 
                                     {notice?.noticeGif &&
                                         <Image src={notice?.noticeGif}
-                                            className='mt-2 mb-1 mb-sm-2 notice__gif'
+                                            className='mb-1 mb-sm-2 notice__gif'
                                             width={isExtraSmallScreen ? '100%' : (isSmallScreen ? '60%' : '60%')}
                                             fluid />
                                     }
