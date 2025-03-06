@@ -18,7 +18,7 @@ const useNotices = (googleUserData) => {
     const [generalFeedNotices, setGeneralFeedNotices] = useState([]);
     const [personalFeedNotices, setPersonalFeedNotices] = useState([]);
 
-    const [lastThreeNoticesInFeed, setLastThreeNoticesInFeed] = useState([]);
+    // const [lastThreeNoticesInFeed, setLastThreeNoticesInFeed] = useState([]);
     const [geminiRes, setGeminiRes] = useState('');
     const [isGeminiLoading, setIsGeminiLoading] = useState(false);
 
@@ -470,13 +470,11 @@ const useNotices = (googleUserData) => {
             const notices = await getFilteredNotices(selectedTags, limit, lastId, user_id);
             console.log('useNotices - getFeedNotices', notices);
 
-            const lstThrNtcsInFd = notices.map((notice) => notice.text);
+            // const lstThrNtcsInFd = notices.map((notice) => notice.text);
 
-            for (let i = 0; i < 3; i++) {
-                console.log('THIS IS notice #' + (i + 1) + ': ' + lstThrNtcsInFd[i]);
-
-                setLastThreeNoticesInFeed((preVal) => [...preVal, lstThrNtcsInFd[i]])
-            }
+            // for (let i = 0; i < 3; i++) { 
+            //     setLastThreeNoticesInFeed((preVal) => [...preVal, lstThrNtcsInFd[i]])
+            // }
 
             setGeneralFeedNotices(notices);
             return notices;
@@ -921,11 +919,11 @@ const useNotices = (googleUserData) => {
         isInterestsUpdating,
         selectedTags,
         isAnyTagSelected,
-        lastThreeNoticesInFeed,
+        // lastThreeNoticesInFeed,
         fetchedInterests,
         geminiRes,
         isGeminiLoading,
-        setLastThreeNoticesInFeed,
+        // setLastThreeNoticesInFeed,
         setIsAnyTagSelected,
         setTagCategories,
         fetchUserInterests,

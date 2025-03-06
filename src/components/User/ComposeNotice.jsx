@@ -280,6 +280,7 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
                     value={duration}
                     onChange={(e) => setDuration(Number(e.target.value))}
                 >
+                    <option>0.15</option>
                     {hours.map(hour => (
                         <option value={hour} key={hour}>
                             {hour}
