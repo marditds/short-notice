@@ -11,17 +11,14 @@ const useNotices = (googleUserData) => {
 
     const { runGemini } = useGemini();
 
+    // User(s) info
     const [user_id, setUserId] = useState(null);
     const [fellowUserId, setFellowUserId] = useState(null)
 
+    // Notices + likes/saves
     const [latestNotice, setLatestNotice] = useState({});
     const [generalFeedNotices, setGeneralFeedNotices] = useState([]);
     const [personalFeedNotices, setPersonalFeedNotices] = useState([]);
-
-    // const [lastThreeNoticesInFeed, setLastThreeNoticesInFeed] = useState([]);
-    const [geminiRes, setGeminiRes] = useState('');
-    const [isGeminiLoading, setIsGeminiLoading] = useState(false);
-
 
     const [personalFeedLikedNotices, setPersonalFeedLikedNotices] = useState({});
     const [personalFeedSavedNotices, setPersonalFeedSavedNotices] = useState({});
@@ -38,6 +35,38 @@ const useNotices = (googleUserData) => {
     const [removingNoticeId, setRemovingNoticeId] = useState(null);
     const [isSavingEdit, setIsSavingEdit] = useState(false);
 
+    // Gemini
+    const [geminiRes, setGeminiRes] = useState('');
+    const [isGeminiLoading, setIsGeminiLoading] = useState(false);
+    const templateItems = {
+        personal: [
+            'Morning Thoughts',
+            'A Song That Matches My Mood',
+            'Life Hack I Just Discovered!',
+            'One Thing I\'m Grateful for Today',
+            'A Random Fact You Didn\'t Know About Me'
+        ],
+        business: [
+            'Flash Sale Alert',
+            'A Brief Explanation of What\'s Coming',
+            'Customer Shoutout',
+            'Limited-Time Offer',
+            'Question for Customers',
+            'Quick Tip for Using Our Product',
+            'Big Product Announcement'
+        ],
+        organization: [
+            'Important Team Update',
+            'Reminder: Upcoming Meeting Details',
+            'Quick Motivation for the Team',
+            'Shoutout to Team Member',
+            'Policy Change Notice',
+            'Fast Feedback from Team',
+            'Celebrating a Team Win'
+        ]
+    };
+
+    //    Interests
     const [fetchedInterests, setFetchedInterests] = useState({});
     const [selectedTags, setSelectedTags] = useState({});
     const [isAnyTagSelected, setIsAnyTagSelected] = useState(false);
@@ -77,33 +106,7 @@ const useNotices = (googleUserData) => {
             values: [false, false, false, false, false]
         }
     ]);
-    const templateItems = {
-        personal: [
-            'Morning Thoughts',
-            'A Song That Matches My Mood',
-            'Life Hack I Just Discovered!',
-            'One Thing I\'m Grateful for Today',
-            'A Random Fact You Didn\'t Know About Me'
-        ],
-        business: [
-            'Flash Sale Alert',
-            'A Brief Explanation of What\'s Coming',
-            'Customer Shoutout',
-            'Limited-Time Offer',
-            'Question for Customers',
-            'Quick Tip for Using Our Product',
-            'Big Product Announcement'
-        ],
-        organization: [
-            'Important Team Update',
-            'Reminder: Upcoming Meeting Details',
-            'Quick Motivation for the Team',
-            'Shoutout to Team Member',
-            'Policy Change Notice',
-            'Fast Feedback from Team',
-            'Celebrating a Team Win'
-        ]
-    };
+
 
     // const { filterBlocksFromLikesSaves } = useUnblockedNotices();
 
@@ -458,23 +461,8 @@ const useNotices = (googleUserData) => {
         try {
             console.log('SELECTED TAGS IN useNotices:', selectedTags);
 
-            // const chakop = Object.values(selectedTags).filter((tagValue) => tagValue === false);
-
-            // console.log('chakop:', chakop);
-
-            // if (chakop.length === 13) {
-            //     setGeneralFeedNotices([]);
-            //     return;
-            // };
-
             const notices = await getFilteredNotices(selectedTags, limit, lastId, user_id);
             console.log('useNotices - getFeedNotices', notices);
-
-            // const lstThrNtcsInFd = notices.map((notice) => notice.text);
-
-            // for (let i = 0; i < 3; i++) { 
-            //     setLastThreeNoticesInFeed((preVal) => [...preVal, lstThrNtcsInFd[i]])
-            // }
 
             setGeneralFeedNotices(notices);
             return notices;
@@ -919,11 +907,9 @@ const useNotices = (googleUserData) => {
         isInterestsUpdating,
         selectedTags,
         isAnyTagSelected,
-        // lastThreeNoticesInFeed,
         fetchedInterests,
         geminiRes,
         isGeminiLoading,
-        // setLastThreeNoticesInFeed,
         setIsAnyTagSelected,
         setTagCategories,
         fetchUserInterests,

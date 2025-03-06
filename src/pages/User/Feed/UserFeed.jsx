@@ -30,9 +30,7 @@ const UserFeed = () => {
         isAddingNotice,
         fetchedInterests,
         isGeminiLoading,
-        hakop,
         onGeminiRunClick,
-        // setLastThreeNoticesInFeed,
         toggleInterestsTag,
         deselectAllInterestTags,
         updateInterests,
@@ -271,7 +269,6 @@ const UserFeed = () => {
         if (isFeedToggled) {
             // Refresh General Feed
             setGeneralFeedNotices([]);
-            // setLastThreeNoticesInFeed([]);
             setLastId(null);
             setHasMoreGeneralNotices(true);
             setLoadMore(true);

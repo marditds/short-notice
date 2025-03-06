@@ -168,7 +168,7 @@ const UserProfile = () => {
 
             console.log('usrNtcs', usrNtcs);
 
-            if (usrNtcs.length > 0) {
+            if (usrNtcs?.length > 0) {
 
                 if (lastId !== 0) {
                     setUserProfileNotices((prevNotices) => [
@@ -197,7 +197,9 @@ const UserProfile = () => {
 
     // Fetch notices for user on component load
     useEffect(() => {
-        fetchNotices();
+        if (user_id) {
+            fetchNotices();
+        }
     }, [user_id])
 
     // Display notice in UI immediately after it is added 
