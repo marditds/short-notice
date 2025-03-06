@@ -7,7 +7,8 @@ import { screenUtils } from '../../../lib/utils/screenUtils.js';
 import { BlockModal, ReportModal, FollowModal } from '../Modals.jsx';
 import { Loading } from '../../Loading/Loading.jsx';
 
-export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUserId, followingCount, followersCount, isFollowing, followingAccounts, followersAccounts, isFollowingUserLoading, isBlocked, isOtherUserBlocked, handleUserReport, hasMoreFollowing, hasMoreFollowers, loadFollowing, loadFollowers, isLoadingMoreFollowing, isLoadingMoreFollowers, isProcessingBlock }) => {
+export const Profile = ({ username, avatarUrl, isAvatarLoading, handleFollow, handleBlock, currUserId, followingCount, followersCount, isFollowing, followingAccounts, followersAccounts, isFollowingUserLoading, isGetFollwedByUserCountLoading,
+    isGetFollowingTheUserCountLoading, isBlocked, isOtherUserBlocked, handleUserReport, hasMoreFollowing, hasMoreFollowers, loadFollowing, loadFollowers, isLoadingMoreFollowing, isLoadingMoreFollowers, isProcessingBlock }) => {
 
     const location = useLocation();
 
@@ -97,7 +98,7 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                                     }}
                                     className='user-profile__follow-number d-flex flex-row flex-sm-column align-items-start p-0'
                                 >
-                                    {followersCount === null ?
+                                    {(followersCount === null || isGetFollowingTheUserCountLoading) ?
                                         <Loading />
                                         :
                                         <>
@@ -116,7 +117,7 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                                     }}
                                     className='user-profile__follow-number d-flex flex-row flex-sm-column align-items-start p-0'
                                 >
-                                    {followingCount === null ?
+                                    {(followingCount === null || isGetFollwedByUserCountLoading) ?
                                         <Loading />
                                         :
                                         <>
@@ -138,12 +139,17 @@ export const Profile = ({ username, avatarUrl, handleFollow, handleBlock, currUs
                     sm={{ span: 4, order: 2 }}
                     className={`d-flex flex-column justify-content-center align-items-sm-center align-items-end user-profile__avatar-col ${location.pathname !== '/user/profile' && isExtraSmallScreen ? 'pt-3' : ''}`}>
                     <div>
-                        <div>
-                            <img
-                                src={avatarUrl ? avatarUrl : defaultAvatar}
-                                alt="Profile"
-                                className='user-profile__avatar'
-                            />
+                        <div className='d-flex justify-content-center align-items-center'>
+                            {
+                                !isAvatarLoading ?
+                                    <img
+                                        src={avatarUrl ? avatarUrl : defaultAvatar}
+                                        alt="Profile"
+                                        className='user-profile__avatar'
+                                    />
+                                    :
+                                    <Loading />
+                            }
                         </div>
                         <p className='my-0 text-center'>
                             <strong>{username}</strong>

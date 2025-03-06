@@ -63,6 +63,8 @@ const UserProfile = () => {
     const {
         followersCount,
         followingCount,
+        isGetFollowingTheUserCountLoading,
+        isGetFollwedByUserCountLoading,
         getUserAccountByUserId,
         getUserByUsername,
         fetchUsersData,
@@ -88,7 +90,7 @@ const UserProfile = () => {
     const [savedNoticesData, setSavedNoticesData] = useState([]);
     const [likedNoticesData, setLikedNoticesData] = useState([]);
 
-    const { avatarUrl } = useUserAvatar(user_id);
+    const { avatarUrl, isAvatarLoading } = useUserAvatar(user_id);
 
     const [followingAccounts, setFollowingAccounts] = useState([]);
     const [followersAccounts, setFollowersAccounts] = useState([]);
@@ -503,12 +505,15 @@ const UserProfile = () => {
                 followersCount={followersCount}
                 followingAccounts={followingAccounts}
                 followersAccounts={followersAccounts}
-                loadFollowers={loadFollowers}
-                loadFollowing={loadFollowing}
                 hasMoreFollowers={hasMoreFollowers}
                 hasMoreFollowing={hasMoreFollowing}
                 isLoadingMoreFollowing={isLoadingMoreFollowing}
                 isLoadingMoreFollowers={isLoadingMoreFollowers}
+                isAvatarLoading={isAvatarLoading}
+                isGetFollowingTheUserCountLoading={isGetFollowingTheUserCountLoading}
+                isGetFollwedByUserCountLoading={isGetFollwedByUserCountLoading}
+                loadFollowers={loadFollowers}
+                loadFollowing={loadFollowing}
             />
 
             <div style={{ marginTop: !isSmallScreen ? '190px' : '150px' }}>

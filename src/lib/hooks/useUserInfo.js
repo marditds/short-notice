@@ -15,6 +15,9 @@ const useUserInfo = (data) => {
     const [followersCount, setFollowersCount] = useState(null);
     const [followingCount, setFollowingCount] = useState(null);
 
+    const [isGetFollwedByUserCountLoading, setIsGetFollwedByUserCountLoading] = useState(false);
+    const [isGetFollowingTheUserCountLoading, setIsGetFollowingTheUserCountLoading] = useState(false);
+
     const [isFollowingUserLoading, setIsFollowingUserLoading] = useState(false);
     const [isInitialFollowCheckLoading, setIsInitialFollowCheckLoading] = useState(true);
     const [isFollowing, setIsFollowing] = useState(false);
@@ -257,12 +260,16 @@ const useUserInfo = (data) => {
     // User follows them
     const getfollwedByUserCount = async (id) => {
         try {
+            setIsGetFollwedByUserCountLoading(true);
+
             const res = await followedByUserCount(id);
             console.log('FollowingCount', res);
 
             setFollowingCount(res);
         } catch (error) {
             console.error('Error getting follwed by user count', error);
+        } finally {
+            setIsGetFollwedByUserCountLoading(false);
         }
     }
 
@@ -317,12 +324,16 @@ const useUserInfo = (data) => {
     // They follow the user
     const getFollowingTheUserCount = async (id) => {
         try {
+            setIsGetFollowingTheUserCountLoading(true);
+
             const res = await followingTheUserCount(id);
             console.log('FollowersCount', res);
 
             setFollowersCount(res);
         } catch (error) {
             console.error('Error getting follwers by user count', error);
+        } finally {
+            setIsGetFollowingTheUserCountLoading(false);
         }
     }
 
@@ -564,6 +575,8 @@ const useUserInfo = (data) => {
         followingCount,
         isProcessingBlock,
         username,
+        isGetFollwedByUserCountLoading,
+        isGetFollowingTheUserCountLoading,
         // followersAccounts,
         // followingAccounts,
         checkIsOtherUserBlockedByUser,

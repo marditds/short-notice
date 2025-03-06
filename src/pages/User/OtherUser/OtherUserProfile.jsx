@@ -56,6 +56,8 @@ const OtherUserProfile = () => {
         followersCount,
         followingCount,
         isProcessingBlock,
+        isGetFollwedByUserCountLoading,
+        isGetFollowingTheUserCountLoading,
         checkIsOtherUserBlockedByUser,
         checkIsUserBlockedByOtherUser,
         handleBlock,
@@ -90,7 +92,7 @@ const OtherUserProfile = () => {
     const [savedNoticesData, setSavedNoticesData] = useState([]);
     const [likedNoticesData, setLikedNoticesData] = useState([]);
 
-    const { avatarUrl } = useUserAvatar(currUserId);
+    const { avatarUrl, isAvatarLoading } = useUserAvatar(currUserId);
 
     const [followingAccounts, setFollowingAccounts] = useState([]);
     const [followersAccounts, setFollowersAccounts] = useState([]);
@@ -259,7 +261,7 @@ const OtherUserProfile = () => {
                     return;
                 }
 
-                const ntcsIds = usrNtcs.map(ntc => ntc.$id);
+                const ntcsIds = usrNtcs?.map(ntc => ntc.$id);
 
                 console.log('nstNtcsIds', ntcsIds);
 
@@ -363,7 +365,7 @@ const OtherUserProfile = () => {
 
                 console.log('noticesWithoutTypeOrganization', noticesWithoutTypeOrganization);
 
-                const ntcsIds = noticesWithoutTypeOrganization.map(ntc => ntc.$id);
+                const ntcsIds = noticesWithoutTypeOrganization?.map(ntc => ntc.$id);
 
                 const [lkdNtcsRes, svdNtcsRes] = await Promise.allSettled([
                     fetchUserLikes(user_id, ntcsIds),
@@ -440,7 +442,7 @@ const OtherUserProfile = () => {
 
                 console.log('noticesWithoutTypeOrganization', noticesWithoutTypeOrganization);
 
-                const ntcsIds = noticesWithoutTypeOrganization.map(ntc => ntc.$id);
+                const ntcsIds = noticesWithoutTypeOrganization?.map(ntc => ntc.$id);
 
                 const [lkdNtcsRes, svdNtcsRes] = await Promise.allSettled([
                     fetchUserLikes(user_id, ntcsIds),
@@ -678,16 +680,19 @@ const OtherUserProfile = () => {
                     isFollowing={isFollowing}
                     isFollowingUserLoading={isFollowingUserLoading}
                     isInitialFollowCheckLoading={isInitialFollowCheckLoading}
-                    handleFollow={handleFollow}
-                    handleBlock={handleBlock}
-                    handleUserReport={handleUserReport}
-                    loadFollowers={loadFollowers}
-                    loadFollowing={loadFollowing}
+                    isAvatarLoading={isAvatarLoading}
+                    isGetFollowingTheUserCountLoading={isGetFollowingTheUserCountLoading}
+                    isGetFollwedByUserCountLoading={isGetFollwedByUserCountLoading}
                     hasMoreFollowers={hasMoreFollowers}
                     hasMoreFollowing={hasMoreFollowing}
                     isLoadingMoreFollowing={isLoadingMoreFollowing}
                     isLoadingMoreFollowers={isLoadingMoreFollowers}
                     isProcessingBlock={isProcessingBlock}
+                    handleFollow={handleFollow}
+                    handleBlock={handleBlock}
+                    handleUserReport={handleUserReport}
+                    loadFollowers={loadFollowers}
+                    loadFollowing={loadFollowing}
                 />
                 <>
                     {!isBlocked ?

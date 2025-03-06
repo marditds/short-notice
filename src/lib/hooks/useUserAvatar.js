@@ -5,10 +5,13 @@ import { getAvatarUrl } from '../utils/avatarUtils';
 const useUserAvatar = (userId) => {
 
     const [avatarUrl, setAvatarUrl] = useState(null);
+    const [isAvatarLoading, setIsAvatarLoading] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
 
     useEffect(() => {
         console.time('avatar-fetch');
+        setIsAvatarLoading(true);
+
         const fetchUserAvatar = async () => {
 
             if (userId === null) {
@@ -34,7 +37,8 @@ const useUserAvatar = (userId) => {
                         console.log(`Retrying fetch... (${retries} attempts left)`);
                         setTimeout(() => retryFetch(retries - 1, delay), delay);
                     }
-
+                } finally {
+                    setIsAvatarLoading(false);
                 }
             };
             retryFetch();
@@ -50,7 +54,7 @@ const useUserAvatar = (userId) => {
             console.log('user,', user);
 
             const url = getAvatarUrl(user.avatar);
-            console.log('url,', url);
+            console.log('getAvatarUrl,', url);
 
             return url;
 
@@ -58,6 +62,10 @@ const useUserAvatar = (userId) => {
             console.error('Error getting user avatar:', error);
         }
     }
+
+    useEffect(() => {
+        console.log('isAvatarLoading', isAvatarLoading);
+    }, [isAvatarLoading, avatarUrl])
 
     const getUserAvatarByString = async (str) => {
         try {
@@ -129,8 +137,9 @@ const useUserAvatar = (userId) => {
 
     return {
         avatarUrl,
-        setAvatarUrl,
         isUploading,
+        isAvatarLoading,
+        setAvatarUrl,
         getUserAvatarById,
         handleAvatarUpload,
         handleDeleteAvatarFromStrg,
