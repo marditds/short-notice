@@ -136,7 +136,7 @@ const UserProfile = () => {
     // Tabs' EventKey
     const [eventKey, setEventKey] = useState('my-notices');
 
-    // Fetch account type by username
+    // Fetch account type and website by username
     useEffect(() => {
         const fetchUserByUserame = async () => {
             try {
@@ -526,7 +526,7 @@ const UserProfile = () => {
                 loadFollowing={loadFollowing}
             />
 
-            <div style={{ marginTop: !isSmallScreen ? '190px' : '150px' }}>
+            <div style={{ marginTop: !isSmallScreen ? '205px' : '155px' }}>
                 <ComposeNotice
                     isAddingNotice={isAddingNotice}
                     noticeText={noticeText}

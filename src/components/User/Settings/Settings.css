@@ -72,10 +72,12 @@
 
 .settings__delete-avatar-btn,
 .settings__update-username-btn,
+.settings__update-website-btn,
 .settings__update-interests-btn,
 .settings__load-blocked-btn,
 .settings__delete-avatar-btn:focus,
 .settings__update-username-btn:focus,
+.settings__update-website-btn:focus,
 .settings__load-blocked-btn:focus,
 .settings__update-interests-btn:focus {
     background-color: var(--main-accent-color) !important;
@@ -98,10 +100,12 @@
 
 .settings__delete-avatar-btn:focus,
 .settings__update-username-btn:focus,
+.settings__update-website-btn:focus,
 .settings__load-blocked-btn:focus,
 .settings__update-interests-btn:focus,
 .settings__delete-avatar-btn:hover,
 .settings__update-username-btn:hover,
+.settings__update-website-btn:hover,
 .settings__update-interests-btn:hover,
 .settings__load-blocked-btn:hover {
     background-color: var(--main-accent-color-hover) !important;
@@ -112,6 +116,7 @@
     width: 100%;
 }
 
+.settings__website-field,
 .settings__username-field {
     border-width: 1.5px;
     border-color: transparent;
@@ -120,20 +125,24 @@
     transition: var(--main-transition-speed);
 }
 
+.settings__website-field:hover,
 .settings__username-field:hover {
     border-color: var(--main-accent-color-hover) !important;
 }
 
+.settings__website-field:active,
 .settings__username-field:active {
     border-color: var(--main-accent-color) !important;
 }
 
+.settings__website-field:focus,
 .settings__username-field:focus {
     border-color: var(--main-accent-color) !important;
     border-width: 1.5px;
     box-shadow: none !important;
 }
 
+.settings__website-field::selection,
 .settings__username-field::selection {
     background-color: var(--main-accent-color) !important;
 }
@@ -314,8 +323,10 @@
 
     .settings__upload-avatar-field,
     .settings__username-field,
+    .settings__website-field,
     .settings__delete-avatar-btn,
     .settings__update-username-btn,
+    .settings__update-website-btn,
     .settings__update-interests-btn,
     .settings__load-blocked-btn,
     .settings__delete-notices-btn,
@@ -382,19 +393,21 @@
         margin-bottom: 0;
     }
 
-
     .settings__upload-avatar-field {
         display: flex !important;
         width: 100% !important;
         max-width: 300px;
     }
 
-    .settings__username-form {
+    .settings__username-form,
+    .settings__website-form {
         width: 225.5px;
     }
 
     .settings__username-form-group,
-    .settings__update-username-btn-col {
+    .settings__website-form-group,
+    .settings__update-username-btn-col,
+    .settings__update-website-btn-col {
         padding-inline: 0;
     }
 

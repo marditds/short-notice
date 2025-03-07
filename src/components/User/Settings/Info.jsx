@@ -13,7 +13,6 @@ export const Info = ({ accountType }) => {
 
     const { handleUpdateUser } = useUserInfo(googleUserData);
 
-    const [currUsername, setCurrUsername] = useState(username);
     const [localUsername, setLocalUsername] = useState(username);
     const [isUpdating, setIsUpdating] = useState(false);
 
@@ -33,7 +32,6 @@ export const Info = ({ accountType }) => {
         try {
             if (localUsername.trim()) {
                 await handleUpdateUser(localUsername);
-                setCurrUsername(localUsername);
                 setUsername(localUsername);
                 setRegisteredUsername(localUsername)
             }
@@ -65,7 +63,7 @@ export const Info = ({ accountType }) => {
                         as={Col}
                         className='pe-sm-0 settings__username-form-group'
                         controlId='usernameField'>
-                        <Form.Label>
+                        <Form.Label className='mb-1 mb-md-2'>
                             {usrnm}:
                         </Form.Label>
                         <Form.Control
@@ -83,7 +81,7 @@ export const Info = ({ accountType }) => {
                         <Button
                             type='submit'
                             disabled={isUpdating || localUsername === '' ? true : false}
-                            className='settings__update-username-btn'
+                            className='settings__update-username-btn mt-1 mt-md-2'
                             onClick={handleSubmit}>
                             {isUpdating ? 'Updating...' : 'Update'}
                             {isUpdating && <Loading />}

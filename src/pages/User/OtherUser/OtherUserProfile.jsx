@@ -8,6 +8,7 @@ import useUserInfo from '../../../lib/hooks/useUserInfo.js';
 import { getAvatarUrl as avatarUtil } from '../../../lib/utils/avatarUtils.js';
 import useUserAvatar from '../../../lib/hooks/useUserAvatar.js';
 import useNotices from '../../../lib/hooks/useNotices.js';
+import { screenUtils } from '../../../lib/utils/screenUtils.js';
 import { useUnblockedNotices } from '../../../lib/utils/blockFilter.js';
 import { Passcode } from '../../../components/User/Passcode.jsx';
 import { Loading } from '../../../components/Loading/Loading.jsx';
@@ -75,14 +76,14 @@ const OtherUserProfile = () => {
         handleUserReport
     } = useUserInfo(googleUserData);
 
-    // const { isSmallScreen } = screenUtils();
+    const { isSmallScreen } = screenUtils();
 
     const [accountType, setAccountType] = useState(null);
     const [accountTypeCheck, setAccountTypeCheck] = useState(false);
     const [passcode, setPasscode] = useState('');
     const [isCheckingPasscode, setIsCheckingPasscode] = useState(false);
     const [isPasscodeIncorrect, setIsPasscodeIncorrect] = useState(false);
-
+    const [otherUserWebsite, setOtherUserWebsite] = useState(null);
 
     const [isOtherUserLoading, setIsOtherUserLoading] = useState(false);
     const [isBlocked, setIsBlocked] = useState(false);
@@ -208,11 +209,11 @@ const OtherUserProfile = () => {
                         setCurrUserId(prevId => (prevId !== otherUser.$id ? otherUser.$id : prevId));
                         setFellowUserId(prevId => (prevId !== otherUser.$id ? otherUser.$id : prevId));
                         setAccountType(otherUser.accountType);
+                        setOtherUserWebsite(otherUser.website);
                     }
                 } else {
                     console.error('Error fetching users:', otherUserRes.reason || userRes.reason);
                 }
-
             } catch (error) {
                 console.error(error);
             } finally {
@@ -671,6 +672,7 @@ const OtherUserProfile = () => {
                     username={otherUsername}
                     avatarUrl={avatarUrl}
                     currUserId={currUserId}
+                    website={otherUserWebsite}
                     isBlocked={isBlocked}
                     isOtherUserBlocked={isOtherUserBlocked}
                     followingAccounts={followingAccounts}
@@ -696,7 +698,7 @@ const OtherUserProfile = () => {
                 />
                 <>
                     {!isBlocked ?
-                        <div style={{ marginTop: '187px' }}>
+                        <div style={{ marginTop: !isSmallScreen ? '205px' : '155px' }}>
                             <Tabs
                                 activeKey={eventKey}
                                 defaultActiveKey='notices'

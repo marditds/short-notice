@@ -159,7 +159,11 @@ export const Profile = ({ username, avatarUrl, isAvatarLoading, website, handleF
                                 {username}
                                 {
                                     website && <>
-                                        {''}<a href={website}><i className='bi bi-link-45deg' /></a>
+                                        <br />
+                                        <a href={website} target='_blank' className='text-decoration-none user-profile__website'>
+                                            <i className='bi bi-link-45deg me-1' />
+                                            {website}
+                                        </a>
                                     </>
                                 }
 

@@ -10,12 +10,11 @@ export const UserWebsite = () => {
 
     const { userWebsite, setUserWebsite, updateUserWebsite, getUserByUsername } = useUserInfo(googleUserData);
 
-    const [localWebsite, setLocalWebsite] = useState(userWebsite);
     const [isUpdatingWebsite, setIsUpdatingWebsite] = useState(false);
 
     const handleUserWebsiteChange = (e) => {
-        e.preventDefault();
-        setUserWebsite(e.target.value);
+        let input = e.target.value.replace(/\s/g, '');
+        setUserWebsite(input);
     }
 
     useEffect(() => {
@@ -44,16 +43,17 @@ export const UserWebsite = () => {
         try {
             setIsUpdatingWebsite(true);
 
-            if (userWebsite !== '') {
-                if (!userWebsite.startsWith('https://') && !userWebsite.startsWith('http://')) {
-                    var usrWbst = 'https://' + userWebsite;
-                    await updateUserWebsite(usrWbst);
-                } else {
-                    await updateUserWebsite(userWebsite);
+            let usrWbst = userWebsite;
+
+            if (usrWbst !== '') {
+                if (!usrWbst.startsWith('https://') && !usrWbst.startsWith('http://')) {
+                    usrWbst = 'https://' + usrWbst;
                 }
             } else {
-                await updateUserWebsite(null);
+                usrWbst = null;
             }
+
+            await updateUserWebsite(usrWbst);
 
         } catch (error) {
             console.error('Error updating user website:', error);
@@ -62,7 +62,17 @@ export const UserWebsite = () => {
         }
     }
 
-    var websitePlaceholder = (userWebsite === null || userWebsite === undefined || userWebsite === '') ? 'Enter your website' : userWebsite;
+    const handleOnKeyDown = (e) => {
+        if (e.key === ' ') {
+            e.preventDefault();
+        }
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            handleUpdateUserWebsite(e);
+        }
+    };
+
+    var websitePlaceholder = (userWebsite === null || userWebsite === undefined || userWebsite === '') ? 'https://' : userWebsite;
 
     return (
         <Row xs={1} sm={2}>
@@ -80,7 +90,7 @@ export const UserWebsite = () => {
                         as={Col}
                         className='pe-sm-0 settings__website-form-group'
                         controlId='websiteField'>
-                        <Form.Label>
+                        <Form.Label className='mb-1 mb-md-2'>
                             Website:
                         </Form.Label>
                         <Form.Control
@@ -88,6 +98,7 @@ export const UserWebsite = () => {
                             placeholder={websitePlaceholder}
                             value={userWebsite || ''}
                             onChange={handleUserWebsiteChange}
+                            onKeyDown={handleOnKeyDown}
                             className='settings__website-field'
                         />
                     </Form.Group>
@@ -95,7 +106,7 @@ export const UserWebsite = () => {
                         <Button
                             type='submit'
                             disabled={isUpdatingWebsite ? true : false}
-                            className='settings__update-website-btn'
+                            className='settings__update-website-btn mt-1 mt-md-2'
                             onClick={handleUpdateUserWebsite}>
                             {isUpdatingWebsite ? 'Updating...' : 'Update'}
                             {isUpdatingWebsite && <Loading />}
