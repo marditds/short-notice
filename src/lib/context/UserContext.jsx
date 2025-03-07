@@ -9,8 +9,9 @@ export const UserProvider = ({ children }) => {
     const [username, setUsername] = useState('');
     const [registeredUsername, setRegisteredUsername] = useState('');
     const [hasUsername, setHasUsername] = useState(false);
-    const [accountType, setAccountType] = useState('');
     const [hasAccountType, setHasAccountType] = useState(false);
+    const [accountType, setAccountType] = useState('');
+    const [website, setWebsite] = useState(null);
 
 
 

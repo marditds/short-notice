@@ -7,7 +7,7 @@ import { screenUtils } from '../../../lib/utils/screenUtils.js';
 import { BlockModal, ReportModal, FollowModal } from '../Modals.jsx';
 import { Loading } from '../../Loading/Loading.jsx';
 
-export const Profile = ({ username, avatarUrl, isAvatarLoading, handleFollow, handleBlock, currUserId, followingCount, followersCount, isFollowing, followingAccounts, followersAccounts, isFollowingUserLoading, isGetFollwedByUserCountLoading,
+export const Profile = ({ username, avatarUrl, isAvatarLoading, website, handleFollow, handleBlock, currUserId, followingCount, followersCount, isFollowing, followingAccounts, followersAccounts, isFollowingUserLoading, isGetFollwedByUserCountLoading,
     isGetFollowingTheUserCountLoading, isBlocked, isOtherUserBlocked, handleUserReport, hasMoreFollowing, hasMoreFollowers, loadFollowing, loadFollowers, isLoadingMoreFollowing, isLoadingMoreFollowers, isProcessingBlock }) => {
 
     const location = useLocation();
@@ -133,12 +133,13 @@ export const Profile = ({ username, avatarUrl, isAvatarLoading, handleFollow, ha
                     }
                 </Col>
 
-                {/* Profile Picture Col */}
+                {/* Avatar and username Col */}
                 <Col
                     xs={{ span: 6, order: 1 }}
                     sm={{ span: 4, order: 2 }}
                     className={`d-flex flex-column justify-content-center align-items-sm-center align-items-end user-profile__avatar-col ${location.pathname !== '/user/profile' && isExtraSmallScreen ? 'pt-3' : ''}`}>
                     <div>
+                        {/* Avatar */}
                         <div className='d-flex justify-content-center align-items-center'>
                             {
                                 !isAvatarLoading ?
@@ -151,8 +152,18 @@ export const Profile = ({ username, avatarUrl, isAvatarLoading, handleFollow, ha
                                     <Loading />
                             }
                         </div>
+
+                        {/* Username */}
                         <p className='my-0 text-center'>
-                            <strong>{username}</strong>
+                            <strong>
+                                {username}
+                                {
+                                    website && <>
+                                        {''}<a href={website}><i className='bi bi-link-45deg' /></a>
+                                    </>
+                                }
+
+                            </strong>
                         </p>
                     </div>
                 </Col>

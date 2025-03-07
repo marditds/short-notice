@@ -466,9 +466,11 @@ export const Notices = ({
                                 <Col xs={9} className='d-flex justify-content-between flex-column notice__text-countdown-col'
                                 >
                                     <p className=' text-break'>
-                                        <strong>
-                                            {notice?.noticeType === 'business' && notice?.adLabel}{' '}
-                                        </strong>
+                                        {notice?.noticeType === 'business' &&
+                                            <strong>
+                                                Ad:{' '}
+                                            </strong>
+                                        }
                                         {notice?.text}
                                     </p>
 

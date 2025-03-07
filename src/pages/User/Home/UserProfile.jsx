@@ -61,10 +61,12 @@ const UserProfile = () => {
     } = useNotices(googleUserData);
 
     const {
+        userWebsite,
         followersCount,
         followingCount,
         isGetFollowingTheUserCountLoading,
         isGetFollwedByUserCountLoading,
+        setUserWebsite,
         getUserAccountByUserId,
         getUserByUsername,
         fetchUsersData,
@@ -78,6 +80,7 @@ const UserProfile = () => {
     const { isSmallScreen } = screenUtils();
 
     const [accountType, setAccountType] = useState(null);
+
     const [noticeText, setNoticeText] = useState('');
     // const [noticeGif, setNoticeGif] = useState(null);
     // const [duration, setDuration] = useState(24);
@@ -138,11 +141,17 @@ const UserProfile = () => {
         const fetchUserByUserame = async () => {
             try {
                 const usr = await getUserByUsername(username);
+                console.log('UserProfile.jsx - usr', usr);
+
                 setAccountType(usr.accountType);
+                setUserWebsite(usr.website);
+
             } catch (error) {
                 console.log('Error creating notice', error);
             }
         }
+        console.log('website in UserProfile.jsx', userWebsite);
+
         fetchUserByUserame();
     }, [username])
 
@@ -501,6 +510,7 @@ const UserProfile = () => {
             <Profile
                 username={username}
                 avatarUrl={avatarUrl}
+                website={userWebsite}
                 followingCount={followingCount}
                 followersCount={followersCount}
                 followingAccounts={followingAccounts}

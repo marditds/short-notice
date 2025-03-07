@@ -26,7 +26,6 @@ export const Info = ({ accountType }) => {
 
         console.log('dfdfdfd');
 
-
         setIsUpdating(true);
 
         e.preventDefault();

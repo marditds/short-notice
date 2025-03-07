@@ -328,6 +328,31 @@ export const updateUser = async ({ userId, username }) => {
     }
 };
 
+export const updateUserWebsite = async ({ userId, website }) => {
+
+    console.log('updateUserWebsite - userId', userId);
+    console.log('updateUserWebsite - website', website);
+
+    try {
+        const res = await databases.updateDocument(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_USERS_COLLECTION,
+            userId,
+            {
+                website: website
+            },
+            // [
+            // Permission.update(Role.users(userId)),
+            // Permission.update(Role.guests())
+            // ]
+        );
+        console.log('Website successfully updated.');
+        return res;
+    } catch (error) {
+        console.error('Error updating the website:', error);
+    }
+};
+
 export const updateAuthUser = async (name) => {
     try {
         const authUsrnm = await account.updateName(name);
@@ -521,9 +546,7 @@ export const getSessionDetails = async () => {
 
 export const createNotice = async ({ user_id, text, timestamp, expiresAt, noticeType, noticeGif, noticeUrl, science, technology, engineering, math, literature, history, philosophy, music, medicine, economics, law, polSci, sports
 }) => {
-
     try {
-
         const response = await databases.createDocument(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_NOTICES_COLLECTION,

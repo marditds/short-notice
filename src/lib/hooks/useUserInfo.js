@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { createBlock, getBlockedUsersByUser as fetchBlockedUsersByUser, getBlockedUsersByUserByBatch as fetchBlockedUsersByUserByBatch, getUsersBlockingUser as fetchUsersBlockingUser, removeBlockUsingBlockedId, checkIdExistsInAuth, checkEmailExistsInAuth as checkEmailInAuthFromServer, registerAuthUser, getUserById, getUserByIdQuery as fetchUserByIdQuery, deleteAuthUser, createUserSession, getSessionDetails as fetchSessionDetails, deleteUserSession, updateUser, updateAuthUser, deleteUser, getUserByUsername as fetchUserByUsername, getAllUsersByString as fetchAllUsersByString, deleteAllNotices, deleteAllReactions, removeAllSaves, removeAllLikes, removeAllFollows, getUsersDocument, createFollow, unfollow, getUserFollowingsById, getUserFollowersById, followedByUserCount, followingTheUserCount, getPersonalFeedAccounts as fetchPersonalFeedAccounts, createPassocde, updatePassocde, getPassocdeByOrganizationId as fetchPassocdeByOrganizationId, createUserReport, getFollowStatus as fetchFollowStatus, isUserBlockedByOtherUser, isOtherUserBlockedByUser } from '../context/dbhandler';
+import { createBlock, getBlockedUsersByUser as fetchBlockedUsersByUser, getBlockedUsersByUserByBatch as fetchBlockedUsersByUserByBatch, getUsersBlockingUser as fetchUsersBlockingUser, removeBlockUsingBlockedId, checkIdExistsInAuth, checkEmailExistsInAuth as checkEmailInAuthFromServer, registerAuthUser, getUserById, getUserByIdQuery as fetchUserByIdQuery, deleteAuthUser, createUserSession, getSessionDetails as fetchSessionDetails, deleteUserSession, updateUser, updateUserWebsite as updtUsrWbst, updateAuthUser, deleteUser, getUserByUsername as fetchUserByUsername, getAllUsersByString as fetchAllUsersByString, deleteAllNotices, deleteAllReactions, removeAllSaves, removeAllLikes, removeAllFollows, getUsersDocument, createFollow, unfollow, getUserFollowingsById, getUserFollowersById, followedByUserCount, followingTheUserCount, getPersonalFeedAccounts as fetchPersonalFeedAccounts, createPassocde, updatePassocde, getPassocdeByOrganizationId as fetchPassocdeByOrganizationId, createUserReport, getFollowStatus as fetchFollowStatus, isUserBlockedByOtherUser, isOtherUserBlockedByUser } from '../context/dbhandler';
 import { useUserContext } from '../context/UserContext';
 import { UserId } from '../../components/User/UserId';
 
@@ -10,6 +10,8 @@ const useUserInfo = (data) => {
     const navigate = useNavigate();
 
     const [userId, setUserId] = useState(null);
+
+    const [userWebsite, setUserWebsite] = useState(null);
 
     const [following, setFollowing] = useState({});
     const [followersCount, setFollowersCount] = useState(null);
@@ -84,7 +86,6 @@ const useUserInfo = (data) => {
         }
 
         try {
-
             console.log('userId', userId);
 
             const res = await updateUser({ userId, username });
@@ -92,13 +93,35 @@ const useUserInfo = (data) => {
             await updateAuthUser(username);
 
             setUsername(username);
-            // setRegisterdUsername(username);
 
             console.log('Username updated successfully.', res);
 
         } catch (error) {
             console.error('Error updating the username:', error);
 
+        }
+    }
+
+    const updateUserWebsite = async (website) => {
+
+        if (!userId) {
+            console.error('User ID is not set.');
+            return;
+        }
+
+        try {
+            console.log('userId', userId);
+
+            console.log('website', website);
+
+            const res = await updtUsrWbst({ userId, website });
+
+            // setUserWebsite(res);
+
+            console.log('userWebsite updated successfully.', res);
+
+        } catch (error) {
+            console.error('Error updating the userWebsite:', error);
         }
     }
 
@@ -147,6 +170,9 @@ const useUserInfo = (data) => {
         try {
             const usrnm = await fetchUserByUsername(username);
             console.log('username found:', usrnm);
+
+            setUserWebsite(usrnm.website);
+
             return usrnm;
         } catch (error) {
             console.error('Error getting user by username:', error);
@@ -575,10 +601,12 @@ const useUserInfo = (data) => {
         followingCount,
         isProcessingBlock,
         username,
+        userWebsite,
         isGetFollwedByUserCountLoading,
         isGetFollowingTheUserCountLoading,
         // followersAccounts,
         // followingAccounts,
+        setUserWebsite,
         checkIsOtherUserBlockedByUser,
         checkIsUserBlockedByOtherUser,
         makeBlock,
@@ -596,6 +624,7 @@ const useUserInfo = (data) => {
         getAllUsersByString,
         getSessionDetails,
         handleUpdateUser,
+        updateUserWebsite,
         handleDeleteUser,
         getUsersData,
         fetchUsersData,

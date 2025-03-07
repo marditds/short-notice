@@ -11,6 +11,7 @@ import { DeleteAccount } from '../../../components/User/Settings/DeleteAccount.j
 import '../../../components/User/Settings/Settings.css';
 import { Passcode } from '../../../components/User/Settings/Passcode.jsx';
 import { BlockedAccounts } from '../../../components/User/Settings/BlockedAccounts.jsx';
+import { UserWebsite } from '../../../components/User/Settings/UserWebsite.jsx';
 
 const UserSettings = () => {
 
@@ -39,6 +40,8 @@ const UserSettings = () => {
                         <hr />
                     </>
                 }
+                <UserWebsite />
+                <hr className='settings__hr' />
                 <Interests />
                 <hr className='settings__hr' />
                 <BlockedAccounts />
