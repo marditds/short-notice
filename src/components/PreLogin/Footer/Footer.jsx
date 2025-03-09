@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Container, Row, Col, Image } from 'react-bootstrap';
-// import { footerData } from './FooterData.jsx';
+import { footerData } from './FooterData.jsx';
 import { screenUtils } from '../../../lib/utils/screenUtils.js';
 import snLogo from '../../../assets/sn_long.png';
 import './Footer.css';
@@ -10,17 +10,19 @@ const Footer = () => {
 
     const { isMediumScreen } = screenUtils();
 
-    // const copyrightText = footerData.copyright.split('newLine');
+    const copyrightText = footerData.copyright.split('newLine');
 
-    // const copyrightTextBreak = isMediumScreen && footerData.copyright.replace('newLine', '');
+    console.log('copyrightText', copyrightText);
+
+    const copyrightTextBreak = isMediumScreen && footerData.copyright.replace('newLine', '');
 
     return (
         <Container fluid className='footer__container'>
             <Container>
                 <Row xs={1} lg={3} xl={6} className='flex-columns mt-5'>
-                    fgdfgdg
+
                     {/* LOGO */}
-                    {/* <Col className='d-flex flex-column footer__col mb-3 mb-lg-0'>
+                    <Col className='d-flex flex-column footer__col mb-3 mb-lg-0'>
                         <Link to='/'>
                             <Image src={snLogo} alt='shortnotice_logo' height='26px'
                                 // width={!isSmallScreen ? 'auto' : '149.5px'} 
@@ -29,21 +31,18 @@ const Footer = () => {
                         {
                             !isMediumScreen ?
                                 <div>
-                                    {
-                                        copyrightText.map((text, idx) => {
-                                            return (
-                                                <p key={idx} className='mb-0'>{text}</p>
-                                            )
-                                        })
-                                    }
+                                    {copyrightText.map((text, idx) => {
+                                        return (
+                                            <p key={idx} className='mb-0'>{text}</p>
+                                        )
+                                    })}
                                 </div>
                                 :
                                 <>
                                     {copyrightTextBreak}
                                 </>
                         }
-
-                    </Col> */}
+                    </Col>
 
                     {/* COMPANY */}
                     {/* <Col className='footer__col'>
