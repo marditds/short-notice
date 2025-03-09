@@ -333,8 +333,6 @@ const UserFeed = () => {
                                 console.log('templateSubject - UserFeed.jsx', templateSubject);
                                 await onGeminiRunClick(templateSubject, setNoticeText)
                             }}
-                        // onGeminiRunClick={hakop}
-                        // onGeminiRunClick={() => hakop()}
                         />
                     </div>
                 </>

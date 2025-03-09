@@ -7,9 +7,8 @@
 
 
 export const keysProvider = (key, setFunction) => {
-    // Check if running in development mode (local environment)
+
     if (import.meta.env.DEV) {
-        // Construct the local environment variable name dynamically
         const localKeyMap = {
             google: "VITE_GOOGLE_API_TOKEN",
             captcha: "VITE_CAPTCHA_SITE_KEY",
@@ -24,7 +23,6 @@ export const keysProvider = (key, setFunction) => {
         }
     }
 
-    // If not in local mode, fetch from Netlify serverless function
     fetch(`/.netlify/functions/get-tokens?key=${key}`)
         .then((res) => res.json())
         .then((data) => setFunction(data.token))

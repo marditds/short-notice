@@ -18,7 +18,7 @@ const Footer = () => {
         <Container fluid className='footer__container'>
             <Container>
                 <Row xs={1} lg={3} xl={6} className='flex-columns mt-5'>
-
+                    fgdfgdg
                     {/* LOGO */}
                     {/* <Col className='d-flex flex-column footer__col mb-3 mb-lg-0'>
                         <Link to='/'>

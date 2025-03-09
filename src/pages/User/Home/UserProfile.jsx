@@ -534,17 +534,10 @@ const UserProfile = () => {
                     isGeminiLoading={isGeminiLoading}
                     setNoticeText={setNoticeText}
                     addNotice={addNotice}
-                    // onGeminiRunClick={hakop}
                     onGeminiRunClick={async (templateSubject) => {
                         console.log('templateSubject - UserProfile.jsx', templateSubject);
                         await onGeminiRunClick(templateSubject, setNoticeText)
                     }}
-                // tagCategories={tagCategories}
-                // noticeGif={noticeGif}
-                // duration={duration} 
-                // setTagCategories={setTagCategories}
-                // setNoticeGif={setNoticeGif}
-                // setDuration={setDuration} 
                 />
             </div>
 
