@@ -36,7 +36,7 @@ const PrivacyData = () => {
         <div>
           ShortNotice does not sell or rent user data to third parties. However, data may be shared in the following instances:
           <ul className='list-unstyled'>
-            <li>- Service Providers: We rely on Appwrite for data storage and backend services. Appwrite collects and stores user data, including IP addresses, on our behalf. Your data is stored within Appwrite's infrastructure.</li>
+            <li>- Service Providers: We rely on Appwrite for data storage and backend services. Appwrite collects and stores user data, including IP addresses. Your data is stored within Appwrite's infrastructure.</li>
             <li>- Legal Requirements: If required by law, we may disclose user data to comply with legal processes.</li>
             <li>- Platform Integrity: In cases of reported content or account violations, data may be reviewed internally for resolution.</li>
           </ul>

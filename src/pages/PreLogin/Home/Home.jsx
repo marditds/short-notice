@@ -22,12 +22,12 @@ const Home = ({ onSuccess }) => {
 
     const features = [
         {
-            title: 'Ephemeral Posting: ',
+            title: 'Ephemeral posting: ',
             description: 'Choose how long your notices stay live—12, 24, or 48 hours.',
             icon: '⌚'
         },
         {
-            title: 'No Noise, Just Words (and GIFs 😜): ',
+            title: 'No noise, just words (and GIFs 😜): ',
             description: 'No photos, videos, or distractions—just authentic thoughts.',
             icon: '💭'
         },
@@ -44,18 +44,22 @@ const Home = ({ onSuccess }) => {
                     <BsHandThumbsUp size={!isSmallScreen ? 28 : 17.5} /> {' '}
                     <BsFloppy size={!isSmallScreen ? 30 : 18.75} /> {' '}
                     <BsReply size={!isSmallScreen ? 38 : 23.75} />
-
                 </span>
             ),
         },
         {
-            title: ' Delete your notices: ',
-            description: 'Don\'t like what you posted? No problem. Delete your notice even if the timer has not run out.',
-            icon: <i className="bi bi-trash3"></i>
+            title: 'AI generated templates: ',
+            description: 'Get a head start with AI-powered templates! Click a button, and AI will generate a structured starting point to help you organize your thoughts effortlessly.',
+            icon: <i className='bi bi-stars' />
         },
         {
-            title: 'Secure Access for Teams and Groups: ',
-            description: 'Leaders set passcodes to control who can view notices, ensuring secure and targeted communication.',
+            title: 'Delete your notices: ',
+            description: 'Don\'t like what you posted? No problem. Delete your notice even if the timer has not run out.',
+            icon: <i className='bi bi-trash3' />
+        },
+        {
+            title: 'Private access for teams and groups: ',
+            description: 'Leaders set passcodes to control who can view notices, ensuring private and targeted communication.',
             icon: '🔒'
         }
     ];
@@ -125,7 +129,7 @@ const Home = ({ onSuccess }) => {
         },
         {
             question: 'What sets apart ShortNotice from other similar platforms? Why choose ShortNotice?',
-            answer: 'At ShortNotice, the users will not encounter a cluttered environment. The goal of the platform is to be an addition to the user\'s daily life and business, and not a distraction. That is why the platform values '
+            answer: 'At ShortNotice, the users will not encounter a cluttered environment. The goal of the platform is to be an addition to the user\'s daily life and business, and not a distraction.'
         },
         {
             question: 'Can I edit or delete my posts?',
