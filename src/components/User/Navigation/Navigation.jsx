@@ -64,6 +64,18 @@ export const Navigation = ({
             url: '/user/settings'
         },
         {
+            title: 'Support',
+            icon: 'bi bi-question-square',
+            onClick: () => console.log('Support clicked'),
+            url: '/user/support'
+        },
+        {
+            title: 'Legal',
+            icon: 'bi bi-shield-shaded',
+            onClick: () => console.log('Legal clicked'),
+            url: '/user/legal'
+        },
+        {
             title: 'Log out',
             icon: 'bi bi-box-arrow-left',
             onClick: async () => {

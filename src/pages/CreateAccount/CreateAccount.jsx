@@ -11,10 +11,14 @@ import ReCAPTCHA from 'react-google-recaptcha';
 import { CreateUsername } from '../../components/Setup/CreateUsername';
 import { SetPasscode } from '../../components/Setup/SetPasscode';
 import useUserInfo from '../../lib/hooks/useUserInfo';
-import { tosData } from '../PreLogin/TOS/tosData';
-import { reportCategories, commGuideParags } from '../../components/PreLogin/ComunityGuidelines/communityGuidelines';
-import PrivacyData from '../../components/PreLogin/Privacy/PrivacyData';
+import { tosData } from '../../components/Legal/tosData';
+import { reportCategories, commGuideParags } from '../../components/Support/communityGuidelines';
+// import PrivacyData from '../../components/PreLogin/Privacy/PrivacyData';
 import { Loading } from '../../components/Loading/Loading';
+import TOSList from '../../components/Legal/TOSList';
+import CommunityGuidelinesList from '../../components/Support/CommunityGuidelinesList';
+import PrivacyList from '../../components/Legal/PrivacyList';
+
 
 const CreateAccount = ({ setUser }) => {
 
@@ -43,7 +47,7 @@ const CreateAccount = ({ setUser }) => {
 
     const [tosCheck, setTosCheck] = useState(false);
 
-    const { privacyPolicyData } = PrivacyData();
+    // const { privacyPolicyData } = PrivacyData();
     const [privacyPolicyCheck, setPrivacyPolicyCheck] = useState(false);
 
     const [showTOSModal, setShowTOSModal] = useState(false);
@@ -293,24 +297,10 @@ const CreateAccount = ({ setUser }) => {
 
             {/* TOS Modal */}
             <Modal show={showTOSModal} onHide={handleCloseTOSModal} className='createAccount__agreement-modal'>
-                <Modal.Header className='border-bottom-0 pb-0'>
-                    <Modal.Title>
-                        <h4 className='mb-0 px-0 px-sm-2'>Terms of Service</h4>
-                    </Modal.Title>
-                </Modal.Header>
-                <Modal.Body className='createAccount__agreement-modal-body px-0 px-md-2'>
-                    <ListGroup className='createAccount__agreement-list-group'>
-                        {
-                            tosData.map((term, idx) => {
-                                return (
-                                    <ListGroup.Item key={idx} className='createAccount__agreement-list-item'>
-                                        <h5>{idx + 1}. {term.title}</h5>
-                                        <p>{term.description}</p>
-                                    </ListGroup.Item>
-                                )
-                            })
-                        }
-                    </ListGroup>
+                {/* <Modal.Header className='border-bottom-0 pb-0'> 
+                </Modal.Header> */}
+                <Modal.Body className='createAccount__agreement-modal-body px-2'>
+                    <TOSList />
                 </Modal.Body>
                 <Modal.Footer className='border-top-0 pt-0'>
                     <Button onClick={handleCloseTOSModal} className='mx-0 createAccount__btn'>
@@ -321,32 +311,9 @@ const CreateAccount = ({ setUser }) => {
 
             {/* Community Guidelines */}
             <Modal show={showCommGuideModal} onHide={handleCloseCommGuideModal} className='createAccount__agreement-modal'>
-                <Modal.Header className='border-bottom-0 pb-0 px-0 px-md-2'>
-                    <Modal.Title>
-                        <h4 className='mb-0 mx-3'>Community Guidelines</h4>
-                    </Modal.Title>
-                </Modal.Header>
+                {/* <Modal.Header className='border-bottom-0 pb-0 px-0 px-md-2'></Modal.Header> */}
                 <Modal.Body className='createAccount__agreement-modal-body px-0 px-md-2'>
-                    <p className='mb-1 mx-3'>
-                        {commGuideParags.intro}
-                    </p>
-                    <p className='mb-1 mx-3'>
-                        {commGuideParags.pargraph}
-                    </p>
-                    <ListGroup className='createAccount__agreement-list-group'>
-                        {
-                            reportCategories.map((category, idx) => {
-                                return (
-                                    <ListGroup.Item key={idx} className='createAccount__agreement-list-item'>
-                                        {idx + 1}. {category.name}
-                                    </ListGroup.Item>
-                                )
-                            })
-                        }
-                    </ListGroup>
-                    <p className='mb-1 mx-3'>
-                        {commGuideParags.outro}
-                    </p>
+                    <CommunityGuidelinesList />
                 </Modal.Body>
                 <Modal.Footer className='border-top-0 pt-0'>
                     <Button onClick={handleCloseCommGuideModal} className='mx-0 createAccount__btn'>
@@ -357,24 +324,9 @@ const CreateAccount = ({ setUser }) => {
 
             {/* Privacy Policy Modal */}
             <Modal show={showPrivacyModal} onHide={handleClosePrivacyModal} className='createAccount__agreement-modal'>
-                <Modal.Header className='border-bottom-0 pb-0'>
-                    <Modal.Title>
-                        <h4 className='mb-0 px-0 px-sm-3'>Privacy Policy</h4>
-                    </Modal.Title>
-                </Modal.Header>
+                {/* <Modal.Header className='border-bottom-0 pb-0'> </Modal.Header> */}
                 <Modal.Body className='createAccount__agreement-modal-body'>
-                    <ListGroup as={'ul'} className='createAccount__agreement-list-group'>
-                        {
-                            privacyPolicyData.map((privacyPolicy, idx) => {
-                                return (
-                                    <ListGroup.Item as={'li'} key={idx} className='createAccount__agreement-list-item my-1 px-0 px-sm-3'>
-                                        <h5 className='mb-1'>{privacyPolicy.title}</h5>
-                                        {privacyPolicy.description}
-                                    </ListGroup.Item>
-                                )
-                            })
-                        }
-                    </ListGroup>
+                    <PrivacyList />
                 </Modal.Body>
                 <Modal.Footer className='border-top-0 pt-0'>
                     <Button onClick={handleClosePrivacyModal} className='mx-0 createAccount__btn'>

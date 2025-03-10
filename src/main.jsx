@@ -31,6 +31,8 @@ import Privacy from './pages/PreLogin/Privacy/Privacy.jsx';
 import CommunityGuidelines from './pages/PreLogin/CommunityGuidelines/CommunityGuidelines.jsx';
 import Attributions from './pages/PreLogin/Attributions/Attributions.jsx';
 import { Loading } from './components/Loading/Loading.jsx';
+import UserLegal from './pages/User/Legal/UserLegal.jsx';
+import UserSupport from './pages/User/Support/UserSupport.jsx';
 
 
 const router = createBrowserRouter([
@@ -129,6 +131,14 @@ const router = createBrowserRouter([
           {
             path: 'settings',
             element: <UserSettings />,
+          },
+          {
+            path: 'legal',
+            element: <UserLegal />,
+          },
+          {
+            path: 'support',
+            element: <UserSupport />,
           },
           {
             path: 'feed',

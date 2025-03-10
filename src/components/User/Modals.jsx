@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { reportCategories } from '../PreLogin/ComunityGuidelines/communityGuidelines';
+import { reportCategories } from '../Support/communityGuidelines';
 import { Modal, Form, Button } from 'react-bootstrap';
 import { Loading } from '../Loading/Loading';
 import { SlClose } from "react-icons/sl";
