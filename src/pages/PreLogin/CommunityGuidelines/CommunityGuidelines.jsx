@@ -1,6 +1,5 @@
 import React from 'react';
 import { Container, Row, Col, ListGroup } from 'react-bootstrap';
-import { reportCategories, commGuideParags } from '../../../components/Support/communityGuidelines';
 import CommunityGuidelinesList from '../../../components/Support/CommunityGuidelinesList';
 
 const CommunityGuidelines = () => {

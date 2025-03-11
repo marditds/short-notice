@@ -8,9 +8,9 @@
 }
 
 @media (max-width: 767px) {
-    .legal__hr {
+    /* .legal__hr {
         margin-block: 0px;
-    }
+    } */
 
     .legal__sections {
         gap: 28px;

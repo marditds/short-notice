@@ -1,6 +1,7 @@
 import React from 'react';
 import { Container, Stack } from 'react-bootstrap';
 import CommunityGuidelinesList from '../../../components/Support/CommunityGuidelinesList';
+import ContactList from '../../../components/Support/ContactList';
 
 const UserSupport = () => {
     return (
@@ -8,11 +9,12 @@ const UserSupport = () => {
             {/* <Stack className='legal__sections'> */}
             <CommunityGuidelinesList />
             <hr className='legal__hr' />
+            <ContactList />
+            <hr className='legal__hr pb-5' />
 
-            <hr className='legal__hr' />
             {/* </Stack> */}
         </Container>
     )
 }
 
-export default UserSupport
+export default UserSupport;
