@@ -217,7 +217,7 @@
 
 .userhome__body--profile--tools--dropdown>div {
     padding: 0;
-    width: fit-content !important;
+    width: 212px !important;
     margin-top: 4px;
     color: var(--main-text-color) !important;
     background-color: rgba(198, 220, 208, 0.6);
@@ -348,6 +348,7 @@
 
     .userhome__body--profile--tools--dropdown>div {
         min-width: 120px !important;
+        max-width: 145px !important;
     }
 
     .userhome__body--profile--tools--dropdown>div>a {

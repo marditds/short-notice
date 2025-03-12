@@ -64,7 +64,7 @@ export const Navigation = ({
             url: '/user/settings'
         },
         {
-            title: 'Support',
+            title: 'Community Guidelines',
             icon: 'bi bi-question-square',
             onClick: () => console.log('Support clicked'),
             url: '/user/support'
@@ -90,14 +90,6 @@ export const Navigation = ({
             url: '/'
         }
     ]
-
-    // const [showTagsModalFunction, setShowTagsModalFunction] = useState(false);
-
-    // const onShowInterestsTagsClick = () => {
-    //     setShowTagsModalFunction(true),
-    //         fetchUserInterests()
-    //     console.log('NAVIGATION - selectedTags', selectedTags);
-    // }
 
     return (
         <>

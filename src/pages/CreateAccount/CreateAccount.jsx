@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { googleLogout } from '@react-oauth/google';
-import { Container, Stack, Row, Col, Form, Button, Alert, Modal, ListGroup } from 'react-bootstrap';
+import { Container, Stack, Row, Col, Form, Button, Alert, Modal } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useUserContext } from '../../lib/context/UserContext';
 import { getUserByUsername } from '../../lib/context/dbhandler';
@@ -11,9 +11,6 @@ import ReCAPTCHA from 'react-google-recaptcha';
 import { CreateUsername } from '../../components/Setup/CreateUsername';
 import { SetPasscode } from '../../components/Setup/SetPasscode';
 import useUserInfo from '../../lib/hooks/useUserInfo';
-import { tosData } from '../../components/Legal/tosData';
-import { reportCategories, commGuideParags } from '../../components/Support/communityGuidelines';
-// import PrivacyData from '../../components/PreLogin/Privacy/PrivacyData';
 import { Loading } from '../../components/Loading/Loading';
 import TOSList from '../../components/Legal/TOSList';
 import CommunityGuidelinesList from '../../components/Support/CommunityGuidelinesList';
@@ -47,7 +44,6 @@ const CreateAccount = ({ setUser }) => {
 
     const [tosCheck, setTosCheck] = useState(false);
 
-    // const { privacyPolicyData } = PrivacyData();
     const [privacyPolicyCheck, setPrivacyPolicyCheck] = useState(false);
 
     const [showTOSModal, setShowTOSModal] = useState(false);
@@ -100,6 +96,21 @@ const CreateAccount = ({ setUser }) => {
 
         if (username === 'profile') {
             setErrorMessage('The username \'profile\' is not allowed. Please choose a different username.');
+            return;
+        }
+
+        if (username === 'feed') {
+            setErrorMessage('The username \'feed\' is not allowed. Please choose a different username.');
+            return;
+        }
+
+        if (username === 'settings') {
+            setErrorMessage('The username \'feed\' is not allowed. Please choose a different username.');
+            return;
+        }
+
+        if (username === 'legal') {
+            setErrorMessage('The username \'legal\' is not allowed. Please choose a different username.');
             return;
         }
 

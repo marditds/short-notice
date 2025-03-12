@@ -8,8 +8,6 @@ const UserSupport = () => {
         <Container fluid className='legal'>
             {/* <Stack className='legal__sections'> */}
             <CommunityGuidelinesList />
-            <hr className='legal__hr' />
-            <ContactList />
             <hr className='legal__hr pb-5' />
 
             {/* </Stack> */}

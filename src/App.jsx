@@ -11,6 +11,8 @@ import { useUserContext } from './lib/context/UserContext';
 import { ID } from 'appwrite';
 import useUserInfo from './lib/hooks/useUserInfo.js';
 import appwrite_logo from '../src/assets/appwrite_logo.svg';
+// import Header from './components/PreLogin/Header/Header.jsx';
+// import { GoogleLoginForm } from './components/LoginForm/Google/GoogleLoginForm.jsx';
 
 
 function App() {
@@ -97,22 +99,22 @@ function App() {
 
       const pathsToRedirect = ['/', '/sn-plus', '/contact', '/about', '/tos', '/help-center', '/user'];
 
-      if (pathsToRedirect.includes(currentPath)) {
-        navigate('/user/feed');
-      } else if (currentPath.startsWith('/user/') && currentPath.split('/').length >= 3) {
-        navigate(currentPath);
-      } else {
-        navigate(currentPath);
-      }
-
-      // if (currentPath === '/' || currentPath === '/user') {
-      // if (currentPath === '/' || currentPath === '/sn-plus' || currentPath === '/contact' || currentPath === '/about' || currentPath === '/tos' || currentPath === '/help-center' || currentPath === '/user') {
+      // if (pathsToRedirect.includes(currentPath)) {
       //   navigate('/user/feed');
+      // } else if (currentPath.startsWith('/user/') && currentPath.split('/').length >= 3) {
+      //   navigate(currentPath);
       // } else {
       //   navigate(currentPath);
       // }
+      if (pathsToRedirect.includes(currentPath)) {
+        navigate('/user/feed');
+      }
     }
   }, [isLoggedIn, hasUsername, navigate]);
+
+  useEffect(() => {
+    console.log("Current Path:", window.location.pathname);
+  }, [location]);
 
 
   // const startSession = async () => {
@@ -167,7 +169,6 @@ function App() {
     // }
 
   };
-
 
   const setUser = async () => {
 
@@ -288,38 +289,79 @@ function App() {
     )
   }
 
-
-
   return (
     <>
-      {isLoggedIn ? (
-        hasUsername ? (
-          <Outlet
-            context={{
-              googleUserData, setGoogleUserData,
-              isLoggedIn, setIsLoggedIn,
-              username, setUsername,
-              registeredUsername, setRegisteredUsername,
-              hasUsername, setHasUsername,
-              accountType, setAccountType,
-              hasAccountType, setHasAccountType
-            }}
-          />
-        ) : (
-          <CreateAccount
-            username={username}
-            setUsername={setUsername}
-            setUser={setUser}
-            setHasUsername={setHasUsername}
-            setIsLoggedIn={setIsLoggedIn}
-            setGoogleUserData={setGoogleUserData}
-          />
-        )
-      ) : (
+      {/* {
+        (!location.pathname.startsWith('/user') && isLoggedIn) &&
+        <Header>
+          <GoogleLoginForm onSuccess={onSuccess} />
+        </Header>
+      } */}
+
+      {!isLoggedIn ? (
         <PreLogin onSuccess={onSuccess} />
+      ) : !hasUsername ? (
+        <CreateAccount
+          username={username}
+          setUsername={setUsername}
+          setUser={setUser}
+          setHasUsername={setHasUsername}
+          setIsLoggedIn={setIsLoggedIn}
+          setGoogleUserData={setGoogleUserData}
+        />
+      ) : (
+        <Outlet
+          context={{
+            googleUserData, setGoogleUserData,
+            isLoggedIn, setIsLoggedIn,
+            username, setUsername,
+            registeredUsername, setRegisteredUsername,
+            hasUsername, setHasUsername,
+            accountType, setAccountType,
+            hasAccountType, setHasAccountType
+          }}
+        />
       )}
     </>
-  )
+  );
+
+  // return (
+  //   <>
+  //     {
+  //       (!location.pathname.startsWith('/user') && isLoggedIn) &&
+  //       <Header>
+  //         <GoogleLoginForm onSuccess={onSuccess} />
+  //       </Header>
+  //     }
+
+  //     {isLoggedIn ? (
+  //       hasUsername ? (
+  //         <Outlet
+  //           context={{
+  //             googleUserData, setGoogleUserData,
+  //             isLoggedIn, setIsLoggedIn,
+  //             username, setUsername,
+  //             registeredUsername, setRegisteredUsername,
+  //             hasUsername, setHasUsername,
+  //             accountType, setAccountType,
+  //             hasAccountType, setHasAccountType
+  //           }}
+  //         />
+  //       ) : (
+  //         <CreateAccount
+  //           username={username}
+  //           setUsername={setUsername}
+  //           setUser={setUser}
+  //           setHasUsername={setHasUsername}
+  //           setIsLoggedIn={setIsLoggedIn}
+  //           setGoogleUserData={setGoogleUserData}
+  //         />
+  //       )
+  //     ) : (
+  //       <PreLogin onSuccess={onSuccess} />
+  //     )}
+  //   </>
+  // )
 }
 
 export default App

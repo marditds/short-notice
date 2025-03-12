@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Outlet } from 'react-router-dom';
 import { Container, Row, Col, Image } from 'react-bootstrap';
 import { screenUtils } from '../../../lib/utils/screenUtils';
 import { HelpCenterArrs } from '../../../components/PreLogin/HelpCenter/HelpCenterArrs.jsx';
@@ -46,7 +46,6 @@ const HelpCenter = () => {
                 }
             </Row>
 
-            {/* <Outlet /> */}
         </Container>
     )
 }
