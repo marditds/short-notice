@@ -97,18 +97,19 @@ function App() {
     if (isLoggedIn && hasUsername) {
       const currentPath = window.location.pathname;
 
-      const pathsToRedirect = ['/', '/sn-plus', '/contact', '/about', '/tos', '/help-center', '/user'];
-
-      // if (pathsToRedirect.includes(currentPath)) {
-      //   navigate('/user/feed');
-      // } else if (currentPath.startsWith('/user/') && currentPath.split('/').length >= 3) {
-      //   navigate(currentPath);
-      // } else {
-      //   navigate(currentPath);
-      // }
+      const pathsToRedirect = ['/', '/sn-plus', '/contact', '/about', '/user'];
       if (pathsToRedirect.includes(currentPath)) {
         navigate('/user/feed');
       }
+      if (currentPath === '/') {
+        navigate('/user/feed')
+      }
+      if (currentPath === '/tos') {
+        navigate('/user/legal')
+      }
+      // if (currentPath === '/help-center') {
+      //   navigate('/user/help-center')
+      // }
     }
   }, [isLoggedIn, hasUsername, navigate]);
 

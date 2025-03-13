@@ -64,10 +64,10 @@ export const Navigation = ({
             url: '/user/settings'
         },
         {
-            title: 'Community Guidelines',
+            title: 'Help Center',
             icon: 'bi bi-question-square',
             onClick: () => console.log('Support clicked'),
-            url: '/user/support'
+            url: '/user/help-center'
         },
         {
             title: 'Legal',

@@ -30,7 +30,7 @@ export const HelpCenterOffcanvas = ({ sectionTitleByPath, helpCenterTitlesPath, 
                             sectionTopicsByPath[helpCenterTitlesPath]?.map((title, idx) => {
                                 return (
                                     <ListGroup.Item as={'li'} className='help__center-titles-list-item' key={idx}>
-                                        <Link to={`help-center/${helpCenterTitlesPath}/${title.path}`} onClick={handleCloseOffcanvas}>
+                                        <Link to={`../help-center/${helpCenterTitlesPath}/${title.path}`} onClick={handleCloseOffcanvas}>
                                             {title.header}
                                         </Link>
                                     </ListGroup.Item>

@@ -94,18 +94,18 @@ const CreateAccount = ({ setUser }) => {
             return;
         }
 
-        if (username === 'profile') {
-            setErrorMessage('The username \'profile\' is not allowed. Please choose a different username.');
-            return;
-        }
-
         if (username === 'feed') {
             setErrorMessage('The username \'feed\' is not allowed. Please choose a different username.');
             return;
         }
 
+        if (username === 'profile') {
+            setErrorMessage('The username \'profile\' is not allowed. Please choose a different username.');
+            return;
+        }
+
         if (username === 'settings') {
-            setErrorMessage('The username \'feed\' is not allowed. Please choose a different username.');
+            setErrorMessage('The username \'settings\' is not allowed. Please choose a different username.');
             return;
         }
 

@@ -217,8 +217,10 @@
 
 .userhome__body--profile--tools--dropdown>div {
     padding: 0;
-    width: 212px !important;
+    width: 100px !important;
+    max-width: 100px !important;
     margin-top: 4px;
+    margin-right: 5px;
     color: var(--main-text-color) !important;
     background-color: rgba(198, 220, 208, 0.6);
     backdrop-filter: blur(8px) !important;

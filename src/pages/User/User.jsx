@@ -21,12 +21,9 @@ const User = () => {
 
     const { userId, removeSession } = useUserInfo(googleUserData);
 
-
     useEffect(() => {
         console.log('googleUserData:', googleUserData);
     }, [googleUserData])
-
-
 
     if (isLoading) {
         return <Loading />;
@@ -60,7 +57,6 @@ const User = () => {
                 {/* <Container className='userhome__body'
               ${location.pathname === '/user/feed' ? (isExtraLargeScreen ? 'w-75' : 'w-100') : 'w-100'} userhome__body`}
               > */}
-
 
                 <Outlet />
 
