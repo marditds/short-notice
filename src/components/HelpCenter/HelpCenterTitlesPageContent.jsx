@@ -4,7 +4,7 @@ import { HelpCenterBreadCrumb } from './HelpCenterBreadCrumb';
 import { ListGroup } from 'react-bootstrap';
 import { HelpCenterArrs } from './HelpCenterArrs';
 
-const HelpCenterTitlesPageContent = () => {
+const HelpCenterTitlesPageContent = ({ isLoggedIn }) => {
 
     let { helpCenterTitlesPath } = useParams();
 
@@ -17,9 +17,10 @@ const HelpCenterTitlesPageContent = () => {
                 helpCenterTitlesPath={helpCenterTitlesPath}
                 sectionTitleByPath={sectionTitleByPath}
                 topicTitleByPath={topicTitleByPath}
+                isLoggedIn={isLoggedIn}
             />
 
-            <h4 className='help__center-titles-title fw-bold'>
+            <h4 className='help__center-titles-title fw-bold mt-2'>
                 {sectionTitleByPath[helpCenterTitlesPath] || 'Help Center'}
             </h4>
             <ListGroup as='ul' className='help__center-titles-list'>
@@ -27,7 +28,8 @@ const HelpCenterTitlesPageContent = () => {
                     sectionTopicsByPath[helpCenterTitlesPath].map((title, idx) => {
                         return (
                             <ListGroup.Item as={'li'} className='help__center-titles-list-item' key={idx}>
-                                <Link to={`../help-center/${helpCenterTitlesPath}/${title.path}`}>
+                                <Link to={`./${title.path}`}>
+                                    {/* <Link to={`../help-center/${helpCenterTitlesPath}/${title.path}`}> */}
                                     {/* <Link to={`${title.path}`}> */}
                                     {title.header}
                                 </Link>

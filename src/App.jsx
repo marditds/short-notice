@@ -97,19 +97,17 @@ function App() {
     if (isLoggedIn && hasUsername) {
       const currentPath = window.location.pathname;
 
-      const pathsToRedirect = ['/', '/sn-plus', '/contact', '/about', '/user'];
+      const pathsToRedirect = ['/', '/about', '/sn-plus', '/attributions', '/community-guidelines', '/contact', '/user'];
+
       if (pathsToRedirect.includes(currentPath)) {
         navigate('/user/feed');
       }
-      if (currentPath === '/') {
-        navigate('/user/feed')
-      }
-      if (currentPath === '/tos') {
+      if ((currentPath === '/tos' || currentPath === '/privacy' || currentPath === '/legal')) {
         navigate('/user/legal')
       }
-      // if (currentPath === '/help-center') {
-      //   navigate('/user/help-center')
-      // }
+      if (currentPath === '/help-center') {
+        navigate('/user/help-center')
+      }
     }
   }, [isLoggedIn, hasUsername, navigate]);
 
@@ -292,13 +290,6 @@ function App() {
 
   return (
     <>
-      {/* {
-        (!location.pathname.startsWith('/user') && isLoggedIn) &&
-        <Header>
-          <GoogleLoginForm onSuccess={onSuccess} />
-        </Header>
-      } */}
-
       {!isLoggedIn ? (
         <PreLogin onSuccess={onSuccess} />
       ) : !hasUsername ? (

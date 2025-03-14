@@ -1,11 +1,10 @@
-import { useRouteError } from "react-router-dom";
+import { Link, useRouteError } from "react-router-dom";
 import { Container, Image } from "react-bootstrap";
 import sn_long from '../assets/sn_long.png';
 
 export default function ErrorPage() {
     const error = useRouteError();
-    console.error(error);
-
+    // console.error(error);
 
     return (
         <>
@@ -21,6 +20,7 @@ export default function ErrorPage() {
                     <p>
                         Sorry. It seems like things broke along the way. 😫
                     </p>
+                    <Link to='/'>Back to ShortNotice</Link>
                 </div>
             </Container>
         </>

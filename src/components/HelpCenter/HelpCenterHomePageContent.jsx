@@ -4,6 +4,7 @@ import { Row, Col, Image } from 'react-bootstrap';
 import sn_small from '../../assets/sn_long.png';
 import { screenUtils } from '../../lib/utils/screenUtils.js';
 import { HelpCenterArrs } from './HelpCenterArrs.jsx';
+import './HelpCenter.css';
 
 const HelpCenterHomePageContent = () => {
 

@@ -1,12 +1,16 @@
 import React from 'react';
 import { Container } from 'react-bootstrap';
 import HelpCenterHomePageContent from '../../../components/HelpCenter/HelpCenterHomePageContent';
+import { Outlet, useLocation } from 'react-router-dom';
 
 const HelpCenter = () => {
 
+    const location = useLocation();
+
     return (
         <Container>
-            <HelpCenterHomePageContent />
+            {location.pathname === '/help-center' && <HelpCenterHomePageContent />}
+            <Outlet />
         </Container>
     )
 }

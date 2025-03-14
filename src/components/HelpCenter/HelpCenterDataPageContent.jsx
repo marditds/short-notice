@@ -5,7 +5,7 @@ import { HelpCenterOffcanvas } from './HelpCenterOffcanvas';
 import { HelpCenterBreadCrumb } from './HelpCenterBreadCrumb';
 import { HelpCenterArrs } from './HelpCenterArrs';
 
-const HelpCenterDataPageContent = () => {
+const HelpCenterDataPageContent = ({ isLoggedIn }) => {
 
     let { helpCenterTitlesPath, helpCenterDataPath } = useParams();
 
@@ -26,6 +26,7 @@ const HelpCenterDataPageContent = () => {
                 helpCenterTitlesPath={helpCenterTitlesPath}
                 sectionTitleByPath={sectionTitleByPath}
                 topicTitleByPath={topicTitleByPath}
+                isLoggedIn={isLoggedIn}
             />
 
             <div className='d-flex flex-column flex-sm-row'>
@@ -41,7 +42,8 @@ const HelpCenterDataPageContent = () => {
                         sectionTopicsByPath[helpCenterTitlesPath].map((title, idx) => {
                             return (
                                 <ListGroup.Item as={'li'} className='help__center-titles-list-item' key={idx}>
-                                    <Link to={`../help-center/${helpCenterTitlesPath}/${title.path}`}>
+                                    <Link to={`../${title.path}`}>
+                                        {/* <Link to={`../help-center/${helpCenterTitlesPath}/${title.path}`}> */}
                                         {title.header}
                                     </Link>
                                 </ListGroup.Item>
@@ -81,11 +83,17 @@ const HelpCenterDataPageContent = () => {
                         <Col>
                             {previousTitle && (
                                 <Button as={Link}
-                                    to={`../help-center/${helpCenterTitlesPath}/${previousTitle}`}
+                                    to={`../${previousTitle}`}
                                     className='help-center__title-switch-btn
                                        d-flex flex-column justify-content-center 
                                         ps-2 py-3 flex-grow-1 h-100'
                                 >
+                                    {/* <Button as={Link}
+                                    to={`../help-center/${helpCenterTitlesPath}/${previousTitle}`}
+                                    className='help-center__title-switch-btn
+                                       d-flex flex-column justify-content-center 
+                                        ps-2 py-3 flex-grow-1 h-100'
+                                > */}
                                     <div className='d-flex'>
                                         <i className='bi bi-arrow-left me-1 me-md-2 d-flex align-items-center' />
                                         <span className='text-start'>
@@ -98,11 +106,17 @@ const HelpCenterDataPageContent = () => {
                         <Col className='mt-2 mt-md-0'>
                             {nextTitle && (
                                 <Button as={Link}
-                                    to={`../help-center/${helpCenterTitlesPath}/${nextTitle}`}
+                                    to={`../${nextTitle}`}
                                     className='help-center__title-switch-btn 
                                     d-flex flex-column justify-content-center  
                                     pe-2 py-3 flex-grow-1 h-100'
                                 >
+                                    {/* <Button as={Link}
+                                    to={`../help-center/${helpCenterTitlesPath}/${nextTitle}`}
+                                    className='help-center__title-switch-btn 
+                                    d-flex flex-column justify-content-center  
+                                    pe-2 py-3 flex-grow-1 h-100'
+                                > */}
                                     <div className='d-flex justify-content-end '>
                                         <span className='text-end'>
                                             {topicTitleByPath[helpCenterTitlesPath][nextTitle]}

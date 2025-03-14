@@ -212,7 +212,8 @@ export const HelpCenterArrs = () => {
                 'Click or tap the dropdown menu and select the duration for which you want your notice to remain live.',
                 'Click or tap "Notify."',
             ],
-            outro: <span>By following these steps, you will successfully create a notice that will appear in the personal feeds of your followers. Your notice will also be visible in the general feed of users who share interests matching your notice's tags. To learn more about setting your interests, <Link to='../help-center/manage-account/set-update-interests' className='help-center__data-link text-decoration-none'>click here</Link>.</span>
+            outro: <span>By following these steps, you will successfully create a notice that will appear in the personal feeds of your followers. Your notice will also be visible in the general feed of users who share interests matching your notice's tags.
+            </span>
         },
         'edit-notice': {
             intro: 'To edit a notice, follow these steps:',

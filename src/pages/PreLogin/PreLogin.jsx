@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { Outlet, useLocation, useParams } from 'react-router-dom';
 import Header from '../../components/PreLogin/Header/Header';
 import Footer from '../../components/PreLogin/Footer/Footer';
 import { GoogleLoginForm } from '../../components/LoginForm/Google/GoogleLoginForm';
@@ -36,7 +36,7 @@ const PreLogin = ({ onSuccess }) => {
             {
                 location.pathname === '/' && <Home onSuccess={onSuccess} />
             }
-            {
+            {/*          {
                 location.pathname === '/about' && <About />
             }
             {
@@ -65,8 +65,8 @@ const PreLogin = ({ onSuccess }) => {
             }
             {
                 location.pathname === '/contact' && <Contact />
-            }
-
+            } */}
+            <Outlet />
             <Footer />
         </div>
     )
