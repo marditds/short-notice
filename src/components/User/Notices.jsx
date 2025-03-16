@@ -627,7 +627,7 @@ export const Notices = ({
                         <Accordion.Body className='notice__reaction'>
                             {isOtherUserBlocked || notice.user_id === user_id ? null :
                                 <Row className='m-auto'>
-                                    <Col className='px-2 px-sm-4 d-flex flex-column justify-content-end'>
+                                    <Col className='px-0 px-sm-3 px-md-4 d-flex flex-column justify-content-end'>
                                         <ComposeReaction
                                             reactionText={reactionText}
                                             reactionGif={reactionGif}
@@ -641,21 +641,20 @@ export const Notices = ({
                                     </Col>
                                 </Row>
                             }
-                            <div className='d-flex justify-content-center'>
-                                <Reactions
-                                    notice={notice}
-                                    defaultAvatar={defaultAvatar}
-                                    loadedReactions={loadedReactions}
-                                    isLoadingMoreReactions={isLoadingMoreReactions}
-                                    loadingStates={loadingStates}
-                                    reactionAvatarMap={reactionAvatarMap}
-                                    reactionUsernameMap={reactionUsernameMap}
-                                    showLoadMoreBtn={showLoadMoreBtn}
-                                    user_id={user_id}
-                                    handleLoadMoreReactions={handleLoadMoreReactions}
-                                    handleReportReaction={handleReportReaction}
-                                />
-                            </div>
+
+                            <Reactions
+                                notice={notice}
+                                defaultAvatar={defaultAvatar}
+                                loadedReactions={loadedReactions}
+                                isLoadingMoreReactions={isLoadingMoreReactions}
+                                loadingStates={loadingStates}
+                                reactionAvatarMap={reactionAvatarMap}
+                                reactionUsernameMap={reactionUsernameMap}
+                                showLoadMoreBtn={showLoadMoreBtn}
+                                user_id={user_id}
+                                handleLoadMoreReactions={handleLoadMoreReactions}
+                                handleReportReaction={handleReportReaction}
+                            />
                         </Accordion.Body>
                     </Accordion.Item>
                 ))

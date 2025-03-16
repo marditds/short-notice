@@ -165,7 +165,7 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
                     {/* Template checkbox */}
                     <Form.Check
                         inline
-                        id="use-template-checkbox"  // Unique ID
+                        id="use-template-checkbox"
                         label="Use template"
                         type="checkbox"
                         checked={isTemplateChecked}

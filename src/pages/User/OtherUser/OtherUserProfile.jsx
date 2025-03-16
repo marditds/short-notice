@@ -9,7 +9,6 @@ import { getAvatarUrl as avatarUtil } from '../../../lib/utils/avatarUtils.js';
 import useUserAvatar from '../../../lib/hooks/useUserAvatar.js';
 import useNotices from '../../../lib/hooks/useNotices.js';
 import { screenUtils } from '../../../lib/utils/screenUtils.js';
-import { useUnblockedNotices } from '../../../lib/utils/blockFilter.js';
 import { Passcode } from '../../../components/User/Passcode.jsx';
 import { Loading } from '../../../components/Loading/Loading.jsx';
 import { EndAsterisks } from '../../../components/User/EndAsterisks.jsx';
@@ -47,8 +46,6 @@ const OtherUserProfile = () => {
         fetchUserLikes,
         fetchUserSaves
     } = useNotices(googleUserData);
-
-    const { filterBlocksFromLikesSaves } = useUnblockedNotices();
 
     const {
         isFollowingUserLoading,
@@ -548,7 +545,7 @@ const OtherUserProfile = () => {
     // Fetch followers count
     useEffect(() => {
         getFollowingTheUserCount(currUserId);
-    }, [currUserId])
+    }, [currUserId, isFollowing])
 
     // Fetch following count
     useEffect(() => {

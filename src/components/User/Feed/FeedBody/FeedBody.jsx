@@ -3,8 +3,6 @@ import { Row, Col } from 'react-bootstrap';
 import { FeedToggle } from './FeedToggle';
 import '../Feed.css';
 
-
-
 export const FeedBody = ({ isFeedToggled, handleFeedToggle, handleRefresh, isAnyTagSelected, sideContent, children }) => {
 
     return (
@@ -30,7 +28,6 @@ export const FeedBody = ({ isFeedToggled, handleFeedToggle, handleRefresh, isAny
                     {sideContent}
                 </Col>
 
-                {/* Feed Notices */}
                 <Col xl={9} xs={12} className={`ms-auto`}>
                     {children}
                 </Col>

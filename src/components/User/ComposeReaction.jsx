@@ -72,10 +72,18 @@ export const ComposeReaction = ({ reactionText, onReactionTextChange, reactionGi
                     }
 
                     {/* handleGifBtn */}
-                    <div className='my-2'>
+                    <div className='my-2 d-flex'>
                         <Button className='notice__react-gif-btn py-1 px-2'
                             onClick={handleGifBtn}>
                             <i className='bi bi-filetype-gif' />
+                        </Button>
+
+                        <Button
+                            onClick={handleReactSubmission}
+                            className='notice__reaction-submit-btn ms-auto'
+                            disabled={reactionText === '' || reactionCharCount > reactionCharLimit ? true : false}
+                        >
+                            {isSendingReactionLoading ? <Loading /> : 'React'}
                         </Button>
                     </div>
 
@@ -91,13 +99,7 @@ export const ComposeReaction = ({ reactionText, onReactionTextChange, reactionGi
                     }
                 </Form.Group>
             </Form>
-            <Button
-                onClick={handleReactSubmission}
-                className='notice__reaction-submit-btn mt-2 ms-auto'
-                disabled={reactionText === '' || reactionCharCount > reactionCharLimit ? true : false}
-            >
-                {isSendingReactionLoading ? <Loading /> : 'React'}
-            </Button>
+
         </>
     )
 }

@@ -1328,6 +1328,10 @@
         white-space: normal; 
     } */
 
+    /* .notice__reaction {
+        padding-inline: 16px;
+    } */
+
     .notice__reaction-info-col,
     .notice__interaction-col {
         padding-right: 0px;

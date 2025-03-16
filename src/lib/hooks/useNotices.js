@@ -476,7 +476,7 @@ const useNotices = (googleUserData) => {
 
             const accountsFollowedByUser = await getPersonalFeedAccounts(user_id);
 
-            const idsForAccountsFollowedByUser = accountsFollowedByUser.map((user) => user.$id);
+            const idsForAccountsFollowedByUser = accountsFollowedByUser?.map((user) => user.$id);
 
             const notices = await getNoticesByUser(idsForAccountsFollowedByUser, limit, lastId);
 

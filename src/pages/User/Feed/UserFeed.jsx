@@ -51,7 +51,7 @@ const UserFeed = () => {
         addNotice,
     } = useNotices(googleUserData);
 
-    const { fetchUsersData, getUserAccountByUserId } = useUserInfo(googleUserData);
+    const { isFetchingUsersData, fetchUsersData, getUserAccountByUserId } = useUserInfo(googleUserData);
 
     const { isLargeScreen } = screenUtils();
 
@@ -61,7 +61,7 @@ const UserFeed = () => {
     const [isLoadingGeneralFeedNotices, setIsLoadingGeneralFeedNotices] = useState(false);
 
     const [personalFeedNotices, setPersonalFeedNotices] = useState([]);
-    const [isLoadingPersonalFeedNotices, setIsLoadingPersonalFeedNotices] = useState(true);
+    const [isLoadingPersonalFeedNotices, setIsLoadingPersonalFeedNotices] = useState(false);
 
     const [isFeedToggled, setIsFeedToggled] = useState(false);
 
@@ -109,19 +109,14 @@ const UserFeed = () => {
     useEffect(() => {
         const fetchInitialGeneralFeed = async () => {
 
-            console.log('Selected Tags in fetchInitialGeneralFeed', selectedTags);
-
             try {
                 setIsLoadingGeneralFeedNotices(true)
                 setIsLoadingMoreInitial(true);
                 setIsLoadingMore(true);
 
-                console.log('Limit:', limit);
-                console.log('Last ID:', lastId);
+                // const abc = Object.values(selectedTags).some(tagKey => tagKey === true);
 
-                const abc = Object.values(selectedTags).some(tagKey => tagKey === true);
-
-                console.log('RRRRRRRRRRRRRR:', abc);
+                // console.log('RRRRRRRRRRRRRR:', abc);
 
                 const feedNotices = await getFeedNotices(selectedTags, limit, null);
 
@@ -190,15 +185,19 @@ const UserFeed = () => {
     useEffect(() => {
         const fetchInitialPersonalFeed = async () => {
             try {
-                setIsLoadingMorePersonalInitial(true);
+                console.log('USER ID IN PERSONAL FEED:', user_id);
+                console.log('STARTING INITIAL PERSONAL FEED.');
+
                 setIsLoadingPersonalFeedNotices(true);
-                // setIsLoadingMorePersonal(true);
+                setIsLoadingMorePersonalInitial(true);
 
                 const allNotices = await getPersonalFeedNotices(limitPersonal, null);
 
                 console.log('allNotices', allNotices);
 
-                let usrNtcs = allNotices.flat();
+                let usrNtcs = allNotices?.flat();
+
+                console.log('AFTER FLATATION:', usrNtcs);
 
                 await fetchUsersData(usrNtcs, setPersonalFeedNotices, avatarUtil);
 
@@ -212,11 +211,13 @@ const UserFeed = () => {
                 console.error('Error fetching personal feed', error);
             } finally {
                 setIsLoadingPersonalFeedNotices(false);
-                // setIsLoadingMorePersonal(false);
                 setIsLoadingMorePersonalInitial(false);
+                console.log('ENDING INITIAL PERSONAL FEED.');
             }
         };
-        fetchInitialPersonalFeed();
+        if (personalFeedNotices.length === 0) {
+            fetchInitialPersonalFeed();
+        }
     }, [user_id]);
 
     // Fetch feed (personal)-(subsequent)
@@ -283,9 +284,9 @@ const UserFeed = () => {
 
     // Render loading state while data is being fetched
     // if (
-    // (isLoadingPersonalFeedNotices)
-    // &&
-    // (personalFeedNotices.length === 0 || generalFeedNotices.length === 0)
+    //     (isLoadingPersonalFeedNotices || isLoadingMorePersonalInitial)
+    //             &&
+    //          (personalFeedNotices.length === 0 || generalFeedNotices.length === 0)
     // ) {
     //     return <div className='pt-5 h-100 user-feed__loading-div'>
     //         <div>
@@ -297,8 +298,11 @@ const UserFeed = () => {
     return (
         <div style={{ marginTop: '80px' }} className='w-100'>
             <FeedBody
+                personalFeedNotices={personalFeedNotices}
                 isAnyTagSelected={isAnyTagSelected}
                 isFeedToggled={isFeedToggled}
+                isLoadingPersonalFeedNotices={isLoadingPersonalFeedNotices}
+                isLoadingMorePersonalInitial={isLoadingMorePersonalInitial}
                 handleFeedToggle={handleFeedToggle}
                 handleRefresh={handleRefresh}
                 sideContent={<> {!isInterestsLoading
@@ -363,7 +367,7 @@ const UserFeed = () => {
 
                 {/* Loading component */}
                 {
-                    (isLoadingPersonalFeedNotices || isLoadingGeneralFeedNotices) &&
+                    (isLoadingPersonalFeedNotices || isLoadingGeneralFeedNotices || isFetchingUsersData) &&
                     <div className='h-100 user-feed__loading-div my-5'>
                         <div className='my-5'>
                             <Loading />
@@ -400,9 +404,9 @@ const UserFeed = () => {
                             disabled={(isLoadingMore || isLoadingMorePersonal) ? true : false}
                             className={`my-4 notices__load-more-notices-btn ${(isLoadingMoreInitial || isLoadingMorePersonalInitial) ? 'd-none' : 'd-block'}`}
                         >
-                            {isLoadingMore || isLoadingMorePersonal ?
+                            {isLoadingPersonalFeedNotices || isLoadingMore || isLoadingMorePersonal ?
                                 <><Loading size={16} /> Loading...</>
-                                : 'Load More'}
+                                : 'Load More HAKOP'}
                         </Button>
                         :
                         <div className={`${isAnyTagSelected && 'my-4'}`}>

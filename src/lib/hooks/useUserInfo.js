@@ -13,6 +13,8 @@ const useUserInfo = (data) => {
 
     const [userWebsite, setUserWebsite] = useState(null);
 
+    const [isFetchingUsersData, setIsFetchingUsersData] = useState(false);
+
     const [following, setFollowing] = useState({});
     const [followersCount, setFollowersCount] = useState(null);
     const [followingCount, setFollowingCount] = useState(null);
@@ -202,7 +204,9 @@ const useUserInfo = (data) => {
 
     const fetchUsersData = async (notices, setNotices, getAvatarUrl) => {
         try {
-            const ntcIds = notices.map((notice) => notice.user_id);
+            setIsFetchingUsersData(true);
+
+            const ntcIds = notices?.map((notice) => notice.user_id);
             console.log('NTCIDS???', ntcIds);
 
             const allUsersData = await getUserByIdQuery(ntcIds);
@@ -228,6 +232,8 @@ const useUserInfo = (data) => {
             }
         } catch (error) {
             console.error('Error getting users data:', error);
+        } finally {
+            setIsFetchingUsersData(false);
         }
     };
 
@@ -604,6 +610,7 @@ const useUserInfo = (data) => {
         userWebsite,
         isGetFollwedByUserCountLoading,
         isGetFollowingTheUserCountLoading,
+        isFetchingUsersData,
         // followersAccounts,
         // followingAccounts,
         setUserWebsite,
