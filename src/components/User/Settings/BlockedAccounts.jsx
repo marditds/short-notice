@@ -42,7 +42,7 @@ export const BlockedAccounts = () => {
 
             let blockedIdArr = [];
 
-            for (let i = 0; i < blckdLst.length; i++) {
+            for (let i = 0; i < blckdLst?.length; i++) {
                 blockedIdArr.push(blckdLst[i].blocked_id);
             }
 
@@ -50,7 +50,7 @@ export const BlockedAccounts = () => {
 
             let blockedUsers = [];
 
-            for (let i = 0; i < blockedIdArr.length; i++) {
+            for (let i = 0; i < blockedIdArr?.length; i++) {
                 const usr = await getUserAccountByUserId(blockedIdArr[i]);
                 console.log('usr', usr);
                 blockedUsers.push(usr);
@@ -135,7 +135,9 @@ export const BlockedAccounts = () => {
         <Row xs={1} sm={2}>
             <Col>
                 <h4>Blocked Accounts:</h4>
-                <p className={blockedUsers.length < 1 && 'mb-0'}>To unblock the account, click on the 'X' button next to the avatar.</p>
+                <p className={blockedUsers.length < 1 ? 'mb-0' : ''}>
+                    To unblock the account, click on the 'X' button next to the avatar.
+                </p>
             </Col>
             <Col >
                 <div className='d-flex justify-content-start flex-wrap gap-2'>
@@ -146,7 +148,7 @@ export const BlockedAccounts = () => {
                                 return (
                                     <div key={user.$id} className='d-flex justify-content-start  align-items-start'>
                                         <div className='d-flex w-100 align-items-center settings__blocked-accounts-profiles'>
-                                            {user.username}
+                                            {user.username.length <= 10 ? user.username : user.username.slice(0, 10) + '...'}
                                             < img src={avatarUrl(user.avatar) || defaultAvatar}
                                                 alt="profile_pic"
                                                 className='settings__blocked-accounts-profile-avatar'

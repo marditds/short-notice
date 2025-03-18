@@ -1037,7 +1037,11 @@
     /* background-color: var(--main-accent-color-hover); */
 }
 
-
+.alert {
+    border-radius: var(--main-rounded-corner);
+    padding-block: 8px;
+    border-color: rgb(250, 6, 6);
+}
 
 
 @media (max-width: 767px) {

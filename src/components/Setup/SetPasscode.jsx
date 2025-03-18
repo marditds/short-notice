@@ -1,7 +1,6 @@
 import React from 'react';
 import { Form } from 'react-bootstrap';
 
-
 export const SetPasscode = ({ accountType, passcode, onPasscodeChange }) => {
     return (
         <>
@@ -18,7 +17,7 @@ export const SetPasscode = ({ accountType, passcode, onPasscodeChange }) => {
                     className='setPasscode__passcode-field'
                 />
                 <Form.Text className='text-muted'>
-                    Your organization's passcode must be 6 digits.
+                    Your passcode cannot be longer than 25 digits.
                 </Form.Text>
             </Form.Group>
             {/* } */}

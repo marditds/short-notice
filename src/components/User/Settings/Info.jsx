@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useUserContext } from '../../../lib/context/UserContext';
-import { Row, Col, Form, Button } from 'react-bootstrap';
+import { Row, Col, Form, Button, Alert } from 'react-bootstrap';
 import useUserInfo from '../../../lib/hooks/useUserInfo';
+import { forbiddenUsrnms, usrnmMaxLngth } from '../../../lib/utils/usernameUtils';
 import { Loading } from '../../Loading/Loading';
 
 export const Info = ({ accountType }) => {
@@ -16,9 +17,13 @@ export const Info = ({ accountType }) => {
     const [localUsername, setLocalUsername] = useState(username);
     const [isUpdating, setIsUpdating] = useState(false);
 
+    const [errorMsg, setErrorMsg] = useState('');
+
 
     const handleUsernameChange = (e) => {
-        setLocalUsername(e.target.value);
+        const usrnm = e.target.value.replace(/\s/g, '');
+        setLocalUsername(usrnm);
+        setErrorMsg('');
     };
 
     const handleSubmit = async (e) => {
@@ -30,7 +35,18 @@ export const Info = ({ accountType }) => {
         e.preventDefault();
 
         try {
+            if (forbiddenUsrnms.includes(localUsername)) {
+                setErrorMsg(`The username ${localUsername} is not allowed. Please choose a different username.`);
+                return;
+            }
+
+            if (localUsername.length > usrnmMaxLngth) {
+                setErrorMsg(`The username cannot be longer than 16 characters. Please choose a shorter username.`);
+                return;
+            }
+
             if (localUsername.trim()) {
+                setErrorMsg('');
                 await handleUpdateUser(localUsername);
                 setUsername(localUsername);
                 setRegisteredUsername(localUsername)
@@ -42,8 +58,6 @@ export const Info = ({ accountType }) => {
         }
 
     };
-
-    // let usrnm = accountType === 'personal' ? 'username' : 'organization\'s name';
 
     let usrnm = (accountType === 'personal' && 'Username') || (accountType === 'business' && 'Business Name') || (accountType === 'organization' && 'Organization\'s Name')
 
@@ -76,6 +90,7 @@ export const Info = ({ accountType }) => {
                         <Form.Text className='settings__username-unique'>
                             Your {usrnm} must be unique.
                         </Form.Text>
+                        {errorMsg && <Alert variant="danger" className='alert'>{errorMsg}</Alert>}
                     </Form.Group>
                     <Col className='settings__update-username-btn-col'>
                         <Button

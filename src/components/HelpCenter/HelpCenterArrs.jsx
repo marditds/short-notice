@@ -206,7 +206,7 @@ export const HelpCenterArrs = () => {
                 'Enter your text.',
                 'Click or tap the URL field below the text field to add a URL (optional).',
                 'Click or tap the checkbox for "Use template" to enable the templates\' menu (optional).',
-                <span>Click or tap the <i class='bi bi-stars' /> button to auto-generate a template.</span>,
+                <span>Click or tap the <i className='bi bi-stars' /> button to auto-generate a template.</span>,
                 <span>Click or tap the <i className='bi bi-filetype-gif' /> button to add a GIF (optional).</span>,
                 <span>Click or tap one of the accordion buttons to add tags.{' '}<small>At leat one tag is require per notice.</small></span>,
                 'Click or tap the dropdown menu and select the duration for which you want your notice to remain live.',

@@ -5,6 +5,7 @@ import { Row, Col, Accordion, Image } from 'react-bootstrap';
 import defaultAvatar from '../../assets/default.png';
 import { Reactions } from './Reactions';
 import { screenUtils } from '../../lib/utils/screenUtils';
+import { truncteUsername } from '../../lib/utils/usernameUtils';
 import { ComposeReaction } from './ComposeReaction';
 import { ReportModal } from './Modals';
 
@@ -522,7 +523,11 @@ export const Notices = ({
                                             >
                                                 <Link to={`../${notice.username}`}
                                                     className='text-decoration-none'>
-                                                    <strong>{notice?.username}</strong>
+                                                    <strong>
+                                                        {
+                                                            truncteUsername(notice?.username)
+                                                        }
+                                                    </strong>
                                                 </Link>
                                             </p>
 

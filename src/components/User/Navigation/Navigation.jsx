@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Container, Nav, Navbar, NavDropdown, Image, Button } from 'react-bootstrap';
 // import { PiDotsThreeOutlineVertical } from "react-icons/pi";
 import { UserSearch } from './UserSearch';
 import { screenUtils } from '../../../lib/utils/screenUtils';
 import snLogo from '../../../assets/sn_long.png'
-import { ComposeNoticeModal, InterestsModal } from '../Modals';
+import { ComposeNoticeModal } from '../Modals';
 import { ComposeNotice } from '../ComposeNotice';
 import useNotices from '../../../lib/hooks/useNotices';
-import { InterestsTags } from '../Settings/InterestsTags';
-import { Loading } from '../../Loading/Loading';
+// import { InterestsTags } from '../Settings/InterestsTags';
+// import { Loading } from '../../Loading/Loading';
 
 export const Navigation = ({
     googleUserData,

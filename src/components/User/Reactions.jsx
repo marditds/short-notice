@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Row, Col, Button, Image } from 'react-bootstrap';
 import { getAvatarUrl as avatarUrl } from '../../lib/utils/avatarUtils';
 import { screenUtils } from '../../lib/utils/screenUtils';
+import { truncteUsername } from '../../lib/utils/usernameUtils';
 import { Loading } from '../Loading/Loading';
 // import { AiOutlineExclamationCircle } from "react-icons/ai";
 import { formatDateToLocal } from '../../lib/utils/dateUtils';
@@ -65,8 +66,12 @@ export const Reactions = ({
                                         />
                                     </Link>
                                     <Link to={`/user/${reactionUsernameMap[notice.$id]?.[reaction.sender_id]}`}
-                                        className='text-decoration-none notice__reaction-username'><strong className='ms-auto me-0'>
-                                            {reactionUsernameMap[notice.$id]?.[reaction.sender_id] || 'Unknown user'}
+                                        className='text-decoration-none notice__reaction-username'>
+                                        <strong className='ms-auto me-0'>
+                                            {
+                                                truncteUsername(reactionUsernameMap[notice.$id]?.[reaction.sender_id])
+                                            }
+                                            {/* {reactionUsernameMap[notice.$id]?.[reaction.sender_id] || 'Unknown user'} */}
                                         </strong>
                                     </Link>
                                 </div>

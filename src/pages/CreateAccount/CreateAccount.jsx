@@ -11,6 +11,7 @@ import ReCAPTCHA from 'react-google-recaptcha';
 import { CreateUsername } from '../../components/Setup/CreateUsername';
 import { SetPasscode } from '../../components/Setup/SetPasscode';
 import useUserInfo from '../../lib/hooks/useUserInfo';
+import { forbiddenUsrnms, usrnmMaxLngth } from '../../lib/utils/usernameUtils';
 import { Loading } from '../../components/Loading/Loading';
 import TOSList from '../../components/Legal/TOSList';
 import CommunityGuidelinesList from '../../components/Support/CommunityGuidelinesList';
@@ -61,13 +62,17 @@ const CreateAccount = ({ setUser }) => {
     const onPasscodeChange = (e) => {
         const input = e.target.value;
 
-        if (input.length === 6) {
+        console.log('input', input);
+
+        if (/^\d{0,25}$/.test(input)) {
             setPasscode(input);
-            setErrorMessage('');
-        } else {
-            setErrorMessage('Passcode must be exactly 6 characters long.');
         }
-    }
+    };
+
+    useEffect(() => {
+        setPasscode('');
+        console.log('ACCOUNT TYPE:', accountType);
+    }, [accountType])
 
     const handleTOSCheck = () => {
         setTosCheck(preVal => !preVal)
@@ -94,23 +99,13 @@ const CreateAccount = ({ setUser }) => {
             return;
         }
 
-        if (username === 'feed') {
-            setErrorMessage('The username \'feed\' is not allowed. Please choose a different username.');
+        if (forbiddenUsrnms.includes(username)) {
+            setErrorMsg(`The username ${username} is not allowed. Please choose a different username.`);
             return;
         }
 
-        if (username === 'profile') {
-            setErrorMessage('The username \'profile\' is not allowed. Please choose a different username.');
-            return;
-        }
-
-        if (username === 'settings') {
-            setErrorMessage('The username \'settings\' is not allowed. Please choose a different username.');
-            return;
-        }
-
-        if (username === 'legal') {
-            setErrorMessage('The username \'legal\' is not allowed. Please choose a different username.');
+        if (username.length > usrnmMaxLngth) {
+            setErrorMessage(`The username cannot be longer than 16 characters. Please choose a shorter username.`);
             return;
         }
 
@@ -216,7 +211,7 @@ const CreateAccount = ({ setUser }) => {
                         <Col>
                             <CreateUsername accountType={accountType} username={username} onUsernameChange={onUsernameChange} />
 
-                            {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
+                            {errorMessage && <Alert variant="danger" className='alert'>{errorMessage}</Alert>}
                         </Col>
                         <Col>
                             <SetPasscode accountType={accountType} passcode={passcode} onPasscodeChange={onPasscodeChange} />
@@ -284,7 +279,7 @@ const CreateAccount = ({ setUser }) => {
                     <div className='mb-5 mb-sm-0 d-flex justify-content-between justify-content-sm-start'>
                         <Button
                             onClick={handleDoneClick}
-                            disabled={!isCaptchaVerified || !username || username.trim() === '' || username.includes(' ') || username === 'profile' || (accountType === 'organization' && passcode.length !== 6) || tosCheck !== true || privacyPolicyCheck !== true}
+                            disabled={!isCaptchaVerified || !username || username.trim() === '' || username.includes(' ') || username === 'profile' || (accountType === 'organization' && passcode.length === 0) || tosCheck !== true || privacyPolicyCheck !== true || !accountType}
                             className='createAccount__btn'
                         >
                             Done
