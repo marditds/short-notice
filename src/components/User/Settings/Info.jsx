@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useUserContext } from '../../../lib/context/UserContext';
 import { Row, Col, Form, Button, Alert } from 'react-bootstrap';
 import useUserInfo from '../../../lib/hooks/useUserInfo';
@@ -65,7 +65,7 @@ export const Info = ({ accountType }) => {
         <Row xs={1} sm={2}>
             <Col>
                 <h4 className=''>Update {usrnm}:</h4>
-                <p className='mb-0'>Update your {usrnm.toLocaleLowerCase()}. The maximum number of characters for your {usrnm.toLowerCase()} is 16.</p>
+                <p className='mb-0'>Update your {usrnm?.toLocaleLowerCase()}. The maximum number of characters for your {usrnm?.toLowerCase()} is 16.</p>
             </Col>
             <Col className='mt-3 mt-sm-0 d-flex justify-content-end align-items-center settings__username-col'>
                 <Form

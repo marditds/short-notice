@@ -20,6 +20,9 @@ import PrivacyList from '../../components/Legal/PrivacyList';
 
 const CreateAccount = ({ setUser }) => {
 
+    console.log('Type of setUser:', typeof setUser);
+
+
     const navigate = useNavigate();
 
     const {
@@ -117,6 +120,8 @@ const CreateAccount = ({ setUser }) => {
             }
 
             console.log('Going for setUser');
+
+            // console.log('About to call setUser, type:', typeof setUser);
 
             await setUser();
 

@@ -1,9 +1,11 @@
 import React, { StrictMode, useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import {
+  // createHashRouter,
   createBrowserRouter,
   RouterProvider,
-  redirect
+  redirect,
+  Outlet
 } from 'react-router-dom';
 import ErrorPage from './routes/error-page.jsx';
 import { GoogleOAuthProvider } from '@react-oauth/google';
@@ -36,43 +38,64 @@ import Contact from './pages/PreLogin/Contact/Contact.jsx';
 import HelpCenterData from './pages/PreLogin/HelpCenter/HelpCenterInfo/HelpCenterData.jsx';
 import UserHelpCenterTitles from './pages/User/HelpCenter/UserHelpCenterTitles.jsx';
 import UserHelpCenterData from './pages/User/HelpCenter/UserHelpCenterData.jsx';
+import Header from './components/PreLogin/Header/Header.jsx';
+import Footer from './components/PreLogin/Footer/Footer.jsx';
+import { GoogleLoginForm } from './components/LoginForm/Google/GoogleLoginForm.jsx';
+import useGoogleLogin from './lib/hooks/useGoogleLogin.js';
+
+const Layout = () => {
+
+  const { onSuccess } = useGoogleLogin();
+
+  return (
+    <div className='home__body d-flex flex-column justify-content-between min-vh-100'>
+      <Header>
+        <GoogleLoginForm
+          onSuccess={onSuccess}
+        />
+      </Header>
+      <Outlet />
+      <Footer />
+    </div>
+  );
+};
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <App />,
+    element: <Layout />,
     errorElement: <ErrorPage />,
     children: [
       {
-        path: '/',
-        // element: <Home />
+        index: true,
+        element: <App />,
       },
       {
-        path: '/about',
-        element: <About />
+        path: 'about',
+        element: <About />,
       },
       {
-        path: '/sn-plus',
-        element: <SNPlus />
+        path: 'sn-plus',
+        element: <SNPlus />,
       },
       {
-        path: '/tos',
-        element: <TOS />
+        path: 'tos',
+        element: <TOS />,
       },
       {
-        path: '/privacy',
-        element: <Privacy />
+        path: 'privacy',
+        element: <Privacy />,
       },
       {
-        path: '/legal',
-        element: <Privacy />
+        path: 'legal',
+        element: <Privacy />,
       },
       {
-        path: '/community-guidelines',
-        element: <CommunityGuidelines />
+        path: 'community-guidelines',
+        element: <CommunityGuidelines />,
       },
       {
-        path: '/help-center',
+        path: 'help-center',
         element: <HelpCenter />,
         children: [
           {
@@ -88,95 +111,95 @@ const router = createBrowserRouter([
         ]
       },
       {
-        path: '/attributions',
-        element: <Attributions />
+        path: 'attributions',
+        element: <Attributions />,
       },
       {
-        path: '/contact',
-        element: <Contact />
+        path: 'contact',
+        element: <Contact />,
+      },
+    ]
+  },
+  {
+    path: 'set-username',
+    element: <CreateAccount />,
+    loader: async () => {
+      const accessToken = localStorage.getItem('accessToken');
+      if (!accessToken) {
+        return redirect('/');
+      }
+
+      const decoded = jwtDecode(accessToken);
+      const user = await getUserByEmail(decoded.email);
+      if (user && user.username) {
+        return redirect('/user/feed');
+      }
+
+      return null;
+    },
+  },
+  {
+    path: 'user',
+    element: <User />,
+    loader: async () => {
+      const accessToken = localStorage.getItem('accessToken');
+      if (!accessToken) {
+        return redirect('/');
+      }
+
+      const decoded = jwtDecode(accessToken);
+      const user = await getUserByEmail(decoded.email);
+      if (!user || !user.username) {
+        return redirect('/set-username');
+      }
+      return { isAuthenticated: true };
+    },
+    children: [
+      {
+        path: ':otherUsername',
+        element: <OtherUserProfile />
       },
       {
-        path: 'set-username',
-        element: <CreateAccount />,
-        loader: async () => {
-          const accessToken = localStorage.getItem('accessToken');
-          if (!accessToken) {
-            return redirect('/');
-          }
-
-          const decoded = jwtDecode(accessToken);
-          const user = await getUserByEmail(decoded.email);
-          if (user && user.username) {
-            return redirect('/user/feed');
-          }
-
-          return null;
-        },
+        path: 'profile',
+        element: <UserProfile />,
       },
       {
-        path: 'user',
-        element: <User />,
-        loader: async () => {
-          const accessToken = localStorage.getItem('accessToken');
-          if (!accessToken) {
-            return redirect('/');
-          }
-
-          const decoded = jwtDecode(accessToken);
-          const user = await getUserByEmail(decoded.email);
-          if (!user || !user.username) {
-            return redirect('/set-username');
-          }
-          return null;
-        },
+        path: 'settings',
+        element: <UserSettings />,
+      },
+      {
+        path: 'legal',
+        element: <UserLegal />,
+      },
+      {
+        path: 'support',
+        element: <UserSupport />,
+      },
+      {
+        path: 'help-center',
+        element: <UserHelpCenter />,
         children: [
           {
-            path: 'profile',
-            element: <UserProfile />,
-          },
-          {
-            path: 'settings',
-            element: <UserSettings />,
-          },
-          {
-            path: 'legal',
-            element: <UserLegal />,
-          },
-          {
-            path: 'support',
-            element: <UserSupport />,
-          },
-          {
-            path: 'help-center',
-            element: <UserHelpCenter />,
+            path: ':helpCenterTitlesPath',
+            element: <UserHelpCenterTitles />,
             children: [
               {
-                path: ':helpCenterTitlesPath',
-                element: <UserHelpCenterTitles />,
-                children: [
-                  {
-                    path: ':helpCenterDataPath',
-                    element: <UserHelpCenterData />,
-                  }
-                ]
+                path: ':helpCenterDataPath',
+                element: <UserHelpCenterData />,
               }
             ]
-          },
-          {
-            path: 'feed',
-            element: <UserFeed />
-          },
-          {
-            path: ':otherUsername',
-            element: <OtherUserProfile />
-          },
-          {
-            index: true,
-            element: <UserFeed />,
           }
         ]
+      },
+      {
+        path: 'feed',
+        element: <UserFeed />
+      },
+      {
+        index: true,
+        element: <UserFeed />,
       }
-    ],
+    ]
   },
 ]);
 

@@ -27,48 +27,15 @@ const PreLogin = ({ onSuccess }) => {
     }, [location]);
 
     return (
-        <div className='home__body d-flex flex-column justify-content-between min-vh-100'>
-            <Header>
-                <GoogleLoginForm
-                    onSuccess={onSuccess}
-                />
-            </Header>
+        // <div className='home__body d-flex flex-column justify-content-between min-vh-100'>
+        <>
             {
                 location.pathname === '/' && <Home onSuccess={onSuccess} />
             }
-            {/*          {
-                location.pathname === '/about' && <About />
-            }
-            {
-                location.pathname === '/sn-plus' && <SNPlus />
-            }
-            {
-                location.pathname === '/tos' && <TOS />
-            }
-            {
-                location.pathname === '/privacy' && <Privacy />
-            }
-            {
-                location.pathname === '/community-guidelines' && <CommunityGuidelines />
-            }
-            {
-                location.pathname === '/help-center' && <HelpCenter />
-            }
-            {
-                location.pathname === `/help-center/${helpCenterTitlesPath}` && <HelpCenterTitles />
-            }
-            {
-                location.pathname === `/help-center/${helpCenterTitlesPath}/${helpCenterDataPath}` && <HelpCenterData />
-            }
-            {
-                location.pathname === `/attributions` && <Attributions />
-            }
-            {
-                location.pathname === '/contact' && <Contact />
-            } */}
+
             <Outlet />
-            <Footer />
-        </div>
+        </>
+        // </div> 
     )
 }
 

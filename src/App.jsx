@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { useNavigate, Outlet } from 'react-router-dom';
+import { useState, useEffect, useCallback } from 'react';
+import { useNavigate, Outlet, useLocation } from 'react-router-dom';
 import PreLogin from './pages/PreLogin/PreLogin.jsx';
 import CreateAccount from './pages/CreateAccount/CreateAccount.jsx';
 import { jwtDecode } from "jwt-decode";
@@ -10,10 +10,10 @@ import { createUser, getUserByEmail } from './lib/context/dbhandler.js';
 import { useUserContext } from './lib/context/UserContext';
 import { ID } from 'appwrite';
 import useUserInfo from './lib/hooks/useUserInfo.js';
+import useGoogleLogin from './lib/hooks/useGoogleLogin.js';
 import appwrite_logo from '../src/assets/appwrite_logo.svg';
-// import Header from './components/PreLogin/Header/Header.jsx';
-// import { GoogleLoginForm } from './components/LoginForm/Google/GoogleLoginForm.jsx';
-
+import Header from './components/PreLogin/Header/Header.jsx';
+import { GoogleLoginForm } from './components/LoginForm/Google/GoogleLoginForm.jsx';
 
 function App() {
 
@@ -37,6 +37,10 @@ function App() {
     checkingEmailInAuth,
   } = useUserInfo(googleUserData);
 
+  const { onSuccess, checkUsernameInDatabase } = useGoogleLogin();
+
+  const [isServerDown, setIsServerDown] = useState(false);
+
   useEffect(() => {
     const storedToken = localStorage.getItem('accessToken');
     const mainSetUp = async () => {
@@ -44,7 +48,6 @@ function App() {
         const decoded = jwtDecode(storedToken);
         setGoogleUserData(decoded);
         setIsLoggedIn(preVal => true);
-        // setHasAccountType(preVal => true);
         console.log('Logged in successfully - 1st useEffect');
 
 
@@ -67,107 +70,24 @@ function App() {
     mainSetUp();
   }, [navigate]);
 
-  const [isServerDown, setIsServerDown] = useState(false);
-
-
-  const checkUsernameInDatabase = async (email) => {
-    try {
-      const user = await getUserByEmail(email);
-
-      if (user && user.username) {
-        setUsername(user.username);
-        setAccountType(user.accountType);
-        setRegisteredUsername(user.username);
-        localStorage.setItem('username', user.username);
-        setHasUsername(true);
-
-      } else {
-        setHasUsername(false);
-        navigate('/set-username');
-      }
-    } catch (error) {
-      console.error('Error checking username:', error);
-      if (error.code === 500) {
-        setIsServerDown(true);
-      }
-    }
-  };
-
   useEffect(() => {
     if (isLoggedIn && hasUsername) {
       const currentPath = window.location.pathname;
 
-      const pathsToRedirect = ['/', '/about', '/sn-plus', '/attributions', '/community-guidelines', '/contact', '/user'];
-
-      if (pathsToRedirect.includes(currentPath)) {
+      if (currentPath === '/') {
         navigate('/user/feed');
+      } else {
+        navigate(currentPath)
       }
-      if ((currentPath === '/tos' || currentPath === '/privacy' || currentPath === '/legal')) {
-        navigate('/user/legal')
-      }
-      if (currentPath === '/help-center') {
-        navigate('/user/help-center')
-      }
+
+      // if ((currentPath === '/tos' || currentPath === '/privacy' || currentPath === '/legal')) {
+      //   navigate('/user/legal')
+      // }
+      // if (currentPath === '/help-center') {
+      //   navigate('/user/help-center')
+      // }
     }
   }, [isLoggedIn, hasUsername, navigate]);
-
-  useEffect(() => {
-    console.log("Current Path:", window.location.pathname);
-  }, [location]);
-
-
-  // const startSession = async () => {
-  //   if (googleUserData.email !== undefined) {
-  //     try {
-  //       let newLoginSession = await createSession(googleUserData?.email)
-  //       console.log('newLoginSession - startSession:', newLoginSession);
-  //     } catch (error) {
-  //       console.error('Error starting session:', error);
-  //     }
-  //   }
-  // }
-
-  // Triggered for returning users 
-
-  const onSuccess = async (credentialResponse) => {
-    const decoded = jwtDecode(credentialResponse?.credential);
-    console.log('Logged in successfully. - onSuccess');
-    setGoogleUserData(preData => decoded);
-
-    setIsLoggedIn(preVal => true);
-
-    const accessToken = credentialResponse?.credential;
-    console.log('Access Token:', accessToken);
-
-    console.log('decoded.email', decoded.email);
-
-    const sessionStatus = await getSessionDetails();
-    console.log(sessionStatus);
-
-    if (!sessionStatus || sessionStatus === undefined) {
-      console.log('Creating a session.');
-      await createSession(decoded.email);
-    } else {
-      console.log('Session already in progress. LOL');
-    }
-
-    localStorage.setItem('accessToken', accessToken);
-
-    checkUsernameInDatabase(decoded.email);
-
-    // if (decoded) {
-    //   console.log('deciding on session');
-    //   const sessionDetails = await getSessionDetails();
-    //   console.log('stiil deciding on session');
-    //   if (!sessionDetails) {
-    //     console.log('session not found so starting a new session');
-    //     await startSession();
-    //   } else {
-    //     console.log('Session already in progress for ', googleUserData.email);
-    //   }
-    // }
-
-  };
 
   const setUser = async () => {
 
@@ -257,8 +177,6 @@ function App() {
 
   };
 
-
-
   if (isServerDown === true) {
     return (
       <div className='d-flex justify-content-center' style={{ fontSize: '20px', marginTop: '200px', maxWidth: 'calc(100% - 20px)', marginLeft: 'auto', marginRight: 'auto' }}>
@@ -288,18 +206,23 @@ function App() {
     )
   }
 
+  console.log('Type of setUser:', typeof setUser);
+
   return (
     <>
       {!isLoggedIn ? (
-        <PreLogin onSuccess={onSuccess} />
+        <>
+          <PreLogin onSuccess={onSuccess} />
+        </>
       ) : !hasUsername ? (
         <CreateAccount
           username={username}
           setUsername={setUsername}
-          setUser={setUser}
           setHasUsername={setHasUsername}
           setIsLoggedIn={setIsLoggedIn}
           setGoogleUserData={setGoogleUserData}
+          setUser={setUser}
+
         />
       ) : (
         <Outlet
@@ -317,43 +240,6 @@ function App() {
     </>
   );
 
-  // return (
-  //   <>
-  //     {
-  //       (!location.pathname.startsWith('/user') && isLoggedIn) &&
-  //       <Header>
-  //         <GoogleLoginForm onSuccess={onSuccess} />
-  //       </Header>
-  //     }
-
-  //     {isLoggedIn ? (
-  //       hasUsername ? (
-  //         <Outlet
-  //           context={{
-  //             googleUserData, setGoogleUserData,
-  //             isLoggedIn, setIsLoggedIn,
-  //             username, setUsername,
-  //             registeredUsername, setRegisteredUsername,
-  //             hasUsername, setHasUsername,
-  //             accountType, setAccountType,
-  //             hasAccountType, setHasAccountType
-  //           }}
-  //         />
-  //       ) : (
-  //         <CreateAccount
-  //           username={username}
-  //           setUsername={setUsername}
-  //           setUser={setUser}
-  //           setHasUsername={setHasUsername}
-  //           setIsLoggedIn={setIsLoggedIn}
-  //           setGoogleUserData={setGoogleUserData}
-  //         />
-  //       )
-  //     ) : (
-  //       <PreLogin onSuccess={onSuccess} />
-  //     )}
-  //   </>
-  // )
 }
 
 export default App

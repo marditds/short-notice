@@ -81,6 +81,7 @@
 .tos__list-group>li {
     background-color: transparent !important;
     border: 0px !important;
+    color: var(--main-text-color);
 }
 
 .attributions__attribute-p>span>a,
