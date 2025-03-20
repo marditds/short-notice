@@ -68,6 +68,16 @@ const CreateAccount = () => {
         setErrorMessage('');
     };
 
+    // const onPasscodeChange = (e) => {
+    //     const input = e.target.value;
+
+    //     console.log('input', input);
+
+    //     if (/^\d{0,25}$/.test(input)) {
+    //         setPasscode(input);
+    //     }
+    // };
+
     const onPasscodeChange = (e) => {
         const input = e.target.value;
 
@@ -75,8 +85,16 @@ const CreateAccount = () => {
 
         if (/^\d{0,25}$/.test(input)) {
             setPasscode(input);
+
+            if (input.length > 0 && input.length < 6) {
+                return;
+                // setErrorMessage('Passcode must be at least 6 digits.');
+            } else {
+                setErrorMessage('');
+            }
         }
     };
+
 
     useEffect(() => {
         setPasscode('');
@@ -306,13 +324,18 @@ const CreateAccount = () => {
         <Container className='
         createUsername__container 
         '>
-            <Form className='my-5 my-sm-0'>
+            <Form
+                onSubmit={(e) => {
+                    e.preventDefault();
+                    handleDoneClick();
+                }}
+                className='my-5 my-sm-0'>
                 <Stack gap={3}>
 
                     <AccountType setAccountType={setAccountType} accountType={accountType} />
 
                     {/* Username and Password */}
-                    <Row xs={1} sm={2} className='align-items-end'>
+                    <Row xs={1} sm={2} className='align-items-start'>
                         <Col>
                             <CreateUsername accountType={accountType} username={username} onUsernameChange={onUsernameChange} />
 
@@ -383,8 +406,9 @@ const CreateAccount = () => {
                     {/* Create Account Buttons */}
                     <div className='mb-5 mb-sm-0 d-flex justify-content-between justify-content-sm-start'>
                         <Button
-                            onClick={handleDoneClick}
-                            disabled={!isCaptchaVerified || !username || username.trim() === '' || username.includes(' ') || username === 'profile' || (accountType === 'organization' && passcode.length === 0) || tosCheck !== true || privacyPolicyCheck !== true || !accountType}
+                            type='submit'
+                            // onClick={handleDoneClick}
+                            disabled={!isCaptchaVerified || !username || username.trim() === '' || username.includes(' ') || username === 'profile' || (accountType === 'organization' && passcode.length < 6) || tosCheck !== true || privacyPolicyCheck !== true || !accountType || isHandleDoneClickLoading}
                             className='createAccount__btn'
                         >
                             {
@@ -394,6 +418,7 @@ const CreateAccount = () => {
                             }
                         </Button>
                         <Button
+                            type='button'
                             onClick={() => {
                                 googleLogout();
                                 setIsLoggedIn(preVal => false)

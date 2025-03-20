@@ -22,6 +22,8 @@ export default async ({ req, res, log, error }) => {
 
     const data = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
 
+    log('data:', data);
+
     if (!data.$id) {
       throw new Error('ID not provided.');
     }
@@ -34,11 +36,10 @@ export default async ({ req, res, log, error }) => {
     await users.delete(data.$id);
     // Log messages and errors to the Appwrite Console
     // These logs won't be seen by your end users
-    log(`User deleted successfully.`);
+    log(`AUTH User deleted successfully.`);
   } catch (err) {
-    error("Could not delete user: " + err.message);
+    error("Could not delete AUTH user: " + err.message);
   }
 
-
-  return res.json({ msg: 'User delete from Appwrite.' });
+  return res.json({ msg: 'User deleted from Appwrite.' });
 };

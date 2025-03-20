@@ -447,7 +447,7 @@ export const deleteAuthUser = async (userId) => {
                 return false;
             }
         } else {
-            console.error("Failed to delete atuh user");
+            console.error("Failed to delete auth user");
         }
     } catch (error) {
         console.error('Error deleting auth user:', error);
