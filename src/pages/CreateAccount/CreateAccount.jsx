@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { ID } from 'appwrite';
 import { googleLogout } from '@react-oauth/google';
 import { Container, Stack, Row, Col, Form, Button, Alert, Modal } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useUserContext } from '../../lib/context/UserContext';
-import { getUserByUsername } from '../../lib/context/dbhandler';
+import { createUser, getUserByUsername } from '../../lib/context/dbhandler';
 import { AccountType } from '../../components/Setup/AccountType';
 import './CreateAccount.css';
 import { keysProvider } from '../../lib/context/keysProvider';
@@ -18,24 +19,26 @@ import CommunityGuidelinesList from '../../components/Support/CommunityGuideline
 import PrivacyList from '../../components/Legal/PrivacyList';
 
 
-const CreateAccount = ({ setUser }) => {
-
-    console.log('Type of setUser:', typeof setUser);
-
+const CreateAccount = () => {
 
     const navigate = useNavigate();
 
     const {
-        username,
-        setUsername,
-        setHasUsername,
-        setGoogleUserData,
+        googleUserData, setGoogleUserData,
         setIsLoggedIn,
-        accountType,
-        setAccountType
+        username, setUsername,
+        accountType, setAccountType,
+        setHasAccountType,
+        setHasUsername
     } = useUserContext();
 
-    const { makePasscode } = useUserInfo();
+    const {
+        makePasscode,
+        checkingEmailInAuth,
+        registerUser,
+        createSession,
+        getSessionDetails,
+    } = useUserInfo();
 
     const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
 
@@ -53,6 +56,9 @@ const CreateAccount = ({ setUser }) => {
     const [showTOSModal, setShowTOSModal] = useState(false);
     const [showCommGuideModal, setShowCommGuideModal] = useState(false);
     const [showPrivacyModal, setShowPrivacyModal] = useState(false);
+
+    const [isHandleDoneClickLoading, setIsHandleDoneClickLoading] = useState(false);
+    const [isSetUserLoading, setIsSetUserLoading] = useState(false);
 
     const onUsernameChange = (e) => {
         console.log('Input changed:', e.target.value);
@@ -85,6 +91,99 @@ const CreateAccount = ({ setUser }) => {
         setPrivacyPolicyCheck(preVal => !preVal)
     }
 
+    const setUser = async () => {
+
+        console.log('setUser 1:', username);
+        try {
+            setIsSetUserLoading(true);
+
+            if (googleUserData?.email && googleUserData?.given_name && username) {
+
+                console.log('this email will be sent - App.jsx:', googleUserData.email);
+
+                const usrData = await checkingEmailInAuth(googleUserData.email);
+
+                console.log('usrData.email', usrData.email);
+
+                if (usrData.email !== googleUserData.email) {
+                    console.log('running if');
+
+                    const usrID = ID.unique();
+                    console.log('usrID', usrID);
+
+                    try {
+                        // Add user to Auth
+                        let newUsr = await registerUser(
+                            usrID,
+                            googleUserData.email,
+                            username.toLowerCase()
+                        );
+                        console.log('newUsr - App.jsx:', newUsr);
+
+                        // Check for session
+                        const sessionStatus = await getSessionDetails();
+                        console.log('sessionStatus', sessionStatus);
+
+                        // Create session for the newly registered user
+                        if (!sessionStatus || sessionStatus === undefined) {
+                            console.log('Creating a session.');
+                            await createSession(googleUserData.email);
+                        } else {
+                            console.log('Session already in progress.');
+                        }
+
+                        // Add user to collection
+                        await createUser({
+                            id: usrID,
+                            email: googleUserData.email,
+                            given_name: googleUserData.given_name,
+                            username: username.toLowerCase(),
+                            accountType: accountType
+                        });
+
+                        localStorage.setItem('username', username.toLowerCase());
+
+                        setHasAccountType(true);
+                        setHasUsername(true);
+
+                        setTimeout(() => {
+                            navigate('/user/profile');
+                        }, 1000);
+
+                    } catch (error) {
+                        console.error('Error creating user:', error);
+                    }
+                } else {
+                    console.log('running else');
+
+                    // const authId = await checkingIdInAuth();
+                    console.log('usrData.$id', usrData.$id);
+
+                    // Add user to collection
+                    await createUser({
+                        id: usrData.$id,
+                        email: googleUserData.email,
+                        given_name: googleUserData.given_name,
+                        username: username.toLowerCase(),
+                        accountType: accountType
+
+                    });
+
+                    localStorage.setItem('username', username.toLowerCase());
+
+                    setHasAccountType(true);
+                    setHasUsername(true);
+                }
+            }
+
+        } catch (error) {
+            console.error('Error running setUser:', error);
+        } finally {
+            setIsSetUserLoading(false);
+        }
+        console.log('setUser 2:', username);
+    };
+
     const handleDoneClick = async () => {
 
         if (!isCaptchaVerified) {
@@ -113,15 +212,16 @@ const CreateAccount = ({ setUser }) => {
         }
 
         try {
+            setIsHandleDoneClickLoading(true);
+
             const existingUser = await getUserByUsername(username);
             if (existingUser) {
                 setErrorMessage('Username already taken. Please choose another one.');
                 return;
             }
-
             console.log('Going for setUser');
 
-            // console.log('About to call setUser, type:', typeof setUser);
+            console.log('About to call setUser, type:', typeof setUser);
 
             await setUser();
 
@@ -130,7 +230,6 @@ const CreateAccount = ({ setUser }) => {
             console.log('usr id', usr.$id);
             console.log('passcode', passcode);
             console.log('accountType', accountType);
-
 
             if (accountType === 'organization' && passcode) {
                 await makePasscode(usr.$id, passcode, accountType);
@@ -145,11 +244,12 @@ const CreateAccount = ({ setUser }) => {
                 navigate('/user/profile');
 
                 console.log('AFTER NAVIGATION - Username after setUser:', username);
-
             }
         } catch (error) {
             console.error('Error checking username:', error);
             setErrorMessage('An error occurred. Please try again.');
+        } finally {
+            setIsHandleDoneClickLoading(false);
         }
     };
 
@@ -287,7 +387,11 @@ const CreateAccount = ({ setUser }) => {
                             disabled={!isCaptchaVerified || !username || username.trim() === '' || username.includes(' ') || username === 'profile' || (accountType === 'organization' && passcode.length === 0) || tosCheck !== true || privacyPolicyCheck !== true || !accountType}
                             className='createAccount__btn'
                         >
-                            Done
+                            {
+                                (isSetUserLoading || isHandleDoneClickLoading) ?
+                                    <Loading /> :
+                                    'Done'
+                            }
                         </Button>
                         <Button
                             onClick={() => {
