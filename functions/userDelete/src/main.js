@@ -7,22 +7,21 @@ export default async ({ req, res, log, error }) => {
   const client = new Client()
     .setEndpoint(process.env.VITE_ENDPOINT) // Appwrite endpoint
     .setProject(process.env.VITE_PROJECT) // Project ID
-    .setKey(process.env.VITE_SHORT_NOTICE_API_KEYS); // API Key for privileged access
+    .setKey(process.env.SHORT_NOTICE_API_KEYS); // API Key for privileged access
 
   const users = new Users(client);
 
   try {
     log('Request method: ' + req.method);
-    log('Request headers: ' + JSON.stringify(req.headers));
+    // log('Request headers: ' + JSON.stringify(req.headers));
     log('Raw body: ' + req.body);
-    log('Raw payload: ' + req.payload);
+    // log('Raw payload: ' + req.payload);
 
     if (!req.body) {
       throw new Error('Request body is missing.');
     }
 
     const data = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
-    log('barev');
 
     log('data:', data)
     log('data.$id:', data.$id)
