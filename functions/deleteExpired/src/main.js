@@ -7,7 +7,7 @@ export default async ({ req, res, log, error }) => {
   const client = new Client()
     .setEndpoint(process.env.VITE_ENDPOINT)
     .setProject(process.env.VITE_PROJECT)
-    .setKey(process.env.VITE_SHORT_NOTICE_API_KEYS);
+    .setKey(process.env.SHORT_NOTICE_API_KEYS);
 
   const databases = new Databases(client);
 
