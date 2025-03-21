@@ -29,7 +29,8 @@ export default async ({ req, res, log, error }) => {
 
     const result = await users.list();
 
-    log('users.list:', result)
+    log('users.list:', result);
+    console.log('barev');
 
     if (!data.$id) {
       throw new Error('ID not provided.');
