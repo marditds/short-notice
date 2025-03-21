@@ -26,7 +26,10 @@ export default async ({ req, res, log, error }) => {
     log('data:', data)
     log('data.$id:', data.$id)
 
-    log('users.list:', await users.list())
+
+    const result = await users.list();
+
+    log('users.list:', result)
 
     if (!data.$id) {
       throw new Error('ID not provided.');
