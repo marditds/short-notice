@@ -22,7 +22,7 @@ export default async ({ req, res, log, error }) => {
     }
 
     const data = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
-    console.log('barev');
+    log('barev');
 
     log('data:', data)
     log('data.$id:', data.$id)
@@ -31,7 +31,7 @@ export default async ({ req, res, log, error }) => {
     const result = await users.list();
 
     log('users.list:', result);
-    console.log('barev');
+    log('barev');
 
     if (!data.$id) {
       throw new Error('ID not provided.');
