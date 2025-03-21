@@ -12,9 +12,9 @@ export default async ({ req, res, log, error }) => {
 
   try {
     log('Request method: ' + req.method);
-    log('Request headers: ' + JSON.stringify(req.headers));
+    // log('Request headers: ' + JSON.stringify(req.headers));
     log('Raw body: ' + req.body);
-    log('Raw payload: ' + req.payload);
+    // log('Raw payload: ' + req.payload);
 
     if (!req.body) {
       throw new Error('Request body is missing.');
@@ -23,6 +23,15 @@ export default async ({ req, res, log, error }) => {
     const data = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
 
     log('data:', data);
+
+    log('data:', data)
+    log('data.$id:', data.$id)
+
+
+    const result = await users.list();
+
+    log('users.list:', result);
+    log('barev');
 
     if (!data.$id) {
       throw new Error('ID not provided.');
