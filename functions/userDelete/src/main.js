@@ -26,6 +26,8 @@ export default async ({ req, res, log, error }) => {
     log('data:', data)
     log('data.$id:', data.$id)
 
+    log('users', users)
+
     if (!data.$id) {
       throw new Error('ID not provided.');
     }
@@ -40,9 +42,8 @@ export default async ({ req, res, log, error }) => {
     // These logs won't be seen by your end users
     log(`AUTH User deleted successfully.`);
   } catch (err) {
-    error("Could not AUTH delete user: " + err.message);
+    error("Could not delete AUTH user: " + err.message);
   }
 
-
-  return res.json({ msg: 'User delete from Appwrite.' });
+  return res.json({ msg: 'User deleted from Appwrite.' });
 };
