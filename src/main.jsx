@@ -41,11 +41,11 @@ import UserHelpCenterData from './pages/User/HelpCenter/UserHelpCenterData.jsx';
 import Header from './components/PreLogin/Header/Header.jsx';
 import Footer from './components/PreLogin/Footer/Footer.jsx';
 import { GoogleLoginForm } from './components/LoginForm/Google/GoogleLoginForm.jsx';
-import useGoogleLogin from './lib/hooks/useGoogleLogin.js';
+import useLogin from './lib/hooks/useLogin.js';
 
-const Layout = () => {
+const PreLoginLayout = () => {
 
-  const { onSuccess } = useGoogleLogin();
+  const { onSuccess } = useLogin();
 
   return (
     <div className='home__body d-flex flex-column justify-content-between min-vh-100'>
@@ -63,7 +63,7 @@ const Layout = () => {
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Layout />,
+    element: <PreLoginLayout />,
     errorElement: <ErrorPage />,
     children: [
       {

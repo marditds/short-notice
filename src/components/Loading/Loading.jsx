@@ -3,14 +3,14 @@ import { TbFidgetSpinner } from "react-icons/tb";
 import './Loading.css'
 
 
-export const Loading = ({ size, color }) => {
+export const Loading = ({ size, color, classAnun }) => {
 
     return (
         <span>
             <TbFidgetSpinner
                 size={size}
                 color={color}
-                className='loading__icon'
+                className={'loading__icon ' + classAnun}
             />
         </span>
     )

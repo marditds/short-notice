@@ -8,8 +8,9 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import './App.css';
 import { useUserContext } from './lib/context/UserContext';
 import useUserInfo from './lib/hooks/useUserInfo.js';
-import useGoogleLogin from './lib/hooks/useGoogleLogin.js';
+import useLogin from './lib/hooks/useLogin.js';
 import appwrite_logo from '../src/assets/appwrite_logo.svg';
+import { Loading } from './components/Loading/Loading.jsx';
 
 function App() {
 
@@ -20,7 +21,8 @@ function App() {
     registeredUsername, setRegisteredUsername,
     accountType, setAccountType,
     hasAccountType, setHasAccountType,
-    hasUsername, setHasUsername
+    hasUsername, setHasUsername,
+    isAppLoading, setIsAppLoading
   } = useUserContext();
 
   const navigate = useNavigate();
@@ -30,36 +32,75 @@ function App() {
     getSessionDetails
   } = useUserInfo(googleUserData);
 
-  const { onSuccess, checkUsernameInDatabase } = useGoogleLogin();
+  const { onSuccess, checkUsernameInDatabase } = useLogin();
 
   const [isServerDown, setIsServerDown] = useState(false);
+
+  // useEffect(() => {
+  //   const storedToken = localStorage.getItem('accessToken');
+  //   const mainSetUp = async () => {
+
+  //     if (storedToken) { 
+  //       const decoded = jwtDecode(storedToken);
+  //       setGoogleUserData(decoded);
+  //       setIsLoggedIn(preVal => true);
+  //       console.log('Logged in successfully - 1st useEffect');
+
+
+  //       await checkUsernameInDatabase(decoded.email);
+
+  //       const sessionStatus = await getSessionDetails();
+  //       console.log('sessionStatus', sessionStatus);
+
+  //       if (!sessionStatus || sessionStatus === undefined) {
+  //         console.log('Creating a session.');
+  //         await createSession(decoded.email);
+  //       } else {
+  //         console.log('Session already in progress.');
+  //       }
+
+  //     } else {
+  //       navigate('/');
+  //     }
+  //   }
+  //   mainSetUp();
+  // }, [navigate]);
 
   useEffect(() => {
     const storedToken = localStorage.getItem('accessToken');
     const mainSetUp = async () => {
-      if (storedToken) {
+      if (!storedToken) {
+        navigate('/');
+        return;
+      }
+
+      try {
+        setIsAppLoading(true);
+
         const decoded = jwtDecode(storedToken);
         setGoogleUserData(decoded);
-        setIsLoggedIn(preVal => true);
+        setIsLoggedIn(true);
         console.log('Logged in successfully - 1st useEffect');
-
 
         await checkUsernameInDatabase(decoded.email);
 
         const sessionStatus = await getSessionDetails();
         console.log('sessionStatus', sessionStatus);
 
-        if (!sessionStatus || sessionStatus === undefined) {
+        if (!sessionStatus) {
           console.log('Creating a session.');
           await createSession(decoded.email);
         } else {
           console.log('Session already in progress.');
         }
-
-      } else {
+      } catch (error) {
+        console.error('Error during user setup:', error);
         navigate('/');
+      } finally {
+        setIsAppLoading(false);
       }
-    }
+    };
+
     mainSetUp();
   }, [navigate]);
 
@@ -69,22 +110,20 @@ function App() {
 
       if (currentPath === '/') {
         navigate('/user/feed');
-      } else {
-        navigate(currentPath)
       }
 
-      // if ((currentPath === '/tos' || currentPath === '/privacy' || currentPath === '/legal')) {
-      //   navigate('/user/legal')
-      // }
-      // if (currentPath === '/help-center') {
-      //   navigate('/user/help-center')
-      // } 
     }
   }, [hasUsername]);
 
   useEffect(() => {
     console.log('[hasUsername]', hasUsername);
   }, [hasUsername])
+
+  if (isAppLoading) {
+    return <div className='d-flex justify-content-center align-items-center'>
+      <Loading classAnun={'me-2'} />Loading...
+    </div>;
+  }
 
   if (isServerDown === true) {
     return (
@@ -138,7 +177,8 @@ function App() {
             registeredUsername, setRegisteredUsername,
             hasUsername, setHasUsername,
             accountType, setAccountType,
-            hasAccountType, setHasAccountType
+            hasAccountType, setHasAccountType,
+            isAppLoading, setIsAppLoading
           }}
         />
       )}

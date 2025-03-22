@@ -16,8 +16,14 @@ export const Passcode = () => {
         console.log(e.target.value);
         const input = e.target.value;
 
-        if (/^\d{0,6}$/.test(input)) {
+        console.log('input', input);
+
+        if (/^\d{0,25}$/.test(input)) {
             setPasscodeVal(input);
+
+            if (input.length > 0 && input.length < 6) {
+                return;
+            }
         }
     }
 
@@ -67,7 +73,7 @@ export const Passcode = () => {
                     </Form.Group>
                     <Button
                         type='submit'
-                        disabled={isUpdating || passcodeVal?.length !== 6}
+                        disabled={isUpdating || passcodeVal?.length < 6}
                         className='settings__update-username-btn mt-1 mt-md-2'
                     >
                         {isUpdating ? 'Updating...' : 'Update'}

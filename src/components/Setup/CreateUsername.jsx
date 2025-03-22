@@ -9,13 +9,13 @@ export const CreateUsername = ({ accountType, username, onUsernameChange }) => {
                     accountType === '' && 'Please select an account type'
                 }
                 {
-                    accountType === 'personal' && 'Please enter your username'
+                    accountType === 'personal' && 'Enter your username'
                 }
                 {
-                    accountType === 'business' && 'Please enter the name of your business.'
+                    accountType === 'business' && 'Enter the name of your business.'
                 }
                 {
-                    accountType === 'organization' && 'Please enter the name of your organization/team.'
+                    accountType === 'organization' && 'Enter the name of your organization/team.'
                 }
             </Form.Label>
             <Form.Control

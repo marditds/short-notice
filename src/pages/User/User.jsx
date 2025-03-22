@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Outlet, Navigate, useLocation } from 'react-router-dom';
+import { Outlet, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
 import { Navigation } from '../../components/User/Navigation/Navigation';
 import { googleLogout } from '@react-oauth/google';
@@ -15,9 +15,11 @@ const User = () => {
         accountType,
         username,
         googleUserData,
-        isLoading } = useUserContext();
+        isAppLoading } = useUserContext();
 
     const location = useLocation();
+
+    const navigate = useNavigate();
 
     const { userId, removeSession } = useUserInfo(googleUserData);
 
@@ -25,12 +27,16 @@ const User = () => {
         console.log('googleUserData:', googleUserData);
     }, [googleUserData])
 
-    if (isLoading) {
-        return <Loading />;
-    }
+    useEffect(() => {
+        if (!isAppLoading && (!username || !googleUserData)) {
+            navigate('/');
+        }
+    }, [isAppLoading, username, googleUserData, navigate]);
 
-    if (!isLoading && (!username || !googleUserData)) {
-        return <Navigate to="/" />;
+    if (isAppLoading) {
+        return <div className='d-flex justify-content-center align-items-center'>
+            <Loading classAnun={'me-2'} />Loading...
+        </div>;
     }
 
     return (
@@ -44,22 +50,11 @@ const User = () => {
                 setIsLoggedIn={setIsLoggedIn}
                 accountType={accountType}
             />
-
-            {/* <div className={` position-relative ${(location.pathname === '/user/feed' && isExtraLargeScreen) ? 'd-block' : 'd-none'}`} style={{ marginTop: '88px' }}>
-               
-            </div> */}
-
             <Container
                 className='userhome__body'
                 style={{ maxWidth: location.pathname !== '/user/feed' ? '1320px' : '100%' }}
-            // className={`${location.pathname === '/user/feed' && 'ms-xxl-0 me-xxl-0 w-100'} `}
             >
-                {/* <Container className='userhome__body'
-              ${location.pathname === '/user/feed' ? (isExtraLargeScreen ? 'w-75' : 'w-100') : 'w-100'} userhome__body`}
-              > */}
-
                 <Outlet />
-
             </Container>
         </Container>
     );

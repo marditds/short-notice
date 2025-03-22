@@ -1,4 +1,6 @@
-import { createContext, useContext, useState } from 'react';
+import { jwtDecode } from 'jwt-decode';
+import { createContext, useContext, useEffect, useState } from 'react';
+import { getUserByEmail } from './dbhandler';
 
 const UserContext = createContext();
 
@@ -11,9 +13,32 @@ export const UserProvider = ({ children }) => {
     const [hasUsername, setHasUsername] = useState(false);
     const [hasAccountType, setHasAccountType] = useState(false);
     const [accountType, setAccountType] = useState('');
-    const [website, setWebsite] = useState(null);
+    const [isAppLoading, setIsAppLoading] = useState(false);
 
+    // useEffect(() => {
+    //     const accessToken = localStorage.getItem('accessToken');
+    //     if (!accessToken) {
+    //         setIsAppLoading(false);
+    //         return;
+    //     }
 
+    //     const decoded = jwtDecode(accessToken);
+    //     getUserByEmail(decoded.email)
+    //         .then((user) => {
+    //             if (user) {
+    //                 setUsername(user.username);
+    //                 setAccountType(user.accountType);
+    //                 setGoogleUserData(user);
+    //                 setIsLoggedIn(true);
+    //             }
+    //         })
+    //         .catch((error) => {
+    //             console.error('Error fetching user data:', error);
+    //         })
+    //         .finally(() => {
+    //             setIsAppLoading(false);
+    //         });
+    // }, []);
 
     return (
         <UserContext.Provider
@@ -24,7 +49,8 @@ export const UserProvider = ({ children }) => {
                 registeredUsername, setRegisteredUsername,
                 hasUsername, setHasUsername,
                 accountType, setAccountType,
-                hasAccountType, setHasAccountType
+                hasAccountType, setHasAccountType,
+                isAppLoading, setIsAppLoading
             }}>
             {children}
         </UserContext.Provider>
