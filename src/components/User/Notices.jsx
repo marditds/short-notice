@@ -524,9 +524,11 @@ export const Notices = ({
                                                 <Link to={`../${notice.username}`}
                                                     className='text-decoration-none'>
                                                     <strong>
-                                                        {
+                                                        {/* {
                                                             truncteUsername(notice?.username)
-                                                        }
+                                                            notice?.username
+                                                        }  */}
+                                                        {notice?.username ? truncteUsername(notice.username) : ''}
                                                     </strong>
                                                 </Link>
                                             </p>

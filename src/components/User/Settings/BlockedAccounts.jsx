@@ -15,7 +15,7 @@ export const BlockedAccounts = () => {
         getBlockedUsersByUserByBatch,
         getUserAccountByUserId,
         deleteBlockUsingBlockedId
-    } = useUserInfo(googleUserData);
+    } = useUserInfo(googleUserData.email);
 
     const [blockedUsers, setBlockedUsers] = useState([]);
     const [isBlockListInitialRunLoading, setIsBlockListInitialRunLoading] = useState(false);

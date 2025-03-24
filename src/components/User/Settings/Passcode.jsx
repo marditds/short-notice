@@ -7,7 +7,7 @@ import { Loading } from '../../Loading/Loading';
 export const Passcode = () => {
 
     const { googleUserData } = useUserContext();
-    const { editPasscode } = useUserInfo(googleUserData);
+    const { editPasscode } = useUserInfo(googleUserData.email);
 
     const [passcodeVal, setPasscodeVal] = useState();
     const [isUpdating, setIsUpdating] = useState(false);

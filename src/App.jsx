@@ -17,6 +17,7 @@ function App() {
   const {
     googleUserData, setGoogleUserData,
     isLoggedIn, setIsLoggedIn,
+    userId, setUserId,
     username, setUsername,
     registeredUsername, setRegisteredUsername,
     accountType, setAccountType,
@@ -30,41 +31,12 @@ function App() {
   const {
     createSession,
     getSessionDetails
-  } = useUserInfo(googleUserData);
+  } = useUserInfo(googleUserData.email);
 
   const { onSuccess, checkUsernameInDatabase } = useLogin();
 
   const [isServerDown, setIsServerDown] = useState(false);
 
-  // useEffect(() => {
-  //   const storedToken = localStorage.getItem('accessToken');
-  //   const mainSetUp = async () => {
-
-  //     if (storedToken) { 
-  //       const decoded = jwtDecode(storedToken);
-  //       setGoogleUserData(decoded);
-  //       setIsLoggedIn(preVal => true);
-  //       console.log('Logged in successfully - 1st useEffect');
-
-
-  //       await checkUsernameInDatabase(decoded.email);
-
-  //       const sessionStatus = await getSessionDetails();
-  //       console.log('sessionStatus', sessionStatus);
-
-  //       if (!sessionStatus || sessionStatus === undefined) {
-  //         console.log('Creating a session.');
-  //         await createSession(decoded.email);
-  //       } else {
-  //         console.log('Session already in progress.');
-  //       }
-
-  //     } else {
-  //       navigate('/');
-  //     }
-  //   }
-  //   mainSetUp();
-  // }, [navigate]);
 
   useEffect(() => {
     const storedToken = localStorage.getItem('accessToken');
@@ -81,6 +53,11 @@ function App() {
         setGoogleUserData(decoded);
         setIsLoggedIn(true);
         console.log('Logged in successfully - 1st useEffect');
+        console.log('decoded - useEffect App.jsx', decoded);
+
+        localStorage.setItem('email', decoded.email);
+
+        console.log('GETTING EMAIL FROM LOCAL STORAGE:', localStorage.getItem('email'));
 
         await checkUsernameInDatabase(decoded.email);
 
@@ -173,6 +150,7 @@ function App() {
           context={{
             googleUserData, setGoogleUserData,
             isLoggedIn, setIsLoggedIn,
+            userId, setUserId,
             username, setUsername,
             registeredUsername, setRegisteredUsername,
             hasUsername, setHasUsername,

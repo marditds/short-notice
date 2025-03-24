@@ -32,7 +32,8 @@ const UserSettings = () => {
             <Stack className='settings__sections'>
                 <Avatar />
                 <hr className='settings__hr' />
-                <Info accountType={accountType} />
+                {/* <Info accountType={accountType} /> */}
+                <Info accountType={'personal'} />
                 <hr className='settings__hr' />
                 {accountType === 'organization' &&
                     <>

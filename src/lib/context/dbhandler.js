@@ -32,6 +32,18 @@ console.log('databases - dbhandler.js', databases);
 //     import.meta.env.VITE_NOTICES_COLLECTION
 // );
 
+export const getAccount = async () => {
+    try {
+        const accnt = account.get();
+
+        console.log('Account gotten successfully:', accnt);
+
+        return accnt;
+    } catch (error) {
+        console.error('Error getting account:', error);
+
+    }
+}
 
 export const uploadAvatar = async (file) => {
 

@@ -12,7 +12,7 @@ export const Info = ({ accountType }) => {
         setUsername,
         setRegisteredUsername } = useUserContext();
 
-    const { handleUpdateUser } = useUserInfo(googleUserData);
+    const { handleUpdateUser } = useUserInfo(googleUserData.email);
 
     const [localUsername, setLocalUsername] = useState(username);
     const [isUpdating, setIsUpdating] = useState(false);
@@ -50,6 +50,7 @@ export const Info = ({ accountType }) => {
                 await handleUpdateUser(localUsername);
                 setUsername(localUsername);
                 setRegisteredUsername(localUsername)
+                localStorage.setItem('username', localUsername.toLowerCase());
             }
         } catch (error) {
             console.error('Username cannot be empty.');

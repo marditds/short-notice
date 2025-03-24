@@ -12,7 +12,7 @@ import { Loading } from '../../Loading/Loading';
 export const DeleteAccount = () => {
 
     const { googleUserData } = useUserContext();
-    const { handleDeleteUser } = useUserInfo(googleUserData);
+    const { handleDeleteUser } = useUserInfo(googleUserData.email);
     const navigate = useNavigate();
     const [showModal, setShowModal] = useState(false);
     const [loading, setLoading] = useState(false);

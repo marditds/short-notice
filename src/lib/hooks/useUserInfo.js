@@ -1,15 +1,15 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { createBlock, getBlockedUsersByUser as fetchBlockedUsersByUser, getBlockedUsersByUserByBatch as fetchBlockedUsersByUserByBatch, getUsersBlockingUser as fetchUsersBlockingUser, removeBlockUsingBlockedId, checkIdExistsInAuth, checkEmailExistsInAuth as checkEmailInAuthFromServer, registerAuthUser, getUserById, getUserByIdQuery as fetchUserByIdQuery, deleteAuthUser, createUserSession, getSessionDetails as fetchSessionDetails, deleteUserSession, updateUser, updateUserWebsite as updtUsrWbst, updateAuthUser, deleteUser, getUserByUsername as fetchUserByUsername, getAllUsersByString as fetchAllUsersByString, deleteAllNotices, deleteAllReactions, removeAllSaves, removeAllLikes, removeAllFollows, getUsersDocument, createFollow, unfollow, getUserFollowingsById, getUserFollowersById, followedByUserCount, followingTheUserCount, getPersonalFeedAccounts as fetchPersonalFeedAccounts, createPassocde, updatePassocde, getPassocdeByOrganizationId as fetchPassocdeByOrganizationId, createUserReport, getFollowStatus as fetchFollowStatus, isUserBlockedByOtherUser, isOtherUserBlockedByUser } from '../context/dbhandler';
+import { getAccount as fetchAccount, createBlock, getBlockedUsersByUser as fetchBlockedUsersByUser, getBlockedUsersByUserByBatch as fetchBlockedUsersByUserByBatch, getUsersBlockingUser as fetchUsersBlockingUser, removeBlockUsingBlockedId, checkIdExistsInAuth, checkEmailExistsInAuth as checkEmailInAuthFromServer, registerAuthUser, getUserById, getUserByIdQuery as fetchUserByIdQuery, deleteAuthUser, createUserSession, getSessionDetails as fetchSessionDetails, deleteUserSession, updateUser, updateUserWebsite as updtUsrWbst, updateAuthUser, deleteUser, getUserByUsername as fetchUserByUsername, getAllUsersByString as fetchAllUsersByString, deleteAllNotices, deleteAllReactions, removeAllSaves, removeAllLikes, removeAllFollows, getUsersDocument, createFollow, unfollow, getUserFollowingsById, getUserFollowersById, followedByUserCount, followingTheUserCount, getPersonalFeedAccounts as fetchPersonalFeedAccounts, createPassocde, updatePassocde, getPassocdeByOrganizationId as fetchPassocdeByOrganizationId, createUserReport, getFollowStatus as fetchFollowStatus, isUserBlockedByOtherUser, isOtherUserBlockedByUser } from '../context/dbhandler';
 import { useUserContext } from '../context/UserContext';
 import { UserId } from '../../components/User/UserId';
 
 const useUserInfo = (data) => {
 
-    const { username, setUsername } = useUserContext();
+    const { username, setUsername, userId } = useUserContext();
     const navigate = useNavigate();
 
-    const [userId, setUserId] = useState(null);
+    // const [userId, setUserId] = useState(null);
 
     const [userWebsite, setUserWebsite] = useState(null);
 
@@ -29,16 +29,27 @@ const useUserInfo = (data) => {
     const [isProcessingBlock, setIsProcessingBlock] = useState(false);
 
 
-    useEffect(() => {
-        const fetchUserId = async () => {
-            if (data) {
-                const id = await UserId(data);
-                setUserId(id);
-            }
-        };
-        fetchUserId();
-    }, [data]);
+    // useEffect(() => {
+    //     const fetchUserId = async () => {
+    //         if (data) {
+    //             const id = await UserId(data);
+    //             setUserId(id);
+    //         }
+    //     };
+    //     fetchUserId();
+    // }, [data]);
 
+    const getAccount = async () => {
+        try {
+            const accnt = await fetchAccount();
+
+            console.log('Success getting account:', accnt);
+
+            return accnt;
+        } catch (error) {
+            console.error('Error getting account:', error);
+        }
+    }
 
     const registerUser = async (id, email, username) => {
         try {
@@ -291,6 +302,8 @@ const useUserInfo = (data) => {
 
     // User follows them
     const getfollwedByUserCount = async (id) => {
+        console.log('Fetching the followebByCount for user:', id);
+
         try {
             setIsGetFollwedByUserCountLoading(true);
 
@@ -613,6 +626,7 @@ const useUserInfo = (data) => {
         isFetchingUsersData,
         // followersAccounts,
         // followingAccounts,
+        getAccount,
         setUserWebsite,
         checkIsOtherUserBlockedByUser,
         checkIsUserBlockedByOtherUser,

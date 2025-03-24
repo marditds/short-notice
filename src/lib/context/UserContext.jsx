@@ -1,6 +1,7 @@
 import { jwtDecode } from 'jwt-decode';
 import { createContext, useContext, useEffect, useState } from 'react';
-import { getUserByEmail } from './dbhandler';
+// import { getUserByEmail } from './dbhandler';
+import { getAccount } from './dbhandler';
 
 const UserContext = createContext();
 
@@ -8,6 +9,8 @@ export const UserProvider = ({ children }) => {
 
     const [googleUserData, setGoogleUserData] = useState([]);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [userId, setUserId] = useState(null);
+    const [userEmail, setUserEmail] = useState(null);
     const [username, setUsername] = useState('');
     const [registeredUsername, setRegisteredUsername] = useState('');
     const [hasUsername, setHasUsername] = useState(false);
@@ -15,36 +18,41 @@ export const UserProvider = ({ children }) => {
     const [accountType, setAccountType] = useState('');
     const [isAppLoading, setIsAppLoading] = useState(false);
 
-    // useEffect(() => {
-    //     const accessToken = localStorage.getItem('accessToken');
-    //     if (!accessToken) {
-    //         setIsAppLoading(false);
-    //         return;
-    //     }
+    useEffect(() => {
+        const fetchUserInfo = async () => {
+            try {
+                setIsAppLoading(true);
+                const account = await getAccount();
+                console.log('account in USERCONTEXT', account);
 
-    //     const decoded = jwtDecode(accessToken);
-    //     getUserByEmail(decoded.email)
-    //         .then((user) => {
-    //             if (user) {
-    //                 setUsername(user.username);
-    //                 setAccountType(user.accountType);
-    //                 setGoogleUserData(user);
-    //                 setIsLoggedIn(true);
-    //             }
-    //         })
-    //         .catch((error) => {
-    //             console.error('Error fetching user data:', error);
-    //         })
-    //         .finally(() => {
-    //             setIsAppLoading(false);
-    //         });
-    // }, []);
+                if (account?.$id) {
+                    setUserId(account.$id);
+                    setUserEmail(account.email);
+                    setUsername(account.name);
+                    setIsLoggedIn(true);
+                    console.log('User ID fetched:', account.$id);
+                }
+            } catch (error) {
+                console.error('Error fetching user ID:', error);
+            } finally {
+                setIsAppLoading(false);
+            }
+        };
+
+        // Only fetch if not already logged in
+        if (!userId && !isLoggedIn) {
+            fetchUserInfo();
+        }
+    }, [userId, isLoggedIn]);
+
 
     return (
         <UserContext.Provider
             value={{
                 googleUserData, setGoogleUserData,
                 isLoggedIn, setIsLoggedIn,
+                userId, setUserId,
+                userEmail, setUserEmail,
                 username, setUsername,
                 registeredUsername, setRegisteredUsername,
                 hasUsername, setHasUsername,

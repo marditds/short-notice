@@ -21,7 +21,9 @@ const OtherUserProfile = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const { googleUserData, username } = useUserContext();
+    const { googleUserData, username, userId } = useUserContext();
+
+    const myUsername = username || localStorage.getItem('username') || 'myUsername';
 
     const [currUserId, setCurrUserId] = useState(() => {
         return localStorage.getItem('currUserId') || null;
@@ -45,9 +47,10 @@ const OtherUserProfile = () => {
         reportReaction,
         fetchUserLikes,
         fetchUserSaves
-    } = useNotices(googleUserData);
+    } = useNotices(googleUserData.email);
 
     const {
+        // userId,
         isFollowingUserLoading,
         isInitialFollowCheckLoading,
         isFollowing,
@@ -71,7 +74,7 @@ const OtherUserProfile = () => {
         fetchAccountsFollowedByUser,
         getPassocdeByOrganizationId,
         handleUserReport
-    } = useUserInfo(googleUserData);
+    } = useUserInfo(googleUserData.email);
 
     const { isSmallScreen } = screenUtils();
 
@@ -136,12 +139,17 @@ const OtherUserProfile = () => {
     // Tabs' EventKey
     const [eventKey, setEventKey] = useState('notices');
 
-    // Check for username vs. otherUsername
+    // Check for myUsername vs. otherUsername
     useEffect(() => {
-        if (otherUsername === username) {
+        if (otherUsername === myUsername) {
             navigate('/user/profile');
         }
-    }, [otherUsername, username, navigate]);
+    }, [otherUsername, myUsername, navigate]);
+
+    //THIS IS MY ID
+    useEffect(() => {
+        console.log('THIS IS MY ID:', userId);
+    }, [userId]);
 
     // Scroll to top on pathname(location) change
     useEffect(() => {
@@ -150,8 +158,8 @@ const OtherUserProfile = () => {
 
     // Hello
     useEffect(() => {
-        console.log('Barev', username);
-    }, [username]);
+        console.log('Barev', myUsername);
+    }, [myUsername]);
 
     // Get Other User
     useEffect(() => {
@@ -162,7 +170,7 @@ const OtherUserProfile = () => {
 
                 const [otherUserRes, userRes] = await Promise.allSettled([
                     getUserByUsername(otherUsername),
-                    getUserByUsername(username)
+                    getUserByUsername(myUsername)
                 ]);
 
                 if (otherUserRes.status === 'fulfilled' && userRes.status === 'fulfilled') {
@@ -203,6 +211,8 @@ const OtherUserProfile = () => {
                     }
 
                     if (otherUser) {
+                        console.log('THIS IS OTHER USER:', otherUser);
+
                         setCurrUserId(prevId => (prevId !== otherUser.$id ? otherUser.$id : prevId));
                         setFellowUserId(prevId => (prevId !== otherUser.$id ? otherUser.$id : prevId));
                         setAccountType(otherUser.accountType);
@@ -220,7 +230,7 @@ const OtherUserProfile = () => {
         setIsOtherUserBlocked(false);
         setIsBlocked(false);
         getCurrUser();
-    }, [username, otherUsername])
+    }, [myUsername, otherUsername])
 
     // CurrUserId
     useEffect(() => {
@@ -264,8 +274,8 @@ const OtherUserProfile = () => {
                 console.log('nstNtcsIds', ntcsIds);
 
                 const [lkdNtcsRes, svdNtcsRes] = await Promise.allSettled([
-                    fetchUserLikes(user_id, ntcsIds),
-                    fetchUserSaves(user_id, ntcsIds)
+                    fetchUserLikes(userId, ntcsIds),
+                    fetchUserSaves(userId, ntcsIds)
                 ]);
 
                 if (lkdNtcsRes.status === 'fulfilled') {
@@ -355,7 +365,7 @@ const OtherUserProfile = () => {
             try {
                 console.log('currUserId - allSavedNotices', currUserId);
 
-                const allSavedNotices = await getAllSavedNotices(currUserId, user_id, limitSaves, offsetSaves);
+                const allSavedNotices = await getAllSavedNotices(currUserId, userId, limitSaves, offsetSaves);
 
                 console.log('allSavedNotices', allSavedNotices);
 
@@ -366,8 +376,8 @@ const OtherUserProfile = () => {
                 const ntcsIds = noticesWithoutTypeOrganization?.map(ntc => ntc.$id);
 
                 const [lkdNtcsRes, svdNtcsRes] = await Promise.allSettled([
-                    fetchUserLikes(user_id, ntcsIds),
-                    fetchUserSaves(user_id, ntcsIds)
+                    fetchUserLikes(userId, ntcsIds),
+                    fetchUserSaves(userId, ntcsIds)
                 ]);
 
                 if (lkdNtcsRes.status === 'fulfilled') {
@@ -432,7 +442,7 @@ const OtherUserProfile = () => {
             }
 
             try {
-                const allLikedNotices = await getAllLikedNotices(currUserId, user_id, limitLikes, offsetLikes);
+                const allLikedNotices = await getAllLikedNotices(currUserId, userId, limitLikes, offsetLikes);
 
                 console.log('allLikedNotices - OtherUserProfile', allLikedNotices);
 
@@ -443,8 +453,8 @@ const OtherUserProfile = () => {
                 const ntcsIds = noticesWithoutTypeOrganization?.map(ntc => ntc.$id);
 
                 const [lkdNtcsRes, svdNtcsRes] = await Promise.allSettled([
-                    fetchUserLikes(user_id, ntcsIds),
-                    fetchUserSaves(user_id, ntcsIds)
+                    fetchUserLikes(userId, ntcsIds),
+                    fetchUserSaves(userId, ntcsIds)
                 ]);
 
                 if (lkdNtcsRes.status === 'fulfilled') {
@@ -539,8 +549,8 @@ const OtherUserProfile = () => {
 
     //Fetch follow status
     useEffect(() => {
-        getFollowStatus(user_id, currUserId);
-    }, [user_id, currUserId])
+        getFollowStatus(userId, currUserId);
+    }, [userId, currUserId])
 
     // Fetch followers count
     useEffect(() => {
@@ -666,7 +676,7 @@ const OtherUserProfile = () => {
         <>
             <>
                 <Profile
-                    username={otherUsername}
+                    myUsername={otherUsername}
                     avatarUrl={avatarUrl}
                     currUserId={currUserId}
                     website={otherUserWebsite}
@@ -718,7 +728,7 @@ const OtherUserProfile = () => {
                                                     savedNotices={savedNotices}
                                                     reactions={noticesReactions}
                                                     eventKey={eventKey}
-                                                    user_id={user_id}
+                                                    userId={userId}
                                                     isOtherUserBlocked={isOtherUserBlocked}
                                                     handleLike={handleLike}
                                                     setLikedNotices={setLikedNotices}
@@ -769,7 +779,7 @@ const OtherUserProfile = () => {
                                             <>
                                                 <Notices
                                                     notices={savedNoticesData}
-                                                    user_id={user_id}
+                                                    userId={userId}
                                                     likedNotices={likedNotices}
                                                     savedNotices={savedNotices}
                                                     eventKey={eventKey}
@@ -823,7 +833,7 @@ const OtherUserProfile = () => {
                                             <>
                                                 <Notices
                                                     notices={likedNoticesData}
-                                                    user_id={user_id}
+                                                    userId={userId}
                                                     likedNotices={likedNotices}
                                                     savedNotices={savedNotices}
                                                     eventKey={eventKey}

@@ -25,7 +25,7 @@ const useLogin = () => {
         getSessionDetails,
         checkingEmailInAuth,
         registerUser,
-    } = useUserInfo(googleUserData);
+    } = useUserInfo(googleUserData.email);
 
     const [isServerDown, setIsServerDown] = useState(false);
 
@@ -152,6 +152,12 @@ const useLogin = () => {
         const decoded = jwtDecode(credentialResponse?.credential);
         console.log('Logged in successfully. - onSuccess');
         setGoogleUserData(preData => decoded);
+
+        console.log('TYPE OF DECODED:', typeof decoded);
+
+        // localStorage.setItem('googleUserData', JSON.stringify(decoded));
+        localStorage.setItem('googleUserData', decoded);
+        localStorage.setItem('email', decoded.email);
 
         setIsLoggedIn(preVal => true);
 

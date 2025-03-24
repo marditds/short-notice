@@ -49,9 +49,9 @@ const UserFeed = () => {
         getReactionByReactionId,
         reportReaction,
         addNotice,
-    } = useNotices(googleUserData);
+    } = useNotices(googleUserData.email);
 
-    const { isFetchingUsersData, fetchUsersData, getUserAccountByUserId } = useUserInfo(googleUserData);
+    const { isFetchingUsersData, fetchUsersData, getUserAccountByUserId } = useUserInfo(googleUserData.email);
 
     const { isLargeScreen } = screenUtils();
 

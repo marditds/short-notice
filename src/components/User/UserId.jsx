@@ -1,12 +1,14 @@
 import { getUserByEmail } from '../../lib/context/dbhandler.js';
 
 export const UserId = async (googleUserData) => {
-    if (!googleUserData || !googleUserData.email) {
+    if (!googleUserData || !googleUserData) {
         return null;
     }
 
     try {
-        const userEmail = googleUserData.email;
+        console.log('THIS IS EMAIL:', googleUserData);
+
+        const userEmail = googleUserData;
 
         const currUser = await getUserByEmail(userEmail);
 

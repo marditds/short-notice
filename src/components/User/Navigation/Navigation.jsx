@@ -36,7 +36,7 @@ export const Navigation = ({
         // updateInterests,
         // deselectAllInterestTags,
         // fetchUserInterests
-    } = useNotices(googleUserData);
+    } = useNotices(googleUserData.email);
 
     const { isLargeScreen, isMediumScreen, isSmallScreen, isExtraSmallScreen } = screenUtils();
 
@@ -84,6 +84,8 @@ export const Navigation = ({
                 setIsLoggedIn(false);
                 setGoogleUserData(null);
                 localStorage.removeItem('accessToken');
+                localStorage.removeItem('googleUserData');
+                localStorage.removeItem('email');
                 console.log('Logged out successfully.');
                 window.location.href = '/';
             },

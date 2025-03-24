@@ -10,28 +10,28 @@ import { getAvatarUrl } from '../../../lib/utils/avatarUtils';
 
 export const Avatar = () => {
 
-    const { googleUserData } = useUserContext();
+    const { googleUserData, userId } = useUserContext();
 
     const [user_id, setUserId] = useState(null);
     const [isDeleting, setIsDeleting] = useState(false);
 
-    const { avatarUrl, setAvatarUrl, isUploading, handleAvatarUpload, handleDeleteAvatarFromStrg, handleDeleteAvatarFromDoc, extractFileIdFromUrl } = useUserAvatar(user_id);
+    const { avatarUrl, setAvatarUrl, isUploading, handleAvatarUpload, handleDeleteAvatarFromStrg, handleDeleteAvatarFromDoc, extractFileIdFromUrl } = useUserAvatar(userId);
 
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        const fetchUserId = async () => {
-            try {
-                const id = await UserId(googleUserData);
-                setUserId(id);
-            } catch (error) {
-                console.error('Error fetching user ID:', error);
-            }
-        };
+    //     const fetchUserId = async () => {
+    //         try {
+    //             const id = await UserId(googleUserData);
+    //             setUserId(id);
+    //         } catch (error) {
+    //             console.error('Error fetching user ID:', error);
+    //         }
+    //     };
 
-        fetchUserId();
+    //     fetchUserId();
 
-    }, [googleUserData]);
+    // }, [googleUserData]);
 
 
     const handleFileChange = async (e) => {

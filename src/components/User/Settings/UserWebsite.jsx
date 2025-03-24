@@ -8,7 +8,7 @@ export const UserWebsite = () => {
 
     const { username, googleUserData } = useUserContext();
 
-    const { userWebsite, setUserWebsite, updateUserWebsite, getUserByUsername } = useUserInfo(googleUserData);
+    const { userWebsite, setUserWebsite, updateUserWebsite, getUserByUsername } = useUserInfo(googleUserData.email);
 
     const [isUpdatingWebsite, setIsUpdatingWebsite] = useState(false);
 

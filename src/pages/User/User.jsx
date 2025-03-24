@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { getUserByEmail } from '../../lib/context/dbhandler';
 import { Outlet, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
 import { Navigation } from '../../components/User/Navigation/Navigation';
@@ -10,30 +11,72 @@ import '../../components/User/Navigation/Navigation.css';
 
 const User = () => {
 
-    const { setGoogleUserData,
+    const {
+        setGoogleUserData,
         setIsLoggedIn,
         accountType,
         username,
         googleUserData,
-        isAppLoading } = useUserContext();
+        isAppLoading,
+        setIsAppLoading,
+        setUsername,
+        setHasUsername
+    } = useUserContext();
 
     const location = useLocation();
 
     const navigate = useNavigate();
 
-    const { userId, removeSession } = useUserInfo(googleUserData);
+    const { userId, removeSession } = useUserInfo(googleUserData.email);
+
+    const [loadingAuth, setLoadingAuth] = useState(false);
 
     useEffect(() => {
         console.log('googleUserData:', googleUserData);
     }, [googleUserData])
 
+    // Ensure we have the google data on direct URL access
     useEffect(() => {
-        if (!isAppLoading && (!username || !googleUserData)) {
-            navigate('/');
-        }
-    }, [isAppLoading, username, googleUserData, navigate]);
+        const initializeAuth = async () => {
+            const accessToken = localStorage.getItem('accessToken');
+            const storedEmail = localStorage.getItem('email');
+            const storedGoogleUserData = localStorage.getItem('googleUserData');
 
-    if (isAppLoading) {
+            console.log('storedGoogleUserData', storedGoogleUserData);
+            console.log('storedEmail', storedEmail);
+
+            if (!accessToken || !storedEmail) {
+                navigate('/');
+                return;
+            }
+
+            try {
+                setLoadingAuth(true);
+                setIsAppLoading(true);
+
+                if (!googleUserData && storedGoogleUserData) {
+                    const parsedData = JSON.parse(storedGoogleUserData);
+
+                    console.log('parsedData', parsedData);
+
+                    setGoogleUserData(parsedData);
+                    setIsLoggedIn(true);
+                    console.log('Rehydrated googleUserData from localStorage:', parsedData);
+                }
+            } catch (error) {
+                console.error("Error initializing auth in User component:", error);
+                navigate('/');
+                return;
+            } finally {
+                setLoadingAuth(false);
+                setIsAppLoading(false);
+            }
+        };
+
+        initializeAuth();
+    }, []);
+
+    if (isAppLoading || loadingAuth) {
         return <div className='d-flex justify-content-center align-items-center'>
             <Loading classAnun={'me-2'} />Loading...
         </div>;
