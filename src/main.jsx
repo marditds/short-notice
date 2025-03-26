@@ -174,9 +174,9 @@ const router = createBrowserRouter([
         return redirect('/set-username');
       }
 
-      console.log('User authenticated and profile complete. Redirecting to /profile');
-      return redirect('/user/profile');
-
+      // console.log('User authenticated and profile complete. Redirecting to /profile');
+      // return redirect('/user/profile');
+      return null;
     },
     children: [
       {

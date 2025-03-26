@@ -95,24 +95,54 @@ const Me = () => {
         console.log('USER EMAIL,', userEmail);
 
         const checkEmailExistsInCollection = async () => {
-            const res = await getUserByEmail(userEmail);
-            if (res) {
-                setEmailExistsInCollection(true);
+            try {
+                setIsAppLoading(true);
+
+                const res = await getUserByEmail(userEmail);
+                if (res) {
+                    setEmailExistsInCollection(true);
+                } else {
+                    console.log('Email not found in collection.');
+                }
+            } catch (error) {
+                console.error('Erro checking email in collectio:', error);
+            } finally {
+                setIsAppLoading(false);
             }
         }
         checkEmailExistsInCollection();
-    }, [])
+    }, [user])
+
+    useEffect(() => {
+        if (emailExistsInCollection) {
+            navigate('/user/profile');
+        }
+    }, [emailExistsInCollection])
 
     return (
-        <div style={{ marginTop: '250px' }}>
+        <div className='d-flex justify-content-center align-items-center'>
             Hello! Welcome to ShortNotice.
             <br />
             Please press continue to set up your account.
             <br />
-            {!emailExistsInCollection ?
-                <><Button onClick={handleContinue}>Continue</Button>
-                    <Button onClick={deleteUserSession}>Cancel</Button></>
-                : 'Getting things ready. Hang tight.'}
+            {(!emailExistsInCollection && !isAppLoading) &&
+                <>
+                    <Button onClick={handleContinue}>
+                        Continue
+                    </Button>
+                    <Button onClick={async () => {
+                        await deleteUserSession();
+                        navigate('/')
+                    }}>
+                        Cancel
+                    </Button>
+                </>
+            }
+            {isAppLoading && <>
+                <Loading classAnun='me-2' /> Getting things ready. Hang tight.
+            </>
+            }
+
 
         </div>
     );
