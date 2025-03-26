@@ -16,9 +16,17 @@ export const Navigation = ({
     userId,
     removeSession,
     googleLogout,
+    accountType,
     setGoogleUserData,
     setIsLoggedIn,
-    accountType }) => {
+    setUserId,
+    setUserEmail,
+    setUsername,
+    setRegisteredUsername,
+    setHasUsername,
+    setAccountType,
+    setHasAccountType,
+    setIsAppLoading }) => {
 
     const location = useLocation();
 
@@ -79,15 +87,46 @@ export const Navigation = ({
             title: 'Log out',
             icon: 'bi bi-box-arrow-left',
             onClick: async () => {
-                await removeSession();
-                googleLogout();
-                setIsLoggedIn(false);
-                setGoogleUserData(null);
-                localStorage.removeItem('accessToken');
-                localStorage.removeItem('googleUserData');
-                localStorage.removeItem('email');
-                console.log('Logged out successfully.');
-                window.location.href = '/';
+                try {
+                    setIsAppLoading(true);
+                    await removeSession();
+                    googleLogout();
+                    setIsLoggedIn(false);
+                    setGoogleUserData(null);
+                    setUserId(null);
+                    setUserEmail(null);
+                    setUsername('');
+                    setHasUsername(false);
+                    setAccountType('');
+                    localStorage.removeItem('accessToken');
+                    localStorage.removeItem('googleUserData');
+                    localStorage.removeItem('email');
+                    localStorage.removeItem('username');
+                    localStorage.removeItem('passcode');
+                    console.log('Logged out successfully.');
+                    window.location.href = '/';
+                } catch (error) {
+                    console.error('Error logging out:', error);
+                } finally {
+                    setIsAppLoading(false);
+                }
+                // setIsAppLoading(true);
+                // await removeSession();
+                // googleLogout();
+                // setIsLoggedIn(false);
+                // setGoogleUserData(null);
+                // setUserId(null);
+                // setUserEmail(null);
+                // setUsername('');
+                // setHasUsername(false);
+                // setAccountType('');
+                // localStorage.removeItem('accessToken');
+                // localStorage.removeItem('googleUserData');
+                // localStorage.removeItem('email');
+                // localStorage.removeItem('username');
+                // localStorage.removeItem('passcode');
+                // console.log('Logged out successfully.');
+                // window.location.href = '/';
             },
             url: '/'
         }

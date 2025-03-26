@@ -19,6 +19,7 @@ function App() {
     isLoggedIn, setIsLoggedIn,
     userId, setUserId,
     username, setUsername,
+    userEmail, setUserEmail,
     registeredUsername, setRegisteredUsername,
     accountType, setAccountType,
     hasAccountType, setHasAccountType,
@@ -55,9 +56,9 @@ function App() {
         console.log('Logged in successfully - 1st useEffect');
         console.log('decoded - useEffect App.jsx', decoded);
 
-        localStorage.setItem('email', decoded.email);
+        // localStorage.setItem('email', decoded.email);
 
-        console.log('GETTING EMAIL FROM LOCAL STORAGE:', localStorage.getItem('email'));
+        // console.log('GETTING EMAIL FROM LOCAL STORAGE:', localStorage.getItem('email'));
 
         await checkUsernameInDatabase(decoded.email);
 
@@ -151,6 +152,7 @@ function App() {
             googleUserData, setGoogleUserData,
             isLoggedIn, setIsLoggedIn,
             userId, setUserId,
+            userEmail, setUserEmail,
             username, setUsername,
             registeredUsername, setRegisteredUsername,
             hasUsername, setHasUsername,

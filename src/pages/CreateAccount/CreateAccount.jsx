@@ -4,7 +4,7 @@ import { googleLogout } from '@react-oauth/google';
 import { Container, Stack, Row, Col, Form, Button, Alert, Modal } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useUserContext } from '../../lib/context/UserContext';
-import { createUser, getUserByUsername } from '../../lib/context/dbhandler';
+import { createUser, getUserByUsername, getAccount } from '../../lib/context/dbhandler';
 import { AccountType } from '../../components/Setup/AccountType';
 import './CreateAccount.css';
 import { keysProvider } from '../../lib/context/keysProvider';
@@ -27,7 +27,10 @@ const CreateAccount = () => {
     const {
         googleUserData, setGoogleUserData,
         setIsLoggedIn,
+        userId, setUserId,
         username, setUsername,
+        userEmail, setUserEmail,
+        givenName, setGivenName,
         accountType, setAccountType,
         setHasAccountType,
         setHasUsername
@@ -231,6 +234,17 @@ const CreateAccount = () => {
             console.log('Going for setUser');
 
             console.log('About to call setUser, type:', typeof setUser);
+
+            const authenticatedUser = await getAccount();
+
+            console.log('RIGHT BEFORE CALLING SET USER:', username, authenticatedUser.email,
+                authenticatedUser.$id,
+                authenticatedUser.name);
+
+
+            setUserEmail(authenticatedUser.email);
+            setUserId(authenticatedUser.$id);
+            setGivenName(authenticatedUser.name);
 
             await setUser();
 

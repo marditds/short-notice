@@ -10,7 +10,7 @@ import {
 import ErrorPage from './routes/error-page.jsx';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { jwtDecode } from "jwt-decode";
-import { getUserByEmail } from './lib/context/dbhandler.js';
+import { getAccount, getUserByEmail } from './lib/context/dbhandler.js';
 import { UserProvider } from './lib/context/UserContext.jsx';
 import { keysProvider } from './lib/context/keysProvider.js';
 import App from './App.jsx';
@@ -42,6 +42,7 @@ import Header from './components/PreLogin/Header/Header.jsx';
 import Footer from './components/PreLogin/Footer/Footer.jsx';
 import { GoogleLoginForm } from './components/LoginForm/Google/GoogleLoginForm.jsx';
 import useLogin from './lib/hooks/useLogin.js';
+import Me from './pages/User/Home/Me.jsx';
 
 const PreLoginLayout = () => {
 
@@ -124,13 +125,17 @@ const router = createBrowserRouter([
     path: 'set-username',
     element: <CreateAccount />,
     loader: async () => {
-      const accessToken = localStorage.getItem('accessToken');
-      if (!accessToken) {
-        return redirect('/');
-      }
+      // const accessToken = localStorage.getItem('accessToken');
+      // if (!accessToken) {
+      //   return redirect('/');
+      // }
 
-      const decoded = jwtDecode(accessToken);
-      const user = await getUserByEmail(decoded.email);
+      // const decoded = jwtDecode(accessToken);
+      console.log('RUNNING <CreateAccount/> LOADER:');
+
+      const authenticatedUser = await getAccount();
+
+      const user = await getUserByEmail(authenticatedUser.email);
       if (user && user.username) {
         return redirect('/user/feed');
       }
@@ -139,20 +144,39 @@ const router = createBrowserRouter([
     },
   },
   {
+    path: 'authenticate',
+    element: <Me />,
+  },
+  {
     path: 'user',
     element: <User />,
     loader: async () => {
-      const accessToken = localStorage.getItem('accessToken');
-      if (!accessToken) {
-        return redirect('/');
+      //   const accessToken = localStorage.getItem('accessToken');
+      //   if (!accessToken) {
+      //     return redirect('/');
+      //   }
+      // const decoded = jwtDecode(accessToken);
+      console.log('RUNNING <USER/> LOADER:');
+
+      const authenticatedUser = await getAccount();
+
+      console.log('authenticatedUser in LOADER:', authenticatedUser);
+
+      if (!authenticatedUser) {
+        console.warn('No authenticated user. Redirecting to /authenitcate');
+        return redirect('authenticate');
       }
 
-      const decoded = jwtDecode(accessToken);
-      const user = await getUserByEmail(decoded.email);
+      const user = await getUserByEmail(authenticatedUser.email);
+
       if (!user || !user.username) {
+        console.log('User profile incomplete. Redirecting to /set-username');
         return redirect('/set-username');
       }
-      return { isAuthenticated: true };
+
+      console.log('User authenticated and profile complete. Redirecting to /profile');
+      return redirect('/user/profile');
+
     },
     children: [
       {

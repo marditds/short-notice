@@ -21,13 +21,14 @@ const OtherUserProfile = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const { googleUserData, username, userId } = useUserContext();
+    const { googleUserData, username, userId, userEmail } = useUserContext();
 
     const myUsername = username || localStorage.getItem('username') || 'myUsername';
 
-    const [currUserId, setCurrUserId] = useState(() => {
-        return localStorage.getItem('currUserId') || null;
-    });
+    const [currUserId, setCurrUserId] = useState(null);
+    // const [currUserId, setCurrUserId] = useState(() => {
+    //     return localStorage.getItem('currUserId') || null;
+    // });
 
     const {
         user_id,

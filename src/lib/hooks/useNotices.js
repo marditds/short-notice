@@ -6,7 +6,7 @@ import useGemini from './useGemini';
 import { UserId } from '../../components/User/UserId.jsx';
 // import { useUnblockedNotices } from '../utils/blockFilter.js';
 
-const useNotices = (googleUserData) => {
+const useNotices = (data) => {
 
     const { userId: user_id } = useUserContext();
 
@@ -110,15 +110,12 @@ const useNotices = (googleUserData) => {
         }
     ]);
 
-
-    // const { filterBlocksFromLikesSaves } = useUnblockedNotices();
-
     // Fetch User Identity
     // useEffect(() => {
     //     const obtainUserById = async () => {
-    //         if (googleUserData) {
+    //         if (data) {
     //             try {
-    //                 const id = await UserId(googleUserData);
+    //                 const id = await UserId(data);
 
     //                 setUserId(id);
 
@@ -134,7 +131,7 @@ const useNotices = (googleUserData) => {
 
     //     obtainUserById();
 
-    // }, [googleUserData]);
+    // }, [data]);
 
     // Fetch User Saves for general feed
     useEffect(() => {
@@ -502,7 +499,7 @@ const useNotices = (googleUserData) => {
         } catch (error) {
             console.error('Error getNoticesByUser - useNotices');
         }
-    }, [googleUserData]);
+    }, [data]);
 
     const fetchUserNotices = async (id, limit, lastId) => {
         if (!id) return;

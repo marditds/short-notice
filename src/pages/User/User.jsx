@@ -12,22 +12,23 @@ import '../../components/User/Navigation/Navigation.css';
 const User = () => {
 
     const {
-        setGoogleUserData,
-        setIsLoggedIn,
-        accountType,
-        username,
-        googleUserData,
-        isAppLoading,
-        setIsAppLoading,
-        setUsername,
-        setHasUsername
+        googleUserData, setGoogleUserData,
+        isLoggedIn, setIsLoggedIn,
+        userId, setUserId,
+        userEmail, setUserEmail,
+        username, setUsername,
+        registeredUsername, setRegisteredUsername,
+        hasUsername, setHasUsername,
+        accountType, setAccountType,
+        hasAccountType, setHasAccountType,
+        isAppLoading, setIsAppLoading
     } = useUserContext();
 
     const location = useLocation();
 
     const navigate = useNavigate();
 
-    const { userId, removeSession } = useUserInfo(googleUserData.email);
+    const { removeSession } = useUserInfo(userEmail);
 
     const [loadingAuth, setLoadingAuth] = useState(false);
 
@@ -36,45 +37,45 @@ const User = () => {
     }, [googleUserData])
 
     // Ensure we have the google data on direct URL access
-    useEffect(() => {
-        const initializeAuth = async () => {
-            const accessToken = localStorage.getItem('accessToken');
-            const storedEmail = localStorage.getItem('email');
-            const storedGoogleUserData = localStorage.getItem('googleUserData');
+    // useEffect(() => {
+    //     const initializeAuth = async () => {
+    //         const accessToken = localStorage.getItem('accessToken');
+    //         // const storedEmail = localStorage.getItem('email');
+    //         const storedGoogleUserData = localStorage.getItem('googleUserData');
 
-            console.log('storedGoogleUserData', storedGoogleUserData);
-            console.log('storedEmail', storedEmail);
+    //         console.log('storedGoogleUserData', storedGoogleUserData);
+    //         console.log('storedEmail', storedEmail);
 
-            if (!accessToken || !storedEmail) {
-                navigate('/');
-                return;
-            }
+    //         if (!accessToken) {
+    //             navigate('/');
+    //             return;
+    //         }
 
-            try {
-                setLoadingAuth(true);
-                setIsAppLoading(true);
+    //         try {
+    //             setLoadingAuth(true);
+    //             setIsAppLoading(true);
 
-                if (!googleUserData && storedGoogleUserData) {
-                    const parsedData = JSON.parse(storedGoogleUserData);
+    //             if (!googleUserData && storedGoogleUserData) {
+    //                 const parsedData = JSON.parse(storedGoogleUserData);
 
-                    console.log('parsedData', parsedData);
+    //                 console.log('parsedData', parsedData);
 
-                    setGoogleUserData(parsedData);
-                    setIsLoggedIn(true);
-                    console.log('Rehydrated googleUserData from localStorage:', parsedData);
-                }
-            } catch (error) {
-                console.error("Error initializing auth in User component:", error);
-                navigate('/');
-                return;
-            } finally {
-                setLoadingAuth(false);
-                setIsAppLoading(false);
-            }
-        };
+    //                 setGoogleUserData(parsedData);
+    //                 setIsLoggedIn(true);
+    //                 console.log('Rehydrated googleUserData from localStorage:', parsedData);
+    //             }
+    //         } catch (error) {
+    //             console.error("Error initializing auth in User component:", error);
+    //             navigate('/');
+    //             return;
+    //         } finally {
+    //             setLoadingAuth(false);
+    //             setIsAppLoading(false);
+    //         }
+    //     };
 
-        initializeAuth();
-    }, []);
+    //     initializeAuth();
+    // }, []);
 
     if (isAppLoading || loadingAuth) {
         return <div className='d-flex justify-content-center align-items-center'>
@@ -92,6 +93,12 @@ const User = () => {
                 setGoogleUserData={setGoogleUserData}
                 setIsLoggedIn={setIsLoggedIn}
                 accountType={accountType}
+                setIsAppLoading={setIsAppLoading}
+                setUserId={setUserId}
+                setUserEmail={setUserEmail}
+                setUsername={setUsername}
+                setHasUsername={setHasUsername}
+                setAccountType={setAccountType}
             />
             <Container
                 className='userhome__body'

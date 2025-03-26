@@ -1,4 +1,4 @@
-import { Client, Storage, Account, Databases, ID, Query, Permission, Role, Functions } from 'appwrite';
+import { Client, Storage, Account, Databases, ID, Query, Permission, Role, Functions, OAuthProvider } from 'appwrite';
 
 const client = new Client()
     .setEndpoint(import.meta.env.VITE_ENDPOINT)
@@ -21,27 +21,51 @@ export const databases = new Databases(client);
 
 console.log('databases - dbhandler.js', databases);
 
+export const googleOAuthLogin = async () => {
+    try {
+        const baseUrl = window.location.origin
 
-// const users = await databases.listDocuments(
-//     import.meta.env.VITE_DATABASE,
-//     import.meta.env.VITE_USERS_COLLECTION
-// );
+        const userAccount = account.createOAuth2Token(
+            'google',
+            `${baseUrl}/authenticate`,
+            `${baseUrl}/`,
+        )
 
-// const notices = await databases.listDocuments(
-//     import.meta.env.VITE_DATABASE,
-//     import.meta.env.VITE_NOTICES_COLLECTION
-// );
+        console.log('Success logging in with Google:', userAccount);
+
+    } catch (error) {
+        console.error('Error logging in with google:', error);
+    }
+}
+
+
+export const handleOAuthSession = async (userId, secret) => {
+
+    try {
+        await account.createSession(userId, secret);
+
+        // Get the user data
+        const user = await account.get();
+
+        console.log('This is USER:', user);
+
+        // User is now authenticated!
+        return user;
+    } catch (error) {
+        console.error('Authentication failed:', error);
+        throw error;
+    }
+};
+
 
 export const getAccount = async () => {
     try {
-        const accnt = account.get();
-
+        const accnt = await account.get();
         console.log('Account gotten successfully:', accnt);
-
         return accnt;
     } catch (error) {
         console.error('Error getting account:', error);
-
+        // throw error;
     }
 }
 

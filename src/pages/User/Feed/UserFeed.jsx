@@ -14,10 +14,11 @@ import { ComposeNotice } from '../../../components/User/ComposeNotice';
 
 const UserFeed = () => {
 
-    const { googleUserData, accountType } = useUserContext();
+    const { googleUserData, accountType,
+        userId, isLoggedIn, userEmail
+    } = useUserContext();
 
     const {
-        user_id,
         personalFeedLikedNotices,
         personalFeedSavedNotices,
         likedNotices,
@@ -49,7 +50,8 @@ const UserFeed = () => {
         getReactionByReactionId,
         reportReaction,
         addNotice,
-    } = useNotices(googleUserData.email);
+    } = useNotices(userEmail);
+    // } = useNotices(googleUserData.email);
 
     const { isFetchingUsersData, fetchUsersData, getUserAccountByUserId } = useUserInfo(googleUserData.email);
 
@@ -84,10 +86,14 @@ const UserFeed = () => {
     const notices = !isFeedToggled ? personalFeedNotices : generalFeedNotices;
     const feedType = !isFeedToggled ? 'personal' : 'general';
 
+    useEffect(() => {
+        console.log('userId in UserFeed:', userId);
+    }, [userId])
+
     // Fetch user interests tags
     useEffect(() => {
         fetchUserInterests();
-    }, [user_id]);
+    }, [userId]);
 
     useEffect(() => {
         console.log('isFeedToggled STATUS:', isFeedToggled);
@@ -185,7 +191,12 @@ const UserFeed = () => {
     useEffect(() => {
         const fetchInitialPersonalFeed = async () => {
             try {
-                console.log('USER ID IN PERSONAL FEED:', user_id);
+                if (!userId || !isLoggedIn) {
+                    console.log('User not fully logged in. Skipping feed fetch.');
+                    return;
+                }
+
+                console.log('USER ID IN PERSONAL FEED:', userId);
                 console.log('STARTING INITIAL PERSONAL FEED.');
 
                 setIsLoadingPersonalFeedNotices(true);
@@ -215,10 +226,14 @@ const UserFeed = () => {
                 console.log('ENDING INITIAL PERSONAL FEED.');
             }
         };
-        if (personalFeedNotices.length === 0) {
+        // if (personalFeedNotices.length === 0) {
+        //     fetchInitialPersonalFeed();
+        // }
+        if (personalFeedNotices.length === 0 && userId && isLoggedIn) {
             fetchInitialPersonalFeed();
         }
-    }, [user_id]);
+
+    }, [userId, isLoggedIn]);
 
     // Fetch feed (personal)-(subsequent)
     useEffect(() => {
@@ -349,7 +364,7 @@ const UserFeed = () => {
                     &&
                     <Notices
                         notices={notices}
-                        user_id={user_id}
+                        user_id={userId}
                         likedNotices={!isFeedToggled ? personalFeedLikedNotices : likedNotices}
                         savedNotices={!isFeedToggled ? personalFeedSavedNotices : savedNotices}
                         handleLike={handleLike}
@@ -406,7 +421,7 @@ const UserFeed = () => {
                         >
                             {isLoadingPersonalFeedNotices || isLoadingMore || isLoadingMorePersonal ?
                                 <><Loading size={16} /> Loading...</>
-                                : 'Load More HAKOP'}
+                                : 'Load More'}
                         </Button>
                         :
                         <div className={`${isAnyTagSelected && 'my-4'}`}>

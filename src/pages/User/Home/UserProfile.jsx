@@ -15,15 +15,16 @@ import '../../../components/User/Profile/UserProfile.css';
 import { EndAsterisks } from '../../../components/User/EndAsterisks.jsx';
 import { NoticesPlaceholder } from '../../../components/User/NoticesPlaceholder.jsx';
 import { ModifyModal } from '../../../components/User/Modals.jsx';
+import { createUserSession, getAccount } from '../../../lib/context/dbhandler.js';
 
 const UserProfile = () => {
 
     const location = useLocation();
 
-    const { googleUserData, username, userId, isApploading } = useUserContext();
+    const { username, userId, userEmail, isApploading } = useUserContext();
 
     const {
-        user_id,
+        // user_id,
         // userNotices,
         latestNotice,
         savedNotices,
@@ -58,16 +59,18 @@ const UserProfile = () => {
         getReactionsForNotice,
         getReactionByReactionId,
         reportReaction
-    } = useNotices(googleUserData.email || localStorage.getItem('email'));
+    } = useNotices(userEmail);
+    // } = useNotices(userEmail || localStorage.getItem('email'));
 
     const {
-        // userId,
+        // myId,
         userWebsite,
         followersCount,
         followingCount,
         isGetFollowingTheUserCountLoading,
         isGetFollwedByUserCountLoading,
-        getAccount,
+        // getAccount,
+        getSessionDetails,
         setUserWebsite,
         getUserAccountByUserId,
         getUserByUsername,
@@ -77,11 +80,14 @@ const UserProfile = () => {
         fetchAccountsFollowingTheUser,
         fetchAccountsFollowedByUser,
         getBlockedUsersByUser
-    } = useUserInfo(googleUserData.email || localStorage.getItem('email'));
+    } = useUserInfo(userEmail);
+    // } = useUserInfo(userEmail || localStorage.getItem('email'));
 
     const { isSmallScreen } = screenUtils();
 
     const [accountType, setAccountType] = useState(null);
+
+    let myId = userId;
 
     const [noticeText, setNoticeText] = useState('');
     // const [noticeGif, setNoticeGif] = useState(null);
@@ -95,7 +101,7 @@ const UserProfile = () => {
     const [savedNoticesData, setSavedNoticesData] = useState([]);
     const [likedNoticesData, setLikedNoticesData] = useState([]);
 
-    const { avatarUrl, isAvatarLoading } = useUserAvatar(userId);
+    const { avatarUrl, isAvatarLoading } = useUserAvatar(myId);
 
     const [followingAccounts, setFollowingAccounts] = useState([]);
     const [followersAccounts, setFollowersAccounts] = useState([]);
@@ -138,50 +144,75 @@ const UserProfile = () => {
     // Tabs' EventKey
     const [eventKey, setEventKey] = useState('my-notices');
 
-    useEffect(() => {
-        console.log('GoogleUserData in UserProfile:', googleUserData);
-    }, [googleUserData])
+    // useEffect(() => {
+    //     console.log('userEmail in UserProfile:', userEmail);
+    // }, [userEmail])
 
-    // Fetch account type and website by username
+    // useEffect(() => {
+    //     console.log('myId in UserProfile:', myId);
+    // }, [myId])
+
     useEffect(() => {
-        const fetchUserByUserame = async () => {
+        const testingGetAccount = async () => {
             try {
-                const usr = await getUserByUsername(username);
-                console.log('UserProfile.jsx - usr', usr);
+                const session = await getSessionDetails();
+                console.log('Active Session:', session);
 
-                setAccountType(usr.accountType);
-                setUserWebsite(usr.website);
+                const accnt = await getAccount();
+                console.log('THIS IS ACCOUNT:', accnt);
+                console.log('THIS IS ACCOUNT ID:', accnt.$id);
+
+                // if(!accnt || accnt === undefined){
+                //     await createSession()
+                // }
 
             } catch (error) {
-                console.log('Error creating notice', error);
+                console.error('Error getting account:', error);
             }
         }
-        console.log('website in UserProfile.jsx', userWebsite);
+        testingGetAccount();
+    })
 
-        fetchUserByUserame();
-    }, [username])
+    // // Fetch account type and website by username
+    // useEffect(() => {
+    //     const fetchUserByUserame = async () => {
+    //         try {
+    //             const usr = await getUserByUsername(username);
+    //             console.log('UserProfile.jsx - usr', usr);
 
-    // fetchBlockedUsersByUser
-    useEffect(() => {
-        const fetchBlockedUsersByUser = async () => {
-            try {
-                console.log('userIdsasasa,', userId);
+    //             setAccountType(usr.accountType);
+    //             setUserWebsite(usr.website);
 
-                const res = await getBlockedUsersByUser(userId);
-                console.log('Bloccked users:', res);
+    //         } catch (error) {
+    //             console.log('Error creating notice', error);
+    //         }
+    //     }
+    //     console.log('website in UserProfile.jsx', userWebsite);
 
-            } catch (error) {
-                console.error('Error fetching blocked users', error);
-            }
-        }
-        // fetchBlockedUsersByUser();
-    }, [userId])
+    //     fetchUserByUserame();
+    // }, [username])
+
+    // // fetchBlockedUsersByUser
+    // useEffect(() => {
+    //     const fetchBlockedUsersByUser = async () => {
+    //         try {
+    //             console.log('userIdsasasa,', myId);
+
+    //             const res = await getBlockedUsersByUser(myId);
+    //             console.log('Bloccked users:', res);
+
+    //         } catch (error) {
+    //             console.error('Error fetching blocked users', error);
+    //         }
+    //     }
+    //     // fetchBlockedUsersByUser();
+    // }, [myId])
 
     // function for fetching notices
     const fetchNotices = async () => {
         setIsLoadingMore(true);
         try {
-            const usrNtcs = await fetchUserNotices(userId, limit, lastId);
+            const usrNtcs = await fetchUserNotices(myId, limit, lastId);
 
             console.log('usrNtcs', usrNtcs);
 
@@ -212,182 +243,182 @@ const UserProfile = () => {
         }
     };
 
-    // Fetch notices for user on component load
-    useEffect(() => {
-        if (userId) {
-            fetchNotices();
-        }
-    }, [userId])
+    // // Fetch notices for user on component load
+    // useEffect(() => {
+    //     if (myId) {
+    //         fetchNotices();
+    //     }
+    // }, [myId])
 
-    // Display notice in UI immediately after it is added 
-    useEffect(() => {
-        if (latestNotice && Object.keys(latestNotice).length > 0) {
+    // // Display notice in UI immediately after it is added 
+    // useEffect(() => {
+    //     if (latestNotice && Object.keys(latestNotice).length > 0) {
 
-            setUserProfileNotices((prevNotices) => {
+    //         setUserProfileNotices((prevNotices) => {
 
-                const noticeExists = prevNotices.some(notice => notice.$id === latestNotice.$id);
-                if (!noticeExists) {
-                    return [latestNotice, ...prevNotices];
-                }
-                return prevNotices;
-            });
-        }
-    }, [latestNotice])
+    //             const noticeExists = prevNotices.some(notice => notice.$id === latestNotice.$id);
+    //             if (!noticeExists) {
+    //                 return [latestNotice, ...prevNotices];
+    //             }
+    //             return prevNotices;
+    //         });
+    //     }
+    // }, [latestNotice])
 
-    // Fetch saves and users' data for saves tab
-    useEffect(() => {
-        const fetchSaveNotices = async () => {
+    // // Fetch saves and users' data for saves tab
+    // useEffect(() => {
+    //     const fetchSaveNotices = async () => {
 
-            if (offsetSaves === 0) {
-                setIsLoadingSaves(true);
-            } else {
-                setIsLoadingMoreSaves(true);
-            }
+    //         if (offsetSaves === 0) {
+    //             setIsLoadingSaves(true);
+    //         } else {
+    //             setIsLoadingMoreSaves(true);
+    //         }
 
-            try {
-                const allSavedNotices = await getAllSavedNotices(userId, userId, limitSaves, offsetSaves);
+    //         try {
+    //             const allSavedNotices = await getAllSavedNotices(myId, myId, limitSaves, offsetSaves);
 
-                console.log('allSavedNotices', allSavedNotices);
+    //             console.log('allSavedNotices', allSavedNotices);
 
-                const ntcsIds = allSavedNotices?.map(ntc => ntc.$id);
+    //             const ntcsIds = allSavedNotices?.map(ntc => ntc.$id);
 
-                const [svdNtcs, lkdNtcs] = await Promise.allSettled([
-                    fetchUserSaves(userId, ntcsIds),
-                    fetchUserLikes(userId, ntcsIds)
-                ]);
+    //             const [svdNtcs, lkdNtcs] = await Promise.allSettled([
+    //                 fetchUserSaves(myId, ntcsIds),
+    //                 fetchUserLikes(myId, ntcsIds)
+    //             ]);
 
-                if (svdNtcs.status === 'fulfilled') {
-                    setSavedNotices(prevSaves => {
-                        const updatedSaves = { ...prevSaves };
-                        svdNtcs.value.forEach(save => {
-                            updatedSaves[save.notice_id] = save.$id;
-                        });
-                        return updatedSaves;
-                    });
-                } else {
-                    console.error('Error fetching saved notices:', svdNtcs.reason);
-                }
+    //             if (svdNtcs.status === 'fulfilled') {
+    //                 setSavedNotices(prevSaves => {
+    //                     const updatedSaves = { ...prevSaves };
+    //                     svdNtcs.value.forEach(save => {
+    //                         updatedSaves[save.notice_id] = save.$id;
+    //                     });
+    //                     return updatedSaves;
+    //                 });
+    //             } else {
+    //                 console.error('Error fetching saved notices:', svdNtcs.reason);
+    //             }
 
-                if (lkdNtcs.status === 'fulfilled') {
-                    setLikedNotices(prevLikes => {
-                        const updatedLikes = { ...prevLikes };
-                        lkdNtcs.value.forEach(like => {
-                            updatedLikes[like.notice_id] = like.$id;
-                        });
-                        return updatedLikes;
-                    });
-                } else {
-                    console.error('Error fetching liked notices:', lkdNtcs.reason);
-                }
+    //             if (lkdNtcs.status === 'fulfilled') {
+    //                 setLikedNotices(prevLikes => {
+    //                     const updatedLikes = { ...prevLikes };
+    //                     lkdNtcs.value.forEach(like => {
+    //                         updatedLikes[like.notice_id] = like.$id;
+    //                     });
+    //                     return updatedLikes;
+    //                 });
+    //             } else {
+    //                 console.error('Error fetching liked notices:', lkdNtcs.reason);
+    //             }
 
-                // Data populating the notice
-                await fetchUsersData(allSavedNotices, setSavedNoticesData, avatarUtil);
+    //             // Data populating the notice
+    //             await fetchUsersData(allSavedNotices, setSavedNoticesData, avatarUtil);
 
-                if (allSavedNotices?.length < limit) {
-                    setHasMoreSaves(false);
-                } else {
-                    setHasMoreSaves(true);
-                }
+    //             if (allSavedNotices?.length < limit) {
+    //                 setHasMoreSaves(false);
+    //             } else {
+    //                 setHasMoreSaves(true);
+    //             }
 
-            } catch (error) {
-                console.error('Error fetching saves - ', error);
-            } finally {
-                if (offsetSaves === 0) {
-                    setIsLoadingSaves(false);
-                }
-                setIsLoadingMoreSaves(false);
-            }
-        };
+    //         } catch (error) {
+    //             console.error('Error fetching saves - ', error);
+    //         } finally {
+    //             if (offsetSaves === 0) {
+    //                 setIsLoadingSaves(false);
+    //             }
+    //             setIsLoadingMoreSaves(false);
+    //         }
+    //     };
 
-        if (isSavesClicked === true) {
-            fetchSaveNotices();
-        }
-    }, [userId, offsetSaves, isSavesClicked])
+    //     if (isSavesClicked === true) {
+    //         fetchSaveNotices();
+    //     }
+    // }, [myId, offsetSaves, isSavesClicked])
 
-    // Fetch likes and users' data for likes tab 
-    useEffect(() => {
-        const fetchLikedNotices = async () => {
+    // // Fetch likes and users' data for likes tab 
+    // useEffect(() => {
+    //     const fetchLikedNotices = async () => {
 
-            console.log('Starting fetchLikedNotices in UserProfile.jsx');
+    //         console.log('Starting fetchLikedNotices in UserProfile.jsx');
 
 
-            if (offsetLikes === 0) {
-                setIsLoadingLikes(true);
-            } else {
-                setIsLoadingMoreLikes(true);
-            }
+    //         if (offsetLikes === 0) {
+    //             setIsLoadingLikes(true);
+    //         } else {
+    //             setIsLoadingMoreLikes(true);
+    //         }
 
-            try {
-                const allLikedNotices = await getAllLikedNotices(userId, userId, limitLikes, offsetLikes);
+    //         try {
+    //             const allLikedNotices = await getAllLikedNotices(myId, myId, limitLikes, offsetLikes);
 
-                console.log('allLikedNotices - UserProfile.jsx', allLikedNotices);
+    //             console.log('allLikedNotices - UserProfile.jsx', allLikedNotices);
 
-                const ntcsIds = allLikedNotices?.map(ntc => ntc.$id);
+    //             const ntcsIds = allLikedNotices?.map(ntc => ntc.$id);
 
-                const [svdNtcsRes, lkdNtcsRes] = await Promise.allSettled([
-                    fetchUserSaves(userId, ntcsIds),
-                    fetchUserLikes(userId, ntcsIds)
-                ]);
+    //             const [svdNtcsRes, lkdNtcsRes] = await Promise.allSettled([
+    //                 fetchUserSaves(myId, ntcsIds),
+    //                 fetchUserLikes(myId, ntcsIds)
+    //             ]);
 
-                if (svdNtcsRes.status === 'fulfilled') {
-                    setSavedNotices(prevSaves => {
-                        const updatedSaves = { ...prevSaves };
-                        svdNtcsRes.value.forEach(save => {
-                            updatedSaves[save.notice_id] = save.$id;
-                        });
-                        return updatedSaves;
-                    });
-                } else {
-                    console.error('Error fetching saved notices:', svdNtcsRes.reason);
-                }
+    //             if (svdNtcsRes.status === 'fulfilled') {
+    //                 setSavedNotices(prevSaves => {
+    //                     const updatedSaves = { ...prevSaves };
+    //                     svdNtcsRes.value.forEach(save => {
+    //                         updatedSaves[save.notice_id] = save.$id;
+    //                     });
+    //                     return updatedSaves;
+    //                 });
+    //             } else {
+    //                 console.error('Error fetching saved notices:', svdNtcsRes.reason);
+    //             }
 
-                if (lkdNtcsRes.status === 'fulfilled') {
-                    setLikedNotices(prevLikes => {
-                        const updatedLikes = { ...prevLikes };
-                        lkdNtcsRes.value.forEach(like => {
-                            updatedLikes[like.notice_id] = like.$id;
-                        });
-                        return updatedLikes;
-                    });
-                } else {
-                    console.error('Error fetching liked notices:', lkdNtcsRes.reason);
-                }
+    //             if (lkdNtcsRes.status === 'fulfilled') {
+    //                 setLikedNotices(prevLikes => {
+    //                     const updatedLikes = { ...prevLikes };
+    //                     lkdNtcsRes.value.forEach(like => {
+    //                         updatedLikes[like.notice_id] = like.$id;
+    //                     });
+    //                     return updatedLikes;
+    //                 });
+    //             } else {
+    //                 console.error('Error fetching liked notices:', lkdNtcsRes.reason);
+    //             }
 
-                // Data populating the notice
-                await fetchUsersData(allLikedNotices, setLikedNoticesData, avatarUtil);
+    //             // Data populating the notice
+    //             await fetchUsersData(allLikedNotices, setLikedNoticesData, avatarUtil);
 
-                if (allLikedNotices?.length < limit) {
-                    setHasMoreLikes(false);
-                } else {
-                    setHasMoreLikes(true);
-                }
+    //             if (allLikedNotices?.length < limit) {
+    //                 setHasMoreLikes(false);
+    //             } else {
+    //                 setHasMoreLikes(true);
+    //             }
 
-            } catch (error) {
-                console.error('Error fetching likes - ', error);
-            } finally {
-                if (offsetLikes === 0) {
-                    setIsLoadingLikes(false);
-                }
-                setIsLoadingMoreLikes(false);
-            }
-        };
-        if (isLikesClicked === true) {
-            fetchLikedNotices();
-        }
-    }, [userId, offsetLikes, isLikesClicked])
+    //         } catch (error) {
+    //             console.error('Error fetching likes - ', error);
+    //         } finally {
+    //             if (offsetLikes === 0) {
+    //                 setIsLoadingLikes(false);
+    //             }
+    //             setIsLoadingMoreLikes(false);
+    //         }
+    //     };
+    //     if (isLikesClicked === true) {
+    //         fetchLikedNotices();
+    //     }
+    // }, [myId, offsetLikes, isLikesClicked])
 
     // The Saves and Likes data don't fetch unless isClicked === true
-    useEffect(() => {
-        if (eventKey === 'my-saves') {
-            setIsSavesClicked(true);
-        } else if (eventKey === 'my-likes') {
-            setIsLikesClicked(true);
-        }
-    }, [eventKey]);
+    // useEffect(() => {
+    //     if (eventKey === 'my-saves') {
+    //         setIsSavesClicked(true);
+    //     } else if (eventKey === 'my-likes') {
+    //         setIsLikesClicked(true);
+    //     }
+    // }, [eventKey]);
 
-    useEffect(() => {
-        console.log('Hello', username);
-    }, [username])
+    // useEffect(() => {
+    //     console.log('Hello', username);
+    // }, [username])
 
     // Fetch accounts followed by user
     const loadFollowing = async () => {
@@ -395,7 +426,7 @@ const UserProfile = () => {
         try {
             setIsLoadingMoreFollowing(true);
 
-            const accountsFollowedByUser = await fetchAccountsFollowedByUser(userId, limitFollowing, offsetFollowing);
+            const accountsFollowedByUser = await fetchAccountsFollowedByUser(myId, limitFollowing, offsetFollowing);
 
             console.log('accountsFollowedByUser', accountsFollowedByUser);
 
@@ -422,7 +453,7 @@ const UserProfile = () => {
         try {
             setIsLoadingMoreFollowers(true);
 
-            const accountsFollowingTheUser = await fetchAccountsFollowingTheUser(userId, limitFollowers, offsetFollowers);
+            const accountsFollowingTheUser = await fetchAccountsFollowingTheUser(myId, limitFollowers, offsetFollowers);
 
             console.log('accountsFollowingTheUser', accountsFollowingTheUser);
 
@@ -443,25 +474,25 @@ const UserProfile = () => {
         }
     };
 
-    // Fetch following count
-    useEffect(() => {
-        console.log('Fetching the followebByCount for user:', userId);
-        if (userId) {
-            getfollwedByUserCount(userId);
-        }
-    }, [userId])
+    // // Fetch following count
+    // useEffect(() => {
+    //     console.log('Fetching the followebByCount for user:', myId);
+    //     if (myId) {
+    //         getfollwedByUserCount(myId);
+    //     }
+    // }, [myId])
 
-    // Fetch followers count
-    useEffect(() => {
-        if (userId) {
-            getFollowingTheUserCount(userId);
-        }
-    }, [userId])
+    // // Fetch followers count
+    // useEffect(() => {
+    //     if (myId) {
+    //         getFollowingTheUserCount(myId);
+    //     }
+    // }, [myId])
 
     // Restting follow(ing/ers) data
     useEffect(() => {
-        if (userId) {
-            console.log('Current User ID changed:', userId);
+        if (myId) {
+            console.log('Current User ID changed:', myId);
             setFollowingAccounts([]);
             setOffsetFollowing(0);
             setHasMoreFollowing(true);
@@ -469,7 +500,7 @@ const UserProfile = () => {
             setOffsetFollowers(0);
             setHasMoreFollowers(true);
         }
-    }, [userId]);
+    }, [myId]);
 
     const handleEditNotice = (noticeId, currentText) => {
         console.log('EditingNoticeId + Current text', { noticeId, currentText });
@@ -495,13 +526,13 @@ const UserProfile = () => {
         setRemovingNoticeId(null);
     }
 
-    useEffect(() => {
-        console.log('eventKey', eventKey);
-    }, [eventKey]);
+    // useEffect(() => {
+    //     console.log('eventKey', eventKey);
+    // }, [eventKey]);
 
-    useEffect(() => {
-        console.log('userProfileNotices,', userProfileNotices);
-    }, [userProfileNotices]);
+    // useEffect(() => {
+    //     console.log('userProfileNotices,', userProfileNotices);
+    // }, [userProfileNotices]);
 
 
     const timerSpacing = 'mx-2';
@@ -518,224 +549,230 @@ const UserProfile = () => {
     }
 
     return (
-        <>
-            <Profile
-                username={username}
-                avatarUrl={avatarUrl}
-                website={userWebsite}
-                followingCount={followingCount}
-                followersCount={followersCount}
-                followingAccounts={followingAccounts}
-                followersAccounts={followersAccounts}
-                hasMoreFollowers={hasMoreFollowers}
-                hasMoreFollowing={hasMoreFollowing}
-                isLoadingMoreFollowing={isLoadingMoreFollowing}
-                isLoadingMoreFollowers={isLoadingMoreFollowers}
-                isAvatarLoading={isAvatarLoading}
-                isGetFollowingTheUserCountLoading={isGetFollowingTheUserCountLoading}
-                isGetFollwedByUserCountLoading={isGetFollwedByUserCountLoading}
-                loadFollowers={loadFollowers}
-                loadFollowing={loadFollowing}
-            />
-
-            <div style={{ marginTop: !isSmallScreen ? '205px' : '155px' }}>
-                <ComposeNotice
-                    isAddingNotice={isAddingNotice}
-                    noticeText={noticeText}
-                    noticeType={accountType}
-                    isGeminiLoading={isGeminiLoading}
-                    setNoticeText={setNoticeText}
-                    addNotice={addNotice}
-                    onGeminiRunClick={async (templateSubject) => {
-                        console.log('templateSubject - UserProfile.jsx', templateSubject);
-                        await onGeminiRunClick(templateSubject, setNoticeText)
-                    }}
-                />
-            </div>
-
-            <Tabs
-                defaultActiveKey="my-notices"
-                id="justify-tab-example"
-                justify
-                className='user-profile__notice-tab fixed-bottom'
-                onSelect={(key) => setEventKey(key)}
-            >
-                {/* My Notices */}
-                <Tab
-                    eventKey='my-notices'
-                    title="My Notices"
-                >
-                    {userProfileNotices.length !== 0 ?
-                        <>
-                            <Notices
-                                notices={userProfileNotices}
-                                username={username}
-                                eventKey={eventKey}
-                                userId={userId}
-                                handleEditNotice={handleEditNotice}
-                                handleDeleteNotice={handleDeleteNotice}
-                                getReactionsForNotice={getReactionsForNotice}
-                                getUserAccountByUserId={getUserAccountByUserId}
-                                getReactionByReactionId={getReactionByReactionId}
-                                handleReportNotice={handleReportNotice}
-                                reportReaction={reportReaction}
-                            />
-                            <div className="d-flex justify-content-center mt-4 pb-5">
-                                {hasMoreNotices ?
-                                    <Button
-                                        onClick={fetchNotices}
-                                        disabled={isLoadingMore || !hasMoreNotices}
-                                        className='mt-3 notices__load-more-notices-btn'
-                                    >
-                                        {isLoadingMore ?
-                                            <><Loading size={18} /> Loading...</>
-                                            : 'Load More'}
-                                    </Button>
-                                    :
-                                    <EndAsterisks componentName='notices' />
-                                }
-                            </div>
-                        </>
-                        :
-                        <NoticesPlaceholder location={location} />
-                    }
-                </Tab>
-
-                {/* My Saves */}
-                <Tab
-                    eventKey='my-saves'
-                    title="Saves"
-                >
-
-                    {!isLoadingSaves ?
-                        (savedNoticesData.length !== 0 ?
-                            <>
-                                <Notices
-                                    notices={savedNoticesData}
-                                    username={username}
-                                    likedNotices={likedNotices}
-                                    savedNotices={savedNotices}
-                                    eventKey={eventKey}
-                                    userId={userId}
-                                    handleLike={handleLike}
-                                    handleSave={handleSave}
-                                    setLikedNotices={setLikedNotices}
-                                    setSavedNotices={setSavedNotices}
-                                    handleReportNotice={handleReportNotice}
-                                    handleReact={handleReact}
-                                    getReactionsForNotice={getReactionsForNotice}
-                                    getUserAccountByUserId={getUserAccountByUserId}
-                                    getReactionByReactionId={getReactionByReactionId}
-                                    reportReaction={reportReaction}
-                                />
-                                <div className='d-flex justify-content-center mt-4 pb-5'>
-                                    {hasMoreSaves ?
-                                        <Button
-                                            onClick={() => setOffsetSaveas(offsetSaves + limitSaves)}
-                                            disabled={isLoadingMoreSaves || !hasMoreSaves}
-                                            className='notices__load-more-notices-btn'
-                                        >
-                                            {isLoadingMoreSaves ?
-                                                <><Loading size={24} /> Loading...</>
-                                                : 'Load More'}
-                                        </Button>
-                                        :
-                                        <EndAsterisks componentName='notices' />
-                                    }
-                                </div>
-                            </>
-                            :
-                            <NoticesPlaceholder location={location} section={'saved'}
-                                icon={
-                                    <i className='bi bi-floppy'></i>
-                                }
-                            />
-                        )
-                        :
-                        <div className='d-flex justify-content-center'>
-                            <Loading /><span className='ms-2'>Loading your saves...</span>
-                        </div>
-                    }
-
-                </Tab>
-
-                {/* My Likes */}
-                <Tab
-                    eventKey='my-likes'
-                    title="Likes"
-                >
-                    {!isLoadingLikes ?
-                        (likedNoticesData.length !== 0 ?
-                            <>
-                                <Notices
-                                    notices={likedNoticesData}
-                                    username={username}
-                                    likedNotices={likedNotices}
-                                    savedNotices={savedNotices}
-                                    eventKey={eventKey}
-                                    userId={userId}
-                                    handleLike={handleLike}
-                                    handleSave={handleSave}
-                                    setLikedNotices={setLikedNotices}
-                                    setSavedNotices={setSavedNotices}
-                                    handleReportNotice={handleReportNotice}
-                                    handleReact={handleReact}
-                                    getReactionsForNotice={getReactionsForNotice}
-                                    getUserAccountByUserId={getUserAccountByUserId}
-                                    getReactionByReactionId={getReactionByReactionId}
-                                    reportReaction={reportReaction}
-                                />
-                                <div className='d-flex justify-content-center mt-4 pb-5'>
-                                    {hasMoreLikes ?
-                                        <Button
-                                            onClick={() => setOffsetLikes(offsetLikes + limitLikes)}
-                                            disabled={isLoadingMoreLikes || !hasMoreLikes}
-                                            className='notices__load-more-notices-btn'
-                                        >
-                                            {isLoadingMoreLikes ?
-                                                <><Loading size={24} /> Loading...</>
-                                                : 'Load More'}
-                                        </Button>
-                                        :
-                                        <EndAsterisks componentName='notices' />
-                                    }
-                                </div>
-                            </>
-                            :
-                            <NoticesPlaceholder location={location} section={'liked'}
-                                // icon={<BsHandThumbsUp />}
-                                icon={<i className="bi bi-hand-thumbs-up"></i>}
-                            />
-                        ) :
-                        <div className='d-flex justify-content-center'>
-                            <Loading /><span className='ms-2'>Loading your likes...</span>
-                        </div>
-                    }
-                </Tab>
-            </Tabs>
-
-            {/* Edit Notice Modal */}
-            <ModifyModal
-                showModifyModal={showEditModal}
-                noticeText={noticeText}
-                isSavingEdit={isSavingEdit}
-                modifyModalTitle={'Edit'}
-                setNoticeText={setNoticeText}
-                handleCloseModifyModal={handleCloseEditModal}
-                handleSaveEdit={() => handleSaveEdit(editingNoticeId, noticeText, userProfileNotices, setUserProfileNotices, setEditingNoticeId, setNoticeText, setShowEditModal)}
-            />
-
-            {/* Delete Notice Modal */}
-            <ModifyModal
-                showModifyModal={showDeleteModal}
-                isRemovingNotice={isRemovingNotice}
-                modifyModalTitle={'Delete'}
-                handleCloseModifyModal={handleCloseDeleteModal}
-                handleDelete={() => handleDelete(setUserProfileNotices, setShowDeleteModal)}
-            />
-
-        </>
+        <div style={{ marginTop: '250px' }}>
+            Hello
+        </div>
     )
+
+    // return (
+    //     <>
+    //         <Profile
+    //             username={username}
+    //             avatarUrl={avatarUrl}
+    //             website={userWebsite}
+    //             followingCount={followingCount}
+    //             followersCount={followersCount}
+    //             followingAccounts={followingAccounts}
+    //             followersAccounts={followersAccounts}
+    //             hasMoreFollowers={hasMoreFollowers}
+    //             hasMoreFollowing={hasMoreFollowing}
+    //             isLoadingMoreFollowing={isLoadingMoreFollowing}
+    //             isLoadingMoreFollowers={isLoadingMoreFollowers}
+    //             isAvatarLoading={isAvatarLoading}
+    //             isGetFollowingTheUserCountLoading={isGetFollowingTheUserCountLoading}
+    //             isGetFollwedByUserCountLoading={isGetFollwedByUserCountLoading}
+    //             loadFollowers={loadFollowers}
+    //             loadFollowing={loadFollowing}
+    //         />
+
+    //         <div style={{ marginTop: !isSmallScreen ? '205px' : '155px' }}>
+    //             <ComposeNotice
+    //                 isAddingNotice={isAddingNotice}
+    //                 noticeText={noticeText}
+    //                 noticeType={accountType}
+    //                 isGeminiLoading={isGeminiLoading}
+    //                 setNoticeText={setNoticeText}
+    //                 addNotice={addNotice}
+    //                 onGeminiRunClick={async (templateSubject) => {
+    //                     console.log('templateSubject - UserProfile.jsx', templateSubject);
+    //                     await onGeminiRunClick(templateSubject, setNoticeText)
+    //                 }}
+    //             />
+    //         </div>
+
+    //         <Tabs
+    //             defaultActiveKey="my-notices"
+    //             id="justify-tab-example"
+    //             justify
+    //             className='user-profile__notice-tab fixed-bottom'
+    //             onSelect={(key) => setEventKey(key)}
+    //         >
+    //             {/* My Notices */}
+    //             <Tab
+    //                 eventKey='my-notices'
+    //                 title="My Notices"
+    //             >
+    //                 {userProfileNotices.length !== 0 ?
+    //                     <>
+    //                         <Notices
+    //                             notices={userProfileNotices}
+    //                             username={username}
+    //                             eventKey={eventKey}
+    //                             myId={myId}
+    //                             handleEditNotice={handleEditNotice}
+    //                             handleDeleteNotice={handleDeleteNotice}
+    //                             getReactionsForNotice={getReactionsForNotice}
+    //                             getUserAccountByUserId={getUserAccountByUserId}
+    //                             getReactionByReactionId={getReactionByReactionId}
+    //                             handleReportNotice={handleReportNotice}
+    //                             reportReaction={reportReaction}
+    //                         />
+    //                         <div className="d-flex justify-content-center mt-4 pb-5">
+    //                             {hasMoreNotices ?
+    //                                 <Button
+    //                                     onClick={fetchNotices}
+    //                                     disabled={isLoadingMore || !hasMoreNotices}
+    //                                     className='mt-3 notices__load-more-notices-btn'
+    //                                 >
+    //                                     {isLoadingMore ?
+    //                                         <><Loading size={18} /> Loading...</>
+    //                                         : 'Load More'}
+    //                                 </Button>
+    //                                 :
+    //                                 <EndAsterisks componentName='notices' />
+    //                             }
+    //                         </div>
+    //                     </>
+    //                     :
+    //                     <NoticesPlaceholder location={location} />
+    //                 }
+    //             </Tab>
+
+    //             {/* My Saves */}
+    //             <Tab
+    //                 eventKey='my-saves'
+    //                 title="Saves"
+    //             >
+
+    //                 {!isLoadingSaves ?
+    //                     (savedNoticesData.length !== 0 ?
+    //                         <>
+    //                             <Notices
+    //                                 notices={savedNoticesData}
+    //                                 username={username}
+    //                                 likedNotices={likedNotices}
+    //                                 savedNotices={savedNotices}
+    //                                 eventKey={eventKey}
+    //                                 user_id={myId}
+    //                                 handleLike={handleLike}
+    //                                 handleSave={handleSave}
+    //                                 setLikedNotices={setLikedNotices}
+    //                                 setSavedNotices={setSavedNotices}
+    //                                 handleReportNotice={handleReportNotice}
+    //                                 handleReact={handleReact}
+    //                                 getReactionsForNotice={getReactionsForNotice}
+    //                                 getUserAccountByUserId={getUserAccountByUserId}
+    //                                 getReactionByReactionId={getReactionByReactionId}
+    //                                 reportReaction={reportReaction}
+    //                             />
+    //                             <div className='d-flex justify-content-center mt-4 pb-5'>
+    //                                 {hasMoreSaves ?
+    //                                     <Button
+    //                                         onClick={() => setOffsetSaveas(offsetSaves + limitSaves)}
+    //                                         disabled={isLoadingMoreSaves || !hasMoreSaves}
+    //                                         className='notices__load-more-notices-btn'
+    //                                     >
+    //                                         {isLoadingMoreSaves ?
+    //                                             <><Loading size={24} /> Loading...</>
+    //                                             : 'Load More'}
+    //                                     </Button>
+    //                                     :
+    //                                     <EndAsterisks componentName='notices' />
+    //                                 }
+    //                             </div>
+    //                         </>
+    //                         :
+    //                         <NoticesPlaceholder location={location} section={'saved'}
+    //                             icon={
+    //                                 <i className='bi bi-floppy'></i>
+    //                             }
+    //                         />
+    //                     )
+    //                     :
+    //                     <div className='d-flex justify-content-center'>
+    //                         <Loading /><span className='ms-2'>Loading your saves...</span>
+    //                     </div>
+    //                 }
+
+    //             </Tab>
+
+    //             {/* My Likes */}
+    //             <Tab
+    //                 eventKey='my-likes'
+    //                 title="Likes"
+    //             >
+    //                 {!isLoadingLikes ?
+    //                     (likedNoticesData.length !== 0 ?
+    //                         <>
+    //                             <Notices
+    //                                 notices={likedNoticesData}
+    //                                 username={username}
+    //                                 likedNotices={likedNotices}
+    //                                 savedNotices={savedNotices}
+    //                                 eventKey={eventKey}
+    //                                 user_id={myId}
+    //                                 handleLike={handleLike}
+    //                                 handleSave={handleSave}
+    //                                 setLikedNotices={setLikedNotices}
+    //                                 setSavedNotices={setSavedNotices}
+    //                                 handleReportNotice={handleReportNotice}
+    //                                 handleReact={handleReact}
+    //                                 getReactionsForNotice={getReactionsForNotice}
+    //                                 getUserAccountByUserId={getUserAccountByUserId}
+    //                                 getReactionByReactionId={getReactionByReactionId}
+    //                                 reportReaction={reportReaction}
+    //                             />
+    //                             <div className='d-flex justify-content-center mt-4 pb-5'>
+    //                                 {hasMoreLikes ?
+    //                                     <Button
+    //                                         onClick={() => setOffsetLikes(offsetLikes + limitLikes)}
+    //                                         disabled={isLoadingMoreLikes || !hasMoreLikes}
+    //                                         className='notices__load-more-notices-btn'
+    //                                     >
+    //                                         {isLoadingMoreLikes ?
+    //                                             <><Loading size={24} /> Loading...</>
+    //                                             : 'Load More'}
+    //                                     </Button>
+    //                                     :
+    //                                     <EndAsterisks componentName='notices' />
+    //                                 }
+    //                             </div>
+    //                         </>
+    //                         :
+    //                         <NoticesPlaceholder location={location} section={'liked'}
+    //                             // icon={<BsHandThumbsUp />}
+    //                             icon={<i className="bi bi-hand-thumbs-up"></i>}
+    //                         />
+    //                     ) :
+    //                     <div className='d-flex justify-content-center'>
+    //                         <Loading /><span className='ms-2'>Loading your likes...</span>
+    //                     </div>
+    //                 }
+    //             </Tab>
+    //         </Tabs>
+
+    //         {/* Edit Notice Modal */}
+    //         <ModifyModal
+    //             showModifyModal={showEditModal}
+    //             noticeText={noticeText}
+    //             isSavingEdit={isSavingEdit}
+    //             modifyModalTitle={'Edit'}
+    //             setNoticeText={setNoticeText}
+    //             handleCloseModifyModal={handleCloseEditModal}
+    //             handleSaveEdit={() => handleSaveEdit(editingNoticeId, noticeText, userProfileNotices, setUserProfileNotices, setEditingNoticeId, setNoticeText, setShowEditModal)}
+    //         />
+
+    //         {/* Delete Notice Modal */}
+    //         <ModifyModal
+    //             showModifyModal={showDeleteModal}
+    //             isRemovingNotice={isRemovingNotice}
+    //             modifyModalTitle={'Delete'}
+    //             handleCloseModifyModal={handleCloseDeleteModal}
+    //             handleDelete={() => handleDelete(setUserProfileNotices, setShowDeleteModal)}
+    //         />
+
+    //     </>
+    // )
 }
 
 export default UserProfile;

@@ -9,10 +9,11 @@ export const Info = ({ accountType }) => {
 
     const { googleUserData,
         username,
+        userEmail,
         setUsername,
         setRegisteredUsername } = useUserContext();
 
-    const { handleUpdateUser } = useUserInfo(googleUserData.email);
+    const { handleUpdateUser } = useUserInfo(userEmail);
 
     const [localUsername, setLocalUsername] = useState(username);
     const [isUpdating, setIsUpdating] = useState(false);

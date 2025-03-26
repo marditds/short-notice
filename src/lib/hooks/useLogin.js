@@ -13,11 +13,15 @@ const useLogin = () => {
     const {
         googleUserData, setGoogleUserData,
         isLoggedIn, setIsLoggedIn,
+        userId, setUserId,
+        userEmail, setUserEmail,
         username, setUsername,
+        givenName, setGivenName,
         registeredUsername, setRegisteredUsername,
+        hasUsername, setHasUsername,
         accountType, setAccountType,
         hasAccountType, setHasAccountType,
-        hasUsername, setHasUsername
+        isAppLoading, setIsAppLoading
     } = useUserContext();
 
     const {
@@ -34,95 +38,109 @@ const useLogin = () => {
 
     const setUser = async () => {
 
-        console.log('setUser 1:', username);
+        console.log('setUser 1:', username, userId, givenName, accountType);
+
         try {
             setIsSetUserLoading(true);
 
-            if (googleUserData?.email && googleUserData?.given_name && username) {
+            if (username && userEmail) {
 
-                console.log('this email will be sent - App.jsx:', googleUserData.email);
+                console.log('this email will be sent - App.jsx:', userEmail);
 
-                const usrData = await checkingEmailInAuth(googleUserData.email);
+                const usrData = await checkingEmailInAuth(userEmail);
 
                 console.log('usrData.email', usrData.email);
 
-                if (usrData.email !== googleUserData.email) {
-                    console.log('running if');
+                await createUser({
+                    id: userId,
+                    email: userEmail,
+                    given_name: givenName,
+                    username: username.toLowerCase(),
+                    accountType: accountType
+                });
 
-                    const usrID = ID.unique();
-                    console.log('usrID', usrID);
+                localStorage.setItem('username', username.toLowerCase());
 
-                    try {
-                        // Add user to Auth
-                        let newUsr = await registerUser(
-                            usrID,
-                            googleUserData.email,
-                            username.toLowerCase()
-                        );
-                        console.log('newUsr - App.jsx:', newUsr);
+                setHasAccountType(true);
+                setHasUsername(true);
 
-                        // Check for session
-                        const sessionStatus = await getSessionDetails();
-                        console.log('sessionStatus', sessionStatus);
 
-                        // Create session for the newly registered user
-                        if (!sessionStatus || sessionStatus === undefined) {
-                            console.log('Creating a session.');
-                            await createSession(googleUserData.email);
-                        } else {
-                            console.log('Session already in progress.');
-                        }
+                // if (usrData.email !== userEmail) {
+                // console.log('running if');
 
-                        // Add user to collection
-                        await createUser({
-                            id: usrID,
-                            email: googleUserData.email,
-                            given_name: googleUserData.given_name,
-                            username: username.toLowerCase(),
-                            accountType: accountType
-                        });
+                // const usrID = ID.unique();
+                // console.log('usrID', usrID);
 
-                        localStorage.setItem('username', username.toLowerCase());
+                // try {
+                // Add user to Auth
+                // let newUsr = await registerUser(
+                //     usrID,
+                //     googleUserData.email,
+                //     username.toLowerCase()
+                // );
+                // console.log('newUsr - App.jsx:', newUsr);
 
-                        setHasAccountType(true);
-                        setHasUsername(true);
+                // Check for session
+                // const sessionStatus = await getSessionDetails();
+                // console.log('sessionStatus', sessionStatus);
 
-                        setTimeout(() => {
-                            navigate('/user/profile');
-                        }, 1000);
+                // Create session for the newly registered user
+                // if (!sessionStatus || sessionStatus === undefined) {
+                //     console.log('Creating a session.');
+                //     await createSession(googleUserData.email);
+                // } else {
+                //     console.log('Session already in progress.');
+                // }
 
-                    } catch (error) {
-                        console.error('Error creating user:', error);
-                    }
-                } else {
-                    console.log('running else');
+                // Add user to collection
+                // await createUser({
+                //     id: userId,
+                //     email: userEmail,
+                //     given_name: givenName,
+                //     username: username.toLowerCase(),
+                //     accountType: accountType
+                // });
 
-                    // const authId = await checkingIdInAuth();
-                    console.log('usrData.$id', usrData.$id);
+                // localStorage.setItem('username', username.toLowerCase());
 
-                    // Add user to collection
-                    await createUser({
-                        id: usrData.$id,
-                        email: googleUserData.email,
-                        given_name: googleUserData.given_name,
-                        username: username.toLowerCase(),
-                        accountType: accountType
+                // setHasAccountType(true);
+                // setHasUsername(true);
 
-                    });
+                // setTimeout(() => {
+                //     navigate('/user/profile');
+                // }, 1000);
 
-                    localStorage.setItem('username', username.toLowerCase());
+                // } catch (error) {
+                //     console.error('Error creating user:', error);
+                // }
+                // } else {
+                //     console.log('running else');
 
-                    setHasAccountType(true);
-                    setHasUsername(true);
-                }
+                // const authId = await checkingIdInAuth();
+                // console.log('usrData.$id', usrData.$id);
+
+                // Add user to collection
+                //         await createUser({
+                //             id: userId,
+                //             email: userEmail,
+                //             given_name: givenName,
+                //             username: username.toLowerCase(),
+                //             accountType: accountType
+                //         });
+
+                //         localStorage.setItem('username', username.toLowerCase());
+
+                //         setHasAccountType(true);
+                //         setHasUsername(true);
+                //     }
             }
-
         } catch (error) {
             console.error('Error running setUser:', error);
         } finally {
             setIsSetUserLoading(false);
         }
-        console.log('setUser 2:', username);
+        console.log('setUser 2:', username, userId, givenName, accountType);
+
     };
 
     const checkUsernameInDatabase = async (email) => {
@@ -149,37 +167,45 @@ const useLogin = () => {
     };
 
     const onSuccess = async (credentialResponse) => {
-        const decoded = jwtDecode(credentialResponse?.credential);
-        console.log('Logged in successfully. - onSuccess');
-        setGoogleUserData(preData => decoded);
+        try {
+            setIsAppLoading(true);
 
-        console.log('TYPE OF DECODED:', typeof decoded);
+            const decoded = jwtDecode(credentialResponse?.credential);
+            console.log('Logged in successfully. - onSuccess');
+            setGoogleUserData(preData => decoded);
 
-        // localStorage.setItem('googleUserData', JSON.stringify(decoded));
-        localStorage.setItem('googleUserData', decoded);
-        localStorage.setItem('email', decoded.email);
+            console.log('TYPE OF DECODED:', typeof decoded);
 
-        setIsLoggedIn(preVal => true);
+            // localStorage.setItem('googleUserData', JSON.stringify(decoded));
+            // localStorage.setItem('googleUserData', decoded);
+            // localStorage.setItem('email', decoded.email);
 
-        const accessToken = credentialResponse?.credential;
-        console.log('Access Token:', accessToken);
+            setIsLoggedIn(preVal => true);
 
-        console.log('decoded.email', decoded.email);
+            const accessToken = credentialResponse?.credential;
+            console.log('Access Token:', accessToken);
 
-        const sessionStatus = await getSessionDetails();
-        console.log(sessionStatus);
+            console.log('decoded.email', decoded.email);
 
-        if (!sessionStatus || sessionStatus === undefined) {
-            console.log('Creating a session.');
-            await createSession(decoded.email);
-        } else {
-            console.log('Session already in progress. LOL');
+            const sessionStatus = await getSessionDetails();
+            console.log(sessionStatus);
+
+            if (!sessionStatus || sessionStatus === undefined) {
+                console.log('Creating a session.');
+                await createSession(decoded.email);
+            } else {
+                console.log('Session already in progress. LOL');
+            }
+
+            localStorage.setItem('accessToken', accessToken);
+
+            checkUsernameInDatabase(decoded.email);
+
+        } catch (error) {
+            console.error('Error logging in:', error);
+        } finally {
+            setIsAppLoading(false);
         }
-
-        localStorage.setItem('accessToken', accessToken);
-
-        checkUsernameInDatabase(decoded.email);
-
     };
 
     return { isSetUserLoading, setUser, onSuccess, checkUsernameInDatabase }
