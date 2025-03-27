@@ -21,7 +21,17 @@ const UserProfile = () => {
 
     const location = useLocation();
 
-    const { username, userId, userEmail, isApploading, setUserId, setUserEmail, setUsername } = useUserContext();
+    const {
+        username,
+        userId,
+        userEmail,
+        userWebsite,
+        isApploading,
+        accountType,
+        setUserId,
+        setUserEmail,
+        setUsername
+    } = useUserContext();
 
     const {
         // user_id,
@@ -64,7 +74,7 @@ const UserProfile = () => {
 
     const {
         // myId,
-        userWebsite,
+        // userWebsite,
         followersCount,
         followingCount,
         isGetFollowingTheUserCountLoading,
@@ -85,7 +95,7 @@ const UserProfile = () => {
 
     const { isSmallScreen } = screenUtils();
 
-    const [accountType, setAccountType] = useState(null);
+    // const [accountType, setAccountType] = useState(null);
 
     let myId = userId;
 
@@ -152,49 +162,50 @@ const UserProfile = () => {
         console.log('myId in UserProfile:', myId);
     }, [myId])
 
-    useEffect(() => {
-        const testingGetAccount = async () => {
-            try {
-                const session = await getSessionDetails();
-                console.log('Active Session:', session);
+    // useEffect(() => {
+    //     const testingGetAccount = async () => {
+    //         try {
+    //             const session = await getSessionDetails();
+    //             console.log('Active Session:', session);
 
-                const accnt = await getAccount();
-                console.log('THIS IS ACCOUNT:', accnt);
-                console.log('THIS IS ACCOUNT ID:', accnt.$id);
-                setUserId(accnt.$id);
-                setUserEmail(accnt.email);
-                // if(!accnt || accnt === undefined){
-                //     await createSession()
-                // }
+    //             const accnt = await getAccount();
+    //             console.log('THIS IS ACCOUNT:', accnt);
+    //             console.log('THIS IS ACCOUNT ID:', accnt.$id);
+    // setUserId(accnt.$id);
+    // setUserEmail(accnt.email);
+    // if(!accnt || accnt === undefined){
+    //     await createSession()
+    // }
 
-            } catch (error) {
-                console.error('Error getting account:', error);
-            }
-        }
-        testingGetAccount();
-    }, [])
+    //         } catch (error) {
+    //             console.error('Error getting account:', error);
+    //         }
+    //     }
+    //     testingGetAccount();
+    // }, [])
 
-    // // Fetch account type and website by user Id
-    useEffect(() => {
-        const fetchUserByUserId = async () => {
-            try {
-                const usr = await getUserAccountByUserId(userId);
-                console.log('UserProfile.jsx - usr', usr);
+    // Fetch account type and website by user Id
 
-                setAccountType(usr.accountType);
-                setUserWebsite(usr.website);
-                setUsername(usr.username);
+    // useEffect(() => {
+    //     const fetchUserByUserId = async () => {
+    //         try {
+    //             const usr = await getUserAccountByUserId(userId);
+    //             console.log('UserProfile.jsx - usr', usr);
 
-            } catch (error) {
-                console.log('Error creating notice', error);
-            }
-        }
-        console.log('website in UserProfile.jsx', userWebsite);
+    //             setAccountType(usr.accountType);
+    //             setUserWebsite(usr.website);
+    //             setUsername(usr.username);
 
-        fetchUserByUserId();
-    }, [userId])
+    //         } catch (error) {
+    //             console.log('Error creating notice', error);
+    //         }
+    //     }
+    //     console.log('website in UserProfile.jsx', userWebsite);
 
-    // // fetchBlockedUsersByUser
+    //     fetchUserByUserId();
+    // }, [userId])
+
+    //fetchBlockedUsersByUser
     useEffect(() => {
         const fetchBlockedUsersByUser = async () => {
             try {
@@ -244,7 +255,6 @@ const UserProfile = () => {
             setIsLoadingMore(false);
         }
     };
-
     // // Fetch notices for user on component load
     useEffect(() => {
         if (myId) {

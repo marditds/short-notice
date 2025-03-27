@@ -6,7 +6,7 @@ import { UserId } from '../../components/User/UserId';
 
 const useUserInfo = (data) => {
 
-    const { username, setUsername, userId } = useUserContext();
+    const { setUsername, userId } = useUserContext();
     const navigate = useNavigate();
 
     // const [userId, setUserId] = useState(null);
@@ -619,7 +619,7 @@ const useUserInfo = (data) => {
         followersCount,
         followingCount,
         isProcessingBlock,
-        username,
+        // username,
         userWebsite,
         isGetFollwedByUserCountLoading,
         isGetFollowingTheUserCountLoading,

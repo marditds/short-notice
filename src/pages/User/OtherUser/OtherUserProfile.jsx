@@ -21,9 +21,13 @@ const OtherUserProfile = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const { googleUserData, username, userId, userEmail } = useUserContext();
+    const {
+        username,
+        userId,
+        userEmail
+    } = useUserContext();
 
-    const myUsername = username || localStorage.getItem('username') || 'myUsername';
+    const myUsername = username;
 
     const [currUserId, setCurrUserId] = useState(null);
     // const [currUserId, setCurrUserId] = useState(() => {
@@ -48,7 +52,7 @@ const OtherUserProfile = () => {
         reportReaction,
         fetchUserLikes,
         fetchUserSaves
-    } = useNotices(googleUserData.email);
+    } = useNotices(userEmail);
 
     const {
         // userId,
@@ -75,7 +79,7 @@ const OtherUserProfile = () => {
         fetchAccountsFollowedByUser,
         getPassocdeByOrganizationId,
         handleUserReport
-    } = useUserInfo(googleUserData.email);
+    } = useUserInfo(userEmail);
 
     const { isSmallScreen } = screenUtils();
 
@@ -677,7 +681,7 @@ const OtherUserProfile = () => {
         <>
             <>
                 <Profile
-                    myUsername={otherUsername}
+                    username={otherUsername}
                     avatarUrl={avatarUrl}
                     currUserId={currUserId}
                     website={otherUserWebsite}

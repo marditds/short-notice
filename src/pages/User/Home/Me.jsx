@@ -19,34 +19,36 @@ const Me = () => {
         hasUsername, setHasUsername,
         accountType, setAccountType,
         hasAccountType, setHasAccountType,
+        user, setUser,
+        isSessionInProgress, setIsSessionInProgress,
         isAppLoading, setIsAppLoading } = useUserContext();
 
-    const [user, setUser] = useState(null);
-    const [isSessionInProgress, setIsSessionInProgress] = useState(false);
+    // const [user, setUser] = useState(null);
+    // const [isSessionInProgress, setIsSessionInProgress] = useState(false);
     const hasAuthenticated = useRef(false);
     const [emailExistsInCollection, setEmailExistsInCollection] = useState(false);
 
     // Checkig Session Status
-    useEffect(() => {
-        const checkingSessionStatus = async () => {
-            try {
-                const usr = await getAccount();
-                if (usr) {
-                    console.log('Session in progress.');
-                    setIsSessionInProgress(true);
-                    setUserEmail(usr.email);
-                    setUserId(usr.$id);
-                    setGivenName(usr.name);
-                    setUser(usr);
-                } else {
-                    setIsSessionInProgress(false);
-                }
-            } catch (error) {
-                console.error('Error checking session status:', error);
-            }
-        };
-        checkingSessionStatus();
-    }, [])
+    // useEffect(() => {
+    //     const checkingSessionStatus = async () => {
+    //         try {
+    //             const usr = await getAccount();
+    //             if (usr) {
+    //                 console.log('Session in progress.');
+    //                 setIsSessionInProgress(true);
+    //                 setUserEmail(usr.email);
+    //                 setUserId(usr.$id);
+    //                 setGivenName(usr.name);
+    //                 setUser(usr);
+    //             } else {
+    //                 setIsSessionInProgress(false);
+    //             }
+    //         } catch (error) {
+    //             console.error('Error checking session status:', error);
+    //         }
+    //     };
+    //     checkingSessionStatus();
+    // }, [])
 
     // Authenticating User
     useEffect(() => {
@@ -123,10 +125,11 @@ const Me = () => {
         <div className='d-flex justify-content-center align-items-center'>
             Hello! Welcome to ShortNotice.
             <br />
-            Please press continue to set up your account.
-            <br />
+
             {(!emailExistsInCollection && !isAppLoading) &&
                 <>
+                    Please press continue to set up your account.
+                    <br />
                     <Button onClick={handleContinue}>
                         Continue
                     </Button>
