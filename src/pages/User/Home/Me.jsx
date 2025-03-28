@@ -117,7 +117,10 @@ const Me = () => {
 
     useEffect(() => {
         if (emailExistsInCollection) {
-            navigate('/user/profile');
+            console.log('DOES EMAIL EXIST?', emailExistsInCollection);
+
+            setIsLoggedIn(true);
+            navigate('/user/feed');
         }
     }, [emailExistsInCollection])
 

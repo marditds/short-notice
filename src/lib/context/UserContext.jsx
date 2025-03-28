@@ -87,9 +87,13 @@ export const UserProvider = ({ children }) => {
 
     // Checkig Session Status
 
+
     useEffect(() => {
         const checkingSessionStatus = async () => {
             try {
+                console.log('START - Checking session status...');
+                setIsAppLoading(true);
+
                 const usr = await getAccount();
                 if (usr) {
                     console.log('Session in progress.');
@@ -104,6 +108,9 @@ export const UserProvider = ({ children }) => {
                 }
             } catch (error) {
                 console.error('Error checking session status:', error);
+            } finally {
+                console.log('FINISH - Checking session status...');
+                setIsAppLoading(false);
             }
         };
         checkingSessionStatus();
@@ -119,14 +126,16 @@ export const UserProvider = ({ children }) => {
                 setAccountType(usr.accountType);
                 setUserWebsite(usr.website);
                 setUsername(usr.username);
+                setHasUsername(true);
 
             } catch (error) {
                 console.log('Error fetching user by id', error);
             }
         }
-        console.log('website in UserProfile.jsx', userWebsite);
 
-        fetchUserByUserId();
+        if (isLoggedIn) {
+            fetchUserByUserId();
+        }
     }, [userId])
 
     return (

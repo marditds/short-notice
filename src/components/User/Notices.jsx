@@ -508,7 +508,7 @@ export const Notices = ({
 
                                     {/* Username and Profile Picture */}
                                     {shouldShowUserInfo() ?
-                                        (<div className='d-flex flex-column justify-content-end align-items-end mt-auto'>
+                                        (<div className='d-flex flex-column justify-content-center align-items-center mt-auto'>
 
                                             <Link to={`../${notice.username}`}>
                                                 <img
@@ -519,7 +519,7 @@ export const Notices = ({
                                             </Link>
 
                                             <p
-                                                className='w-100 my-0 text-center notice__username'
+                                                className='w-100 mt-1 mb-0 text-center notice__username'
                                             >
                                                 <Link to={`../${notice.username}`}
                                                     className='text-decoration-none'>

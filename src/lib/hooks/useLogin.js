@@ -47,9 +47,9 @@ const useLogin = () => {
 
                 console.log('this email will be sent - App.jsx:', userEmail);
 
-                const usrData = await checkingEmailInAuth(userEmail);
+                // const usrData = await checkingEmailInAuth(userEmail);
 
-                console.log('usrData.email', usrData.email);
+                // console.log('usrData.email', usrData.email);
 
                 await createUser({
                     id: userId,
@@ -59,7 +59,7 @@ const useLogin = () => {
                     accountType: accountType
                 });
 
-                localStorage.setItem('username', username.toLowerCase());
+                // localStorage.setItem('username', username.toLowerCase());
 
                 setHasAccountType(true);
                 setHasUsername(true);
@@ -151,7 +151,7 @@ const useLogin = () => {
                 setUsername(user.username);
                 setAccountType(user.accountType);
                 setRegisteredUsername(user.username);
-                localStorage.setItem('username', user.username);
+                // localStorage.setItem('username', user.username);
                 setHasUsername(true);
 
             } else {
@@ -197,7 +197,7 @@ const useLogin = () => {
                 console.log('Session already in progress. LOL');
             }
 
-            localStorage.setItem('accessToken', accessToken);
+            // localStorage.setItem('accessToken', accessToken);
 
             checkUsernameInDatabase(decoded.email);
 

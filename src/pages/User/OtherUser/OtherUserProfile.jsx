@@ -620,9 +620,9 @@ const OtherUserProfile = () => {
             const psscd = await getPassocdeByOrganizationId(currUserId);
 
             console.log('psscd', psscd[0].passcode);
-            localStorage.setItem('passcode', passcode);
+            // localStorage.setItem('passcode', passcode);
 
-            console.log('Stored passcode in localStorage:', localStorage.getItem('passcode'));
+            // console.log('Stored passcode in localStorage:', localStorage.getItem('passcode'));
 
             if (psscd[0].passcode === passcode) {
                 setAccountTypeCheck(true);
@@ -733,7 +733,7 @@ const OtherUserProfile = () => {
                                                     savedNotices={savedNotices}
                                                     reactions={noticesReactions}
                                                     eventKey={eventKey}
-                                                    userId={userId}
+                                                    user_id={userId}
                                                     isOtherUserBlocked={isOtherUserBlocked}
                                                     handleLike={handleLike}
                                                     setLikedNotices={setLikedNotices}
@@ -784,7 +784,7 @@ const OtherUserProfile = () => {
                                             <>
                                                 <Notices
                                                     notices={savedNoticesData}
-                                                    userId={userId}
+                                                    user_id={userId}
                                                     likedNotices={likedNotices}
                                                     savedNotices={savedNotices}
                                                     eventKey={eventKey}
@@ -838,7 +838,7 @@ const OtherUserProfile = () => {
                                             <>
                                                 <Notices
                                                     notices={likedNoticesData}
-                                                    userId={userId}
+                                                    user_id={userId}
                                                     likedNotices={likedNotices}
                                                     savedNotices={savedNotices}
                                                     eventKey={eventKey}

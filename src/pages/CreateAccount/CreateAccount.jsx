@@ -254,6 +254,8 @@ const CreateAccount = () => {
             console.log('passcode', passcode);
             console.log('accountType', accountType);
 
+            setIsLoggedIn(true);
+
             if (accountType === 'organization' && passcode) {
                 await makePasscode(usr.$id, passcode, accountType);
                 console.log('Passcode stored successfully.');

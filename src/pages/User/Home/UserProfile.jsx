@@ -73,7 +73,7 @@ const UserProfile = () => {
     // } = useNotices(userEmail || localStorage.getItem('email'));
 
     const {
-        // myId,
+        // userId,
         // userWebsite,
         followersCount,
         followingCount,
@@ -97,8 +97,6 @@ const UserProfile = () => {
 
     // const [accountType, setAccountType] = useState(null);
 
-    let myId = userId;
-
     const [noticeText, setNoticeText] = useState('');
     // const [noticeGif, setNoticeGif] = useState(null);
     // const [duration, setDuration] = useState(24);
@@ -111,7 +109,7 @@ const UserProfile = () => {
     const [savedNoticesData, setSavedNoticesData] = useState([]);
     const [likedNoticesData, setLikedNoticesData] = useState([]);
 
-    const { avatarUrl, isAvatarLoading } = useUserAvatar(myId);
+    const { avatarUrl, isAvatarLoading } = useUserAvatar(userId);
 
     const [followingAccounts, setFollowingAccounts] = useState([]);
     const [followersAccounts, setFollowersAccounts] = useState([]);
@@ -159,8 +157,8 @@ const UserProfile = () => {
     }, [userEmail])
 
     useEffect(() => {
-        console.log('myId in UserProfile:', myId);
-    }, [myId])
+        console.log('userId in UserProfile:', userId);
+    }, [userId])
 
     // useEffect(() => {
     //     const testingGetAccount = async () => {
@@ -209,9 +207,9 @@ const UserProfile = () => {
     useEffect(() => {
         const fetchBlockedUsersByUser = async () => {
             try {
-                console.log('userIdsasasa,', myId);
+                console.log('userIdsasasa,', userId);
 
-                const res = await getBlockedUsersByUser(myId);
+                const res = await getBlockedUsersByUser(userId);
                 console.log('Bloccked users:', res);
 
             } catch (error) {
@@ -219,13 +217,13 @@ const UserProfile = () => {
             }
         }
         // fetchBlockedUsersByUser();
-    }, [myId])
+    }, [userId])
 
     // function for fetching notices
     const fetchNotices = async () => {
         setIsLoadingMore(true);
         try {
-            const usrNtcs = await fetchUserNotices(myId, limit, lastId);
+            const usrNtcs = await fetchUserNotices(userId, limit, lastId);
 
             console.log('usrNtcs', usrNtcs);
 
@@ -255,12 +253,13 @@ const UserProfile = () => {
             setIsLoadingMore(false);
         }
     };
-    // // Fetch notices for user on component load
+
+    // Fetch notices for user on component load
     useEffect(() => {
-        if (myId) {
+        if (userId) {
             fetchNotices();
         }
-    }, [myId])
+    }, [userId])
 
     // // Display notice in UI immediately after it is added 
     useEffect(() => {
@@ -288,15 +287,15 @@ const UserProfile = () => {
             }
 
             try {
-                const allSavedNotices = await getAllSavedNotices(myId, myId, limitSaves, offsetSaves);
+                const allSavedNotices = await getAllSavedNotices(userId, userId, limitSaves, offsetSaves);
 
                 console.log('allSavedNotices', allSavedNotices);
 
                 const ntcsIds = allSavedNotices?.map(ntc => ntc.$id);
 
                 const [svdNtcs, lkdNtcs] = await Promise.allSettled([
-                    fetchUserSaves(myId, ntcsIds),
-                    fetchUserLikes(myId, ntcsIds)
+                    fetchUserSaves(userId, ntcsIds),
+                    fetchUserLikes(userId, ntcsIds)
                 ]);
 
                 if (svdNtcs.status === 'fulfilled') {
@@ -345,7 +344,7 @@ const UserProfile = () => {
         if (isSavesClicked === true) {
             fetchSaveNotices();
         }
-    }, [myId, offsetSaves, isSavesClicked])
+    }, [userId, offsetSaves, isSavesClicked])
 
     // // Fetch likes and users' data for likes tab 
     useEffect(() => {
@@ -361,15 +360,15 @@ const UserProfile = () => {
             }
 
             try {
-                const allLikedNotices = await getAllLikedNotices(myId, myId, limitLikes, offsetLikes);
+                const allLikedNotices = await getAllLikedNotices(userId, userId, limitLikes, offsetLikes);
 
                 console.log('allLikedNotices - UserProfile.jsx', allLikedNotices);
 
                 const ntcsIds = allLikedNotices?.map(ntc => ntc.$id);
 
                 const [svdNtcsRes, lkdNtcsRes] = await Promise.allSettled([
-                    fetchUserSaves(myId, ntcsIds),
-                    fetchUserLikes(myId, ntcsIds)
+                    fetchUserSaves(userId, ntcsIds),
+                    fetchUserLikes(userId, ntcsIds)
                 ]);
 
                 if (svdNtcsRes.status === 'fulfilled') {
@@ -417,7 +416,7 @@ const UserProfile = () => {
         if (isLikesClicked === true) {
             fetchLikedNotices();
         }
-    }, [myId, offsetLikes, isLikesClicked])
+    }, [userId, offsetLikes, isLikesClicked])
 
     // The Saves and Likes data don't fetch unless isClicked === true
     useEffect(() => {
@@ -438,7 +437,7 @@ const UserProfile = () => {
         try {
             setIsLoadingMoreFollowing(true);
 
-            const accountsFollowedByUser = await fetchAccountsFollowedByUser(myId, limitFollowing, offsetFollowing);
+            const accountsFollowedByUser = await fetchAccountsFollowedByUser(userId, limitFollowing, offsetFollowing);
 
             console.log('accountsFollowedByUser', accountsFollowedByUser);
 
@@ -465,7 +464,7 @@ const UserProfile = () => {
         try {
             setIsLoadingMoreFollowers(true);
 
-            const accountsFollowingTheUser = await fetchAccountsFollowingTheUser(myId, limitFollowers, offsetFollowers);
+            const accountsFollowingTheUser = await fetchAccountsFollowingTheUser(userId, limitFollowers, offsetFollowers);
 
             console.log('accountsFollowingTheUser', accountsFollowingTheUser);
 
@@ -486,25 +485,25 @@ const UserProfile = () => {
         }
     };
 
-    // // Fetch following count
+    // Fetch following count
     useEffect(() => {
-        console.log('Fetching the followebByCount for user:', myId);
-        if (myId) {
-            getfollwedByUserCount(myId);
+        console.log('Fetching the followebByCount for user:', userId);
+        if (userId) {
+            getfollwedByUserCount(userId);
         }
-    }, [myId])
+    }, [userId])
 
-    // // Fetch followers count
+    // Fetch followers count
     useEffect(() => {
-        if (myId) {
-            getFollowingTheUserCount(myId);
+        if (userId) {
+            getFollowingTheUserCount(userId);
         }
-    }, [myId])
+    }, [userId])
 
     // Restting follow(ing/ers) data
     useEffect(() => {
-        if (myId) {
-            console.log('Current User ID changed:', myId);
+        if (userId) {
+            console.log('Current User ID changed:', userId);
             setFollowingAccounts([]);
             setOffsetFollowing(0);
             setHasMoreFollowing(true);
@@ -512,7 +511,7 @@ const UserProfile = () => {
             setOffsetFollowers(0);
             setHasMoreFollowers(true);
         }
-    }, [myId]);
+    }, [userId]);
 
     const handleEditNotice = (noticeId, currentText) => {
         console.log('EditingNoticeId + Current text', { noticeId, currentText });
@@ -620,7 +619,7 @@ const UserProfile = () => {
                                 notices={userProfileNotices}
                                 username={username}
                                 eventKey={eventKey}
-                                myId={myId}
+                                user_id={userId}
                                 handleEditNotice={handleEditNotice}
                                 handleDeleteNotice={handleDeleteNotice}
                                 getReactionsForNotice={getReactionsForNotice}
@@ -665,7 +664,7 @@ const UserProfile = () => {
                                     likedNotices={likedNotices}
                                     savedNotices={savedNotices}
                                     eventKey={eventKey}
-                                    user_id={myId}
+                                    user_id={userId}
                                     handleLike={handleLike}
                                     handleSave={handleSave}
                                     setLikedNotices={setLikedNotices}
@@ -722,7 +721,7 @@ const UserProfile = () => {
                                     likedNotices={likedNotices}
                                     savedNotices={savedNotices}
                                     eventKey={eventKey}
-                                    user_id={myId}
+                                    user_id={userId}
                                     handleLike={handleLike}
                                     handleSave={handleSave}
                                     setLikedNotices={setLikedNotices}

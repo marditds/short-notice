@@ -61,7 +61,7 @@ export const handleOAuthSession = async (userId, secret) => {
 export const getAccount = async () => {
     try {
         const accnt = await account.get();
-        console.log('Account gotten successfully:', accnt);
+        // console.log('Account gotten successfully:', accnt);
         return accnt;
     } catch (error) {
         console.error('Error getting account:', error);

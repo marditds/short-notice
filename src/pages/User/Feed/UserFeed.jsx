@@ -53,7 +53,7 @@ const UserFeed = () => {
     } = useNotices(userEmail);
     // } = useNotices(googleUserData.email);
 
-    const { isFetchingUsersData, fetchUsersData, getUserAccountByUserId } = useUserInfo(googleUserData.email);
+    const { isFetchingUsersData, fetchUsersData, getUserAccountByUserId } = useUserInfo(userEmail);
 
     const { isLargeScreen } = screenUtils();
 
@@ -190,13 +190,19 @@ const UserFeed = () => {
     // Fetch feed (personal)-(initial)
     useEffect(() => {
         const fetchInitialPersonalFeed = async () => {
+            console.log('USER ID IN PERSONAL FEED:', userId);
+            console.log('USER LOG IN IN PERSONAL FEED:', isLoggedIn);
+
             try {
                 if (!userId || !isLoggedIn) {
                     console.log('User not fully logged in. Skipping feed fetch.');
                     return;
                 }
 
-                console.log('USER ID IN PERSONAL FEED:', userId);
+                console.log('userId in fetchInitialPersonalFeed()', userId);
+                console.log('isLoggedIn in fetchInitialPersonalFeed()', isLoggedIn);
+
+
                 console.log('STARTING INITIAL PERSONAL FEED.');
 
                 setIsLoadingPersonalFeedNotices(true);
@@ -230,10 +236,11 @@ const UserFeed = () => {
         //     fetchInitialPersonalFeed();
         // }
         if (personalFeedNotices.length === 0 && userId && isLoggedIn) {
+            console.log('Calling fetchInitialPersonalFeed()');
             fetchInitialPersonalFeed();
         }
 
-    }, [userId, isLoggedIn]);
+    }, [userId]);
 
     // Fetch feed (personal)-(subsequent)
     useEffect(() => {
@@ -421,7 +428,7 @@ const UserFeed = () => {
                         >
                             {isLoadingPersonalFeedNotices || isLoadingMore || isLoadingMorePersonal ?
                                 <><Loading size={16} /> Loading...</>
-                                : 'Load More'}
+                                : 'Load More Hakop'}
                         </Button>
                         :
                         <div className={`${isAnyTagSelected && 'my-4'}`}>

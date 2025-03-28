@@ -38,49 +38,47 @@ function App() {
 
   const [isServerDown, setIsServerDown] = useState(false);
 
+  // UNNECESSARY?
+  // useEffect(() => {
+  //   const storedToken = localStorage.getItem('accessToken');
+  // const mainSetUp = async () => {
+  //     if (!storedToken) {
+  //       navigate('/');
+  //       return;
+  //     } 
+  // try {
+  // setIsAppLoading(true); 
+  //       const decoded = jwtDecode(storedToken);
+  //       setGoogleUserData(decoded);
+  //       setIsLoggedIn(true);
+  //       console.log('Logged in successfully - 1st useEffect');
+  //       console.log('decoded - useEffect App.jsx', decoded);
 
-  useEffect(() => {
-    const storedToken = localStorage.getItem('accessToken');
-    const mainSetUp = async () => {
-      if (!storedToken) {
-        navigate('/');
-        return;
-      }
+  //       // localStorage.setItem('email', decoded.email);
 
-      try {
-        setIsAppLoading(true);
+  //       // console.log('GETTING EMAIL FROM LOCAL STORAGE:', localStorage.getItem('email'));
 
-        const decoded = jwtDecode(storedToken);
-        setGoogleUserData(decoded);
-        setIsLoggedIn(true);
-        console.log('Logged in successfully - 1st useEffect');
-        console.log('decoded - useEffect App.jsx', decoded);
+  //       await checkUsernameInDatabase(decoded.email);
 
-        // localStorage.setItem('email', decoded.email);
+  // const sessionStatus = await getSessionDetails();
+  // console.log('sessionStatus', sessionStatus);
 
-        // console.log('GETTING EMAIL FROM LOCAL STORAGE:', localStorage.getItem('email'));
+  // if (!sessionStatus) {
+  // console.log('Creating a session.');
+  //         await createSession(decoded.email);
+  //       } else {
+  //         console.log('Session already in progress.');
+  //       }
+  // } catch (error) {
+  // console.error('Error during user setup:', error);
+  // navigate('/');
+  // } finally {
+  // setIsAppLoading(false);
+  // }
+  // };
 
-        await checkUsernameInDatabase(decoded.email);
-
-        const sessionStatus = await getSessionDetails();
-        console.log('sessionStatus', sessionStatus);
-
-        if (!sessionStatus) {
-          console.log('Creating a session.');
-          await createSession(decoded.email);
-        } else {
-          console.log('Session already in progress.');
-        }
-      } catch (error) {
-        console.error('Error during user setup:', error);
-        navigate('/');
-      } finally {
-        setIsAppLoading(false);
-      }
-    };
-
-    mainSetUp();
-  }, [navigate]);
+  // mainSetUp();
+  // }, [navigate]);
 
   useEffect(() => {
     if (hasUsername) {

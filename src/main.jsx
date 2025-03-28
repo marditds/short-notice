@@ -160,7 +160,7 @@ const router = createBrowserRouter([
 
       const authenticatedUser = await getAccount();
 
-      console.log('authenticatedUser in LOADER:', authenticatedUser);
+      console.log('authenticatedUser in <USER/> LOADER:', authenticatedUser);
 
       if (!authenticatedUser) {
         console.warn('No authenticated user. Redirecting to /authenitcate');
