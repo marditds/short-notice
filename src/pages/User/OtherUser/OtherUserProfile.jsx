@@ -27,8 +27,6 @@ const OtherUserProfile = () => {
         userEmail
     } = useUserContext();
 
-    const myUsername = username;
-
     const [currUserId, setCurrUserId] = useState(null);
     // const [currUserId, setCurrUserId] = useState(() => {
     //     return localStorage.getItem('currUserId') || null;
@@ -144,12 +142,12 @@ const OtherUserProfile = () => {
     // Tabs' EventKey
     const [eventKey, setEventKey] = useState('notices');
 
-    // Check for myUsername vs. otherUsername
+    // Check for username vs. otherUsername
     useEffect(() => {
-        if (otherUsername === myUsername) {
+        if (otherUsername === username) {
             navigate('/user/profile');
         }
-    }, [otherUsername, myUsername, navigate]);
+    }, [otherUsername, username, navigate]);
 
     //THIS IS MY ID
     useEffect(() => {
@@ -163,8 +161,14 @@ const OtherUserProfile = () => {
 
     // Hello
     useEffect(() => {
-        console.log('Barev', myUsername);
-    }, [myUsername]);
+        console.log('Barev', username);
+    }, [username]);
+    useEffect(() => {
+        console.log('userId', userId);
+    }, [userId]);
+    useEffect(() => {
+        console.log('userEmail', userEmail);
+    }, [userEmail]);
 
     // Get Other User
     useEffect(() => {
@@ -175,7 +179,7 @@ const OtherUserProfile = () => {
 
                 const [otherUserRes, userRes] = await Promise.allSettled([
                     getUserByUsername(otherUsername),
-                    getUserByUsername(myUsername)
+                    getUserByUsername(username)
                 ]);
 
                 if (otherUserRes.status === 'fulfilled' && userRes.status === 'fulfilled') {
@@ -235,7 +239,7 @@ const OtherUserProfile = () => {
         setIsOtherUserBlocked(false);
         setIsBlocked(false);
         getCurrUser();
-    }, [myUsername, otherUsername])
+    }, [username, otherUsername])
 
     // CurrUserId
     useEffect(() => {

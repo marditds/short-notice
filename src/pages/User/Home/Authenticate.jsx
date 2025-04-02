@@ -15,6 +15,7 @@ const Authenticate = () => {
         userEmail, setUserEmail,
         setGivenName,
         user, setUser,
+        setUsername,
         isSessionInProgress,
         isCheckEmailExistanceLoading, setIsCheckEmailExistanceLoading,
     } = useUserContext();
@@ -41,8 +42,8 @@ const Authenticate = () => {
 
                 setUserEmail(authenticatedUser.email);
                 setUserId(authenticatedUser.$id);
+                setUsername(authenticatedUser.name);
                 setGivenName(authenticatedUser.name);
-
                 setUser(authenticatedUser);
 
             } catch (err) {

@@ -30,12 +30,13 @@ export const UserProvider = ({ children }) => {
 
                 const usr = await getAccount();
                 if (usr) {
-                    console.log('Session in progress.');
+                    console.log('Session in progress.', usr);
                     setIsSessionInProgress(true);
                     setUserEmail(usr.email);
                     setUserId(usr.$id);
                     setGivenName(usr.name);
                     setUser(usr);
+                    setUsername(usr.username)
                     setIsLoggedIn(true);
                 } else {
                     console.log('No session found.');
@@ -55,6 +56,8 @@ export const UserProvider = ({ children }) => {
 
     // Fetch username, account type, and website by user Id
     useEffect(() => {
+        if (!isLoggedIn || !userId) return;
+
         const fetchUserByUserId = async () => {
             try {
                 const usr = await getUserById(userId);
@@ -70,10 +73,10 @@ export const UserProvider = ({ children }) => {
             }
         }
 
-        if (isLoggedIn) {
+        if (isLoggedIn && userId) {
             fetchUserByUserId();
         }
-    }, [userId])
+    }, [userId, isLoggedIn])
 
     return (
         <UserContext.Provider

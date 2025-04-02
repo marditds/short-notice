@@ -29,8 +29,12 @@ export const googleOAuthLogin = async () => {
             'google',
             `${baseUrl}/authenticate`,
             `${baseUrl}/`,
+            ['profile', 'email'],
+            {
+                prompt: 'select_account',
+                login_hint: ''
+            }
         )
-
     } catch (error) {
         console.error('Error logging in with google:', error);
     }
@@ -515,27 +519,47 @@ export const getSession = async () => {
 export const deleteUserSession = async () => {
 
     const currentSession = await account.getSession('current');
-    const accessToken = currentSession.$id;
+
     console.log('currentSession', currentSession);
-    console.log('accessToken', accessToken);
+
     try {
-        if (currentSession && accessToken) {
+        if (currentSession) {
             await account.deleteSession(currentSession.$id);
             console.log('Session deleted successfully');
 
-            await fetch('https://accounts.google.com/o/oauth2/revoke?token=' + accessToken, {
-                method: 'GET',
-                mode: 'no-cors',
-            });
+            const iframe = document.createElement('iframe');
+            iframe.style.display = 'none';
+            iframe.src = 'https://accounts.google.com/logout';
+            document.body.appendChild(iframe);
 
-            console.log('LOGGED OUT SUCCESSFULLY.');
+            // Remove the iframe after a short delay
+            setTimeout(() => {
+                document.body.removeChild(iframe);
+                console.log('LOGGED OUT SUCCESSFULLY.');
+            }, 1000);
         }
         console.log('REDIRECTING TO /');
-        // window.location.href = '/';
     } catch (error) {
         console.error('Error deleting the session:', error);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 // {
@@ -571,6 +595,8 @@ export const deleteUserSession = async () => {
 // }
 // {
 //     $createdAt:     $id:     $updatedAt:     clientCode:     clientEngine:     clientEngineVersion:     clientName:     clientType:     clientVersion:     countryCode:     countryName:     current:     deviceBrand:,
+
+
 //     deviceModel:     deviceName:     expire:     factors:     ip:     mfaUpdatedAt:     osCode:     osName:     osVersion:     provider:    providerAccessToken:     providerAccessTokenExpiry:     providerRefreshToken:     providerUid:     secret:     userId: }
 
 export const getSessionDetails = async () => {

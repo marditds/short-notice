@@ -88,18 +88,12 @@ export const Navigation = ({
                 try {
                     setIsAppLoading(true);
                     await removeSession();
-                    // googleLogout();
                     setIsLoggedIn(false);
                     setUserId(null);
                     setUserEmail(null);
                     setUsername('');
                     setHasUsername(false);
                     setAccountType('');
-                    // localStorage.removeItem('accessToken');
-                    // localStorage.removeItem('googleUserData');
-                    // localStorage.removeItem('email');
-                    // localStorage.removeItem('username');
-                    // localStorage.removeItem('passcode');
                     console.log('Logged out successfully.');
                     window.location.href = '/';
                 } catch (error) {
@@ -107,23 +101,6 @@ export const Navigation = ({
                 } finally {
                     setIsAppLoading(false);
                 }
-                // setIsAppLoading(true);
-                // await removeSession();
-                // googleLogout();
-                // setIsLoggedIn(false);
-                // setGoogleUserData(null);
-                // setUserId(null);
-                // setUserEmail(null);
-                // setUsername('');
-                // setHasUsername(false);
-                // setAccountType('');
-                // localStorage.removeItem('accessToken');
-                // localStorage.removeItem('googleUserData');
-                // localStorage.removeItem('email');
-                // localStorage.removeItem('username');
-                // localStorage.removeItem('passcode');
-                // console.log('Logged out successfully.');
-                // window.location.href = '/';
             },
             url: '/'
         }
