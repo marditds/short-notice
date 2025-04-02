@@ -1,26 +1,26 @@
 import React from 'react';
 import { googleOAuthLogin } from '../../../lib/context/dbhandler';
 import { Button } from 'react-bootstrap';
-import { GoogleLogin } from '@react-oauth/google';
+import { useUserContext } from '../../../lib/context/UserContext';
 
+export const GoogleLoginForm = ({ subtitle }) => {
 
-export const GoogleLoginForm = ({ onSuccess, subtitle }) => {
+    const { setIsLogInBtnClicked } = useUserContext();
 
+    const handleOnGoogleLoginClick = () => {
+        console.log('handleOnGoogleLoginClick is clicked.');
+
+        setIsLogInBtnClicked(true);
+        googleOAuthLogin();
+    }
 
     return (
         <>
             <div className="login__btn">
-                <Button onClick={googleOAuthLogin}>Login with Google</Button>
-                {/* <GoogleLogin
-                    onSuccess={onSuccess}
+                <Button onClick={handleOnGoogleLoginClick}>
+                    Login with Google
+                </Button>
 
-                    onError={() => {
-                        console.log('Login Failed');
-                    }}
-
-                    shape='pill'
-                    auto_select={false}
-                /> */}
                 <sub>{subtitle}</sub>
             </div>
         </>

@@ -6,8 +6,8 @@ import { Loading } from '../../Loading/Loading';
 
 export const DeleteAllNotices = () => {
 
-    const { googleUserData } = useUserContext();
-    const { user_id, removeAllNoticesByUser } = useNotices(googleUserData.email);
+    const { userEmail } = useUserContext();
+    const { user_id, removeAllNoticesByUser } = useNotices(userEmail);
 
     const [showModal, setShowModal] = useState(false);
     const [loading, setLoading] = useState(false);

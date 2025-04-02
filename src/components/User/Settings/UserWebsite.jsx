@@ -6,9 +6,9 @@ import { Loading } from '../../Loading/Loading';
 
 export const UserWebsite = () => {
 
-    const { username, googleUserData } = useUserContext();
+    const { username, userEmail } = useUserContext();
 
-    const { userWebsite, setUserWebsite, updateUserWebsite, getUserByUsername } = useUserInfo(googleUserData.email);
+    const { userWebsite, setUserWebsite, updateUserWebsite, getUserByUsername } = useUserInfo(userEmail);
 
     const [isUpdatingWebsite, setIsUpdatingWebsite] = useState(false);
 

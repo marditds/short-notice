@@ -7,7 +7,7 @@ import { Loading } from '../../Loading/Loading';
 
 export const Interests = () => {
 
-    const { googleUserData, userId } = useUserContext();
+    const { userId, userEmail } = useUserContext();
     const {
         tagCategories,
         isInterestsUpdating,
@@ -17,7 +17,7 @@ export const Interests = () => {
         updateInterests,
         toggleInterestsTag,
         deselectAllInterestTags
-    } = useNotices(googleUserData.email);
+    } = useNotices(userEmail);
 
     useEffect(() => {
         // if (location.pathname === feed or settings)

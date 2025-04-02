@@ -12,12 +12,10 @@ import useNotices from '../../../lib/hooks/useNotices';
 // import { Loading } from '../../Loading/Loading';
 
 export const Navigation = ({
-    googleUserData,
     userId,
     removeSession,
-    googleLogout,
+    // googleLogout,
     accountType,
-    setGoogleUserData,
     setIsLoggedIn,
     setUserId,
     setUserEmail,
@@ -44,7 +42,7 @@ export const Navigation = ({
         // updateInterests,
         // deselectAllInterestTags,
         // fetchUserInterests
-    } = useNotices(googleUserData.email);
+    } = useNotices(userId);
 
     const { isLargeScreen, isMediumScreen, isSmallScreen, isExtraSmallScreen } = screenUtils();
 
@@ -90,19 +88,18 @@ export const Navigation = ({
                 try {
                     setIsAppLoading(true);
                     await removeSession();
-                    googleLogout();
+                    // googleLogout();
                     setIsLoggedIn(false);
-                    setGoogleUserData(null);
                     setUserId(null);
                     setUserEmail(null);
                     setUsername('');
                     setHasUsername(false);
                     setAccountType('');
-                    localStorage.removeItem('accessToken');
-                    localStorage.removeItem('googleUserData');
-                    localStorage.removeItem('email');
-                    localStorage.removeItem('username');
-                    localStorage.removeItem('passcode');
+                    // localStorage.removeItem('accessToken');
+                    // localStorage.removeItem('googleUserData');
+                    // localStorage.removeItem('email');
+                    // localStorage.removeItem('username');
+                    // localStorage.removeItem('passcode');
                     console.log('Logged out successfully.');
                     window.location.href = '/';
                 } catch (error) {

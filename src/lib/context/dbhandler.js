@@ -25,13 +25,11 @@ export const googleOAuthLogin = async () => {
     try {
         const baseUrl = window.location.origin
 
-        const userAccount = account.createOAuth2Token(
+        account.createOAuth2Token(
             'google',
             `${baseUrl}/authenticate`,
             `${baseUrl}/`,
         )
-
-        console.log('Success logging in with Google:', userAccount);
 
     } catch (error) {
         console.error('Error logging in with google:', error);
@@ -194,6 +192,11 @@ export const getUserByIdQuery = async (userId) => {
 };
 
 export const getUserByEmail = async (email) => {
+
+    if (!email) {
+        throw new Error("Email is null or undefined.");
+    }
+
     try {
         const userList = await databases.listDocuments(
             import.meta.env.VITE_DATABASE,
@@ -500,20 +503,75 @@ export const createUserSession = async (email) => {
     }
 }
 
+export const getSession = async () => {
+    try {
+        const currentSession = await account.getSession('current');
+        console.log('CURRENT SESS:', currentSession);
+    } catch (error) {
+        console.error('Error getting current session deets:', error);
+    }
+}
+
 export const deleteUserSession = async () => {
 
     const currentSession = await account.getSession('current');
+    const accessToken = currentSession.$id;
     console.log('currentSession', currentSession);
+    console.log('accessToken', accessToken);
     try {
-
-        if (currentSession) {
+        if (currentSession && accessToken) {
             await account.deleteSession(currentSession.$id);
-            console.log('Session delete successfully');
+            console.log('Session deleted successfully');
+
+            await fetch('https://accounts.google.com/o/oauth2/revoke?token=' + accessToken, {
+                method: 'GET',
+                mode: 'no-cors',
+            });
+
+            console.log('LOGGED OUT SUCCESSFULLY.');
         }
+        console.log('REDIRECTING TO /');
+        // window.location.href = '/';
     } catch (error) {
         console.error('Error deleting the session:', error);
     }
 }
+
+
+// {
+//     $createdAt: "2025-04-02T00:42:36.300+00:00",
+//     $id: "67ec87fc4806b059b113",
+//     $updatedAt: "2025-04-02T00:42:36.300+00:00",
+//     clientCode: "CH",
+//     clientEngine: "Blink",
+//     clientEngineVersion: "134.0.0.0",
+//     clientName: "Chrome",
+//     clientType: "browser",
+//     clientVersion: "134.0",
+//     countryCode: "us",
+//     countryName: "United States",
+//     current: true,
+//     deviceBrand: "",
+//     deviceModel: "",
+//     deviceName: "desktop",
+//     expire: "2026-04-02T00:42:36.295+00:00",
+//     factors: ['email'],
+//     ip: "2600:6c50:27f:6430:656c:9a04:b451:981a",
+//     mfaUpdatedAt: "",
+//     osCode: "WIN",
+//     osName: "Windows",
+//     osVersion: "10",
+//     provider: "oauth2",
+//     providerAccessToken: "",
+//     providerAccessTokenExpiry: "",
+//     providerRefreshToken: "",
+//     providerUid: "",
+//     secret: "",
+//     userId: "6728729c0015edd16a7e"
+// }
+// {
+//     $createdAt:     $id:     $updatedAt:     clientCode:     clientEngine:     clientEngineVersion:     clientName:     clientType:     clientVersion:     countryCode:     countryName:     current:     deviceBrand:,
+//     deviceModel:     deviceName:     expire:     factors:     ip:     mfaUpdatedAt:     osCode:     osName:     osVersion:     provider:    providerAccessToken:     providerAccessTokenExpiry:     providerRefreshToken:     providerUid:     secret:     userId: }
 
 export const getSessionDetails = async () => {
     try {

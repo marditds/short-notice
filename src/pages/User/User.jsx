@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { getUserByEmail } from '../../lib/context/dbhandler';
+import { getUserByEmail, getSession } from '../../lib/context/dbhandler';
 import { Outlet, Navigate, useLocation, useNavigate } from 'react-router-dom';
-import { Container } from 'react-bootstrap';
+import { Container, Button } from 'react-bootstrap';
 import { Navigation } from '../../components/User/Navigation/Navigation';
-import { googleLogout } from '@react-oauth/google';
+// import { googleLogout } from '@react-oauth/google';
 import { useUserContext } from '../../lib/context/UserContext';
 import useUserInfo from '../../lib/hooks/useUserInfo';
 import { Loading } from '../../components/Loading/Loading';
@@ -12,7 +12,6 @@ import '../../components/User/Navigation/Navigation.css';
 const User = () => {
 
     const {
-        googleUserData, setGoogleUserData,
         isLoggedIn, setIsLoggedIn,
         userId, setUserId,
         userEmail, setUserEmail,
@@ -31,10 +30,6 @@ const User = () => {
     const { removeSession } = useUserInfo(userEmail);
 
     const [loadingAuth, setLoadingAuth] = useState(false);
-
-    useEffect(() => {
-        console.log('googleUserData:', googleUserData);
-    }, [googleUserData])
 
     // Ensure we have the google data on direct URL access
     // useEffect(() => {
@@ -86,11 +81,9 @@ const User = () => {
     return (
         <Container fluid className='w-100 p-0 px-lg-1'>
             <Navigation
-                googleUserData={googleUserData}
                 userId={userId}
                 removeSession={removeSession}
-                googleLogout={googleLogout}
-                setGoogleUserData={setGoogleUserData}
+                // googleLogout={googleLogout}
                 setIsLoggedIn={setIsLoggedIn}
                 accountType={accountType}
                 setIsAppLoading={setIsAppLoading}
@@ -104,6 +97,7 @@ const User = () => {
                 className='userhome__body'
                 style={{ maxWidth: location.pathname !== '/user/feed' ? '1320px' : '100%' }}
             >
+                <Button style={{ marginTop: '65px' }} onClick={getSession}>get session details</Button>
                 <Outlet />
             </Container>
         </Container>

@@ -25,7 +25,6 @@ const CreateAccount = () => {
     const navigate = useNavigate();
 
     const {
-        googleUserData, setGoogleUserData,
         setIsLoggedIn,
         userId, setUserId,
         username, setUsername,
@@ -427,9 +426,8 @@ const CreateAccount = () => {
                         <Button
                             type='button'
                             onClick={() => {
-                                googleLogout();
+                                // googleLogout();
                                 setIsLoggedIn(preVal => false)
-                                setGoogleUserData(null);
                                 localStorage.removeItem('accessToken');
                                 console.log('Logged out successfully.');
                                 window.location.href = '/';

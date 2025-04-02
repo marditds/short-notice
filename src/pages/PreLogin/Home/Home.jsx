@@ -16,7 +16,7 @@ import { RiTeamFill } from "react-icons/ri";
 import { RiNumber1, RiNumber2, RiNumber3, RiNumber4 } from "react-icons/ri";
 import { screenUtils } from '../../../lib/utils/screenUtils';
 
-const Home = ({ onSuccess }) => {
+const Home = () => {
 
     const { isSmallScreen } = screenUtils();
 
@@ -162,7 +162,7 @@ const Home = ({ onSuccess }) => {
                                     <h4 className='mb-0 pe-0 pe-sm-2'>Join with your Google account</h4>
 
                                     <span className='mt-3 mt-sm-0'>
-                                        <GoogleLoginForm onSuccess={onSuccess}
+                                        <GoogleLoginForm
                                             subtitle={'More sign in options coming soon!'}
                                         />
                                     </span>
@@ -170,11 +170,6 @@ const Home = ({ onSuccess }) => {
                             </div>
                         </Col>
                     </Row>
-
-                    {/* CTA */}
-                    {/* <CallToAction sectionName={'hero'}>
-                        <GoogleLoginForm onSuccess={onSuccess} />
-                    </CallToAction> */}
 
                     {/* FEATURES */}
                     <div>
@@ -262,7 +257,7 @@ const Home = ({ onSuccess }) => {
 
                     {/* CTA */}
                     <CallToAction sectionName={'features'}>
-                        <GoogleLoginForm onSuccess={onSuccess} />
+                        <GoogleLoginForm />
                     </CallToAction>
 
                     {/* HOW IT WORKS */}
@@ -292,7 +287,7 @@ const Home = ({ onSuccess }) => {
 
                     {/* CTA */}
                     <CallToAction sectionName={'how'}>
-                        <GoogleLoginForm onSuccess={onSuccess} />
+                        <GoogleLoginForm />
                     </CallToAction>
 
                     {/* FAQ */}

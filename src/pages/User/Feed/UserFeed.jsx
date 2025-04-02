@@ -14,8 +14,8 @@ import { ComposeNotice } from '../../../components/User/ComposeNotice';
 
 const UserFeed = () => {
 
-    const { googleUserData, accountType,
-        userId, isLoggedIn, userEmail
+    const { accountType,
+        userId, isLoggedIn, userEmail, isAppLoading
     } = useUserContext();
 
     const {
@@ -51,7 +51,6 @@ const UserFeed = () => {
         reportReaction,
         addNotice,
     } = useNotices(userEmail);
-    // } = useNotices(googleUserData.email);
 
     const { isFetchingUsersData, fetchUsersData, getUserAccountByUserId } = useUserInfo(userEmail);
 
@@ -305,15 +304,21 @@ const UserFeed = () => {
     };
 
     // Render loading state while data is being fetched
-    // if (
-    //     (isLoadingPersonalFeedNotices || isLoadingMorePersonalInitial)
-    //             &&
-    //          (personalFeedNotices.length === 0 || generalFeedNotices.length === 0)
-    // ) {
-    //     return <div className='pt-5 h-100 user-feed__loading-div'>
-    //         <div>
-    //             <Loading /><span className='ms-2'>{`Loading your feed...`}</span>
-    //         </div>
+    if (
+        (isLoadingPersonalFeedNotices || isLoadingMorePersonalInitial)
+        &&
+        (personalFeedNotices.length === 0 || generalFeedNotices.length === 0)
+    ) {
+        return <div className='pt-5 h-100 user-feed__loading-div'>
+            <div>
+                <Loading /><span className='ms-2'>{`Loading your feed...`}</span>
+            </div>
+        </div>;
+    }
+
+    // if (isAppLoading) {
+    //     return <div className='d-flex justify-content-center align-items-center'>
+    //         <Loading classAnun={'me-2'} />Loading...
     //     </div>;
     // }
 

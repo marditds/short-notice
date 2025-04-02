@@ -11,7 +11,6 @@ const useLogin = () => {
     const navigate = useNavigate();
 
     const {
-        googleUserData, setGoogleUserData,
         isLoggedIn, setIsLoggedIn,
         userId, setUserId,
         userEmail, setUserEmail,
@@ -29,7 +28,7 @@ const useLogin = () => {
         getSessionDetails,
         checkingEmailInAuth,
         registerUser,
-    } = useUserInfo(googleUserData.email);
+    } = useUserInfo(userEmail);
 
     const [isServerDown, setIsServerDown] = useState(false);
 
@@ -166,49 +165,49 @@ const useLogin = () => {
         }
     };
 
-    const onSuccess = async (credentialResponse) => {
-        try {
-            setIsAppLoading(true);
+    // const onSuccess = async (credentialResponse) => {
+    //     try {
+    //         setIsAppLoading(true);
 
-            const decoded = jwtDecode(credentialResponse?.credential);
-            console.log('Logged in successfully. - onSuccess');
-            setGoogleUserData(preData => decoded);
+    //         const decoded = jwtDecode(credentialResponse?.credential);
+    //         console.log('Logged in successfully. - onSuccess');
+    //         setGoogleUserData(preData => decoded);
 
-            console.log('TYPE OF DECODED:', typeof decoded);
+    //         console.log('TYPE OF DECODED:', typeof decoded);
 
-            // localStorage.setItem('googleUserData', JSON.stringify(decoded));
-            // localStorage.setItem('googleUserData', decoded);
-            // localStorage.setItem('email', decoded.email);
+    //         // localStorage.setItem('googleUserData', JSON.stringify(decoded));
+    //         // localStorage.setItem('googleUserData', decoded);
+    //         // localStorage.setItem('email', decoded.email);
 
-            setIsLoggedIn(preVal => true);
+    //         setIsLoggedIn(preVal => true);
 
-            const accessToken = credentialResponse?.credential;
-            console.log('Access Token:', accessToken);
+    //         const accessToken = credentialResponse?.credential;
+    //         console.log('Access Token:', accessToken);
 
-            console.log('decoded.email', decoded.email);
+    //         console.log('decoded.email', decoded.email);
 
-            const sessionStatus = await getSessionDetails();
-            console.log(sessionStatus);
+    //         const sessionStatus = await getSessionDetails();
+    //         console.log(sessionStatus);
 
-            if (!sessionStatus || sessionStatus === undefined) {
-                console.log('Creating a session.');
-                await createSession(decoded.email);
-            } else {
-                console.log('Session already in progress. LOL');
-            }
+    //         if (!sessionStatus || sessionStatus === undefined) {
+    //             console.log('Creating a session.');
+    //             await createSession(decoded.email);
+    //         } else {
+    //             console.log('Session already in progress. LOL');
+    //         }
 
-            // localStorage.setItem('accessToken', accessToken);
+    //         // localStorage.setItem('accessToken', accessToken);
 
-            checkUsernameInDatabase(decoded.email);
+    //         checkUsernameInDatabase(decoded.email);
 
-        } catch (error) {
-            console.error('Error logging in:', error);
-        } finally {
-            setIsAppLoading(false);
-        }
-    };
+    //     } catch (error) {
+    //         console.error('Error logging in:', error);
+    //     } finally {
+    //         setIsAppLoading(false);
+    //     }
+    // };
 
-    return { isSetUserLoading, setUser, onSuccess, checkUsernameInDatabase }
+    return { isSetUserLoading, setUser, checkUsernameInDatabase }
 }
 
 export default useLogin;

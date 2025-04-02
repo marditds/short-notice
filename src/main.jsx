@@ -42,17 +42,17 @@ import Header from './components/PreLogin/Header/Header.jsx';
 import Footer from './components/PreLogin/Footer/Footer.jsx';
 import { GoogleLoginForm } from './components/LoginForm/Google/GoogleLoginForm.jsx';
 import useLogin from './lib/hooks/useLogin.js';
-import Me from './pages/User/Home/Me.jsx';
+import Authenticate from './pages/User/Home/Authenticate.jsx';
 
 const PreLoginLayout = () => {
 
-  const { onSuccess } = useLogin();
+  // const { onSuccess } = useLogin();
 
   return (
     <div className='home__body d-flex flex-column justify-content-between min-vh-100'>
       <Header>
         <GoogleLoginForm
-          onSuccess={onSuccess}
+        // onSuccess={onSuccess}
         />
       </Header>
       <Outlet />
@@ -145,7 +145,11 @@ const router = createBrowserRouter([
   },
   {
     path: 'authenticate',
-    element: <Me />,
+    loader: async () => {
+      console.log('RUNNING <Authenticate/> LOADER:');
+      return null;
+    },
+    element: <Authenticate />,
   },
   {
     path: 'user',
@@ -235,7 +239,7 @@ const MainRender = () => {
     keysProvider('google', setClientId);
   }, []);
 
-  if (!clientId) return <p><Loading /> Loading...</p>;
+  if (!clientId) return <p><Loading /> Loading Hakop...</p>;
 
   return (
     <StrictMode>

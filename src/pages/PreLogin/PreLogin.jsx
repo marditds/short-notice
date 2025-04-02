@@ -16,7 +16,7 @@ import HelpCenterTitles from './HelpCenter/HelpCenterInfo/HelpCenterTitles';
 import HelpCenterData from './HelpCenter/HelpCenterInfo/HelpCenterData';
 import Attributions from './Attributions/Attributions';
 
-const PreLogin = ({ onSuccess }) => {
+const PreLogin = () => {
 
     const location = useLocation();
 
@@ -30,7 +30,7 @@ const PreLogin = ({ onSuccess }) => {
         // <div className='home__body d-flex flex-column justify-content-between min-vh-100'>
         <>
             {
-                location.pathname === '/' && <Home onSuccess={onSuccess} />
+                location.pathname === '/' && <Home />
             }
 
             <Outlet />

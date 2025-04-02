@@ -7,7 +7,7 @@ import { Loading } from '../../Loading/Loading';
 
 export const Info = ({ accountType }) => {
 
-    const { googleUserData,
+    const {
         username,
         userEmail,
         setUsername,

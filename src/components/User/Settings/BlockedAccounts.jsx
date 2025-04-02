@@ -10,12 +10,12 @@ import { EndAsterisks } from '../EndAsterisks';
 
 export const BlockedAccounts = () => {
 
-    const { googleUserData, username } = useUserContext();
+    const { username, userEmail } = useUserContext();
     const { userId,
         getBlockedUsersByUserByBatch,
         getUserAccountByUserId,
         deleteBlockUsingBlockedId
-    } = useUserInfo(googleUserData.email);
+    } = useUserInfo(userEmail);
 
     const [blockedUsers, setBlockedUsers] = useState([]);
     const [isBlockListInitialRunLoading, setIsBlockListInitialRunLoading] = useState(false);

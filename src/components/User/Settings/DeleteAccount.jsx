@@ -11,8 +11,8 @@ import { Loading } from '../../Loading/Loading';
 
 export const DeleteAccount = () => {
 
-    const { googleUserData } = useUserContext();
-    const { handleDeleteUser } = useUserInfo(googleUserData.email);
+    const { userEmail } = useUserContext();
+    const { handleDeleteUser } = useUserInfo(userEmail);
     const navigate = useNavigate();
     const [showModal, setShowModal] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -20,20 +20,20 @@ export const DeleteAccount = () => {
 
     const { avatarUrl, setAvatarUrl, handleDeleteAvatarFromStrg, extractFileIdFromUrl } = useUserAvatar(user_id);
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        const fetchUserId = async () => {
-            try {
-                const id = await UserId(googleUserData);
-                setUserId(id);
-            } catch (error) {
-                console.error('Error fetching user ID:', error);
-            }
-        };
+    //     const fetchUserId = async () => {
+    //         try {
+    //             const id = await UserId(googleUserData);
+    //             setUserId(id);
+    //         } catch (error) {
+    //             console.error('Error fetching user ID:', error);
+    //         }
+    //     };
 
-        fetchUserId();
+    //     fetchUserId();
 
-    }, [googleUserData]);
+    // }, [googleUserData]);
 
 
     const handleDeleteAccount = async () => {
@@ -55,7 +55,7 @@ export const DeleteAccount = () => {
 
             await Promise.allSettled([handleDeleteAvatarPromise, handleDeleteUserPromise]);
 
-            googleLogout();
+            // googleLogout();
 
             localStorage.removeItem('accessToken');
 
