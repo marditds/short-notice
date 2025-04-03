@@ -5,11 +5,13 @@ import useUserInfo from '../../../lib/hooks/useUserInfo';
 import { forbiddenUsrnms, usrnmMaxLngth } from '../../../lib/utils/usernameUtils';
 import { Loading } from '../../Loading/Loading';
 
-export const Info = ({ accountType }) => {
+// export const Info = ({ accountType }) => {
+export const Info = () => {
 
     const {
         username,
         userEmail,
+        accountType,
         setUsername,
         setRegisteredUsername } = useUserContext();
 
@@ -20,6 +22,9 @@ export const Info = ({ accountType }) => {
 
     const [errorMsg, setErrorMsg] = useState('');
 
+    useEffect(() => {
+        console.log('accountType in INFO:', accountType);
+    }, [accountType])
 
     const handleUsernameChange = (e) => {
         const usrnm = e.target.value.replace(/\s/g, '');
@@ -61,13 +66,19 @@ export const Info = ({ accountType }) => {
 
     };
 
+    useEffect(() => {
+        console.log('username in INFO:', username);
+        console.log('localUsername in INFO:', localUsername);
+    }, [localUsername])
+
     let usrnm = (accountType === 'personal' && 'Username') || (accountType === 'business' && 'Business Name') || (accountType === 'organization' && 'Organization\'s Name')
 
     return (
         <Row xs={1} sm={2}>
             <Col>
                 <h4 className=''>Update {usrnm}:</h4>
-                <p className='mb-0'>Update your {usrnm?.toLocaleLowerCase()}. The maximum number of characters for your {usrnm?.toLowerCase()} is 16.</p>
+                {/* <p className='mb-0'>Update your {usrnm?.toLowerCase()}. The maximum number of characters for your {usrnm?.toLowerCase()} is 16.</p> */}
+                <p className='mb-0'>Update your {usrnm && usrnm.toLowerCase()}. The maximum number of characters for your {usrnm && usrnm.toLowerCase()} is 16.</p>
             </Col>
             <Col className='mt-3 mt-sm-0 d-flex justify-content-end align-items-center settings__username-col'>
                 <Form
@@ -90,7 +101,8 @@ export const Info = ({ accountType }) => {
                             className='settings__username-field'
                         />
                         <Form.Text className='settings__username-unique'>
-                            Your {usrnm} must be unique.
+                            {/* Your {usrnm?.toLowerCase()} must be unique. */}
+                            Your {usrnm && usrnm.toLowerCase()} must be unique.
                         </Form.Text>
                         {errorMsg && <Alert variant="danger" className='alert'>{errorMsg}</Alert>}
                     </Form.Group>

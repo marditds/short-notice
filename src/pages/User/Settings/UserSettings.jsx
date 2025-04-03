@@ -23,6 +23,11 @@ const UserSettings = () => {
         setIsLoading(false);
     })
 
+    useEffect(() => {
+        console.log('accountType in UserSetting:', accountType);
+    }, [accountType])
+
+
     if (isLoading) {
         return <div><Loading /></div>;
     }
@@ -33,7 +38,7 @@ const UserSettings = () => {
                 <Avatar />
                 <hr className='settings__hr' />
                 {/* <Info accountType={accountType} /> */}
-                <Info accountType={'personal'} />
+                <Info />
                 <hr className='settings__hr' />
                 {accountType === 'organization' &&
                     <>

@@ -153,6 +153,10 @@ const UserProfile = () => {
     const [eventKey, setEventKey] = useState('my-notices');
 
     useEffect(() => {
+        console.log('accountType in UserProfile:', accountType);
+    }, [accountType])
+
+    useEffect(() => {
         console.log('userEmail in UserProfile:', userEmail);
     }, [userEmail])
 
