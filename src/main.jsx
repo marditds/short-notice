@@ -46,14 +46,10 @@ import Authenticate from './pages/User/Home/Authenticate.jsx';
 
 const PreLoginLayout = () => {
 
-  // const { onSuccess } = useLogin();
-
   return (
     <div className='home__body d-flex flex-column justify-content-between min-vh-100'>
       <Header>
-        <GoogleLoginForm
-        // onSuccess={onSuccess}
-        />
+        <GoogleLoginForm />
       </Header>
       <Outlet />
       <Footer />
@@ -125,20 +121,8 @@ const router = createBrowserRouter([
     path: 'set-username',
     element: <CreateAccount />,
     loader: async () => {
-      // const accessToken = localStorage.getItem('accessToken');
-      // if (!accessToken) {
-      //   return redirect('/');
-      // }
 
-      // const decoded = jwtDecode(accessToken);
       console.log('RUNNING <CreateAccount/> LOADER:');
-
-      const authenticatedUser = await getAccount();
-
-      const user = await getUserByEmail(authenticatedUser.email);
-      if (user && user.username) {
-        return redirect('/user/feed');
-      }
 
       return null;
     },
@@ -147,6 +131,14 @@ const router = createBrowserRouter([
     path: 'authenticate',
     loader: async () => {
       console.log('RUNNING <Authenticate/> LOADER:');
+
+      // const authenticatedUser = await getAccount();
+
+      // const user = await getUserByEmail(authenticatedUser.email);
+      // if (user && user.username) {
+      //   return redirect('/user/feed');
+      // }
+
       return null;
     },
     element: <Authenticate />,
@@ -155,11 +147,7 @@ const router = createBrowserRouter([
     path: 'user',
     element: <User />,
     loader: async () => {
-      //   const accessToken = localStorage.getItem('accessToken');
-      //   if (!accessToken) {
-      //     return redirect('/');
-      //   }
-      // const decoded = jwtDecode(accessToken);
+
       console.log('RUNNING <USER/> LOADER:');
 
       const authenticatedUser = await getAccount();
@@ -171,15 +159,12 @@ const router = createBrowserRouter([
         return redirect('authenticate');
       }
 
-      const user = await getUserByEmail(authenticatedUser.email);
+      // const user = await getUserByEmail(authenticatedUser.email);
+      // if (!user || !user.username) {
+      //   console.log('User profile incomplete. Redirecting to /set-username');
+      //   return redirect('/authenticate');
+      // }
 
-      if (!user || !user.username) {
-        console.log('User profile incomplete. Redirecting to /set-username');
-        return redirect('/set-username');
-      }
-
-      // console.log('User authenticated and profile complete. Redirecting to /profile');
-      // return redirect('/user/profile');
       return null;
     },
     children: [

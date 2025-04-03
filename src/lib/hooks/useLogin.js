@@ -35,9 +35,9 @@ const useLogin = () => {
     const [isSetUserLoading, setIsSetUserLoading] = useState(false);
 
 
-    const setUser = async () => {
+    const createUserInCollection = async () => {
 
-        console.log('setUser 1:', username, userId, givenName, accountType);
+        console.log('createUserInCollection 1:', username, userId, givenName, accountType);
 
         try {
             setIsSetUserLoading(true);
@@ -138,32 +138,32 @@ const useLogin = () => {
         } finally {
             setIsSetUserLoading(false);
         }
-        console.log('setUser 2:', username, userId, givenName, accountType);
+        console.log('createUserInCollection 2:', username, userId, givenName, accountType);
 
     };
 
-    const checkUsernameInDatabase = async (email) => {
-        try {
-            const user = await getUserByEmail(email);
+    // const checkUsernameInDatabase = async (email) => {
+    //     try {
+    //         const user = await getUserByEmail(email);
 
-            if (user && user.username) {
-                setUsername(user.username);
-                setAccountType(user.accountType);
-                setRegisteredUsername(user.username);
-                // localStorage.setItem('username', user.username);
-                setHasUsername(true);
+    //         if (user && user.username) {
+    //             setUsername(user.username);
+    //             setAccountType(user.accountType);
+    //             setRegisteredUsername(user.username);
+    //             // localStorage.setItem('username', user.username);
+    //             setHasUsername(true);
 
-            } else {
-                setHasUsername(false);
-                navigate('/set-username');
-            }
-        } catch (error) {
-            console.error('Error checking username:', error);
-            if (error.code === 500) {
-                setIsServerDown(true);
-            }
-        }
-    };
+    //         } else {
+    //             setHasUsername(false);
+    //             navigate('/set-username');
+    //         }
+    //     } catch (error) {
+    //         console.error('Error checking username:', error);
+    //         if (error.code === 500) {
+    //             setIsServerDown(true);
+    //         }
+    //     }
+    // };
 
     // const onSuccess = async (credentialResponse) => {
     //     try {
@@ -207,7 +207,7 @@ const useLogin = () => {
     //     }
     // };
 
-    return { isSetUserLoading, setUser, checkUsernameInDatabase }
+    return { isSetUserLoading, createUserInCollection }
 }
 
 export default useLogin;

@@ -97,7 +97,7 @@ const User = () => {
                 className='userhome__body'
                 style={{ maxWidth: location.pathname !== '/user/feed' ? '1320px' : '100%' }}
             >
-                <Button style={{ marginTop: '65px' }} onClick={getSession}>get session details</Button>
+                {/* <Button style={{ marginTop: '65px' }} onClick={getSession}>get session details</Button> */}
                 <Outlet />
             </Container>
         </Container>

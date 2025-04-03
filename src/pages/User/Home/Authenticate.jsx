@@ -54,7 +54,9 @@ const Authenticate = () => {
         };
 
         if (!isSessionInProgress) {
+            console.log('CALLING authenticateUser.');
             authenticateUser();
+            console.log('FINISHED CALLING authenticateUser.');
         }
     }, [isSessionInProgress]);
 
@@ -101,11 +103,9 @@ const Authenticate = () => {
 
     // Getting things ready
     if (isCheckEmailExistanceLoading) {
-        return (
-            <Container>
-                <Loading classAnun='me-2' /> Getting things ready. Hang tight.
-            </Container>
-        )
+        return <Container>
+            <Loading classAnun='me-2' /> Getting things ready. Hang tight.
+        </Container>
     }
 
     return (

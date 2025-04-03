@@ -43,7 +43,7 @@ const CreateAccount = () => {
         getSessionDetails,
     } = useUserInfo();
 
-    const { isSetUserLoading, setUser } = useLogin();
+    const { isSetUserLoading, createUserInCollection } = useLogin();
 
     const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
 
@@ -90,7 +90,7 @@ const CreateAccount = () => {
     useEffect(() => {
         setPasscode('');
         console.log('ACCOUNT TYPE:', accountType);
-        console.log('setUser type:', typeof setUser);
+        console.log('createUserInCollection type:', typeof createUserInCollection);
 
     }, [accountType])
 
@@ -101,99 +101,6 @@ const CreateAccount = () => {
     const handlePrivacyPolicyCheck = () => {
         setPrivacyPolicyCheck(preVal => !preVal)
     }
-
-    // const setUser = async () => {
-
-    //     console.log('setUser 1:', username);
-    //     try {
-    //         setIsSetUserLoading(true);
-
-    //         if (googleUserData?.email && googleUserData?.given_name && username) {
-
-    //             console.log('this email will be sent - App.jsx:', googleUserData.email);
-
-    //             const usrData = await checkingEmailInAuth(googleUserData.email);
-
-    //             console.log('usrData.email', usrData.email);
-
-    //             if (usrData.email !== googleUserData.email) {
-    //                 console.log('running if');
-
-    //                 const usrID = ID.unique();
-    //                 console.log('usrID', usrID);
-
-    //                 try {
-    //                     // Add user to Auth
-    //                     let newUsr = await registerUser(
-    //                         usrID,
-    //                         googleUserData.email,
-    //                         username.toLowerCase()
-    //                     );
-    //                     console.log('newUsr - App.jsx:', newUsr);
-
-    //                     // Check for session
-    //                     const sessionStatus = await getSessionDetails();
-    //                     console.log('sessionStatus', sessionStatus);
-
-    //                     // Create session for the newly registered user
-    //                     if (!sessionStatus || sessionStatus === undefined) {
-    //                         console.log('Creating a session.');
-    //                         await createSession(googleUserData.email);
-    //                     } else {
-    //                         console.log('Session already in progress.');
-    //                     }
-
-    //                     // Add user to collection
-    //                     await createUser({
-    //                         id: usrID,
-    //                         email: googleUserData.email,
-    //                         given_name: googleUserData.given_name,
-    //                         username: username.toLowerCase(),
-    //                         accountType: accountType
-    //                     });
-
-    //                     localStorage.setItem('username', username.toLowerCase());
-
-    //                     setHasAccountType(true);
-    //                     setHasUsername(true);
-
-    //                     setTimeout(() => {
-    //                         navigate('/user/profile');
-    //                     }, 1000);
-
-    //                 } catch (error) {
-    //                     console.error('Error creating user:', error);
-    //                 }
-    //             } else {
-    //                 console.log('running else');
-
-    //                 // const authId = await checkingIdInAuth();
-    //                 console.log('usrData.$id', usrData.$id);
-
-    //                 // Add user to collection
-    //                 await createUser({
-    //                     id: usrData.$id,
-    //                     email: googleUserData.email,
-    //                     given_name: googleUserData.given_name,
-    //                     username: username.toLowerCase(),
-    //                     accountType: accountType
-
-    //                 });
-
-    //                 localStorage.setItem('username', username.toLowerCase());
-
-    //                 setHasAccountType(true);
-    //                 setHasUsername(true);
-    //             }
-    //         }
-
-    //     } catch (error) {
-    //         console.error('Error running setUser:', error);
-    //     } finally {
-    //         setIsSetUserLoading(false);
-    //     }
-    //     console.log('setUser 2:', username);
-    // };
 
     const handleDoneClickCreateAccount = async () => {
 
@@ -230,9 +137,9 @@ const CreateAccount = () => {
                 setErrorMessage('Username already taken. Please choose another one.');
                 return;
             }
-            console.log('Going for setUser');
+            console.log('Going for createUserInCollection');
 
-            console.log('About to call setUser, type:', typeof setUser);
+            console.log('About to call createUserInCollection, type:', typeof createUserInCollection);
 
             const authenticatedUser = await getAccount();
 
@@ -245,7 +152,7 @@ const CreateAccount = () => {
             setUserId(authenticatedUser.$id);
             setGivenName(authenticatedUser.name);
 
-            await setUser();
+            await createUserInCollection();
 
             const usr = await getUserByUsername(username);
 
@@ -263,11 +170,11 @@ const CreateAccount = () => {
             if (username) {
                 setHasUsername(true);
 
-                console.log('BEFORE NAVIGATION - Username after setUser:', username);
+                console.log('BEFORE NAVIGATION - Username after createUserInCollection:', username);
 
                 navigate('/user/profile');
 
-                console.log('AFTER NAVIGATION - Username after setUser:', username);
+                console.log('AFTER NAVIGATION - Username after createUserInCollection:', username);
             }
         } catch (error) {
             console.error('Error checking username:', error);
