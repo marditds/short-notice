@@ -34,8 +34,6 @@ export const UserProvider = ({ children }) => {
                     setIsSessionInProgress(true);
                     setUserEmail(usr.email);
                     setUserId(usr.$id);
-                    // setGivenName(usr.name);
-                    // setUser(usr);
                     setUsername(usr.name)
                     setIsLoggedIn(true);
                 } else {

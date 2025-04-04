@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { handleOAuthSession, deleteUserSession, getUserByEmail } from '../../../lib/context/dbhandler';
+import { handleOAuthSession, getUserByEmail, deleteAuthUser } from '../../../lib/context/dbhandler';
 import { Button, Container } from 'react-bootstrap';
 import { Loading } from '../../../components/Loading/Loading';
 import { useUserContext } from '../../../lib/context/UserContext';
@@ -11,7 +11,7 @@ const Authenticate = () => {
 
     const {
         setIsLoggedIn,
-        setUserId,
+        userId, setUserId,
         userEmail, setUserEmail,
         setGivenName,
         user, setUser,
@@ -22,6 +22,8 @@ const Authenticate = () => {
 
     const hasAuthenticated = useRef(false);
     const [emailExistsInCollection, setEmailExistsInCollection] = useState(false);
+
+    const [isCancellationLoading, setIsCancellationLoading] = useState(false);
 
     // Authenticating User
     useEffect(() => {
@@ -60,10 +62,7 @@ const Authenticate = () => {
         }
     }, [isSessionInProgress]);
 
-    const handleContinue = () => {
-        navigate('/set-username');
-    };
-
+    // Check Emaik in Collection
     useEffect(() => {
         console.log('USER EMAIL,', userEmail);
 
@@ -80,10 +79,10 @@ const Authenticate = () => {
                     console.log('Email not found in collection.');
                 }
             } catch (error) {
-                console.error('Erro checking email in collection:', error);
+                console.error('Error checking email in collection:', error);
             } finally {
                 setIsCheckEmailExistanceLoading(false);
-                console.log('Finish fhecking email existance.');
+                console.log('Finish checking email existance.');
             }
         }
         if (user) {
@@ -91,6 +90,7 @@ const Authenticate = () => {
         }
     }, [user])
 
+    // Redirect to /user/feed
     useEffect(() => {
         if (emailExistsInCollection) {
             console.log('DOES EMAIL EXIST?', emailExistsInCollection);
@@ -100,11 +100,36 @@ const Authenticate = () => {
         }
     }, [emailExistsInCollection])
 
+    useEffect(() => {
+        console.log('userId in Authenticate:', userId);
+    }, [userId])
+
+    const onContinueClick = () => {
+        navigate('/set-username');
+    };
+
+    const onCancelClick = async () => {
+        try {
+            setIsCancellationLoading(true);
+            await deleteAuthUser(userId);
+            navigate('/');
+        } catch (error) {
+            console.error('Error successful user cancellation:', error);
+        } finally {
+            setIsCancellationLoading(false);
+        }
+    }
 
     // Getting things ready
-    if (isCheckEmailExistanceLoading) {
+    if (isCheckEmailExistanceLoading || isCancellationLoading || userEmail === null) {
         return <Container>
-            <Loading classAnun='me-2' /> Getting things ready. Hang tight.
+            <Loading classAnun='me-2' />
+            {
+                (isCheckEmailExistanceLoading || userEmail === null) && 'Getting things ready. Hang tight.'
+            }
+            {
+                isCancellationLoading && 'Cancelling your account creation. Please wait...'
+            }
         </Container>
     }
 
@@ -119,13 +144,10 @@ const Authenticate = () => {
                     <>
                         Please press continue to set up your account.
                         <br />
-                        <Button onClick={handleContinue}>
+                        <Button onClick={onContinueClick} disabled={userEmail === null}>
                             Continue
                         </Button>
-                        <Button onClick={async () => {
-                            await deleteUserSession();
-                            navigate('/')
-                        }}>
+                        <Button onClick={onCancelClick} disabled={userEmail === null}>
                             Cancel
                         </Button>
                     </>
