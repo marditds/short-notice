@@ -5,7 +5,7 @@ import { Container, Button } from 'react-bootstrap';
 import { Navigation } from '../../components/User/Navigation/Navigation';
 // import { googleLogout } from '@react-oauth/google';
 import { useUserContext } from '../../lib/context/UserContext';
-import useUserInfo from '../../lib/hooks/useUserInfo';
+import { useUserInfo } from '../../lib/hooks/useUserInfo';
 import { Loading } from '../../components/Loading/Loading';
 import '../../components/User/Navigation/Navigation.css';
 

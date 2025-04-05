@@ -1,40 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { googleLogout } from '@react-oauth/google';
 import { useUserContext } from '../../../lib/context/UserContext';
-import useUserInfo from '../../../lib/hooks/useUserInfo';
-import useUserAvatar from '../../../lib/hooks/useUserAvatar';
-import { UserId } from '../UserId';
+import { useUserInfo } from '../../../lib/hooks/useUserInfo';
+import { useUserAvatar } from '../../../lib/hooks/useUserAvatar';
 import { Row, Col, Modal, Button } from 'react-bootstrap';
 import { Loading } from '../../Loading/Loading';
 
 
 export const DeleteAccount = () => {
 
-    const { userEmail } = useUserContext();
+    const { userId, userEmail } = useUserContext();
     const { handleDeleteUser } = useUserInfo(userEmail);
     const navigate = useNavigate();
     const [showModal, setShowModal] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [user_id, setUserId] = useState(null);
 
-    const { avatarUrl, setAvatarUrl, handleDeleteAvatarFromStrg, extractFileIdFromUrl } = useUserAvatar(user_id);
-
-    // useEffect(() => {
-
-    //     const fetchUserId = async () => {
-    //         try {
-    //             const id = await UserId(googleUserData);
-    //             setUserId(id);
-    //         } catch (error) {
-    //             console.error('Error fetching user ID:', error);
-    //         }
-    //     };
-
-    //     fetchUserId();
-
-    // }, [googleUserData]);
-
+    const { avatarUrl, setAvatarUrl, handleDeleteAvatarFromStrg, extractFileIdFromUrl } = useUserAvatar(userId);
 
     const handleDeleteAccount = async () => {
 
@@ -54,10 +35,6 @@ export const DeleteAccount = () => {
             const handleDeleteUserPromise = handleDeleteUser();
 
             await Promise.allSettled([handleDeleteAvatarPromise, handleDeleteUserPromise]);
-
-            // googleLogout();
-
-            localStorage.removeItem('accessToken');
 
             console.log('hajoh');
 

@@ -1,16 +1,12 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAccount as fetchAccount, createBlock, getBlockedUsersByUser as fetchBlockedUsersByUser, getBlockedUsersByUserByBatch as fetchBlockedUsersByUserByBatch, getUsersBlockingUser as fetchUsersBlockingUser, removeBlockUsingBlockedId, checkIdExistsInAuth, checkEmailExistsInAuth as checkEmailInAuthFromServer, registerAuthUser, getUserById, getUserByIdQuery as fetchUserByIdQuery, deleteAuthUser, createUserSession, getSessionDetails as fetchSessionDetails, deleteUserSession, updateUser, updateUserWebsite as updtUsrWbst, updateAuthUser, deleteUser, getUserByUsername as fetchUserByUsername, getAllUsersByString as fetchAllUsersByString, deleteAllNotices, deleteAllReactions, removeAllSaves, removeAllLikes, removeAllFollows, getUsersDocument, createFollow, unfollow, getUserFollowingsById, getUserFollowersById, followedByUserCount, followingTheUserCount, getPersonalFeedAccounts as fetchPersonalFeedAccounts, createPassocde, updatePassocde, getPassocdeByOrganizationId as fetchPassocdeByOrganizationId, createUserReport, getFollowStatus as fetchFollowStatus, isUserBlockedByOtherUser, isOtherUserBlockedByUser } from '../context/dbhandler';
 import { useUserContext } from '../context/UserContext';
-import { UserId } from '../../components/User/UserId';
 
-// const useUserInfo = (data) => {
 export const useUserInfo = (data) => {
 
     const { setUsername, userId } = useUserContext();
     const navigate = useNavigate();
-
-    // const [userId, setUserId] = useState(null);
 
     const [userWebsite, setUserWebsite] = useState(null);
 
@@ -605,9 +601,6 @@ export const useUserInfo = (data) => {
         }
     }
 
-
-
-
     return {
         userId,
         isFollowingUserLoading,
@@ -666,5 +659,3 @@ export const useUserInfo = (data) => {
         handleUserReport
     }
 }
-
-// export default useUserInfo;

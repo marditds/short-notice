@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useUserContext } from '../../../lib/context/UserContext';
 import { Row, Col, Form, Button, Alert } from 'react-bootstrap';
-import useUserInfo from '../../../lib/hooks/useUserInfo';
+import { useUserInfo } from '../../../lib/hooks/useUserInfo';
 import { forbiddenUsrnms, usrnmMaxLngth } from '../../../lib/utils/usernameUtils';
 import { Loading } from '../../Loading/Loading';
 
@@ -77,13 +77,11 @@ export const Info = () => {
         <Row xs={1} sm={2}>
             <Col>
                 <h4 className=''>Update {usrnm}:</h4>
-                {/* <p className='mb-0'>Update your {usrnm?.toLowerCase()}. The maximum number of characters for your {usrnm?.toLowerCase()} is 16.</p> */}
                 <p className='mb-0'>Update your {usrnm && usrnm.toLowerCase()}. The maximum number of characters for your {usrnm && usrnm.toLowerCase()} is 16.</p>
             </Col>
             <Col className='mt-3 mt-sm-0 d-flex justify-content-end align-items-center settings__username-col'>
                 <Form
                     as={Row}
-                    // onSubmit={handleSubmit}
                     className='w-100 m-0 flex-column settings__username-form'
                 >
                     <Form.Group

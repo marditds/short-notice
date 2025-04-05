@@ -1,36 +1,21 @@
-import { ID } from 'appwrite';
 import { useState } from 'react';
-import { jwtDecode } from 'jwt-decode';
 import { useUserContext } from '../context/UserContext';
-import useUserInfo from './useUserInfo';
 import { useNavigate } from 'react-router-dom';
-import { createUser, deleteAuthUser, getUserByEmail } from '../context/dbhandler';
+import { createUser, deleteAuthUser } from '../context/dbhandler';
 
-const useLogin = () => {
+export const useLogin = () => {
 
     const navigate = useNavigate();
 
     const {
-        isLoggedIn, setIsLoggedIn,
-        userId, setUserId,
-        userEmail, setUserEmail,
-        username, setUsername,
-        givenName, setGivenName,
-        registeredUsername, setRegisteredUsername,
-        hasUsername, setHasUsername,
-        accountType, setAccountType,
-        hasAccountType, setHasAccountType,
-        isAppLoading, setIsAppLoading
+        userId,
+        userEmail,
+        username,
+        givenName,
+        setHasUsername,
+        accountType,
+        setHasAccountType
     } = useUserContext();
-
-    const {
-        createSession,
-        getSessionDetails,
-        checkingEmailInAuth,
-        registerUser,
-    } = useUserInfo(userEmail);
-
-    const [isServerDown, setIsServerDown] = useState(false);
 
     const [isSetUserLoading, setIsSetUserLoading] = useState(false);
 
@@ -227,5 +212,3 @@ const useLogin = () => {
         cancelAccountSetup
     }
 }
-
-export default useLogin;

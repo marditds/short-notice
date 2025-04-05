@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useUserContext } from '../../../lib/context/UserContext';
-import useUserInfo from '../../../lib/hooks/useUserInfo';
+import { useUserInfo } from '../../../lib/hooks/useUserInfo';
 import { Row, Col, Form, Button } from 'react-bootstrap';
 import { Loading } from '../../Loading/Loading';
 
@@ -8,7 +8,12 @@ export const UserWebsite = () => {
 
     const { username, userEmail } = useUserContext();
 
-    const { userWebsite, setUserWebsite, updateUserWebsite, getUserByUsername } = useUserInfo(userEmail);
+    const {
+        userWebsite,
+        setUserWebsite,
+        updateUserWebsite,
+        getUserByUsername
+    } = useUserInfo(userEmail);
 
     const [isUpdatingWebsite, setIsUpdatingWebsite] = useState(false);
 

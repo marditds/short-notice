@@ -1,17 +1,13 @@
 import React from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { GoogleLoginForm } from '../../../components/LoginForm/Google/GoogleLoginForm';
-// import Header from '../../components/PreLogin/Header/Header';
-// import Footer from '../../components/PreLogin/Footer/Footer';
 import { Hero } from '../../../components/PreLogin/Home/Hero';
 import { CallToAction } from '../../../components/PreLogin/Home/CallToAction';
 import { MdOutlinePassword } from "react-icons/md";
 import { BsReply } from "react-icons/bs";
-// import { FaHeart } from "react-icons/fa";
 import { BsPencil } from "react-icons/bs";
 import { BsHandThumbsUp } from "react-icons/bs";
 import { BsFloppy } from "react-icons/bs";
-// import { AiOutlineSave } from "react-icons/ai";
 import { RiTeamFill } from "react-icons/ri";
 import { RiNumber1, RiNumber2, RiNumber3, RiNumber4 } from "react-icons/ri";
 import { screenUtils } from '../../../lib/utils/screenUtils';

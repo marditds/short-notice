@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { Row, Col, Button } from 'react-bootstrap';
+import React, { useEffect } from 'react';
+import { Row, Col } from 'react-bootstrap';
 import { useUserContext } from '../../../lib/context/UserContext';
-import useNotices from '../../../lib/hooks/useNotices';
+import { useNotices } from '../../../lib/hooks/useNotices';
 import { InterestsTags } from './InterestsTags';
 import { Loading } from '../../Loading/Loading';
 

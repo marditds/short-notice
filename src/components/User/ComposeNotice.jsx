@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { keysProvider } from '../../lib/context/keysProvider';
 import { screenUtils } from '../../lib/utils/screenUtils';
-import useNotices from '../../lib/hooks/useNotices';
+import { useNotices } from '../../lib/hooks/useNotices';
 import { Form, Button, Image, Dropdown } from 'react-bootstrap';
 import { NoticeTags } from './NoticeTags';
 import { Loading } from '../Loading/Loading';

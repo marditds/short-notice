@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { handleOAuthSession, getUserByEmail, deleteAuthUser } from '../../../lib/context/dbhandler';
+import { handleOAuthSession, getUserByEmail } from '../../../lib/context/dbhandler';
 import { Button, Container } from 'react-bootstrap';
 import { Loading } from '../../../components/Loading/Loading';
 import { useUserContext } from '../../../lib/context/UserContext';
-import useLogin from '../../../lib/hooks/useLogin';
+import { useLogin } from '../../../lib/hooks/useLogin';
 
 const Authenticate = () => {
 
@@ -16,7 +16,6 @@ const Authenticate = () => {
         userEmail, setUserEmail,
         setGivenName,
         user, setUser,
-        setUsername,
         isSessionInProgress,
         isCheckEmailExistanceLoading, setIsCheckEmailExistanceLoading,
     } = useUserContext();
@@ -92,7 +91,7 @@ const Authenticate = () => {
         }
     }, [user])
 
-    // Redirect to /user/feed
+    // Redirect to /user/feed if email in collection
     useEffect(() => {
         if (emailExistsInCollection) {
             console.log('DOES EMAIL EXIST?', emailExistsInCollection);

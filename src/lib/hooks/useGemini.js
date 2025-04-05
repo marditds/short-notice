@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { keysProvider } from "../context/keysProvider";
 
-const useGemini = () => {
+export const useGemini = () => {
 
     const [geminiKey, setGeminiKey] = useState(null);
 
@@ -39,5 +39,3 @@ const useGemini = () => {
 
     return { runGemini }
 }
-
-export default useGemini;

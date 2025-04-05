@@ -1,23 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { ID } from 'appwrite';
-import { googleLogout } from '@react-oauth/google';
 import { Container, Stack, Row, Col, Form, Button, Alert, Modal } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useUserContext } from '../../lib/context/UserContext';
-import { createUser, getUserByUsername, getAccount, deleteAuthUser } from '../../lib/context/dbhandler';
+import { getUserByUsername, getAccount } from '../../lib/context/dbhandler';
 import { AccountType } from '../../components/Setup/AccountType';
 import './CreateAccount.css';
 import { keysProvider } from '../../lib/context/keysProvider';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { CreateUsername } from '../../components/Setup/CreateUsername';
 import { SetPasscode } from '../../components/Setup/SetPasscode';
-import useUserInfo from '../../lib/hooks/useUserInfo';
+import { useUserInfo } from '../../lib/hooks/useUserInfo';
 import { forbiddenUsrnms, usrnmMaxLngth } from '../../lib/utils/usernameUtils';
 import { Loading } from '../../components/Loading/Loading';
 import TOSList from '../../components/Legal/TOSList';
 import CommunityGuidelinesList from '../../components/Support/CommunityGuidelinesList';
 import PrivacyList from '../../components/Legal/PrivacyList';
-import useLogin from '../../lib/hooks/useLogin';
+import { useLogin } from '../../lib/hooks/useLogin';
 
 
 const CreateAccount = () => {

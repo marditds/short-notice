@@ -43,7 +43,6 @@ const HelpCenterDataPageContent = ({ isLoggedIn }) => {
                             return (
                                 <ListGroup.Item as={'li'} className='help__center-titles-list-item' key={idx}>
                                     <Link to={`../${title.path}`}>
-                                        {/* <Link to={`../help-center/${helpCenterTitlesPath}/${title.path}`}> */}
                                         {title.header}
                                     </Link>
                                 </ListGroup.Item>
@@ -88,12 +87,6 @@ const HelpCenterDataPageContent = ({ isLoggedIn }) => {
                                        d-flex flex-column justify-content-center 
                                         ps-2 py-3 flex-grow-1 h-100'
                                 >
-                                    {/* <Button as={Link}
-                                    to={`../help-center/${helpCenterTitlesPath}/${previousTitle}`}
-                                    className='help-center__title-switch-btn
-                                       d-flex flex-column justify-content-center 
-                                        ps-2 py-3 flex-grow-1 h-100'
-                                > */}
                                     <div className='d-flex'>
                                         <i className='bi bi-arrow-left me-1 me-md-2 d-flex align-items-center' />
                                         <span className='text-start'>
@@ -111,12 +104,6 @@ const HelpCenterDataPageContent = ({ isLoggedIn }) => {
                                     d-flex flex-column justify-content-center  
                                     pe-2 py-3 flex-grow-1 h-100'
                                 >
-                                    {/* <Button as={Link}
-                                    to={`../help-center/${helpCenterTitlesPath}/${nextTitle}`}
-                                    className='help-center__title-switch-btn 
-                                    d-flex flex-column justify-content-center  
-                                    pe-2 py-3 flex-grow-1 h-100'
-                                > */}
                                     <div className='d-flex justify-content-end '>
                                         <span className='text-end'>
                                             {topicTitleByPath[helpCenterTitlesPath][nextTitle]}

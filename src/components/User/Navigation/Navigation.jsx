@@ -7,7 +7,7 @@ import { screenUtils } from '../../../lib/utils/screenUtils';
 import snLogo from '../../../assets/sn_long.png'
 import { ComposeNoticeModal } from '../Modals';
 import { ComposeNotice } from '../ComposeNotice';
-import useNotices from '../../../lib/hooks/useNotices';
+import { useNotices } from '../../../lib/hooks/useNotices';
 // import { InterestsTags } from '../Settings/InterestsTags';
 // import { Loading } from '../../Loading/Loading';
 

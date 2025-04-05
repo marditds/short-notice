@@ -34,7 +34,6 @@ export const UserProvider = ({ children }) => {
                     setIsSessionInProgress(true);
                     setUserEmail(usr.email);
                     setUserId(usr.$id);
-                    // setUsername(usr.name)
                     setIsLoggedIn(true);
                 } else {
                     console.log('No session found.');
@@ -47,9 +46,7 @@ export const UserProvider = ({ children }) => {
                 setIsAppLoading(false);
             }
         };
-        // if (isLogInBtnClicked) {
         checkingSessionStatus();
-        // }
     }, [])
 
     // Fetch username, account type, and website by user Id

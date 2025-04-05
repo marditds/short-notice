@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Form, Row, Col, Button } from 'react-bootstrap';
 import { useUserContext } from '../../../lib/context/UserContext';
-import useUserInfo from '../../../lib/hooks/useUserInfo';
+import { useUserInfo } from '../../../lib/hooks/useUserInfo';
 import { Loading } from '../../Loading/Loading';
 
 export const Passcode = () => {

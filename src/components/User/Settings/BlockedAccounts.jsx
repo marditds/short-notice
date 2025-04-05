@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Col, Button } from 'react-bootstrap';
 import { useUserContext } from '../../../lib/context/UserContext';
-import useUserInfo from '../../../lib/hooks/useUserInfo';
+import { useUserInfo } from '../../../lib/hooks/useUserInfo';
 import { getAvatarUrl as avatarUrl } from '../../../lib/utils/avatarUtils';
 import defaultAvatar from '../../../assets/default.png';
 import { Loading } from '../../Loading/Loading';

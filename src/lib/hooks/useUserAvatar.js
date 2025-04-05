@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
-import { uploadAvatar, deleteAvatarFromStrg, updateAvatar, deleteAvatarFromDoc, getUserById, getUserByUsername, getAllUsersByString } from '../context/dbhandler';
+import { uploadAvatar, deleteAvatarFromStrg, updateAvatar, deleteAvatarFromDoc, getUserById, getAllUsersByString } from '../context/dbhandler';
 import { getAvatarUrl } from '../utils/avatarUtils';
 
-const useUserAvatar = (userId) => {
+export const useUserAvatar = (userId) => {
 
     const [avatarUrl, setAvatarUrl] = useState(null);
     const [isAvatarLoading, setIsAvatarLoading] = useState(false);
@@ -147,5 +147,3 @@ const useUserAvatar = (userId) => {
         extractFileIdFromUrl
     };
 }
-
-export default useUserAvatar;

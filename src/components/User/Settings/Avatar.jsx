@@ -3,7 +3,7 @@ import { Row, Col, Form, Button } from 'react-bootstrap';
 import { Loading } from '../../Loading/Loading';
 import defaultAvatar from '../../../assets/default.png';
 import { useUserContext } from '../../../lib/context/UserContext';
-import useUserAvatar from '../../../lib/hooks/useUserAvatar';
+import { useUserAvatar } from '../../../lib/hooks/useUserAvatar';
 import { UserId } from '../UserId';
 import { getAvatarUrl } from '../../../lib/utils/avatarUtils';
 

@@ -1,12 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
 import { createNotice, getUserNotices, updateNotice, deleteNotice, saveDeletedNoticeId, deleteAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSave, getUserSaves, removeSave, createReport, createLike, removeLike, getUserLikes, getAllLikedNotices as fetchAllLikedNotices, getAllLikesByNoticeId as fetchAllLikesByNoticeId, getUserLikesNotInFeed, getUserSavesNotInFeed, getAllSavedNotices as fetchAllSavedNotices, createReaction, deleteReaction, getAllReactionsBySenderId as fetchAllReactionsBySenderId, getAllReactions as fetchAllReactions, getAllReactionsByRecipientId as fetchAllReactionsByRecipientId, getNoticeByNoticeId as fetchNoticeByNoticeId, getAllReactionsByNoticeId as fetchAllReactionsByNoticeId, getReactionByReactionId as fetchReactionByReactionId, deleteAllReactions, createReactionReport, getNoticeByUserId as fetchNoticeByUserId, removeAllSavesForNotice, removeAllLikesForNotice } from '../../lib/context/dbhandler';
 import { useUserContext } from '../context/UserContext.jsx';
-import useUserInfo from './useUserInfo.js';
-import useGemini from './useGemini';
-import { UserId } from '../../components/User/UserId.jsx';
-// import { useUnblockedNotices } from '../utils/blockFilter.js';
+import { useUserInfo } from './useUserInfo.js';
+import { useGemini } from './useGemini';
 
-const useNotices = (data) => {
+export const useNotices = (data) => {
 
     const { userId: user_id } = useUserContext();
 
@@ -15,7 +13,6 @@ const useNotices = (data) => {
     const { runGemini } = useGemini();
 
     // User(s) info
-    // const [user_id, setUserId] = useState(null);
     const [fellowUserId, setFellowUserId] = useState(null)
 
     // Notices + likes/saves
@@ -109,29 +106,6 @@ const useNotices = (data) => {
             values: [false, false, false, false, false]
         }
     ]);
-
-    // Fetch User Identity
-    // useEffect(() => {
-    //     const obtainUserById = async () => {
-    //         if (data) {
-    //             try {
-    //                 const id = await UserId(data);
-
-    //                 setUserId(id);
-
-    //             } catch (error) {
-    //                 console.error('Error obtaining user by id:', error);
-    //             } finally {
-    //                 setIsLoading(false);
-    //             }
-    //         } else {
-    //             setIsLoading(false);
-    //         }
-    //     };
-
-    //     obtainUserById();
-
-    // }, [data]);
 
     // Fetch User Saves for general feed
     useEffect(() => {
@@ -959,5 +933,3 @@ const useNotices = (data) => {
         onGeminiRunClick
     };
 };
-
-export default useNotices;

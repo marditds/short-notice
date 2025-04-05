@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useUserContext } from '../../../lib/context/UserContext';
-import useNotices from '../../../lib/hooks/useNotices';
+import { useNotices } from '../../../lib/hooks/useNotices';
 import { Row, Col, Button, Modal } from 'react-bootstrap';
 import { Loading } from '../../Loading/Loading';
 

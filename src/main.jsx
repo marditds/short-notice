@@ -1,7 +1,6 @@
 import React, { StrictMode, useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import {
-  // createHashRouter,
   createBrowserRouter,
   RouterProvider,
   redirect,
@@ -9,7 +8,6 @@ import {
 } from 'react-router-dom';
 import ErrorPage from './routes/error-page.jsx';
 import { GoogleOAuthProvider } from '@react-oauth/google';
-import { jwtDecode } from "jwt-decode";
 import { getAccount, getUserByEmail } from './lib/context/dbhandler.js';
 import { UserProvider } from './lib/context/UserContext.jsx';
 import { keysProvider } from './lib/context/keysProvider.js';
@@ -25,7 +23,6 @@ import { Loading } from './components/Loading/Loading.jsx';
 import UserLegal from './pages/User/Legal/UserLegal.jsx';
 import UserSupport from './pages/User/Support/UserSupport.jsx';
 import UserHelpCenter from './pages/User/HelpCenter/UserHelpCenter.jsx';
-import Home from './pages/PreLogin/Home/Home.jsx';
 import About from './pages/PreLogin/About/About.jsx';
 import SNPlus from './pages/PreLogin/SNPlus/SNPlus.jsx';
 import TOS from './pages/PreLogin/TOS/TOS.jsx';
@@ -41,7 +38,7 @@ import UserHelpCenterData from './pages/User/HelpCenter/UserHelpCenterData.jsx';
 import Header from './components/PreLogin/Header/Header.jsx';
 import Footer from './components/PreLogin/Footer/Footer.jsx';
 import { GoogleLoginForm } from './components/LoginForm/Google/GoogleLoginForm.jsx';
-import useLogin from './lib/hooks/useLogin.js';
+import { useLogin } from './lib/hooks/useLogin.js';
 import Authenticate from './pages/User/Home/Authenticate.jsx';
 
 const PreLoginLayout = () => {
@@ -124,6 +121,19 @@ const router = createBrowserRouter([
 
       console.log('RUNNING <CreateAccount/> LOADER:');
 
+      const authenticatedUser = await getAccount();
+
+      console.log('authenticatedUser in /set-username loader:', authenticatedUser);
+
+      if (!authenticatedUser) {
+        return redirect('/');
+      } else {
+        const user = await getUserByEmail(authenticatedUser.email);
+        if (user && user.username) {
+          return redirect('/user/feed');
+        }
+      }
+
       return null;
     },
   },
@@ -131,14 +141,6 @@ const router = createBrowserRouter([
     path: 'authenticate',
     loader: async () => {
       console.log('RUNNING <Authenticate/> LOADER:');
-
-      // const authenticatedUser = await getAccount();
-
-      // const user = await getUserByEmail(authenticatedUser.email);
-      // if (user && user.username) {
-      //   return redirect('/user/feed');
-      // }
-
       return null;
     },
     element: <Authenticate />,
@@ -158,12 +160,6 @@ const router = createBrowserRouter([
         console.warn('No authenticated user. Redirecting to /authenitcate');
         return redirect('authenticate');
       }
-
-      // const user = await getUserByEmail(authenticatedUser.email);
-      // if (!user || !user.username) {
-      //   console.log('User profile incomplete. Redirecting to /set-username');
-      //   return redirect('/authenticate');
-      // }
 
       return null;
     },

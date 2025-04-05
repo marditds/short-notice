@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useUserContext } from '../../../lib/context/UserContext';
-import useNotices from '../../../lib/hooks/useNotices';
-import useUserInfo from '../../../lib/hooks/useUserInfo';
+import { useNotices } from '../../../lib/hooks/useNotices';
+import { useUserInfo } from '../../../lib/hooks/useUserInfo';
 import { getAvatarUrl as avatarUtil } from '../../../lib/utils/avatarUtils';
 import { screenUtils } from '../../../lib/utils/screenUtils';
 import { Notices } from '../../../components/User/Notices';
