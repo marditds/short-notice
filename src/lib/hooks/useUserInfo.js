@@ -178,14 +178,11 @@ const useUserInfo = (data) => {
     }
 
     const getUserByUsername = async (username) => {
-        console.log('otherUsername', username);
+        console.log('getUserByUsername in useUserInfo', username);
 
         try {
             const usrnm = await fetchUserByUsername(username);
             console.log('username found:', usrnm);
-
-            setUserWebsite(usrnm.website);
-
             return usrnm;
         } catch (error) {
             console.error('Error getting user by username:', error);

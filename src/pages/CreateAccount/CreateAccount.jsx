@@ -4,7 +4,7 @@ import { googleLogout } from '@react-oauth/google';
 import { Container, Stack, Row, Col, Form, Button, Alert, Modal } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useUserContext } from '../../lib/context/UserContext';
-import { createUser, getUserByUsername, getAccount } from '../../lib/context/dbhandler';
+import { createUser, getUserByUsername, getAccount, deleteAuthUser } from '../../lib/context/dbhandler';
 import { AccountType } from '../../components/Setup/AccountType';
 import './CreateAccount.css';
 import { keysProvider } from '../../lib/context/keysProvider';
@@ -43,7 +43,7 @@ const CreateAccount = () => {
         getSessionDetails,
     } = useUserInfo();
 
-    const { isSetUserLoading, createUserInCollection } = useLogin();
+    const { isSetUserLoading, isSetupCancellationLoading, createUserInCollection, cancelAccountSetup } = useLogin();
 
     const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
 
@@ -147,7 +147,7 @@ const CreateAccount = () => {
                 authenticatedUser.$id,
                 authenticatedUser.name);
 
-
+            setUsername(username);
             setUserEmail(authenticatedUser.email);
             setUserId(authenticatedUser.$id);
             setGivenName(authenticatedUser.name);
@@ -232,6 +232,19 @@ const CreateAccount = () => {
     useEffect(() => {
         keysProvider('captcha', setCaptchaSiteKey);
     }, []);
+
+    // Getting things ready
+    if (isSetupCancellationLoading || userEmail === null) {
+        return <Container>
+            <Loading classAnun='me-2' />
+            {
+                (userEmail === null) && 'Getting things ready. Hang tight.'
+            }
+            {
+                isSetupCancellationLoading && 'Cancelling your account creation. Please wait...'
+            }
+        </Container>
+    }
 
     return (
         <Container className='
@@ -332,13 +345,8 @@ const CreateAccount = () => {
                         </Button>
                         <Button
                             type='button'
-                            onClick={() => {
-                                // googleLogout();
-                                setIsLoggedIn(preVal => false)
-                                localStorage.removeItem('accessToken');
-                                console.log('Logged out successfully.');
-                                window.location.href = '/';
-
+                            onClick={async () => {
+                                await cancelAccountSetup(userId);
                             }}
                             className='createAccount__btn ms-sm-2'>
                             Cancel

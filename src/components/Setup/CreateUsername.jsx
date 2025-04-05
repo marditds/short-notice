@@ -38,9 +38,11 @@ export const CreateUsername = ({ accountType, username, onUsernameChange }) => {
                 {
                     accountType === ''
                         ? 'Your account name must be unique'
-                        : (accountType === 'personal'
-                            ? 'Your userame must be unique.'
-                            : 'Your organization\'s name must be unique.')
+                        : (
+                            (accountType === 'personal' && 'Your username must be unique.') ||
+                            (accountType === 'business' && 'Your business name must be unique.') ||
+                            (accountType === 'organization' && 'Your organization\'s name must be unique.')
+                        )
                 }
             </Form.Text>
         </Form.Group>

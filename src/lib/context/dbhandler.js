@@ -1,4 +1,4 @@
-import { Client, Storage, Account, Databases, ID, Query, Permission, Role, Functions, OAuthProvider } from 'appwrite';
+import { Client, Storage, Account, Databases, ID, Query, Permission, Role, Functions } from 'appwrite';
 
 const client = new Client()
     .setEndpoint(import.meta.env.VITE_ENDPOINT)
@@ -220,7 +220,7 @@ export const getUserByEmail = async (email) => {
 };
 
 export const getUserByUsername = async (username) => {
-    console.log('otherUsername', username);
+    console.log('getUserByUsername in dbhandler', username);
 
     try {
         const userList = await databases.listDocuments(

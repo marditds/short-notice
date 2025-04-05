@@ -4,7 +4,7 @@ import { jwtDecode } from 'jwt-decode';
 import { useUserContext } from '../context/UserContext';
 import useUserInfo from './useUserInfo';
 import { useNavigate } from 'react-router-dom';
-import { createUser, getUserByEmail } from '../context/dbhandler';
+import { createUser, deleteAuthUser, getUserByEmail } from '../context/dbhandler';
 
 const useLogin = () => {
 
@@ -34,6 +34,7 @@ const useLogin = () => {
 
     const [isSetUserLoading, setIsSetUserLoading] = useState(false);
 
+    const [isSetupCancellationLoading, setIsSetupCancellationLoading] = useState(false);
 
     const createUserInCollection = async () => {
 
@@ -142,6 +143,18 @@ const useLogin = () => {
 
     };
 
+    const cancelAccountSetup = async (id) => {
+        try {
+            setIsSetupCancellationLoading(true);
+            await deleteAuthUser(id);
+            navigate('/');
+        } catch (error) {
+            console.error('Error account setup cancellation:', error);
+        } finally {
+            setIsSetupCancellationLoading(false);
+        }
+    }
+
     // const checkUsernameInDatabase = async (email) => {
     //     try {
     //         const user = await getUserByEmail(email);
@@ -207,7 +220,12 @@ const useLogin = () => {
     //     }
     // };
 
-    return { isSetUserLoading, createUserInCollection }
+    return {
+        isSetUserLoading,
+        isSetupCancellationLoading,
+        createUserInCollection,
+        cancelAccountSetup
+    }
 }
 
 export default useLogin;

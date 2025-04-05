@@ -4,6 +4,7 @@ import { handleOAuthSession, getUserByEmail, deleteAuthUser } from '../../../lib
 import { Button, Container } from 'react-bootstrap';
 import { Loading } from '../../../components/Loading/Loading';
 import { useUserContext } from '../../../lib/context/UserContext';
+import useLogin from '../../../lib/hooks/useLogin';
 
 const Authenticate = () => {
 
@@ -20,10 +21,11 @@ const Authenticate = () => {
         isCheckEmailExistanceLoading, setIsCheckEmailExistanceLoading,
     } = useUserContext();
 
+    const { isSetupCancellationLoading, cancelAccountSetup } = useLogin();
+
     const hasAuthenticated = useRef(false);
     const [emailExistsInCollection, setEmailExistsInCollection] = useState(false);
 
-    const [isCancellationLoading, setIsCancellationLoading] = useState(false);
 
     // Authenticating User
     useEffect(() => {
@@ -44,7 +46,7 @@ const Authenticate = () => {
 
                 setUserEmail(authenticatedUser.email);
                 setUserId(authenticatedUser.$id);
-                setUsername(authenticatedUser.name);
+                // setUsername(authenticatedUser.name);
                 setGivenName(authenticatedUser.name);
                 setUser(authenticatedUser);
 
@@ -109,26 +111,18 @@ const Authenticate = () => {
     };
 
     const onCancelClick = async () => {
-        try {
-            setIsCancellationLoading(true);
-            await deleteAuthUser(userId);
-            navigate('/');
-        } catch (error) {
-            console.error('Error successful user cancellation:', error);
-        } finally {
-            setIsCancellationLoading(false);
-        }
+        await cancelAccountSetup(userId);
     }
 
     // Getting things ready
-    if (isCheckEmailExistanceLoading || isCancellationLoading || userEmail === null) {
+    if (isCheckEmailExistanceLoading || isSetupCancellationLoading || userEmail === null) {
         return <Container>
             <Loading classAnun='me-2' />
             {
                 (isCheckEmailExistanceLoading || userEmail === null) && 'Getting things ready. Hang tight.'
             }
             {
-                isCancellationLoading && 'Cancelling your account creation. Please wait...'
+                isSetupCancellationLoading && 'Cancelling your account creation. Please wait...'
             }
         </Container>
     }

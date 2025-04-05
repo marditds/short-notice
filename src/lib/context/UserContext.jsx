@@ -34,7 +34,7 @@ export const UserProvider = ({ children }) => {
                     setIsSessionInProgress(true);
                     setUserEmail(usr.email);
                     setUserId(usr.$id);
-                    setUsername(usr.name)
+                    // setUsername(usr.name)
                     setIsLoggedIn(true);
                 } else {
                     console.log('No session found.');

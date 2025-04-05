@@ -5,7 +5,6 @@ import useUserInfo from '../../../lib/hooks/useUserInfo';
 import { forbiddenUsrnms, usrnmMaxLngth } from '../../../lib/utils/usernameUtils';
 import { Loading } from '../../Loading/Loading';
 
-// export const Info = ({ accountType }) => {
 export const Info = () => {
 
     const {
@@ -25,6 +24,12 @@ export const Info = () => {
     useEffect(() => {
         console.log('accountType in INFO:', accountType);
     }, [accountType])
+
+    useEffect(() => {
+        console.log('username in INFO:', username);
+        setLocalUsername(username);
+        console.log('localUsername in INFO:', localUsername);
+    }, [username])
 
     const handleUsernameChange = (e) => {
         const usrnm = e.target.value.replace(/\s/g, '');
@@ -56,8 +61,8 @@ export const Info = () => {
                 await handleUpdateUser(localUsername);
                 setUsername(localUsername);
                 setRegisteredUsername(localUsername)
-                // localStorage.setItem('username', localUsername.toLowerCase());
             }
+
         } catch (error) {
             console.error('Username cannot be empty.');
         } finally {
@@ -65,11 +70,6 @@ export const Info = () => {
         }
 
     };
-
-    useEffect(() => {
-        console.log('username in INFO:', username);
-        console.log('localUsername in INFO:', localUsername);
-    }, [localUsername])
 
     let usrnm = (accountType === 'personal' && 'Username') || (accountType === 'business' && 'Business Name') || (accountType === 'organization' && 'Organization\'s Name')
 
@@ -96,12 +96,11 @@ export const Info = () => {
                         <Form.Control
                             type='username'
                             placeholder='Enter your username'
-                            value={localUsername || ''}
+                            value={(localUsername && localUsername) || ''}
                             onChange={handleUsernameChange}
                             className='settings__username-field'
                         />
                         <Form.Text className='settings__username-unique'>
-                            {/* Your {usrnm?.toLowerCase()} must be unique. */}
                             Your {usrnm && usrnm.toLowerCase()} must be unique.
                         </Form.Text>
                         {errorMsg && <Alert variant="danger" className='alert'>{errorMsg}</Alert>}
