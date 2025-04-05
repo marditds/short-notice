@@ -4,7 +4,8 @@ import { getAccount as fetchAccount, createBlock, getBlockedUsersByUser as fetch
 import { useUserContext } from '../context/UserContext';
 import { UserId } from '../../components/User/UserId';
 
-const useUserInfo = (data) => {
+// const useUserInfo = (data) => {
+export const useUserInfo = (data) => {
 
     const { setUsername, userId } = useUserContext();
     const navigate = useNavigate();
@@ -666,4 +667,4 @@ const useUserInfo = (data) => {
     }
 }
 
-export default useUserInfo;
+// export default useUserInfo;

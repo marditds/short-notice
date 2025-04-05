@@ -43,7 +43,12 @@ const CreateAccount = () => {
         getSessionDetails,
     } = useUserInfo();
 
-    const { isSetUserLoading, isSetupCancellationLoading, createUserInCollection, cancelAccountSetup } = useLogin();
+    const {
+        isSetUserLoading,
+        isSetupCancellationLoading,
+        createUserInCollection,
+        cancelAccountSetup
+    } = useLogin();
 
     const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
 

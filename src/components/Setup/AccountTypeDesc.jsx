@@ -15,7 +15,7 @@ export const AccountTypeDesc = ({ accountType }) => {
                 <>
                     <strong>For business use.
                         <br />
-                        Business accounts allow brands to share timely promotions, announcements, or messages.
+                        Business accounts allow brands to share timely promotions, announcements, or messages. Notices shared by business accounts are preceded by 'Ad:'.
                     </strong>
                 </>
             )}

@@ -23,7 +23,7 @@ const About = () => {
                             <strong>Personal accounts</strong> enable users to share their updates and receive feedback or reactions, fostering moments of connection without prolonged dialogue.
                         </li>
                         <li>
-                            <strong>Business accounts</strong> allow brands to share timely promotions, announcements, or messages, inviting reactions or questions from their audience.
+                            <strong>Business accounts</strong> allow brands to share timely promotions, announcements, or messages, inviting reactions or questions from their audience. Notices shared by business accounts are preceded by 'Ad:'.
                         </li>
                         <li>
                             <strong>Organizational accounts</strong> provide a private space for leaders, teachers, or managers to share updates and announcements exclusively with their team members, ensuring streamlined communication in a secure format.
