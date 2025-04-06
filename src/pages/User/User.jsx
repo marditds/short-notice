@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { getUserByEmail, getSession } from '../../lib/context/dbhandler';
-import { Outlet, Navigate, useLocation, useNavigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { Container, Button } from 'react-bootstrap';
 import { Navigation } from '../../components/User/Navigation/Navigation';
-// import { googleLogout } from '@react-oauth/google';
 import { useUserContext } from '../../lib/context/UserContext';
 import { useUserInfo } from '../../lib/hooks/useUserInfo';
 import { Loading } from '../../components/Loading/Loading';
@@ -12,15 +10,14 @@ import '../../components/User/Navigation/Navigation.css';
 const User = () => {
 
     const {
-        isLoggedIn, setIsLoggedIn,
+        setIsLoggedIn,
         userId, setUserId,
         userEmail, setUserEmail,
-        username, setUsername,
-        registeredUsername, setRegisteredUsername,
+        setUsername,
         hasUsername, setHasUsername,
         accountType, setAccountType,
-        hasAccountType, setHasAccountType,
-        isAppLoading, setIsAppLoading
+        isAppLoading, setIsAppLoading,
+        isSessionInProgress
     } = useUserContext();
 
     const location = useLocation();
@@ -29,50 +26,27 @@ const User = () => {
 
     const { removeSession } = useUserInfo(userEmail);
 
-    const [loadingAuth, setLoadingAuth] = useState(false);
+    // redirect to feed on /user, /user/
+    useEffect(() => {
+        if (hasUsername) {
+            console.log('HAS USERNAME IS TRUE!');
 
-    // Ensure we have the google data on direct URL access
-    // useEffect(() => {
-    //     const initializeAuth = async () => {
-    //         const accessToken = localStorage.getItem('accessToken');
-    //         // const storedEmail = localStorage.getItem('email');
-    //         const storedGoogleUserData = localStorage.getItem('googleUserData');
+            const currentPath = window.location.pathname;
 
-    //         console.log('storedGoogleUserData', storedGoogleUserData);
-    //         console.log('storedEmail', storedEmail);
 
-    //         if (!accessToken) {
-    //             navigate('/');
-    //             return;
-    //         }
+            if (currentPath === '/user' && isSessionInProgress) {
+                navigate('/user/feed');
+            }
 
-    //         try {
-    //             setLoadingAuth(true);
-    //             setIsAppLoading(true);
+            if (currentPath === '/user/' && isSessionInProgress) {
+                navigate('/user/feed');
+            }
 
-    //             if (!googleUserData && storedGoogleUserData) {
-    //                 const parsedData = JSON.parse(storedGoogleUserData);
+        }
+    }, [hasUsername]);
 
-    //                 console.log('parsedData', parsedData);
 
-    //                 setGoogleUserData(parsedData);
-    //                 setIsLoggedIn(true);
-    //                 console.log('Rehydrated googleUserData from localStorage:', parsedData);
-    //             }
-    //         } catch (error) {
-    //             console.error("Error initializing auth in User component:", error);
-    //             navigate('/');
-    //             return;
-    //         } finally {
-    //             setLoadingAuth(false);
-    //             setIsAppLoading(false);
-    //         }
-    //     };
-
-    //     initializeAuth();
-    // }, []);
-
-    if (isAppLoading || loadingAuth) {
+    if (isAppLoading) {
         return <div className='d-flex justify-content-center align-items-center'>
             <Loading classAnun={'me-2'} />Loading...
         </div>;
@@ -83,7 +57,6 @@ const User = () => {
             <Navigation
                 userId={userId}
                 removeSession={removeSession}
-                // googleLogout={googleLogout}
                 setIsLoggedIn={setIsLoggedIn}
                 accountType={accountType}
                 setIsAppLoading={setIsAppLoading}

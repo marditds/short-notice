@@ -1,12 +1,10 @@
 import { useEffect } from 'react';
 import { useNavigate, Outlet } from 'react-router-dom';
 import PreLogin from './pages/PreLogin/PreLogin.jsx';
-import CreateAccount from './pages/CreateAccount/CreateAccount.jsx';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import './App.css';
 import { useUserContext } from './lib/context/UserContext';
-import { useLogin } from './lib/hooks/useLogin.js';
 
 function App() {
 
@@ -24,47 +22,6 @@ function App() {
   } = useUserContext();
 
   const navigate = useNavigate();
-
-  // useEffect(() => {
-  //   const storedToken = localStorage.getItem('accessToken');
-  // const mainSetUp = async () => {
-  //     if (!storedToken) {
-  //       navigate('/');
-  //       return;
-  //     } 
-  // try {
-  // setIsAppLoading(true); 
-  //       const decoded = jwtDecode(storedToken);
-  //       setGoogleUserData(decoded);
-  //       setIsLoggedIn(true);
-  //       console.log('Logged in successfully - 1st useEffect');
-  //       console.log('decoded - useEffect App.jsx', decoded);
-
-  //       // localStorage.setItem('email', decoded.email);
-
-  //       // console.log('GETTING EMAIL FROM LOCAL STORAGE:', localStorage.getItem('email'));
-
-  //       await checkUsernameInDatabase(decoded.email);
-
-  // const sessionStatus = await getSessionDetails();
-  // console.log('sessionStatus', sessionStatus);
-
-  // if (!sessionStatus) {
-  // console.log('Creating a session.');
-  //         await createSession(decoded.email);
-  //       } else {
-  //         console.log('Session already in progress.');
-  //       }
-  // } catch (error) {
-  // console.error('Error during user setup:', error);
-  // navigate('/');
-  // } finally {
-  // setIsAppLoading(false);
-  // }
-  // };
-
-  // mainSetUp();
-  // }, [navigate]);
 
   useEffect(() => {
     if (hasUsername) {

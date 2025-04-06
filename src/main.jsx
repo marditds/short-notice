@@ -4,7 +4,8 @@ import {
   createBrowserRouter,
   RouterProvider,
   redirect,
-  Outlet
+  Outlet,
+  useLocation
 } from 'react-router-dom';
 import ErrorPage from './routes/error-page.jsx';
 import { GoogleOAuthProvider } from '@react-oauth/google';
@@ -42,6 +43,12 @@ import { useLogin } from './lib/hooks/useLogin.js';
 import Authenticate from './pages/User/Home/Authenticate.jsx';
 
 const PreLoginLayout = () => {
+
+  const location = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
 
   return (
     <div className='home__body d-flex flex-column justify-content-between min-vh-100'>
@@ -165,6 +172,14 @@ const router = createBrowserRouter([
     },
     children: [
       {
+        index: true,
+        element: <UserFeed />,
+      },
+      {
+        path: 'feed',
+        element: <UserFeed />
+      },
+      {
         path: ':otherUsername',
         element: <OtherUserProfile />
       },
@@ -199,14 +214,6 @@ const router = createBrowserRouter([
             ]
           }
         ]
-      },
-      {
-        path: 'feed',
-        element: <UserFeed />
-      },
-      {
-        index: true,
-        element: <UserFeed />,
       }
     ]
   },

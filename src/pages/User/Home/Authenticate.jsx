@@ -32,8 +32,16 @@ const Authenticate = () => {
         const userId = params.get('userId');
         const secret = params.get('secret');
 
+        console.log('THESE ARE THE PARAMS:', params);
+
+        if (params.size === 0) {
+            navigate('/')
+        }
+
         const authenticateUser = async () => {
-            if (hasAuthenticated.current || !userId || !secret) return;
+            if (hasAuthenticated.current || !userId || !secret) {
+                return;
+            }
 
             hasAuthenticated.current = true;
 
