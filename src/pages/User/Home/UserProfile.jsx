@@ -579,7 +579,7 @@ const UserProfile = () => {
                 username={username}
                 avatarUrl={avatarUrl}
                 website={userWebsite}
-                hakobos={userWebsite}
+                userWebsite={userWebsite}
                 followingCount={followingCount}
                 followersCount={followersCount}
                 followingAccounts={followingAccounts}

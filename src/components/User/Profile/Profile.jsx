@@ -8,7 +8,7 @@ import { BlockModal, ReportModal, FollowModal } from '../Modals.jsx';
 import { Loading } from '../../Loading/Loading.jsx';
 
 export const Profile = ({ username, avatarUrl, isAvatarLoading, website, handleFollow, handleBlock, currUserId, followingCount, followersCount, isFollowing, followingAccounts, followersAccounts, isFollowingUserLoading, isGetFollwedByUserCountLoading,
-    isGetFollowingTheUserCountLoading, isBlocked, isOtherUserBlocked, handleUserReport, hasMoreFollowing, hasMoreFollowers, loadFollowing, loadFollowers, isLoadingMoreFollowing, isLoadingMoreFollowers, isProcessingBlock, hakobos }) => {
+    isGetFollowingTheUserCountLoading, isBlocked, isOtherUserBlocked, handleUserReport, hasMoreFollowing, hasMoreFollowers, loadFollowing, loadFollowers, isLoadingMoreFollowing, isLoadingMoreFollowers, isProcessingBlock, userWebsite }) => {
 
     const location = useLocation();
 
@@ -167,7 +167,7 @@ export const Profile = ({ username, avatarUrl, isAvatarLoading, website, handleF
                                         </a>
                                     </>
                                 }
-                                {hakobos === null &&
+                                {(userWebsite === null || userWebsite === '') &&
                                     <>
                                         <br />
                                         <Link to='/user/settings' className='user-profile__website'>

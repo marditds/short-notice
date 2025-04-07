@@ -41,6 +41,7 @@ import Footer from './components/PreLogin/Footer/Footer.jsx';
 import { GoogleLoginForm } from './components/LoginForm/Google/GoogleLoginForm.jsx';
 import { useLogin } from './lib/hooks/useLogin.js';
 import Authenticate from './pages/User/Home/Authenticate.jsx';
+import PreLogin from './pages/PreLogin/PreLogin.jsx';
 
 const PreLoginLayout = () => {
 
