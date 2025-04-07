@@ -41,7 +41,6 @@ const User = () => {
             if (currentPath === '/user/' && isSessionInProgress) {
                 navigate('/user/feed');
             }
-
         }
     }, [hasUsername]);
 

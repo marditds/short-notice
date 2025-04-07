@@ -35,7 +35,7 @@ const Authenticate = () => {
         console.log('THESE ARE THE PARAMS:', params);
 
         if (params.size === 0) {
-            navigate('/')
+            navigate('/');
         }
 
         const authenticateUser = async () => {
@@ -95,7 +95,9 @@ const Authenticate = () => {
             }
         }
         if (user) {
+            console.log('CALLING checkEmailExistsInCollection().');
             checkEmailExistsInCollection();
+            console.log('DONE calling checkEmailExistsInCollection().');
         }
     }, [user])
 
@@ -143,7 +145,7 @@ const Authenticate = () => {
                 {/* Navigate to /set-username or cancel */}
                 {(!emailExistsInCollection) ?
                     <>
-                        Please press continue to set up your account.
+                        Thank you for choosing ShortNotice. Please press continue to set up your account.
                         <br />
                         <Button onClick={onContinueClick} disabled={userEmail === null}>
                             Continue

@@ -163,9 +163,13 @@ const router = createBrowserRouter([
 
       console.log('authenticatedUser in <USER/> LOADER:', authenticatedUser);
 
+      // if (!authenticatedUser) {
+      //   console.warn('No authenticated user. Redirecting to /authenitcate');
+      //   return redirect('authenticate');
+      // }
       if (!authenticatedUser) {
-        console.warn('No authenticated user. Redirecting to /authenitcate');
-        return redirect('authenticate');
+        console.warn('No authenticated user. Redirecting to /');
+        return redirect('/');
       }
 
       return null;

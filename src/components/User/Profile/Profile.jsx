@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import { Row, Col, Button, Dropdown } from 'react-bootstrap';
 import { getAvatarUrl } from '../../../lib/utils/avatarUtils.js';
 import defaultAvatar from '../../../assets/default.png';
@@ -8,7 +8,7 @@ import { BlockModal, ReportModal, FollowModal } from '../Modals.jsx';
 import { Loading } from '../../Loading/Loading.jsx';
 
 export const Profile = ({ username, avatarUrl, isAvatarLoading, website, handleFollow, handleBlock, currUserId, followingCount, followersCount, isFollowing, followingAccounts, followersAccounts, isFollowingUserLoading, isGetFollwedByUserCountLoading,
-    isGetFollowingTheUserCountLoading, isBlocked, isOtherUserBlocked, handleUserReport, hasMoreFollowing, hasMoreFollowers, loadFollowing, loadFollowers, isLoadingMoreFollowing, isLoadingMoreFollowers, isProcessingBlock }) => {
+    isGetFollowingTheUserCountLoading, isBlocked, isOtherUserBlocked, handleUserReport, hasMoreFollowing, hasMoreFollowers, loadFollowing, loadFollowers, isLoadingMoreFollowing, isLoadingMoreFollowers, isProcessingBlock, hakobos }) => {
 
     const location = useLocation();
 
@@ -158,12 +158,22 @@ export const Profile = ({ username, avatarUrl, isAvatarLoading, website, handleF
                             <strong>
                                 {username}
                                 {
-                                    website && <>
+                                    website &&
+                                    <>
                                         <br />
                                         <a href={website} target='_blank' className='text-decoration-none user-profile__website'>
                                             <i className='bi bi-link-45deg me-1' />
                                             {website}
                                         </a>
+                                    </>
+                                }
+                                {hakobos === null &&
+                                    <>
+                                        <br />
+                                        <Link to='/user/settings' className='user-profile__website'>
+                                            <i className='bi bi-link-45deg' />
+                                            Add a website
+                                        </Link>
                                     </>
                                 }
 

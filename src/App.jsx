@@ -32,7 +32,6 @@ function App() {
       if (currentPath === '/' && isSessionInProgress) {
         navigate('/user/feed');
       }
-
     }
   }, [hasUsername]);
 

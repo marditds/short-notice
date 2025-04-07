@@ -161,6 +161,10 @@ const UserProfile = () => {
     }, [userEmail])
 
     useEffect(() => {
+        console.log('userWebsite in UserProfile:', userWebsite);
+    }, [userWebsite])
+
+    useEffect(() => {
         console.log('userId in UserProfile:', userId);
     }, [userId])
 
@@ -575,6 +579,7 @@ const UserProfile = () => {
                 username={username}
                 avatarUrl={avatarUrl}
                 website={userWebsite}
+                hakobos={userWebsite}
                 followingCount={followingCount}
                 followersCount={followersCount}
                 followingAccounts={followingAccounts}

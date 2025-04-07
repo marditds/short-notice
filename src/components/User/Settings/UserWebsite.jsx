@@ -6,11 +6,9 @@ import { Loading } from '../../Loading/Loading';
 
 export const UserWebsite = () => {
 
-    const { username, userEmail } = useUserContext();
+    const { username, userEmail, userWebsite, setUserWebsite } = useUserContext();
 
     const {
-        userWebsite,
-        setUserWebsite,
         updateUserWebsite,
         getUserByUsername
     } = useUserInfo(userEmail);
