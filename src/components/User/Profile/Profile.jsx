@@ -163,7 +163,10 @@ export const Profile = ({ username, avatarUrl, isAvatarLoading, website, handleF
                                         <br />
                                         <a href={website} target='_blank' className='text-decoration-none user-profile__website'>
                                             <i className='bi bi-link-45deg me-1' />
-                                            {website}
+                                            {website
+                                                .replace(/^https?:\/\//, '')
+                                                .replace(/^www\./, '')
+                                            }
                                         </a>
                                     </>
                                 }

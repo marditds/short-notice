@@ -57,6 +57,7 @@ export const UserWebsite = () => {
             }
 
             await updateUserWebsite(usrWbst);
+            setUserWebsite(usrWbst);
 
         } catch (error) {
             console.error('Error updating user website:', error);

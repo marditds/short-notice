@@ -8,8 +8,6 @@ export const useUserInfo = (data) => {
     const { setUsername, userId } = useUserContext();
     const navigate = useNavigate();
 
-    const [userWebsite, setUserWebsite] = useState(null);
-
     const [isFetchingUsersData, setIsFetchingUsersData] = useState(false);
 
     const [following, setFollowing] = useState({});
@@ -125,8 +123,6 @@ export const useUserInfo = (data) => {
             console.log('website', website);
 
             const res = await updtUsrWbst({ userId, website });
-
-            // setUserWebsite(res);
 
             console.log('userWebsite updated successfully.', res);
 
