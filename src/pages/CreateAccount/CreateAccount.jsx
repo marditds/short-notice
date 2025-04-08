@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Container, Stack, Row, Col, Form, Button, Alert, Modal } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useUserContext } from '../../lib/context/UserContext';
-import { getUserByUsername, getAccount } from '../../lib/context/dbhandler';
+import { getUserByUsername, getAccount, updateAuthUser } from '../../lib/context/dbhandler';
 import { AccountType } from '../../components/Setup/AccountType';
 import './CreateAccount.css';
 import { keysProvider } from '../../lib/context/keysProvider';
@@ -155,13 +155,17 @@ const CreateAccount = () => {
             setUserId(authenticatedUser.$id);
             setGivenName(authenticatedUser.name);
 
+            // Adding the user to the users collection
             await createUserInCollection();
+
+            // Updating the name in Auth section to match username
+            await updateAuthUser(username);
 
             const usr = await getUserByUsername(username);
 
-            console.log('usr id', usr.$id);
-            console.log('passcode', passcode);
-            console.log('accountType', accountType);
+            console.log('usr id in <CreateAccount />', usr.$id);
+            console.log('passcode in <CreateAccount />', passcode);
+            console.log('accountType in <CreateAccount />', accountType);
 
             setIsLoggedIn(true);
 

@@ -67,6 +67,24 @@ const router = createBrowserRouter([
     path: '/',
     element: <PreLoginLayout />,
     errorElement: <ErrorPage />,
+    loader: async () => {
+      console.log('RUNNING ROOT LOADER:');
+
+      const authenticatedUser = await getAccount();
+
+      if (authenticatedUser) {
+        console.log('User is already authenticated, checking if they have a username');
+
+        const user = await getUserByEmail(authenticatedUser.email);
+
+        if (user && user.username) {
+          console.log('User has username, redirecting to feed');
+          return redirect('/user/feed');
+        }
+      }
+
+      return null;
+    },
     children: [
       {
         index: true,

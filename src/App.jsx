@@ -33,7 +33,7 @@ function App() {
         navigate('/user/feed');
       }
     }
-  }, [hasUsername]);
+  }, [hasUsername, isSessionInProgress]);
 
   useEffect(() => {
     console.log('[hasUsername]', hasUsername);
@@ -95,35 +95,6 @@ function App() {
         />
       }
     </>
-
-    // <>
-    //   {!isLoggedIn ? (
-    //     <>
-    //       <PreLogin />
-    //     </>
-    //   ) : !hasUsername ? (
-    //     <CreateAccount
-    //       username={username}
-    //       setUsername={setUsername}
-    //       setHasUsername={setHasUsername}
-    //       setIsLoggedIn={setIsLoggedIn}
-    //     />
-    //   ) : (
-    //     <Outlet
-    //       context={{
-    //         isLoggedIn, setIsLoggedIn,
-    //         userId, setUserId,
-    //         userEmail, setUserEmail,
-    //         username, setUsername,
-    //         registeredUsername, setRegisteredUsername,
-    //         hasUsername, setHasUsername,
-    //         accountType, setAccountType,
-    //         hasAccountType, setHasAccountType,
-    //         isAppLoading, setIsAppLoading
-    //       }}
-    //     />
-    //   )}
-    // </>
   );
 
 }
