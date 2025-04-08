@@ -24,7 +24,7 @@ const NavigationBar = ({ children }) => {
                 <Nav className='ms-auto me-lg-auto'>
 
                     <Nav.Link as={Link} to='/' className='me-lg-4 navigation__nav-link'>Home</Nav.Link>
-                    {children}
+                    <Nav.Item className='d-flex navigation__nav-link'>{children}</Nav.Item>
                     <Nav.Link as={Link} to='/sn-plus' className='ms-lg-4 navigation__nav-link'>SN Plus</Nav.Link>
                     <Nav.Link as={Link} to='/contact' className='ms-lg-4 navigation__nav-link'>Contact</Nav.Link>
 

@@ -6,7 +6,7 @@ const SNPlus = () => {
     return (
         <div className='snplus__body'>
             <main className='flex-grow-1'>
-                <Container className='snplus__body-container'>
+                <Container className='snplus__body-container mt-5 mt-lg-0'>
                     <Row>
                         <Col className='d-flex justify-content-center'>
                             <Image src={sn_large} alt='short_notice_plus_logo' fluid />

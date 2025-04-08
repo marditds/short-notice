@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { handleOAuthSession, getUserByEmail } from '../../../lib/context/dbhandler';
-import { Button, Container } from 'react-bootstrap';
+import { Button, Col, Container, Image, Row } from 'react-bootstrap';
 import { Loading } from '../../../components/Loading/Loading';
 import { useUserContext } from '../../../lib/context/UserContext';
 import { useLogin } from '../../../lib/hooks/useLogin';
+import sn_logo from '../../../assets/sn_long.png';
 
 const Authenticate = () => {
 
@@ -102,14 +103,14 @@ const Authenticate = () => {
     }, [user])
 
     // Redirect to /user/feed if email in collection
-    useEffect(() => {
-        if (emailExistsInCollection) {
-            console.log('DOES EMAIL EXIST?', emailExistsInCollection);
+    // useEffect(() => {
+    //     if (emailExistsInCollection) {
+    //         console.log('DOES EMAIL EXIST?', emailExistsInCollection);
 
-            setIsLoggedIn(true);
-            navigate('/user/feed');
-        }
-    }, [emailExistsInCollection])
+    //         setIsLoggedIn(true);
+    //         navigate('/user/feed');
+    //     }
+    // }, [emailExistsInCollection])
 
     useEffect(() => {
         console.log('userId in Authenticate:', userId);
@@ -125,15 +126,21 @@ const Authenticate = () => {
 
     // Getting things ready
     if (isCheckEmailExistanceLoading || isSetupCancellationLoading || userEmail === null) {
-        return <Container>
-            <Loading classAnun='me-2' />
-            {
-                (isCheckEmailExistanceLoading || userEmail === null) && 'Getting things ready. Hang tight.'
-            }
-            {
-                isSetupCancellationLoading && 'Cancelling your account creation. Please wait...'
-            }
-        </Container>
+        return <div className='min-vh-100'>
+            <Container className='min-vh-100 flex-grow-1'>
+                <Row className='min-vh-100 flex-grow-1  justify-content-center align-items-center'>
+                    <Col className='d-flex justify-content-center align-items-center'>
+                        <Loading classAnun='me-2' />
+                        {
+                            (isCheckEmailExistanceLoading || userEmail === null) && 'Getting things ready. Hang tight.'
+                        }
+                        {
+                            isSetupCancellationLoading && 'Cancelling your account creation. Please wait...'
+                        }
+                    </Col>
+                </Row>
+            </Container>
+        </div>
     }
 
     return (
@@ -156,7 +163,13 @@ const Authenticate = () => {
                     </>
                     :
                     <>
-                        Welcome to ShortNotice.
+                        Welcome to
+                        <Image
+                            src={sn_logo}
+                            height={'25px'}
+                            alt='logo'
+                            className='ms-2 align-items-center'
+                        />.
                     </>
                 }
             </div>

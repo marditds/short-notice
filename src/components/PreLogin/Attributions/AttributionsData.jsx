@@ -1,7 +1,7 @@
 import appwrite_logo from '../../../assets/appwrite_logo.svg';
 import recaptcha_logo from '../../../assets/reCAPTCHA-logo@2x.png';
 import reactbootstrap_logo from '../../../assets/reactbootstrap.svg';
-import googlesignin_logo from '../../../assets/web_neutral_rd_na.svg';
+import googlesignin_logo from '../../../assets/web_neutral_sq_SI@1x.png';
 import tenor_logo from '../../../assets/tenor_logo.svg';
 import gemini_logo from '../../../assets/google-gemini-icon.svg';
 

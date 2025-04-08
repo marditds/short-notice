@@ -157,7 +157,7 @@ const Home = () => {
                                 <div className='d-flex flex-column flex-sm-row align-items-center justify-content-evenly pt-3'>
                                     <h4 className='mb-0 pe-0 pe-sm-2'>Join with your Google account</h4>
 
-                                    <span className='mt-3 mt-sm-0'>
+                                    <span className='mt-2 mt-sm-0'>
                                         <GoogleLoginForm
                                             subtitle={'More sign in options coming soon!'}
                                         />

@@ -2,3 +2,7 @@
     width: 34px;
     height: 34px;
 }
+
+.signin__btn {
+    background-color: transparent;
+}
