@@ -6,6 +6,7 @@ import { Loading } from '../../../components/Loading/Loading';
 import { useUserContext } from '../../../lib/context/UserContext';
 import { useLogin } from '../../../lib/hooks/useLogin';
 import sn_logo from '../../../assets/sn_long.png';
+import '../../../components/Authenticate/Authenticate.css';
 
 const Authenticate = () => {
 
@@ -103,14 +104,14 @@ const Authenticate = () => {
     }, [user])
 
     // Redirect to /user/feed if email in collection
-    // useEffect(() => {
-    //     if (emailExistsInCollection) {
-    //         console.log('DOES EMAIL EXIST?', emailExistsInCollection);
+    useEffect(() => {
+        if (emailExistsInCollection) {
+            console.log('DOES EMAIL EXIST?', emailExistsInCollection);
 
-    //         setIsLoggedIn(true);
-    //         navigate('/user/feed');
-    //     }
-    // }, [emailExistsInCollection])
+            setIsLoggedIn(true);
+            navigate('/user/feed');
+        }
+    }, [emailExistsInCollection])
 
     useEffect(() => {
         console.log('userId in Authenticate:', userId);
@@ -144,36 +145,52 @@ const Authenticate = () => {
     }
 
     return (
-        <Container>
-            <div className='d-flex justify-content-center align-items-center'>
-                Hello!
-                <br />
-
-                {/* Navigate to /set-username or cancel */}
-                {(!emailExistsInCollection) ?
-                    <>
-                        Thank you for choosing ShortNotice. Please press continue to set up your account.
+        <div className='min-vh-100'>
+            <Container className='min-vh-100 flex-grow-1'>
+                <Row className='authenticate__hello flex-column  justify-content-center align-items-center'>
+                    <Col className='d-flex justify-content-start align-items-end'>
+                        Hello!
                         <br />
-                        <Button onClick={onContinueClick} disabled={userEmail === null}>
-                            Continue
-                        </Button>
-                        <Button onClick={onCancelClick} disabled={userEmail === null}>
-                            Cancel
-                        </Button>
-                    </>
-                    :
-                    <>
-                        Welcome to
-                        <Image
-                            src={sn_logo}
-                            height={'25px'}
-                            alt='logo'
-                            className='ms-2 align-items-center'
-                        />.
-                    </>
-                }
-            </div>
-        </Container>
+                    </Col>
+
+                    {/* Navigate to /set-username or cancel */}
+                    {(!emailExistsInCollection) ?
+                        <Col >
+                            <p className='d-flex align-items-baseline authenticate__thank-you'>
+                                Thank you for choosing <Image
+                                    src={sn_logo}
+                                    alt='logo'
+                                    className='ms-2 authenticate__thank-you-logo'
+                                    fluid
+                                />.
+                            </p>
+                            <p>
+                                Please press continue to set up your account.
+                            </p>
+                            <div className='d-flex'>
+                                <Button onClick={onCancelClick} disabled={userEmail === null} className='authenticate__btn'>
+                                    Cancel
+                                </Button>
+
+                                <Button onClick={onContinueClick} disabled={userEmail === null} className='authenticate__btn'>
+                                    Continue
+                                </Button>
+                            </div>
+                        </Col>
+                        :
+                        <Col className='d-flex align-items-baseline'>
+                            Welcome to
+                            <Image
+                                src={sn_logo}
+                                height={'25px'}
+                                alt='logo'
+                                className='ms-2'
+                            />.
+                        </Col>
+                    }
+                </Row>
+            </Container>
+        </div>
     );
 }
 
