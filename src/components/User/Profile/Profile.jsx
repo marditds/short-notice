@@ -5,7 +5,7 @@ import { getAvatarUrl } from '../../../lib/utils/avatarUtils.js';
 import defaultAvatar from '../../../assets/default.png';
 import { screenUtils } from '../../../lib/utils/screenUtils.js';
 import { BlockModal, ReportModal, FollowModal } from '../Modals.jsx';
-import { Loading } from '../../Loading/Loading.jsx';
+import { LoadingSpinner } from '../../Loading/LoadingSpinner.jsx';
 
 export const Profile = ({ username, avatarUrl, isAvatarLoading, website, handleFollow, handleBlock, currUserId, followingCount, followersCount, isFollowing, followingAccounts, followersAccounts, isFollowingUserLoading, isGetFollwedByUserCountLoading,
     isGetFollowingTheUserCountLoading, isBlocked, isOtherUserBlocked, handleUserReport, hasMoreFollowing, hasMoreFollowers, loadFollowing, loadFollowers, isLoadingMoreFollowing, isLoadingMoreFollowers, isProcessingBlock, userWebsite }) => {
@@ -99,7 +99,7 @@ export const Profile = ({ username, avatarUrl, isAvatarLoading, website, handleF
                                     className='user-profile__follow-number d-flex flex-row flex-sm-column align-items-start p-0'
                                 >
                                     {(followersCount === null || isGetFollowingTheUserCountLoading) ?
-                                        <Loading />
+                                        <LoadingSpinner />
                                         :
                                         <>
                                             Followers <br />
@@ -118,7 +118,7 @@ export const Profile = ({ username, avatarUrl, isAvatarLoading, website, handleF
                                     className='user-profile__follow-number d-flex flex-row flex-sm-column align-items-start p-0'
                                 >
                                     {(followingCount === null || isGetFollwedByUserCountLoading) ?
-                                        <Loading />
+                                        <LoadingSpinner />
                                         :
                                         <>
                                             Following
@@ -149,7 +149,7 @@ export const Profile = ({ username, avatarUrl, isAvatarLoading, website, handleF
                                         className='user-profile__avatar'
                                     />
                                     :
-                                    <Loading />
+                                    <LoadingSpinner />
                             }
                         </div>
 
@@ -204,7 +204,7 @@ export const Profile = ({ username, avatarUrl, isAvatarLoading, website, handleF
                                         }}
                                         disabled={isOtherUserBlocked ? true : false}
                                     >
-                                        {isFollowingUserLoading ? <Loading /> :
+                                        {isFollowingUserLoading ? <LoadingSpinner /> :
                                             <>
                                                 {isFollowing ? 'Following' : 'Follow'}
                                             </>

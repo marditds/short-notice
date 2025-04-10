@@ -4,8 +4,7 @@ import { Row, Col, Button, Image } from 'react-bootstrap';
 import { getAvatarUrl as avatarUrl } from '../../lib/utils/avatarUtils';
 import { screenUtils } from '../../lib/utils/screenUtils';
 import { truncteUsername } from '../../lib/utils/usernameUtils';
-import { Loading } from '../Loading/Loading';
-// import { AiOutlineExclamationCircle } from "react-icons/ai";
+import { LoadingSpinner } from '../Loading/LoadingSpinner';
 import { formatDateToLocal } from '../../lib/utils/dateUtils';
 
 
@@ -30,9 +29,9 @@ export const Reactions = ({
         <>
             {loadingStates[notice.$id] ? (
                 <div className="text-center py-3">
-                    <Loading size={24} />
-                    <Loading size={24} />
-                    <Loading size={24} />
+                    <LoadingSpinner size={!isSmallScreen ? 24 : 18} />
+                    <LoadingSpinner size={!isSmallScreen ? 24 : 18} />
+                    <LoadingSpinner size={!isSmallScreen ? 24 : 18} />
                 </div>
             ) : loadedReactions[notice.$id]?.length > 0 ? (
                 <>
@@ -101,7 +100,7 @@ export const Reactions = ({
                                 disabled={isLoadingMoreReactions}
                             >
                                 {isLoadingMoreReactions ?
-                                    <><Loading size={24} /> Loading...</>
+                                    <><LoadingSpinner size={24} /> Loading...</>
                                     : 'Load More Reactions'}
                             </Button>
                             :

@@ -172,7 +172,7 @@ export const Navigation = ({
                                         />
                                         :
                                         <div className='d-flex justify-content-center my-2'>
-                                            <Loading />
+                                            <LoadingSpinner />
                                         </div>
                                     }
                                 </InterestsModal> */}

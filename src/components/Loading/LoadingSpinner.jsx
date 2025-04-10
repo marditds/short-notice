@@ -3,7 +3,7 @@ import { TbFidgetSpinner } from "react-icons/tb";
 import './Loading.css'
 
 
-export const Loading = ({ size, color, classAnun }) => {
+export const LoadingSpinner = ({ size, color, classAnun }) => {
 
     return (
         <span>

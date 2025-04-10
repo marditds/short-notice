@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useUserContext } from '../../../lib/context/UserContext';
 import { useNotices } from '../../../lib/hooks/useNotices';
 import { Row, Col, Button, Modal } from 'react-bootstrap';
-import { Loading } from '../../Loading/Loading';
+import { LoadingSpinner } from '../../Loading/LoadingSpinner';
 
 export const DeleteAllNotices = () => {
 
@@ -73,7 +73,7 @@ export const DeleteAllNotices = () => {
                         onClick={confirmAllNoticesDeletion}
                         className='settings__delete-notices-btn final d-flex justify-content-center align-items-center'
                     >
-                        {loading ? <Loading /> : 'Yes, Delete All Notices'}
+                        {loading ? <LoadingSpinner /> : 'Yes, Delete All Notices'}
                     </Button>
                 </Modal.Footer>
             </Modal>

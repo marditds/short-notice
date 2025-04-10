@@ -1,6 +1,6 @@
 import React from 'react';
 import { Row, Col, Form, Button } from "react-bootstrap";
-import { Loading } from '../Loading/Loading';
+import { LoadingSpinner } from '../Loading/LoadingSpinner';
 
 export const Passcode = ({ passcode, setPasscode, checkPasscode, isCheckingPasscode, isPasscodeIncorrect }) => {
 
@@ -43,7 +43,7 @@ export const Passcode = ({ passcode, setPasscode, checkPasscode, isCheckingPassc
                         disabled={passcode.length < 6}
                         className='user-profile__organization-passcode-btn ms-2'
                     >
-                        {!isCheckingPasscode ? 'Submit' : <Loading />}
+                        {!isCheckingPasscode ? 'Submit' : <LoadingSpinner />}
                     </Button>
                 </Form>
                 <p className='mb-0 mt-2 position-absolute'>

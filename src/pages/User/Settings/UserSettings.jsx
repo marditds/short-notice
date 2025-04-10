@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useUserContext } from '../../../lib/context/UserContext.jsx';
-import { Loading } from '../../../components/Loading/Loading.jsx'
 import { Avatar } from '../../../components/User/Settings/Avatar.jsx';
 import { Info } from '../../../components/User/Settings/Info.jsx';
 import { DeleteAllNotices } from '../../../components/User/Settings/DeleteAllNotices.jsx';
@@ -12,6 +11,7 @@ import '../../../components/User/Settings/Settings.css';
 import { Passcode } from '../../../components/User/Settings/Passcode.jsx';
 import { BlockedAccounts } from '../../../components/User/Settings/BlockedAccounts.jsx';
 import { UserWebsite } from '../../../components/User/Settings/UserWebsite.jsx';
+import { LoadingComponent } from '../../../components/Loading/LoadingComponent.jsx';
 
 const UserSettings = () => {
 
@@ -29,7 +29,7 @@ const UserSettings = () => {
 
 
     if (isLoading) {
-        return <div><Loading /></div>;
+        return <LoadingComponent />
     }
 
     return (
@@ -37,7 +37,6 @@ const UserSettings = () => {
             <Stack className='settings__sections'>
                 <Avatar />
                 <hr className='settings__hr' />
-                {/* <Info accountType={accountType} /> */}
                 <Info />
                 <hr className='settings__hr' />
                 {accountType === 'organization' &&

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Col, Form, Button } from 'react-bootstrap';
-import { Loading } from '../../Loading/Loading';
+import { LoadingSpinner } from '../../Loading/LoadingSpinner';
 import defaultAvatar from '../../../assets/default.png';
 import { useUserContext } from '../../../lib/context/UserContext';
 import { useUserAvatar } from '../../../lib/hooks/useUserAvatar';
@@ -93,7 +93,7 @@ export const Avatar = () => {
                         {isUploading ?
                             (
                                 <>
-                                    Updating avatar <Loading />
+                                    Updating avatar <LoadingSpinner />
                                 </>
                             )
                             : (
@@ -115,7 +115,7 @@ export const Avatar = () => {
                             className='float-start settings__delete-avatar-btn'
                         >
                             {isDeleting ? 'Deleting...' : 'Delete Avatar'}
-                            {isDeleting && <Loading />}
+                            {isDeleting && <LoadingSpinner />}
                         </Button>
                     </Col>
                 </Form>

@@ -10,7 +10,7 @@ import { useUserAvatar } from '../../../lib/hooks/useUserAvatar.js';
 import { useNotices } from '../../../lib/hooks/useNotices.js';
 import { screenUtils } from '../../../lib/utils/screenUtils.js';
 import { ComposeNotice } from '../../../components/User/ComposeNotice';
-import { Loading } from '../../../components/Loading/Loading.jsx';
+import { LoadingSpinner } from '../../../components/Loading/LoadingSpinner.jsx';
 import '../../../components/User/Profile/UserProfile.css';
 import { EndAsterisks } from '../../../components/User/EndAsterisks.jsx';
 import { NoticesPlaceholder } from '../../../components/User/NoticesPlaceholder.jsx';
@@ -561,8 +561,8 @@ const UserProfile = () => {
     if (isApploading) {
         return <div className='user-profile__loading'>
             <div>
-                {/* <Loading />Loading {username}'s profile */}
-                <Loading /><span className='ms-2'>Loading your profile</span>
+                {/* <LoadingSpinner />Loading {username}'s profile */}
+                <LoadingSpinner /><span className='ms-2'>Loading your profile</span>
             </div>
         </div>;
     }
@@ -645,7 +645,7 @@ const UserProfile = () => {
                                         className='mt-3 notices__load-more-notices-btn'
                                     >
                                         {isLoadingMore ?
-                                            <><Loading size={18} /> Loading...</>
+                                            <><LoadingSpinner size={18} /> Loading...</>
                                             : 'Load More'}
                                     </Button>
                                     :
@@ -693,7 +693,7 @@ const UserProfile = () => {
                                             className='notices__load-more-notices-btn'
                                         >
                                             {isLoadingMoreSaves ?
-                                                <><Loading size={24} /> Loading...</>
+                                                <><LoadingSpinner size={24} /> Loading...</>
                                                 : 'Load More'}
                                         </Button>
                                         :
@@ -710,7 +710,7 @@ const UserProfile = () => {
                         )
                         :
                         <div className='d-flex justify-content-center'>
-                            <Loading /><span className='ms-2'>Loading your saves...</span>
+                            <LoadingSpinner /><span className='ms-2'>Loading your saves...</span>
                         </div>
                     }
 
@@ -750,7 +750,7 @@ const UserProfile = () => {
                                             className='notices__load-more-notices-btn'
                                         >
                                             {isLoadingMoreLikes ?
-                                                <><Loading size={24} /> Loading...</>
+                                                <><LoadingSpinner size={24} /> Loading...</>
                                                 : 'Load More'}
                                         </Button>
                                         :
@@ -765,7 +765,7 @@ const UserProfile = () => {
                             />
                         ) :
                         <div className='d-flex justify-content-center'>
-                            <Loading /><span className='ms-2'>Loading your likes...</span>
+                            <LoadingSpinner /><span className='ms-2'>Loading your likes...</span>
                         </div>
                     }
                 </Tab>

@@ -11,7 +11,7 @@ import { CreateUsername } from '../../components/Setup/CreateUsername';
 import { SetPasscode } from '../../components/Setup/SetPasscode';
 import { useUserInfo } from '../../lib/hooks/useUserInfo';
 import { forbiddenUsrnms, usrnmMaxLngth } from '../../lib/utils/usernameUtils';
-import { Loading } from '../../components/Loading/Loading';
+import { LoadingSpinner } from '../../components/Loading/LoadingSpinner';
 import TOSList from '../../components/Legal/TOSList';
 import CommunityGuidelinesList from '../../components/Support/CommunityGuidelinesList';
 import PrivacyList from '../../components/Legal/PrivacyList';
@@ -243,7 +243,7 @@ const CreateAccount = () => {
     // Getting things ready
     if (isSetupCancellationLoading || userEmail === null) {
         return <Container>
-            <Loading classAnun='me-2' />
+            <LoadingSpinner classAnun='me-2' />
             {
                 (userEmail === null) && 'Getting things ready. Hang tight.'
             }
@@ -332,7 +332,7 @@ const CreateAccount = () => {
                                         setErrorMessage('ReCAPTCHA verification failed. Please try again.');
                                     }}
                                 /> :
-                                <><Loading /> Loading ReCAPTCHA</>
+                                <><LoadingSpinner /> Loading ReCAPTCHA</>
                         }
                     </div>
 
@@ -346,7 +346,7 @@ const CreateAccount = () => {
                         >
                             {
                                 (isSetUserLoading || isHandleDoneClickLoading) ?
-                                    <Loading /> :
+                                    <LoadingSpinner /> :
                                     'Done'
                             }
                         </Button>

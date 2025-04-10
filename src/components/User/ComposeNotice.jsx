@@ -5,7 +5,7 @@ import { screenUtils } from '../../lib/utils/screenUtils';
 import { useNotices } from '../../lib/hooks/useNotices';
 import { Form, Button, Image, Dropdown } from 'react-bootstrap';
 import { NoticeTags } from './NoticeTags';
-import { Loading } from '../Loading/Loading';
+import { LoadingSpinner } from '../Loading/LoadingSpinner';
 import GifPicker from 'gif-picker-react';
 
 export const ComposeNotice = ({ noticeText, setNoticeText,
@@ -229,7 +229,7 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
                         {!isGeminiLoading ?
                             <i className='bi bi-stars' />
                             :
-                            <Loading />
+                            <LoadingSpinner />
                         }
                     </Button>
 
@@ -295,7 +295,7 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
                     disabled={noticeText === '' || isAddingNotice || !isAnyTagSelected || charCount > charLimit}
                     className='ms-auto user-profile__notify-btn'
                 >
-                    {isAddingNotice ? <Loading /> : 'Notify'}
+                    {isAddingNotice ? <LoadingSpinner /> : 'Notify'}
                 </Button>
             </div>
 

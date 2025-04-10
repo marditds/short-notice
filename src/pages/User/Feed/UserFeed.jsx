@@ -6,7 +6,7 @@ import { getAvatarUrl as avatarUtil } from '../../../lib/utils/avatarUtils';
 import { screenUtils } from '../../../lib/utils/screenUtils';
 import { Notices } from '../../../components/User/Notices';
 import { Button } from 'react-bootstrap';
-import { Loading } from '../../../components/Loading/Loading';
+import { LoadingSpinner } from '../../../components/Loading/LoadingSpinner';
 import { FeedBody } from '../../../components/User/Feed/FeedBody/FeedBody';
 import { EndAsterisks } from '../../../components/User/EndAsterisks';
 import { InterestsTags } from '../../../components/User/Settings/InterestsTags';
@@ -311,14 +311,14 @@ const UserFeed = () => {
     ) {
         return <div className='pt-5 h-100 user-feed__loading-div'>
             <div>
-                <Loading /><span className='ms-2'>{`Loading your feed...`}</span>
+                <LoadingSpinner /><span className='ms-2'>{`Loading your feed...`}</span>
             </div>
         </div>;
     }
 
     // if (isAppLoading) {
     //     return <div className='d-flex justify-content-center align-items-center'>
-    //         <Loading classAnun={'me-2'} />Loading...
+    //         <LoadingSpinner classAnun={'me-2'} />Loading...
     //     </div>;
     // }
 
@@ -345,7 +345,7 @@ const UserFeed = () => {
                         deselectAllInterestTags={deselectAllInterestTags}
                     />
                     :
-                    <Loading />
+                    <LoadingSpinner />
                 }
 
                     <p className='mb-3' style={{ marginLeft: '10px' }}>
@@ -397,7 +397,7 @@ const UserFeed = () => {
                     (isLoadingPersonalFeedNotices || isLoadingGeneralFeedNotices || isFetchingUsersData) &&
                     <div className='h-100 user-feed__loading-div my-5'>
                         <div className='my-5'>
-                            <Loading />
+                            <LoadingSpinner />
                             <span className='ms-2'>
                                 Loading {feedType} feed...
                             </span>
@@ -432,7 +432,7 @@ const UserFeed = () => {
                             className={`my-4 notices__load-more-notices-btn ${(isLoadingMoreInitial || isLoadingMorePersonalInitial) ? 'd-none' : 'd-block'}`}
                         >
                             {isLoadingPersonalFeedNotices || isLoadingMore || isLoadingMorePersonal ?
-                                <><Loading size={16} /> Loading...</>
+                                <><LoadingSpinner size={16} /> Loading...</>
                                 : 'Load More Hakop'}
                         </Button>
                         :

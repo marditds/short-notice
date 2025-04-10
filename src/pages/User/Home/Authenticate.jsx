@@ -2,9 +2,10 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { handleOAuthSession, getUserByEmail } from '../../../lib/context/dbhandler';
 import { Button, Col, Container, Image, Row } from 'react-bootstrap';
-import { Loading } from '../../../components/Loading/Loading';
+import { LoadingSpinner } from '../../../components/Loading/LoadingSpinner';
 import { useUserContext } from '../../../lib/context/UserContext';
 import { useLogin } from '../../../lib/hooks/useLogin';
+import { screenUtils } from '../../../lib/utils/screenUtils';
 import sn_logo from '../../../assets/sn_long.png';
 import '../../../components/Authenticate/Authenticate.css';
 
@@ -26,6 +27,8 @@ const Authenticate = () => {
 
     const hasAuthenticated = useRef(false);
     const [emailExistsInCollection, setEmailExistsInCollection] = useState(false);
+
+    const { isSmallScreen } = screenUtils();
 
 
     // Authenticating User
@@ -131,7 +134,7 @@ const Authenticate = () => {
             <Container className='min-vh-100 flex-grow-1'>
                 <Row className='min-vh-100 flex-grow-1  justify-content-center align-items-center'>
                     <Col className='d-flex justify-content-center align-items-center'>
-                        <Loading classAnun='me-2' />
+                        <LoadingSpinner classAnun='me-2' />
                         {
                             (isCheckEmailExistanceLoading || userEmail === null) && 'Getting things ready. Hang tight.'
                         }
@@ -145,17 +148,17 @@ const Authenticate = () => {
     }
 
     return (
-        <div className='min-vh-100'>
-            <Container className='min-vh-100 flex-grow-1'>
+        <div className='min-vh-100 d-flex justify-content-center align-items-center'>
+            <Container >
                 <Row className='authenticate__hello flex-column  justify-content-center align-items-center'>
-                    <Col className='d-flex justify-content-start align-items-end'>
+                    <Col xs={11} sm={7} md={7} lg={5} xl={4} className='d-flex justify-content-start align-items-end'>
                         Hello!
                         <br />
                     </Col>
 
                     {/* Navigate to /set-username or cancel */}
                     {(!emailExistsInCollection) ?
-                        <Col >
+                        <Col xs={11} sm={7} md={7} lg={5} xl={4}>
                             <p className='d-flex align-items-baseline authenticate__thank-you'>
                                 Thank you for choosing <Image
                                     src={sn_logo}
@@ -165,7 +168,7 @@ const Authenticate = () => {
                                 />.
                             </p>
                             <p>
-                                Please press continue to set up your account.
+                                Please press continue to finish setting up your account.
                             </p>
                             <div className='d-flex'>
                                 <Button onClick={onCancelClick} disabled={userEmail === null} className='authenticate__btn'>
@@ -178,11 +181,11 @@ const Authenticate = () => {
                             </div>
                         </Col>
                         :
-                        <Col className='d-flex align-items-baseline'>
+                        <Col xs={11} sm={7} md={7} lg={5} xl={4} className='d-flex align-items-baseline'>
                             Welcome to
                             <Image
                                 src={sn_logo}
-                                height={'25px'}
+                                height={!isSmallScreen ? '25px' : '15px'}
                                 alt='logo'
                                 className='ms-2'
                             />.

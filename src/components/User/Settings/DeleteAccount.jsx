@@ -4,7 +4,7 @@ import { useUserContext } from '../../../lib/context/UserContext';
 import { useUserInfo } from '../../../lib/hooks/useUserInfo';
 import { useUserAvatar } from '../../../lib/hooks/useUserAvatar';
 import { Row, Col, Modal, Button } from 'react-bootstrap';
-import { Loading } from '../../Loading/Loading';
+import { LoadingSpinner } from '../../Loading/LoadingSpinner';
 
 
 export const DeleteAccount = () => {
@@ -100,7 +100,7 @@ export const DeleteAccount = () => {
                         onClick={confirmDeletion}
                         className='settings__delete-account-btn final d-flex justify-content-center align-items-center'
                     >
-                        {loading ? <Loading /> : 'Yes, Delete My Account'}
+                        {loading ? <LoadingSpinner /> : 'Yes, Delete My Account'}
                     </Button>
                 </Modal.Footer>
             </Modal>

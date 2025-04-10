@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Form, Row, Col, Button } from 'react-bootstrap';
 import { useUserContext } from '../../../lib/context/UserContext';
 import { useUserInfo } from '../../../lib/hooks/useUserInfo';
-import { Loading } from '../../Loading/Loading';
+import { LoadingSpinner } from '../../Loading/LoadingSpinner';
 
 export const Passcode = () => {
 
@@ -77,7 +77,7 @@ export const Passcode = () => {
                         className='settings__update-username-btn mt-1 mt-md-2'
                     >
                         {isUpdating ? 'Updating...' : 'Update'}
-                        {isUpdating && <Loading />}
+                        {isUpdating && <LoadingSpinner />}
                     </Button>
                 </Form>
             </Col>

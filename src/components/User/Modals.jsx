@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { reportCategories } from '../Support/communityGuidelines';
 import { Modal, Form, Button } from 'react-bootstrap';
-import { Loading } from '../Loading/Loading';
+import { LoadingSpinner } from '../Loading/LoadingSpinner';
 import { SlClose } from "react-icons/sl";
 import { EndAsterisks } from './EndAsterisks';
 
@@ -58,7 +58,7 @@ export const ReportModal = ({
                             className='notice__report--modal-btn'
                         // disabled={!reportReason}
                         >
-                            {isProcessing ? <Loading /> : 'Report'}
+                            {isProcessing ? <LoadingSpinner /> : 'Report'}
                         </Button>
                     </>
                 )}
@@ -127,8 +127,8 @@ export const ModifyModal = ({ modifyModalTitle, showModifyModal, handleCloseModi
                     disabled={isRemovingNotice}
                     className='notice__edit--modal-btn'
                 >
-                    {isSavingEdit ? <Loading /> : (modifyModalTitle === 'Edit' && 'Save')}
-                    {isRemovingNotice ? <Loading /> : (modifyModalTitle === 'Delete' && 'Delete')}
+                    {isSavingEdit ? <LoadingSpinner /> : (modifyModalTitle === 'Edit' && 'Save')}
+                    {isRemovingNotice ? <LoadingSpinner /> : (modifyModalTitle === 'Delete' && 'Delete')}
                 </Button>
             </Modal.Footer>
         </Modal>
@@ -167,7 +167,7 @@ export const BlockModal = ({
                 <Button onClick={() => handleBlock(currUserId)}
                     className='me-2 user-profile__block--modal-body-btn'
                 >
-                    {isProcessing ? <Loading /> : 'Yes'}
+                    {isProcessing ? <LoadingSpinner /> : 'Yes'}
                 </Button>
                 <Button onClick={handleCloseBlockModalFunction}
                     className='user-profile__block--modal-body-btn'
@@ -243,7 +243,7 @@ export const FollowModal = ({
                         {
                             isLoadingMoreFollow ? (
                                 <div className='d-block mx-auto w-100'>
-                                    <Loading size={22} color={'var(--main-accent-color-hover)'} />
+                                    <LoadingSpinner size={22} color={'var(--main-accent-color-hover)'} />
                                 </div>
                             ) : <i className='bi bi-chevron-down user-profile__following--modal-results-expand-btn-icon' />
                         }

@@ -7,7 +7,7 @@ import { screenUtils } from '../../../lib/utils/screenUtils';
 import { Button, Form, Modal, Stack } from 'react-bootstrap';
 import { UserSearchModal } from '../Modals';
 import { SearchForm } from './SearchForm';
-import { Loading } from '../../Loading/Loading';
+import { LoadingSpinner } from '../../Loading/LoadingSpinner';
 import { EndAsterisks } from '../EndAsterisks';
 
 export const UserSearch = () => {
@@ -249,7 +249,7 @@ export const UserSearch = () => {
                     className='d-flex flex-wrap justify-content-start'>
                     {isResultLoading ?
                         <div className='d-block mx-auto'>
-                            <Loading size={20} color={'var(--main-text-color)'} />
+                            <LoadingSpinner size={20} color={'var(--main-text-color)'} />
                         </div>
                         :
                         (
@@ -286,7 +286,7 @@ export const UserSearch = () => {
                                 className='w-100 tools__search--results-expand-btn'
                             >
                                 {isLoadingMore ?
-                                    <Loading size={24} color={'var(--main-accent-color)'} />
+                                    <LoadingSpinner size={24} color={'var(--main-accent-color)'} />
                                     :
                                     <i className='bi bi-chevron-down tools__search--results-expand-btn-icon'></i>
                                 }

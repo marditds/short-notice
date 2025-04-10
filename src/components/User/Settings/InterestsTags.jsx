@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
-import { Loading } from '../../Loading/Loading';
+import { LoadingSpinner } from '../../Loading/LoadingSpinner';
 
 export const InterestsTags = ({
     tagCategories,
@@ -44,7 +44,7 @@ export const InterestsTags = ({
                     }
                     className='settings__update-interests-btn'
                 >
-                    {isInterestsUpdating ? <Loading /> : 'Update Interests'}
+                    {isInterestsUpdating ? <LoadingSpinner /> : 'Update Interests'}
                 </Button>
                 <Button onClick={deselectAllInterestTags}
                     className='settings__update-interests-btn'

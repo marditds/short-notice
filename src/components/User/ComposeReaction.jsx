@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Form, Button, Image } from 'react-bootstrap';
 import GifPicker from 'gif-picker-react';
 import { keysProvider } from '../../lib/context/keysProvider';
-import { Loading } from '../Loading/Loading';
+import { LoadingSpinner } from '../Loading/LoadingSpinner';
 import { screenUtils } from '../../lib/utils/screenUtils';
 
 export const ComposeReaction = ({ reactionText, onReactionTextChange, reactionGif, setReactionGif, handleReactSubmission, isSendingReactionLoading, reactionCharCount }) => {
@@ -83,7 +83,7 @@ export const ComposeReaction = ({ reactionText, onReactionTextChange, reactionGi
                             className='notice__reaction-submit-btn ms-auto'
                             disabled={reactionText === '' || reactionCharCount > reactionCharLimit ? true : false}
                         >
-                            {isSendingReactionLoading ? <Loading /> : 'React'}
+                            {isSendingReactionLoading ? <LoadingSpinner /> : 'React'}
                         </Button>
                     </div>
 

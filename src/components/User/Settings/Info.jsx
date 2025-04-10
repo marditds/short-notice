@@ -3,7 +3,7 @@ import { useUserContext } from '../../../lib/context/UserContext';
 import { Row, Col, Form, Button, Alert } from 'react-bootstrap';
 import { useUserInfo } from '../../../lib/hooks/useUserInfo';
 import { forbiddenUsrnms, usrnmMaxLngth } from '../../../lib/utils/usernameUtils';
-import { Loading } from '../../Loading/Loading';
+import { LoadingSpinner } from '../../Loading/LoadingSpinner';
 
 export const Info = () => {
 
@@ -110,7 +110,7 @@ export const Info = () => {
                             className='settings__update-username-btn mt-1 mt-md-2'
                             onClick={handleSubmit}>
                             {isUpdating ? 'Updating...' : 'Update'}
-                            {isUpdating && <Loading />}
+                            {isUpdating && <LoadingSpinner />}
                         </Button>
                     </Col>
                 </Form>

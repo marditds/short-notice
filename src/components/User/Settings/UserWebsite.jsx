@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useUserContext } from '../../../lib/context/UserContext';
 import { useUserInfo } from '../../../lib/hooks/useUserInfo';
 import { Row, Col, Form, Button } from 'react-bootstrap';
-import { Loading } from '../../Loading/Loading';
+import { LoadingSpinner } from '../../Loading/LoadingSpinner';
 
 export const UserWebsite = () => {
 
@@ -113,7 +113,7 @@ export const UserWebsite = () => {
                             className='settings__update-website-btn mt-1 mt-md-2'
                             onClick={handleUpdateUserWebsite}>
                             {isUpdatingWebsite ? 'Updating...' : 'Update'}
-                            {isUpdatingWebsite && <Loading />}
+                            {isUpdatingWebsite && <LoadingSpinner />}
                         </Button>
                     </Col>
                 </Form>

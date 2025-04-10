@@ -3,7 +3,7 @@ import { Row, Col } from 'react-bootstrap';
 import { useUserContext } from '../../../lib/context/UserContext';
 import { useNotices } from '../../../lib/hooks/useNotices';
 import { InterestsTags } from './InterestsTags';
-import { Loading } from '../../Loading/Loading';
+import { LoadingSpinner } from '../../Loading/LoadingSpinner';
 
 export const Interests = () => {
 
@@ -44,7 +44,7 @@ export const Interests = () => {
                             updateInterests={updateInterests}
                         />
                         :
-                        <Loading />
+                        <LoadingSpinner />
                 }
             </Col>
         </Row>

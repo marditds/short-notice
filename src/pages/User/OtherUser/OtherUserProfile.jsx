@@ -10,7 +10,7 @@ import { useUserAvatar } from '../../../lib/hooks/useUserAvatar.js';
 import { useNotices } from '../../../lib/hooks/useNotices.js';
 import { screenUtils } from '../../../lib/utils/screenUtils.js';
 import { Passcode } from '../../../components/User/Passcode.jsx';
-import { Loading } from '../../../components/Loading/Loading.jsx';
+import { LoadingSpinner } from '../../../components/Loading/LoadingSpinner.jsx';
 import { EndAsterisks } from '../../../components/User/EndAsterisks.jsx';
 import { NoticesPlaceholder } from '../../../components/User/NoticesPlaceholder.jsx';
 
@@ -659,14 +659,14 @@ const OtherUserProfile = () => {
     }, [savedNoticesData])
 
     if (isOtherUserLoading) {
-        // return <div className='mt-5'><Loading />Loading {otherUsername}'s profile</div>;
+        // return <div className='mt-5'><LoadingSpinner />Loading {otherUsername}'s profile</div>;
         return <div className='other-user-profile__loading'>
             <div>
-                <Loading />
+                <LoadingSpinner />
                 <span className='ms-2'>
                     Loading {otherUsername}'s profile
                 </span>
-                {/* <Loading /><span className='ms-2'>Loading your profile</span> */}
+                {/* <LoadingSpinner /><span className='ms-2'>Loading your profile</span> */}
             </div>
         </div>;
     }
@@ -758,7 +758,7 @@ const OtherUserProfile = () => {
                                                             className='user-profile__load-more-notices-btn'
                                                         >
                                                             {isLoadingMore ?
-                                                                <><Loading size={24} /> Loading...</>
+                                                                <><LoadingSpinner size={24} /> Loading...</>
                                                                 : 'Load More'}
                                                         </Button>
                                                         :
@@ -772,7 +772,7 @@ const OtherUserProfile = () => {
                                             />
                                         ) :
                                         <div className='d-flex justify-content-center'>
-                                            <Loading /><span className='ms-2'>Loading {otherUsername}'s notices...</span>
+                                            <LoadingSpinner /><span className='ms-2'>Loading {otherUsername}'s notices...</span>
                                         </div>
                                     }
 
@@ -811,7 +811,7 @@ const OtherUserProfile = () => {
                                                             className='user-profile__load-more-notices-btn'
                                                         >
                                                             {isLoadingMoreSaves ?
-                                                                <><Loading size={24} /> Loading...</>
+                                                                <><LoadingSpinner size={24} /> Loading...</>
                                                                 : 'Load More'}
                                                         </Button>
                                                         :
@@ -827,7 +827,7 @@ const OtherUserProfile = () => {
                                             />)
                                         :
                                         <div className='d-flex justify-content-center'>
-                                            <Loading /><span className='ms-2'>Loading {otherUsername}'s saves...</span>
+                                            <LoadingSpinner /><span className='ms-2'>Loading {otherUsername}'s saves...</span>
                                         </div>
                                     }
                                 </Tab>
@@ -866,7 +866,7 @@ const OtherUserProfile = () => {
                                                             className='user-profile__load-more-notices-btn'
                                                         >
                                                             {isLoadingMoreLikes ?
-                                                                <><Loading size={24} /> Loading...</>
+                                                                <><LoadingSpinner size={24} /> Loading...</>
                                                                 : 'Load More'}
                                                         </Button>
                                                         :
@@ -881,7 +881,7 @@ const OtherUserProfile = () => {
                                             />
                                         ) :
                                         <div className='d-flex justify-content-center'>
-                                            <Loading /><span className='ms-2'>Loading {otherUsername}'s likes...</span>
+                                            <LoadingSpinner /><span className='ms-2'>Loading {otherUsername}'s likes...</span>
                                         </div>
                                     }
 

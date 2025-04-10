@@ -4,7 +4,7 @@ import { useUserContext } from '../../../lib/context/UserContext';
 import { useUserInfo } from '../../../lib/hooks/useUserInfo';
 import { getAvatarUrl as avatarUrl } from '../../../lib/utils/avatarUtils';
 import defaultAvatar from '../../../assets/default.png';
-import { Loading } from '../../Loading/Loading';
+import { LoadingSpinner } from '../../Loading/LoadingSpinner';
 import { AiFillCloseCircle } from "react-icons/ai";
 import { EndAsterisks } from '../EndAsterisks';
 
@@ -142,7 +142,7 @@ export const BlockedAccounts = () => {
             <Col >
                 <div className='d-flex justify-content-start flex-wrap gap-2'>
                     {isBlockListInitialRunLoading || isUnblockingLoading ?
-                        <div><Loading size={24} /></div> :
+                        <div><LoadingSpinner size={24} /></div> :
                         (
                             blockedUsers?.map((user) => {
                                 return (
@@ -177,7 +177,7 @@ export const BlockedAccounts = () => {
                             disabled={isLoadingMore || !hasMoreBlockedProfiles}
                         >
                             {isLoadingMore ?
-                                <><Loading size={24} /> Loading...</>
+                                <><LoadingSpinner size={24} /> Loading...</>
                                 : 'Load More Profiles'}
                         </Button>
                         :

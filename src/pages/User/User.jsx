@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { Container, Button } from 'react-bootstrap';
+import { Container, Button, Row, Col } from 'react-bootstrap';
 import { Navigation } from '../../components/User/Navigation/Navigation';
 import { useUserContext } from '../../lib/context/UserContext';
 import { useUserInfo } from '../../lib/hooks/useUserInfo';
-import { Loading } from '../../components/Loading/Loading';
+import { LoadingSpinner } from '../../components/Loading/LoadingSpinner';
 import '../../components/User/Navigation/Navigation.css';
+import { LoadingComponent } from '../../components/Loading/LoadingComponent';
 
 const User = () => {
 
@@ -46,9 +47,7 @@ const User = () => {
 
 
     if (isAppLoading) {
-        return <div className='d-flex justify-content-center align-items-center'>
-            <Loading classAnun={'me-2'} />Loading...
-        </div>;
+        return <LoadingComponent />;
     }
 
     return (

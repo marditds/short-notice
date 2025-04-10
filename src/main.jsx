@@ -8,10 +8,8 @@ import {
   useLocation
 } from 'react-router-dom';
 import ErrorPage from './routes/error-page.jsx';
-import { GoogleOAuthProvider } from '@react-oauth/google';
 import { getAccount, getUserByEmail } from './lib/context/dbhandler.js';
 import { UserProvider } from './lib/context/UserContext.jsx';
-import { keysProvider } from './lib/context/keysProvider.js';
 import App from './App.jsx';
 import User from './pages/User/User.jsx';
 import './index.css';
@@ -20,7 +18,6 @@ import UserSettings from './pages/User/Settings/UserSettings.jsx';
 import UserProfile from './pages/User/Home/UserProfile.jsx';
 import UserFeed from './pages/User/Feed/UserFeed.jsx';
 import OtherUserProfile from './pages/User/OtherUser/OtherUserProfile.jsx';
-import { Loading } from './components/Loading/Loading.jsx';
 import UserLegal from './pages/User/Legal/UserLegal.jsx';
 import UserSupport from './pages/User/Support/UserSupport.jsx';
 import UserHelpCenter from './pages/User/HelpCenter/UserHelpCenter.jsx';
@@ -39,9 +36,7 @@ import UserHelpCenterData from './pages/User/HelpCenter/UserHelpCenterData.jsx';
 import Header from './components/PreLogin/Header/Header.jsx';
 import Footer from './components/PreLogin/Footer/Footer.jsx';
 import { GoogleLoginForm } from './components/LoginForm/Google/GoogleLoginForm.jsx';
-import { useLogin } from './lib/hooks/useLogin.js';
 import Authenticate from './pages/User/Home/Authenticate.jsx';
-import PreLogin from './pages/PreLogin/PreLogin.jsx';
 
 const PreLoginLayout = () => {
 
@@ -244,21 +239,11 @@ const router = createBrowserRouter([
 
 const MainRender = () => {
 
-  const [clientId, setClientId] = useState(null);
-
-  useEffect(() => {
-    keysProvider('google', setClientId);
-  }, []);
-
-  if (!clientId) return <p><Loading /> Loading Hakop...</p>;
-
   return (
     <StrictMode>
-      <GoogleOAuthProvider clientId={clientId}>
-        <UserProvider>
-          <RouterProvider router={router} />
-        </UserProvider>
-      </GoogleOAuthProvider>
+      <UserProvider>
+        <RouterProvider router={router} />
+      </UserProvider>
     </StrictMode>
   );
 };
