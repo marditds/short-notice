@@ -15,7 +15,7 @@ export default async ({ req, res, log, error }) => {
   try {
     // log('Request method: ' + req.method);
     // log('Request headers: ' + JSON.stringify(req.headers));
-    log('Raw body: ' + req.body);
+    // log('Raw body: ' + req.body);
     // log('Raw payload: ' + req.payload);
 
 
