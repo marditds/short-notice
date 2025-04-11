@@ -132,7 +132,6 @@ export const routes = [
     },
     {
         path: 'authenticate', element: <Authenticate />,
-        authRequired: true,
         loader: async () => {
             console.log('RUNNING <Authenticate/> LOADER:');
 
@@ -140,10 +139,12 @@ export const routes = [
 
             console.log('CHECKING IF USER ALREADY EXISTS IN COLLECTION.');
 
-            const user = await getUserByEmail(authenticatedUser.email);
-            if (user?.username) {
-                console.log('USER ALREADY EXISTS IN COLLECTION. REDIRECTING TO /user/feed');
-                return redirect('/user/feed');
+            if (authenticatedUser) {
+                const user = await getUserByEmail(authenticatedUser?.email);
+                if (user?.username) {
+                    console.log('USER ALREADY EXISTS IN COLLECTION. REDIRECTING TO /user/feed');
+                    return redirect('/user/feed');
+                }
             }
 
             return null;
