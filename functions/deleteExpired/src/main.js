@@ -24,7 +24,7 @@ export default async ({ req, res, log, error }) => {
 
     const notices = ntcs.documents;
 
-    log(notices);
+    // log(notices);
 
     const now = new Date();
 
