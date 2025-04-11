@@ -15,7 +15,7 @@ export default async ({ req, res, log, error }) => {
   try {
     // log('Request method: ' + req.method);
     // log('Request headers: ' + JSON.stringify(req.headers));
-    log('Raw body: ' + req.body);
+    // log('Raw body: ' + req.body);
     // log('Raw payload: ' + req.payload);
 
 
@@ -26,7 +26,7 @@ export default async ({ req, res, log, error }) => {
 
     const reactions = res.documents;
 
-    log(reactions);
+    // log(reactions);
 
     const now = new Date();
 
@@ -38,8 +38,8 @@ export default async ({ req, res, log, error }) => {
         // log('reaction.expiresAt:', reaction.expiresAt)
         if (expiresAt <= now) {
 
-          log('FOUND AN EXPIRED REACTION!', reaction.content);
-          log('reaction.expiresAt:', reaction.expiresAt)
+          // log('FOUND AN EXPIRED REACTION!', reaction.content);
+          // log('reaction.expiresAt:', reaction.expiresAt)
 
           const [likesRes, savesRes] = await Promise.all([
             databases.listDocuments(
