@@ -2,7 +2,6 @@ import { Client, Databases, Query } from 'node-appwrite';
 
 // This Appwrite function will be executed every time your function is triggered
 export default async ({ req, res, log, error }) => {
-  // You can use the Appwrite SDK to interact with other services
   // For this example, we're using the Users service
   const client = new Client()
     .setEndpoint(process.env.VITE_ENDPOINT)
@@ -10,7 +9,6 @@ export default async ({ req, res, log, error }) => {
     .setKey(process.env.SHORT_NOTICE_API_KEYS);
 
   const databases = new Databases(client);
-
 
   try {
     // log('Request method: ' + req.method);
@@ -26,7 +24,7 @@ export default async ({ req, res, log, error }) => {
 
     const notices = ntcs.documents;
 
-    log(notices);
+    // log(notices);
 
     const now = new Date();
 
