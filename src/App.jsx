@@ -5,6 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import './App.css';
 import { useUserContext } from './lib/context/UserContext';
+import { LoadingComponent } from './components/Loading/LoadingComponent.jsx';
 
 function App() {
 
@@ -72,6 +73,10 @@ function App() {
   //     </div>
   //   )
   // }
+
+  if (isAppLoading) {
+    return <LoadingComponent />;
+  }
 
   return (
     <>

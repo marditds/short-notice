@@ -21,6 +21,7 @@ const Authenticate = () => {
         user, setUser,
         isSessionInProgress,
         isCheckEmailExistanceLoading, setIsCheckEmailExistanceLoading,
+        isAppLoading, isFetchingUserinContextLoading
     } = useUserContext();
 
     const { isSetupCancellationLoading, cancelAccountSetup } = useLogin();
@@ -129,7 +130,7 @@ const Authenticate = () => {
     }
 
     // Getting things ready
-    if (isCheckEmailExistanceLoading || isSetupCancellationLoading || userEmail === null) {
+    if (isCheckEmailExistanceLoading || isSetupCancellationLoading || userEmail === null || isAppLoading || isFetchingUserinContextLoading) {
         return <div className='min-vh-100'>
             <Container className='min-vh-100 flex-grow-1'>
                 <Row className='min-vh-100 flex-grow-1  justify-content-center align-items-center'>

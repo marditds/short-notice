@@ -1,5 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { getAccount, getUserById } from './dbhandler';
+import { LoadingSpinner } from '../../components/Loading/LoadingSpinner';
+import { LoadingComponent } from '../../components/Loading/LoadingComponent';
 
 const UserContext = createContext();
 
@@ -17,6 +19,7 @@ export const UserProvider = ({ children }) => {
     const [hasAccountType, setHasAccountType] = useState(false);
     const [accountType, setAccountType] = useState('');
     const [isAppLoading, setIsAppLoading] = useState(false);
+    const [isFetchingUserinContextLoading, setIsFetchingUserinContextLoading] = useState(false);
     const [isCheckEmailExistanceLoading, setIsCheckEmailExistanceLoading] = useState(false);
     const [isSessionInProgress, setIsSessionInProgress] = useState(false);
     const [isLogInBtnClicked, setIsLogInBtnClicked] = useState(false);
@@ -55,6 +58,9 @@ export const UserProvider = ({ children }) => {
 
         const fetchUserByUserId = async () => {
             try {
+                console.log('START - Fetching user in Context...');
+                setIsFetchingUserinContextLoading(true);
+
                 const usr = await getUserById(userId);
                 console.log('usr in UserContext:', usr);
 
@@ -65,6 +71,10 @@ export const UserProvider = ({ children }) => {
 
             } catch (error) {
                 console.log('Error fetching user by id', error);
+            }
+            finally {
+                console.log('FINISH - Fetching user in Context...');
+                setIsFetchingUserinContextLoading(false);
             }
         }
 

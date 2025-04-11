@@ -43,7 +43,7 @@ const User = () => {
                 navigate('/user/feed');
             }
         }
-    }, [hasUsername]);
+    }, [hasUsername, isSessionInProgress]);
 
 
     if (isAppLoading) {

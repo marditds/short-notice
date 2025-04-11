@@ -24,7 +24,8 @@ const OtherUserProfile = () => {
     const {
         username,
         userId,
-        userEmail
+        userEmail,
+        isAppLoading, isFetchingUserinContextLoading
     } = useUserContext();
 
     const [currUserId, setCurrUserId] = useState(null);
@@ -658,15 +659,13 @@ const OtherUserProfile = () => {
 
     }, [savedNoticesData])
 
-    if (isOtherUserLoading) {
-        // return <div className='mt-5'><LoadingSpinner />Loading {otherUsername}'s profile</div>;
+    if (isOtherUserLoading || isAppLoading || isFetchingUserinContextLoading) {
         return <div className='other-user-profile__loading'>
             <div>
                 <LoadingSpinner />
                 <span className='ms-2'>
                     Loading {otherUsername}'s profile
                 </span>
-                {/* <LoadingSpinner /><span className='ms-2'>Loading your profile</span> */}
             </div>
         </div>;
     }
