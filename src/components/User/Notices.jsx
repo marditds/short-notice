@@ -508,7 +508,7 @@ export const Notices = ({
 
                                     {/* Username and Profile Picture */}
                                     {shouldShowUserInfo() ?
-                                        (<div className='d-flex flex-column justify-content-center align-items-center mt-auto'>
+                                        (<div className='d-flex flex-column justify-content-center align-items-end mt-auto'>
 
                                             <Link to={`../${notice.username}`}>
                                                 <img

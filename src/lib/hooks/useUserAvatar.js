@@ -46,7 +46,7 @@ export const useUserAvatar = (userId) => {
         };
         fetchUserAvatar();
         // fetchUserAvatar().finally(() => console.timeEnd('avatar-fetch'));
-    }, [avatarUrl]);
+    }, [userId, avatarUrl]);
 
     const getUserAvatarById = async (userId) => {
         try {

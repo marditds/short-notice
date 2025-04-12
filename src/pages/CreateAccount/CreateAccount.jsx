@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Stack, Row, Col, Form, Button, Alert, Modal } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useNavigation } from 'react-router-dom';
 import { useUserContext } from '../../lib/context/UserContext';
 import { getUserByUsername, getAccount, updateAuthUser } from '../../lib/context/dbhandler';
 import { AccountType } from '../../components/Setup/AccountType';
@@ -242,15 +242,21 @@ const CreateAccount = () => {
 
     // Getting things ready
     if (isSetupCancellationLoading || userEmail === null) {
-        return <Container>
-            <LoadingSpinner classAnun='me-2' />
-            {
-                (userEmail === null) && 'Getting things ready. Hang tight.'
-            }
-            {
-                isSetupCancellationLoading && 'Cancelling your account creation. Please wait...'
-            }
-        </Container>
+        return <div className='min-vh-100'>
+            <Container className='min-vh-100 flex-grow-1'>
+                <Row className='min-vh-100 flex-grow-1  justify-content-center align-items-center'>
+                    <Col className='d-flex justify-content-center align-items-center'>
+                        <LoadingSpinner classAnun='me-2' />
+                        {
+                            (userEmail === null) && 'Getting things ready. Hang tight.'
+                        }
+                        {
+                            isSetupCancellationLoading && 'Cancelling your account creation. Please wait...'
+                        }
+                    </Col>
+                </Row>
+            </Container>
+        </div>
     }
 
     return (
