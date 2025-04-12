@@ -9,7 +9,7 @@ export const useUserAvatar = (userId) => {
     const [isUploading, setIsUploading] = useState(false);
 
     useEffect(() => {
-        console.time('avatar-fetch');
+        // console.time('avatar-fetch');
         setIsAvatarLoading(true);
 
         const fetchUserAvatar = async () => {
@@ -19,34 +19,34 @@ export const useUserAvatar = (userId) => {
                 return;
             }
 
-            const retryFetch = async (retries = 3, delay = 1000) => {
-                try {
-                    const user = await getUserById(userId);
+            // const retryFetch = async (retries = 3, delay = 1000) => {
+            try {
+                const user = await getUserById(userId);
 
-                    if (user && user.avatar) {
+                if (user && user.avatar) {
 
-                        const url = getAvatarUrl(user.avatar);
+                    const url = getAvatarUrl(user.avatar);
 
-                        setAvatarUrl(url);
-                    } else {
-                        console.log("No avatar found for user");
-                        setAvatarUrl('');
-                    }
-                } catch (error) {
-                    if (retries > 0) {
-                        console.log(`Retrying fetch... (${retries} attempts left)`);
-                        setTimeout(() => retryFetch(retries - 1, delay), delay);
-                    }
-                } finally {
-                    setIsAvatarLoading(false);
+                    setAvatarUrl(url);
+                } else {
+                    console.log("No avatar found for user");
+                    setAvatarUrl(null);
                 }
-            };
-            retryFetch();
+            } catch (error) {
+                console.error('Error fetching Avatar:', error);
+                // if (retries > 0) {
+                //     console.log(`Retrying fetch... (${retries} attempts left)`);
+                //     setTimeout(() => retryFetch(retries - 1, delay), delay);
+                // }
+            } finally {
+                setIsAvatarLoading(false);
+            }
+            // };
+            // retryFetch();
         };
-
         fetchUserAvatar();
-        fetchUserAvatar().finally(() => console.timeEnd('avatar-fetch'));
-    }, [userId]);
+        // fetchUserAvatar().finally(() => console.timeEnd('avatar-fetch'));
+    }, [avatarUrl]);
 
     const getUserAvatarById = async (userId) => {
         try {
@@ -65,7 +65,7 @@ export const useUserAvatar = (userId) => {
 
     useEffect(() => {
         console.log('isAvatarLoading', isAvatarLoading);
-    }, [isAvatarLoading, avatarUrl])
+    }, [isAvatarLoading])
 
     const getUserAvatarByString = async (str) => {
         try {

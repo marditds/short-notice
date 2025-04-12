@@ -2,10 +2,18 @@ import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAccount as fetchAccount, createBlock, getBlockedUsersByUser as fetchBlockedUsersByUser, getBlockedUsersByUserByBatch as fetchBlockedUsersByUserByBatch, getUsersBlockingUser as fetchUsersBlockingUser, removeBlockUsingBlockedId, checkIdExistsInAuth, checkEmailExistsInAuth as checkEmailInAuthFromServer, registerAuthUser, getUserById, getUserByIdQuery as fetchUserByIdQuery, deleteAuthUser, createUserSession, getSessionDetails as fetchSessionDetails, deleteUserSession, updateUser, updateUserWebsite as updtUsrWbst, updateAuthUser, deleteUser, getUserByUsername as fetchUserByUsername, getAllUsersByString as fetchAllUsersByString, deleteAllNotices, deleteAllReactions, removeAllSaves, removeAllLikes, removeAllFollows, getUsersDocument, createFollow, unfollow, getUserFollowingsById, getUserFollowersById, followedByUserCount, followingTheUserCount, getPersonalFeedAccounts as fetchPersonalFeedAccounts, createPassocde, updatePassocde, getPassocdeByOrganizationId as fetchPassocdeByOrganizationId, createUserReport, getFollowStatus as fetchFollowStatus, isUserBlockedByOtherUser, isOtherUserBlockedByUser } from '../context/dbhandler';
 import { useUserContext } from '../context/UserContext';
+import { useUserAvatar } from './useUserAvatar';
 
 export const useUserInfo = (data) => {
 
     const { setUsername, userId } = useUserContext();
+
+    const {
+        avatarUrl,
+        extractFileIdFromUrl,
+        handleDeleteAvatarFromStrg
+    } = useUserAvatar(userId);
+
     const navigate = useNavigate();
 
     const [isFetchingUsersData, setIsFetchingUsersData] = useState(false);
@@ -133,6 +141,7 @@ export const useUserInfo = (data) => {
 
     const handleDeleteUser = async () => {
         try {
+
             await Promise.allSettled([
                 deleteAllNotices(userId),
                 deleteAllReactions(userId),
@@ -140,9 +149,15 @@ export const useUserInfo = (data) => {
                 removeAllLikes(userId),
                 removeAllFollows(userId)
             ]);
+
+            if (avatarUrl) {
+                const fileId = extractFileIdFromUrl(avatarUrl);
+                await handleDeleteAvatarFromStrg(fileId);
+            }
+
             await deleteUser(userId);
             await deleteAuthUser(userId);
-            // await deleteUserSession();
+
             console.log('User deleted successfully.');
 
         } catch (error) {

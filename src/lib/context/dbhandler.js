@@ -139,7 +139,7 @@ export const deleteAvatarFromDoc = async (userId) => {
             import.meta.env.VITE_USERS_COLLECTION,
             userId,
             {
-                avatar: ''
+                avatar: null
             },
             // [
             //     Permission.delete(Role.users()),

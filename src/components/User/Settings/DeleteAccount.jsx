@@ -2,20 +2,17 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUserContext } from '../../../lib/context/UserContext';
 import { useUserInfo } from '../../../lib/hooks/useUserInfo';
-import { useUserAvatar } from '../../../lib/hooks/useUserAvatar';
 import { Row, Col, Modal, Button } from 'react-bootstrap';
 import { LoadingSpinner } from '../../Loading/LoadingSpinner';
 
 
 export const DeleteAccount = () => {
 
-    const { userId, userEmail } = useUserContext();
+    const { userEmail } = useUserContext();
     const { handleDeleteUser } = useUserInfo(userEmail);
     const navigate = useNavigate();
     const [showModal, setShowModal] = useState(false);
     const [loading, setLoading] = useState(false);
-
-    const { avatarUrl, setAvatarUrl, handleDeleteAvatarFromStrg, extractFileIdFromUrl } = useUserAvatar(userId);
 
     const handleDeleteAccount = async () => {
 
@@ -23,18 +20,20 @@ export const DeleteAccount = () => {
 
         try {
 
-            let handleDeleteAvatarPromise = Promise.resolve();
+            // let handleDeleteAvatarPromise = Promise.resolve();
 
-            if (avatarUrl) {
-                const fileId = extractFileIdFromUrl(avatarUrl);
-                handleDeleteAvatarPromise = handleDeleteAvatarFromStrg(fileId)
-                    .then(() => setAvatarUrl(''))
-                    .catch((err) => console.error("Error deleting avatar:", err));
-            }
+            // if (avatarUrl) {
+            //     const fileId = extractFileIdFromUrl(avatarUrl);
+            //     handleDeleteAvatarPromise = handleDeleteAvatarFromStrg(fileId)
+            //         .then(() => setAvatarUrl(null))
+            //         .catch((err) => console.error("Error deleting avatar:", err));
+            // }
 
-            const handleDeleteUserPromise = handleDeleteUser();
+            // const handleDeleteUserPromise = handleDeleteUser();
 
-            await Promise.allSettled([handleDeleteAvatarPromise, handleDeleteUserPromise]);
+            // await Promise.allSettled([handleDeleteAvatarPromise, handleDeleteUserPromise]);
+
+            await handleDeleteUser();
 
             console.log('hajoh');
 
