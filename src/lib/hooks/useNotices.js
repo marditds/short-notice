@@ -56,13 +56,12 @@ export const useNotices = (data) => {
             'Big Product Announcement'
         ],
         organization: [
-            'Important Team Update',
+            'Important Update',
             'Reminder: Upcoming Meeting Details',
-            'Quick Motivation for the Team',
-            'Shoutout to Team Member',
+            'Quick Motivation for the Members',
+            'Shoutout to a Member',
             'Policy Change Notice',
-            'Fast Feedback from Team',
-            'Celebrating a Team Win'
+            'Celebrating a Win'
         ]
     };
 

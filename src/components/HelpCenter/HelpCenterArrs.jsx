@@ -183,7 +183,7 @@ export const HelpCenterArrs = () => {
         'account-visibility': {
             intro: 'Currently, you cannot change the visibility of your personal account.',
             steps: [
-                'Accounts for organizations and teams require passcodes. Their notices are not visible to the general public.'
+                'Accounts for organizations and groups require passcodes. Their notices are not visible to the general public.'
             ],
             outro: 'If there are any changes, users will be notified promptly.'
         },

@@ -15,7 +15,7 @@ export const CreateUsername = ({ accountType, username, onUsernameChange }) => {
                     accountType === 'business' && 'Enter the name of your business.'
                 }
                 {
-                    accountType === 'organization' && 'Enter the name of your organization/team.'
+                    accountType === 'organization' && 'Enter the name of your organization/group.'
                 }
             </Form.Label>
             <Form.Control
@@ -26,7 +26,7 @@ export const CreateUsername = ({ accountType, username, onUsernameChange }) => {
                         : (
                             (accountType === 'personal' && 'username') ||
                             (accountType === 'business' && 'business name') ||
-                            (accountType === 'organization' && 'organization/team name')
+                            (accountType === 'organization' && 'organization/group name')
                         )
                 }
                 value={username || ''}

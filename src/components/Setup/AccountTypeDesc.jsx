@@ -23,7 +23,7 @@ export const AccountTypeDesc = ({ accountType }) => {
                 <>
                     <strong>For organizations and teams.
                         <br />
-                        A private space for leaders, teachers, or managers to share updates and announcements exclusively with their team members.
+                        A private space for leaders, teachers, or managers to share updates and announcements exclusively with their group members.
                     </strong>
                 </>
             )}

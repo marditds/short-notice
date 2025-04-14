@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form, Row, Col, Button } from 'react-bootstrap';
 import { useUserContext } from '../../../lib/context/UserContext';
 import { useUserInfo } from '../../../lib/hooks/useUserInfo';
@@ -40,6 +40,10 @@ export const Passcode = () => {
         }
     }
 
+    useEffect(() => {
+        console.log('passcodeVal', passcodeVal);
+    }, [passcodeVal])
+
     return (
         <Row>
             <Col>
@@ -73,7 +77,7 @@ export const Passcode = () => {
                     </Form.Group>
                     <Button
                         type='submit'
-                        disabled={isUpdating || passcodeVal?.length < 6}
+                        disabled={isUpdating || passcodeVal?.length < 6 || passcodeVal === undefined}
                         className='settings__update-username-btn mt-1 mt-md-2'
                     >
                         {isUpdating ? 'Updating...' : 'Update'}

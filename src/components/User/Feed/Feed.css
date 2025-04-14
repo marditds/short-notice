@@ -69,14 +69,18 @@
     border-color: var(--main-accent-color);
     border-radius: var(--main-rounded-corner) !important;
     background-image: url('../../../assets/square-fill.svg') !important;
-    transition: 0.3;
+    transition: var(--main-transition-speed);
     cursor: pointer;
 }
 
 .user-feed__toggle-btn>input:active,
 .user-feed__toggle-btn>input:focus {
-    box-shadow: none !important;
-    border-color: var(--main-accent-color) !important;
+    border-color: var(--main-accent-color-hover) !important;
+}
+
+.user-feed__toggle-btn>input:focus {
+    border-width: 2px;
+    border-style: double;
 }
 
 .user-feed__toggle-btn>input:checked {

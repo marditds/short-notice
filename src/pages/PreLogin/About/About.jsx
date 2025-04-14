@@ -26,12 +26,12 @@ const About = () => {
                             <strong>Business accounts</strong> allow brands to share timely promotions, announcements, or messages, inviting reactions or questions from their audience. Notices shared by business accounts are preceded by 'Ad:'.
                         </li>
                         <li>
-                            <strong>Organizational accounts</strong> provide a private space for leaders, teachers, or managers to share updates and announcements exclusively with their team members, ensuring streamlined communication in a secure format.
+                            <strong>Organizational accounts</strong> provide a private space for leaders, teachers, or managers to share updates and announcements exclusively with their group, ensuring streamlined communication in a secure format.
                         </li>
                     </ul>
 
                     <p>
-                        At ShortNotice, we value simplicity, clarity, and purpose-driven communication. By stripping away permanence and focusing on concise exchanges, we foster an environment that encourages authentic, meaningful interactions without the noise of endless discussions. Whether you are building an audience, managing a brand, or streamlining team updates, ShortNotice helps you connect in the moments that matter—before they're gone.
+                        At ShortNotice, we value simplicity, clarity, and purpose-driven communication. By stripping away permanence and focusing on concise exchanges, we foster an environment that encourages authentic, meaningful interactions without the noise of endless discussions. Whether you are building an audience, managing a brand, or streamlining group updates, ShortNotice helps you connect in the moments that matter—before they're gone.
                     </p>
 
                     <p>

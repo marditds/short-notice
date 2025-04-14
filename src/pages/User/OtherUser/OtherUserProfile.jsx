@@ -624,7 +624,6 @@ const OtherUserProfile = () => {
 
             const psscd = await getPassocdeByOrganizationId(currUserId);
 
-            console.log('psscd', psscd[0].passcode);
             // localStorage.setItem('passcode', passcode);
 
             // console.log('Stored passcode in localStorage:', localStorage.getItem('passcode'));

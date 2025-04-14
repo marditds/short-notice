@@ -76,6 +76,7 @@
     border-color: var(--main-accent-color-hover) !important;
 }
 
+.createUsername__username-field:disabled,
 .setPasscode__passcode-field:disabled {
     background-color: #6262623b !important;
     border-color: #6262623b !important;

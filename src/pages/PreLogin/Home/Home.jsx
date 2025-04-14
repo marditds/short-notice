@@ -54,7 +54,7 @@ const Home = () => {
             icon: <i className='bi bi-trash3' />
         },
         {
-            title: 'Private access for teams and groups: ',
+            title: 'Private access for groups: ',
             description: 'Leaders set passcodes to control who can view notices, ensuring private and targeted communication.',
             icon: '🔒'
         }
@@ -68,7 +68,7 @@ const Home = () => {
         },
         {
             title: 'Effortless Setup:',
-            description: "Leaders create passcodes; team members enter the code.",
+            description: "Leaders create passcodes; group members enter the code.",
             icon: '✅'
         },
         {
@@ -80,9 +80,9 @@ const Home = () => {
 
     const organizationExamples = [
         {
-            title: 'For Teams: ',
-            description: 'Keep internal updates secure by requiring team members to enter a passcode to view notices.',
-            subtext: '*The notices by the team leaders will also appear in the team members\' personal feed.',
+            title: 'For Groups: ',
+            description: 'Keep internal updates secure by requiring group members to enter a passcode to view notices.',
+            subtext: '*The notices by the group leaders will also appear in the group members\' personal feed.',
             icon: <RiTeamFill size={!isSmallScreen ? 43 : 26.88} />,
         },
         {
@@ -133,7 +133,7 @@ const Home = () => {
         },
         {
             question: 'Who can use passcodes to secure posts?',
-            answer: 'Passcodes are designed for groups and teams like schools, employess of businesses, or organizations to control access to their posts. Notices posted by team leaders are not meant for public consumption.'
+            answer: 'Passcodes are designed for groups and teams like schools, employess of businesses, or organizations to control access to their posts. Notices posted by group leaders are not meant for public consumption.'
         },
         {
             question: 'Can I interact with other accounts?',
@@ -198,9 +198,9 @@ const Home = () => {
                             <Col >
                                 <h4 className='text-center d-flex align-items-center justify-content-center'>
                                     <i className='bi bi-diagram-3-fill home__body-organization-row-intro-icon me-2'></i>
-                                    Designed to streamline communication from higherups to team members.
+                                    Designed to streamline communication from higherups to group members.
                                 </h4>
-                                <p className='text-center fw-bold'>Empower your organization with secure and controlled communication. Use passcodes to ensure only authorized members see posts. Perfect for teachers sharing with students or managers updating their teams.</p>
+                                <p className='text-center fw-bold'>Empower your organization with secure and controlled communication. Use passcodes to ensure only authorized members see posts. Perfect for teachers sharing with students or managers updating their group members.</p>
                             </Col>
 
                         </Row>

@@ -544,61 +544,6 @@ export const deleteUserSession = async () => {
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// {
-//     $createdAt: "2025-04-02T00:42:36.300+00:00",
-//     $id: "67ec87fc4806b059b113",
-//     $updatedAt: "2025-04-02T00:42:36.300+00:00",
-//     clientCode: "CH",
-//     clientEngine: "Blink",
-//     clientEngineVersion: "134.0.0.0",
-//     clientName: "Chrome",
-//     clientType: "browser",
-//     clientVersion: "134.0",
-//     countryCode: "us",
-//     countryName: "United States",
-//     current: true,
-//     deviceBrand: "",
-//     deviceModel: "",
-//     deviceName: "desktop",
-//     expire: "2026-04-02T00:42:36.295+00:00",
-//     factors: ['email'],
-//     ip: "2600:6c50:27f:6430:656c:9a04:b451:981a",
-//     mfaUpdatedAt: "",
-//     osCode: "WIN",
-//     osName: "Windows",
-//     osVersion: "10",
-//     provider: "oauth2",
-//     providerAccessToken: "",
-//     providerAccessTokenExpiry: "",
-//     providerRefreshToken: "",
-//     providerUid: "",
-//     secret: "",
-//     userId: "6728729c0015edd16a7e"
-// }
-// {
-//     $createdAt:     $id:     $updatedAt:     clientCode:     clientEngine:     clientEngineVersion:     clientName:     clientType:     clientVersion:     countryCode:     countryName:     current:     deviceBrand:,
-
-
-//     deviceModel:     deviceName:     expire:     factors:     ip:     mfaUpdatedAt:     osCode:     osName:     osVersion:     provider:    providerAccessToken:     providerAccessTokenExpiry:     providerRefreshToken:     providerUid:     secret:     userId: }
-
 export const getSessionDetails = async () => {
     try {
         const sessDets = account.get();
@@ -1912,6 +1857,32 @@ export const updatePassocde = async (user_id, passcode) => {
     }
 }
 
+export const deletePassocde = async (user_id) => {
+    try {
+        const passcodeDocs = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_PASSCODES_COLLECTION,
+            [Query.equal('user_id', user_id)]
+        );
+
+        if (passcodeDocs.total > 0) {
+
+            const docId = passcodeDocs.documents[0].$id;
+
+            await databases.deleteDocument(
+                import.meta.env.VITE_DATABASE,
+                import.meta.env.VITE_PASSCODES_COLLECTION,
+                docId
+            )
+        }
+
+        console.log('Passcode deleted successfully.');
+
+    } catch (error) {
+        console.error('Error deleting passcode:', error);
+    }
+}
+
 export const getPassocdeByOrganizationId = async (user_id) => {
     try {
         const response = await databases.listDocuments(
@@ -1921,7 +1892,6 @@ export const getPassocdeByOrganizationId = async (user_id) => {
                 Query.equal('user_id', user_id)
             ]
         )
-        console.log('Passcode gotten successfuly:', response);
         return response;
     } catch (error) {
         console.error('Error getting passcode:', error);
