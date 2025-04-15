@@ -31,8 +31,7 @@ export const googleOAuthLogin = async () => {
             `${baseUrl}/`,
             ['profile', 'email'],
             {
-                prompt: 'select_account',
-                login_hint: ''
+                prompt: 'select_account'
             }
         )
     } catch (error) {
@@ -527,16 +526,15 @@ export const deleteUserSession = async () => {
             await account.deleteSession(currentSession.$id);
             console.log('Session deleted successfully');
 
-            const iframe = document.createElement('iframe');
-            iframe.style.display = 'none';
-            iframe.src = 'https://accounts.google.com/logout';
-            document.body.appendChild(iframe);
+            // const iframe = document.createElement('iframe');
+            // iframe.style.display = 'none';
+            // iframe.src = 'https://accounts.google.com/logout';
+            // document.body.appendChild(iframe);
 
-            // Remove the iframe after a short delay
-            setTimeout(() => {
-                document.body.removeChild(iframe);
-                console.log('LOGGED OUT SUCCESSFULLY.');
-            }, 1000);
+            // setTimeout(() => {
+            //     document.body.removeChild(iframe);
+            //     console.log('LOGGED OUT SUCCESSFULLY.');
+            // }, 1000);
         }
         console.log('REDIRECTING TO /');
     } catch (error) {

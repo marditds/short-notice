@@ -95,7 +95,7 @@ export const Navigation = ({
                     setHasUsername(false);
                     setAccountType('');
                     console.log('Logged out successfully.');
-                    window.location.href = '/';
+                    // window.location.href = '/';
                 } catch (error) {
                     console.error('Error logging out:', error);
                 } finally {
