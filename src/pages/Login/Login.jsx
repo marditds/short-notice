@@ -12,6 +12,7 @@ const Login = () => {
         setUserEmail,
         setGivenName,
         setUser,
+        setIsLoggedIn
     } = useUserContext();
 
     const navigate = useNavigate();
@@ -43,10 +44,13 @@ const Login = () => {
 
                 const user = await getAccount();
 
+                console.log('THIS IS USER in LOGIN:', user);
+
                 setUserEmail(user.email);
                 setUserId(user.$id);
                 setGivenName(user.name);
                 setUser(user);
+                setIsLoggedIn(true);
 
                 loginSuccess = true;
             }

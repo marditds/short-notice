@@ -192,7 +192,7 @@ export const routes = [
                 loader: async () => {
                     console.log('RUNNING <Login/> LOADER:');
 
-                    // const authenticatedUser = await getAccount();
+                    const authenticatedUser = await getAccount();
 
                     // console.log('CHECKING IF USER ALREADY EXISTS IN COLLECTION.');
 
@@ -220,7 +220,7 @@ export const routes = [
                 index: true, element: <UserFeed />,
             },
             {
-                path: 'feed', element: <UserFeed />
+                path: 'feed', element: <UserFeed />,
             },
             {
                 path: ':otherUsername', element: <OtherUserProfile />

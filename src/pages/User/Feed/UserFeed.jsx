@@ -15,7 +15,7 @@ import { ComposeNotice } from '../../../components/User/ComposeNotice';
 const UserFeed = () => {
 
     const { accountType,
-        userId, isLoggedIn, userEmail, isAppLoading
+        userId, isLoggedIn, userEmail
     } = useUserContext();
 
     const {
