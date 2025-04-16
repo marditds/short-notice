@@ -29,6 +29,8 @@ import { GoogleLoginForm } from '../components/LoginForm/Google/GoogleLoginForm.
 import Authenticate from '../pages/User/Home/Authenticate.jsx';
 import { useState, useEffect } from 'react';
 import { LoadingComponent } from '../components/Loading/LoadingComponent.jsx';
+import SignUp from '../pages/SignUp/SignUp.jsx';
+import Login from '../pages/Login/Login.jsx';
 
 const PreLoginLayout = () => {
 
@@ -49,7 +51,7 @@ const PreLoginLayout = () => {
         <div className='home__body d-flex flex-column justify-content-between min-vh-100'>
 
             {
-                !location.pathname.startsWith('/authenticate') && location.pathname !== '/set-username' &&
+                !location.pathname.startsWith('/authenticate') && location.pathname !== '/set-username' && location.pathname !== '/signup' &&
                 <Header>
                     <GoogleLoginForm />
                 </Header>
@@ -59,7 +61,7 @@ const PreLoginLayout = () => {
             <Outlet />
 
             {
-                !location.pathname.startsWith('/authenticate') && location.pathname !== '/set-username' &&
+                !location.pathname.startsWith('/authenticate') && location.pathname !== '/set-username' && location.pathname !== '/signup' &&
                 <Footer />
             }
 
@@ -167,7 +169,41 @@ export const routes = [
 
                     return null;
                 },
-            }
+            },
+            {
+                path: 'signup', element: <SignUp />,
+                loader: async () => {
+                    console.log('RUNNING <SignUp/> LOADER:');
+
+                    // const authenticatedUser = await getAccount();
+
+                    // console.log('CHECKING IF USER ALREADY EXISTS IN COLLECTION.');
+
+                    // const user = await getUserByEmail(authenticatedUser.email);
+                    // if (user?.username) {
+                    //     console.log('USER ALREADY EXISTS IN COLLECTION. REDIRECTING TO /user/feed');
+                    //     return redirect('/user/feed');
+                    // }
+                    return null;
+                }
+            },
+            {
+                path: 'login', element: <Login />,
+                loader: async () => {
+                    console.log('RUNNING <Login/> LOADER:');
+
+                    // const authenticatedUser = await getAccount();
+
+                    // console.log('CHECKING IF USER ALREADY EXISTS IN COLLECTION.');
+
+                    // const user = await getUserByEmail(authenticatedUser.email);
+                    // if (user?.username) {
+                    //     console.log('USER ALREADY EXISTS IN COLLECTION. REDIRECTING TO /user/feed');
+                    //     return redirect('/user/feed');
+                    // }
+                    return null;
+                }
+            },
         ]
     },
     // {

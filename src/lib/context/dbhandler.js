@@ -39,7 +39,6 @@ export const googleOAuthLogin = async () => {
     }
 }
 
-
 export const handleOAuthSession = async (userId, secret) => {
 
     try {
@@ -58,6 +57,28 @@ export const handleOAuthSession = async (userId, secret) => {
     }
 };
 
+export const createAuthUser = async (email, password, name) => {
+
+    try {
+        const user = await account.create(
+            ID.unique(),
+            email,
+            password,
+            name
+        );
+
+        console.log('User in Auth created successfully:', user);
+
+        return user;
+    } catch (error) {
+        if (error.code === 409) {
+            return 'A user with the same email already exists.';
+        } else {
+            console.error('Authentication failed:', error);
+        }
+        throw error;
+    }
+};
 
 export const getAccount = async () => {
     try {
@@ -329,10 +350,6 @@ export const createUser = async ({ id, email, given_name, username, accountType 
 
 export const registerAuthUser = async (id, email, username) => {
     try {
-        // const result = await account.listIdentities(
-        //     [Query.equal('email', email)] // queries (optional)
-        // );
-
         const newUsr = await account.create(
             id,
             email,
@@ -496,9 +513,9 @@ export const deleteAuthUser = async (userId) => {
     }
 }
 
-export const createUserSession = async (email) => {
+export const createUserSession = async (email, password) => {
     try {
-        const userSession = await account.createEmailPasswordSession(email, 'TmbkaberdiArum55');
+        const userSession = await account.createEmailPasswordSession(email, password);
         console.log('Session created successfully:', userSession);
         return userSession;
     } catch (error) {
