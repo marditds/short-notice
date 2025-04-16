@@ -2,6 +2,7 @@ import { redirect } from "react-router-dom";
 import { getAccount } from "../lib/context/dbhandler";
 
 const withAuth = (loader, path) => {
+
     return async (args) => {
 
         console.log('THIS IS PATH:', path);

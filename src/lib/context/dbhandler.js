@@ -520,6 +520,7 @@ export const createUserSession = async (email, password) => {
         return userSession;
     } catch (error) {
         console.error('Error creating session:', error);
+        return 'Invalid credentials. Please check the email and password.';
     }
 }
 

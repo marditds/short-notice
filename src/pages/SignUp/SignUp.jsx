@@ -7,14 +7,14 @@ import { useUserContext } from '../../lib/context/UserContext';
 
 const SignUp = () => {
 
-    const navigate = useNavigate();
-
     const {
         setUserId,
         setUserEmail,
         setGivenName,
         setUser,
     } = useUserContext();
+
+    const navigate = useNavigate();
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -28,6 +28,9 @@ const SignUp = () => {
         console.log('Email:', email);
         console.log('Password:', password);
         console.log('Name:', name);
+
+        let signupSuccess = false;
+
         try {
             setIsAccountGettingCreated(true);
             const user = await createAuthUser(email, password, name);
@@ -45,6 +48,8 @@ const SignUp = () => {
                 setUserId(user.$id);
                 setGivenName(user.name);
                 setUser(user);
+
+                signupSuccess = true;
             }
 
         } catch (error) {
@@ -52,7 +57,9 @@ const SignUp = () => {
             setErrorMsg('Something went wrong. Please try again.');
         } finally {
             setIsAccountGettingCreated(false);
-            navigate('/set-username');
+            if (signupSuccess) {
+                navigate('/set-username');
+            }
         }
     }
 
