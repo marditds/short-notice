@@ -111,7 +111,7 @@ const SignUp = () => {
                     <Form.Text>
                         {errorMsg}
                         {
-                            doesEmailExist && <Button style={{ backgroundColor: 'transparent' }}>Login</Button>
+                            doesEmailExist && <Button style={{ backgroundColor: 'transparent' }}>Sign in</Button>
                         }
                     </Form.Text>
                 }

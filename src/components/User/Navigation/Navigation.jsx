@@ -82,7 +82,7 @@ export const Navigation = ({
             url: '/user/legal'
         },
         {
-            title: 'Log out',
+            title: 'Sign out',
             icon: 'bi bi-box-arrow-left',
             onClick: async () => {
                 try {
@@ -94,8 +94,8 @@ export const Navigation = ({
                     setUsername('');
                     setHasUsername(false);
                     setAccountType('');
-                    console.log('Logged out successfully.');
-                    // window.location.href = '/';
+                    console.log('Signed out successfully.');
+                    window.location.href = '/';
                 } catch (error) {
                     console.error('Error logging out:', error);
                 } finally {

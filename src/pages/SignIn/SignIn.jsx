@@ -5,7 +5,7 @@ import { createUserSession, getAccount } from '../../lib/context/dbhandler';
 import { LoadingSpinner } from '../../components/Loading/LoadingSpinner';
 import { useUserContext } from '../../lib/context/UserContext';
 
-const Login = () => {
+const SignIn = () => {
 
     const {
         setUserId,
@@ -44,7 +44,7 @@ const Login = () => {
 
                 const user = await getAccount();
 
-                console.log('THIS IS USER in LOGIN:', user);
+                console.log('THIS IS USER in SIGNIN:', user);
 
                 setUserEmail(user.email);
                 setUserId(user.$id);
@@ -97,11 +97,11 @@ const Login = () => {
                         (password?.length < 8) ||
                         (email === '')}>
                     {
-                        !isLoggingInLoading ? 'Login' : <LoadingSpinner />
+                        !isLoggingInLoading ? 'Sign in' : <LoadingSpinner />
                     }
 
                 </Button>
-                {
+                {errorMsg &&
                     <Form.Text>
                         {errorMsg}
                     </Form.Text>
@@ -111,4 +111,4 @@ const Login = () => {
     )
 }
 
-export default Login
+export default SignIn;

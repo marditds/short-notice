@@ -30,7 +30,7 @@ import Authenticate from '../pages/User/Home/Authenticate.jsx';
 import { useState, useEffect } from 'react';
 import { LoadingComponent } from '../components/Loading/LoadingComponent.jsx';
 import SignUp from '../pages/SignUp/SignUp.jsx';
-import Login from '../pages/Login/Login.jsx';
+import SignIn from '../pages/SignIn/SignIn.jsx';
 
 const PreLoginLayout = () => {
 
@@ -188,11 +188,11 @@ export const routes = [
                 }
             },
             {
-                path: 'login', element: <Login />,
+                path: 'signin', element: <SignIn />,
                 loader: async () => {
-                    console.log('RUNNING <Login/> LOADER:');
+                    console.log('RUNNING <SignIn/> LOADER:');
 
-                    const authenticatedUser = await getAccount();
+                    // const authenticatedUser = await getAccount();
 
                     // console.log('CHECKING IF USER ALREADY EXISTS IN COLLECTION.');
 

@@ -23,7 +23,7 @@ const PrivacyData = () => {
         <div>
           The data we collect is used to:
           <ul className='list-unstyled'>
-            <li>- Facilitate account creation and login using Google authentication.</li>
+            <li>- Facilitate account creation and sign-in using Google authentication.</li>
             <li>- Display content and enable interactions within the platform.</li>
             <li>- Moderate and enforce our Terms of Service and Community Guidelines.</li>
             <li>- Improve platform functionality and user experience.</li>

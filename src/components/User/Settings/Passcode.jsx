@@ -45,7 +45,7 @@ export const Passcode = () => {
     }, [passcodeVal])
 
     return (
-        <Row>
+        <Row xs={1} sm={2}>
             <Col>
                 <h4>Update Passcode:</h4>
                 <p>Update your organization's passcode. The minimum number of digits for your passcode is 6.</p>

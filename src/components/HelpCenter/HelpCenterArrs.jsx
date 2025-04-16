@@ -33,8 +33,8 @@ export const HelpCenterArrs = () => {
         'getting-started': [
             { header: 'How to create a ShortNotice account', path: 'how-to' },
             { header: 'Account verification', path: 'account-verification' },
-            { header: 'Log in to your account', path: 'login-information' },
-            { header: 'Log out of your account', path: 'logout-information' },
+            { header: 'Sign in to your account', path: 'sign-in-information' },
+            { header: 'Sign out of your account', path: 'sign-out-information' },
             { header: 'Requirements to join ShortNotice', path: 'platform-requirements' }
         ],
         'manage-account': [
@@ -61,8 +61,8 @@ export const HelpCenterArrs = () => {
         'getting-started': {
             'how-to': 'How to create a ShortNotice account',
             'account-verification': 'Account verification',
-            'login-information': 'Log in to your account',
-            'logout-information': 'Logout of your account',
+            'sign-in-information': 'Sign in to your account',
+            'sign-out-information': 'Sign out of your account',
             'platform-requirements': 'Requirements to join ShortNotice'
         },
         'manage-account': {
@@ -109,8 +109,8 @@ export const HelpCenterArrs = () => {
             ],
             outro: 'If there are any changes, users will be notified promptly.'
         },
-        'login-information': {
-            intro: 'To login to your account, follow these steps:',
+        'sign-in-information': {
+            intro: 'To sign-in to your account, follow these steps:',
             steps: [
                 'Click or tap "Sign in with Google."',
                 'Enter the email or phone number associated with your ShortNotice account.',
@@ -121,11 +121,11 @@ export const HelpCenterArrs = () => {
             ],
             outro: 'By following these steps, you will log in to your ShortNotice account.'
         },
-        'logout-information': {
-            intro: 'To logout of your account, follow these steps:',
+        'sign-out-information': {
+            intro: 'To sign out of your account, follow these steps:',
             steps: [
                 <span>Click or tap the three dots <i className="bi bi-three-dots-vertical"></i> located in the top-right corner of the screen.</span>,
-                'Select "Log out."'
+                'Select "Sign out."'
             ],
             outro: 'By following these steps, you will log out of your ShortNotice account.'
         },

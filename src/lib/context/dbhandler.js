@@ -91,6 +91,27 @@ export const getAccount = async () => {
     }
 }
 
+export const updateAuthPassword = async (newPassword, oldPassword) => {
+    try {
+        const result = await account.updatePassword(
+            newPassword,
+            oldPassword
+        );
+
+        console.log('Password updated successfully.', result);
+
+    } catch (error) {
+        if (error.code === 401) {
+            console.error('Error updating Auth User Password:', error);
+            return 'Your current password is incorrect.'
+        } else {
+            console.error('Error updating Auth User Password:', error);
+            return 'Something went wrong.';
+        }
+
+    }
+}
+
 export const uploadAvatar = async (file) => {
 
     console.log('dbhandler - uploadAvatar', file);
@@ -546,7 +567,7 @@ export const deleteUserSession = async () => {
 
             // const iframe = document.createElement('iframe');
             // iframe.style.display = 'none';
-            // iframe.src = 'https://accounts.google.com/logout';
+            // iframe.src = 'https://accounts.google.com/sign-out';
             // document.body.appendChild(iframe);
 
             // setTimeout(() => {

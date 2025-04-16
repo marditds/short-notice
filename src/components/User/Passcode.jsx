@@ -58,7 +58,7 @@ export const Passcode = ({ passcode, setPasscode, checkPasscode, isCheckingPassc
                         </Col>
                     </Row>
                 </Form>
-                <p className='mb-0 mt-2 position-absolute text-danger fw-bold'>
+                <p className='mb-0 mt-2 position-absolute fw-bold' style={{ color: 'var(--main-caution-color)' }}>
                     {
                         isPasscodeIncorrect && 'Invalid passcode. Please try again or contact your leader.'
                     }

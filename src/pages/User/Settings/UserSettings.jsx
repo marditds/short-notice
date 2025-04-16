@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useUserContext } from '../../../lib/context/UserContext.jsx';
 import { Avatar } from '../../../components/User/Settings/Avatar.jsx';
 import { Info } from '../../../components/User/Settings/Info.jsx';
+import { UserPassword } from '../../../components/User/Settings/UserPassword.jsx';
 import { DeleteAllNotices } from '../../../components/User/Settings/DeleteAllNotices.jsx';
 import { Visibility } from '../../../components/User/Settings/Visibility.jsx';
 import { Interests } from '../../../components/User/Settings/Interests.jsx';
@@ -38,6 +39,8 @@ const UserSettings = () => {
                 <Avatar />
                 <hr className='settings__hr' />
                 <Info />
+                <hr className='settings__hr' />
+                <UserPassword />
                 <hr className='settings__hr' />
                 {accountType === 'organization' &&
                     <>
