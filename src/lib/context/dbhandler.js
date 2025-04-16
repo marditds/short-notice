@@ -395,16 +395,12 @@ export const updateUser = async ({ userId, username }) => {
             {
                 username: username
             },
-            // [
-            // Permission.update(Role.users(userId)),
-            // Permission.update(Role.guests())
-            // ]
         );
         console.log('Username successfully updated.');
         return res;
     } catch (error) {
         console.error('Error updating the username:', error);
-
+        return 'Something went wrong. Please try again later.'
     }
 };
 
@@ -421,15 +417,12 @@ export const updateUserWebsite = async ({ userId, website }) => {
             {
                 website: website
             },
-            // [
-            // Permission.update(Role.users(userId)),
-            // Permission.update(Role.guests())
-            // ]
         );
         console.log('Website successfully updated.');
         return res;
     } catch (error) {
         console.error('Error updating the website:', error);
+        return 'Something went wrong. Please try again later.'
     }
 };
 
@@ -438,8 +431,10 @@ export const updateAuthUser = async (name) => {
         const authUsrnm = await account.updateName(name);
 
         console.log('Auth username updated successfully', authUsrnm);
+        return authUsrnm;
     } catch (error) {
         console.error('Error updating auth username:', error);
+        return 'Something went wrong. Please try again later.'
     }
 };
 
@@ -1891,6 +1886,7 @@ export const updatePassocde = async (user_id, passcode) => {
 
     } catch (error) {
         console.error('Error updating passcode:', error);
+        return 'Something happened. Please try again later.'
     }
 }
 

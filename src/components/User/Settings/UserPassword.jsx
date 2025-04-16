@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useUserInfo } from '../../../lib/hooks/useUserInfo';
 import { Col, Form, Row, Button } from 'react-bootstrap';
 import { LoadingSpinner } from '../../Loading/LoadingSpinner';
+import { ErrorMessage, SuccessMessage } from './UpdateMessage';
 
 export const UserPassword = () => {
 
@@ -117,20 +118,9 @@ export const UserPassword = () => {
                         {isUpdating && <LoadingSpinner />}
                     </Button>
 
-                    {errorMsg &&
-                        <div className='mt-1 mt-md-2'>
-                            <Form.Text style={{ color: 'var(--main-caution-color)' }}>
-                                {errorMsg}
-                            </Form.Text>
-                        </div>
-                    }
-                    {successMsg &&
-                        <div className='mt-1 mt-md-2'>
-                            <Form.Text style={{ color: 'var(--main-accent-color-hover)' }}>
-                                {successMsg}
-                            </Form.Text>
-                        </div>
-                    }
+                    <SuccessMessage message={successMsg} />
+                    <ErrorMessage message={errorMsg} />
+
                 </Form>
             </Col>
         </Row>

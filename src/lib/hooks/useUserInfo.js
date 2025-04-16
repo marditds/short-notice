@@ -106,11 +106,14 @@ export const useUserInfo = (data) => {
 
             const res = await updateUser({ userId, username });
 
-            await updateAuthUser(username);
+            const authRes = await updateAuthUser(username);
 
             setUsername(username);
 
-            console.log('Username updated successfully.', res);
+            console.log('Username updated successfully - collection.', res);
+            console.log('Username updated successfully - atuh.', authRes);
+
+            return { res, authRes }
 
         } catch (error) {
             console.error('Error updating the username:', error);
@@ -142,7 +145,7 @@ export const useUserInfo = (data) => {
             const res = await updtUsrWbst({ userId, website });
 
             console.log('userWebsite updated successfully.', res);
-
+            return res;
         } catch (error) {
             console.error('Error updating the userWebsite:', error);
         }

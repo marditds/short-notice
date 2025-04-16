@@ -4,6 +4,7 @@ import { Row, Col, Form, Button, Alert } from 'react-bootstrap';
 import { useUserInfo } from '../../../lib/hooks/useUserInfo';
 import { forbiddenUsrnms, usrnmMaxLngth } from '../../../lib/utils/usernameUtils';
 import { LoadingSpinner } from '../../Loading/LoadingSpinner';
+import { ErrorMessage, SuccessMessage } from './UpdateMessage';
 
 export const Info = () => {
 
@@ -20,6 +21,7 @@ export const Info = () => {
     const [isUpdating, setIsUpdating] = useState(false);
 
     const [errorMsg, setErrorMsg] = useState('');
+    const [successMsg, setSuccessMsg] = useState('');
 
     useEffect(() => {
         console.log('accountType in INFO:', accountType);
@@ -58,9 +60,19 @@ export const Info = () => {
 
             if (localUsername.trim()) {
                 setErrorMsg('');
-                await handleUpdateUser(localUsername);
+                const updatedUser = await handleUpdateUser(localUsername);
                 setUsername(localUsername);
                 setRegisteredUsername(localUsername)
+
+                console.log('THIS IS handleUpdateUser RES:', updatedUser);
+
+                if ((typeof updatedUser.authRes === 'string') || (typeof updatedUser.res === 'string')) {
+                    setErrorMsg('Something went wrong. Please try again later.');
+                    return;
+                }
+
+                setErrorMsg('');
+                setSuccessMsg('Username updated successfully.')
             }
 
         } catch (error) {
@@ -69,6 +81,16 @@ export const Info = () => {
             setIsUpdating(false);
         }
 
+    };
+
+    const handleOnKeyDown = (e) => {
+        if (e.key === ' ') {
+            e.preventDefault();
+        }
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            handleSubmit(e);
+        }
     };
 
     let usrnm = (accountType === 'personal' && 'Username') || (accountType === 'business' && 'Business Name') || (accountType === 'organization' && 'Organization\'s Name')
@@ -96,6 +118,7 @@ export const Info = () => {
                             placeholder='Enter your username'
                             value={(localUsername && localUsername) || ''}
                             onChange={handleUsernameChange}
+                            onKeyDown={handleOnKeyDown}
                             className='settings__username-field'
                         />
                         <Form.Text className='settings__username-unique'>
@@ -104,6 +127,7 @@ export const Info = () => {
                         {errorMsg && <Alert variant="danger" className='alert'>{errorMsg}</Alert>}
                     </Form.Group>
                     <Col className='settings__update-username-btn-col'>
+
                         <Button
                             type='submit'
                             disabled={isUpdating || localUsername === '' ? true : false}
@@ -112,6 +136,10 @@ export const Info = () => {
                             {isUpdating ? 'Updating...' : 'Update'}
                             {isUpdating && <LoadingSpinner />}
                         </Button>
+
+                        <SuccessMessage message={successMsg} />
+                        <ErrorMessage message={errorMsg} />
+
                     </Col>
                 </Form>
             </Col>

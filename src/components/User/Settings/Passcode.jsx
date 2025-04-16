@@ -3,6 +3,7 @@ import { Form, Row, Col, Button } from 'react-bootstrap';
 import { useUserContext } from '../../../lib/context/UserContext';
 import { useUserInfo } from '../../../lib/hooks/useUserInfo';
 import { LoadingSpinner } from '../../Loading/LoadingSpinner';
+import { ErrorMessage, SuccessMessage } from './UpdateMessage';
 
 export const Passcode = () => {
 
@@ -11,6 +12,8 @@ export const Passcode = () => {
 
     const [passcodeVal, setPasscodeVal] = useState();
     const [isUpdating, setIsUpdating] = useState(false);
+    const [errMsg, setErrMsg] = useState('');
+    const [successMsg, setSuccessMsg] = useState('');
 
     const handlePasscodeChange = (e) => {
         console.log(e.target.value);
@@ -32,7 +35,15 @@ export const Passcode = () => {
         e.preventDefault();
         try {
             console.log('Barev');
-            await editPasscode(passcodeVal);
+            const res = await editPasscode(passcodeVal);
+
+            if (typeof res === 'string') {
+                setErrMsg(res);
+                return;
+            }
+
+            setErrMsg('');
+            setSuccessMsg('Passode updated successfully.')
         } catch (error) {
             console.error('Error updating passcode:', error);
         } finally {
@@ -83,6 +94,10 @@ export const Passcode = () => {
                         {isUpdating ? 'Updating...' : 'Update'}
                         {isUpdating && <LoadingSpinner />}
                     </Button>
+
+                    <SuccessMessage message={successMsg} />
+                    <ErrorMessage message={errMsg} />
+
                 </Form>
             </Col>
         </Row>

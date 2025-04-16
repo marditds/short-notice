@@ -3,10 +3,16 @@ import { useUserContext } from '../../../lib/context/UserContext';
 import { useUserInfo } from '../../../lib/hooks/useUserInfo';
 import { Row, Col, Form, Button } from 'react-bootstrap';
 import { LoadingSpinner } from '../../Loading/LoadingSpinner';
+import { ErrorMessage, SuccessMessage } from './UpdateMessage';
 
 export const UserWebsite = () => {
 
-    const { username, userEmail, userWebsite, setUserWebsite } = useUserContext();
+    const {
+        username,
+        userEmail,
+        userWebsite,
+        setUserWebsite
+    } = useUserContext();
 
     const {
         updateUserWebsite,
@@ -14,6 +20,9 @@ export const UserWebsite = () => {
     } = useUserInfo(userEmail);
 
     const [isUpdatingWebsite, setIsUpdatingWebsite] = useState(false);
+
+    const [errMsg, setErrMsg] = useState('');
+    const [successMsg, setSuccessMsg] = useState('');
 
     const handleUserWebsiteChange = (e) => {
         let input = e.target.value.replace(/\s/g, '');
@@ -56,8 +65,14 @@ export const UserWebsite = () => {
                 usrWbst = null;
             }
 
-            await updateUserWebsite(usrWbst);
+            const userWebsiteRes = await updateUserWebsite(usrWbst);
+            if (typeof userWebsiteRes === 'string') {
+                setErrMsg(userWebsiteRes);
+                return;
+            }
+
             setUserWebsite(usrWbst);
+            setSuccessMsg('Website updated successfully.');
 
         } catch (error) {
             console.error('Error updating user website:', error);
@@ -115,6 +130,10 @@ export const UserWebsite = () => {
                             {isUpdatingWebsite ? 'Updating...' : 'Update'}
                             {isUpdatingWebsite && <LoadingSpinner />}
                         </Button>
+
+                        <SuccessMessage message={successMsg} />
+                        <ErrorMessage message={errMsg} />
+
                     </Col>
                 </Form>
             </Col>
