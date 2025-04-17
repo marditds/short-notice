@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { LoadingSpinner } from '../../Loading/LoadingSpinner';
+import { ErrorMessage, SuccessMessage } from './UpdateMessage';
+import { screenUtils } from '../../../lib/utils/screenUtils';
 
 export const InterestsTags = ({
     tagCategories,
@@ -14,6 +16,11 @@ export const InterestsTags = ({
 }) => {
 
     const allTags = tagCategories.flatMap(category => category.tags);
+
+    const { isSmallScreen } = screenUtils();
+
+    const [errorMsg, setErrorMsg] = useState('');
+    const [successMsg, setSuccessMsg] = useState('');
 
     return (
         <div className='d-flex flex-column'>
@@ -32,11 +39,21 @@ export const InterestsTags = ({
                     </div>
                 ))}
             </div>
-            {/* <div className='d-flex'> */}
             <div className='d-xxl-flex d-grid'>
                 <Button
-                    onClick={() => {
-                        updateInterests();
+                    onClick={async () => {
+                        const updateInterestsRes = await updateInterests();
+
+                        console.log('THIS IS updateInterestsRes:', updateInterestsRes);
+
+                        if (typeof updateInterestsRes === 'string') {
+                            setErrorMsg('Something went wrong. Please try again later.');
+                            return;
+                        }
+
+                        setErrorMsg('');
+                        setSuccessMsg('Interest(s) updated successfully.')
+
                         if (isAnyTagSelected && onUpdateInterests) {
                             onUpdateInterests();
                         }
@@ -51,6 +68,14 @@ export const InterestsTags = ({
                 >
                     Deselect All
                 </Button>
+
+                <div style={{ marginLeft: !isSmallScreen ? '10px' : '5px' }}>
+                    <SuccessMessage message={successMsg} />
+                </div>
+                <div style={{ marginLeft: !isSmallScreen ? '10px' : '5px' }}>
+                    <ErrorMessage message={errorMsg} />
+                </div>
+
             </div>
         </div>
     )

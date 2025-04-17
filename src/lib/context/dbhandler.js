@@ -559,16 +559,6 @@ export const deleteUserSession = async () => {
         if (currentSession) {
             await account.deleteSession(currentSession.$id);
             console.log('Session deleted successfully');
-
-            // const iframe = document.createElement('iframe');
-            // iframe.style.display = 'none';
-            // iframe.src = 'https://accounts.google.com/sign-out';
-            // document.body.appendChild(iframe);
-
-            // setTimeout(() => {
-            //     document.body.removeChild(iframe);
-            //     console.log('LOGGED OUT SUCCESSFULLY.');
-            // }, 1000);
         }
         console.log('REDIRECTING TO /');
     } catch (error) {
@@ -585,61 +575,6 @@ export const getSessionDetails = async () => {
         console.error('Error getting session details', error);
     }
 }
-
-// export const getSessionDetails = async (email) => {
-//     try {
-//         console.log('this email will be sent - dbhandler:', email);
-//         console.log('type of email', typeof (email));
-
-//         const payload = JSON.stringify({ email: email });
-//         console.log('Payload being sent:');
-//         console.log(payload);
-
-//         const exec = await functions.createExecution(
-//             import.meta.env.VITE_USER_SESSION_FUNCTION_ID,  // your function ID
-//             payload
-//         )
-
-//         console.log('Function response:', exec);
-//         console.log('Response status:', exec.status);
-//         console.log('Response status code:', exec.responseStatusCode);
-//         console.log('Response Body:', exec.responseBody);
-
-//         if (exec.status === 'completed') {
-//             try {
-//                 const result = JSON.parse(exec.responseBody);
-//                 console.log(result);
-//                 return result;
-//                 // return result;
-//             } catch (parseError) {
-//                 console.error('Error parsing response:', parseError);
-//                 return false;
-//             }
-//         } else {
-//             console.error('Function execution failed:', execution.stderr);
-//             return false;
-//         }
-
-
-//         // const sessDets = await account?.getSession('current');
-//         // console.log('sessDets:', sessDets);
-//         // return sessDets;
-//     } catch (error) {
-//         console.error('Error getting session details:', error);
-
-//     }
-// }
-
-// const createGoogleSession = async () => {
-//     try {
-//         let createSession = await account.createOAuth2Session(
-//             'google'
-//         )
-//         console.log('createSession - App.jsx:', createSession);
-//     } catch (error) {
-//         console.error('Error creating session:', error);
-//     }
-// }
 
 export const createNotice = async ({ user_id, text, timestamp, expiresAt, noticeType, noticeGif, noticeUrl, science, technology, engineering, math, literature, history, philosophy, music, medicine, economics, law, polSci, sports
 }) => {
@@ -997,10 +932,6 @@ export const updateUserInterests = async (userId, selectedTags) => {
                 import.meta.env.VITE_INTERESTS_COLLECTION,
                 userId,
                 interestsData,
-                // [
-                //     Permission.update(Role.users()),
-                //     Permission.update(Role.guests())
-                // ]
             );
         } catch (updateError) {
             if (updateError.code === 404) {
@@ -1009,9 +940,6 @@ export const updateUserInterests = async (userId, selectedTags) => {
                     import.meta.env.VITE_INTERESTS_COLLECTION,
                     userId,
                     interestsData,
-                    // [
-                    //     Permission.write(Role.users()), Permission.write(Role.guests())
-                    // ]
                 );
             } else {
                 throw updateError;
@@ -1022,7 +950,7 @@ export const updateUserInterests = async (userId, selectedTags) => {
         return response;
     } catch (error) {
         console.error('Error updating user interests:', error);
-        throw error;
+        return 'Something went wrong. Please try again later.';
     }
 };
 

@@ -124,7 +124,6 @@ export const Info = () => {
                         <Form.Text className='settings__username-unique'>
                             Your {usrnm && usrnm.toLowerCase()} must be unique.
                         </Form.Text>
-                        {errorMsg && <Alert variant="danger" className='alert'>{errorMsg}</Alert>}
                     </Form.Group>
                     <Col className='settings__update-username-btn-col'>
 

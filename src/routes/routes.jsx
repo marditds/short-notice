@@ -173,34 +173,18 @@ export const routes = [
             {
                 path: 'signup', element: <SignUp />,
                 loader: async () => {
+
                     console.log('RUNNING <SignUp/> LOADER:');
 
-                    // const authenticatedUser = await getAccount();
-
-                    // console.log('CHECKING IF USER ALREADY EXISTS IN COLLECTION.');
-
-                    // const user = await getUserByEmail(authenticatedUser.email);
-                    // if (user?.username) {
-                    //     console.log('USER ALREADY EXISTS IN COLLECTION. REDIRECTING TO /user/feed');
-                    //     return redirect('/user/feed');
-                    // }
                     return null;
                 }
             },
             {
                 path: 'signin', element: <SignIn />,
                 loader: async () => {
+
                     console.log('RUNNING <SignIn/> LOADER:');
 
-                    // const authenticatedUser = await getAccount();
-
-                    // console.log('CHECKING IF USER ALREADY EXISTS IN COLLECTION.');
-
-                    // const user = await getUserByEmail(authenticatedUser.email);
-                    // if (user?.username) {
-                    //     console.log('USER ALREADY EXISTS IN COLLECTION. REDIRECTING TO /user/feed');
-                    //     return redirect('/user/feed');
-                    // }
                     return null;
                 }
             },

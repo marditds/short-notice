@@ -1,7 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { getAccount, getUserById } from './dbhandler';
-import { LoadingSpinner } from '../../components/Loading/LoadingSpinner';
-import { LoadingComponent } from '../../components/Loading/LoadingComponent';
 
 const UserContext = createContext();
 
@@ -98,6 +96,7 @@ export const UserProvider = ({ children }) => {
                 hasAccountType, setHasAccountType,
                 isAppLoading, setIsAppLoading,
                 isCheckEmailExistanceLoading, setIsCheckEmailExistanceLoading,
+                isFetchingUserinContextLoading,
                 user, setUser,
                 isSessionInProgress, setIsSessionInProgress,
                 isLogInBtnClicked, setIsLogInBtnClicked
