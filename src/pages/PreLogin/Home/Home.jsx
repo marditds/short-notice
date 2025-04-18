@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Container, Row, Col } from 'react-bootstrap';
 import { GoogleLoginForm } from '../../../components/LoginForm/Google/GoogleLoginForm';
 import { Hero } from '../../../components/PreLogin/Home/Hero';
@@ -11,6 +12,7 @@ import { BsFloppy } from "react-icons/bs";
 import { RiTeamFill } from "react-icons/ri";
 import { RiNumber1, RiNumber2, RiNumber3, RiNumber4 } from "react-icons/ri";
 import { screenUtils } from '../../../lib/utils/screenUtils';
+
 
 const Home = () => {
 
@@ -155,11 +157,11 @@ const Home = () => {
                                 </div>
                                 <Hero />
                                 <div className='d-flex flex-column flex-sm-row align-items-center justify-content-evenly pt-3'>
-                                    <h4 className='mb-0 pe-0 pe-sm-2'>Join with your Google account</h4>
+                                    <h4 className='mb-0 pe-0 pe-sm-2'>Create your account now!</h4>
 
                                     <span className='mt-2 mt-sm-0'>
                                         <GoogleLoginForm
-                                            subtitle={'More sign in options coming soon!'}
+                                            subtitle={<>Already have an account? <Link to='signin'>Sign in</Link></>}
                                         />
                                     </span>
                                 </div>
@@ -253,7 +255,7 @@ const Home = () => {
 
                     {/* CTA */}
                     <CallToAction sectionName={'features'}>
-                        <GoogleLoginForm />
+                        <GoogleLoginForm subtitle={<>Already have an account? <Link to='signin'>Sign in</Link></>} />
                     </CallToAction>
 
                     {/* HOW IT WORKS */}
@@ -283,7 +285,7 @@ const Home = () => {
 
                     {/* CTA */}
                     <CallToAction sectionName={'how'}>
-                        <GoogleLoginForm />
+                        <GoogleLoginForm subtitle={<>Already have an account? <Link to='signin'>Sign in</Link></>} />
                     </CallToAction>
 
                     {/* FAQ */}

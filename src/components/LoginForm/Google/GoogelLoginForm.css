@@ -7,7 +7,7 @@
     background-color: transparent;
 } */
 
-.gsi-material-button {
+/* .gsi-material-button {
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
@@ -112,4 +112,93 @@
 .gsi-material-button:not(:disabled):hover .gsi-material-button-state {
     background-color: #001d35;
     opacity: 8%;
+} */
+
+.signin__btn--nav,
+.signup__btn--nav {
+    width: 120px;
+    border-radius: var(--main-rounded-corner) !important;
+    color: var(--main-text-color) !important;
+
+}
+
+.signin__btn--nav {
+    background-color: transparent !important;
+    border-color: var(--main-accent-color) !important;
+}
+
+.signin__btn--nav:hover,
+.signin__btn--nav:focus {
+    background-color: var(--main-accent-color) !important;
+    border-color: var(--main-accent-color-hover) !important;
+    color: var(--main-text-color) !important;
+}
+
+.signin__btn--nav:active {
+    box-shadow: transparent !important;
+}
+
+.signup__btn--nav {
+    background-color: var(--main-accent-color) !important;
+    border-color: var(--main-accent-color-hover) !important;
+}
+
+.signup__btn--nav:hover,
+.signup__btn--nav:focus {
+    background-color: var(--main-accent-color-hover) !important;
+    color: var(--main-font-color) !important;
+}
+
+/* main page buttons */
+.signin__btn {
+    background-color: var(--main-accent-color) !important;
+    border: 1px solid var(--main-accent-color-hover) !important;
+    font-size: var(--pc-font-size) !important;
+    width: 180px !important;
+    transition: var(--main-transition-speed) !important;
+    color: var(--main-font-color) !important;
+    border-radius: var(--main-rounded-corner) !important;
+}
+
+.signin__btn:hover {
+    background-color: var(--main-accent-color-hover) !important;
+    border: 1px solid var(--main-accent-color-hover) !important;
+    width: 180px !important
+}
+
+.signin__btn:active,
+.signin__btn:focus {
+    background-color: var(--main-accent-color-hover) !important;
+    box-shadow: none !important;
+}
+
+.signin__btn--sub--div {
+    width: max-content;
+    margin-top: 5px;
+}
+
+.signin__btn--sub>a {
+    color: var(--main-accent-color-hover);
+    transition: var(--main-transition-speed) !important;
+}
+
+.signin__btn--sub>a:hover {
+    color: var(--main-accent-color);
+}
+
+@media (max-width: 767px) {
+
+    .signin__btn,
+    .signin__btn--nav,
+    .signup__btn--nav {
+        font-size: var(--mobile-font-size) !important;
+    }
+}
+
+@media (max-width: 575px) {
+
+    .signin__btn--sub--div {
+        margin-top: 0px;
+        /* margin-left: 8px; */
+    }
 }

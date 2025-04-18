@@ -52,9 +52,9 @@ const PreLoginLayout = () => {
 
             {
                 !location.pathname.startsWith('/authenticate') && location.pathname !== '/set-username' && location.pathname !== '/signup' &&
-                <Header>
-                    <GoogleLoginForm />
-                </Header>
+                <Header />
+                //     <GoogleLoginForm />
+                // </Header>
             }
 
 

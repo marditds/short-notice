@@ -1,6 +1,7 @@
 import React from 'react';
 import { googleOAuthLogin } from '../../../lib/context/dbhandler';
-import { Button, Image } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+import { Button, Row, Col } from 'react-bootstrap';
 import { useUserContext } from '../../../lib/context/UserContext';
 import './GoogelLoginForm.css';
 import google_btn from '../../../assets/web_neutral_sq_SI@1x.png';
@@ -17,7 +18,18 @@ export const GoogleLoginForm = ({ subtitle }) => {
     }
 
     return (
-        <div className="login__btn">
+        <Row className='login__btn d-flex flex-sm-column justify-content-center align-items-center'>
+
+            <Col className='d-flex justify-content-center'>
+                <Button as={Link} to={'signup'} className='signin__btn'>
+                    Sign Up
+                </Button>
+            </Col>
+            <Col className='d-flex justify-content-center'>
+                <div className='signin__btn--sub--div'>
+                    <p className='signin__btn--sub mb-0'>{subtitle}</p>
+                </div>
+            </Col>
             {/* <Button onClick={handleOnGoogleLoginClick} className='p-0 border-0 d-block mx-auto signin__btn' aria-label='Sign in with Google'>
                 <Image
                     src={google_btn}
@@ -25,7 +37,7 @@ export const GoogleLoginForm = ({ subtitle }) => {
                 />
             </Button> */}
 
-            <button onClick={handleOnGoogleLoginClick} className="gsi-material-button">
+            {/* <button onClick={handleOnGoogleLoginClick} className="gsi-material-button">
                 <div className="gsi-material-button-state"></div>
                 <div className="gsi-material-button-content-wrapper">
                     <div className="gsi-material-button-icon">
@@ -46,10 +58,8 @@ export const GoogleLoginForm = ({ subtitle }) => {
                     <span className="gsi-material-button-contents">Sign in with Google</span>
                     <span style={{ display: 'none' }}>Sign in with Google</span>
                 </div>
-            </button>
+            </button> */}
 
-            <br />
-            <sub>{subtitle}</sub>
-        </div>
+        </Row>
     )
 }

@@ -3,9 +3,10 @@ import NavigationBar from './NavigationBar/NavigationBar';
 
 const Header = ({ children }) => {
     return (
-        <NavigationBar>
-            {children}
-        </NavigationBar>
+        // <NavigationBar>
+        //     {children}
+        // </NavigationBar>
+        <NavigationBar />
     )
 }
 
