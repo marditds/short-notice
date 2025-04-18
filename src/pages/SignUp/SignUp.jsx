@@ -27,6 +27,31 @@ const SignUp = () => {
     const [doesEmailExist, setDoesEmailExist] = useState(false);
     const [errorMsg, setErrorMsg] = useState(null);
 
+    const formFields = [
+        {
+            label: 'Name:',
+            type: 'text',
+            value: name,
+            onChange: (e) => setName(e.target.value),
+            controlId: 'signUpFormName',
+        },
+        {
+            label: 'Email:',
+            type: 'email',
+            value: email,
+            onChange: (e) => setEmail(e.target.value),
+            controlId: 'signUpFormEmail',
+        },
+        {
+            label: 'Password:',
+            type: 'password',
+            value: password,
+            onChange: (e) => setPassword(e.target.value),
+            controlId: 'signUpFormPassword',
+        },
+    ];
+
+
     const onEmailPasswordSubmit = async (event) => {
         event.preventDefault();
         console.log('Email:', email);
@@ -69,108 +94,79 @@ const SignUp = () => {
 
     return (
         <Container className='min-vh-100 d-flex flex-column justify-content-center align-items-center'>
-            <Row className={`${!isSmallScreen ? 'w-50' : 'w-100'}`}>
-                <Col>
-                    <Image src={sn_logo} className='mb-5' fluid />
-                </Col>
-            </Row>
-
-            <Row className={`${!isSmallScreen ? 'w-50' : 'w-100'}`}>
-                <Col>
-                    <h2 style={{ maxWidth: isSmallScreen && '350px' }}
-                        className={`mb-3 ${!isMediumScreen ? 'ms-auto' : 'ms-auto me-auto'}`}
-                    >
-                        Sign Up
-                    </h2>
-                </Col>
-            </Row>
-
-            <Row className={`${!isSmallScreen ? 'w-50' : 'w-100'}`}>
-                <Form onSubmit={onEmailPasswordSubmit}>
-
-                    <Form.Group as={Col} className='mb-3 d-flex flex-column flex-lg-row align-items-center signin__form--field' controlId="formBasicName">
-                        <Form.Label
-                            className={`mb-1 mb-lg-0 ${isMediumScreen && 'w-100 d-flex justify-content-start'}`}
-                            style={{ maxWidth: isSmallScreen && '350px' }}
+            <div style={{ width: !isSmallScreen ? '550px' : '100%', }} className='d-flex flex-column justify-content-evenly align-items-center p-4 signup__form--bg'>
+                <Row className='w-100'>
+                    <Col>
+                        <h2
+                            style={{ maxWidth: isMediumScreen && '350px' }}
+                            className={`mb-3 ${!isMediumScreen ? 'ms-auto' : 'ms-auto me-auto'}`}
                         >
-                            Name:
-                        </Form.Label>
-                        <Form.Control
-                            style={{ maxWidth: '350px' }}
-                            className={`signup__form--field ${!isMediumScreen ? 'ms-auto' : 'ms-auto me-auto'}`}
-                            // placeholder={`${!isMediumScreen ? '' : 'Name'}`}
-                            type="Name"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                        />
-                    </Form.Group>
-
-                    <Form.Group as={Col} className='mb-3 d-flex flex-column flex-lg-row align-items-center signin__form--field' controlId="formBasicEmail">
-                        <Form.Label
-                            className={`mb-1 mb-lg-0 ${isMediumScreen && 'w-100 d-flex justify-content-start'}`}
-                            style={{ maxWidth: isSmallScreen && '350px' }}
-                        >Email:</Form.Label>
-                        <Form.Control
-                            style={{ maxWidth: '350px' }}
-                            className={`signup__form--field ${!isMediumScreen ? 'ms-auto' : 'ms-auto me-auto'}`}
-                            // placeholder={`${!isMediumScreen ? '' : 'Email'}`}
-                            type="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                        />
-                    </Form.Group>
-
-                    <Form.Group as={Col} className='mb-3 d-flex flex-column flex-lg-row align-items-center signin__form--field' controlId="formBasicPassword">
-                        <Form.Label
-                            className={`mb-1 mb-lg-0 ${isMediumScreen && 'w-100 d-flex justify-content-start'}`}
-                            style={{ maxWidth: isSmallScreen && '350px' }}
-                        >Password:</Form.Label>
-
-                        <Form.Control
-                            style={{ maxWidth: '350px' }}
-                            className={`signup__form--field ${!isMediumScreen ? 'ms-auto' : 'ms-auto me-auto'}`}
-                            // placeholder={`${!isMediumScreen ? '' : 'Password'}`}
-                            type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
-
-
-                    </Form.Group>
-
-                    <Form.Text as='ul' className={`mt-0 ps-3 d-flex flex-column ${!isMediumScreen ? 'ms-auto' : 'mx-auto'}`} style={{ maxWidth: '350px' }}>
-                        <li>You passowrd cannot contain fewer than 8 characters.</li>
-                        <li>You passowrd cannot contain more than 256 characters.</li>
-                    </Form.Text>
-
-                    <Col
-                        className={`${!isMediumScreen ? 'd-flex ms-auto' : 'd-flex mx-auto'}`}
-
-                        style={{ maxWidth: '350px' }}
-                    >
-                        <Button type='submit'
-                            disabled={
-                                (password?.length < 8) ||
-                                (name === '') ||
-                                (email === '')}
-                            className={`signup-form__btn me-0 ms-auto ${isExtraSmallScreen && 'w-100'}`}
-                        >
-                            {
-                                !isAccountGettingCreated ? 'Continue' : <LoadingSpinner />
-                            }
-
-                        </Button>
-                        {
-                            <Form.Text>
-                                {errorMsg}
-                                {
-                                    doesEmailExist && <Button style={{ backgroundColor: 'transparent' }}>Sign in</Button>
-                                }
-                            </Form.Text>
-                        }
+                            Sign Up
+                        </h2>
                     </Col>
-                </Form>
-            </Row>
+                </Row>
+
+                <Row className='w-100'>
+                    <Form onSubmit={onEmailPasswordSubmit}
+                        style={{ paddingInline: !isMediumScreen ? '12px' : '0px' }}
+                    >
+                        {formFields.map(({ label, type, value, onChange, controlId }, idx) => (
+                            <Form.Group
+                                as={Col}
+                                key={idx}
+                                className="mb-3 d-flex flex-column flex-lg-row align-items-center signin__form--field"
+                                controlId={controlId}
+                            >
+                                <Form.Label
+                                    className={`mb-1 mb-lg-0 ${isMediumScreen && 'w-100 d-flex justify-content-start'}`}
+                                    style={{ maxWidth: isMediumScreen && '360px' }}
+                                >
+                                    {label}
+                                </Form.Label>
+                                <Form.Control
+                                    style={{ maxWidth: '360px' }}
+                                    className={`signup__form--field ${!isMediumScreen ? 'ms-auto' : 'ms-auto me-auto'}`}
+                                    type={type}
+                                    value={value}
+                                    onChange={onChange}
+                                />
+                            </Form.Group>
+                        ))}
+
+                        <Form.Text as='ul' className={`mt-0 ps-3 d-flex flex-column ${!isMediumScreen ? 'ms-auto' : 'mx-auto'}`} style={{ maxWidth: '350px' }}>
+                            <li>You passowrd cannot contain fewer than 8 characters.</li>
+                            <li>You passowrd cannot contain more than 256 characters.</li>
+                        </Form.Text>
+
+                        <Col
+                            className={`${!isMediumScreen ? 'd-flex ms-auto' : 'd-flex mx-auto'}`}
+
+                            style={{ maxWidth: '350px' }}
+                        >
+                            <Button type='submit'
+                                disabled={
+                                    (password?.length < 8) ||
+                                    (name === '') ||
+                                    (email === '')}
+                                className={`signup-form__btn me-0 ms-auto ${isExtraSmallScreen && 'w-100'}`}
+                            >
+                                {
+                                    !isAccountGettingCreated ? 'Continue' : <LoadingSpinner />
+                                }
+
+                            </Button>
+                            {
+                                <Form.Text>
+                                    {errorMsg}
+                                    {
+                                        doesEmailExist && <Button style={{ backgroundColor: 'transparent' }}>Sign in</Button>
+                                    }
+                                </Form.Text>
+                            }
+                        </Col>
+                    </Form>
+                </Row>
+            </div>
         </Container>
     )
 }

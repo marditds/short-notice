@@ -167,7 +167,6 @@
 .signin__btn:hover {
     background-color: var(--main-accent-color-hover) !important;
     border: 1px solid var(--main-accent-color-hover) !important;
-    width: 180px !important
 }
 
 .signup-form__btn:active,
@@ -190,6 +189,12 @@
 
 .signin__btn--sub>a:hover {
     color: var(--main-accent-color);
+}
+
+/* form */
+.signup__form--bg {
+    border-radius: var(--main-rounded-corner);
+    background-color: rgba(var(--main-accent-color-values), 0.2);
 }
 
 .signup__form--field:hover {
