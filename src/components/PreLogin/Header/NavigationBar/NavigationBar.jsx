@@ -30,7 +30,8 @@ const NavigationBar = ({ children }) => {
                 <Nav className='ms-auto me-lg-auto w-100'>
 
                     <Nav.Link as={Link} to='/' className='ms-md-2 ms-lg-4 navigation__nav-link '>Home</Nav.Link>
-                    <Nav.Link as={Link} to='/sn-plus' className='ms-md-2 ms-lg-4 navigation__nav-link '>SN Plus</Nav.Link>
+                    <Nav.Link as={Link} to='/sn-plus' className='ms-md-2 ms-lg-4 d-inline d-md-none  d-lg-inline navigation__nav-link '>SN Plus</Nav.Link>
+                    <Nav.Link as={Link} to='/about' className='ms-md-2 ms-lg-4 navigation__nav-link '>About</Nav.Link>
                     <Nav.Link as={Link} to='/contact' className='ms-md-2 ms-lg-4 navigation__nav-link '>Contact</Nav.Link>
                     <Nav.Item className='my-md-auto ms-md-auto'>
                         <Button className='signin__btn--nav' as={Link} to='signin'>

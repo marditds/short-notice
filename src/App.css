@@ -20,6 +20,8 @@
     --mobile-icon-size: 14px;
     --pc-loading-spinner-size: 24px;
     --mobile-loading-spinner-size: 20px;
+    --mobile-h1-size: 1.5625rem;
+    --mobile-h2-size: 1.25rem;
     --mobile-h4-size: 0.9375rem;
     --mobile-h5-size: 0.78125rem;
     /* --mobile-icon-size: 16px; */
@@ -59,6 +61,14 @@ p {
 
     body, p, details {
         font-size: var(--mobile-font-size) !important;
+    }
+
+    h1 {
+        font-size: var(--mobile-h1-size) !important;
+    }
+
+    h2 {
+        font-size: var(--mobile-h2-size) !important;
     }
 
     h4 {
