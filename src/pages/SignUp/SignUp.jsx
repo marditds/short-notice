@@ -156,8 +156,6 @@ const SignUp = () => {
         }
     }
 
-
-
     useEffect(() => {
         // console.log('captchaKey:', captchaKey);
         if (isCaptchaVerified === false) {
@@ -172,6 +170,8 @@ const SignUp = () => {
     return (
         <Container className='min-vh-100 d-flex flex-column justify-content-center align-items-center'>
             <div style={{ width: !isSmallScreen ? '550px' : '100%', }} className='d-flex flex-column justify-content-evenly align-items-center p-4 signup__form--bg'>
+
+                {/* Title */}
                 <Row className='w-100'>
                     <Col
                         className='px-0'
@@ -179,11 +179,7 @@ const SignUp = () => {
                         <h2
                             style={{ maxWidth: '350px' }}
                             className={`d-block d-lg-flex align-items-lg-baseline 
-                          ${!isMediumScreen ? 'ms-0' : 'ms-auto me-auto'}
-                                 `
-                            }
-                        // className={`d-block d-lg-inline mb-3 $}       // 
-
+                          ${!isMediumScreen ? 'ms-0' : 'ms-auto me-auto'}`}
                         >
                             <span className='signup__form--title--span'>
                                 Sign Up with
@@ -195,6 +191,7 @@ const SignUp = () => {
                     </Col>
                 </Row>
 
+                {/* Form for sign up */}
                 <Row className='w-100'>
                     <Form onSubmit={onEmailPasswordSubmit}
                         style={{ paddingInline: !isMediumScreen ? '12px' : '0px' }}
@@ -291,8 +288,7 @@ const SignUp = () => {
                             />
                         </Col>
 
-
-
+                        {/* Buttons for signup */}
                         <Col
                             className={`d-flex flex-column ${!isMediumScreen ? 'ms-auto' : 'mx-auto'}`}
 
@@ -305,13 +301,12 @@ const SignUp = () => {
                                     (email === '') ||
                                     !isCaptchaVerified ||
                                     tosCheck !== true ||
-                                    privacyPolicyCheck !== true
+                                    privacyPolicyCheck !== true ||
+                                    isAccountGettingCreated
                                 }
                                 className={`signup-form__btn me-0 ms-auto ${isExtraSmallScreen && 'w-100'}`}
                             >
-                                {
-                                    !isAccountGettingCreated ? 'Continue' : <LoadingSpinner />
-                                }
+                                {!isAccountGettingCreated ? 'Continue' : <LoadingSpinner />}
 
                             </Button>
                             {
@@ -326,6 +321,8 @@ const SignUp = () => {
                         </Col>
                     </Form>
                 </Row>
+
+                {/* Already have an account? */}
                 <Row className='mt-3 w-100'>
                     <Col className={`${!isMediumScreen ? 'd-flex ms-auto' : 'd-flex mx-auto'}`}
                         style={{ maxWidth: '350px' }}>
@@ -339,8 +336,6 @@ const SignUp = () => {
 
             {/* TOS Modal */}
             <Modal show={showTOSModal} onHide={handleCloseTOSModal} className='createAccount__agreement-modal'>
-                {/* <Modal.Header className='border-bottom-0 pb-0'> 
-                            </Modal.Header> */}
                 <Modal.Body className='createAccount__agreement-modal-body px-2'>
                     <TOSList />
                 </Modal.Body>
@@ -353,7 +348,6 @@ const SignUp = () => {
 
             {/* Community Guidelines */}
             <Modal show={showCommGuideModal} onHide={handleCloseCommGuideModal} className='createAccount__agreement-modal'>
-                {/* <Modal.Header className='border-bottom-0 pb-0 px-0 px-md-2'></Modal.Header> */}
                 <Modal.Body className='createAccount__agreement-modal-body px-0 px-md-2'>
                     <CommunityGuidelinesList />
                 </Modal.Body>
@@ -366,7 +360,6 @@ const SignUp = () => {
 
             {/* Privacy Policy Modal */}
             <Modal show={showPrivacyModal} onHide={handleClosePrivacyModal} className='createAccount__agreement-modal'>
-                {/* <Modal.Header className='border-bottom-0 pb-0'> </Modal.Header> */}
                 <Modal.Body className='createAccount__agreement-modal-body'>
                     <PrivacyList />
                 </Modal.Body>

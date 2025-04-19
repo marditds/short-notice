@@ -287,7 +287,7 @@ const CreateAccount = () => {
 
                     <Row className='flex-column'>
                         {/* TOS */}
-                        <Col>
+                        {/* <Col>
                             <Form.Check
                                 label={
                                     <span className='createAccount__form-check-text'>
@@ -308,20 +308,18 @@ const CreateAccount = () => {
                                  
                                 '
                             />
-                        </Col>
+                        </Col> */}
 
                         {/* PRivacy Policy */}
-                        <Col>
+                        {/* <Col>
                             <Form.Check
                                 label={<span>I have read and agree to the <Button onClick={handleShowPrivacyModal} className='ms-1'>Privacy Policy</Button>.</span>}
                                 type='checkbox'
                                 id='privacyPolicyCheckbox'
                                 onChange={handlePrivacyPolicyCheck}
-                                className='createUsername__checkbox 
-                                 
-                                '
+                                className='createUsername__checkbox'
                             />
-                        </Col>
+                        </Col> */}
                     </Row>
 
                     {/* ReCAPTCHA */}
@@ -340,7 +338,7 @@ const CreateAccount = () => {
                                 /> :
                                 <><LoadingSpinner /> Loading ReCAPTCHA</>
                         }
-                    </div> */}
+                    </div>   */}
 
                     {/* Create Account Buttons */}
                     <div className='mb-5 mb-sm-0 d-flex justify-content-between justify-content-sm-start'>
@@ -369,9 +367,7 @@ const CreateAccount = () => {
             </Form>
 
             {/* TOS Modal */}
-            <Modal show={showTOSModal} onHide={handleCloseTOSModal} className='createAccount__agreement-modal'>
-                {/* <Modal.Header className='border-bottom-0 pb-0'> 
-                </Modal.Header> */}
+            {/* <Modal show={showTOSModal} onHide={handleCloseTOSModal} className='createAccount__agreement-modal'> 
                 <Modal.Body className='createAccount__agreement-modal-body px-2'>
                     <TOSList />
                 </Modal.Body>
@@ -380,11 +376,10 @@ const CreateAccount = () => {
                         Close
                     </Button>
                 </Modal.Footer>
-            </Modal>
+            </Modal> */}
 
             {/* Community Guidelines */}
-            <Modal show={showCommGuideModal} onHide={handleCloseCommGuideModal} className='createAccount__agreement-modal'>
-                {/* <Modal.Header className='border-bottom-0 pb-0 px-0 px-md-2'></Modal.Header> */}
+            {/* <Modal show={showCommGuideModal} onHide={handleCloseCommGuideModal} className='createAccount__agreement-modal'> 
                 <Modal.Body className='createAccount__agreement-modal-body px-0 px-md-2'>
                     <CommunityGuidelinesList />
                 </Modal.Body>
@@ -393,11 +388,10 @@ const CreateAccount = () => {
                         Close
                     </Button>
                 </Modal.Footer>
-            </Modal>
+            </Modal> */}
 
             {/* Privacy Policy Modal */}
-            <Modal show={showPrivacyModal} onHide={handleClosePrivacyModal} className='createAccount__agreement-modal'>
-                {/* <Modal.Header className='border-bottom-0 pb-0'> </Modal.Header> */}
+            {/* <Modal show={showPrivacyModal} onHide={handleClosePrivacyModal} className='createAccount__agreement-modal'> 
                 <Modal.Body className='createAccount__agreement-modal-body'>
                     <PrivacyList />
                 </Modal.Body>
@@ -406,7 +400,7 @@ const CreateAccount = () => {
                         Close
                     </Button>
                 </Modal.Footer>
-            </Modal>
+            </Modal>   */}
 
 
         </Container>
