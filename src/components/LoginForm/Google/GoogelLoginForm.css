@@ -182,11 +182,13 @@
     margin-top: 5px;
 }
 
+.signup-form__signin-btn,
 .signin__btn--sub>a {
     color: var(--main-accent-color-hover);
     transition: var(--main-transition-speed) !important;
 }
 
+.signup-form__signin-btn:hover,
 .signin__btn--sub>a:hover {
     color: var(--main-accent-color);
 }
@@ -194,7 +196,11 @@
 /* form */
 .signup__form--bg {
     border-radius: var(--main-rounded-corner);
-    background-color: rgba(var(--main-accent-color-values), 0.2);
+    background-color: rgba(var(--main-accent-color-values), 0.14);
+}
+
+.signup__form--title--span {
+    min-width: fit-content !important;
 }
 
 .signup__form--field:hover {
@@ -209,6 +215,11 @@
 .signup__form--field:focus {
     border-color: var(--main-accent-color) !important;
     box-shadow: none !important;
+}
+
+.hakobos {
+    transform: scale(1);
+    transform-origin: 0 0;
 }
 
 @media (max-width: 767px) {
@@ -226,6 +237,17 @@
 
     .signin__btn--sub--div {
         margin-top: 0px;
-        /* margin-left: 8px; */
+    }
+}
+
+@media (max-width: 400px) {
+    .hakobos {
+        transform: scale(0.7);
+    }
+}
+
+@media (max-width: 320px) {
+    .hakobos {
+        transform: scale(0.8);
     }
 }

@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button, Col, Container, Form, Row } from 'react-bootstrap';
 import { createUserSession, getAccount } from '../../lib/context/dbhandler';
 import { LoadingSpinner } from '../../components/Loading/LoadingSpinner';
 import { useUserContext } from '../../lib/context/UserContext';
+import { screenUtils } from '../../lib/utils/screenUtils';
 
 const SignIn = () => {
 
@@ -16,6 +17,8 @@ const SignIn = () => {
     } = useUserContext();
 
     const navigate = useNavigate();
+
+    const { isSmallScreen, isExtraSmallScreen, isMediumScreen, isLargeScreen } = screenUtils();
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -109,6 +112,13 @@ const SignIn = () => {
                             </Form.Text>
                         }
                     </Form>
+                </Col>
+            </Row>
+            <Row className='mt-3 w-100'>
+                <Col className={`${!isMediumScreen ? 'd-flex ms-auto' : 'd-flex mx-auto'}`} style={{ maxWidth: '350px' }}>
+                    <p className={`mb-0 me-0 ms-auto`}>
+                        Don't have an account? <Link to='/signup' className='signup-form__signin-btn'>Sign Up</Link>
+                    </p>
                 </Col>
             </Row>
         </Container>

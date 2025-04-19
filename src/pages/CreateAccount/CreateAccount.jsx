@@ -325,7 +325,7 @@ const CreateAccount = () => {
                     </Row>
 
                     {/* ReCAPTCHA */}
-                    <div className='mb-3'>
+                    {/* <div className='mb-3'>
                         {
                             captchaSiteKey ?
                                 <ReCAPTCHA
@@ -340,7 +340,7 @@ const CreateAccount = () => {
                                 /> :
                                 <><LoadingSpinner /> Loading ReCAPTCHA</>
                         }
-                    </div>
+                    </div> */}
 
                     {/* Create Account Buttons */}
                     <div className='mb-5 mb-sm-0 d-flex justify-content-between justify-content-sm-start'>

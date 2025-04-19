@@ -1,11 +1,16 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Button, Container, Form, Row, Col, Image } from 'react-bootstrap';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Button, Container, Form, Row, Col, Image, Modal } from 'react-bootstrap';
 import { createAuthUser, createUserSession } from '../../lib/context/dbhandler';
 import { LoadingSpinner } from '../../components/Loading/LoadingSpinner';
 import { useUserContext } from '../../lib/context/UserContext';
 import { screenUtils } from '../../lib/utils/screenUtils';
 import sn_logo from '../../assets/sn_long.png';
+import { keysProvider } from '../../lib/context/keysProvider';
+import ReCAPTCHA from 'react-google-recaptcha';
+import TOSList from '../../components/Legal/TOSList';
+import CommunityGuidelinesList from '../../components/Support/CommunityGuidelinesList';
+import PrivacyList from '../../components/Legal/PrivacyList';
 
 const SignUp = () => {
 
@@ -25,7 +30,21 @@ const SignUp = () => {
     const [name, setName] = useState('');
     const [isAccountGettingCreated, setIsAccountGettingCreated] = useState(false);
     const [doesEmailExist, setDoesEmailExist] = useState(false);
+
     const [errorMsg, setErrorMsg] = useState(null);
+
+    const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
+    const [captchaKey, setCaptchaKey] = useState(null);
+    const [captchaSiteKey, setCaptchaSiteKey] = useState(null);
+    const [captchaErrorMessage, setCaptchaErrorMessage] = useState(null);
+
+    const [tosCheck, setTosCheck] = useState(false);
+    const [privacyPolicyCheck, setPrivacyPolicyCheck] = useState(false);
+
+    const [showTOSModal, setShowTOSModal] = useState(false);
+    const [showCommGuideModal, setShowCommGuideModal] = useState(false);
+    const [showPrivacyModal, setShowPrivacyModal] = useState(false);
+
 
     const formFields = [
         {
@@ -51,6 +70,51 @@ const SignUp = () => {
         },
     ];
 
+    const onCaptchaChange = (value) => {
+
+        if (value || value !== null) {
+            // console.log(value);
+            setCaptchaKey(value);
+            setIsCaptchaVerified(true);
+        }
+
+        if (value === null) {
+            setIsCaptchaVerified(false);
+        }
+
+    };
+
+    const handleTOSCheck = () => {
+        setTosCheck(preVal => !preVal)
+    }
+
+    const handlePrivacyPolicyCheck = () => {
+        setPrivacyPolicyCheck(preVal => !preVal)
+    }
+
+    const handleShowTOSModal = () => {
+        setShowTOSModal(true);
+    }
+
+    const handleCloseTOSModal = () => {
+        setShowTOSModal(false);
+    }
+
+    const handleShowCommGuideModal = () => {
+        setShowCommGuideModal(true);
+    }
+
+    const handleCloseCommGuideModal = () => {
+        setShowCommGuideModal(false);
+    }
+
+    const handleShowPrivacyModal = () => {
+        setShowPrivacyModal(true);
+    }
+
+    const handleClosePrivacyModal = () => {
+        setShowPrivacyModal(false);
+    }
 
     const onEmailPasswordSubmit = async (event) => {
         event.preventDefault();
@@ -92,16 +156,41 @@ const SignUp = () => {
         }
     }
 
+
+
+    useEffect(() => {
+        // console.log('captchaKey:', captchaKey);
+        if (isCaptchaVerified === false) {
+            setCaptchaKey(null);
+        }
+    }, [captchaKey, isCaptchaVerified])
+
+    useEffect(() => {
+        keysProvider('captcha', setCaptchaSiteKey);
+    }, []);
+
     return (
         <Container className='min-vh-100 d-flex flex-column justify-content-center align-items-center'>
             <div style={{ width: !isSmallScreen ? '550px' : '100%', }} className='d-flex flex-column justify-content-evenly align-items-center p-4 signup__form--bg'>
                 <Row className='w-100'>
-                    <Col>
+                    <Col
+                        className='px-0'
+                    >
                         <h2
-                            style={{ maxWidth: isMediumScreen && '350px' }}
-                            className={`mb-3 ${!isMediumScreen ? 'ms-auto' : 'ms-auto me-auto'}`}
+                            style={{ maxWidth: '350px' }}
+                            className={`d-block d-lg-flex align-items-lg-baseline 
+                          ${!isMediumScreen ? 'ms-0' : 'ms-auto me-auto'}
+                                 `
+                            }
+                        // className={`d-block d-lg-inline mb-3 $}       // 
+
                         >
-                            Sign Up
+                            <span className='signup__form--title--span'>
+                                Sign Up with
+                            </span>
+                            <Image src={sn_logo}
+                                className='ms-0 ms-lg-2 d-block d-lg-inline'
+                                width={'210'} fluid />
                         </h2>
                     </Col>
                 </Row>
@@ -124,7 +213,7 @@ const SignUp = () => {
                                     {label}
                                 </Form.Label>
                                 <Form.Control
-                                    style={{ maxWidth: '360px' }}
+                                    style={{ maxWidth: '350px' }}
                                     className={`signup__form--field ${!isMediumScreen ? 'ms-auto' : 'ms-auto me-auto'}`}
                                     type={type}
                                     value={value}
@@ -138,8 +227,74 @@ const SignUp = () => {
                             <li>You passowrd cannot contain more than 256 characters.</li>
                         </Form.Text>
 
+
+                        {/* ReCAPTCHA */}
+                        <Col className={`mb-3 d-flex ${!isMediumScreen ? 'ms-auto' : 'mx-auto'}`}
+                            style={{ maxWidth: '350px' }}>
+                            {
+                                captchaSiteKey ?
+                                    <div style={{ width: '100%', overflow: 'hidden' }}>
+                                        <ReCAPTCHA
+                                            className="hakobos"
+                                            sitekey={captchaSiteKey}
+                                            onChange={(value) => onCaptchaChange(value)}
+                                            onExpired={() => setIsCaptchaVerified(false)}
+                                            onErrored={() => {
+                                                setIsCaptchaVerified(false);
+                                                setCaptchaErrorMessage('ReCAPTCHA verification failed. Please try again.');
+                                            }}
+                                        />
+                                    </div> :
+                                    <><LoadingSpinner /> Loading ReCAPTCHA</>
+                            }
+                        </Col>
+                        {
+                            captchaErrorMessage &&
+                            <Col className={`mb-3 ${!isMediumScreen ? 'd-flex ms-auto' : 'd-flex mx-auto'}`}
+                                style={{ maxWidth: '350px' }}>
+                                {captchaErrorMessage}
+                            </Col>
+                        }
+
+                        {/* TOS */}
+                        <Col>
+                            <Form.Check
+                                label={
+                                    <span className='createAccount__form-check-text'>
+                                        I have read and agree to the
+                                        <Button onClick={handleShowTOSModal} className='mx-1 createAccount__form-check-text-btn'>
+                                            Terms of Services
+                                        </Button>
+                                        and
+                                        <Button onClick={handleShowCommGuideModal} className='ms-1 createAccount__form-check-text-btn'>
+                                            Community Guidelines
+                                        </Button>
+                                        .
+                                    </span>}
+                                type='checkbox'
+                                id='tosCheckbox'
+                                onChange={handleTOSCheck}
+                                className='createUsername__checkbox 
+                                                         
+                                                        '
+                            />
+                        </Col>
+
+                        {/* PRivacy Policy */}
+                        <Col>
+                            <Form.Check
+                                label={<span>I have read and agree to the <Button onClick={handleShowPrivacyModal} className='ms-1'>Privacy Policy</Button>.</span>}
+                                type='checkbox'
+                                id='privacyPolicyCheckbox'
+                                onChange={handlePrivacyPolicyCheck}
+                                className='createUsername__checkbox  '
+                            />
+                        </Col>
+
+
+
                         <Col
-                            className={`${!isMediumScreen ? 'd-flex ms-auto' : 'd-flex mx-auto'}`}
+                            className={`d-flex flex-column ${!isMediumScreen ? 'ms-auto' : 'mx-auto'}`}
 
                             style={{ maxWidth: '350px' }}
                         >
@@ -147,7 +302,11 @@ const SignUp = () => {
                                 disabled={
                                     (password?.length < 8) ||
                                     (name === '') ||
-                                    (email === '')}
+                                    (email === '') ||
+                                    !isCaptchaVerified ||
+                                    tosCheck !== true ||
+                                    privacyPolicyCheck !== true
+                                }
                                 className={`signup-form__btn me-0 ms-auto ${isExtraSmallScreen && 'w-100'}`}
                             >
                                 {
@@ -156,17 +315,67 @@ const SignUp = () => {
 
                             </Button>
                             {
+
                                 <Form.Text>
-                                    {errorMsg}
+                                    <span style={{ color: 'var(--main-caution-color)' }}>{errorMsg}</span>
                                     {
-                                        doesEmailExist && <Button style={{ backgroundColor: 'transparent' }}>Sign in</Button>
+                                        doesEmailExist && <Link to='/signin' className='ms-1 signup-form__signin-btn' >Sign in</Link>
                                     }
                                 </Form.Text>
                             }
                         </Col>
                     </Form>
                 </Row>
+                <Row className='mt-3 w-100'>
+                    <Col className={`${!isMediumScreen ? 'd-flex ms-auto' : 'd-flex mx-auto'}`}
+                        style={{ maxWidth: '350px' }}>
+                        <p className={`mb-0 me-0 ms-auto`}>
+                            Already have an account? <Link to='/signin' className='signup-form__signin-btn'>Sign In</Link>
+                        </p>
+                    </Col>
+                </Row>
             </div>
+
+
+            {/* TOS Modal */}
+            <Modal show={showTOSModal} onHide={handleCloseTOSModal} className='createAccount__agreement-modal'>
+                {/* <Modal.Header className='border-bottom-0 pb-0'> 
+                            </Modal.Header> */}
+                <Modal.Body className='createAccount__agreement-modal-body px-2'>
+                    <TOSList />
+                </Modal.Body>
+                <Modal.Footer className='border-top-0 pt-0'>
+                    <Button onClick={handleCloseTOSModal} className='mx-0 createAccount__btn'>
+                        Close
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+
+            {/* Community Guidelines */}
+            <Modal show={showCommGuideModal} onHide={handleCloseCommGuideModal} className='createAccount__agreement-modal'>
+                {/* <Modal.Header className='border-bottom-0 pb-0 px-0 px-md-2'></Modal.Header> */}
+                <Modal.Body className='createAccount__agreement-modal-body px-0 px-md-2'>
+                    <CommunityGuidelinesList />
+                </Modal.Body>
+                <Modal.Footer className='border-top-0 pt-0'>
+                    <Button onClick={handleCloseCommGuideModal} className='mx-0 createAccount__btn'>
+                        Close
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+
+            {/* Privacy Policy Modal */}
+            <Modal show={showPrivacyModal} onHide={handleClosePrivacyModal} className='createAccount__agreement-modal'>
+                {/* <Modal.Header className='border-bottom-0 pb-0'> </Modal.Header> */}
+                <Modal.Body className='createAccount__agreement-modal-body'>
+                    <PrivacyList />
+                </Modal.Body>
+                <Modal.Footer className='border-top-0 pt-0'>
+                    <Button onClick={handleClosePrivacyModal} className='mx-0 createAccount__btn'>
+                        Close
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </Container>
     )
 }
