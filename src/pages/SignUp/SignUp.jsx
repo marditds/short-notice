@@ -254,31 +254,45 @@ const SignUp = () => {
                         }
 
                         {/* TOS */}
-                        <Col>
+                        <Col className={`d-flex ${!isMediumScreen ? 'ms-auto' : 'mx-auto'}`} style={{ maxWidth: '350px' }}>
                             <Form.Check
                                 label={
-                                    <span className='createAccount__form-check-text'>
-                                        I have read and agree to the
-                                        <Button onClick={handleShowTOSModal} className='mx-1 createAccount__form-check-text-btn'>
+                                    <span className='d-inline'>
+                                        I have read and understood to the
+                                        <span onClick={handleShowTOSModal} className='d-inline ms-1'>
                                             Terms of Services
-                                        </Button>
-                                        and
-                                        <Button onClick={handleShowCommGuideModal} className='ms-1 createAccount__form-check-text-btn'>
-                                            Community Guidelines
-                                        </Button>
+                                        </span>
                                         .
-                                    </span>}
+                                    </span>
+                                }
                                 type='checkbox'
                                 id='tosCheckbox'
                                 onChange={handleTOSCheck}
-                                className='createUsername__checkbox 
-                                                         
-                                                        '
+                                className='createUsername__checkbox d-flex align-items-lg-start'
+                            />
+                        </Col>
+
+                        {/* Community Guidelines */}
+                        <Col className={`my-1 d-flex ${!isMediumScreen ? 'ms-auto' : 'mx-auto'}`} style={{ maxWidth: '350px' }}>
+                            <Form.Check
+                                label={
+                                    <span className='d-inline'>
+                                        I have read and agree to abide by the
+                                        <span onClick={handleShowCommGuideModal} className='d-inline ms-1'>
+                                            Community Guidelines
+                                        </span>
+                                        .
+                                    </span>
+                                }
+                                type='checkbox'
+                                id='commGuideCheckbox'
+                                onChange={handleTOSCheck}
+                                className='createUsername__checkbox d-flex align-items-start'
                             />
                         </Col>
 
                         {/* PRivacy Policy */}
-                        <Col>
+                        <Col className={`d-flex ${!isMediumScreen ? 'ms-auto' : 'mx-auto'}`} style={{ maxWidth: '350px' }}>
                             <Form.Check
                                 label={<span>I have read and agree to the <Button onClick={handleShowPrivacyModal} className='ms-1'>Privacy Policy</Button>.</span>}
                                 type='checkbox'

@@ -101,9 +101,8 @@
     box-shadow: none !important;
 }
 
-.createUsername__checkbox>label>span {
-    display: flex;
-    /* vertical-align: middle; */
+.createUsername__checkbox>label {
+    margin-left: 8px;
 }
 
 .createUsername__checkbox button {
@@ -167,10 +166,10 @@
     display: inline !important;
 }
 
-.createAccount__form-check-text-btn {
-    display: inline-block !important;
-    white-space: nowrap;
-}
+
+/* .createAccount__form-check-text-btn {
+    min-width: fit-content !important;
+} */
 
 @media (min-width:576px) and (max-width: 767px) {
     .createUsername__accountType--radio {
@@ -204,15 +203,10 @@
         margin-top: 0px;
     }
 
-    .createUsername__checkbox>label>span {
-        display: flex;
-        align-items: center;
-        margin-left: 6px;
-    }
 
-    .createUsername__checkbox>label>span>button {
+    /* .createUsername__checkbox>label>span>button {
         display: inline;
-    }
+    } */
 }
 
 @media (max-width: 575px) {
@@ -235,11 +229,11 @@
     } */
 }
 
-@media (max-width: 397px) {
+/* @media (max-width: 397px) {
     .createAccount__form-check-text-btn {
         display: block;
     }
-}
+} */
 
 
 
