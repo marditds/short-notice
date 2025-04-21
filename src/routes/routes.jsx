@@ -14,7 +14,7 @@ import UserHelpCenter from '../pages/User/HelpCenter/UserHelpCenter.jsx';
 import About from '../pages/PreLogin/About/About.jsx';
 import SNPlus from '../pages/PreLogin/SNPlus/SNPlus.jsx';
 import TOS from '../pages/PreLogin/TOS/TOS.jsx';
-import Privacy from '../components/Legal/PrivacyList.jsx';
+import Privacy from '../pages/PreLogin/Privacy/Privacy';
 import CommunityGuidelines from '../pages/PreLogin/CommunityGuidelines/CommunityGuidelines.jsx';
 import HelpCenter from '../pages/PreLogin/HelpCenter/HelpCenter.jsx';
 import HelpCenterTitles from '../pages/PreLogin/HelpCenter/HelpCenterInfo/HelpCenterTitles.jsx';

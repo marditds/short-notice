@@ -11,6 +11,7 @@ import ReCAPTCHA from 'react-google-recaptcha';
 import TOSList from '../../components/Legal/TOSList';
 import CommunityGuidelinesList from '../../components/Support/CommunityGuidelinesList';
 import PrivacyList from '../../components/Legal/PrivacyList';
+import { TermsModal } from '../../components/User/Modals';
 
 const SignUp = () => {
 
@@ -39,6 +40,7 @@ const SignUp = () => {
     const [captchaErrorMessage, setCaptchaErrorMessage] = useState(null);
 
     const [tosCheck, setTosCheck] = useState(false);
+    const [commGuideCheck, setCommGuideCheck] = useState(false);
     const [privacyPolicyCheck, setPrivacyPolicyCheck] = useState(false);
 
     const [showTOSModal, setShowTOSModal] = useState(false);
@@ -86,6 +88,10 @@ const SignUp = () => {
 
     const handleTOSCheck = () => {
         setTosCheck(preVal => !preVal)
+    }
+
+    const handleCommGuideCheck = () => {
+        setCommGuideCheck(preVal => !preVal)
     }
 
     const handlePrivacyPolicyCheck = () => {
@@ -167,6 +173,30 @@ const SignUp = () => {
         keysProvider('captcha', setCaptchaSiteKey);
     }, []);
 
+    const agreements = [
+        {
+            id: 'tosCheckbox',
+            textBefore: 'I acknowledge that I have read and fully understand the',
+            linkText: 'Terms of Service',
+            onClick: handleShowTOSModal,
+            onChange: handleTOSCheck,
+        },
+        {
+            id: 'commGuideCheckbox',
+            textBefore: 'I acknowledge that I have read and agree to comply with the',
+            linkText: 'Community Guidelines',
+            onClick: handleShowCommGuideModal,
+            onChange: handleCommGuideCheck,
+        },
+        {
+            id: 'privacyPolicyCheckbox',
+            textBefore: 'I acknowledge that I have read and consent to the terms of the',
+            linkText: 'Privacy Policy',
+            onClick: handleShowPrivacyModal,
+            onChange: handlePrivacyPolicyCheck,
+        },
+    ];
+
     return (
         <Container className='min-vh-100 d-flex flex-column justify-content-center align-items-center'>
             <div style={{ width: !isSmallScreen ? '550px' : '100%', }} className='d-flex flex-column justify-content-evenly align-items-center p-4 signup__form--bg'>
@@ -205,7 +235,7 @@ const SignUp = () => {
                             >
                                 <Form.Label
                                     className={`mb-1 mb-lg-0 ${isMediumScreen && 'w-100 d-flex justify-content-start'}`}
-                                    style={{ maxWidth: isMediumScreen && '360px' }}
+                                    style={{ maxWidth: isMediumScreen && '350px' }}
                                 >
                                     {label}
                                 </Form.Label>
@@ -253,54 +283,37 @@ const SignUp = () => {
                             </Col>
                         }
 
-                        {/* TOS */}
-                        <Col className={`d-flex ${!isMediumScreen ? 'ms-auto' : 'mx-auto'}`} style={{ maxWidth: '350px' }}>
-                            <Form.Check
-                                label={
-                                    <span className='d-inline'>
-                                        I have read and understood to the
-                                        <span onClick={handleShowTOSModal} className='d-inline ms-1'>
-                                            Terms of Services
+                        {/* Checkboxes */}
+                        {agreements.map(({ id, textBefore, linkText, onClick, onChange }, index) => (
+                            <Col
+                                key={id}
+                                className={`d-flex ${index === 1 ? 'my-1' : index === 2 ? 'mb-1' : ''} ${!isMediumScreen ? 'ms-auto' : 'mx-auto'}`}
+                                style={{ maxWidth: '350px' }}
+                            >
+                                <Form.Check
+                                    label={
+                                        <span className='d-inline'>
+                                            {textBefore}{' '}
+                                            <a
+                                                href='#'
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    onClick();
+                                                }}
+                                                className='signup__form--terms--btn'
+                                            >
+                                                {linkText}
+                                            </a>
+                                            .
                                         </span>
-                                        .
-                                    </span>
-                                }
-                                type='checkbox'
-                                id='tosCheckbox'
-                                onChange={handleTOSCheck}
-                                className='createUsername__checkbox d-flex align-items-lg-start'
-                            />
-                        </Col>
-
-                        {/* Community Guidelines */}
-                        <Col className={`my-1 d-flex ${!isMediumScreen ? 'ms-auto' : 'mx-auto'}`} style={{ maxWidth: '350px' }}>
-                            <Form.Check
-                                label={
-                                    <span className='d-inline'>
-                                        I have read and agree to abide by the
-                                        <span onClick={handleShowCommGuideModal} className='d-inline ms-1'>
-                                            Community Guidelines
-                                        </span>
-                                        .
-                                    </span>
-                                }
-                                type='checkbox'
-                                id='commGuideCheckbox'
-                                onChange={handleTOSCheck}
-                                className='createUsername__checkbox d-flex align-items-start'
-                            />
-                        </Col>
-
-                        {/* PRivacy Policy */}
-                        <Col className={`d-flex ${!isMediumScreen ? 'ms-auto' : 'mx-auto'}`} style={{ maxWidth: '350px' }}>
-                            <Form.Check
-                                label={<span>I have read and agree to the <Button onClick={handleShowPrivacyModal} className='ms-1'>Privacy Policy</Button>.</span>}
-                                type='checkbox'
-                                id='privacyPolicyCheckbox'
-                                onChange={handlePrivacyPolicyCheck}
-                                className='createUsername__checkbox  '
-                            />
-                        </Col>
+                                    }
+                                    type='checkbox'
+                                    id={id}
+                                    onChange={onChange}
+                                    className='signup__form--terms--checkbox d-flex align-items-lg-start'
+                                />
+                            </Col>
+                        ))}
 
                         {/* Buttons for signup */}
                         <Col
@@ -315,6 +328,7 @@ const SignUp = () => {
                                     (email === '') ||
                                     !isCaptchaVerified ||
                                     tosCheck !== true ||
+                                    commGuideCheck !== true ||
                                     privacyPolicyCheck !== true ||
                                     isAccountGettingCreated
                                 }
@@ -349,40 +363,21 @@ const SignUp = () => {
 
 
             {/* TOS Modal */}
-            <Modal show={showTOSModal} onHide={handleCloseTOSModal} className='createAccount__agreement-modal'>
-                <Modal.Body className='createAccount__agreement-modal-body px-2'>
-                    <TOSList />
-                </Modal.Body>
-                <Modal.Footer className='border-top-0 pt-0'>
-                    <Button onClick={handleCloseTOSModal} className='mx-0 createAccount__btn'>
-                        Close
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+            <TermsModal showTermModal={showTOSModal} handleCloseTermModal={handleCloseTOSModal}
+            >
+                <TOSList />
+            </TermsModal>
 
             {/* Community Guidelines */}
-            <Modal show={showCommGuideModal} onHide={handleCloseCommGuideModal} className='createAccount__agreement-modal'>
-                <Modal.Body className='createAccount__agreement-modal-body px-0 px-md-2'>
-                    <CommunityGuidelinesList />
-                </Modal.Body>
-                <Modal.Footer className='border-top-0 pt-0'>
-                    <Button onClick={handleCloseCommGuideModal} className='mx-0 createAccount__btn'>
-                        Close
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+            <TermsModal showTermModal={showCommGuideModal} handleCloseTermModal={handleCloseCommGuideModal}>
+                <CommunityGuidelinesList />
+            </TermsModal>
 
             {/* Privacy Policy Modal */}
-            <Modal show={showPrivacyModal} onHide={handleClosePrivacyModal} className='createAccount__agreement-modal'>
-                <Modal.Body className='createAccount__agreement-modal-body'>
-                    <PrivacyList />
-                </Modal.Body>
-                <Modal.Footer className='border-top-0 pt-0'>
-                    <Button onClick={handleClosePrivacyModal} className='mx-0 createAccount__btn'>
-                        Close
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+            <TermsModal showTermModal={showPrivacyModal} handleCloseTermModal={handleClosePrivacyModal}>
+                <PrivacyList />
+            </TermsModal>
+
         </Container>
     )
 }

@@ -316,3 +316,18 @@ export const UserSearchModal = ({ children, show, handleCloseUserSearchModalFunc
         </Modal>
     )
 }
+
+export const TermsModal = ({ showTermModal, handleCloseTermModal, children }) => {
+    return (
+        <Modal show={showTermModal} onHide={handleCloseTermModal} className='createAccount__agreement-modal'>
+            <Modal.Body className='createAccount__agreement-modal-body px-2'>
+                {children}
+            </Modal.Body>
+            <Modal.Footer className='border-top-0 pt-0'>
+                <Button onClick={handleCloseTermModal} className='mx-0 createAccount__btn'>
+                    Close
+                </Button>
+            </Modal.Footer>
+        </Modal>
+    )
+}
