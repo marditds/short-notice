@@ -1,0 +1,147 @@
+import React from 'react';
+import { Button, Col, Container, Form, Image, Row } from 'react-bootstrap';
+import ReCAPTCHA from 'react-google-recaptcha';
+import { Link } from 'react-router-dom';
+import { screenUtils } from '../../lib/utils/screenUtils';
+import { LoadingSpinner } from '../Loading/LoadingSpinner';
+import './SignFormLayout.css';
+
+export const SignFormLayout = ({
+    type,
+    titleText,
+    logo,
+    onSubmit,
+    formFields,
+    submitButtonText,
+    isLoading,
+    errorMsg,
+    showRecaptcha = false,
+    captchaSiteKey,
+    onCaptchaChange,
+    captchaErrorMessage,
+    agreements = [],
+    isSubmitDisabled,
+    alternateRouteText,
+    alternateRouteLink,
+    children,
+}) => {
+
+    const { isSmallScreen, isExtraSmallScreen, isMediumScreen } = screenUtils();
+
+    const maxColWidth = '350px';
+
+    return (
+        <Container className={`${type === 'signup' ? 'min-vh-100' : 'mt-5'} d-flex flex-column justify-content-center align-items-center`}>
+            <div className="d-flex flex-column justify-content-evenly align-items-center p-4 signup-form--bg" style={{ width: !isSmallScreen ? '580px' : '100%' }}>
+                {/* Title */}
+                <Row className='w-100 mb-2'>
+                    <Col className={`${isMediumScreen && 'px-0'} d-block d-lg-flex align-items-lg-baseline ${!isMediumScreen ? 'ms-0' : 'ms-auto me-auto'}`} style={{ maxWidth: maxColWidth }}>
+                        <h2 className={`d-block d-lg-flex align-items-lg-baseline`}>
+                            <span className='signup-form--title--span'>
+                                {titleText}
+                            </span>
+                            <Image src={logo} className='ms-0 ms-lg-2 d-block d-lg-inline' width={'210'} fluid />
+                        </h2>
+                    </Col>
+                </Row>
+
+                {/* Form */}
+                <Row className='w-100'>
+                    <Form onSubmit={onSubmit} style={{ paddingInline: !isMediumScreen ? '12px' : '0px' }}>
+                        {formFields?.map(({ label, type, value, onChange, controlId }, idx) => (
+                            <Form.Group
+                                as={Col}
+                                key={idx}
+                                className="mb-3 d-flex flex-column flex-lg-row align-items-center signin__form--field"
+                                controlId={controlId}
+                            >
+                                <Form.Label
+                                    className={`mb-1 mb-lg-0 ${isMediumScreen && 'w-100 d-flex justify-content-start'}`}
+                                    style={{ maxWidth: isMediumScreen && maxColWidth, color: 'var(--main-text-color)' }}
+                                >
+                                    {label}
+                                </Form.Label>
+                                <Form.Control
+                                    className={`signup-form--field ${!isMediumScreen ? 'ms-auto' : 'ms-auto me-auto'}`}
+                                    style={{ maxWidth: maxColWidth }}
+                                    type={type}
+                                    value={value}
+                                    onChange={onChange}
+                                />
+                            </Form.Group>
+                        ))}
+
+                        {/* ReCAPTCHA */}
+                        {showRecaptcha && (
+                            <Col className={`mb-3 d-flex ${!isMediumScreen ? 'ms-auto' : 'mx-auto'}`} style={{ maxWidth: maxColWidth }}>
+                                {captchaSiteKey ? (
+                                    <ReCAPTCHA
+                                        className="hakobos"
+                                        sitekey={captchaSiteKey}
+                                        onChange={onCaptchaChange}
+                                        onExpired={() => onCaptchaChange(null)}
+                                        onErrored={() => onCaptchaChange(null)}
+                                    />
+                                ) : (
+                                    <>Loading ReCAPTCHA...</>
+                                )}
+                            </Col>
+                        )}
+                        {captchaErrorMessage && (
+                            <Col className={`mb-3 ${!isMediumScreen ? 'd-flex ms-auto' : 'd-flex mx-auto'}`} style={{ maxWidth: maxColWidth }}>
+                                {captchaErrorMessage}
+                            </Col>
+                        )}
+
+                        {/* Agreements */}
+                        {agreements?.map(({ id, textBefore, linkText, onClick, onChange }, index) => (
+                            <Col key={id} className={`mb-1 mb-md-2 ${index !== 0 ? 'my-1' : ''} ${!isMediumScreen ? 'ms-auto' : 'mx-auto'}`} style={{ maxWidth: maxColWidth }}>
+                                <Form.Check
+                                    type='checkbox'
+                                    id={id}
+                                    onChange={onChange}
+                                    label={
+                                        <span>
+                                            {textBefore}
+                                            {' '}
+                                            <a href="#" onClick={(e) => { e.preventDefault(); onClick(); }} className='signup-form--terms--btn'>
+                                                {linkText}
+                                            </a>.
+                                        </span>
+                                    }
+                                    className='signup-form--terms--checkbox'
+                                />
+                            </Col>
+                        ))}
+
+                        {/* Submit button */}
+                        <Col className={`d-flex flex-column ${!isMediumScreen ? 'ms-auto' : 'mx-auto'}`} style={{ maxWidth: maxColWidth }}>
+                            <Button
+                                type='submit'
+                                className={`signup-form__btn me-0 ms-auto ${isExtraSmallScreen && 'w-100'}`}
+                                disabled={isSubmitDisabled}
+                            >
+                                {!isLoading ? submitButtonText : <LoadingSpinner />}
+                            </Button>
+                            <Form.Text>
+                                <span style={{ color: 'var(--main-caution-color)' }}>{errorMsg}</span>
+                            </Form.Text>
+                        </Col>
+                    </Form>
+                </Row>
+
+                {/* Alternate route */}
+                <Row className='mt-2 w-100'>
+                    <Col className={`${!isMediumScreen ? 'd-flex ms-auto' : 'd-flex mx-auto'}`} style={{ maxWidth: maxColWidth }}>
+                        <p className='mb-0 me-0 ms-auto'>
+                            {alternateRouteText} <Link to={alternateRouteLink} className='signup-form__signin-btn'>{type === 'signup' ? 'Sign In' : 'Sign Up'}</Link>
+                        </p>
+                    </Col>
+                </Row>
+            </div>
+
+            {/* Modals */}
+            {children}
+        </Container>
+    );
+};

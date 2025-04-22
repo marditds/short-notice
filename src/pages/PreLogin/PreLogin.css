@@ -51,9 +51,9 @@
 
 .home__body-hero-col-div {
     background-image: url('../../assets/log_hq.png');
-    background-size: 40%;
+    background-size: 35%;
     background-attachment: fixed;
-    background-position: right;
+    background-position: left;
     background-repeat: no-repeat;
 }
 

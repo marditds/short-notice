@@ -1,0 +1,117 @@
+ .signup-form__btn {
+     background-color: var(--main-accent-color) !important;
+     border: 1px solid var(--main-accent-color) !important;
+     font-size: var(--pc-font-size) !important;
+     width: 180px !important;
+     transition: var(--main-transition-speed) !important;
+     color: var(--main-text-color) !important;
+     border-radius: var(--main-rounded-corner) !important;
+ }
+
+ .signup-form__btn:hover {
+     background-color: var(--main-accent-color-hover) !important;
+     border: 1px solid var(--main-accent-color) !important;
+ }
+
+ .signup-form__btn:active,
+ .signup-form__btn:focus {
+     background-color: var(--main-accent-color-hover) !important;
+     box-shadow: none !important;
+ }
+
+ .signup-form__signin-btn {
+     color: var(--main-accent-color-hover);
+     transition: var(--main-transition-speed) !important;
+ }
+
+ .signup-form__signin-btn:hover {
+     color: var(--main-accent-color);
+ }
+
+ /* form */
+ .signup-form--bg {
+     border-radius: var(--main-rounded-corner);
+     background-color: rgba(var(--main-accent-color-values), 0.14);
+ }
+
+ .signup-form--title--span {
+     min-width: fit-content !important;
+ }
+
+ .signup-form--field:hover {
+     transition: var(--main-transition-speed) !important;
+ }
+
+ .signup-form--field:hover {
+     border-color: var(--main-accent-color-hover);
+ }
+
+ .signup-form--field:active,
+ .signup-form--field:focus {
+     border-color: var(--main-accent-color) !important;
+     box-shadow: none !important;
+ }
+
+ .signup-form--terms--btn {
+     color: var(--main-accent-color-hover) !important;
+     cursor: pointer !important;
+     transition: var(--main-transition-speed) !important;
+     text-decoration: none !important;
+ }
+
+ .signup-form--terms--btn:hover {
+     color: var(--main-accent-color) !important;
+ }
+
+ .signup-form--terms--checkbox>input:active,
+ .signup-form--terms--checkbox>input:focus {
+     box-shadow: none;
+     border-color: var(--main-text-color) !important;
+ }
+
+ .signup-form--terms--checkbox>input:checked {
+     background-color: var(--main-accent-color) !important;
+     border-color: var(--main-accent-color) !important;
+ }
+
+ .signup-form--terms--checkbox>input:focus:checked,
+ .signup-form--terms--checkbox>input:active:checked {
+     background-color: var(--main-accent-color-hover) !important;
+     border-color: var(--main-text-color) !important;
+ }
+
+ .hakobos {
+     transform: scale(1);
+     transform-origin: 0 0;
+ }
+
+ @media (max-width: 767px) {
+
+     .signup-form__btn {
+         font-size: var(--mobile-font-size) !important;
+     }
+
+     .signup-form--terms--checkbox {
+         min-height: 20px !important;
+     }
+
+ }
+
+ @media (max-width: 575px) {
+
+     .signin__btn--sub--div {
+         margin-top: 0px;
+     }
+ }
+
+ @media (max-width: 400px) {
+     .hakobos {
+         transform: scale(0.7);
+     }
+ }
+
+ @media (max-width: 320px) {
+     .hakobos {
+         transform: scale(0.8);
+     }
+ }

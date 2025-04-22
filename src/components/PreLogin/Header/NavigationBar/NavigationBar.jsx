@@ -34,12 +34,12 @@ const NavigationBar = ({ children }) => {
                     <Nav.Link as={Link} to='/about' className='ms-md-2 ms-lg-4 navigation__nav-link '>About</Nav.Link>
                     <Nav.Link as={Link} to='/contact' className='ms-md-2 ms-lg-4 navigation__nav-link '>Contact</Nav.Link>
                     <Nav.Item className='my-md-auto ms-md-auto'>
-                        <Button className='signin__btn--nav' as={Link} to='signin'>
+                        <Button as={Link} className='signin__btn--nav' to='signin'>
                             Sign In
                         </Button>
                     </Nav.Item>
                     <Nav.Item className='mt-2 my-md-auto ms-md-2 ms-lg-4 '>
-                        <Button className='signup__btn--nav' as={Link} to='signup'>
+                        <Button as={Link} className='signup__btn--nav' to='signup'>
                             Sign Up
                         </Button>
                     </Nav.Item>

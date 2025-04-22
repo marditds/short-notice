@@ -130,8 +130,8 @@
 
 .signin__btn--nav:hover,
 .signin__btn--nav:focus {
-    background-color: var(--main-accent-color) !important;
-    border-color: var(--main-accent-color-hover) !important;
+    background-color: var(--main-accent-color-hover) !important;
+    border-color: var(--main-accent-color) !important;
     color: var(--main-text-color) !important;
 }
 
@@ -142,20 +142,22 @@
 
 .signup__btn--nav {
     background-color: var(--main-accent-color) !important;
-    border-color: var(--main-accent-color-hover) !important;
+    border-color: var(--main-accent-color) !important;
 }
 
 .signup__btn--nav:hover,
 .signup__btn--nav:focus {
     background-color: var(--main-accent-color-hover) !important;
     color: var(--main-font-color) !important;
+    border-color: var(--main-accent-color) !important;
 }
 
 /* main page buttons */
 .signup-form__btn,
 .signin__btn {
     background-color: var(--main-accent-color) !important;
-    border: 1px solid var(--main-accent-color-hover) !important;
+    border: 1px solid !important;
+    border-color: var(--main-accent-color) !important;
     font-size: var(--pc-font-size) !important;
     width: 180px !important;
     transition: var(--main-transition-speed) !important;
@@ -166,7 +168,7 @@
 .signup-form__btn:hover,
 .signin__btn:hover {
     background-color: var(--main-accent-color-hover) !important;
-    border: 1px solid var(--main-accent-color-hover) !important;
+    border: 1px solid var(--main-accent-color) !important;
 }
 
 .signup-form__btn:active,

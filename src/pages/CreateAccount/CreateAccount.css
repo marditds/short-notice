@@ -101,45 +101,6 @@
     box-shadow: none !important;
 }
 
-.signup__form--terms--checkbox>label {
-    margin-left: 8px;
-}
-
-.signup__form--terms--checkbox button {
-    background-color: transparent;
-    border: 0;
-    padding: 0;
-    height: 20px;
-    color: var(--main-accent-color);
-    transition: var(--main-transition-speed) !important;
-}
-
-.signup__form--terms--checkbox button:hover,
-.signup__form--terms--checkbox button:active,
-.signup__form--terms--checkbox button:focus {
-    background-color: transparent !important;
-    border: 0 !important;
-    color: var(--main-accent-color-hover) !important;
-    box-shadow: none !important;
-}
-
-.signup__form--terms--checkbox>input:active,
-.signup__form--terms--checkbox>input:focus {
-    box-shadow: none;
-    border-color: var(--main-text-color) !important;
-}
-
-.signup__form--terms--checkbox>input:checked {
-    background-color: var(--main-accent-color);
-    border-color: var(--main-accent-color) !important;
-}
-
-.signup__form--terms--checkbox>input:focus:checked,
-.signup__form--terms--checkbox>input:active:checked {
-    background-color: var(--main-accent-color-hover);
-    border-color: var(--main-text-color) !important;
-}
-
 .createAccount__agreement-modal {
     padding-inline: 15px !important;
 }
@@ -172,17 +133,6 @@
     display: inline !important;
 }
 
-.signup__form--terms--btn {
-    color: var(--main-accent-color-hover);
-    cursor: pointer;
-    transition: var(--main-transition-speed);
-    text-decoration: none;
-}
-
-.signup__form--terms--btn:hover {
-    color: var(--main-accent-color);
-}
-
 @media (min-width:576px) and (max-width: 767px) {
     .createUsername__accountType--radio {
         width: 160px;
@@ -194,23 +144,12 @@
 
     .createUsername__container,
     .createUsername__username-field,
-    .createAccount__btn,
-    .signup__form--terms--checkbox button {
+    .createAccount__btn {
         font-size: var(--mobile-font-size) !important;
     }
 
     .setPasscode__passcode-field {
         max-height: 29px;
-    }
-
-    .signup__form--terms--checkbox {
-        min-height: 20px !important;
-        display: flex !important;
-        align-items: center;
-    }
-
-    .signup__form--terms--checkbox>input {
-        margin-top: 0px;
     }
 
 }
