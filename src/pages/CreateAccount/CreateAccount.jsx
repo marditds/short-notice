@@ -16,6 +16,8 @@ import TOSList from '../../components/Legal/TOSList';
 import CommunityGuidelinesList from '../../components/Support/CommunityGuidelinesList';
 import PrivacyList from '../../components/Legal/PrivacyList';
 import { useLogin } from '../../lib/hooks/useLogin';
+import { SignFormLayout } from '../../components/LoginForm/SignFormLayout';
+import { screenUtils } from '../../lib/utils/screenUtils';
 
 
 const CreateAccount = () => {
@@ -48,25 +50,18 @@ const CreateAccount = () => {
         cancelAccountSetup
     } = useLogin();
 
+    const { isSmallScreen, isExtraSmallScreen, isMediumScreen } = screenUtils();
+
     const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
 
     const [captchaKey, setCaptchaKey] = useState(null);
-    const [captchaSiteKey, setCaptchaSiteKey] = useState(null);
 
     const [errorMessage, setErrorMessage] = useState('');
 
     const [passcode, setPasscode] = useState('');
 
-    const [tosCheck, setTosCheck] = useState(false);
-
-    const [privacyPolicyCheck, setPrivacyPolicyCheck] = useState(false);
-
-    const [showTOSModal, setShowTOSModal] = useState(false);
-    const [showCommGuideModal, setShowCommGuideModal] = useState(false);
-    const [showPrivacyModal, setShowPrivacyModal] = useState(false);
-
     const [isHandleDoneClickLoading, setIsHandleDoneClickLoading] = useState(false);
-    // const [isSetUserLoading, setIsSetUserLoading] = useState(false);
+
 
     const onUsernameChange = (e) => {
         console.log('Input changed:', e.target.value);
@@ -96,14 +91,6 @@ const CreateAccount = () => {
         console.log('createUserInCollection type:', typeof createUserInCollection);
 
     }, [accountType])
-
-    const handleTOSCheck = () => {
-        setTosCheck(preVal => !preVal)
-    }
-
-    const handlePrivacyPolicyCheck = () => {
-        setPrivacyPolicyCheck(preVal => !preVal)
-    }
 
     const handleDoneClickCreateAccount = async () => {
 
@@ -191,44 +178,6 @@ const CreateAccount = () => {
         }
     };
 
-    const onCaptchaChange = (value) => {
-
-        if (value || value !== null) {
-            // console.log(value);
-            setCaptchaKey(value);
-            setIsCaptchaVerified(true);
-        }
-
-        if (value === null) {
-            setIsCaptchaVerified(false);
-        }
-
-    };
-
-    const handleShowTOSModal = () => {
-        setShowTOSModal(true);
-    }
-
-    const handleCloseTOSModal = () => {
-        setShowTOSModal(false);
-    }
-
-    const handleShowCommGuideModal = () => {
-        setShowCommGuideModal(true);
-    }
-
-    const handleCloseCommGuideModal = () => {
-        setShowCommGuideModal(false);
-    }
-
-    const handleShowPrivacyModal = () => {
-        setShowPrivacyModal(true);
-    }
-
-    const handleClosePrivacyModal = () => {
-        setShowPrivacyModal(false);
-    }
-
     useEffect(() => {
         // console.log('captchaKey:', captchaKey);
         if (isCaptchaVerified === false) {
@@ -236,173 +185,86 @@ const CreateAccount = () => {
         }
     }, [captchaKey, isCaptchaVerified])
 
-    useEffect(() => {
-        keysProvider('captcha', setCaptchaSiteKey);
-    }, []);
 
     // Getting things ready
-    if (isSetupCancellationLoading || userEmail === null) {
-        return <div className='min-vh-100'>
-            <Container className='min-vh-100 flex-grow-1'>
-                <Row className='min-vh-100 flex-grow-1  justify-content-center align-items-center'>
-                    <Col className='d-flex justify-content-center align-items-center'>
-                        <LoadingSpinner classAnun='me-2' />
-                        {
-                            (userEmail === null) && 'Getting things ready. Hang tight.'
-                        }
-                        {
-                            isSetupCancellationLoading && 'Cancelling your account creation. Please wait...'
-                        }
-                    </Col>
-                </Row>
-            </Container>
-        </div>
-    }
+    // if (isSetupCancellationLoading || userEmail === null) {
+    //     return <div className='min-vh-100'>
+    //         <Container className='min-vh-100 flex-grow-1'>
+    //             <Row className='min-vh-100 flex-grow-1  justify-content-center align-items-center'>
+    //                 <Col className='d-flex justify-content-center align-items-center'>
+    //                     <LoadingSpinner classAnun='me-2' />
+    //                     {
+    //                         (userEmail === null) && 'Getting things ready. Hang tight.'
+    //                     }
+    //                     {
+    //                         isSetupCancellationLoading && 'Cancelling your account creation. Please wait...'
+    //                     }
+    //                 </Col>
+    //             </Row>
+    //         </Container>
+    //     </div>
+    // }
 
     return (
-        <Container className='
-        createUsername__container 
-        '>
-            <Form
-                onSubmit={(e) => {
-                    e.preventDefault();
-                    handleDoneClickCreateAccount();
-                }}
-                className='my-5 my-sm-0'>
-                <Stack gap={3}>
+        <Container
+            className='createUsername__container d-flex justify-content-center align-items-center min-vh-100'
+        >
+            <div className="d-flex flex-column justify-content-evenly align-items-center p-4 signup-form--bg"
+                style={{ width: '696px' }}
+            >
+                <Form
+                    onSubmit={(e) => {
+                        e.preventDefault();
+                        handleDoneClickCreateAccount();
+                    }}
+                    className='my-5 my-sm-0'>
+                    <Stack gap={3}>
 
-                    <AccountType setAccountType={setAccountType} accountType={accountType} />
+                        <AccountType setAccountType={setAccountType} accountType={accountType} />
 
-                    {/* Username and Password */}
-                    <Row xs={1} sm={2} className='align-items-start'>
-                        <Col>
-                            <CreateUsername accountType={accountType} username={username} onUsernameChange={onUsernameChange} />
+                        {/* Username and Password */}
+                        <Row xs={1} sm={2} className='align-items-start'>
+                            <Col>
+                                <CreateUsername accountType={accountType} username={username} onUsernameChange={onUsernameChange} />
 
-                            {errorMessage && <Alert variant="danger" className='alert'>{errorMessage}</Alert>}
-                        </Col>
-                        <Col>
-                            <SetPasscode accountType={accountType} passcode={passcode} onPasscodeChange={onPasscodeChange} />
-                        </Col>
-                    </Row>
-
-                    <Row className='flex-column'>
-                        {/* TOS */}
-                        {/* <Col>
-                            <Form.Check
-                                label={
-                                    <span className='createAccount__form-check-text'>
-                                        I have read and agree to the
-                                        <Button onClick={handleShowTOSModal} className='mx-1 createAccount__form-check-text-btn'>
-                                            Terms of Services
-                                        </Button>
-                                        and
-                                        <Button onClick={handleShowCommGuideModal} className='ms-1 createAccount__form-check-text-btn'>
-                                            Community Guidelines
-                                        </Button>
-                                        .
-                                    </span>}
-                                type='checkbox'
-                                id='tosCheckbox'
-                                onChange={handleTOSCheck}
-                                className='createUsername__checkbox 
-                                 
-                                '
-                            />
-                        </Col> */}
-
-                        {/* PRivacy Policy */}
-                        {/* <Col>
-                            <Form.Check
-                                label={<span>I have read and agree to the <Button onClick={handleShowPrivacyModal} className='ms-1'>Privacy Policy</Button>.</span>}
-                                type='checkbox'
-                                id='privacyPolicyCheckbox'
-                                onChange={handlePrivacyPolicyCheck}
-                                className='createUsername__checkbox'
-                            />
-                        </Col> */}
-                    </Row>
-
-                    {/* ReCAPTCHA */}
-                    {/* <div className='mb-3'>
-                        {
-                            captchaSiteKey ?
-                                <ReCAPTCHA
-                                    className='hakobos'
-                                    sitekey={captchaSiteKey}
-                                    onChange={(value) => onCaptchaChange(value)}
-                                    onExpired={() => setIsCaptchaVerified(false)}
-                                    onErrored={() => {
-                                        setIsCaptchaVerified(false);
-                                        setErrorMessage('ReCAPTCHA verification failed. Please try again.');
-                                    }}
-                                /> :
-                                <><LoadingSpinner /> Loading ReCAPTCHA</>
-                        }
-                    </div>   */}
-
-                    {/* Create Account Buttons */}
-                    <div className='mb-5 mb-sm-0 d-flex justify-content-between justify-content-sm-start'>
-                        <Button
-                            type='submit'
-                            // onClick={handleDoneClick}
-                            disabled={!isCaptchaVerified || !username || username.trim() === '' || username.includes(' ') || username === 'profile' || (accountType === 'organization' && passcode.length < 6) || tosCheck !== true || privacyPolicyCheck !== true || !accountType || isHandleDoneClickLoading}
-                            className='createAccount__btn'
-                        >
+                                {errorMessage && <Alert variant="danger" className='alert'>{errorMessage}</Alert>}
+                            </Col>
                             {
-                                (isSetUserLoading || isHandleDoneClickLoading) ?
-                                    <LoadingSpinner /> :
-                                    'Done'
+                                accountType === 'organization' &&
+                                <Col>
+                                    <SetPasscode accountType={accountType} passcode={passcode} onPasscodeChange={onPasscodeChange} />
+                                </Col>
                             }
-                        </Button>
-                        <Button
-                            type='button'
-                            onClick={async () => {
-                                await cancelAccountSetup(userId);
-                            }}
-                            className='createAccount__btn ms-sm-2'>
-                            Cancel
-                        </Button>
-                    </div>
-                </Stack>
-            </Form>
 
-            {/* TOS Modal */}
-            {/* <Modal show={showTOSModal} onHide={handleCloseTOSModal} className='createAccount__agreement-modal'> 
-                <Modal.Body className='createAccount__agreement-modal-body px-2'>
-                    <TOSList />
-                </Modal.Body>
-                <Modal.Footer className='border-top-0 pt-0'>
-                    <Button onClick={handleCloseTOSModal} className='mx-0 createAccount__btn'>
-                        Close
-                    </Button>
-                </Modal.Footer>
-            </Modal> */}
+                        </Row>
 
-            {/* Community Guidelines */}
-            {/* <Modal show={showCommGuideModal} onHide={handleCloseCommGuideModal} className='createAccount__agreement-modal'> 
-                <Modal.Body className='createAccount__agreement-modal-body px-0 px-md-2'>
-                    <CommunityGuidelinesList />
-                </Modal.Body>
-                <Modal.Footer className='border-top-0 pt-0'>
-                    <Button onClick={handleCloseCommGuideModal} className='mx-0 createAccount__btn'>
-                        Close
-                    </Button>
-                </Modal.Footer>
-            </Modal> */}
+                        {/* Create Account Buttons  */}
+                        <div className='mb-5 mb-sm-0 d-flex justify-content-between justify-content-sm-end'>
 
-            {/* Privacy Policy Modal */}
-            {/* <Modal show={showPrivacyModal} onHide={handleClosePrivacyModal} className='createAccount__agreement-modal'> 
-                <Modal.Body className='createAccount__agreement-modal-body'>
-                    <PrivacyList />
-                </Modal.Body>
-                <Modal.Footer className='border-top-0 pt-0'>
-                    <Button onClick={handleClosePrivacyModal} className='mx-0 createAccount__btn'>
-                        Close
-                    </Button>
-                </Modal.Footer>
-            </Modal>   */}
+                            <Button
+                                type='button'
+                                onClick={async () => {
+                                    await cancelAccountSetup(userId);
+                                }}
+                                className='createAccount__btn'>
+                                Cancel
+                            </Button>
 
-
+                            <Button
+                                type='submit'
+                                disabled={!isCaptchaVerified || !username || username.trim() === '' || username.includes(' ') || username === 'profile' || (accountType === 'organization' && passcode.length < 6) || !accountType || isHandleDoneClickLoading}
+                                className='createAccount__btn  ms-sm-2'
+                            >
+                                {
+                                    (isSetUserLoading || isHandleDoneClickLoading) ?
+                                        <LoadingSpinner /> :
+                                        'Done'
+                                }
+                            </Button>
+                        </div>
+                    </Stack>
+                </Form>
+            </div>
         </Container>
 
     )

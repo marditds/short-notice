@@ -1,9 +1,9 @@
-.createUsername__container {
+/* .createUsername__container {
     display: grid;
     align-items: center;
     height: 100vh !important;
     color: var(--main-text-color);
-}
+} */
 
 .createUsername__accountType--radio {
     border: 1px solid var(--main-accent-color) !important;
