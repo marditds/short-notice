@@ -18,8 +18,8 @@ export const SetPasscode = ({ accountType, passcode, onPasscodeChange }) => {
                 />
                 <Form.Text className='text-muted'>
                     <ul className='mb-0 ps-3'>
-                        <li>Your passcode must contain at least six digits.</li>
-                        <li>Your passcode cannot be longer than 25 digits.</li>
+                        <li>Your passcode must contain at least 6 digits.</li>
+                        <li>Your passcode must not exceed 25 digits.</li>
                     </ul>
                 </Form.Text>
             </Form.Group>
