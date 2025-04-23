@@ -47,7 +47,7 @@ export const AccountType = ({ setAccountType, accountType }) => {
                             <div key={accountType.type}
                             >
                                 <label
-                                    className={`d-flex flex-column justify-content-center align-items-center createUsername__accountType--radio ${selectedType === accountType.type ? 'selected' : ''}`}
+                                    className={`mx-1 mx-md-0 d-flex flex-column justify-content-center align-items-center createUsername__accountType--radio ${selectedType === accountType.type ? 'selected' : ''}`}
                                     onClick={() => !accountType.disabled && handleSelection(accountType.type)}
                                 >
                                     {accountType.icon}

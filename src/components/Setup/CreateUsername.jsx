@@ -9,7 +9,7 @@ export const CreateUsername = ({ accountType, username, onUsernameChange }) => {
     return (
         <Row>
             <Form.Group controlId='user__username--field'>
-                <Form.Label>
+                <Form.Label className='mb-0'>
                     {
                         accountType === '' && 'Please select an account type'
                     }
@@ -40,7 +40,7 @@ export const CreateUsername = ({ accountType, username, onUsernameChange }) => {
                         value={username || ''}
                         onChange={onUsernameChange}
                         disabled={accountType === ''}
-                        className='createUsername__username-field'
+                        className='my-1 my-sm-2 createUsername__username-field'
                     />
                     <Form.Text className='text-muted'>
                         <ul className='mb-0 ps-3'>
