@@ -14,6 +14,7 @@ export const SetPasscode = ({ accountType, passcode, onPasscodeChange }) => {
                     value={passcode || ''}
                     onChange={onPasscodeChange}
                     disabled={accountType !== 'organization'}
+                    placeholder='passcode'
                     className='my-1 my-sm-2 setPasscode__passcode-field'
                 />
                 <Form.Text className='text-muted'>
