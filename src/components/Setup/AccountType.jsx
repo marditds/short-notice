@@ -20,19 +20,19 @@ export const AccountType = ({ setAccountType, accountType }) => {
         {
             type: 'personal',
             label: 'Personal',
-            icon: <BsFillPersonFill size={!isSmallScreen ? 45 : 38} color={selectedType === 'personal' ? 'var(--main-bg-color)' : 'var(--main-text-color)'} style={{ transition: 'var(--main-transition-speed)' }} />,
+            icon: <BsFillPersonFill size={!isSmallScreen ? 45 : 32} color={selectedType === 'personal' ? 'var(--main-bg-color)' : 'var(--main-text-color)'} style={{ transition: 'var(--main-transition-speed)' }} />,
             disabled: false,
         },
         {
             type: 'business',
             label: 'Business',
-            icon: <PiBagFill size={!isSmallScreen ? 45 : 38} color={selectedType === 'personal' ? 'var(--main-bg-color)' : 'var(--main-text-color)'} style={{ transition: 'var(--main-transition-speed)' }} />,
+            icon: <PiBagFill size={!isSmallScreen ? 45 : 32} color={selectedType === 'personal' ? 'var(--main-bg-color)' : 'var(--main-text-color)'} style={{ transition: 'var(--main-transition-speed)' }} />,
             disabled: false,
         },
         {
             type: 'organization',
             label: 'Organization',
-            icon: <i className='bi bi-diagram-3-fill' style={{ color: selectedType === 'organization' ? 'var(--main-bg-color)' : 'var(--main-text-color)', fontSize: !isSmallScreen ? '45px' : '38px', transition: 'var(--main-transition-speed)' }}></i>,
+            icon: <i className='bi bi-diagram-3-fill' style={{ color: selectedType === 'organization' ? 'var(--main-bg-color)' : 'var(--main-text-color)', fontSize: !isSmallScreen ? '45px' : '32px', transition: 'var(--main-transition-speed)', lineHeight: !isSmallScreen ? '45px' : '32px' }}></i>,
             disabled: false,
         },
     ];
