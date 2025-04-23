@@ -217,26 +217,29 @@ const CreateAccount = () => {
                         e.preventDefault();
                         handleDoneClickCreateAccount();
                     }}
-                    className='my-5 my-sm-0'>
-                    <Stack gap={3}>
+                    className={`my-5 my-sm-0 ${isSmallScreen ? 'w-100' : ''}`}>
+                    <Stack gap={3} className=''>
 
                         <AccountType setAccountType={setAccountType} accountType={accountType} />
 
                         {/* Username and Password */}
-                        <Row xs={1} sm={2} className='align-items-start'>
-                            <Col>
-                                <CreateUsername accountType={accountType} username={username} onUsernameChange={onUsernameChange} />
+                        {
+                            accountType !== '' &&
+                            <Row xs={1} sm={2} className='align-items-start bbbbbb'>
+                                <Col className=''>
+                                    <CreateUsername accountType={accountType} username={username} onUsernameChange={onUsernameChange} />
 
-                                {errorMessage && <Alert variant="danger" className='alert'>{errorMessage}</Alert>}
-                            </Col>
-                            {
-                                accountType === 'organization' &&
-                                <Col>
-                                    <SetPasscode accountType={accountType} passcode={passcode} onPasscodeChange={onPasscodeChange} />
+                                    {errorMessage && <Alert variant="danger" className='alert'>{errorMessage}</Alert>}
                                 </Col>
-                            }
+                                {
+                                    accountType === 'organization' &&
+                                    <Col>
+                                        <SetPasscode accountType={accountType} passcode={passcode} onPasscodeChange={onPasscodeChange} />
+                                    </Col>
+                                }
+                            </Row>
+                        }
 
-                        </Row>
 
                         {/* Create Account Buttons  */}
                         <div className='mb-5 mb-sm-0 d-flex justify-content-between justify-content-sm-end'>

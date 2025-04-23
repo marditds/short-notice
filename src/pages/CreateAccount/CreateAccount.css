@@ -5,6 +5,10 @@
     color: var(--main-text-color);
 } */
 
+/* .dsfsf>div {
+    width: 100% !important;
+} */
+
 .createUsername__accountType--radio {
     border: 1px solid var(--main-accent-color) !important;
     width: 200px;

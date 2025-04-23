@@ -45,7 +45,6 @@ export const AccountType = ({ setAccountType, accountType }) => {
                     <Col className='d-flex flex-column flex-sm-row justify-content-evenly'>
                         {accountTypes.map((accountType) => (
                             <div key={accountType.type}
-                            // className='w-100'
                             >
                                 <label
                                     className={`d-flex flex-column justify-content-center align-items-center createUsername__accountType--radio ${selectedType === accountType.type ? 'selected' : ''}`}
