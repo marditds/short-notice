@@ -148,6 +148,7 @@
 
     .createUsername__container,
     .createUsername__username-field,
+    .setPasscode__passcode-field,
     .createAccount__btn {
         font-size: var(--mobile-font-size) !important;
     }
