@@ -146,12 +146,24 @@
         font-size: 10px !important;
         height: 31px !important;
     }
+
+    .home__body-organization-row-intro-icon {
+        font-size: 18pt;
+    }
 }
 
 @media (max-width: 575px) {
     .home__body-container {
         display: grid;
         row-gap: 50px;
+    }
+
+    .home__body-hero-col-div {
+        background-image: url('../../assets/log_hq.png');
+        background-size: 60%;
+        background-attachment: fixed;
+        background-position: right top;
+        background-repeat: no-repeat;
     }
 
     .commGuide__list-group>li,

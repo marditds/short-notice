@@ -52,7 +52,7 @@ export const SignFormLayout = ({
                             <Form.Group
                                 as={Col}
                                 key={idx}
-                                className="mb-3 d-flex flex-column flex-lg-row align-items-center signin__form--field"
+                                className='mb-3 d-flex flex-column flex-lg-row align-items-center signin__form--field'
                                 controlId={controlId}
                             >
                                 <Form.Label
@@ -70,6 +70,15 @@ export const SignFormLayout = ({
                                 />
                             </Form.Group>
                         ))}
+
+                        <Col className={`mb-3 d-flex ${!isMediumScreen ? 'ms-auto' : 'mx-auto'}`} style={{ maxWidth: maxColWidth }}>
+                            <Form.Text className='text-muted'>
+                                <ul className='ps-3'>
+                                    <li>Your password must contain at least 8 characters.</li>
+                                    <li>Your password must not exceed 256 characters.</li>
+                                </ul>
+                            </Form.Text>
+                        </Col>
 
                         {/* ReCAPTCHA */}
                         {showRecaptcha && (

@@ -50,12 +50,42 @@ export const CreateUsername = ({ accountType, username, onUsernameChange }) => {
                                         Your account name must be unique
                                     </li>
                                     : (
-                                        (accountType === 'personal' && <li>
-                                            Your username must be unique.
-                                        </li>) ||
-                                        (accountType === 'business' && <li>
-                                            Your business name must be unique.</li>) ||
-                                        (accountType === 'organization' && <li>Your organization's name must be unique.</li>)
+                                        (accountType === 'personal' &&
+                                            <>
+                                                <li>
+                                                    Your username must be unique.
+                                                </li>
+                                                <li>
+                                                    Your usernane must not exceed 16 characters.
+                                                </li>
+                                                <li>
+                                                    Your usernane can only include letters and numbers.
+                                                </li>
+                                            </>
+                                        ) ||
+                                        (accountType === 'business' &&
+                                            <>
+                                                <li>
+                                                    Your business name must be unique.</li>
+                                                <li>
+                                                    Your business name must not exceed 16 characters.
+                                                </li>
+                                                <li>
+                                                    Your business name can only include letters and numbers.
+                                                </li>
+                                            </>
+                                        ) ||
+                                        (accountType === 'organization' &&
+                                            <>
+                                                <li>Your organization's name must be unique.</li>
+                                                <li>
+                                                    Your organization's name must not exceed 16 characters.
+                                                </li>
+                                                <li>
+                                                    Your organization's name can only include letters and numbers.
+                                                </li>
+                                            </>
+                                        )
                                     )
                             }
                         </ul>

@@ -73,6 +73,8 @@ export const createAuthUser = async (email, password, name) => {
     } catch (error) {
         if (error.code === 409) {
             return 'A user with the same email already exists.';
+        } else if (error.code === 400) {
+            return 'Password must be between 8 and 265 characters long, and should not be one of the commonly used password.';
         } else {
             console.error('Authentication failed:', error);
         }

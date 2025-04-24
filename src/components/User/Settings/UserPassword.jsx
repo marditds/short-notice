@@ -104,8 +104,8 @@ export const UserPassword = () => {
                         />
                         <Form.Text className='settings__username-unique'>
                             <ul className='mb-0 ps-3'>
-                                <li>Your passcode must contain at least 8 characters.</li>
-                                <li>Your passcode cannot be longer than 256 characters.</li>
+                                <li>Your password must contain at least 8 characters.</li>
+                                <li>Your password must not exceed 256 characters.</li>
                             </ul>
                         </Form.Text>
                     </Form.Group>

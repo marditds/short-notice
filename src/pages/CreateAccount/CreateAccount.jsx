@@ -66,7 +66,8 @@ const CreateAccount = () => {
     const onUsernameChange = (e) => {
         console.log('Input changed:', e.target.value);
 
-        const usrnm = e.target.value.replace(/\s/g, '');
+        const usrnm = e.target.value.replace(/[^a-zA-Z0-9]/g, '');
+
         setUsername(usrnm);
         setErrorMessage('');
     };
@@ -76,14 +77,24 @@ const CreateAccount = () => {
 
         console.log('input', input);
 
-        if (/^\d{0,25}$/.test(input)) {
+        if (input.length <= 25) {
             setPasscode(input);
-
-            if (input.length > 0 && input.length < 6) {
-                return;
-            }
         }
     };
+
+    // const onPasscodeChange = (e) => {
+    //     const input = e.target.value;
+
+    //     console.log('input', input);
+
+    //     if (/^\d{0,25}$/.test(input)) {
+    //         setPasscode(input);
+
+    //         if (input.length > 0 && input.length < 6) {
+    //             return;
+    //         }
+    //     }
+    // };
 
     useEffect(() => {
         setPasscode('');
@@ -94,10 +105,10 @@ const CreateAccount = () => {
 
     const handleDoneClickCreateAccount = async () => {
 
-        if (!isCaptchaVerified) {
-            alert('Please complete the reCAPTCHA verification');
-            return;
-        }
+        // if (!isCaptchaVerified) {
+        //     alert('Please complete the reCAPTCHA verification');
+        //     return;
+        // }
 
         if (!username || username.trim() === '') {
             setErrorMessage('Username cannot be empty. Please enter a valid username.');
@@ -178,12 +189,12 @@ const CreateAccount = () => {
         }
     };
 
-    useEffect(() => {
-        // console.log('captchaKey:', captchaKey);
-        if (isCaptchaVerified === false) {
-            setCaptchaKey(null);
-        }
-    }, [captchaKey, isCaptchaVerified])
+    // useEffect(() => {
+    // console.log('captchaKey:', captchaKey);
+    //     if (isCaptchaVerified === false) {
+    //         setCaptchaKey(null);
+    //     }
+    // }, [captchaKey, isCaptchaVerified])
 
 
     // Getting things ready
@@ -255,7 +266,7 @@ const CreateAccount = () => {
 
                             <Button
                                 type='submit'
-                                disabled={!isCaptchaVerified || !username || username.trim() === '' || username.includes(' ') || username === 'profile' || (accountType === 'organization' && passcode.length < 6) || !accountType || isHandleDoneClickLoading}
+                                disabled={!username || username.trim() === '' || username.includes(' ') || username === 'profile' || (accountType === 'organization' && passcode.length < 6) || !accountType || isHandleDoneClickLoading}
                                 className='createAccount__btn  ms-sm-2'
                             >
                                 {

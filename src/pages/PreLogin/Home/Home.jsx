@@ -21,7 +21,7 @@ const Home = () => {
     const features = [
         {
             title: 'Ephemeral posting: ',
-            description: 'Choose how long your notices stay live—12, 24, or 48 hours.',
+            description: 'Pick how long your notices stay up—anywhere from 1 day to a full week.',
             icon: '⌚'
         },
         {
@@ -200,8 +200,8 @@ const Home = () => {
                         {/* Organization Intro */}
                         <Row className='home__body-organization-row-into mt-5'>
                             <Col >
-                                <h4 className='text-center d-flex align-items-center justify-content-center'>
-                                    <i className='bi bi-diagram-3-fill home__body-organization-row-intro-icon me-2'></i>
+                                <h4 className='text-center d-flex align-items-start justify-content-center'>
+                                    <i className='bi bi-diagram-3-fill home__body-organization-row-intro-icon me-0 me-lg-3' />
                                     Designed to streamline communication from higherups to group members.
                                 </h4>
                                 <p className='text-center fw-bold'>Empower your organization with secure and controlled communication. Use passcodes to ensure only authorized members see posts. Perfect for teachers sharing with students or managers updating their group members.</p>

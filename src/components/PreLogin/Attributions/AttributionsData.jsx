@@ -19,22 +19,16 @@ export const AttributionsData = () => {
             description: <span>ShortNotice uses Google's <a href='https://developers.google.com/recaptcha/docs/display'><strong>reCAPTCHA v2</strong></a> to prevent bots and other automated malicious activities.</span>,
             icon: recaptcha_logo,
         },
-        {
-            title: 'React-Bootstrap',
-            url: 'https://react-bootstrap.github.io/',
-            description: <span>Some user interface components were imported from <a href='https://react-bootstrap.github.io/'><strong>React-Bootstrap</strong></a>. These components may have been customized to align with the platform's aesthetics.</span>,
-            icon: reactbootstrap_logo,
-        },
-        {
-            title: 'Sign in with Google',
-            url: 'https://developers.google.com/identity/gsi/web/guides/overview',
-            description: (
-                <span>
-                    Account creation and sign-in functionality are provided by <a href='https://developers.google.com/identity/gsi/web/guides/overview'><strong>Google</strong></a>.
-                </span>
-            ),
-            icon: googlesignin_logo,
-        },
+        // {
+        //     title: 'Sign in with Google',
+        //     url: 'https://developers.google.com/identity/gsi/web/guides/overview',
+        //     description: (
+        //         <span>
+        //             Account creation and sign-in functionality are provided by <a href='https://developers.google.com/identity/gsi/web/guides/overview'><strong>Google</strong></a>.
+        //         </span>
+        //     ),
+        //     icon: googlesignin_logo,
+        // },
         {
             title: 'Tenor GIF Keyboard',
             url: 'https://tenor.com/',

@@ -45,13 +45,15 @@ const SignUp = () => {
     const [showCommGuideModal, setShowCommGuideModal] = useState(false);
     const [showPrivacyModal, setShowPrivacyModal] = useState(false);
 
-
     const formFields = [
         {
             label: 'Name:',
             type: 'text',
             value: name,
-            onChange: (e) => setName(e.target.value),
+            onChange: (e) => {
+                const onlyLettersAndSpaces = e.target.value.replace(/[^a-zA-Z\s]/g, '');
+                setName(onlyLettersAndSpaces);
+            },
             controlId: 'signUpFormName',
         },
         {
@@ -69,6 +71,7 @@ const SignUp = () => {
             controlId: 'signUpFormPassword',
         },
     ];
+
 
     const onCaptchaChange = (value) => {
 
@@ -223,9 +226,15 @@ const SignUp = () => {
             alternateRouteText="Already have an account?"
             alternateRouteLink="/signin"
         >
-            <TermsModal showTermModal={showTOSModal} handleCloseTermModal={handleCloseTOSModal}><TOSList /></TermsModal>
-            <TermsModal showTermModal={showCommGuideModal} handleCloseTermModal={handleCloseCommGuideModal}><CommunityGuidelinesList /></TermsModal>
-            <TermsModal showTermModal={showPrivacyModal} handleCloseTermModal={handleClosePrivacyModal}><PrivacyList /></TermsModal>
+            <TermsModal showTermModal={showTOSModal} handleCloseTermModal={handleCloseTOSModal}>
+                <TOSList />
+            </TermsModal>
+            <TermsModal showTermModal={showCommGuideModal} handleCloseTermModal={handleCloseCommGuideModal}>
+                <CommunityGuidelinesList />
+            </TermsModal>
+            <TermsModal showTermModal={showPrivacyModal} handleCloseTermModal={handleClosePrivacyModal}>
+                <PrivacyList />
+            </TermsModal>
         </SignFormLayout>
 
         // <Container className='min-vh-100 d-flex flex-column justify-content-center align-items-center'>
