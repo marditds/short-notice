@@ -437,7 +437,7 @@ const UserFeed = () => {
                         </Button>
                         :
                         <div className={`${isAnyTagSelected && 'my-4'}`}>
-                            {!isFeedToggled && <EndAsterisks />}
+                            {!isFeedToggled && <>{personalFeedNotices.length === 0 ? 'Start following accounts to populate your personal feed!' : <EndAsterisks />}</>}
                             {(isFeedToggled && isAnyTagSelected) && <EndAsterisks />}
                         </div>
                     }

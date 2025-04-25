@@ -4,7 +4,7 @@
 }
 
 
-/* .signin__btn {
+/* .signup__btn {
     background-color: transparent;
 } */
 
@@ -147,6 +147,12 @@
 
 .signup__btn--nav:hover,
 .signup__btn--nav:focus {
+    background-color: var(--main-accent-color) !important;
+    color: var(--main-font-color) !important;
+    border-color: var(--main-accent-color-hover) !important;
+}
+
+.signup__btn--nav:focus {
     background-color: var(--main-accent-color-hover) !important;
     color: var(--main-font-color) !important;
     border-color: var(--main-accent-color) !important;
@@ -154,7 +160,7 @@
 
 /* main page buttons */
 .signup-form__btn,
-.signin__btn {
+.signup__btn {
     background-color: var(--main-accent-color) !important;
     border: 1px solid !important;
     border-color: var(--main-accent-color) !important;
@@ -165,33 +171,37 @@
     border-radius: var(--main-rounded-corner) !important;
 }
 
-.signup-form__btn:hover,
-.signin__btn:hover {
+.signup-form__btn:hover {
     background-color: var(--main-accent-color-hover) !important;
     border: 1px solid var(--main-accent-color) !important;
 }
 
+.signup__btn:hover {
+    background-color: var(--main-accent-color) !important;
+    border: 1px solid var(--main-accent-color-hover) !important;
+}
+
 .signup-form__btn:active,
 .signup-form__btn:focus,
-.signin__btn:active,
-.signin__btn:focus {
+.signup__btn:active,
+.signup__btn:focus {
     background-color: var(--main-accent-color-hover) !important;
     box-shadow: none !important;
 }
 
-.signin__btn--sub--div {
+.signup__btn--sub--div {
     width: max-content;
     margin-top: 5px;
 }
 
 .signup-form__signin-btn,
-.signin__btn--sub>a {
+.signup__btn--sub>a {
     color: var(--main-accent-color-hover);
     transition: var(--main-transition-speed) !important;
 }
 
 .signup-form__signin-btn:hover,
-.signin__btn--sub>a:hover {
+.signup__btn--sub>a:hover {
     color: var(--main-accent-color);
 }
 
@@ -228,7 +238,7 @@
 
     .signup-form__btn,
     .signup__btn,
-    .signin__btn,
+    .signup__btn,
     .signin__btn--nav,
     .signup__btn--nav {
         font-size: var(--mobile-font-size) !important;
@@ -237,7 +247,7 @@
 
 @media (max-width: 575px) {
 
-    .signin__btn--sub--div {
+    .signup__btn--sub--div {
         margin-top: 0px;
     }
 }

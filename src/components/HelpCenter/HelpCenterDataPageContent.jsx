@@ -60,7 +60,7 @@ const HelpCenterDataPageContent = ({ isLoggedIn }) => {
                             }</h4>
 
                             <div>
-                                <p className='mb-2'>{topicDetailsByPath[helpCenterDataPath].intro}</p>
+                                <p className='mb-2 help__center-data-content-intro'>{topicDetailsByPath[helpCenterDataPath].intro}</p>
                                 <ListGroup as='ol' className='help__center-data-list'>
                                     {topicDetailsByPath[helpCenterDataPath].steps.map((step, idx) => (
                                         <ListGroup.Item key={idx} as='li' className='help__center-data-list-item aaa'>
@@ -71,7 +71,7 @@ const HelpCenterDataPageContent = ({ isLoggedIn }) => {
                                         </ListGroup.Item>
                                     ))}
                                 </ListGroup>
-                                <p className='mt-2'>{topicDetailsByPath[helpCenterDataPath].outro}</p>
+                                <p className='mt-2 help__center-data-content-outro'>{topicDetailsByPath[helpCenterDataPath].outro}</p>
                             </div>
                         </Col>
                     </Row>

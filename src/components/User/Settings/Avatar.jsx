@@ -126,18 +126,21 @@ export const Avatar = () => {
                             {isDeleting && <LoadingSpinner />}
                         </Button>
                     </Col>
-                    <Col className='mt-1 mt-md-2'>
-                        <Form.Text style={{ color: 'var(--main-caution-color)' }}>
-                            {fileFormatError}
-                        </Form.Text>
-                    </Col>
+                    {fileFormatError &&
+                        <Col className='mt-1 mt-md-2'>
+                            <Form.Text style={{ color: 'var(--main-caution-color)' }}>
+                                {fileFormatError}
+                            </Form.Text>
+                        </Col>
+                    }
 
-                    <Col className='mt-1 mt-md-2'>
-                        <Form.Text style={{ color: 'var(--main-accent-color-hover)' }}>
-                            {avatarUploadSuccessMsg}
-                        </Form.Text>
-                    </Col>
-
+                    {avatarUploadSuccessMsg &&
+                        <Col className='mt-1 mt-md-2'>
+                            <Form.Text style={{ color: 'var(--main-accent-color-hover)' }}>
+                                {avatarUploadSuccessMsg}
+                            </Form.Text>
+                        </Col>
+                    }
 
                 </Form>
 

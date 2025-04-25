@@ -5,13 +5,13 @@ import { ListGroup } from 'react-bootstrap';
 const CommunityGuidelinesList = () => {
     return (
         <>
-            <h4 className='px-md-3'>
+            <h4 className='px-md-3 commGuide__list-title'>
                 Community Guidelines
             </h4>
-            <p className='mb-1 px-md-3'>
+            <p className='mb-1 px-md-3 commGuide__list-intro'>
                 {commGuideParags.intro}
             </p>
-            <p className='mb-1 px-md-3'>
+            <p className='mb-1 px-md-3 commGuide__list-p'>
                 {commGuideParags.pargraph}
             </p>
 
@@ -27,7 +27,7 @@ const CommunityGuidelinesList = () => {
                 }
             </ListGroup>
 
-            <p className='mb-1 px-md-3'>
+            <p className='mb-1 px-md-3 commGuide__list-outro'>
                 {commGuideParags.outro}
             </p>
         </>

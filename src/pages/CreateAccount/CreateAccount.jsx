@@ -82,20 +82,6 @@ const CreateAccount = () => {
         }
     };
 
-    // const onPasscodeChange = (e) => {
-    //     const input = e.target.value;
-
-    //     console.log('input', input);
-
-    //     if (/^\d{0,25}$/.test(input)) {
-    //         setPasscode(input);
-
-    //         if (input.length > 0 && input.length < 6) {
-    //             return;
-    //         }
-    //     }
-    // };
-
     useEffect(() => {
         setPasscode('');
         console.log('ACCOUNT TYPE:', accountType);
@@ -110,23 +96,23 @@ const CreateAccount = () => {
         //     return;
         // }
 
-        if (!username || username.trim() === '') {
-            setErrorMessage('Username cannot be empty. Please enter a valid username.');
-            return;
-        }
-
         // if (username.includes(' ')) {
         //     setErrorMessage('Username cannot contain spaces. Please remove any spaces.');
         //     return;
         // }
 
+        // if (username.length > usrnmMaxLngth) {
+        //     setErrorMessage(`The username cannot be longer than 16 characters. Please choose a shorter username.`);
+        //     return;
+        // }
+
+        // if (!username || username.trim() === '') {
+        //     setErrorMessage('Username cannot be empty. Please enter a valid username.');
+        //     return;
+        // }
+
         if (forbiddenUsrnms.includes(username)) {
             setErrorMessage(`The username "${username}" is not allowed. Please choose a different username.`);
-            return;
-        }
-
-        if (username.length > usrnmMaxLngth) {
-            setErrorMessage(`The username cannot be longer than 16 characters. Please choose a shorter username.`);
             return;
         }
 
@@ -239,8 +225,6 @@ const CreateAccount = () => {
                             <Row xs={1} sm={2} className='align-items-start bbbbbb'>
                                 <Col className=''>
                                     <CreateUsername accountType={accountType} username={username} onUsernameChange={onUsernameChange} />
-
-                                    {/* {errorMessage && <Alert variant="danger" className='alert'>{errorMessage}</Alert>} */}
                                 </Col>
                                 {
                                     accountType === 'organization' &&
@@ -250,7 +234,6 @@ const CreateAccount = () => {
                                 }
                             </Row>
                         }
-
 
                         {/* Create Account Buttons  */}
                         <div className='mb-sm-0 d-flex justify-content-between justify-content-sm-end'>

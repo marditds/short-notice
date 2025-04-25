@@ -38,11 +38,13 @@
     min-width: fit-content;
 }
 
-.help__center-titles-list>.help__center-titles-list-item,
+.help__center-data-content-intro, .help__center-titles-list>.help__center-titles-list-item,
+.help__center-data-content-outro, .help__center-titles-list-item,
 .help__center-data-list>.help__center-data-list-item {
     background-color: transparent !important;
     border: none;
     padding-left: 0;
+    color: var(--main-text-color);
 }
 
 .help__center-titles-list>.help__center-titles-list-item>a {

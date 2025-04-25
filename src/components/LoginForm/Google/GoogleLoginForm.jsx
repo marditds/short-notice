@@ -21,16 +21,16 @@ export const GoogleLoginForm = ({ subtitle }) => {
         <Row className='login__btn d-flex flex-sm-column justify-content-center align-items-center'>
 
             <Col className='d-flex justify-content-center'>
-                <Button as={Link} to={'signup'} className='signin__btn'>
+                <Button as={Link} to={'signup'} className='signup__btn'>
                     Sign Up
                 </Button>
             </Col>
             <Col className='d-flex justify-content-center'>
-                <div className='signin__btn--sub--div'>
-                    <p className='signin__btn--sub mb-0'>{subtitle}</p>
+                <div className='signup__btn--sub--div'>
+                    <p className='signup__btn--sub mb-0'>{subtitle}</p>
                 </div>
             </Col>
-            {/* <Button onClick={handleOnGoogleLoginClick} className='p-0 border-0 d-block mx-auto signin__btn' aria-label='Sign in with Google'>
+            {/* <Button onClick={handleOnGoogleLoginClick} className='p-0 border-0 d-block mx-auto signup__btn' aria-label='Sign in with Google'>
                 <Image
                     src={google_btn}
                     alt='Sign in with Google'

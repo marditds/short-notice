@@ -76,7 +76,12 @@
     color: var(--main-accent-color-hover);
 }
 
+.commGuide__list-title,
+.commGuide__list-intro,
+.commGuide__list-p,
+.commGuide__list-outro,
 .commGuide__list-group>li,
+.privacyPolicy__list-group,
 .privacyPolicy__list-group>li,
 .tos__list-group>li {
     background-color: transparent !important;

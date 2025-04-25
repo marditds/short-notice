@@ -7,8 +7,8 @@ export const useUserAvatar = (userId) => {
     const [avatarUrl, setAvatarUrl] = useState(null);
     const [isAvatarLoading, setIsAvatarLoading] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
-    const [fileFormatError, setFileFormatError] = useState('');
-    const [avatarUploadSuccessMsg, setAvatarUploadSuccessMsg] = useState('');
+    const [fileFormatError, setFileFormatError] = useState(null);
+    const [avatarUploadSuccessMsg, setAvatarUploadSuccessMsg] = useState(null);
 
     useEffect(() => {
         // console.time('avatar-fetch');
