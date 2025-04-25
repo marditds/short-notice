@@ -161,8 +161,7 @@ const Home = () => {
 
                                     <span className='mt-2 mt-sm-0'>
                                         <GoogleLoginForm
-                                            subtitle={<>Already have an account?
-                                                <Link to='signin'>Sign in</Link>
+                                            subtitle={<>Already have an account? <Link to='signin'>Sign in</Link>
                                             </>}
                                         />
                                     </span>

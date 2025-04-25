@@ -52,9 +52,9 @@ const CreateAccount = () => {
 
     const { isSmallScreen, isExtraSmallScreen, isMediumScreen } = screenUtils();
 
-    const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
+    // const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
 
-    const [captchaKey, setCaptchaKey] = useState(null);
+    // const [captchaKey, setCaptchaKey] = useState(null);
 
     const [errorMessage, setErrorMessage] = useState('');
 
@@ -115,13 +115,13 @@ const CreateAccount = () => {
             return;
         }
 
-        if (username.includes(' ')) {
-            setErrorMessage('Username cannot contain spaces. Please remove any spaces.');
-            return;
-        }
+        // if (username.includes(' ')) {
+        //     setErrorMessage('Username cannot contain spaces. Please remove any spaces.');
+        //     return;
+        // }
 
         if (forbiddenUsrnms.includes(username)) {
-            setErrorMsg(`The username ${username} is not allowed. Please choose a different username.`);
+            setErrorMessage(`The username "${username}" is not allowed. Please choose a different username.`);
             return;
         }
 
@@ -198,23 +198,23 @@ const CreateAccount = () => {
 
 
     // Getting things ready
-    // if (isSetupCancellationLoading || userEmail === null) {
-    //     return <div className='min-vh-100'>
-    //         <Container className='min-vh-100 flex-grow-1'>
-    //             <Row className='min-vh-100 flex-grow-1  justify-content-center align-items-center'>
-    //                 <Col className='d-flex justify-content-center align-items-center'>
-    //                     <LoadingSpinner classAnun='me-2' />
-    //                     {
-    //                         (userEmail === null) && 'Getting things ready. Hang tight.'
-    //                     }
-    //                     {
-    //                         isSetupCancellationLoading && 'Cancelling your account creation. Please wait...'
-    //                     }
-    //                 </Col>
-    //             </Row>
-    //         </Container>
-    //     </div>
-    // }
+    if (isSetupCancellationLoading || userEmail === null) {
+        return <div className='min-vh-100'>
+            <Container className='min-vh-100 flex-grow-1'>
+                <Row className='min-vh-100 flex-grow-1  justify-content-center align-items-center'>
+                    <Col className='d-flex justify-content-center align-items-center'>
+                        <LoadingSpinner classAnun='me-2' />
+                        {
+                            (userEmail === null) && 'Getting things ready. Hang tight.'
+                        }
+                        {
+                            isSetupCancellationLoading && 'Cancelling your account creation. Please wait...'
+                        }
+                    </Col>
+                </Row>
+            </Container>
+        </div>
+    }
 
     return (
         <Container
@@ -240,7 +240,7 @@ const CreateAccount = () => {
                                 <Col className=''>
                                     <CreateUsername accountType={accountType} username={username} onUsernameChange={onUsernameChange} />
 
-                                    {errorMessage && <Alert variant="danger" className='alert'>{errorMessage}</Alert>}
+                                    {/* {errorMessage && <Alert variant="danger" className='alert'>{errorMessage}</Alert>} */}
                                 </Col>
                                 {
                                     accountType === 'organization' &&
@@ -253,7 +253,7 @@ const CreateAccount = () => {
 
 
                         {/* Create Account Buttons  */}
-                        <div className='mb-5 mb-sm-0 d-flex justify-content-between justify-content-sm-end'>
+                        <div className='mb-sm-0 d-flex justify-content-between justify-content-sm-end'>
 
                             <Button
                                 type='button'
@@ -266,7 +266,7 @@ const CreateAccount = () => {
 
                             <Button
                                 type='submit'
-                                disabled={!username || username.trim() === '' || username.includes(' ') || username === 'profile' || (accountType === 'organization' && passcode.length < 6) || !accountType || isHandleDoneClickLoading}
+                                disabled={!username || username.trim() === '' || username.includes(' ') || username.length > usrnmMaxLngth || (accountType === 'organization' && passcode.length < 6) || !accountType || isHandleDoneClickLoading}
                                 className='createAccount__btn  ms-sm-2'
                             >
                                 {
@@ -275,7 +275,15 @@ const CreateAccount = () => {
                                         'Done'
                                 }
                             </Button>
+
                         </div>
+                        {
+                            errorMessage &&
+                            <Form.Text style={{ color: 'var(--main-caution-color)' }}>
+                                {errorMessage}
+                            </Form.Text>
+                        }
+
                     </Stack>
                 </Form>
             </div>

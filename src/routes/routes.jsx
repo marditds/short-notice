@@ -132,21 +132,21 @@ export const routes = [
             },
             {
                 path: 'set-username', element: <CreateAccount />,
-                // authRequired: true,
-                // loader: async () => {
-                //     console.log('RUNNING <CreateAccount/> LOADER:');
+                authRequired: true,
+                loader: async () => {
+                    console.log('RUNNING <CreateAccount/> LOADER:');
 
-                //     const authenticatedUser = await getAccount();
+                    const authenticatedUser = await getAccount();
 
-                //     console.log('CHECKING IF USER ALREADY EXISTS IN COLLECTION.');
+                    console.log('CHECKING IF USER ALREADY EXISTS IN COLLECTION.');
 
-                //     const user = await getUserByEmail(authenticatedUser.email);
-                //     if (user?.username) {
-                //         console.log('USER ALREADY EXISTS IN COLLECTION. REDIRECTING TO /user/feed');
-                //         return redirect('/user/feed');
-                //     }
-                //     return null;
-                // }
+                    const user = await getUserByEmail(authenticatedUser.email);
+                    if (user?.username) {
+                        console.log('USER ALREADY EXISTS IN COLLECTION. REDIRECTING TO /user/feed');
+                        return redirect('/user/feed');
+                    }
+                    return null;
+                }
             },
             {
                 path: 'authenticate', element: <Authenticate />,
