@@ -7,6 +7,8 @@ export const useUserAvatar = (userId) => {
     const [avatarUrl, setAvatarUrl] = useState(null);
     const [isAvatarLoading, setIsAvatarLoading] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
+    const [fileFormatError, setFileFormatError] = useState('');
+    const [avatarUploadSuccessMsg, setAvatarUploadSuccessMsg] = useState('');
 
     useEffect(() => {
         // console.time('avatar-fetch');
@@ -92,16 +94,51 @@ export const useUserAvatar = (userId) => {
             console.log('Avatar uploading starting...');
 
             try {
-                const fileId = await uploadAvatar(file);
+                // console.log('file in handleAvatarUpload:', file);
 
-                await updateAvatar(userId, fileId);
+                if (file.type !== 'image/png' && file.type !== 'image/jpeg' && file.type !== 'image/jpg') {
+                    setFileFormatError('Accepted file formats are PNG and JPG/JPEG.');
+                    setAvatarUploadSuccessMsg('');
+                    return;
+                }
 
-                const url = `${import.meta.env.VITE_ENDPOINT}/storage/buckets/${import.meta.env.VITE_AVATAR_BUCKET}/files/${fileId}/view?project=${import.meta.env.VITE_PROJECT}&mode=admin`;
+                const uploadedAvatarFile = await uploadAvatar(file);
+
+                // console.log('uploadedAvatarFile in handleAvatarUpload:', uploadedAvatarFile);
+
+                if (typeof uploadedAvatarFile === 'string') {
+                    setFileFormatError(uploadedAvatarFile);
+                    setAvatarUploadSuccessMsg('');
+                    return;
+                }
+
+                if (uploadedAvatarFile.mimeType !== 'image/png' && uploadedAvatarFile.mimeType !== 'image/jpeg' && uploadedAvatarFile.mimeType !== 'image/jpg') {
+                    setFileFormatError('Accepted file formats are PNG and JPG/JPEG.');
+                    setAvatarUploadSuccessMsg('');
+                    return;
+                }
+
+                const updateAvatarRes = await updateAvatar(userId, uploadedAvatarFile.$id);
+
+                const url = `${import.meta.env.VITE_ENDPOINT}/storage/buckets/${import.meta.env.VITE_AVATAR_BUCKET}/files/${uploadedAvatarFile.$id}/view?project=${import.meta.env.VITE_PROJECT}&mode=admin`;
 
                 setAvatarUrl(url);
 
+                if (typeof updateAvatarRes === 'string') {
+                    setFileFormatError(updateAvatarRes);
+                    setAvatarUploadSuccessMsg('');
+                    return;
+                }
+
+                if ((typeof updateAvatarRes !== 'string') && (updateAvatarRes !== undefined)) {
+                    setAvatarUploadSuccessMsg('Avatar uploaded successfully.');
+                    setFileFormatError('');
+                }
+
             } catch (error) {
                 console.error('Profile picture upload failed:', error);
+                setFileFormatError('Avatar upload failed. Please try again later.');
+                setAvatarUploadSuccessMsg('');
             } finally {
                 setIsUploading(false);
                 console.log('Avatar uploading done.');
@@ -111,9 +148,12 @@ export const useUserAvatar = (userId) => {
     }
 
     const handleDeleteAvatarFromStrg = async (fileId) => {
+
+        // console.log('fileId in handleDeleteAvatarFromStrg:', fileId);
+
         try {
             const response = await deleteAvatarFromStrg(fileId);
-            console.log('Avatar deleted from storage:', response);
+            // console.log('Avatar deleted from storage:', response);
 
         } catch (error) {
             console.error('Error deleting avatar from storage:', error);
@@ -123,7 +163,7 @@ export const useUserAvatar = (userId) => {
     const handleDeleteAvatarFromDoc = async () => {
         try {
             const response = await deleteAvatarFromDoc(userId);
-            console.log('Avatar deleted from doc successfully:', response);
+            // console.log('Avatar deleted from doc successfully:', response);
         } catch (error) {
             console.error('Error deleting avatar from doc:', error);
         }
@@ -139,11 +179,15 @@ export const useUserAvatar = (userId) => {
         avatarUrl,
         isUploading,
         isAvatarLoading,
+        fileFormatError,
+        avatarUploadSuccessMsg,
         setAvatarUrl,
         getUserAvatarById,
         handleAvatarUpload,
         handleDeleteAvatarFromStrg,
         handleDeleteAvatarFromDoc,
-        extractFileIdFromUrl
+        extractFileIdFromUrl,
+        setFileFormatError,
+        setAvatarUploadSuccessMsg
     };
 }

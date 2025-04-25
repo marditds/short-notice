@@ -12,10 +12,12 @@ export const Avatar = () => {
     const [isDeleting, setIsDeleting] = useState(false);
 
     const {
-        avatarUrl, isUploading, isAvatarLoading,
+        avatarUrl, isUploading, isAvatarLoading, fileFormatError, avatarUploadSuccessMsg,
         setAvatarUrl,
         handleAvatarUpload, handleDeleteAvatarFromStrg, handleDeleteAvatarFromDoc,
-        extractFileIdFromUrl
+        extractFileIdFromUrl,
+        setFileFormatError,
+        setAvatarUploadSuccessMsg
     } = useUserAvatar(userId);
 
     const handleFileChange = async (e) => {
@@ -24,7 +26,22 @@ export const Avatar = () => {
 
         const file = e.target.files[0];
 
-        if (!file) return;
+        if (!file) { return; }
+
+        console.log('this is FILE:', file);
+
+        if (
+            file.type
+            !== 'image/png' &&
+            file.type
+            !== 'image/jpeg' &&
+            file.type
+            !== 'image/jpg'
+        ) {
+            setFileFormatError('Accepted file formats are PNG and JPG/JPEG.');
+            setAvatarUploadSuccessMsg('');
+            return;
+        }
 
         if (avatarUrl) {
             const fileId = extractFileIdFromUrl(avatarUrl);
@@ -49,9 +66,13 @@ export const Avatar = () => {
                     handleDeleteAvatarFromDoc(user_id)
                 ]);
                 setAvatarUrl('');
+                setAvatarUploadSuccessMsg('Avatar deleted successfully.');
+                setFileFormatError('');
             }
         } catch (error) {
             console.error("Error deleting avatar:", error);
+            setFileFormatError('Failed to delete avatar.');
+            setAvatarUploadSuccessMsg('');
         } finally {
             setIsDeleting(false);
         }
@@ -105,6 +126,19 @@ export const Avatar = () => {
                             {isDeleting && <LoadingSpinner />}
                         </Button>
                     </Col>
+                    <Col className='mt-1 mt-md-2'>
+                        <Form.Text style={{ color: 'var(--main-caution-color)' }}>
+                            {fileFormatError}
+                        </Form.Text>
+                    </Col>
+
+                    <Col className='mt-1 mt-md-2'>
+                        <Form.Text style={{ color: 'var(--main-accent-color-hover)' }}>
+                            {avatarUploadSuccessMsg}
+                        </Form.Text>
+                    </Col>
+
+
                 </Form>
 
             </Col>

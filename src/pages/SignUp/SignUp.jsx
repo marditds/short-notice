@@ -215,6 +215,7 @@ const SignUp = () => {
             agreements={agreements}
             isSubmitDisabled={
                 (password?.length < 8) ||
+                (password?.length > 256) ||
                 (name === '') ||
                 (email === '') ||
                 !isCaptchaVerified ||

@@ -77,8 +77,8 @@ export const createAuthUser = async (email, password, name) => {
             return 'Password must be between 8 and 265 characters long, and should not be one of the commonly used password.';
         } else {
             console.error('Authentication failed:', error);
+            return 'Something went wrong. Please try again later.';
         }
-        throw error;
     }
 };
 
@@ -108,7 +108,7 @@ export const updateAuthPassword = async (newPassword, oldPassword) => {
             return 'Your current password is incorrect.'
         } else {
             console.error('Error updating Auth User Password:', error);
-            return 'Something went wrong.';
+            return 'Something went wrong. Please try again later.';
         }
 
     }
@@ -116,24 +116,24 @@ export const updateAuthPassword = async (newPassword, oldPassword) => {
 
 export const uploadAvatar = async (file) => {
 
-    console.log('dbhandler - uploadAvatar', file);
+    // console.log('dbhandler - uploadAvatar', file);
 
     try {
         const response = await storage.createFile(
             import.meta.env.VITE_AVATAR_BUCKET,
             ID.unique(),
             file,
-            // [
-            //     Permission.write(Role.users()),
-            //     Permission.write(Role.guests())
-
-            // ]
         );
-        const fileId = response.$id;
-        return fileId;
+        // const fileId = response.$id;
+        // return fileId;
+        return response;
     } catch (error) {
         console.error('Error uploading avatar:', error);
-        throw error;
+        if (error.code === 400) {
+            return 'Accepted file formats are PNG and JPG/JPEG.'
+        } else {
+            return 'Something went wrong. Please try again later.'
+        }
     }
 };
 
@@ -142,10 +142,6 @@ export const deleteAvatarFromStrg = async (fileId) => {
         const response = await storage.deleteFile(
             import.meta.env.VITE_AVATAR_BUCKET,
             fileId,
-            // [
-            //     Permission.delete(Role.users()),
-            //     Permission.delete(Role.guests())
-            // ]
         );
         console.log('Avatar deleted successfully:', response);
     } catch (error) {
@@ -153,23 +149,26 @@ export const deleteAvatarFromStrg = async (fileId) => {
     }
 };
 
-export const updateAvatar = async (userId, profilePictureId) => {
+export const updateAvatar = async (userId, avatarId) => {
+
+    // console.log('userId:', userId);
+    // console.log('avatarId:', avatarId);
+    // console.log('type of avatarId:', typeof avatarId);
+
     try {
-        await databases.updateDocument(
+        const res = await databases.updateDocument(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_USERS_COLLECTION,
             userId,
             {
-                avatar: profilePictureId
+                avatar: avatarId
             },
-            // [
-            //     Permission.update(Role.users()),
-            //     Permission.update(Role.guests())
-            // ]
         );
-        console.log('User profile updated successfully');
+        console.log('User profile updated successfully:', res);
+        return res;
     } catch (error) {
-        console.error('Error updating user profile:', error);
+        console.error('Error updating user avatar:', error);
+        return 'Something went wrong. Please try again later.'
     }
 };
 
@@ -538,7 +537,11 @@ export const createUserSession = async (email, password) => {
         return userSession;
     } catch (error) {
         console.error('Error creating session:', error);
-        return 'Invalid credentials. Please check the email and password.';
+        if (error.code === 401) {
+            return 'Invalid credentials. Please check the email and password.';
+        } else {
+            return 'Something went wrong. Please try again later.'
+        }
     }
 }
 

@@ -34,7 +34,7 @@ export const Info = () => {
     }, [username])
 
     const handleUsernameChange = (e) => {
-        const usrnm = e.target.value.replace(/\s/g, '');
+        const usrnm = e.target.value.replace(/[^a-zA-Z0-9]/g, '');
         setLocalUsername(usrnm);
         setErrorMsg('');
     };

@@ -29,9 +29,13 @@
     /* --primary-font-family: 'Poppins', sans-serif; */
     /* --primary-font-family: 'Outfit', sans-serif; */
     --primary-font-family: 'Inter', sans-serif;
+
+    scroll-behavior: smooth;
 }
 
 body {
+    scroll-behavior: smooth;
+
     font-family: var(--primary-font-family);
 
     background: rgb(255, 255, 255);
