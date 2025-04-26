@@ -9,8 +9,8 @@
  }
 
  .signup-form__btn:hover {
-     background-color: var(--main-accent-color-hover) !important;
-     border: 1px solid var(--main-accent-color) !important;
+     background-color: var(--main-accent-color) !important;
+     border: 1px solid var(--main-accent-color-hover) !important;
  }
 
  .signup-form__btn:active,

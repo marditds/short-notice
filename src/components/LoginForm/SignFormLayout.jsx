@@ -71,7 +71,7 @@ export const SignFormLayout = ({
                             </Form.Group>
                         ))}
 
-                        <Col className={`mb-3 d-flex ${!isMediumScreen ? 'ms-auto' : 'mx-auto'}`} style={{ maxWidth: maxColWidth }}>
+                        <Col className={`mb-0 mb-md-0 d-flex ${!isMediumScreen ? 'ms-auto' : 'mx-auto'}`} style={{ maxWidth: maxColWidth }}>
                             <Form.Text className='text-muted'>
                                 <ul className='ps-3'>
                                     <li>Your password must contain at least 8 characters.</li>
@@ -82,7 +82,7 @@ export const SignFormLayout = ({
 
                         {/* ReCAPTCHA */}
                         {showRecaptcha && (
-                            <Col className={`mb-3 d-flex ${!isMediumScreen ? 'ms-auto' : 'mx-auto'}`} style={{ maxWidth: maxColWidth }}>
+                            <Col className={`d-flex ${!isMediumScreen ? 'ms-auto' : 'mx-auto'}`} style={{ maxWidth: maxColWidth }}>
                                 {captchaSiteKey ? (
                                     <ReCAPTCHA
                                         className="hakobos"
@@ -102,26 +102,31 @@ export const SignFormLayout = ({
                             </Col>
                         )}
 
-                        {/* Agreements */}
-                        {agreements?.map(({ id, textBefore, linkText, onClick, onChange }, index) => (
-                            <Col key={id} className={`mb-1 mb-md-2 ${index !== 0 ? 'my-1' : ''} ${!isMediumScreen ? 'ms-auto' : 'mx-auto'}`} style={{ maxWidth: maxColWidth }}>
-                                <Form.Check
-                                    type='checkbox'
-                                    id={id}
-                                    onChange={onChange}
-                                    label={
-                                        <span>
-                                            {textBefore}
-                                            {' '}
-                                            <a href="#" onClick={(e) => { e.preventDefault(); onClick(); }} className='signup-form--terms--btn'>
-                                                {linkText}
-                                            </a>.
-                                        </span>
-                                    }
-                                    className='signup-form--terms--checkbox'
-                                />
-                            </Col>
-                        ))}
+                        {agreements.length !== 0 &&
+                            <div className='mt-3 mb-3'>
+                                {/* Agreements */}
+                                {agreements?.map(({ id, textBefore, linkText, onClick, onChange }, index) => (
+                                    <Col key={id} className={`mb-1 mb-md-2 ${index !== 0 ? 'my-1' : ''} ${!isMediumScreen ? 'ms-auto' : 'mx-auto'}`} style={{ maxWidth: maxColWidth }}>
+                                        <Form.Check
+                                            type='checkbox'
+                                            id={id}
+                                            onChange={onChange}
+                                            label={
+                                                <span>
+                                                    {textBefore}
+                                                    {' '}
+                                                    <a href="#" onClick={(e) => { e.preventDefault(); onClick(); }} className='signup-form--terms--btn'>
+                                                        {linkText}
+                                                    </a>.
+                                                </span>
+                                            }
+                                            className='signup-form--terms--checkbox'
+                                        />
+                                    </Col>
+                                ))}
+                            </div>
+                        }
+
 
                         {/* Submit button */}
                         <Col className={`d-flex flex-column ${!isMediumScreen ? 'ms-auto' : 'mx-auto'}`} style={{ maxWidth: maxColWidth }}>
@@ -141,7 +146,7 @@ export const SignFormLayout = ({
 
                 {/* Alternate route */}
                 <Row className='mt-2 w-100'>
-                    <Col className={`${!isMediumScreen ? 'd-flex ms-auto' : 'd-flex mx-auto'}`} style={{ maxWidth: maxColWidth }}>
+                    <Col className={` pe-0 pe-lg-3 ${!isMediumScreen ? 'd-flex ms-auto' : 'd-flex mx-auto'}`} style={{ maxWidth: maxColWidth }}>
                         <p className='mb-0 me-0 ms-auto'>
                             {alternateRouteText} <Link to={alternateRouteLink} className='signup-form__signin-btn'>{type === 'signup' ? 'Sign In' : 'Sign Up'}</Link>
                         </p>

@@ -1786,7 +1786,7 @@ export const createPassocde = async (user_id, passcode, accountType) => {
                 accountType
             }
         )
-        console.log('Passcode created successfuly:', response);
+        console.log('Passcode created successfuly.');
         return response;
     } catch (error) {
         console.error('Error creating passcode:', error);
@@ -1796,7 +1796,6 @@ export const createPassocde = async (user_id, passcode, accountType) => {
 export const updatePassocde = async (user_id, passcode) => {
     try {
         console.log('usr id', user_id);
-        console.log('passcode', passcode);
 
         const listResponse = await databases.listDocuments(
             import.meta.env.VITE_DATABASE,
@@ -1813,7 +1812,7 @@ export const updatePassocde = async (user_id, passcode) => {
             { passcode: passcode }
         );
 
-        console.log('Passcode updated successfully:', updateResponse);
+        console.log('Passcode updated successfully.');
 
         return updateResponse;
 
