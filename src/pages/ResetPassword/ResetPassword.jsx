@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Col, Container, Row, Form } from 'react-bootstrap';
 import { SignFormLayout } from '../../components/LoginForm/SignFormLayout';
-import sn_logo from '../../assets/sn_long.png';
+// import sn_logo from '../../assets/sn_long.png';
 
 const ResetPassword = () => {
 
@@ -34,9 +34,9 @@ const ResetPassword = () => {
 
         console.log('THESE ARE THE PARAMS:', params);
 
-        if (params.size === 0) {
-            navigate('/');
-        }
+        // if (params.size === 0) {
+        //     navigate('/');
+        // }
 
         const FunctionInResetPasswrodComponent = async () => {
             if (!userId || !secret || !email) {
@@ -87,8 +87,8 @@ const ResetPassword = () => {
                 <Col>
                     <SignFormLayout
                         type="reset"
-                        titleText="Reset password for"
-                        logo={sn_logo}
+                        titleText="Reset password"
+                        // logo={sn_logo}
                         onSubmit={onPasswrodChange}
                         formFields={formFields}
                         submitButtonText="Reset Password"

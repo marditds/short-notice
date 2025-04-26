@@ -32,6 +32,7 @@ import { LoadingComponent } from '../components/Loading/LoadingComponent.jsx';
 import SignUp from '../pages/SignUp/SignUp.jsx';
 import SignIn from '../pages/SignIn/SignIn.jsx';
 import ResetPassword from '../pages/ResetPassword/ResetPassword.jsx';
+import ForgotPassword from '../pages/ForgotPassword/ForgotPassword.jsx';
 
 const PreLoginLayout = () => {
 
@@ -192,6 +193,15 @@ export const routes = [
                 loader: async () => {
 
                     console.log('RUNNING <ResetPassword/> LOADER:');
+
+                    return null;
+                }
+            },
+            {
+                path: 'forgot-password', element: <ForgotPassword />,
+                loader: async () => {
+
+                    console.log('RUNNING <ForgotPassword/> LOADER:');
 
                     return null;
                 }

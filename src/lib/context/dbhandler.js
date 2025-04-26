@@ -114,7 +114,7 @@ export const updateAuthPassword = async (newPassword, oldPassword) => {
     }
 }
 
-export const createAuthPasswordRecover = async (email, redirectUrl) => {
+export const createAuthPasswordRecovery = async (email, redirectUrl) => {
     try {
         const result = await account.createRecovery(
             email,

@@ -33,11 +33,13 @@ export const SignFormLayout = ({
     const maxColWidth = '350px';
 
     return (
-        <Container className={`${type === 'signup' ? 'min-vh-100' : 'mt-5'} d-flex flex-column justify-content-center align-items-center`}>
-            <div className="d-flex flex-column justify-content-evenly align-items-center p-4 signup-form--bg" style={{ width: !isSmallScreen ? '580px' : '100%' }}>
+        <Container
+            className={`${type === 'signup' ? 'min-vh-100' : 'mt-5'} 
+        d-flex flex-column justify-content-center align-items-center`}>
+            <div className='d-flex flex-column justify-content-evenly align-items-center p-4 signup-form--bg' style={{ width: !isSmallScreen ? '580px' : '100%' }}>
                 {/* Title */}
                 <Row className='w-100 mb-2'>
-                    <Col className={`${isMediumScreen && 'px-0'} d-block d-lg-flex align-items-lg-baseline ${!isMediumScreen ? 'ms-0' : 'ms-auto me-auto'}`} style={{ maxWidth: maxColWidth }}>
+                    <Col className={`${isMediumScreen ? 'px-0' : ''} d-block d-lg-flex align-items-lg-baseline ${!isMediumScreen ? 'ms-0' : 'ms-auto me-auto'}`} style={{ maxWidth: maxColWidth }}>
                         <h2 className={`d-block d-lg-flex align-items-lg-baseline`}>
                             <span className='signup-form--title--span'>
                                 {titleText}
@@ -50,6 +52,14 @@ export const SignFormLayout = ({
                 {/* Form */}
                 <Row className='w-100'>
                     <Form onSubmit={onSubmit} style={{ paddingInline: !isMediumScreen ? '12px' : '0px' }}>
+
+                        {location.pathname === '/forgot-password' &&
+                            <Col className={`mb-0 mb-md-0 d-flex ${!isMediumScreen ? 'ms-auto' : 'mx-auto'}`} style={{ maxWidth: maxColWidth }}>
+                                <p>
+                                    Enter the email associated with your ShortNotice account.
+                                </p>
+                            </Col>}
+
                         {formFields?.map(({ label, type, value, onChange, controlId }, idx) => (
                             <Form.Group
                                 as={Col}
@@ -73,14 +83,16 @@ export const SignFormLayout = ({
                             </Form.Group>
                         ))}
 
-                        <Col className={`mb-0 mb-md-0 d-flex ${!isMediumScreen ? 'ms-auto' : 'mx-auto'}`} style={{ maxWidth: maxColWidth }}>
-                            <Form.Text className='text-muted'>
-                                <ul className='ps-3'>
-                                    <li>Your password must contain at least 8 characters.</li>
-                                    <li>Your password must not exceed 256 characters.</li>
-                                </ul>
-                            </Form.Text>
-                        </Col>
+                        {location.pathname !== '/forgot-password' &&
+                            <Col className={`mb-0 mb-md-0 d-flex ${!isMediumScreen ? 'ms-auto' : 'mx-auto'}`} style={{ maxWidth: maxColWidth }}>
+                                <Form.Text className='text-muted'>
+                                    <ul className='ps-3'>
+                                        <li>Your password must contain at least 8 characters.</li>
+                                        <li>Your password must not exceed 256 characters.</li>
+                                    </ul>
+                                </Form.Text>
+                            </Col>
+                        }
 
                         {/* ReCAPTCHA */}
                         {showRecaptcha && (
@@ -148,7 +160,7 @@ export const SignFormLayout = ({
 
                 {/* Alternate route */}
                 {
-                    location.pathname !== '/reset-password' && <Row className='mt-2 w-100'>
+                    ((location.pathname !== '/reset-password') && (location.pathname !== '/forgot-password')) && <Row className='mt-2 w-100'>
                         <Col className={` pe-0 pe-lg-3 ${!isMediumScreen ? 'd-flex ms-auto' : 'd-flex mx-auto'}`} style={{ maxWidth: maxColWidth }}>
                             <p className='mb-0 me-0 ms-auto'>
                                 {alternateRouteText} <Link to={alternateRouteLink} className='signup-form__signin-btn'>{type === 'signup' ? 'Sign In' : 'Sign Up'}</Link>
