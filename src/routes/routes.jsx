@@ -31,6 +31,7 @@ import { useState, useEffect } from 'react';
 import { LoadingComponent } from '../components/Loading/LoadingComponent.jsx';
 import SignUp from '../pages/SignUp/SignUp.jsx';
 import SignIn from '../pages/SignIn/SignIn.jsx';
+import ResetPassword from '../pages/ResetPassword/ResetPassword.jsx';
 
 const PreLoginLayout = () => {
 
@@ -182,6 +183,15 @@ export const routes = [
                 loader: async () => {
 
                     console.log('RUNNING <SignIn/> LOADER:');
+
+                    return null;
+                }
+            },
+            {
+                path: 'reset-password', element: <ResetPassword />,
+                loader: async () => {
+
+                    console.log('RUNNING <ResetPassword/> LOADER:');
 
                     return null;
                 }

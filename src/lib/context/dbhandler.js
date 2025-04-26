@@ -114,6 +114,22 @@ export const updateAuthPassword = async (newPassword, oldPassword) => {
     }
 }
 
+export const createAuthPasswordRecover = async (email, redirectUrl) => {
+    try {
+        const result = await account.createRecovery(
+            email,
+            redirectUrl
+        );
+
+        console.log('Success creating recovery:', result);
+
+        return result;
+
+    } catch (error) {
+        console.error('Error creating password recovery:', error);
+    }
+}
+
 export const uploadAvatar = async (file) => {
 
     // console.log('dbhandler - uploadAvatar', file);

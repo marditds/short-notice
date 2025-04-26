@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Col, Container, Form, Image, Row } from 'react-bootstrap';
 import ReCAPTCHA from 'react-google-recaptcha';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { screenUtils } from '../../lib/utils/screenUtils';
 import { LoadingSpinner } from '../Loading/LoadingSpinner';
 import './SignFormLayout.css';
@@ -25,6 +25,8 @@ export const SignFormLayout = ({
     alternateRouteLink,
     children,
 }) => {
+
+    const location = useLocation();
 
     const { isSmallScreen, isExtraSmallScreen, isMediumScreen } = screenUtils();
 
@@ -145,13 +147,16 @@ export const SignFormLayout = ({
                 </Row>
 
                 {/* Alternate route */}
-                <Row className='mt-2 w-100'>
-                    <Col className={` pe-0 pe-lg-3 ${!isMediumScreen ? 'd-flex ms-auto' : 'd-flex mx-auto'}`} style={{ maxWidth: maxColWidth }}>
-                        <p className='mb-0 me-0 ms-auto'>
-                            {alternateRouteText} <Link to={alternateRouteLink} className='signup-form__signin-btn'>{type === 'signup' ? 'Sign In' : 'Sign Up'}</Link>
-                        </p>
-                    </Col>
-                </Row>
+                {
+                    location.pathname !== '/reset-password' && <Row className='mt-2 w-100'>
+                        <Col className={` pe-0 pe-lg-3 ${!isMediumScreen ? 'd-flex ms-auto' : 'd-flex mx-auto'}`} style={{ maxWidth: maxColWidth }}>
+                            <p className='mb-0 me-0 ms-auto'>
+                                {alternateRouteText} <Link to={alternateRouteLink} className='signup-form__signin-btn'>{type === 'signup' ? 'Sign In' : 'Sign Up'}</Link>
+                            </p>
+                        </Col>
+                    </Row>
+                }
+
             </div>
 
             {/* Modals */}
