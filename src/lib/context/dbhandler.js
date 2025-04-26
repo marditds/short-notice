@@ -127,6 +127,23 @@ export const createAuthPasswordRecovery = async (email, redirectUrl) => {
 
     } catch (error) {
         console.error('Error creating password recovery:', error);
+        return 'Error creating password recovery link. Please try again later.'
+    }
+}
+
+export const updateAuthPasswordRecovery = async (userId, secret, password) => {
+    try {
+        const result = await account.updateRecovery(
+            userId,
+            secret,
+            password
+        );
+
+        console.log('Sccess updating recovery:', result);
+
+    } catch (error) {
+        console.error('Error updating password recovery:', error);
+        return 'Error updating your password. Please try again later.'
     }
 }
 
