@@ -12,6 +12,7 @@ const ResetPassword = () => {
     const [secret, setSecret] = useState(null);
     const [email, setEmail] = useState(null);
     const [newPassword, setNewPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [isResetPasswordLoading, setIsResetPasswordLoading] = useState(false);
     const [resetPsswdSuccessMsg, setResetPsswdSuccessMsg] = useState(null);
     const [resetPsswdErrorMsg, setResetPsswdErrorMsg] = useState(null);
@@ -23,6 +24,13 @@ const ResetPassword = () => {
             value: newPassword,
             onChange: (e) => setNewPassword(e.target.value),
             controlId: 'resetPasswordFormPassword',
+        },
+        {
+            label: 'Confirm Password:',
+            type: 'password',
+            value: confirmPassword,
+            onChange: (e) => setConfirmPassword(e.target.value),
+            controlId: 'resetPasswordFormConfirmPassword',
         }
     ]
 
@@ -67,6 +75,11 @@ const ResetPassword = () => {
 
         event.preventDefault();
 
+        if (newPassword !== confirmPassword) {
+            setResetPsswdErrorMsg('Passwords do not match.');
+            return;
+        }
+
         try {
             setIsResetPasswordLoading(true);
 
@@ -83,7 +96,6 @@ const ResetPassword = () => {
             console.log('res in onPasswrodChange', res);
 
             setResetPsswdSuccessMsg('Your password was changed successfully.')
-
             setResetPsswdErrorMsg('');
 
         } catch (error) {
@@ -108,7 +120,7 @@ const ResetPassword = () => {
                         isLoading={isResetPasswordLoading}
                         errorMsg={resetPsswdErrorMsg}
                         successMsg={resetPsswdSuccessMsg}
-                        isSubmitDisabled={newPassword.length < 8}
+                        isSubmitDisabled={newPassword.length < 8 || confirmPassword.length < 8}
                     />
                 </Col>
             </Row>
