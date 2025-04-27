@@ -62,6 +62,15 @@ p {
     color: var(--main-text-color);
 }
 
+a {
+    color: var(--main-accent-color-hover);
+    transition: var(--main-transition-speed);
+}
+
+a:hover {
+    color: var(--main-accent-color);
+}
+
 @media (max-width: 767px) {
 
     body, p, details {

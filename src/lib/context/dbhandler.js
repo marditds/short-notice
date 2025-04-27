@@ -127,7 +127,13 @@ export const createAuthPasswordRecovery = async (email, redirectUrl) => {
 
     } catch (error) {
         console.error('Error creating password recovery:', error);
-        return 'Error creating password recovery link. Please try again later.'
+        if (error.code === 400) {
+            return 'Invalid email address.';
+        } else if (error.code === 404) {
+            return 'No account is associated with this email address. Please check the email entered or sign up for a new account.';
+        } else {
+            return 'Error creating password recovery link. Please try again later.'
+        }
     }
 }
 
@@ -141,9 +147,15 @@ export const updateAuthPasswordRecovery = async (userId, secret, password) => {
 
         console.log('Sccess updating recovery:', result);
 
+        return result;
+
     } catch (error) {
         console.error('Error updating password recovery:', error);
-        return 'Error updating your password. Please try again later.'
+        if (error.code === 401) {
+            return 'This link has expired. Request a new recovery email.';
+        } else {
+            return 'Error updating your password. Please try again later.'
+        }
     }
 }
 

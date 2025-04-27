@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Col, Container, Form, Image, Row } from 'react-bootstrap';
 import ReCAPTCHA from 'react-google-recaptcha';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { screenUtils } from '../../lib/utils/screenUtils';
 import { LoadingSpinner } from '../Loading/LoadingSpinner';
 import './SignFormLayout.css';
@@ -15,6 +15,7 @@ export const SignFormLayout = ({
     submitButtonText,
     isLoading,
     errorMsg,
+    successMsg,
     showRecaptcha = false,
     captchaSiteKey,
     onCaptchaChange,
@@ -25,8 +26,6 @@ export const SignFormLayout = ({
     alternateRouteLink,
     children,
 }) => {
-
-    const location = useLocation();
 
     const { isSmallScreen, isExtraSmallScreen, isMediumScreen } = screenUtils();
 
@@ -53,7 +52,7 @@ export const SignFormLayout = ({
                 <Row className='w-100'>
                     <Form onSubmit={onSubmit} style={{ paddingInline: !isMediumScreen ? '12px' : '0px' }}>
 
-                        {location.pathname === '/forgot-password' &&
+                        {type === 'forgot' &&
                             <Col className={`mb-0 mb-md-0 d-flex ${!isMediumScreen ? 'ms-auto' : 'mx-auto'}`} style={{ maxWidth: maxColWidth }}>
                                 <p>
                                     Enter the email associated with your ShortNotice account.
@@ -83,8 +82,22 @@ export const SignFormLayout = ({
                             </Form.Group>
                         ))}
 
-                        {location.pathname !== '/forgot-password' &&
-                            <Col className={`mb-0 mb-md-0 d-flex ${!isMediumScreen ? 'ms-auto' : 'mx-auto'}`} style={{ maxWidth: maxColWidth }}>
+                        {type === 'signin' &&
+                            <Col
+                                className={`mb-2 ${!isMediumScreen ? 'ms-auto' : 'mx-auto'}`}
+                                style={{ maxWidth: maxColWidth }}
+                            >
+                                <Form.Text className='text-muted text-end d-flex justify-content-end'>
+                                    <Link to='/forgot-password'>
+                                        Forgot password?
+                                    </Link>
+                                </Form.Text>
+                            </Col>
+                        }
+
+                        {type !== 'forgot' &&
+                            <Col className={`mb-0 mb-md-0 d-flex ${!isMediumScreen ? 'ms-auto' : 'mx-auto'}`}
+                                style={{ maxWidth: maxColWidth }}>
                                 <Form.Text className='text-muted'>
                                     <ul className='ps-3'>
                                         <li>Your password must contain at least 8 characters.</li>
@@ -151,16 +164,28 @@ export const SignFormLayout = ({
                             >
                                 {!isLoading ? submitButtonText : <LoadingSpinner />}
                             </Button>
-                            <Form.Text>
-                                <span style={{ color: 'var(--main-caution-color)' }}>{errorMsg}</span>
-                            </Form.Text>
+                            {errorMsg &&
+                                <Form.Text className='mt-3 text-center'>
+                                    <span style={{ color: 'var(--main-caution-color)' }}>
+                                        {errorMsg}{' '}
+                                        {type === 'reset' && <Link className='d-block mt-1' to='/forgot-password'>Get a new link</Link>}
+                                    </span>
+                                </Form.Text>}
+
+                            {successMsg &&
+                                <Form.Text className='mt-3 text-center'>
+                                    <span style={{ color: 'var(--main-accent-color-hover)' }}>
+                                        {successMsg}{' '}
+                                        {type === 'reset' && <Link to='/login'>Login</Link>}
+                                    </span>
+                                </Form.Text>}
                         </Col>
                     </Form>
                 </Row>
 
                 {/* Alternate route */}
                 {
-                    ((location.pathname !== '/reset-password') && (location.pathname !== '/forgot-password')) && <Row className='mt-2 w-100'>
+                    ((type !== 'reset') && (type !== 'forgot')) && <Row className='mt-2 w-100'>
                         <Col className={` pe-0 pe-lg-3 ${!isMediumScreen ? 'd-flex ms-auto' : 'd-flex mx-auto'}`} style={{ maxWidth: maxColWidth }}>
                             <p className='mb-0 me-0 ms-auto'>
                                 {alternateRouteText} <Link to={alternateRouteLink} className='signup-form__signin-btn'>{type === 'signup' ? 'Sign In' : 'Sign Up'}</Link>
