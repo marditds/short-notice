@@ -39,7 +39,6 @@ const ResetPassword = () => {
         const params = new URLSearchParams(window.location.search);
         setUserId(params.get('userId'));
         setSecret(params.get('secret'));
-        setEmail(params.get('email'));
 
         console.log('THESE ARE THE PARAMS:', params);
 
@@ -53,10 +52,6 @@ const ResetPassword = () => {
 
                 console.log('FunctionInResetPasswrodComponent in process.');
 
-                console.log('userId:', userId);
-                console.log('secret:', secret);
-                console.log('email:', email);
-
             } catch (err) {
                 console.error('Authentication failed. Please try again.', err);
             } finally {
@@ -64,11 +59,16 @@ const ResetPassword = () => {
             }
         };
 
-        if (userId && secret && email) {
+        if (userId && secret) {
             functionInResetPasswrodComponent();
         }
 
-    }, [userId, secret, email]);
+    }, [userId, secret]);
+
+    useEffect(() => {
+        console.log('userId:', userId);
+        console.log('secret:', secret);
+    }, [userId, secret]);
 
     // Change password function
     const onPasswrodChange = async (event) => {

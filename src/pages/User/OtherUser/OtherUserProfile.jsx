@@ -878,7 +878,7 @@ const OtherUserProfile = () => {
                                                 icon={<i className="bi bi-hand-thumbs-up"></i>}
                                             />
                                         ) :
-                                        <div className='d-flex justify-content-center'>
+                                        <div className='d-flex justify-content-center pt-5'>
                                             <LoadingSpinner /><span className='ms-2'>Loading {otherUsername}'s likes...</span>
                                         </div>
                                     }

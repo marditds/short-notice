@@ -168,7 +168,7 @@ export const SignFormLayout = ({
                                 <Form.Text className='mt-3 text-center'>
                                     <span style={{ color: 'var(--main-caution-color)' }}>
                                         {errorMsg}{' '}
-                                        {type === 'reset' && <Link className='d-block mt-1' to='/forgot-password'>Get a new link</Link>}
+                                        {((type === 'reset') && (errorMsg !== 'Passwords do not match.')) && <Link className='d-block mt-1' to='/forgot-password'>Get a new link</Link>}
                                     </span>
                                 </Form.Text>}
 
@@ -176,7 +176,7 @@ export const SignFormLayout = ({
                                 <Form.Text className='mt-3 text-center'>
                                     <span style={{ color: 'var(--main-accent-color-hover)' }}>
                                         {successMsg}{' '}
-                                        {type === 'reset' && <Link to='/login'>Login</Link>}
+                                        {type === 'reset' && <Link to='/signin'>Sign In</Link>}
                                     </span>
                                 </Form.Text>}
                         </Col>

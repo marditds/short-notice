@@ -10,43 +10,45 @@ export const UserPassword = () => {
 
     const [oldPasswordVal, setOldPasswordVal] = useState();
     const [newPasswordVal, setNewPasswordVal] = useState();
+    const [confirmPasswordVal, setConfirmPasswordVal] = useState();
     const [isUpdating, setIsUpdating] = useState(false);
-    const [errorMsg, setErrorMsg] = useState('');
     const [successMsg, setSuccessMsg] = useState('');
+    const [errorMsg, setErrorMsg] = useState('');
 
     const handleOldPasswordChange = (e) => {
-        console.log(e.target.value);
         const input = e.target.value;
-
-        console.log('input', input);
 
         if (input.length <= 256) {
             setOldPasswordVal(input);
-
-            if (input.length > 0 && input.length < 8) {
-                return;
-            }
         }
     };
 
     const handleNewPasswordChange = (e) => {
-        console.log(e.target.value);
         const input = e.target.value;
-
-        console.log('input', input);
 
         if (input.length <= 256) {
             setNewPasswordVal(input);
-
-            if (input.length > 0 && input.length < 8) {
-                return;
-            }
         }
     }
 
+    const handleConfirmPasswordChange = (e) => {
+        const input = e.target.value;
+
+        if (input.length <= 256) {
+            setConfirmPasswordVal(input);
+        }
+    };
+
     const handleUpdatePassword = async (e) => {
-        setIsUpdating(true);
+
         e.preventDefault();
+
+        if (newPasswordVal !== confirmPasswordVal) {
+            setErrorMsg('New passwords do not match.');
+            return;
+        }
+
+        setIsUpdating(true);
         try {
             const res = await updateAuthPassword(newPasswordVal, oldPasswordVal);
 
@@ -56,9 +58,12 @@ export const UserPassword = () => {
             }
 
             setErrorMsg('');
-            setSuccessMsg('Passowrd updated successfully.')
+            setSuccessMsg('Password updated successfully.')
+            setOldPasswordVal('');
+            setNewPasswordVal('');
+            setConfirmPasswordVal('');
         } catch (error) {
-            console.error('Error updating passcode:', error);
+            console.error('Error updating password:', error);
             setErrorMsg('Something went wrong. Please try again later.');
         } finally {
             setIsUpdating(false);
@@ -89,7 +94,6 @@ export const UserPassword = () => {
                             placeholder='Enter your current password'
                             value={oldPasswordVal || ''}
                             onChange={handleOldPasswordChange}
-
                             className='settings__username-field mb-1 mb-md-2'
                         />
                     </Form.Group>
@@ -99,19 +103,34 @@ export const UserPassword = () => {
                             placeholder='Enter your new password'
                             value={newPasswordVal || ''}
                             onChange={handleNewPasswordChange}
-
                             className='settings__username-field mb-1 mb-md-2'
                         />
                         <Form.Text className='settings__username-unique'>
-                            <ul className='mb-0 ps-3'>
+                            <ul className='mb-1 mb-md-2 ps-3'>
                                 <li>Your password must contain at least 8 characters.</li>
                                 <li>Your password must not exceed 256 characters.</li>
                             </ul>
                         </Form.Text>
                     </Form.Group>
+                    <Form.Group controlId='confirmPasswordField'>
+                        <Form.Control
+                            type='password'
+                            placeholder='Re-enter your new password'
+                            value={confirmPasswordVal || ''}
+                            onChange={handleConfirmPasswordChange}
+                            className='settings__username-field mb-1 mb-md-2'
+                        />
+                    </Form.Group>
                     <Button
                         type='submit'
-                        disabled={isUpdating || newPasswordVal?.length < 8 || newPasswordVal === undefined || oldPasswordVal?.length < 8 || oldPasswordVal === undefined}
+                        disabled={isUpdating ||
+                            newPasswordVal?.length < 8 ||
+                            newPasswordVal === undefined ||
+                            oldPasswordVal?.length < 8 ||
+                            oldPasswordVal === undefined ||
+                            confirmPasswordVal?.length < 8 ||
+                            confirmPasswordVal === undefined
+                        }
                         className='settings__update-username-btn mt-1 mt-md-2'
                     >
                         {isUpdating ? 'Updating...' : 'Update'}
