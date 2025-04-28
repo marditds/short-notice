@@ -769,7 +769,7 @@ const OtherUserProfile = () => {
                                                 otherUsername={otherUsername}
                                             />
                                         ) :
-                                        <div className='d-flex justify-content-center'>
+                                        <div className='d-flex justify-content-center pt-5'>
                                             <LoadingSpinner /><span className='ms-2'>Loading {otherUsername}'s notices...</span>
                                         </div>
                                     }
@@ -824,7 +824,7 @@ const OtherUserProfile = () => {
                                                 }
                                             />)
                                         :
-                                        <div className='d-flex justify-content-center'>
+                                        <div className='d-flex justify-content-center pt-5'>
                                             <LoadingSpinner /><span className='ms-2'>Loading {otherUsername}'s saves...</span>
                                         </div>
                                     }

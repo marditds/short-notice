@@ -24,10 +24,16 @@ export const SignFormLayout = ({
     isSubmitDisabled,
     alternateRouteText,
     alternateRouteLink,
+    wishValue,
+    onWishChange,
     children,
 }) => {
 
     const { isSmallScreen, isExtraSmallScreen, isMediumScreen } = screenUtils();
+
+    const randomName = React.useMemo(() => {
+        return 'rnnm_' + Math.random().toString(36).substring(2, 12);
+    }, []);
 
     const maxColWidth = '350px';
 
@@ -81,6 +87,36 @@ export const SignFormLayout = ({
                                 />
                             </Form.Group>
                         ))}
+
+                        {/* Wish field */}
+                        <Form.Group
+                            as={Col}
+                            controlId={randomName}
+                        // style={{
+                        //     position: 'absolute',
+                        //     left: '-100vw',
+                        //     top: 'auto',
+                        //     width: '1px',
+                        //     height: '1px',
+                        //     overflow: 'hidden'
+                        // }}
+                        >
+                            <Form.Label aria-hidden='true'>
+                                Are you sure? {randomName}
+                            </Form.Label>
+                            <Form.Control
+                                type='text'
+                                name={randomName}
+                                tabIndex='-1'
+                                aria-hidden='true'
+                                autoComplete='off'
+                                value={wishValue}
+                                onChange={onWishChange}
+                                spellCheck='false'
+                                autoCorrect='off'
+                            />
+                        </Form.Group>
+
 
                         {type === 'signin' &&
                             <Col
@@ -160,7 +196,7 @@ export const SignFormLayout = ({
                             <Button
                                 type='submit'
                                 className={`signup-form__btn me-0 ms-auto ${isExtraSmallScreen && 'w-100'}`}
-                                disabled={isSubmitDisabled}
+                                disabled={isSubmitDisabled || wishValue !== ''}
                             >
                                 {!isLoading ? submitButtonText : <LoadingSpinner />}
                             </Button>

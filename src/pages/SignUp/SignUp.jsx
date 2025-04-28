@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createAuthUser, createUserSession } from '../../lib/context/dbhandler';
 import { useUserContext } from '../../lib/context/UserContext';
-import { screenUtils } from '../../lib/utils/screenUtils';
 import sn_logo from '../../assets/sn_long.png';
 import { keysProvider } from '../../lib/context/keysProvider';
 import TOSList from '../../components/Legal/TOSList';
@@ -22,11 +21,11 @@ const SignUp = () => {
 
     const navigate = useNavigate();
 
-    const { isSmallScreen, isExtraSmallScreen, isMediumScreen, isLargeScreen } = screenUtils();
-
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
+    const [easterWish, setEasterWish] = useState('');
+
     const [isAccountGettingCreated, setIsAccountGettingCreated] = useState(false);
     const [doesEmailExist, setDoesEmailExist] = useState(false);
 
@@ -129,6 +128,11 @@ const SignUp = () => {
         console.log('Password:', password);
         console.log('Name:', name);
 
+        if (easterWish) {
+            setErrorMsg('Try again.');
+            return;
+        }
+
         let signupSuccess = false;
 
         try {
@@ -213,6 +217,8 @@ const SignUp = () => {
             onCaptchaChange={onCaptchaChange}
             captchaErrorMessage={captchaErrorMessage}
             agreements={agreements}
+            wishValue={easterWish}
+            onWishChange={(e) => setEasterWish(e.target.value)}
             isSubmitDisabled={
                 (password?.length < 8) ||
                 (password?.length > 256) ||

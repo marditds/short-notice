@@ -65,11 +65,6 @@ const ResetPassword = () => {
 
     }, [userId, secret]);
 
-    useEffect(() => {
-        console.log('userId:', userId);
-        console.log('secret:', secret);
-    }, [userId, secret]);
-
     // Change password function
     const onPasswrodChange = async (event) => {
 
@@ -105,7 +100,6 @@ const ResetPassword = () => {
             setIsResetPasswordLoading(false);
         }
     }
-
 
     return (
         <Container>

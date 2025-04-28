@@ -6,6 +6,7 @@ import { SignFormLayout } from '../../components/LoginForm/SignFormLayout';
 const ForgotPassword = () => {
 
     const [email, setEmail] = useState('');
+    const [thanksgivingWish, setThanksgivingWish] = useState('');
     const [isForgotPasswordLoading, setIsForgotPasswordLoading] = useState(false);
     const [forgotPsswdSuccessMsg, setForgotPsswdSuccessMsg] = useState(null);
     const [forgotPsswdErrorMsg, setForgotPsswdErrorMsg] = useState(null);
@@ -15,6 +16,11 @@ const ForgotPassword = () => {
     const onForgotPassword = async (event) => {
 
         event.preventDefault();
+
+        if (thanksgivingWish) {
+            setErrorMsg('Try again.');
+            return;
+        }
 
         try {
             setIsForgotPasswordLoading(true);
@@ -66,6 +72,8 @@ const ForgotPassword = () => {
                         isLoading={isForgotPasswordLoading}
                         errorMsg={forgotPsswdErrorMsg}
                         successMsg={forgotPsswdSuccessMsg}
+                        wishValue={thanksgivingWish}
+                        onWishChange={(e) => setThanksgivingWish(e.target.value)}
                         isSubmitDisabled={email === ''}
                     />
                 </Col>
