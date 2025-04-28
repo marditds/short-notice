@@ -92,14 +92,14 @@ export const SignFormLayout = ({
                         <Form.Group
                             as={Col}
                             controlId={randomName}
-                        // style={{
-                        //     position: 'absolute',
-                        //     left: '-100vw',
-                        //     top: 'auto',
-                        //     width: '1px',
-                        //     height: '1px',
-                        //     overflow: 'hidden'
-                        // }}
+                            style={{
+                                position: 'absolute',
+                                left: '-100vw',
+                                top: 'auto',
+                                width: '1px',
+                                height: '1px',
+                                overflow: 'hidden'
+                            }}
                         >
                             <Form.Label aria-hidden='true'>
                                 Are you sure? {randomName}
