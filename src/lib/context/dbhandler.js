@@ -161,16 +161,12 @@ export const updateAuthPasswordRecovery = async (userId, secret, password) => {
 
 export const uploadAvatar = async (file) => {
 
-    // console.log('dbhandler - uploadAvatar', file);
-
     try {
         const response = await storage.createFile(
             import.meta.env.VITE_AVATAR_BUCKET,
             ID.unique(),
             file,
         );
-        // const fileId = response.$id;
-        // return fileId;
         return response;
     } catch (error) {
         console.error('Error uploading avatar:', error);
@@ -195,10 +191,6 @@ export const deleteAvatarFromStrg = async (fileId) => {
 };
 
 export const updateAvatar = async (userId, avatarId) => {
-
-    // console.log('userId:', userId);
-    // console.log('avatarId:', avatarId);
-    // console.log('type of avatarId:', typeof avatarId);
 
     try {
         const res = await databases.updateDocument(
@@ -228,10 +220,6 @@ export const deleteAvatarFromDoc = async (userId) => {
             {
                 avatar: null
             },
-            // [
-            //     Permission.delete(Role.users()),
-            //     Permission.delete(Role.guests())
-            // ]
         );
         console.log('User profile avatar set to null successfully');
     } catch (error) {
@@ -357,7 +345,7 @@ export const getAllUsersByString = async (str, limit, cursorAfter) => {
     }
 };
 
-const checkUsernameExists = async (username) => {
+export const checkUsernameExists = async (username) => {
     try {
         const users = await databases.listDocuments(
             import.meta.env.VITE_DATABASE,
@@ -374,22 +362,19 @@ const checkUsernameExists = async (username) => {
 export const createUser = async ({ id, email, given_name, username, accountType }) => {
     try {
 
+        // checkin email
         const existingUser = await databases.listDocuments(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_USERS_COLLECTION,
             [Query.equal('email', email)],
-            // [
-            //     Permission.write(Role.users()),
-            //     Permission.write(Role.guests())
-            // ]
         );
-
-        const usernameExists = await checkUsernameExists(username);
-
         if (existingUser.total > 0) {
             console.log('User already exists:', existingUser.documents[0]);
             return;
         }
+
+        // checking username
+        const usernameExists = await checkUsernameExists(username);
 
         if (usernameExists) {
             console.log('Username already exists:', username);
@@ -434,6 +419,13 @@ export const registerAuthUser = async (id, email, username) => {
 
 export const updateUser = async ({ userId, username }) => {
     try {
+
+        // const usernameExists = await checkUsernameExists(username);
+
+        // if (usernameExists) {
+        //     return 'Username already taken.';
+        // }
+
         const res = await databases.updateDocument(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_USERS_COLLECTION,
@@ -584,8 +576,10 @@ export const createUserSession = async (email, password) => {
         console.error('Error creating session:', error);
         if (error.code === 401) {
             return 'Invalid credentials. Please check the email and password.';
+        } else if (error.code === 429) {
+            return 'Too many attempts. ';
         } else {
-            return 'Something went wrong. Please try again later.'
+            return 'Something went wrong. Please try again later.';
         }
     }
 }

@@ -95,10 +95,7 @@ export const SignFormLayout = ({
                             style={{
                                 position: 'absolute',
                                 left: '-100vw',
-                                top: 'auto',
-                                width: '1px',
-                                height: '1px',
-                                overflow: 'hidden'
+                                top: 'auto'
                             }}
                         >
                             <Form.Label aria-hidden='true'>

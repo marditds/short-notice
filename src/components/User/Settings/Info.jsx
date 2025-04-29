@@ -15,7 +15,7 @@ export const Info = () => {
         setUsername,
         setRegisteredUsername } = useUserContext();
 
-    const { handleUpdateUser } = useUserInfo(userEmail);
+    const { checkUsernameExists, handleUpdateUser } = useUserInfo(userEmail);
 
     const [localUsername, setLocalUsername] = useState(username);
     const [isUpdating, setIsUpdating] = useState(false);
@@ -47,6 +47,15 @@ export const Info = () => {
 
         e.preventDefault();
 
+        const usernameExists = await checkUsernameExists(localUsername);
+
+        if (typeof usernameExists === 'string') {
+            setErrorMsg(usernameExists);
+            setSuccessMsg('');
+            setIsUpdating(false);
+            return;
+        }
+
         try {
             if (forbiddenUsrnms.includes(localUsername)) {
                 setErrorMsg(`The username ${localUsername} is not allowed. Please choose a different username.`);
@@ -60,7 +69,9 @@ export const Info = () => {
 
             if (localUsername.trim()) {
                 setErrorMsg('');
+
                 const updatedUser = await handleUpdateUser(localUsername);
+
                 setUsername(localUsername);
                 setRegisteredUsername(localUsername)
 
@@ -129,7 +140,7 @@ export const Info = () => {
 
                         <Button
                             type='submit'
-                            disabled={isUpdating || localUsername === '' ? true : false}
+                            disabled={isUpdating || localUsername === '' ? true : false || localUsername === username}
                             className='settings__update-username-btn mt-1 mt-md-2'
                             onClick={handleSubmit}>
                             {isUpdating ? 'Updating...' : 'Update'}

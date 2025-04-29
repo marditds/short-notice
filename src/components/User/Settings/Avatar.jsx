@@ -4,10 +4,20 @@ import { LoadingSpinner } from '../../Loading/LoadingSpinner';
 import defaultAvatar from '../../../assets/default.png';
 import { useUserContext } from '../../../lib/context/UserContext';
 import { useUserAvatar } from '../../../lib/hooks/useUserAvatar';
+import { getCroppedAvatar } from '../../../lib/utils/avatarUtils';
+import Cropper from 'react-easy-crop';
+import { AvatarCropModal } from '../Modals';
 
 export const Avatar = () => {
 
     const { userId } = useUserContext();
+
+    const [showAvatarCropModal, setShowAvatarCropModal] = useState(false);
+    const [imageSrc, setImageSrc] = useState(null);
+    const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+    const [crop, setCrop] = useState({ x: 0, y: 0 });
+    const [zoom, setZoom] = useState(1);
+    const [showCropper, setShowCropper] = useState(false);
 
     const [isDeleting, setIsDeleting] = useState(false);
 
@@ -20,37 +30,79 @@ export const Avatar = () => {
         setAvatarUploadSuccessMsg
     } = useUserAvatar(userId);
 
+    // const handleFileChange = async (e) => {
+
+    //     console.log('Changing avatar...');
+
+    //     console.log('THIS IS e', e);
+
+    //     const file = e.target.files[0];
+
+    //     if (!file) { return; }
+
+    //     console.log('this is FILE:', file);
+
+    //     if (
+    //         file.type
+    //         !== 'image/png' &&
+    //         file.type
+    //         !== 'image/jpeg' &&
+    //         file.type
+    //         !== 'image/jpg'
+    //     ) {
+    //         setFileFormatError('Accepted file formats are PNG and JPG/JPEG.');
+    //         setAvatarUploadSuccessMsg('');
+    //         return;
+    //     }
+
+    //     if (avatarUrl) {
+    //         const fileId = extractFileIdFromUrl(avatarUrl);
+    //         await Promise.allSettled([
+    //             handleDeleteAvatarFromStrg(fileId),
+    //             handleAvatarUpload(e)
+    //         ]);
+    //     } else {
+    //         await handleAvatarUpload(e);
+    //     }
+    // };
+
     const handleFileChange = async (e) => {
-
-        console.log('Changing avatar...');
-
         const file = e.target.files[0];
+        if (!file) return;
 
-        if (!file) { return; }
-
-        console.log('this is FILE:', file);
-
-        if (
-            file.type
-            !== 'image/png' &&
-            file.type
-            !== 'image/jpeg' &&
-            file.type
-            !== 'image/jpg'
-        ) {
+        if (file.type !== 'image/png' && file.type !== 'image/jpeg' && file.type !== 'image/jpg') {
             setFileFormatError('Accepted file formats are PNG and JPG/JPEG.');
             setAvatarUploadSuccessMsg('');
             return;
         }
 
-        if (avatarUrl) {
-            const fileId = extractFileIdFromUrl(avatarUrl);
-            await Promise.allSettled([
-                handleDeleteAvatarFromStrg(fileId),
-                handleAvatarUpload(e)
-            ]);
-        } else {
-            await handleAvatarUpload(e);
+        const reader = new FileReader();
+        reader.addEventListener('load', () => {
+            setImageSrc(reader.result);
+            setShowCropper(true);
+            setShowAvatarCropModal(true);
+        });
+        reader.readAsDataURL(file);
+    };
+
+    const handleSaveCroppedImage = async () => {
+        try {
+            const croppedBlob = await getCroppedAvatar(imageSrc, croppedAreaPixels);
+
+            const croppedFile = new File([croppedBlob], 'avatar.jpeg', { type: 'image/jpeg' });
+
+            if (avatarUrl) {
+                const fileId = extractFileIdFromUrl(avatarUrl);
+                await handleDeleteAvatarFromStrg(fileId);
+            }
+
+            await handleAvatarUpload({ target: { files: [croppedFile] } });
+
+            setShowCropper(false);
+        } catch (error) {
+            console.error('Error saving cropped image:', error);
+        } finally {
+            setShowAvatarCropModal(false);
         }
     };
 
@@ -76,6 +128,10 @@ export const Avatar = () => {
         } finally {
             setIsDeleting(false);
         }
+    }
+
+    const handleCloseAvatarCropModal = () => {
+        setShowAvatarCropModal(false);
     }
 
     return (
@@ -108,7 +164,8 @@ export const Avatar = () => {
                                 <>
                                     <Form.Label className='settings__upload-avatar-label mb-1 mb-md-2'>Upload Avatar</Form.Label>
                                     <Form.Control
-                                        type="file"
+                                        type='file'
+                                        accept='image/*'
                                         onChange={handleFileChange}
                                         className='settings__upload-avatar-field'
 
@@ -145,6 +202,51 @@ export const Avatar = () => {
                 </Form>
 
             </Col>
+
+
+            <AvatarCropModal
+                showAvatarCropModal={showAvatarCropModal}
+                isUploading={isUploading}
+
+                handleCloseAvatarCropModal={handleCloseAvatarCropModal}
+                handleSaveCroppedImage={handleSaveCroppedImage}
+                loadingSpinner={<LoadingSpinner />}
+            >
+                {showCropper && imageSrc && (
+                    // laight gray bg
+                    <div className='avatar-crop-component' style={{ position: 'relative', width: '100%', height: '100%', background: '#333' }}>
+                        {/* Cropper takes full size */}
+                        {/* dark gray bg */}
+                        <div style={{ position: 'relative', width: '100%', height: '90%' }}>
+                            <Cropper
+                                image={imageSrc}
+                                crop={crop}
+                                zoom={zoom}
+                                aspect={1}
+                                onCropChange={setCrop}
+                                onZoomChange={setZoom}
+                                onCropComplete={(croppedArea, croppedAreaPixels) => setCroppedAreaPixels(croppedAreaPixels)}
+                            />
+                        </div>
+
+                        {/* Zoom Slider using Form.Range */}
+                        <Form.Group controlId='zoomRange' className='px-3 mt-2'>
+                            <Form.Label className='text-light small mb-1'>Zoom</Form.Label>
+                            <Form.Range
+                                min={1}
+                                max={3}
+                                step={0.05}
+                                value={zoom}
+                                onChange={(e) => setZoom(Number(e.target.value))}
+                                className='setting__avatar-crop-zoom-slider'
+                            />
+                        </Form.Group>
+
+                    </div>
+                )}
+
+            </AvatarCropModal>
+
 
         </Row>
     )

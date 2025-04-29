@@ -7,24 +7,45 @@
     gap: 48px;
 }
 
-/* .setting__avatar-display,
-.settings__blocked-accounts-profile-avatar {
-    --r: 8px;
-    aspect-ratio: cos(30deg);
-    --_g: calc(tan(60deg)*var(--r)) right var(--r), #000 98%, #0000 101%;
-    mask:
-        conic-gradient(from 240deg at calc(200% - 3*var(--r)/2), #000 60deg, #0000 0) 100% 0/calc(100% - 3*var(--r)/2) 100% no-repeat,
-        radial-gradient(var(--r) at calc(2*var(--r)) 50%, #000 98%, #0000 101%),
-        radial-gradient(var(--r) at top var(--_g)),
-        radial-gradient(var(--r) at bottom var(--_g));
-    clip-path: polygon(0 50%, 100% 100%, 100% 0);
-    object-fit: cover;
-    object-position: left center;
-} */
-
 .setting__avatar-display {
     height: 85px !important;
     width: 85px !important;
+}
+
+.avatar-crop-component {
+    background-color: var(--main-accent-color-hover);
+}
+
+.setting__avatar-crop-zoom-slider::-webkit-slider-thumb {
+    background-color: var(--main-accent-color) !important;
+    border-radius: var(--main-rounded-corner) !important;
+    height: 22px !important;
+    width: 22px !important;
+    margin-top: -6px;
+    box-shadow: none !important;
+}
+
+.setting__avatar-crop-zoom-slider::-moz-range-thumb {
+    background-color: var(--main-accent-color) !important;
+    border-radius: var(--main-rounded-corner) !important;
+    height: 22px !important;
+    width: 22px !important;
+    margin-top: -6px;
+    box-shadow: none !important;
+}
+
+.setting__avatar-crop-zoom-slider::-webkit-slider-thumb:hover,
+.setting__avatar-crop-zoom-slider::-webkit-slider-thumb:active,
+.setting__avatar-crop-zoom-slider::-webkit-slider-thumb:focus {
+    background-color: var(--main-accent-color-hover) !important;
+    border-radius: var(--main-rounded-corner) !important;
+}
+
+.setting__avatar-crop-zoom-slider::-moz-range-thumb:hover,
+.setting__avatar-crop-zoom-slider::-moz-range-thumb:active,
+.setting__avatar-crop-zoom-slider::-moz-range-thumb:focus {
+    background-color: var(--main-accent-color-hover) !important;
+    border-radius: var(--main-rounded-corner) !important;
 }
 
 .settings__blocked-accounts-profile-avatar {
@@ -70,6 +91,7 @@
     box-shadow: none !important;
 }
 
+
 .settings__delete-avatar-btn,
 .settings__update-username-btn,
 .settings__update-website-btn,
@@ -85,6 +107,47 @@
     border: none;
     border-radius: var(--main-rounded-corner) !important;
     width: fit-content;
+    box-shadow: none !important;
+}
+
+.setting__avatar-crop-save-btn {
+    border-radius: var(--main-rounded-corner);
+    background-color: var(--main-accent-color) !important;
+    color: var(--main-text-color);
+    border: 1px solid var(--main-accent-color);
+}
+
+.setting__avatar-crop-save-btn:hover {
+    border-color: var(--main-accent-color-hover);
+    color: var(--main-text-color);
+}
+
+.setting__avatar-crop-save-btn:focus,
+.setting__avatar-crop-save-btn:active {
+    background-color: var(--main-accent-color-hover) !important;
+    border-color: var(--main-accent-color-hover) !important;
+    color: var(--main-text-color) !important;
+    box-shadow: none !important;
+}
+
+.setting__avatar-crop-cancel-btn {
+    border-radius: var(--main-rounded-corner);
+    background-color: transparent;
+    color: var(--main-text-color);
+    border-color: var(--main-accent-color);
+}
+
+.setting__avatar-crop-cancel-btn:hover {
+    background-color: var(--main-accent-color-hover);
+    color: var(--main-text-color);
+    border-color: var(--main-accent-color);
+}
+
+.setting__avatar-crop-cancel-btn:focus,
+.setting__avatar-crop-cancel-btn:active {
+    background-color: var(--main-accent-color-hover) !important;
+    color: var(--main-text-color) !important;
+    border-color: var(--main-accent-color) !important;
     box-shadow: none !important;
 }
 
@@ -321,6 +384,8 @@
         padding-inline: 6px;
     }
 
+    .setting__avatar-crop-save-btn,
+    .setting__avatar-crop-cancel-btn,
     .settings__upload-avatar-field,
     .settings__username-field,
     .settings__website-field,
@@ -335,6 +400,11 @@
         height: 31px;
         display: flex;
         align-items: center;
+    }
+
+    .setting__avatar-crop-save-btn,
+    .setting__avatar-crop-cancel-btn {
+        width: calc(50% - 5px);
     }
 
     .settings__blocked-accounts-profiles {
@@ -410,6 +480,4 @@
     .settings__update-website-btn-col {
         padding-inline: 0;
     }
-
-
 }

@@ -331,3 +331,24 @@ export const TermsModal = ({ showTermModal, handleCloseTermModal, children }) =>
         </Modal>
     )
 }
+
+export const AvatarCropModal = ({ showAvatarCropModal, handleCloseAvatarCropModal, handleSaveCroppedImage, isUploading, loadingSpinner, children }) => {
+    return (
+        <Modal show={showAvatarCropModal} onHide={handleCloseAvatarCropModal} className='setting__avatar-crop-modal createAccount__agreement-modal' style={{ zIndex: '9999999' }}>
+            <Modal.Body className='setting__avatar-crop-modal-body createAccount__agreement-modal-body px-2'>
+                {children}
+            </Modal.Body>
+            <Modal.Footer className='border-top-0 pt-0 user-profile__block--modal-footer'>
+
+                <Button onClick={handleCloseAvatarCropModal} className='setting__avatar-crop-cancel-btn d-flex justify-content-center align-items-center ms-0 me-1' >
+                    Cancel
+                </Button>
+
+                <Button onClick={handleSaveCroppedImage} className='setting__avatar-crop-save-btn d-flex justify-content-center align-items-center mx-0'>
+                    {!isUploading ? 'Save' : loadingSpinner}
+                </Button>
+
+            </Modal.Footer>
+        </Modal>
+    )
+}
