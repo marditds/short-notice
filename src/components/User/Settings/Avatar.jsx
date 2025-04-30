@@ -13,6 +13,8 @@ export const Avatar = () => {
     const { userId } = useUserContext();
 
     const [showAvatarCropModal, setShowAvatarCropModal] = useState(false);
+    const [imageName, setImageName] = useState(null);
+    const [imageType, setImageType] = useState(null);
     const [imageSrc, setImageSrc] = useState(null);
     const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
     const [crop, setCrop] = useState({ x: 0, y: 0 });
@@ -26,8 +28,8 @@ export const Avatar = () => {
         setAvatarUrl,
         handleAvatarUpload, handleDeleteAvatarFromStrg, handleDeleteAvatarFromDoc,
         extractFileIdFromUrl,
-        setFileFormatError,
-        setAvatarUploadSuccessMsg
+        setIsUploading,
+        setFileFormatError, setAvatarUploadSuccessMsg
     } = useUserAvatar(userId);
 
     // const handleFileChange = async (e) => {
@@ -81,15 +83,24 @@ export const Avatar = () => {
             setImageSrc(reader.result);
             setShowCropper(true);
             setShowAvatarCropModal(true);
+
+            console.log(file);
+            console.log('file type', file.type);
+
+            setImageName(file.name);
+            setImageType(file.type);
         });
         reader.readAsDataURL(file);
     };
 
     const handleSaveCroppedImage = async () => {
         try {
-            const croppedBlob = await getCroppedAvatar(imageSrc, croppedAreaPixels);
+            setIsUploading(true);
+            const croppedBlob = await getCroppedAvatar(imageSrc, croppedAreaPixels, imageType);
 
-            const croppedFile = new File([croppedBlob], 'avatar.jpeg', { type: 'image/jpeg' });
+            const croppedFile = new File([croppedBlob], imageName, { type: imageType });
+
+            console.log('croppedFile:', croppedFile);
 
             if (avatarUrl) {
                 const fileId = extractFileIdFromUrl(avatarUrl);
@@ -103,6 +114,7 @@ export const Avatar = () => {
             console.error('Error saving cropped image:', error);
         } finally {
             setShowAvatarCropModal(false);
+            setIsUploading(false);
         }
     };
 
@@ -138,7 +150,7 @@ export const Avatar = () => {
         <Row xs={1} sm={2} >
             <Col className='d-block align-items-baseline'>
                 <h4>Update Avatar:</h4>
-                <p>Add, update, or delete your avatar. Accepted file formats are PNG and JPG.</p>
+                <p>Add, update, or delete your avatar. Accepted file formats are PNG and JPG. The maximum file size is 2 MB.</p>
             </Col>
             <Col className='d-flex justify-content-start align-items-center mt-2 mt-sm-0'>
                 {!isAvatarLoading ?

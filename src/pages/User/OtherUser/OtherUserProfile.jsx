@@ -658,7 +658,7 @@ const OtherUserProfile = () => {
 
     }, [savedNoticesData])
 
-    if (isOtherUserLoading || isAppLoading || isFetchingUserinContextLoading) {
+    if (isOtherUserLoading || isAppLoading || isFetchingUserinContextLoading || isInitialFollowCheckLoading) {
         return <div className='other-user-profile__loading'>
             <div>
                 <LoadingSpinner />

@@ -419,13 +419,6 @@ export const registerAuthUser = async (id, email, username) => {
 
 export const updateUser = async ({ userId, username }) => {
     try {
-
-        // const usernameExists = await checkUsernameExists(username);
-
-        // if (usernameExists) {
-        //     return 'Username already taken.';
-        // }
-
         const res = await databases.updateDocument(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_USERS_COLLECTION,
@@ -998,6 +991,19 @@ export const updateUserInterests = async (userId, selectedTags) => {
     }
 };
 
+export const deleteUserInterestsFromDB = async (userId) => {
+    try {
+        await databases.deleteDocument(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_INTERESTS_COLLECTION,
+            userId
+        )
+        console.log(`${userId}'s interests doc deleted from DB.`);
+    } catch (error) {
+        console.error('Error deleting user\'s interests doc from DB:', error);
+    }
+}
+
 export const createSave = async (notice_id, author_id, user_id) => {
     try {
         const response = await databases.createDocument(
@@ -1028,9 +1034,6 @@ export const removeSave = async (save_id) => {
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_SAVES_COLLECTION,
             save_id,
-            [
-                Permission.delete(Role.users())
-            ]
         );
         console.log('Save removed successfully:', response);
         return response;
@@ -1452,13 +1455,13 @@ export const createFollow = async (user_id, otherUser_id) => {
 
 export const removeFollow = async (following_id) => {
 
-    console.log('following_id', following_id);
+    console.log('following doc id', following_id);
 
     try {
         const response = await databases.deleteDocument(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_FOLLOWING_COLLECTION,
-            following_id
+            following_id //follow doc id
         )
         console.log('Follow removed successfully');
         return response;
@@ -2065,6 +2068,62 @@ export const removeBlockUsingBlockedId = async (blocked_id) => {
 
     } catch (error) {
         console.error('Error removing block:', error);
+    }
+}
+
+export const removeBlock = async (block_doc_id) => {
+
+    console.log('block doc id', block_doc_id);
+
+    try {
+        const response = await databases.deleteDocument(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_BLOCKS_COLLECTION,
+            block_doc_id //block doc id
+        )
+        return response;
+    } catch (error) {
+        console.error('Block removal failed', error);
+    }
+}
+
+export const removeAllBlocksForBlocker = async (blocker_id) => {
+    try {
+        const blocks = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_BLOCKS_COLLECTION,
+            [
+                Query.equal('blocker_id', blocker_id)
+            ]
+        )
+
+        for (const block of blocks.documents) {
+            await removeBlock(block.$id);
+        }
+
+        console.log(`All blocks made by ${blocker_id} removed successfully.`);
+    } catch (error) {
+        console.error('Error removing all follows:', error);
+    }
+}
+
+export const removeAllBlocksForBlocked = async (blocked_id) => {
+    try {
+        const blocks = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_BLOCKS_COLLECTION,
+            [
+                Query.equal('blocked_id', blocked_id)
+            ]
+        )
+
+        for (const block of blocks.documents) {
+            await removeBlock(block.$id);
+        }
+
+        console.log(`${blocked_id} is no longer blocked by anyone.`);
+    } catch (error) {
+        console.error('Error removing all follows:', error);
     }
 }
 

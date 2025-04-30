@@ -12,7 +12,7 @@ import { addAuthGuards } from './routes/routesUtils.js';
 import { routes } from './routes/routes.jsx';
 
 // import ErrorPage from './routes/error-page.jsx';
-// import { getAccount, getUserByEmail } from './lib/context/dbhandler.js'; 
+// import { getAccount, getUserByEmail } from './lib/context/dbhandler.js';
 // import App from './App.jsx';
 // import User from './pages/User/User.jsx';
 // import './index.css';
@@ -39,7 +39,7 @@ import { routes } from './routes/routes.jsx';
 // import Header from './components/PreLogin/Header/Header.jsx';
 // import Footer from './components/PreLogin/Footer/Footer.jsx';
 // import { GoogleLoginForm } from './components/LoginForm/Google/GoogleLoginForm.jsx';
-// import Authenticate from './pages/User/Home/Authenticate.jsx'; 
+// import Authenticate from './pages/User/Home/Authenticate.jsx';
 // import { LoadingComponent } from './components/Loading/LoadingComponent.jsx';
 
 
@@ -141,7 +141,7 @@ import { routes } from './routes/routes.jsx';
 //     ]
 //   },
 //   {
-//     path: 'set-username',
+//     path: 'create-account',
 //     element: <CreateAccount />,
 //     loader: async () => {
 
@@ -149,7 +149,7 @@ import { routes } from './routes/routes.jsx';
 
 //       const authenticatedUser = await getAccount();
 
-//       console.log('authenticatedUser in /set-username loader:', authenticatedUser);
+//       console.log('authenticatedUser in /create-account loader:', authenticatedUser);
 
 //       if (!authenticatedUser) {
 //         return redirect('/');

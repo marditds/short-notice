@@ -122,7 +122,7 @@ const Authenticate = () => {
     }, [userId])
 
     const onContinueClick = () => {
-        navigate('/set-username');
+        navigate('/create-account');
     };
 
     const onCancelClick = async () => {
@@ -157,7 +157,7 @@ const Authenticate = () => {
                         <br />
                     </Col>
 
-                    {/* Navigate to /set-username or cancel */}
+                    {/* Navigate to /create-account or cancel */}
                     {(!emailExistsInCollection) ?
                         <Col xs={11} sm={7} md={7} lg={5} xl={4}>
                             <p className='d-flex align-items-baseline authenticate__thank-you'>

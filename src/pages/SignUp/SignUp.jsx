@@ -162,7 +162,7 @@ const SignUp = () => {
         } finally {
             setIsAccountGettingCreated(false);
             if (signupSuccess) {
-                navigate('/set-username');
+                navigate('/create-account');
             }
         }
     }

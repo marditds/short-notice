@@ -90,7 +90,7 @@ export const useUserAvatar = (userId) => {
 
         if (file) {
 
-            setIsUploading(true);
+            // setIsUploading(true);
             console.log('Avatar uploading starting...');
 
             try {
@@ -140,7 +140,7 @@ export const useUserAvatar = (userId) => {
                 setFileFormatError('Avatar upload failed. Please try again later.');
                 setAvatarUploadSuccessMsg('');
             } finally {
-                setIsUploading(false);
+                // setIsUploading(false);
                 console.log('Avatar uploading done.');
 
             }
@@ -186,6 +186,7 @@ export const useUserAvatar = (userId) => {
         handleAvatarUpload,
         handleDeleteAvatarFromStrg,
         handleDeleteAvatarFromDoc,
+        setIsUploading,
         extractFileIdFromUrl,
         setFileFormatError,
         setAvatarUploadSuccessMsg

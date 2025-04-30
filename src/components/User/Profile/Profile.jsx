@@ -143,11 +143,18 @@ export const Profile = ({ username, avatarUrl, isAvatarLoading, website, handleF
                         <div className='d-flex justify-content-center align-items-center'>
                             {
                                 !isAvatarLoading ?
-                                    <img
-                                        src={avatarUrl ? avatarUrl : defaultAvatar}
-                                        alt="Profile"
-                                        className='user-profile__avatar'
-                                    />
+                                    <>
+                                        <img
+                                            src={avatarUrl ? avatarUrl : defaultAvatar}
+                                            alt="Profile"
+                                            className='user-profile__avatar'
+                                        />
+                                        {/* {!avatarUrl &&
+                                            <span className='position-absolute'>
+                                                <i className='bi bi-plus-square' />
+                                            </span>
+                                        } */}
+                                    </>
                                     :
                                     <LoadingSpinner />
                             }

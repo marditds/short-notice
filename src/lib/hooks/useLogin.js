@@ -153,7 +153,7 @@ export const useLogin = () => {
 
     //         } else {
     //             setHasUsername(false);
-    //             navigate('/set-username');
+    //             navigate('/create-account');
     //         }
     //     } catch (error) {
     //         console.error('Error checking username:', error);

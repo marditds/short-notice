@@ -5,7 +5,7 @@ export const getAvatarUrl = (avatarId) => {
     return url;
 };
 
-export const getCroppedAvatar = (imageSrc, croppedAreaPixels) => {
+export const getCroppedAvatar = (imageSrc, croppedAreaPixels, originalType) => {
     return new Promise((resolve, reject) => {
         const image = new Image();
         image.src = imageSrc;
@@ -29,14 +29,21 @@ export const getCroppedAvatar = (imageSrc, croppedAreaPixels) => {
                 croppedAreaPixels.height
             );
 
+            let outputType = originalType;
+            let quality = 0.92;
+
+            if (originalType === 'image/jpeg' || originalType === 'image/jpg') {
+                quality = 0.8;
+            }
+
             canvas.toBlob((blob) => {
                 if (!blob) {
                     reject(new Error('Canvas is empty'));
                     return;
                 }
                 resolve(blob);
-            }, 'image/jpeg');
+            }, outputType, quality);
         };
         image.onerror = (error) => reject(error);
     });
-}
+};
