@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { createNotice, getUserNotices, updateNotice, deleteNotice, saveDeletedNoticeId, deleteAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSave, getUserSaves, removeSave, createReport, createLike, removeLike, getUserLikes, getAllLikedNotices as fetchAllLikedNotices, getAllLikesByNoticeId as fetchAllLikesByNoticeId, getUserLikesNotInFeed, getUserSavesNotInFeed, getAllSavedNotices as fetchAllSavedNotices, createReaction, deleteReaction, getAllReactionsBySenderId as fetchAllReactionsBySenderId, getAllReactions as fetchAllReactions, getAllReactionsByRecipientId as fetchAllReactionsByRecipientId, getNoticeByNoticeId as fetchNoticeByNoticeId, getAllReactionsByNoticeId as fetchAllReactionsByNoticeId, getReactionByReactionId as fetchReactionByReactionId, deleteAllReactions, createReactionReport, getNoticeByUserId as fetchNoticeByUserId, removeAllSavesForNotice, removeAllLikesForNotice } from '../../lib/context/dbhandler';
+import { createNotice, getUserNotices, updateNotice, deleteNotice, saveDeletedNoticeId, deleteAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSave, getUserSaves, removeSave, createReport, createLike, removeLike, getUserLikes, getAllLikedNotices as fetchAllLikedNotices, getAllLikesByNoticeId as fetchAllLikesByNoticeId, getUserLikesNotInFeed, getUserSavesNotInFeed, getAllSavedNotices as fetchAllSavedNotices, createReaction, deleteReaction, getAllReactionsBySenderId as fetchAllReactionsBySenderId, getAllReactions as fetchAllReactions, getAllReactionsByRecipientId as fetchAllReactionsByRecipientId, getNoticeByNoticeId as fetchNoticeByNoticeId, getAllReactionsByNoticeId as fetchAllReactionsByNoticeId, getReactionByReactionId as fetchReactionByReactionId, deleteAllSentReactions, createReactionReport, getNoticeByUserId as fetchNoticeByUserId, removeAllSavesForNotice, removeAllLikesForNotice } from '../../lib/context/dbhandler';
 import { useUserContext } from '../context/UserContext.jsx';
 import { useUserInfo } from './useUserInfo.js';
 import { useGemini } from './useGemini';
@@ -328,7 +328,7 @@ export const useNotices = (data) => {
 
     const removeNotice = async (noticeId) => {
 
-        console.log('Attempting to delete notice with ID:', noticeId);
+        // console.log('Attempting to delete notice with ID:', noticeId);
 
         if (!noticeId) {
             console.error("Invalid notice ID");
@@ -339,29 +339,29 @@ export const useNotices = (data) => {
         setRemovingNoticeId(noticeId);
 
         try {
+            await deleteNotice(noticeId);
 
-            const [deleteNoticeRes, likesRes, savesRes] = await Promise.allSettled([
-                deleteNotice(noticeId),
-                removeAllSavesForNotice(noticeId),
-                removeAllLikesForNotice(noticeId)
-            ])
+            // const [deleteNoticeRes, likesRes, savesRes] = await Promise.allSettled([
+            //     deleteNotice(noticeId),
+            //     removeAllSavesForNotice(noticeId),
+            //     removeAllLikesForNotice(noticeId)
+            // ])
 
-            if (deleteNoticeRes.status === "fulfilled") {
-                console.log("Notice deleted successfully:", noticeId);
-                return deleteNoticeRes.value; // Return deleted notice details
-            } else {
-                console.error("Error deleting notice:", deleteNoticeRes.reason);
-            }
+            // if (deleteNoticeRes.status === "fulfilled") {
+            //     console.log("Notice deleted successfully:", noticeId);
+            //     return deleteNoticeRes.value; // Return deleted notice details
+            // } else {
+            //     console.error("Error deleting notice:", deleteNoticeRes.reason);
+            // }
 
             // Log errors for likes & saves deletion (optional)
-            if (likesRes.status === "rejected") {
-                console.error("Error deleting likes:", likesRes.reason);
-            }
-            if (savesRes.status === "rejected") {
-                console.error("Error deleting saves:", savesRes.reason);
-            }
-            // const removedNotice = await deleteNotice(noticeId);
-            // return removedNotice;
+            // if (likesRes.status === "rejected") {
+            //     console.error("Error deleting likes:", likesRes.reason);
+            // }
+            // if (savesRes.status === "rejected") {
+            //     console.error("Error deleting saves:", savesRes.reason);
+            // }
+
         } catch (error) {
             if (error.code === 404) {
                 console.log('Notice already deleted or does not exist:', noticeId);
@@ -742,7 +742,7 @@ export const useNotices = (data) => {
 
     const removeAllReactionsByUser = async (user_id) => {
         try {
-            const response = await deleteAllReactions(user_id);
+            const response = await deleteAllSentReactions(user_id);
             return response;
         } catch (error) {
             console.error('Error deleting all reactions:', error);

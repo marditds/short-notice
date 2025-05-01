@@ -874,13 +874,16 @@ export const updateNotice = async (noticeId, newText) => {
 export const deleteNotice = async (noticeId) => {
     console.log('Attempting to delete notice with ID:', noticeId);
     try {
+
+        await Promise.allSettled([
+            removeAllSavesForNotice(noticeId),
+            removeAllLikesForNotice(noticeId),
+            deleteAllReactionsForOneNotice(noticeId),
+        ])
         const response = await databases.deleteDocument(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_NOTICES_COLLECTION,
             noticeId,
-            [
-                Permission.delete(Role.users())
-            ]
         );
         console.log('Notice deleted successfully:', response);
     } catch (error) {
@@ -918,8 +921,11 @@ export const deleteAllNotices = async (userId) => {
         );
 
         for (const notice of notices.documents) {
-            await removeAllLikesForNotice(notice.$id);
-            await removeAllSavesForNotice(notice.$id);
+            await Promise.allSettled([
+                removeAllLikesForNotice(notice.$id),
+                removeAllSavesForNotice(notice.$id),
+                deleteAllReactionsForOneNotice(notice.$id)
+            ])
             await deleteNotice(notice.$id);
         }
 
@@ -1035,7 +1041,7 @@ export const removeSave = async (save_id) => {
             import.meta.env.VITE_SAVES_COLLECTION,
             save_id,
         );
-        console.log('Save removed successfully:', response);
+        console.log('Save removed successfully.');
         return response;
     } catch (error) {
         console.error('Error removing save:', error);
@@ -1043,7 +1049,7 @@ export const removeSave = async (save_id) => {
     }
 }
 
-export const removeAllSaves = async (user_id) => {
+export const removeAllSavesByUser = async (user_id) => {
     try {
         const saves = await databases.listDocuments(
             import.meta.env.VITE_DATABASE,
@@ -1057,7 +1063,27 @@ export const removeAllSaves = async (user_id) => {
             await removeSave(save.$id);
         }
 
-        console.log(`All saves for user ${user_id} removed successfully.`);
+        console.log(`All saves from user ${user_id} removed successfully.`);
+    } catch (error) {
+        console.error('Error removing all saves:', error);
+    }
+}
+
+export const removeAllSavesForAuthor = async (author_id) => {
+    try {
+        const saves = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_SAVES_COLLECTION,
+            [
+                Query.equal('author_id', author_id)
+            ]
+        )
+
+        for (const save of saves.documents) {
+            await removeSave(save.$id);
+        }
+
+        console.log(`All saves for ${author_id}'s notices removed successfully.`);
     } catch (error) {
         console.error('Error removing all saves:', error);
     }
@@ -1111,12 +1137,8 @@ export const removeLike = async (like_id) => {
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_LIKES_COLLECTION,
             like_id,
-            // [
-            //     Permission.delete(Role.users()),
-            //     Permission.delete(Role.guests())
-            // ]
         );
-        console.log('Like removed successfully:', response);
+        console.log('Like removed successfully.');
         return response;
     } catch (error) {
         console.error('Error removing like:', error);
@@ -1124,13 +1146,31 @@ export const removeLike = async (like_id) => {
     }
 }
 
-export const removeAllLikes = async (user_id) => {
+export const removeAllLikesByUser = async (user_id) => {
+    try {
+        const likes = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_LIKES_COLLECTION,
+            [Query.equal('user_id', user_id)]
+        )
+
+        for (const like of likes.documents) {
+            await removeLike(like.$id);
+        }
+
+        console.log(`All likes from user ${user_id} removed successfully.`);
+    } catch (error) {
+        console.error('Error removing all likes:', error);
+    }
+}
+
+export const removeAllLikesForAuthor = async (author_id) => {
     try {
         const likes = await databases.listDocuments(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_LIKES_COLLECTION,
             [
-                Query.equal('user_id', user_id)
+                Query.equal('author_id', author_id)
             ]
         )
 
@@ -1138,7 +1178,7 @@ export const removeAllLikes = async (user_id) => {
             await removeLike(like.$id);
         }
 
-        console.log(`All likes for user ${user_id} removed successfully.`);
+        console.log(`All likes for ${author_id}'s removed successfully.`);
     } catch (error) {
         console.error('Error removing all likes:', error);
     }
@@ -1149,9 +1189,7 @@ export const removeAllLikesForNotice = async (notice_id) => {
         const likes = await databases.listDocuments(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_LIKES_COLLECTION,
-            [
-                Query.equal('notice_id', notice_id)
-            ]
+            [Query.equal('notice_id', notice_id)]
         )
         for (const like of likes.documents) {
             await removeLike(like.$id);
@@ -1490,6 +1528,26 @@ export const removeAllFollows = async (user_id) => {
     }
 }
 
+export const removeAllFollowed = async (user_id) => {
+    try {
+        const followeds = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_FOLLOWING_COLLECTION,
+            [
+                Query.equal('otherUser_id', user_id)
+            ]
+        )
+
+        for (const followed of followeds.documents) {
+            await removeFollow(followed.$id);
+        }
+
+        console.log(`No account no longer follows ${user_id}.`);
+    } catch (error) {
+        console.error('Error removing all follows:', error);
+    }
+}
+
 export const unfollow = async (user_id, otherUser_id) => {
     try {
         const res = await databases.listDocuments(
@@ -1667,10 +1725,6 @@ export const deleteReaction = async (reactionId) => {
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_REACTIONS_COLLECTION,
             reactionId,
-            [
-                Permission.delete(Role.users()),
-                Permission.delete(Role.guests())
-            ]
         );
         console.log('Reaction deleted successfully:', response);
     } catch (error) {
@@ -1682,16 +1736,12 @@ export const deleteReaction = async (reactionId) => {
     }
 };
 
-export const deleteAllReactions = async (sender_id) => {
+export const deleteAllSentReactions = async (sender_id) => {
     try {
         const reactions = await databases.listDocuments(
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_REACTIONS_COLLECTION,
             [Query.equal('sender_id', sender_id)],
-            [
-                Permission.delete(Role.users()),
-                Permission.delete(Role.guests())
-            ]
         );
 
         for (const reaction of reactions.documents) {
@@ -1701,6 +1751,65 @@ export const deleteAllReactions = async (sender_id) => {
         console.log(`All reactions from user ${sender_id} deleted successfully.`);
     } catch (error) {
         console.error('Error deleting user reactions:', error);
+        throw error;
+    }
+}
+
+export const deleteAllRecievedReactions = async (recipient_id) => {
+    try {
+
+        const reactions = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_REACTIONS_COLLECTION,
+            [Query.equal('recipient_id', recipient_id)],
+        );
+
+        for (const reaction of reactions.documents) {
+            await deleteReaction(reaction.$id);
+        }
+
+        console.log(`All reactions for ${recipient_id}'s notices deleted successfully.`);
+    } catch (error) {
+        console.error('Error deleting user reactions:', error);
+        throw error;
+    }
+}
+
+export const deleteAllReactionsForOneNotice = async (notice_id) => {
+    try {
+        console.log('deleteAllReactionsForOneNotice:', notice_id);
+
+        const reactions = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_REACTIONS_COLLECTION,
+            [Query.equal('notice_id', notice_id)],
+        );
+
+        for (const reaction of reactions.documents) {
+            await deleteReaction(reaction.$id);
+        }
+
+        console.log(`All reactions for notice ${notice_id}'s deleted successfully.`);
+    } catch (error) {
+        console.error('Error deleting notice\'s reactions:', error);
+        throw error;
+    }
+}
+
+export const allReactionsForOneNotice = async (notice_id) => {
+    try {
+        console.log('allReactionsForOneNotice:', notice_id);
+
+        const reactions = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE,
+            import.meta.env.VITE_REACTIONS_COLLECTION,
+            [Query.equal('notice_id', notice_id)],
+        );
+
+        console.log('reactions docs:', reactions);
+
+    } catch (error) {
+        console.error('Error deleting notice\'s reactions:', error);
         throw error;
     }
 }
@@ -1767,6 +1876,7 @@ export const getAllReactionsByNoticeId = async (notice_id, limit, cursor = null)
             import.meta.env.VITE_REACTIONS_COLLECTION,
             queries
         )
+
         return response;
     } catch (error) {
         console.error('Error getting reactions by notice_id:', error);
