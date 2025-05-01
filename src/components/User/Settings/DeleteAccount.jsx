@@ -13,37 +13,29 @@ export const DeleteAccount = () => {
     const navigate = useNavigate();
     const [showModal, setShowModal] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [accountDeleteMsg, setAccountDeleteMsg] = useState(null);
 
     const handleDeleteAccount = async () => {
 
         setLoading(true);
 
         try {
+            const res = await handleDeleteUser();
 
-            // let handleDeleteAvatarPromise = Promise.resolve();
-
-            // if (avatarUrl) {
-            //     const fileId = extractFileIdFromUrl(avatarUrl);
-            //     handleDeleteAvatarPromise = handleDeleteAvatarFromStrg(fileId)
-            //         .then(() => setAvatarUrl(null))
-            //         .catch((err) => console.error("Error deleting avatar:", err));
-            // }
-
-            // const handleDeleteUserPromise = handleDeleteUser();
-
-            // await Promise.allSettled([handleDeleteAvatarPromise, handleDeleteUserPromise]);
-
-            await handleDeleteUser();
-
-            console.log('hajoh');
-
-            setTimeout(() => {
+            if (res === 'Hajogh') {
+                setAccountDeleteMsg('Good bye! ShortNotice will love to see you again. ✌️')
+                setTimeout(() => {
+                    setLoading(false);
+                    navigate('/');
+                    window.location.reload();
+                }, 1500);
+            } else {
+                setAccountDeleteMsg('Unexpected error. Please try again later.');
                 setLoading(false);
-                navigate('/');
-                window.location.reload();
-            }, 3000);
+            }
         } catch (error) {
             console.error('User not deleted:', error);
+            setAccountDeleteMsg('User not deleted. Please try again later.');
         }
     }
 
@@ -76,32 +68,37 @@ export const DeleteAccount = () => {
                 onHide={handleCloseModal}
                 className='settings__delete-account-modal'
             >
-                <Modal.Header
+                {!accountDeleteMsg ? <><Modal.Header
                     className='settings__delete-account-modal-header border-bottom-0'
                 >
                     <Modal.Title>ARE YOU SURE?</Modal.Title>
                 </Modal.Header>
-                <Modal.Body
-                    className='settings__delete-account-modal-body py-1'
-                >
-                    Are you sure you want to delete your account? This action is irreversible and all your data will be lost. PERMANENTLY.
-                </Modal.Body>
-                <Modal.Footer
-                    className='settings__delete-account-modal-footer border-top-0'
-                >
-                    <Button onClick={handleCloseModal}
-                        disabled={loading}
-                        className='settings__delete-account-btn final cancel d-flex justify-content-center align-items-center'
+                    <Modal.Body
+                        className='settings__delete-account-modal-body py-1'
                     >
-                        Cancel
-                    </Button>
-                    <Button
-                        onClick={confirmDeletion}
-                        className='settings__delete-account-btn final d-flex justify-content-center align-items-center'
+                        Are you sure you want to delete your account? This action is irreversible and all your data will be lost. PERMANENTLY.
+                    </Modal.Body>
+                    <Modal.Footer
+                        className='settings__delete-account-modal-footer border-top-0'
                     >
-                        {loading ? <LoadingSpinner /> : 'Yes, Delete My Account'}
-                    </Button>
-                </Modal.Footer>
+                        <Button onClick={handleCloseModal}
+                            disabled={loading}
+                            className='settings__delete-account-btn final cancel d-flex justify-content-center align-items-center'
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            onClick={confirmDeletion}
+                            className='settings__delete-account-btn final d-flex justify-content-center align-items-center'
+                        >
+                            {loading ? <LoadingSpinner /> : 'Yes, Delete My Account'}
+                        </Button>
+                    </Modal.Footer>
+                </>
+                    :
+                    <p className='p-3 p-md-4 mb-0'>{accountDeleteMsg}</p>
+                }
+
             </Modal>
         </>
     )

@@ -522,10 +522,6 @@ export const deleteUser = async (userId) => {
             import.meta.env.VITE_DATABASE,
             import.meta.env.VITE_USERS_COLLECTION,
             userId,
-            // [
-            //     Permission.delete(Role.users()),
-            //     Permission.delete(Role.guests())
-            // ]
         );
         console.log('User deleted successfully:', response);
     } catch (error) {

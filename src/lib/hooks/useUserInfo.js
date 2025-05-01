@@ -194,7 +194,7 @@ export const useUserInfo = (data) => {
             await deleteAuthUser(userId);
 
             console.log('User deleted successfully.');
-
+            return 'Hajogh';
         } catch (error) {
             console.error('Error deleting user:', error);
         }

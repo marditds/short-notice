@@ -101,7 +101,7 @@ const SignIn = () => {
             errorMsg={errorMsg}
             wishValue={newYearWish}
             onWishChange={(e) => setNewYearWish(e.target.value)}
-            isSubmitDisabled={email === '' || password.length < 8}
+            isSubmitDisabled={email === '' || password.length < 8 || isLoggingInLoading}
             alternateRouteText="Don't have an account?"
             alternateRouteLink="/signup"
         />
