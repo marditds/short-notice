@@ -1,8 +1,11 @@
 import { Client, Storage, Account, Databases, ID, Query, Permission, Role, Functions } from 'appwrite';
 
+export const endpointEnv = import.meta.env.VITE_ENDPOINT;
+export const projectEnv = import.meta.env.VITE_PROJECT;
+
 const client = new Client()
-    .setEndpoint(import.meta.env.VITE_ENDPOINT)
-    .setProject(import.meta.env.VITE_PROJECT);
+    .setEndpoint(endpointEnv)
+    .setProject(projectEnv);
 
 console.log('client - dbhandler.js', client);
 
@@ -20,6 +23,22 @@ const storage = new Storage(client);
 export const databases = new Databases(client);
 
 console.log('databases - dbhandler.js', databases);
+
+const dbEnv = import.meta.env.VITE_DATABASE;
+const usersCollEnv = import.meta.env.VITE_USERS_COLLECTION;
+const blocksCollEnv = import.meta.env.VITE_BLOCKS_COLLECTION;
+const noticesCollEnv = import.meta.env.VITE_NOTICES_COLLECTION;
+const savesCollEnv = import.meta.env.VITE_SAVES_COLLECTION;
+const reportsCollEnv = import.meta.env.VITE_REPORTS_COLLECTION;
+const reportsReactionsCollEnv = import.meta.env.VITE_REPORTS_REACTIONS_COLLECTION;
+const reportsUsersCollEnv = import.meta.env.VITE_REPORTS_USERS_COLLECTION;
+const followersCollEnv = import.meta.env.VITE_FOLLOWERS_COLLECTION;
+const followingCollEnv = import.meta.env.VITE_FOLLOWING_COLLECTION;
+const likesCollEnv = import.meta.env.VITE_LIKES_COLLECTION;
+const reactionsCollEnv = import.meta.env.VITE_REACTIONS_COLLECTION;
+const interestsCollEnv = import.meta.env.VITE_INTERESTS_COLLECTION;
+const passcodesCollEnv = import.meta.env.VITE_PASSCODES_COLLECTION;
+export const avatarBucketEnv = import.meta.env.VITE_AVATAR_BUCKET;
 
 export const googleOAuthLogin = async () => {
     try {
@@ -163,7 +182,7 @@ export const uploadAvatar = async (file) => {
 
     try {
         const response = await storage.createFile(
-            import.meta.env.VITE_AVATAR_BUCKET,
+            avatarBucketEnv,
             ID.unique(),
             file,
         );
@@ -181,7 +200,7 @@ export const uploadAvatar = async (file) => {
 export const deleteAvatarFromStrg = async (fileId) => {
     try {
         const response = await storage.deleteFile(
-            import.meta.env.VITE_AVATAR_BUCKET,
+            avatarBucketEnv,
             fileId,
         );
         console.log('Avatar deleted successfully:', response);
@@ -194,8 +213,8 @@ export const updateAvatar = async (userId, avatarId) => {
 
     try {
         const res = await databases.updateDocument(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_USERS_COLLECTION,
+            dbEnv,
+            usersCollEnv,
             userId,
             {
                 avatar: avatarId
@@ -214,8 +233,8 @@ export const deleteAvatarFromDoc = async (userId) => {
 
 
         await databases.updateDocument(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_USERS_COLLECTION,
+            dbEnv,
+            usersCollEnv,
             userId,
             {
                 avatar: null
@@ -230,8 +249,8 @@ export const deleteAvatarFromDoc = async (userId) => {
 export const getUsersDocument = async () => {
     try {
         const response = await databases.listDocuments(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_USERS_COLLECTION,
+            dbEnv,
+            usersCollEnv,
             // userId
         );
         // console.log('Users documents:', response);
@@ -245,8 +264,8 @@ export const getUsersDocument = async () => {
 export const getUserById = async (userId) => {
     try {
         const response = await databases.getDocument(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_USERS_COLLECTION,
+            dbEnv,
+            usersCollEnv,
             userId
         );
         return response;
@@ -259,8 +278,8 @@ export const getUserById = async (userId) => {
 export const getUserByIdQuery = async (userId) => {
     try {
         const response = await databases.listDocuments(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_USERS_COLLECTION,
+            dbEnv,
+            usersCollEnv,
             [Query.equal('$id', userId)]
         );
         return response;
@@ -278,8 +297,8 @@ export const getUserByEmail = async (email) => {
 
     try {
         const userList = await databases.listDocuments(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_USERS_COLLECTION,
+            dbEnv,
+            usersCollEnv,
             [Query.equal('email', email)]
         );
 
@@ -299,8 +318,8 @@ export const getUserByUsername = async (username) => {
 
     try {
         const userList = await databases.listDocuments(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_USERS_COLLECTION,
+            dbEnv,
+            usersCollEnv,
             [Query.equal('username', username.toLowerCase())]
         );
 
@@ -328,8 +347,8 @@ export const getAllUsersByString = async (str, limit, cursorAfter) => {
         }
 
         const userList = await databases.listDocuments(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_USERS_COLLECTION,
+            dbEnv,
+            usersCollEnv,
             queryParams
         );
 
@@ -348,8 +367,8 @@ export const getAllUsersByString = async (str, limit, cursorAfter) => {
 export const checkUsernameExists = async (username) => {
     try {
         const users = await databases.listDocuments(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_USERS_COLLECTION,
+            dbEnv,
+            usersCollEnv,
             [Query.equal('username', username.toLowerCase())]
         );
         return users.total > 0;
@@ -364,8 +383,8 @@ export const createUser = async ({ id, email, given_name, username, accountType 
 
         // checkin email
         const existingUser = await databases.listDocuments(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_USERS_COLLECTION,
+            dbEnv,
+            usersCollEnv,
             [Query.equal('email', email)],
         );
         if (existingUser.total > 0) {
@@ -382,8 +401,8 @@ export const createUser = async ({ id, email, given_name, username, accountType 
         }
 
         const response = await databases.createDocument(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_USERS_COLLECTION,
+            dbEnv,
+            usersCollEnv,
             id,
             {
                 email,
@@ -420,8 +439,8 @@ export const registerAuthUser = async (id, email, username) => {
 export const updateUser = async ({ userId, username }) => {
     try {
         const res = await databases.updateDocument(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_USERS_COLLECTION,
+            dbEnv,
+            usersCollEnv,
             userId,
             {
                 username: username
@@ -442,8 +461,8 @@ export const updateUserWebsite = async ({ userId, website }) => {
 
     try {
         const res = await databases.updateDocument(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_USERS_COLLECTION,
+            dbEnv,
+            usersCollEnv,
             userId,
             {
                 website: website
@@ -519,8 +538,8 @@ export const checkEmailExistsInAuth = async (email) => {
 export const deleteUser = async (userId) => {
     try {
         const response = await databases.deleteDocument(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_USERS_COLLECTION,
+            dbEnv,
+            usersCollEnv,
             userId,
         );
         console.log('User deleted successfully:', response);
@@ -609,12 +628,24 @@ export const getSessionDetails = async () => {
     }
 }
 
+export const deleteDoc = async (collectionEnv, doc_id) => {
+    try {
+        await databases.deleteDocument(
+            dbEnv,
+            collectionEnv,
+            doc_id
+        )
+    } catch (error) {
+        console.error('Error deleting doc:', error);
+    }
+}
+
 export const createNotice = async ({ user_id, text, timestamp, expiresAt, noticeType, noticeGif, noticeUrl, science, technology, engineering, math, literature, history, philosophy, music, medicine, economics, law, polSci, sports
 }) => {
     try {
         const response = await databases.createDocument(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_NOTICES_COLLECTION,
+            dbEnv,
+            noticesCollEnv,
             ID.unique(),
             {
                 user_id,
@@ -663,8 +694,8 @@ export const getUserNotices = async (user_id, limit, lastId) => {
         }
 
         const response = await databases.listDocuments(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_NOTICES_COLLECTION,
+            dbEnv,
+            noticesCollEnv,
             queries
         );
 
@@ -684,8 +715,8 @@ export const getNoticeByUserId = async (user_id, limit, offset) => {
         }
 
         const res = await databases.listDocuments(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_NOTICES_COLLECTION,
+            dbEnv,
+            noticesCollEnv,
             [
                 Query.equal('user_id', user_id),
                 Query.limit(limit),
@@ -702,8 +733,8 @@ export const getNoticeByUserId = async (user_id, limit, offset) => {
 export const getNoticeByTagname = async (tagnames) => {
     try {
         const response = await databases.listDocuments(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_NOTICES_COLLECTION,
+            dbEnv,
+            noticesCollEnv,
             [
                 Query.equal(tagnames, true),
                 Query.orderDesc('timestamp'),
@@ -719,8 +750,8 @@ export const getNoticeByTagname = async (tagnames) => {
 export const getNoticeByNoticeId = async (notice_id) => {
     try {
         const response = await databases.listDocuments(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_NOTICES_COLLECTION,
+            dbEnv,
+            noticesCollEnv,
             [
                 Query.equal('$id', notice_id),
             ]
@@ -735,8 +766,8 @@ export const getNoticeByNoticeId = async (notice_id) => {
 export const getAllNotices = async () => {
     try {
         const response = await databases.listDocuments(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_NOTICES_COLLECTION,
+            dbEnv,
+            noticesCollEnv,
             [
                 Query.orderDesc('timestamp')
             ]
@@ -776,8 +807,8 @@ export const getAllNotices = async () => {
 //         }
 
 //         const notices = await databases.listDocuments(
-//             import.meta.env.VITE_DATABASE,
-//             import.meta.env.VITE_NOTICES_COLLECTION,
+//             dbEnv,
+//             noticesCollEnv,
 //             queries
 //         );
 
@@ -834,8 +865,8 @@ export const getFilteredNotices = async (selectedTags, limit, lastId, userId) =>
         }
 
         const notices = await databases.listDocuments(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_NOTICES_COLLECTION,
+            dbEnv,
+            noticesCollEnv,
             queries
         );
 
@@ -849,8 +880,8 @@ export const getFilteredNotices = async (selectedTags, limit, lastId, userId) =>
 export const updateNotice = async (noticeId, newText) => {
     try {
         const response = await databases.updateDocument(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_NOTICES_COLLECTION,
+            dbEnv,
+            noticesCollEnv,
             noticeId,
             {
                 text: newText
@@ -876,12 +907,17 @@ export const deleteNotice = async (noticeId) => {
             removeAllLikesForNotice(noticeId),
             deleteAllReactionsForOneNotice(noticeId),
         ])
-        const response = await databases.deleteDocument(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_NOTICES_COLLECTION,
-            noticeId,
+
+        await deleteDoc(
+            noticesCollEnv,
+            noticeId
         );
-        console.log('Notice deleted successfully:', response);
+        // const response = await databases.deleteDocument(
+        //     dbEnv,
+        //     noticesCollEnv,
+        //     noticeId,
+        // );
+        console.log('Notice deleted successfully.');
     } catch (error) {
         if (error.code === 404) {
             console.log('Ha, 404. Kez inch. 🤪');
@@ -895,7 +931,7 @@ export const saveDeletedNoticeId = async (notice_id) => {
     console.log('Attempting to save notice ID of deleted Notice:', notice_id);
     try {
         const response = await databases.createDocument(
-            import.meta.env.VITE_DATABASE,
+            dbEnv,
             import.meta.env.VITE_DELETED_NOTICES_COLLECTION,
             ID.unique(),
             { notice_id }
@@ -909,34 +945,44 @@ export const saveDeletedNoticeId = async (notice_id) => {
 
 
 export const deleteAllNotices = async (userId) => {
+
     try {
         const notices = await databases.listDocuments(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_NOTICES_COLLECTION,
+            dbEnv,
+            noticesCollEnv,
             [Query.equal('user_id', userId)]
         );
 
-        for (const notice of notices.documents) {
+        const deletionTasks = notices.documents.map(async (notice) => {
+
             await Promise.allSettled([
                 removeAllLikesForNotice(notice.$id),
                 removeAllSavesForNotice(notice.$id),
                 deleteAllReactionsForOneNotice(notice.$id)
-            ])
-            await deleteNotice(notice.$id);
-        }
+            ]);
+
+            await deleteDoc(
+                noticesCollEnv,
+                notice.$id
+            );
+            // await deleteNotice(notice.$id);
+        });
+
+        await Promise.all(deletionTasks);
 
         console.log(`All notices for user ${userId} deleted successfully.`);
     } catch (error) {
         console.error('Error deleting user notices:', error);
         throw error;
     }
-}
+};
+
 
 export const getUserInterests = async (userId) => {
     try {
         const response = await databases.getDocument(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_INTERESTS_COLLECTION,
+            dbEnv,
+            interestsCollEnv,
             userId
         );
         return response;
@@ -967,16 +1013,16 @@ export const updateUserInterests = async (userId, selectedTags) => {
 
         try {
             response = await databases.updateDocument(
-                import.meta.env.VITE_DATABASE,
-                import.meta.env.VITE_INTERESTS_COLLECTION,
+                dbEnv,
+                interestsCollEnv,
                 userId,
                 interestsData,
             );
         } catch (updateError) {
             if (updateError.code === 404) {
                 response = await databases.createDocument(
-                    import.meta.env.VITE_DATABASE,
-                    import.meta.env.VITE_INTERESTS_COLLECTION,
+                    dbEnv,
+                    interestsCollEnv,
                     userId,
                     interestsData,
                 );
@@ -996,8 +1042,8 @@ export const updateUserInterests = async (userId, selectedTags) => {
 export const deleteUserInterestsFromDB = async (userId) => {
     try {
         await databases.deleteDocument(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_INTERESTS_COLLECTION,
+            dbEnv,
+            interestsCollEnv,
             userId
         )
         console.log(`${userId}'s interests doc deleted from DB.`);
@@ -1009,8 +1055,8 @@ export const deleteUserInterestsFromDB = async (userId) => {
 export const createSave = async (notice_id, author_id, user_id) => {
     try {
         const response = await databases.createDocument(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_SAVES_COLLECTION,
+            dbEnv,
+            savesCollEnv,
             ID.unique(),
             {
                 notice_id: notice_id,
@@ -1033,8 +1079,8 @@ export const createSave = async (notice_id, author_id, user_id) => {
 export const removeSave = async (save_id) => {
     try {
         const response = await databases.deleteDocument(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_SAVES_COLLECTION,
+            dbEnv,
+            savesCollEnv,
             save_id,
         );
         console.log('Save removed successfully.');
@@ -1046,18 +1092,23 @@ export const removeSave = async (save_id) => {
 }
 
 export const removeAllSavesByUser = async (user_id) => {
+
     try {
         const saves = await databases.listDocuments(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_SAVES_COLLECTION,
-            [
-                Query.equal('user_id', user_id)
-            ]
+            dbEnv,
+            savesCollEnv,
+            [Query.equal('user_id', user_id)]
         )
 
-        for (const save of saves.documents) {
-            await removeSave(save.$id);
-        }
+        const removeSavePromises = saves.documents.map(save =>
+            // removeSave(save.$id)
+            deleteDoc(
+                savesCollEnv,
+                save.$id
+            )
+        );
+
+        await Promise.all(removeSavePromises);
 
         console.log(`All saves from user ${user_id} removed successfully.`);
     } catch (error) {
@@ -1066,18 +1117,23 @@ export const removeAllSavesByUser = async (user_id) => {
 }
 
 export const removeAllSavesForAuthor = async (author_id) => {
+
     try {
         const saves = await databases.listDocuments(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_SAVES_COLLECTION,
-            [
-                Query.equal('author_id', author_id)
-            ]
+            dbEnv,
+            savesCollEnv,
+            [Query.equal('author_id', author_id)]
         )
 
-        for (const save of saves.documents) {
-            await removeSave(save.$id);
-        }
+        const removeSavePromises = saves.documents.map(save =>
+            // removeSave(save.$id)
+            deleteDoc(
+                savesCollEnv,
+                save.$id
+            )
+        );
+
+        await Promise.all(removeSavePromises);
 
         console.log(`All saves for ${author_id}'s notices removed successfully.`);
     } catch (error) {
@@ -1086,17 +1142,24 @@ export const removeAllSavesForAuthor = async (author_id) => {
 }
 
 export const removeAllSavesForNotice = async (notice_id) => {
+
     try {
         const saves = await databases.listDocuments(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_SAVES_COLLECTION,
-            [
-                Query.equal('notice_id', notice_id)
-            ]
+            dbEnv,
+            savesCollEnv,
+            [Query.equal('notice_id', notice_id)]
         )
-        for (const save of saves.documents) {
-            await removeSave(save.$id);
-        }
+
+        const removeSavePromises = saves.documents.map(save =>
+            // removeSave(save.$id)
+            deleteDoc(
+                savesCollEnv,
+                save.$id
+            )
+        );
+
+        await Promise.all(removeSavePromises);
+
         console.log(`Removed all saves for notice id:`, notice_id);
     } catch (error) {
         console.error('Error removing saves from the db:', error);
@@ -1106,8 +1169,8 @@ export const removeAllSavesForNotice = async (notice_id) => {
 export const createLike = async (notice_id, author_id, user_id) => {
     try {
         const response = await databases.createDocument(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_LIKES_COLLECTION,
+            dbEnv,
+            likesCollEnv,
             ID.unique(),
             {
                 notice_id: notice_id,
@@ -1130,8 +1193,8 @@ export const createLike = async (notice_id, author_id, user_id) => {
 export const removeLike = async (like_id) => {
     try {
         const response = await databases.deleteDocument(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_LIKES_COLLECTION,
+            dbEnv,
+            likesCollEnv,
             like_id,
         );
         console.log('Like removed successfully.');
@@ -1143,16 +1206,23 @@ export const removeLike = async (like_id) => {
 }
 
 export const removeAllLikesByUser = async (user_id) => {
+
     try {
         const likes = await databases.listDocuments(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_LIKES_COLLECTION,
+            dbEnv,
+            likesCollEnv,
             [Query.equal('user_id', user_id)]
         )
 
-        for (const like of likes.documents) {
-            await removeLike(like.$id);
-        }
+        const removeLikesPromises = likes.documents.map(like =>
+            // removeLike(like.$id)
+            deleteDoc(
+                likesCollEnv,
+                like.$id
+            )
+        );
+
+        await Promise.all(removeLikesPromises);
 
         console.log(`All likes from user ${user_id} removed successfully.`);
     } catch (error) {
@@ -1161,18 +1231,23 @@ export const removeAllLikesByUser = async (user_id) => {
 }
 
 export const removeAllLikesForAuthor = async (author_id) => {
+
     try {
         const likes = await databases.listDocuments(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_LIKES_COLLECTION,
-            [
-                Query.equal('author_id', author_id)
-            ]
+            dbEnv,
+            likesCollEnv,
+            [Query.equal('author_id', author_id)]
         )
 
-        for (const like of likes.documents) {
-            await removeLike(like.$id);
-        }
+        const removeLikesPromises = likes.documents.map(like =>
+            // removeLike(like.$id)
+            deleteDoc(
+                likesCollEnv,
+                like.$id
+            )
+        );
+
+        await Promise.all(removeLikesPromises);
 
         console.log(`All likes for ${author_id}'s removed successfully.`);
     } catch (error) {
@@ -1181,15 +1256,25 @@ export const removeAllLikesForAuthor = async (author_id) => {
 }
 
 export const removeAllLikesForNotice = async (notice_id) => {
+
     try {
         const likes = await databases.listDocuments(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_LIKES_COLLECTION,
+            dbEnv,
+            likesCollEnv,
             [Query.equal('notice_id', notice_id)]
         )
-        for (const like of likes.documents) {
-            await removeLike(like.$id);
-        }
+
+        const removeLikesPromises = likes.documents.map(like =>
+            // removeLike(like.$id)
+            deleteDoc(
+                dbEnv,
+                likesCollEnv,
+                like.$id
+            )
+        );
+
+        await Promise.all(removeLikesPromises);
+
         console.log(`Removed all likes for notice id:`, notice_id);
     } catch (error) {
         console.error('Error removing likes from the db:', error);
@@ -1213,8 +1298,8 @@ export const getUserLikes = async (user_id, noticeIds) => {
         }
 
         const response = await databases.listDocuments(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_LIKES_COLLECTION,
+            dbEnv,
+            likesCollEnv,
             [
                 Query.equal('user_id', user_id),
                 Query.equal('notice_id', noticeIds),
@@ -1259,8 +1344,8 @@ export const getUserLikesNotInFeed = async (user_id, visitor_id, limit, offset) 
         console.log('dbhandler - getUserLikesNotInFeed offset', offset);
 
         const response = await databases.listDocuments(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_LIKES_COLLECTION,
+            dbEnv,
+            likesCollEnv,
             [
                 Query.equal('user_id', user_id),
                 // Query.equal('notice_id', noticeIdsInProfile),
@@ -1292,8 +1377,8 @@ export const getAllLikedNotices = async (likedNoticeIds) => {
 
 
         const allLikedNotices = await databases.listDocuments(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_NOTICES_COLLECTION,
+            dbEnv,
+            noticesCollEnv,
             [
                 Query.equal('$id', likedNoticeIds),
                 // Query.notEqual('noticeType', ['organization']),
@@ -1315,8 +1400,8 @@ export const getAllLikedNotices = async (likedNoticeIds) => {
 export const getAllLikesByNoticeId = async (notice_id) => {
     try {
         const res = await databases.listDocuments(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_LIKES_COLLECTION,
+            dbEnv,
+            likesCollEnv,
             [
                 Query.equal('notice_id', notice_id)
             ]
@@ -1351,8 +1436,8 @@ export const getUserSaves = async (user_id, noticeIds) => {
         ];
 
         const response = await databases.listDocuments(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_SAVES_COLLECTION,
+            dbEnv,
+            savesCollEnv,
             queries
         );
 
@@ -1379,8 +1464,8 @@ export const getUserSavesNotInFeed = async (user_id, visitor_id, limit, offset) 
         console.log('dbhandler - offset', offset);
 
         const response = await databases.listDocuments(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_SAVES_COLLECTION,
+            dbEnv,
+            savesCollEnv,
             [
                 Query.equal('user_id', user_id),
                 ...(allBlockedIds.length > 0 ? allBlockedIds.map(id => Query.notEqual('author_id', id)) : []),
@@ -1403,8 +1488,8 @@ export const getAllSavedNotices = async (saveNoticeIds) => {
         }
 
         const allSavedNotices = await databases.listDocuments(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_NOTICES_COLLECTION,
+            dbEnv,
+            noticesCollEnv,
             [
                 Query.equal('$id', saveNoticeIds),
                 // Query.notEqual('noticeType', ['organization']),
@@ -1423,8 +1508,8 @@ export const getAllSavedNotices = async (saveNoticeIds) => {
 export const createReport = async (notice_id, author_id, reason, user_id, noticeText) => {
     try {
         const response = await databases.createDocument(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_REPORTS_COLLECTION,
+            dbEnv,
+            reportsCollEnv,
             ID.unique(),
             {
                 notice_id: notice_id,
@@ -1433,10 +1518,6 @@ export const createReport = async (notice_id, author_id, reason, user_id, notice
                 user_id: user_id,
                 noticeText: noticeText
             },
-            // [
-            //     Permission.write(Role.users()),
-            //     Permission.write(Role.guests())
-            // ]
         );
         console.log('Report created successfully');
         return response;
@@ -1447,18 +1528,13 @@ export const createReport = async (notice_id, author_id, reason, user_id, notice
 }
 
 export const createFollow = async (user_id, otherUser_id) => {
+
     try {
         // Check if follow relationship already exists
         const followRecords = await databases.listDocuments(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_FOLLOWING_COLLECTION,
-            [
-                Query.equal('user_id', user_id)
-            ],
-            [
-                Permission.write(Role.users()),
-                Permission.write(Role.guests())
-            ]
+            dbEnv,
+            followingCollEnv,
+            [Query.equal('user_id', user_id)]
         );
 
         const existingFollow = followRecords.documents.find(
@@ -1467,14 +1543,18 @@ export const createFollow = async (user_id, otherUser_id) => {
 
         if (existingFollow) {
             // If the follow relationship exists, unfollow by deleting the document 
-            await removeFollow(existingFollow.$id);
-            console.log('Unfollowed successfully');
+            // await removeFollow(existingFollow.$id);
+            await deleteDoc(
+                followingCollEnv,
+                existingFollow.$id
+            )
+            console.log(`${user_id} unfollowed ${otherUser_id} successfully.`);
             return { unfollowed: true };
         } else {
             // Otherwise, create a new follow entry
             const response = await databases.createDocument(
-                import.meta.env.VITE_DATABASE,
-                import.meta.env.VITE_FOLLOWING_COLLECTION,
+                dbEnv,
+                followingCollEnv,
                 ID.unique(),
                 { user_id, otherUser_id }
             );
@@ -1493,8 +1573,8 @@ export const removeFollow = async (following_id) => {
 
     try {
         const response = await databases.deleteDocument(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_FOLLOWING_COLLECTION,
+            dbEnv,
+            followingCollEnv,
             following_id //follow doc id
         )
         console.log('Follow removed successfully');
@@ -1505,18 +1585,23 @@ export const removeFollow = async (following_id) => {
 }
 
 export const removeAllFollows = async (user_id) => {
+
     try {
         const follows = await databases.listDocuments(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_FOLLOWING_COLLECTION,
-            [
-                Query.equal('user_id', user_id)
-            ]
+            dbEnv,
+            followingCollEnv,
+            [Query.equal('user_id', user_id)]
         )
 
-        for (const follow of follows.documents) {
-            await removeFollow(follow.$id);
-        }
+        const removeFollowPromises = follows.documents.map(follow =>
+            // removeFollow(follow.$id)
+            deleteDoc(
+                followingCollEnv,
+                follow.$id
+            )
+        );
+
+        await Promise.all(removeFollowPromises);
 
         console.log(`All follows made by ${user_id} removed successfully.`);
     } catch (error) {
@@ -1525,18 +1610,23 @@ export const removeAllFollows = async (user_id) => {
 }
 
 export const removeAllFollowed = async (user_id) => {
+
     try {
         const followeds = await databases.listDocuments(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_FOLLOWING_COLLECTION,
-            [
-                Query.equal('otherUser_id', user_id)
-            ]
+            dbEnv,
+            followingCollEnv,
+            [Query.equal('otherUser_id', user_id)]
         )
 
-        for (const followed of followeds.documents) {
-            await removeFollow(followed.$id);
-        }
+        const removeFollowPromises = followeds.documents.map(follow =>
+            // removeFollow(follow.$id)
+            deleteDoc(
+                followingCollEnv,
+                follow.$id
+            )
+        );
+
+        await Promise.all(removeFollowPromises);
 
         console.log(`No account no longer follows ${user_id}.`);
     } catch (error) {
@@ -1545,10 +1635,11 @@ export const removeAllFollowed = async (user_id) => {
 }
 
 export const unfollow = async (user_id, otherUser_id) => {
+
     try {
         const res = await databases.listDocuments(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_FOLLOWING_COLLECTION,
+            dbEnv,
+            followingCollEnv,
             [
                 Query.or([
                     Query.and([Query.equal('user_id', user_id), Query.equal('otherUser_id', otherUser_id)]),
@@ -1560,8 +1651,15 @@ export const unfollow = async (user_id, otherUser_id) => {
         console.log('Follow instance FOUND:', res);
 
         for (const r of res.documents) {
-            await removeFollow(r.$id);
+            // await removeFollow(r.$id);
+            await deleteDoc(
+                followingCollEnv,
+                r.$id
+            );
         }
+
+        console.log(`${user_id} successfully unfollowed ${otherUser_id}.`);
+
     } catch (error) {
         console.error('Error unfollowing:', error);
     }
@@ -1570,8 +1668,8 @@ export const unfollow = async (user_id, otherUser_id) => {
 export const followedByUserCount = async (user_id) => {
     try {
         const res = await databases.listDocuments(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_FOLLOWING_COLLECTION,
+            dbEnv,
+            followingCollEnv,
             [
                 Query.equal('user_id', user_id)
             ]
@@ -1585,8 +1683,8 @@ export const followedByUserCount = async (user_id) => {
 export const followingTheUserCount = async (user_id) => {
     try {
         const res = await databases.listDocuments(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_FOLLOWING_COLLECTION,
+            dbEnv,
+            followingCollEnv,
             [
                 Query.equal('otherUser_id', user_id)
             ]
@@ -1606,8 +1704,8 @@ export const getUserFollowingsById = async (user_id, limit, offset) => {
 
     try {
         const response = await databases.listDocuments(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_FOLLOWING_COLLECTION,
+            dbEnv,
+            followingCollEnv,
             [
                 Query.equal('user_id', user_id),
                 Query.limit(limit),
@@ -1625,8 +1723,8 @@ export const getUserFollowingsById = async (user_id, limit, offset) => {
 export const getUserFollowersById = async (otherUser_id, limit, offset) => {
     try {
         const response = await databases.listDocuments(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_FOLLOWING_COLLECTION,
+            dbEnv,
+            followingCollEnv,
             [
                 Query.equal('otherUser_id', otherUser_id),
                 Query.limit(limit),
@@ -1646,8 +1744,8 @@ export const getFollowStatus = async (user_id, otherUser_id) => {
 
     try {
         const res = await databases.listDocuments(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_FOLLOWING_COLLECTION,
+            dbEnv,
+            followingCollEnv,
             [
                 Query.and([Query.equal('user_id', user_id), Query.equal('otherUser_id', otherUser_id)])
             ]
@@ -1663,8 +1761,8 @@ export const getFollowStatus = async (user_id, otherUser_id) => {
 export const getPersonalFeedAccounts = async (user_id) => {
     try {
         const res = await databases.listDocuments(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_FOLLOWING_COLLECTION,
+            dbEnv,
+            followingCollEnv,
             [
                 Query.equal('user_id', user_id)
             ]
@@ -1690,8 +1788,8 @@ export const getPersonalFeedAccounts = async (user_id) => {
 export const createReaction = async (sender_id, recipient_id, content, timestamp, notice_id, expiresAt, reactionGif) => {
     try {
         const response = await databases.createDocument(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_REACTIONS_COLLECTION,
+            dbEnv,
+            reactionsCollEnv,
             ID.unique(),
             {
                 sender_id,
@@ -1718,8 +1816,8 @@ export const deleteReaction = async (reactionId) => {
     console.log('Attempting to delete reaction with ID:', reactionId);
     try {
         const response = await databases.deleteDocument(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_REACTIONS_COLLECTION,
+            dbEnv,
+            reactionsCollEnv,
             reactionId,
         );
         console.log('Reaction deleted successfully:', response);
@@ -1733,16 +1831,23 @@ export const deleteReaction = async (reactionId) => {
 };
 
 export const deleteAllSentReactions = async (sender_id) => {
+
     try {
         const reactions = await databases.listDocuments(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_REACTIONS_COLLECTION,
+            dbEnv,
+            reactionsCollEnv,
             [Query.equal('sender_id', sender_id)],
         );
 
-        for (const reaction of reactions.documents) {
-            await deleteReaction(reaction.$id);
-        }
+        const deleteSentReactionPromises = reactions.documents.map(reaction =>
+            // deleteReaction(reaction.$id)
+            deleteDoc(
+                reactionsCollEnv,
+                reaction.$id
+            )
+        );
+
+        await Promise.all(deleteSentReactionPromises);
 
         console.log(`All reactions from user ${sender_id} deleted successfully.`);
     } catch (error) {
@@ -1752,17 +1857,24 @@ export const deleteAllSentReactions = async (sender_id) => {
 }
 
 export const deleteAllRecievedReactions = async (recipient_id) => {
+
     try {
 
         const reactions = await databases.listDocuments(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_REACTIONS_COLLECTION,
+            dbEnv,
+            reactionsCollEnv,
             [Query.equal('recipient_id', recipient_id)],
         );
 
-        for (const reaction of reactions.documents) {
-            await deleteReaction(reaction.$id);
-        }
+        const deletePromises = reactions.documents.map(reaction =>
+            // deleteReaction(reaction.$id)
+            deleteDoc(
+                reactionsCollEnv,
+                reaction.$id
+            )
+        );
+
+        await Promise.all(deletePromises);
 
         console.log(`All reactions for ${recipient_id}'s notices deleted successfully.`);
     } catch (error) {
@@ -1772,18 +1884,25 @@ export const deleteAllRecievedReactions = async (recipient_id) => {
 }
 
 export const deleteAllReactionsForOneNotice = async (notice_id) => {
+
     try {
         console.log('deleteAllReactionsForOneNotice:', notice_id);
 
         const reactions = await databases.listDocuments(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_REACTIONS_COLLECTION,
+            dbEnv,
+            reactionsCollEnv,
             [Query.equal('notice_id', notice_id)],
         );
 
-        for (const reaction of reactions.documents) {
-            await deleteReaction(reaction.$id);
-        }
+        const deleteOnReactionForOneNoticePromises = reactions.documents.map(reaction =>
+            // deleteReaction(reaction.$id)
+            deleteDoc(
+                reactionsCollEnv,
+                reaction.$id
+            )
+        );
+
+        await Promise.all(deleteOnReactionForOneNoticePromises);
 
         console.log(`All reactions for notice ${notice_id}'s deleted successfully.`);
     } catch (error) {
@@ -1797,8 +1916,8 @@ export const allReactionsForOneNotice = async (notice_id) => {
         console.log('allReactionsForOneNotice:', notice_id);
 
         const reactions = await databases.listDocuments(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_REACTIONS_COLLECTION,
+            dbEnv,
+            reactionsCollEnv,
             [Query.equal('notice_id', notice_id)],
         );
 
@@ -1813,8 +1932,8 @@ export const allReactionsForOneNotice = async (notice_id) => {
 export const getAllReactions = async () => {
     try {
         const response = await databases.listDocuments(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_REACTIONS_COLLECTION
+            dbEnv,
+            reactionsCollEnv
         )
         console.log('Successfully got ALL reactions.:', response);
         return response;
@@ -1826,8 +1945,8 @@ export const getAllReactions = async () => {
 export const getAllReactionsBySenderId = async (sender_id) => {
     try {
         const response = await databases.listDocuments(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_REACTIONS_COLLECTION,
+            dbEnv,
+            reactionsCollEnv,
             [
                 Query.equal('sender_id', sender_id),
             ]
@@ -1842,8 +1961,8 @@ export const getAllReactionsBySenderId = async (sender_id) => {
 export const getAllReactionsByRecipientId = async (recipient_id) => {
     try {
         const response = await databases.listDocuments(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_REACTIONS_COLLECTION,
+            dbEnv,
+            reactionsCollEnv,
             [
                 Query.equal('recipient_id', recipient_id),
             ]
@@ -1868,8 +1987,8 @@ export const getAllReactionsByNoticeId = async (notice_id, limit, cursor = null)
         }
 
         const response = await databases.listDocuments(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_REACTIONS_COLLECTION,
+            dbEnv,
+            reactionsCollEnv,
             queries
         )
 
@@ -1882,8 +2001,8 @@ export const getAllReactionsByNoticeId = async (notice_id, limit, cursor = null)
 export const getReactionByReactionId = async (reactionId) => {
     try {
         const reaction = await databases.getDocument(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_REACTIONS_COLLECTION,
+            dbEnv,
+            reactionsCollEnv,
             reactionId
         )
         console.log('Success getting reaction:', reaction);
@@ -1896,8 +2015,8 @@ export const getReactionByReactionId = async (reactionId) => {
 export const createReactionReport = async (reaction_id, author_id, reason, user_id, reaction_text) => {
     try {
         const response = await databases.createDocument(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_REPORTS_REACTIONS_COLLECTION,
+            dbEnv,
+            reportsReactionsCollEnv,
             ID.unique(),
             {
                 reaction_id: reaction_id,
@@ -1925,8 +2044,8 @@ export const createPassocde = async (user_id, passcode, accountType) => {
         console.log('passcode', passcode);
         console.log('accountType', accountType);
         const response = await databases.createDocument(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_PASSCODES_COLLECTION,
+            dbEnv,
+            passcodesCollEnv,
             ID.unique(),
             {
                 user_id,
@@ -1946,16 +2065,16 @@ export const updatePassocde = async (user_id, passcode) => {
         console.log('usr id', user_id);
 
         const listResponse = await databases.listDocuments(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_PASSCODES_COLLECTION,
+            dbEnv,
+            passcodesCollEnv,
             [Query.equal('user_id', user_id)]
         );
 
         const documentId = listResponse.documents[0].$id;
 
         const updateResponse = await databases.updateDocument(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_PASSCODES_COLLECTION,
+            dbEnv,
+            passcodesCollEnv,
             documentId,
             { passcode: passcode }
         );
@@ -1971,10 +2090,11 @@ export const updatePassocde = async (user_id, passcode) => {
 }
 
 export const deletePassocde = async (user_id) => {
+
     try {
         const passcodeDocs = await databases.listDocuments(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_PASSCODES_COLLECTION,
+            dbEnv,
+            passcodesCollEnv,
             [Query.equal('user_id', user_id)]
         );
 
@@ -1982,11 +2102,16 @@ export const deletePassocde = async (user_id) => {
 
             const docId = passcodeDocs.documents[0].$id;
 
-            await databases.deleteDocument(
-                import.meta.env.VITE_DATABASE,
-                import.meta.env.VITE_PASSCODES_COLLECTION,
+            await deleteDoc(
+                passcodesCollEnv,
                 docId
             )
+
+            // await databases.deleteDocument(
+            //     dbEnv,
+            //     passcodesCollEnv,
+            //     docId
+            // )
         }
 
         console.log('Passcode deleted successfully.');
@@ -1999,8 +2124,8 @@ export const deletePassocde = async (user_id) => {
 export const getPassocdeByOrganizationId = async (user_id) => {
     try {
         const response = await databases.listDocuments(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_PASSCODES_COLLECTION,
+            dbEnv,
+            passcodesCollEnv,
             [
                 Query.equal('user_id', user_id)
             ]
@@ -2014,8 +2139,8 @@ export const getPassocdeByOrganizationId = async (user_id) => {
 export const createBlock = async (user_id, currUser_id) => {
     try {
         const res = await databases.createDocument(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_BLOCKS_COLLECTION,
+            dbEnv,
+            blocksCollEnv,
             ID.unique(),
             {
                 blocker_id: user_id,
@@ -2032,8 +2157,8 @@ export const createBlock = async (user_id, currUser_id) => {
 export const getBlockedUsersByUser = async (blocker_id) => {
     try {
         const res = await databases.listDocuments(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_BLOCKS_COLLECTION,
+            dbEnv,
+            blocksCollEnv,
             [
                 Query.equal('blocker_id', blocker_id)
             ]
@@ -2048,8 +2173,8 @@ export const getBlockedUsersByUser = async (blocker_id) => {
 export const getBlockedUsersByUserTwo = async (user_id) => {
     try {
         const res = await databases.listDocuments(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_BLOCKS_COLLECTION,
+            dbEnv,
+            blocksCollEnv,
             [
                 Query.equal('blocker_id', user_id)
             ]
@@ -2064,8 +2189,8 @@ export const getBlockedUsersByUserTwo = async (user_id) => {
 export const getBlockedUsersByUserByBatch = async (blocker_id, limit, offset) => {
     try {
         const res = await databases.listDocuments(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_BLOCKS_COLLECTION,
+            dbEnv,
+            blocksCollEnv,
             [
                 Query.equal('blocker_id', blocker_id),
                 Query.limit(limit),
@@ -2082,8 +2207,8 @@ export const getBlockedUsersByUserByBatch = async (blocker_id, limit, offset) =>
 export const getUsersBlockingUser = async (blocked_id) => {
     try {
         const res = await databases.listDocuments(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_BLOCKS_COLLECTION,
+            dbEnv,
+            blocksCollEnv,
             [
                 Query.equal('blocked_id', blocked_id)
             ]
@@ -2100,8 +2225,8 @@ export const isOtherUserBlockedByUser = async (user_id, otherUser_id) => {
 
     try {
         const res = await databases.listDocuments(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_BLOCKS_COLLECTION,
+            dbEnv,
+            blocksCollEnv,
             [
                 Query.and([
                     Query.equal('blocker_id', user_id),
@@ -2127,8 +2252,8 @@ export const isUserBlockedByOtherUser = async (otherUser_id, user_id) => {
 
     try {
         const res = await databases.listDocuments(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_BLOCKS_COLLECTION,
+            dbEnv,
+            blocksCollEnv,
             [
                 Query.and([
                     Query.equal('blocker_id', otherUser_id),
@@ -2150,25 +2275,29 @@ export const isUserBlockedByOtherUser = async (otherUser_id, user_id) => {
 }
 
 export const removeBlockUsingBlockedId = async (blocked_id) => {
+
     try {
         console.log('To be removed:', blocked_id);
 
         const user = await databases.listDocuments(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_BLOCKS_COLLECTION,
-            [
-                Query.equal('blocked_id', blocked_id)
-            ]
+            dbEnv,
+            blocksCollEnv,
+            [Query.equal('blocked_id', blocked_id)]
         );
 
         console.log('Removing block for - 1:', user);
         console.log('Removing block for - 2:', user.documents[0].$id);
 
-        await databases.deleteDocument(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_BLOCKS_COLLECTION,
+        await deleteDoc(
+            blocksCollEnv,
             user.documents[0].$id
         )
+
+        // await databases.deleteDocument(
+        //     dbEnv,
+        //     blocksCollEnv,
+        //     user.documents[0].$id
+        // )
 
         console.log('Block removed succesfully');
 
@@ -2183,8 +2312,8 @@ export const removeBlock = async (block_doc_id) => {
 
     try {
         const response = await databases.deleteDocument(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_BLOCKS_COLLECTION,
+            dbEnv,
+            blocksCollEnv,
             block_doc_id //block doc id
         )
         return response;
@@ -2194,18 +2323,23 @@ export const removeBlock = async (block_doc_id) => {
 }
 
 export const removeAllBlocksForBlocker = async (blocker_id) => {
+
     try {
         const blocks = await databases.listDocuments(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_BLOCKS_COLLECTION,
-            [
-                Query.equal('blocker_id', blocker_id)
-            ]
+            dbEnv,
+            blocksCollEnv,
+            [Query.equal('blocker_id', blocker_id)]
         )
 
-        for (const block of blocks.documents) {
-            await removeBlock(block.$id);
-        }
+        const removeBlockerPromises = blocks.documents.map(block =>
+            // removeBlock(block.$id)
+            deleteDoc(
+                blocksCollEnv,
+                block.$id
+            )
+        );
+
+        await Promise.all(removeBlockerPromises);
 
         console.log(`All blocks made by ${blocker_id} removed successfully.`);
     } catch (error) {
@@ -2214,18 +2348,23 @@ export const removeAllBlocksForBlocker = async (blocker_id) => {
 }
 
 export const removeAllBlocksForBlocked = async (blocked_id) => {
+
     try {
         const blocks = await databases.listDocuments(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_BLOCKS_COLLECTION,
-            [
-                Query.equal('blocked_id', blocked_id)
-            ]
+            dbEnv,
+            blocksCollEnv,
+            [Query.equal('blocked_id', blocked_id)]
         )
 
-        for (const block of blocks.documents) {
-            await removeBlock(block.$id);
-        }
+        const removeBlockedPromises = blocks.documents.map(block =>
+            // removeBlock(block.$id)
+            deleteDoc(
+                blocksCollEnv,
+                block.$id
+            )
+        );
+
+        await Promise.all(removeBlockedPromises);
 
         console.log(`${blocked_id} is no longer blocked by anyone.`);
     } catch (error) {
@@ -2236,23 +2375,95 @@ export const removeAllBlocksForBlocked = async (blocked_id) => {
 export const createUserReport = async (reported_id, reason, reporter_id) => {
     try {
         const response = await databases.createDocument(
-            import.meta.env.VITE_DATABASE,
-            import.meta.env.VITE_REPORTS_USERS_COLLECTION,
+            dbEnv,
+            reportsUsersCollEnv,
             ID.unique(),
             {
                 reported_id,
                 reason,
                 reporter_id
             },
-            // [
-            //     Permission.write(Role.users()),
-            //     Permission.write(Role.guests())
-            // ]
         );
         console.log('Report created successfully');
         return response;
     } catch (error) {
         console.error('Error adding to reports:', error);
+        throw error;
+    }
+}
+
+
+
+export const deleteReport = async (report_id) => {
+    try {
+        await databases.deleteDocument(
+            dbEnv,
+            reportsUsersCollEnv,
+            report_id
+        )
+        console.log('Report deleted successfully');
+
+    } catch (error) {
+        console.error('Error deleting report:', error);
+    }
+}
+
+export const removeAllReportsReportingTheUser = async (reported_id) => {
+
+    if (!reported_id) {
+        console.log('reported_id is required');
+    }
+
+    try {
+        const docs = await databases.listDocuments(
+            dbEnv,
+            reportsUsersCollEnv,
+            [Query.equal('reported_id', reported_id)]
+        );
+
+        const deletePromises = docs.documents.map(doc =>
+            // deleteReport(doc.$id)
+            deleteDoc(
+                reportsUsersCollEnv,
+                doc.$id
+            )
+        );
+
+        await Promise.all(deletePromises);
+
+        console.log('Reports deleted successfully');
+    } catch (error) {
+        console.error('Error deleting reports:', error);
+        throw error;
+    }
+}
+
+export const removeAllReportsReportingTheUserNotice = async (author_id) => {
+
+    if (!author_id) {
+        console.log('author_id is required');
+    }
+
+    try {
+        const docs = await databases.listDocuments(
+            dbEnv,
+            reportsUsersCollEnv,
+            [Query.equal('author_id', author_id)]
+        );
+
+        const deletePromises = docs.documents.map(doc =>
+            // deleteReport(doc.$id)
+            deleteDoc(
+                reportsUsersCollEnv,
+                doc.$id
+            )
+        );
+
+        await Promise.all(deletePromises);
+
+        console.log('Reports deleted successfully');
+    } catch (error) {
+        console.error('Error deleting reports:', error);
         throw error;
     }
 }

@@ -1,7 +1,9 @@
+import { endpointEnv, projectEnv, avatarBucketEnv } from '../context/dbhandler';
+
 export const getAvatarUrl = (avatarId) => {
     if (!avatarId) return null;
 
-    const url = `${import.meta.env.VITE_ENDPOINT}/storage/buckets/${import.meta.env.VITE_AVATAR_BUCKET}/files/${avatarId}/view?project=${import.meta.env.VITE_PROJECT}`;
+    const url = `${endpointEnv}/storage/buckets/${avatarBucketEnv}/files/${avatarId}/view?project=${projectEnv}`;
     return url;
 };
 

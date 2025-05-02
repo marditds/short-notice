@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { uploadAvatar, deleteAvatarFromStrg, updateAvatar, deleteAvatarFromDoc, getUserById, getAllUsersByString } from '../context/dbhandler';
+import { endpointEnv, projectEnv, avatarBucketEnv, uploadAvatar, deleteAvatarFromStrg, updateAvatar, deleteAvatarFromDoc, getUserById, getAllUsersByString } from '../context/dbhandler';
 import { getAvatarUrl } from '../utils/avatarUtils';
 
 export const useUserAvatar = (userId) => {
@@ -120,7 +120,7 @@ export const useUserAvatar = (userId) => {
 
                 const updateAvatarRes = await updateAvatar(userId, uploadedAvatarFile.$id);
 
-                const url = `${import.meta.env.VITE_ENDPOINT}/storage/buckets/${import.meta.env.VITE_AVATAR_BUCKET}/files/${uploadedAvatarFile.$id}/view?project=${import.meta.env.VITE_PROJECT}&mode=admin`;
+                const url = `${endpointEnv}/storage/buckets/${avatarBucketEnv}/files/${uploadedAvatarFile.$id}/view?project=${projectEnv}&mode=admin`;
 
                 setAvatarUrl(url);
 
