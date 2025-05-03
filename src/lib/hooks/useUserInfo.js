@@ -273,11 +273,12 @@ export const useUserInfo = (data) => {
                     if (user && user.avatar) {
                         const avatarUrl = getAvatarUrl(user.avatar);
 
-                        return { ...notice, avatarUrl, username: user.username, btnPermission: userPermissions.btns_reaction_perm, txtPermission: userPermissions.txt_reaction_perm, noticeLikesTotal: noticeLikesTotal.total };
+                        return { ...notice, avatarUrl, username: user.username, btnPermission: userPermissions.btns_reaction_perm, txtPermission: userPermissions.txt_reaction_perm, noticeLikesTotal: noticeLikesTotal.total ?? 0 };
                     }
-                    return { ...notice, avatarUrl: null, username: user?.username || 'Unknown User', btnPermission: userPermissions.btns_reaction_perm, txtPermission: userPermissions.txt_reaction_perm, noticeLikesTotal: noticeLikesTotal.total };
+                    return { ...notice, avatarUrl: null, username: user?.username || 'Unknown User', btnPermission: userPermissions.btns_reaction_perm, txtPermission: userPermissions.txt_reaction_perm, noticeLikesTotal: noticeLikesTotal.total ?? 0 };
                 })
             );
+            console.log('updatedNotices in fetchUsersData:', updatedNotices);
 
             if (JSON.stringify(updatedNotices) !== JSON.stringify(notices)) {
                 setNotices(prevNotices => {

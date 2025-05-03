@@ -68,7 +68,8 @@ const UserProfile = () => {
         getAllSavedNotices,
         getReactionsForNotice,
         getReactionByReactionId,
-        reportReaction
+        reportReaction,
+        getAllLikesTotalByNoticeId
     } = useNotices(userEmail);
     // } = useNotices(userEmail || localStorage.getItem('email'));
 
@@ -235,20 +236,44 @@ const UserProfile = () => {
 
             console.log('usrNtcs', usrNtcs);
 
-            if (usrNtcs?.length > 0) {
+            const ntcsIds = usrNtcs?.map(ntc => ntc.$id);
+
+            console.log('nstNtcsIds', ntcsIds);
+
+            const likesForEachNotice = {};
+
+            const noticeLikesTotal = await getAllLikesTotalByNoticeId(ntcsIds);
+
+            console.log('TOTAL LIKES:', noticeLikesTotal);
+
+            noticeLikesTotal.forEach(like => {
+                const id = like.notice_id;
+                likesForEachNotice[id] = (likesForEachNotice[id] || 0) + 1;
+            });
+
+            console.log('likesForEachNotice', likesForEachNotice);
+
+            const noticesWithLikes = usrNtcs.map(notice => ({
+                ...notice,
+                totalLikes: likesForEachNotice[notice.$id] || 0
+            }));
+
+            console.log('noticesWithLikes', noticesWithLikes);
+
+            if (noticesWithLikes?.length > 0) {
 
                 if (lastId !== 0) {
                     setUserProfileNotices((prevNotices) => [
                         ...prevNotices,
-                        ...usrNtcs,
+                        ...noticesWithLikes,
                     ]);
                 } else {
-                    setUserProfileNotices(usrNtcs);
+                    setUserProfileNotices(noticesWithLikes);
                 }
 
-                setLastId(usrNtcs[usrNtcs.length - 1].$id);
+                setLastId(noticesWithLikes[noticesWithLikes.length - 1].$id);
 
-                if (usrNtcs?.length < limit) {
+                if (noticesWithLikes?.length < limit) {
                     setHasMoreNotices(false);
                 }
             } else {
@@ -277,7 +302,10 @@ const UserProfile = () => {
 
                 const noticeExists = prevNotices.some(notice => notice.$id === latestNotice.$id);
                 if (!noticeExists) {
-                    return [latestNotice, ...prevNotices];
+
+                    const latestNoticeWithLike = { ...latestNotice, noticeLikesTotal: 0 }
+
+                    return [latestNoticeWithLike, ...prevNotices];
                 }
                 return prevNotices;
             });
@@ -545,15 +573,6 @@ const UserProfile = () => {
         setRemovingNoticeId(null);
     }
 
-    // useEffect(() => {
-    //     console.log('eventKey', eventKey);
-    // }, [eventKey]);
-
-    // useEffect(() => {
-    //     console.log('userProfileNotices,', userProfileNotices);
-    // }, [userProfileNotices]);
-
-
     const timerSpacing = 'mx-2';
     const timerDisplay = 'd-flex';
     const classname = `${timerDisplay} ${timerSpacing}`;
@@ -567,14 +586,9 @@ const UserProfile = () => {
         </div>;
     }
 
-    // return (
-    //     <div style={{ marginTop: '250px' }}>
-    //         Hello
-    //     </div>
-    // )
-
     return (
         <>
+            {/* User info section */}
             <Profile
                 username={username}
                 avatarUrl={avatarUrl}
@@ -595,6 +609,7 @@ const UserProfile = () => {
                 loadFollowing={loadFollowing}
             />
 
+            {/* Compose notice */}
             <div style={{ marginTop: !isSmallScreen ? '205px' : '155px' }}>
                 <ComposeNotice
                     isAddingNotice={isAddingNotice}
@@ -610,6 +625,7 @@ const UserProfile = () => {
                 />
             </div>
 
+            {/* Notices tabs */}
             <Tabs
                 defaultActiveKey="my-notices"
                 id="justify-tab-example"

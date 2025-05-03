@@ -1499,11 +1499,9 @@ export const getAllLikesTotalByNoticeId = async (notice_id) => {
         const res = await databases.listDocuments(
             dbEnv,
             likesCollEnv,
-            [
-                Query.equal('notice_id', notice_id)
-            ]
+            [Query.equal('notice_id', notice_id)]
         )
-        return res.total;
+        return res.documents;
     } catch (error) {
         console.error('Error getting all likes by notice id.', error);
     }

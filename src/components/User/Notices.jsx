@@ -466,7 +466,10 @@ export const Notices = ({
                             onClick={() => handleAccordionToggle(notice.$id)}
                         >
                             <Row className='w-100 m-auto'>
-                                {/* Text and Countdown Col */}
+
+
+
+                                {/* Text, Likes and Countdown Col */}
                                 <Col xs={9} className='d-flex justify-content-between flex-column notice__text-countdown-col'
                                 >
                                     <p className='text-break notice__text'>
@@ -498,10 +501,8 @@ export const Notices = ({
                                     }
 
                                     <div>
-                                        <p className='mb-0'>
-                                            {notice.noticeLikesTotal ||
-
-                                                notice.totalLikes}
+                                        <p className='mb-0 text-muted'>
+                                            {notice.noticeLikesTotal ?? notice.totalLikes} Like(s)
                                         </p>
 
                                         <small className='me-auto'>
@@ -556,22 +557,13 @@ export const Notices = ({
                                                     className='ms-auto notice__edit-btn'
                                                     onClick={() => handleEditNotice(notice.$id, notice.text)}
                                                 >
-                                                    <i className='bi bi-pencil'
-                                                    // style={{ fontSize: isSmallScreen ? 12 : 18 }}
-                                                    >
-                                                    </i>
-                                                    {/* <AiFillEdit size={isSmallScreen ? 16 : 20} /> */}
+                                                    <i className='bi bi-pencil' />
                                                 </div>
                                                 <div
                                                     className='ms-2 notice__delete-btn'
                                                     onClick={() => handleDeleteNotice(notice.$id)}
                                                 >
-                                                    <i className='bi bi-trash3'
-                                                    // style={{ fontSize: isSmallScreen ? 12 : 18 }}
-                                                    // 
-                                                    ></i>
-                                                    {/* <CgTrash size={isSmallScreen ? 16 : 20} /> */}
-
+                                                    <i className='bi bi-trash3' />
                                                 </div>
                                             </span>
                                         </div>
@@ -603,10 +595,10 @@ export const Notices = ({
                                                             >
                                                                 {likedNotices && likedNotices[notice.$id] ? (
                                                                     <>
-                                                                        <i className='bi bi-hand-thumbs-up-fill notice__reaction-btn-fill'></i>
+                                                                        <i className='bi bi-hand-thumbs-up-fill notice__reaction-btn-fill' />
                                                                     </>
                                                                 ) : (
-                                                                    <i className='bi bi-hand-thumbs-up notice__reaction-btn'></i>
+                                                                    <i className='bi bi-hand-thumbs-up notice__reaction-btn' />
                                                                 )}
                                                             </div>
 
@@ -620,7 +612,7 @@ export const Notices = ({
                                                                     ? 'disabled' : ''} ms-2`}
                                                             >
                                                                 {savedNotices && savedNotices[notice.$id] ? (
-                                                                    <i className='bi bi-floppy-fill notice__reaction-btn-fill'></i>
+                                                                    <i className='bi bi-floppy-fill notice__reaction-btn-fill' />
 
                                                                 ) : (
                                                                     <i className='bi bi-floppy notice__reaction-btn' />
@@ -631,13 +623,13 @@ export const Notices = ({
                                                             <div
                                                                 className={`notice__reaction-btn ${isOtherUserBlocked ? 'disabled' : ''} ms-2`}
                                                             >
-                                                                <i className='bi bi-reply'></i>
+                                                                <i className='bi bi-reply' />
                                                             </div>
                                                             <div
                                                                 onClick={() => onReportNoticeClick(notice.$id)}
                                                                 className='notice__reaction-btn ms-2'
                                                             >
-                                                                <i className='bi bi-exclamation-circle'></i>
+                                                                <i className='bi bi-exclamation-circle' />
                                                             </div>
                                                         </div>
                                                     }
