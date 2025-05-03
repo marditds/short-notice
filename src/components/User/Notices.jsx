@@ -27,7 +27,9 @@ export const Notices = ({
     getReactionsForNotice,
     getReactionByReactionId,
     getUserAccountByUserId,
-    reportReaction
+    reportReaction,
+    btnPermission,
+    txtPermission
     // handleDeleteReaction
 }) => {
     const location = useLocation();
@@ -583,10 +585,13 @@ export const Notices = ({
                                                             className='d-flex justify-content-end align-items-center notice__reaction-icon-div'
                                                         // style={{ height: '35px' }}
                                                         >
+                                                            {/* Like */}
                                                             <div
-                                                                className={`notice__reaction-btn ${isOtherUserBlocked ? 'disabled' : ''} ms-2`}
+                                                                className={`notice__reaction-btn ${(isOtherUserBlocked || (btnPermission === false || notice.btnPermission === false))
+                                                                    ? 'disabled' : ''} ms-2`}
                                                                 onClick={() => {
-                                                                    isOtherUserBlocked ? console.log(`YOU are blocked`) : handleLike(notice.$id, notice.user_id, likedNotices, setLikedNotices);
+                                                                    (isOtherUserBlocked || (btnPermission === false || notice.btnPermission === false))
+                                                                        ? console.log(`YOU are blocked`) : handleLike(notice.$id, notice.user_id, likedNotices, setLikedNotices);
                                                                 }}
                                                             >
                                                                 {likedNotices && likedNotices[notice.$id] ? (
@@ -597,17 +602,25 @@ export const Notices = ({
                                                                     <i className='bi bi-hand-thumbs-up notice__reaction-btn'></i>
                                                                 )}
                                                             </div>
+
+                                                            {/* Save */}
                                                             <div
-                                                                onClick={() => handleSave(notice.$id, notice.user_id, savedNotices, setSavedNotices)}
-                                                                className={`notice__reaction-btn ${isOtherUserBlocked ? 'disabled' : ''} ms-2`}
+                                                                onClick={() => {
+                                                                    (isOtherUserBlocked || (btnPermission === false || notice.btnPermission === false))
+                                                                        ? console.log(`YOU are blocked`) : handleSave(notice.$id, notice.user_id, savedNotices, setSavedNotices)
+                                                                }}
+                                                                className={`notice__reaction-btn ${(isOtherUserBlocked || (btnPermission === false || notice.btnPermission === false))
+                                                                    ? 'disabled' : ''} ms-2`}
                                                             >
                                                                 {savedNotices && savedNotices[notice.$id] ? (
                                                                     <i className='bi bi-floppy-fill notice__reaction-btn-fill'></i>
 
                                                                 ) : (
-                                                                    <i className='bi bi-floppy notice__reaction-btn'></i>
+                                                                    <i className='bi bi-floppy notice__reaction-btn' />
                                                                 )}
                                                             </div>
+
+                                                            {/* Report */}
                                                             <div
                                                                 className={`notice__reaction-btn ${isOtherUserBlocked ? 'disabled' : ''} ms-2`}
                                                             >
@@ -631,38 +644,51 @@ export const Notices = ({
                                 </Col>
                             </Row>
                         </Accordion.Header>
-                        <Accordion.Body className='notice__reaction'>
-                            {isOtherUserBlocked || notice.user_id === user_id ? null :
-                                <Row className='m-auto'>
-                                    <Col className='px-0 px-sm-3 px-md-4 d-flex flex-column justify-content-end'>
-                                        <ComposeReaction
-                                            reactionText={reactionText}
-                                            reactionGif={reactionGif}
-                                            setReactionGif={setReactionGif}
-                                            isSendingReactionLoading={isSendingReactionLoading}
-                                            reactionCharCount={reactionCharCount}
-                                            onReactionTextChange={onReactionTextChange}
-                                            handleReactSubmission={handleReactSubmission}
-                                        />
-                                        <hr />
-                                    </Col>
-                                </Row>
-                            }
 
-                            <Reactions
-                                notice={notice}
-                                defaultAvatar={defaultAvatar}
-                                loadedReactions={loadedReactions}
-                                isLoadingMoreReactions={isLoadingMoreReactions}
-                                loadingStates={loadingStates}
-                                reactionAvatarMap={reactionAvatarMap}
-                                reactionUsernameMap={reactionUsernameMap}
-                                showLoadMoreBtn={showLoadMoreBtn}
-                                user_id={user_id}
-                                handleLoadMoreReactions={handleLoadMoreReactions}
-                                handleReportReaction={handleReportReaction}
-                            />
+
+                        <Accordion.Body className='notice__reaction'>
+
+                            {
+                                (txtPermission ?? notice.txtPermission) ?
+                                    <>
+                                        {isOtherUserBlocked || notice.user_id === user_id ? null :
+                                            <Row className='m-auto'>
+                                                <Col className='px-0 px-sm-3 px-md-4 d-flex flex-column justify-content-end'>
+                                                    <ComposeReaction
+                                                        reactionText={reactionText}
+                                                        reactionGif={reactionGif}
+                                                        setReactionGif={setReactionGif}
+                                                        isSendingReactionLoading={isSendingReactionLoading}
+                                                        reactionCharCount={reactionCharCount}
+                                                        onReactionTextChange={onReactionTextChange}
+                                                        handleReactSubmission={handleReactSubmission}
+                                                    />
+                                                    <hr />
+                                                </Col>
+                                            </Row>
+                                        }
+
+                                        <Reactions
+                                            notice={notice}
+                                            defaultAvatar={defaultAvatar}
+                                            loadedReactions={loadedReactions}
+                                            isLoadingMoreReactions={isLoadingMoreReactions}
+                                            loadingStates={loadingStates}
+                                            reactionAvatarMap={reactionAvatarMap}
+                                            reactionUsernameMap={reactionUsernameMap}
+                                            showLoadMoreBtn={showLoadMoreBtn}
+                                            user_id={user_id}
+                                            handleLoadMoreReactions={handleLoadMoreReactions}
+                                            handleReportReaction={handleReportReaction}
+                                        />
+                                    </>
+                                    :
+                                    <p className='text-center text-muted mb-0'>
+                                        This user has disabled reactions on their notices.
+                                    </p>
+                            }
                         </Accordion.Body>
+
                     </Accordion.Item>
                 ))
                 }

@@ -37,6 +37,7 @@ const followingCollEnv = import.meta.env.VITE_FOLLOWING_COLLECTION;
 const likesCollEnv = import.meta.env.VITE_LIKES_COLLECTION;
 const reactionsCollEnv = import.meta.env.VITE_REACTIONS_COLLECTION;
 const interestsCollEnv = import.meta.env.VITE_INTERESTS_COLLECTION;
+const permissionsCollEnv = import.meta.env.VITE_PERMISSIONS_COLLECTION;
 const passcodesCollEnv = import.meta.env.VITE_PASSCODES_COLLECTION;
 export const avatarBucketEnv = import.meta.env.VITE_AVATAR_BUCKET;
 
@@ -285,6 +286,20 @@ export const getUserByIdQuery = async (userId) => {
         return response;
     } catch (error) {
         // console.error('Error fetching user by ID:', error);
+        throw error;
+    }
+};
+
+export const getUserPermissionsByIdQuery = async (userId) => {
+    try {
+        const response = await databases.listDocuments(
+            dbEnv,
+            permissionsCollEnv,
+            [Query.equal('$id', userId)]
+        );
+        return response;
+    } catch (error) {
+        console.error('Error querying user permission by ID:', error);
         throw error;
     }
 };
@@ -876,7 +891,6 @@ export const getFilteredNotices = async (selectedTags, limit, lastId, userId) =>
     }
 };
 
-
 export const updateNotice = async (noticeId, newText) => {
     try {
         const response = await databases.updateDocument(
@@ -943,7 +957,6 @@ export const saveDeletedNoticeId = async (notice_id) => {
     }
 };
 
-
 export const deleteAllNotices = async (userId) => {
 
     try {
@@ -976,7 +989,6 @@ export const deleteAllNotices = async (userId) => {
         throw error;
     }
 };
-
 
 export const getUserInterests = async (userId) => {
     try {
@@ -1039,10 +1051,81 @@ export const updateUserInterests = async (userId, selectedTags) => {
     }
 };
 
+export const createUserPermissions = async (userId) => {
+    try {
+        const permissions = await databases.createDocument(
+            dbEnv,
+            permissionsCollEnv,
+            userId,
+            {
+                btns_reaction_perm: true,
+                txt_reaction_perm: true
+            }
+        )
+        console.log('User permissions created successfully:', permissions);
+
+        return { btns_reaction_perm: permissions.btns_reaction_perm, txt_reaction_perm: permissions.txt_reaction_perm };
+    } catch (error) {
+        console.error('Error getting user permissions:', error);
+    }
+}
+export const getUserPermissions = async (userId) => {
+    try {
+        const permissions = await databases.getDocument(
+            dbEnv,
+            permissionsCollEnv,
+            userId
+        )
+        console.log('perm in dbhandler.js:', permissions);
+
+        return { btns_reaction_perm: permissions.btns_reaction_perm, txt_reaction_perm: permissions.txt_reaction_perm };
+    } catch (error) {
+        console.error('Error getting user permissions:', error);
+    }
+}
+
+export const updateUserPermissions = async (userId, btns_reaction_perm, txt_reaction_perm) => {
+    try {
+
+        let response;
+
+        try {
+            response = await databases.updateDocument(
+                dbEnv,
+                permissionsCollEnv,
+                userId,
+                {
+                    btns_reaction_perm,
+                    txt_reaction_perm
+                }
+            );
+        } catch (updateError) {
+            if (updateError.code === 404) {
+                response = await databases.createDocument(
+                    dbEnv,
+                    permissionsCollEnv,
+                    userId,
+                    {
+                        btns_reaction_perm,
+                        txt_reaction_perm
+                    }
+                );
+            } else {
+                throw updateError;
+            }
+        }
+
+        console.log({ btns_reaction_perm: response.btns_reaction_perm, txt_reaction_perm: response.txt_reaction_perm });
+        return { btns_reaction_perm: response.btns_reaction_perm, txt_reaction_perm: response.txt_reaction_perm };
+    } catch (error) {
+        console.error('Error updating user permissions:', error);
+        return 'Something went wrong. Please try again later.';
+    }
+};
+
 export const deleteUserInterestsFromDB = async (userId) => {
     try {
-        await databases.deleteDocument(
-            dbEnv,
+        await deleteDoc(
             interestsCollEnv,
             userId
         )
@@ -1364,7 +1447,6 @@ export const getUserLikesNotInFeed = async (user_id, visitor_id, limit, offset) 
         return [];
     }
 };
-
 
 // The full notice for likes
 export const getAllLikedNotices = async (likedNoticeIds) => {

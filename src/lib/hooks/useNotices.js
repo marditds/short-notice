@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { createNotice, getUserNotices, updateNotice, deleteNotice, saveDeletedNoticeId, deleteAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSave, getUserSaves, removeSave, createReport, createLike, removeLike, getUserLikes, getAllLikedNotices as fetchAllLikedNotices, getAllLikesByNoticeId as fetchAllLikesByNoticeId, getUserLikesNotInFeed, getUserSavesNotInFeed, getAllSavedNotices as fetchAllSavedNotices, createReaction, deleteReaction, getAllReactionsBySenderId as fetchAllReactionsBySenderId, getAllReactions as fetchAllReactions, getAllReactionsByRecipientId as fetchAllReactionsByRecipientId, getNoticeByNoticeId as fetchNoticeByNoticeId, getAllReactionsByNoticeId as fetchAllReactionsByNoticeId, getReactionByReactionId as fetchReactionByReactionId, deleteAllSentReactions, createReactionReport, getNoticeByUserId as fetchNoticeByUserId, removeAllSavesForNotice, removeAllLikesForNotice } from '../../lib/context/dbhandler';
+import { createNotice, getUserNotices, updateNotice, deleteNotice, saveDeletedNoticeId, deleteAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSave, getUserSaves, removeSave, createReport, createLike, removeLike, getUserLikes, getAllLikedNotices as fetchAllLikedNotices, getAllLikesByNoticeId as fetchAllLikesByNoticeId, getUserLikesNotInFeed, getUserSavesNotInFeed, getAllSavedNotices as fetchAllSavedNotices, createReaction, deleteReaction, getAllReactionsBySenderId as fetchAllReactionsBySenderId, getAllReactions as fetchAllReactions, getAllReactionsByRecipientId as fetchAllReactionsByRecipientId, getNoticeByNoticeId as fetchNoticeByNoticeId, getAllReactionsByNoticeId as fetchAllReactionsByNoticeId, getReactionByReactionId as fetchReactionByReactionId, deleteAllSentReactions, createReactionReport, getNoticeByUserId as fetchNoticeByUserId, removeAllSavesForNotice, removeAllLikesForNotice, updateUserPermissions as updatePermissions, getUserPermissions as fetchUserPermissions } from '../../lib/context/dbhandler';
 import { useUserContext } from '../context/UserContext.jsx';
 import { useUserInfo } from './useUserInfo.js';
 import { useGemini } from './useGemini';
@@ -574,6 +574,27 @@ export const useNotices = (data) => {
         setSelectedTags({});
     }
 
+    const updateUserPermissions = async (userId, btns_reaction_perm, reaction_text) => {
+        try {
+            const res = await updatePermissions(userId, btns_reaction_perm, reaction_text);
+
+            return res;
+        } catch (error) {
+            console.error('Error updating permissions:', error);
+        }
+    }
+
+    const getUserPermissions = async (userId) => {
+        try {
+            const res = await fetchUserPermissions(userId);
+            console.log('res in getUserPermissions', res);
+
+            return res;
+        } catch (error) {
+            console.error('Error fetching permissions:', error);
+        }
+    }
+
     const handleSave = async (notice_id, author_id, savedNoticesArr, setSaveFunc) => {
         try {
             if (savedNoticesArr[notice_id]) {
@@ -888,6 +909,8 @@ export const useNotices = (data) => {
         fetchUserInterests,
         toggleInterestsTag,
         deselectAllInterestTags,
+        updateUserPermissions,
+        getUserPermissions,
         setSelectedTags,
         setFellowUserId,
         addNotice,

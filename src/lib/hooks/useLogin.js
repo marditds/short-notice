@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useUserContext } from '../context/UserContext';
 import { useNavigate } from 'react-router-dom';
-import { createUser, deleteAuthUser } from '../context/dbhandler';
+import { createUser, createUserPermissions, deleteAuthUser } from '../context/dbhandler';
 
 export const useLogin = () => {
 
@@ -43,6 +43,8 @@ export const useLogin = () => {
                     username: username.toLowerCase(),
                     accountType: accountType
                 });
+
+                await createUserPermissions(userId);
 
                 // localStorage.setItem('username', username.toLowerCase());
 

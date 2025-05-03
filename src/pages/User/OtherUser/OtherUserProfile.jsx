@@ -50,7 +50,8 @@ const OtherUserProfile = () => {
         getReactionByReactionId,
         reportReaction,
         fetchUserLikes,
-        fetchUserSaves
+        fetchUserSaves,
+        getUserPermissions
     } = useNotices(userEmail);
 
     const {
@@ -109,8 +110,9 @@ const OtherUserProfile = () => {
     const [isLoadingMore, setIsLoadingMore] = useState(false);
     const [likedNotices, setLikedNotices] = useState([]);
     const [savedNotices, setSavedNotices] = useState([]);
+    const [btnPermission, setBtnPermission] = useState(null);
+    const [txtPermission, setTxtPermission] = useState(null);
     const [isLoadingNotices, setIsLoadingNotices] = useState(false);
-
 
     // Saves Tab
     const [limitSaves] = useState(5);
@@ -227,6 +229,14 @@ const OtherUserProfile = () => {
                         setFellowUserId(prevId => (prevId !== otherUser.$id ? otherUser.$id : prevId));
                         setAccountType(otherUser.accountType);
                         setOtherUserWebsite(otherUser.website);
+
+                        const permissions = await getUserPermissions(otherUser.$id);
+                        console.log('permissions', permissions);
+                        if (permissions !== undefined) {
+                            setBtnPermission(permissions.btns_reaction_perm ?? true);
+                            setTxtPermission(permissions.txt_reaction_perm ?? true);
+                        }
+
                     }
                 } else {
                     console.error('Error fetching users:', otherUserRes.reason || userRes.reason);
@@ -737,6 +747,8 @@ const OtherUserProfile = () => {
                                                     eventKey={eventKey}
                                                     user_id={userId}
                                                     isOtherUserBlocked={isOtherUserBlocked}
+                                                    btnPermission={btnPermission}
+                                                    txtPermission={txtPermission}
                                                     handleLike={handleLike}
                                                     setLikedNotices={setLikedNotices}
                                                     handleSave={handleSave}

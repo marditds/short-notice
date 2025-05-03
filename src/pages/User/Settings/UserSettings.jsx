@@ -13,6 +13,7 @@ import { Passcode } from '../../../components/User/Settings/Passcode.jsx';
 import { BlockedAccounts } from '../../../components/User/Settings/BlockedAccounts.jsx';
 import { UserWebsite } from '../../../components/User/Settings/UserWebsite.jsx';
 import { LoadingComponent } from '../../../components/Loading/LoadingComponent.jsx';
+import Permissions from '../../../components/User/Settings/Permissions.jsx';
 
 const UserSettings = () => {
 
@@ -53,6 +54,8 @@ const UserSettings = () => {
                 <Interests />
                 <hr className='settings__hr' />
                 <BlockedAccounts />
+                <hr className='settings__hr' />
+                <Permissions />
                 <hr className='settings__hr' />
                 <DeleteAllNotices />
                 <hr className='settings__hr' />
