@@ -51,7 +51,9 @@ const OtherUserProfile = () => {
         reportReaction,
         fetchUserLikes,
         fetchUserSaves,
-        getUserPermissions
+        getUserPermissions,
+        getAllLikesByNoticeId,
+        getAllLikesTotalByNoticeId
     } = useNotices(userEmail);
 
     const {
@@ -112,6 +114,7 @@ const OtherUserProfile = () => {
     const [savedNotices, setSavedNotices] = useState([]);
     const [btnPermission, setBtnPermission] = useState(null);
     const [txtPermission, setTxtPermission] = useState(null);
+    const [totalLikesForEachNotice, setTotalLikesForEachNotice] = useState([]);
     const [isLoadingNotices, setIsLoadingNotices] = useState(false);
 
     // Saves Tab
@@ -257,10 +260,6 @@ const OtherUserProfile = () => {
         console.log('CurrUserId', currUserId);
     }, [currUserId])
 
-    useEffect(() => {
-        console.log('otherUserNotices:', otherUserNotices);
-    }, [otherUserNotices])
-
     // Set tab back to 'Notices' when user changes
     useEffect(() => {
         setEventKey('notices');
@@ -328,7 +327,32 @@ const OtherUserProfile = () => {
                     });
                 }
 
-                setOtherUserNotices((preVal) => [...preVal, ...usrNtcs]);
+                const likesForEachNotice = [{}];
+
+                for (let i = 0; i < ntcsIds.length; i++) {
+                    const noticeLikesTotal = await getAllLikesTotalByNoticeId(ntcsIds[i]);
+
+                    console.log('TOTAL LIKES:', noticeLikesTotal);
+
+                    likesForEachNotice[i] = { noticeId: ntcsIds[i], totalLikes: noticeLikesTotal }
+
+                }
+                console.log('likesForEachNotice', likesForEachNotice);
+
+                const noticesWithLikes = usrNtcs.map(notice => {
+                    const likeData = likesForEachNotice.find(like => like.noticeId === notice.$id);
+                    return {
+                        ...notice,
+                        totalLikes: likeData ? likeData.totalLikes : 0
+                    };
+                });
+
+                console.log('noticesWithLikes', noticesWithLikes);
+
+                setOtherUserNotices(prev => [...prev, ...noticesWithLikes]);
+
+
+                // setOtherUserNotices((preVal) => [...preVal, ...usrNtcs]);
 
                 if (usrNtcs?.length < limitNotices) {
                     setHasMoreNotices(false);
@@ -348,6 +372,37 @@ const OtherUserProfile = () => {
         callFunctionIfNotBlocked(fetchNotices);
 
     }, [currUserId, offsetNotices])
+
+
+    // Fetch total likes for each notice for other user
+    // useEffect(() => {
+
+    //     const getTotalLikesForEachNotice = async () => {
+    //         console.log('otherUserNotices:', otherUserNotices);
+
+    //         for (let i = 0; i < otherUserNotices.length; i++) {
+    //             const noticeLikesTotal = await getAllLikesTotalByNoticeId(otherUserNotices[i].$id);
+
+    //             console.log('TOTAL LIKES:', noticeLikesTotal);
+
+    //             setTotalLikesForEachNotice(prev => [
+    //                 ...prev,
+    //                 {
+    //                     noticeId: otherUserNotices[i].$id,
+    //                     totalLikes: noticeLikesTotal
+    //                 }
+    //             ]);
+    //         }
+    //     }
+
+    //     getTotalLikesForEachNotice();
+
+    // }, [otherUserNotices])
+
+    useEffect(() => {
+        console.log('totalLikesForEachNotice', totalLikesForEachNotice);
+
+    }, [totalLikesForEachNotice])
 
     // Reset the notices/saves/likes and offset by currUserId change
     useEffect(() => {
@@ -749,6 +804,7 @@ const OtherUserProfile = () => {
                                                     isOtherUserBlocked={isOtherUserBlocked}
                                                     btnPermission={btnPermission}
                                                     txtPermission={txtPermission}
+                                                    // totalLikesForEachNotice={totalLikesForEachNotice}
                                                     handleLike={handleLike}
                                                     setLikedNotices={setLikedNotices}
                                                     handleSave={handleSave}

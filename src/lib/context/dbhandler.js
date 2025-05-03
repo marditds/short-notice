@@ -1494,6 +1494,21 @@ export const getAllLikesByNoticeId = async (notice_id) => {
     }
 }
 
+export const getAllLikesTotalByNoticeId = async (notice_id) => {
+    try {
+        const res = await databases.listDocuments(
+            dbEnv,
+            likesCollEnv,
+            [
+                Query.equal('notice_id', notice_id)
+            ]
+        )
+        return res.total;
+    } catch (error) {
+        console.error('Error getting all likes by notice id.', error);
+    }
+}
+
 // The save icon + user's saves tab 
 export const getUserSaves = async (user_id, noticeIds) => {
     try {

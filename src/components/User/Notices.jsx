@@ -29,7 +29,8 @@ export const Notices = ({
     getUserAccountByUserId,
     reportReaction,
     btnPermission,
-    txtPermission
+    txtPermission,
+    totalLikesForEachNotice
     // handleDeleteReaction
 }) => {
     const location = useLocation();
@@ -496,13 +497,19 @@ export const Notices = ({
                                             fluid />
                                     }
 
-                                    <small className='me-auto'>
-                                        <span
-                                            style={{ color: 'gray' }}
-                                        >
-                                            Expires In:
-                                        </span>  {countdowns[idx] || calculateCountdown(notice?.expiresAt)}
-                                    </small>
+                                    <div>
+                                        <p className='mb-0'>
+                                            {notice.noticeLikesTotal ||
+
+                                                notice.totalLikes}
+                                        </p>
+
+                                        <small className='me-auto'>
+                                            <span style={{ color: 'gray' }} >
+                                                Expires In:
+                                            </span>  {countdowns[idx] || calculateCountdown(notice?.expiresAt)}
+                                        </small>
+                                    </div>
                                 </Col>
 
                                 {/* Username, Profile Picture, Edit/Delete, Interaction Col */}

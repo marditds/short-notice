@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
     getAccount as fetchAccount, createBlock, getBlockedUsersByUser as fetchBlockedUsersByUser, getBlockedUsersByUserByBatch as fetchBlockedUsersByUserByBatch, getUsersBlockingUser as fetchUsersBlockingUser, removeBlockUsingBlockedId, checkIdExistsInAuth, checkEmailExistsInAuth as checkEmailInAuthFromServer, registerAuthUser, getUserById, getUserByIdQuery as fetchUserByIdQuery, deleteAuthUser, createUserSession, getSessionDetails as fetchSessionDetails, deleteUserSession, updateUser, updateUserWebsite as updtUsrWbst, updateAuthUser, deleteUser, getUserByUsername as fetchUserByUsername, getAllUsersByString as fetchAllUsersByString, deleteAllNotices, deleteAllSentReactions, removeAllSavesByUser, removeAllLikesByUser, removeAllFollows, removeAllFollowed, getUsersDocument, createFollow, unfollow, getUserFollowingsById, getUserFollowersById, followedByUserCount, followingTheUserCount, getPersonalFeedAccounts as fetchPersonalFeedAccounts, createPassocde, updatePassocde, getPassocdeByOrganizationId as fetchPassocdeByOrganizationId, createUserReport, getFollowStatus as fetchFollowStatus, isUserBlockedByOtherUser, isOtherUserBlockedByUser, deletePassocde, updateAuthPassword as changeAuthPassword, checkUsernameExists as doesUsernameExists, removeAllBlocksForBlocker, removeAllBlocksForBlocked, deleteUserInterestsFromDB, deleteAllRecievedReactions, removeAllSavesForAuthor, removeAllLikesForAuthor,
-    getUserPermissions
+    getUserPermissions, getAllLikesByNoticeId
 } from '../context/dbhandler';
 import { useUserContext } from '../context/UserContext';
 import { useUserAvatar } from './useUserAvatar';
@@ -268,13 +268,14 @@ export const useUserInfo = (data) => {
                 notices.map(async (notice) => {
                     const user = allUsersData.documents.find((user) => user.$id === notice.user_id);
                     const userPermissions = await getUserPermissions(user.$id);
+                    const noticeLikesTotal = await getAllLikesByNoticeId(notice.$id);
 
                     if (user && user.avatar) {
                         const avatarUrl = getAvatarUrl(user.avatar);
 
-                        return { ...notice, avatarUrl, username: user.username, btnPermission: userPermissions.btns_reaction_perm, txtPermission: userPermissions.txt_reaction_perm };
+                        return { ...notice, avatarUrl, username: user.username, btnPermission: userPermissions.btns_reaction_perm, txtPermission: userPermissions.txt_reaction_perm, noticeLikesTotal: noticeLikesTotal.total };
                     }
-                    return { ...notice, avatarUrl: null, username: user?.username || 'Unknown User', btnPermission: userPermissions.btns_reaction_perm, txtPermission: userPermissions.txt_reaction_perm };
+                    return { ...notice, avatarUrl: null, username: user?.username || 'Unknown User', btnPermission: userPermissions.btns_reaction_perm, txtPermission: userPermissions.txt_reaction_perm, noticeLikesTotal: noticeLikesTotal.total };
                 })
             );
 
