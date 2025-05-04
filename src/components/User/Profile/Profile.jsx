@@ -314,7 +314,7 @@ export const Profile = ({ username, avatarUrl, isAvatarLoading, website, handleF
                 handleCloseBlockModalFunction={handleCloseBlockModal}
             />
 
-            {/* User report modal */}.
+            {/* User report modal */}
             <ReportModal
                 showReportModalFunction={showReportUserModal}
                 showReportConfirmationCheck={showReportUserConfirmation}

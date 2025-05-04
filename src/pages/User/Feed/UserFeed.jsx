@@ -394,9 +394,10 @@ const UserFeed = () => {
 
                 {/* Loading component */}
                 {
-                    (isLoadingPersonalFeedNotices || isLoadingGeneralFeedNotices || isFetchingUsersData) &&
+                    // (isLoadingPersonalFeedNotices || isLoadingGeneralFeedNotices || isFetchingUsersData) &&
+                    (isLoadingMorePersonalInitial || isLoadingMoreInitial) &&
                     <div className='h-100 user-feed__loading-div my-5'>
-                        <div className='my-5'>
+                        <div className='my-5 d-flex justify-content-center'>
                             <LoadingSpinner />
                             <span className='ms-2'>
                                 Loading {feedType} feed...
