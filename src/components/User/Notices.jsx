@@ -518,6 +518,7 @@ export const Notices = ({
                             </Row>
 
                             <hr className='my-3' />
+
                             {/* Text */}
                             <Row>
                                 <Col>
@@ -558,59 +559,66 @@ export const Notices = ({
                                     null
                                     :
                                     <>
-                                        {(location.pathname === '/user/feed' && user_id === notice.user_id) || ((location.pathname !== `/user/profile` || location.pathname !== `/user/feed`) && user_id === notice.user_id) ?
-                                            <div className='notice__reaction-icon-div-empty' /> :
-                                            <div
-                                                className='d-flex justify-content-start align-items-center notice__reaction-icon-div'
+                                        {
+                                            <div className='d-flex justify-content-start align-items-center notice__reaction-icon-div'
                                             >
-                                                {/* Like */}
-                                                <div
-                                                    className={`notice__reaction-btn ${(isOtherUserBlocked || (btnPermission === false || notice.btnPermission === false))
-                                                        ? 'disabled' : ''} ms-2`}
-                                                    onClick={() => {
-                                                        (isOtherUserBlocked || (btnPermission === false || notice.btnPermission === false))
-                                                            ? console.log(`YOU are blocked`) : handleLike(notice.$id, notice.user_id, likedNotices, setLikedNotices);
-                                                    }}
-                                                >
-                                                    {likedNotices && likedNotices[notice.$id] ? (
-                                                        <i className='bi bi-hand-thumbs-up-fill notice__reaction-btn-fill' />
-                                                    ) : (
-                                                        <i className='bi bi-hand-thumbs-up notice__reaction-btn' />
-                                                    )} <span>
-                                                        {notice.noticeLikesTotal ?? notice.totalLikes}
-                                                    </span>
-                                                </div>
+                                                {
+                                                    (location.pathname === '/user/feed' && user_id === notice.user_id) ?
+                                                        <span className='d-flex mt-auto my-auto'>
+                                                            <i className='bi bi-hand-thumbs-up notice__reaction-btn-fill me-1' /> {notice.noticeLikesTotal ?? notice.totalLikes}
+                                                        </span> :
 
-                                                {/* Save */}
-                                                <div
-                                                    onClick={() => {
-                                                        (isOtherUserBlocked || (btnPermission === false || notice.btnPermission === false))
-                                                            ? console.log(`YOU are blocked`) : handleSave(notice.$id, notice.user_id, savedNotices, setSavedNotices)
-                                                    }}
-                                                    className={`notice__reaction-btn ${(isOtherUserBlocked || (btnPermission === false || notice.btnPermission === false))
-                                                        ? 'disabled' : ''} ms-4`}
-                                                >
-                                                    {savedNotices && savedNotices[notice.$id] ? (
-                                                        <i className='bi bi-floppy-fill notice__reaction-btn-fill' />
+                                                        <>
+                                                            {/* Like */}
+                                                            <div
+                                                                className={`notice__reaction-btn ${(isOtherUserBlocked || (btnPermission === false || notice.btnPermission === false))
+                                                                    ? 'disabled' : ''} ms-2`}
+                                                                onClick={() => {
+                                                                    (isOtherUserBlocked || (btnPermission === false || notice.btnPermission === false))
+                                                                        ? console.log(`YOU are blocked`) : handleLike(notice.$id, notice.user_id, likedNotices, setLikedNotices);
+                                                                }}
+                                                            >
+                                                                {likedNotices && likedNotices[notice.$id] ? (
+                                                                    <i className='bi bi-hand-thumbs-up-fill notice__reaction-btn-fill' />
+                                                                ) : (
+                                                                    <i className='bi bi-hand-thumbs-up notice__reaction-btn' />
+                                                                )} <span className='ms-1'>
+                                                                    {notice.noticeLikesTotal ?? notice.totalLikes}
+                                                                </span>
+                                                            </div>
 
-                                                    ) : (
-                                                        <i className='bi bi-floppy notice__reaction-btn' />
-                                                    )}
-                                                </div>
+                                                            {/* Save */}
+                                                            <div
+                                                                onClick={() => {
+                                                                    (isOtherUserBlocked || (btnPermission === false || notice.btnPermission === false))
+                                                                        ? console.log(`YOU are blocked`) : handleSave(notice.$id, notice.user_id, savedNotices, setSavedNotices)
+                                                                }}
+                                                                className={`notice__reaction-btn ${(isOtherUserBlocked || (btnPermission === false || notice.btnPermission === false))
+                                                                    ? 'disabled' : ''} ms-4`}
+                                                            >
+                                                                {savedNotices && savedNotices[notice.$id] ? (
+                                                                    <i className='bi bi-floppy-fill notice__reaction-btn-fill' />
 
-                                                {/* <div
+                                                                ) : (
+                                                                    <i className='bi bi-floppy notice__reaction-btn' />
+                                                                )}
+                                                            </div>
+
+                                                            {/* <div
                                                         className={`notice__reaction-btn ${isOtherUserBlocked ? 'disabled' : ''} ms-2`}
                                                     >
                                                         <i className='bi bi-reply' />
                                                     </div> */}
 
-                                                {/* Report */}
-                                                <div
-                                                    onClick={() => onReportNoticeClick(notice.$id)}
-                                                    className='notice__reaction-btn ms-auto'
-                                                >
-                                                    <i className='bi bi-exclamation-circle' />
-                                                </div>
+                                                            {/* Report */}
+                                                            <div
+                                                                onClick={() => onReportNoticeClick(notice.$id)}
+                                                                className='notice__reaction-btn ms-auto'
+                                                            >
+                                                                <i className='bi bi-exclamation-circle' />
+                                                            </div>
+                                                        </>
+                                                }
                                             </div>
                                         }
                                     </>

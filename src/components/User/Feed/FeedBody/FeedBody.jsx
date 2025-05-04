@@ -20,6 +20,7 @@ export const FeedBody = ({ isFeedToggled, handleFeedToggle, handleRefresh, isAny
 
             {/* Side section */}
             <Row className='position-relative'>
+
                 {/* Feed tag selection */}
                 <Col xs={3} className='flex-column d-xl-block d-none fixed-top w-25'
                     style={{
@@ -31,6 +32,7 @@ export const FeedBody = ({ isFeedToggled, handleFeedToggle, handleRefresh, isAny
                 <Col xl={9} xs={12} className={`ms-auto`}>
                     {children}
                 </Col>
+
             </Row>
         </>
     )
