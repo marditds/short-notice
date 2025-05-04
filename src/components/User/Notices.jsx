@@ -462,15 +462,388 @@ export const Notices = ({
                 {notices?.map((notice, idx) => (
                     <Accordion.Item eventKey={notice?.$id} key={notice?.$id}>
                         <Accordion.Header
-                            className='notices__accordion-header'
+                            className='notices__accordion-header mb-3'
                             onClick={() => handleAccordionToggle(notice.$id)}
                         >
+                            {/* Avatar, username, dates */}
+                            <Row className='w-100 m-auto flex-nowrap'>
+
+                                {/* Avatar */}
+                                {shouldShowUserInfo() ?
+                                    <Col xs={{ span: 1, order: 1 }} className='d-flex flex-column bg-light'>
+
+                                        <div className='d-flex justify-content-center justify-content-sm-start align-items-center mt-auto'>
+                                            <Link to={`../${notice.username}`}>
+                                                <img
+                                                    src={notice.avatarUrl || defaultAvatar}
+                                                    alt="Profile"
+                                                    className='notice__avatar'
+                                                />
+                                            </Link>
+                                        </div>
+
+                                    </Col>
+                                    : null
+                                }
+
+                                {/* Username and dates */}
+                                <Col xs={{ span: 11, order: 2 }} className='d-flex flex-column pe-0 justify-content-evenly'>
+                                    {shouldShowUserInfo() ?
+                                        <p className='w-100 mt-1 mb-0 text-start notice__username'>
+                                            <Link to={`../${notice.username}`}
+                                                className='text-decoration-none'>
+                                                <strong>
+                                                    {notice?.username ? truncteUsername(notice.username) : ''}
+                                                </strong>
+                                            </Link>
+                                        </p>
+                                        : null}
+                                    <div>
+                                        {/* Creation date */}
+                                        <small className='text-end mt-auto notice__create-date text-nowrap me-4'>
+                                            <span style={{ color: 'gray' }} >
+                                                Created:
+                                            </span> {formatDateToLocal(notice.timestamp)}
+                                        </small>
+
+                                        {/* Expiration countdown */}
+                                        <small className='me-auto'>
+                                            <span style={{ color: 'gray' }} >
+                                                Expires In:
+                                            </span>  {countdowns[idx] || calculateCountdown(notice?.expiresAt)}
+                                        </small>
+                                    </div>
+                                </Col>
+                            </Row>
+
+                            <hr />
+                            {/* Text */}
+                            <Row>
+                                <Col>
+                                    <p className='text-break notice__text mb-0 px-2'>
+                                        {notice?.noticeType === 'business' &&
+                                            <strong>
+                                                Ad:{' '}
+                                            </strong>
+                                        }
+                                        {notice?.text}
+                                    </p>
+                                </Col>
+                            </Row>
+
+                            <hr />
+                            {/* Interaction / edit / delete */}
+                            <Row>
+                                {/* Like, save, reply, and report */}
+                                {(location.pathname === '/user/profile' && eventKey === 'my-notices') ?
+                                    null
+                                    :
+                                    <>
+                                        {(location.pathname === '/user/feed' && user_id === notice.user_id) || ((location.pathname !== `/user/profile` || location.pathname !== `/user/feed`) && user_id === notice.user_id) ?
+                                            <div className='notice__reaction-icon-div-empty' /> :
+                                            <div
+                                                className='d-flex justify-content-start align-items-center notice__reaction-icon-div'
+                                            >
+
+                                                <div
+                                                    className={`notice__reaction-btn ${(isOtherUserBlocked || (btnPermission === false || notice.btnPermission === false))
+                                                        ? 'disabled' : ''} ms-2`}
+                                                    onClick={() => {
+                                                        (isOtherUserBlocked || (btnPermission === false || notice.btnPermission === false))
+                                                            ? console.log(`YOU are blocked`) : handleLike(notice.$id, notice.user_id, likedNotices, setLikedNotices);
+                                                    }}
+                                                >
+                                                    {likedNotices && likedNotices[notice.$id] ? (
+                                                        <>
+                                                            <i className='bi bi-hand-thumbs-up-fill notice__reaction-btn-fill' />
+                                                        </>
+                                                    ) : (
+                                                        <i className='bi bi-hand-thumbs-up notice__reaction-btn' />
+                                                    )} <span> {notice.noticeLikesTotal ? notice.noticeLikesTotal : notice.totalLikes}</span>
+                                                </div>
+
+
+                                                <div
+                                                    onClick={() => {
+                                                        (isOtherUserBlocked || (btnPermission === false || notice.btnPermission === false))
+                                                            ? console.log(`YOU are blocked`) : handleSave(notice.$id, notice.user_id, savedNotices, setSavedNotices)
+                                                    }}
+                                                    className={`notice__reaction-btn ${(isOtherUserBlocked || (btnPermission === false || notice.btnPermission === false))
+                                                        ? 'disabled' : ''} ms-4`}
+                                                >
+                                                    {savedNotices && savedNotices[notice.$id] ? (
+                                                        <i className='bi bi-floppy-fill notice__reaction-btn-fill' />
+
+                                                    ) : (
+                                                        <i className='bi bi-floppy notice__reaction-btn' />
+                                                    )}
+                                                </div>
+
+                                                {/* <div
+                                                        className={`notice__reaction-btn ${isOtherUserBlocked ? 'disabled' : ''} ms-2`}
+                                                    >
+                                                        <i className='bi bi-reply' />
+                                                    </div> */}
+                                                <div
+                                                    onClick={() => onReportNoticeClick(notice.$id)}
+                                                    className='notice__reaction-btn ms-auto'
+                                                >
+                                                    <i className='bi bi-exclamation-circle' />
+                                                </div>
+                                            </div>
+                                        }
+                                    </>
+                                }
+
+
+                                {/* Edit/Delete */}
+                                {location.pathname === '/user/profile' && eventKey === 'my-notices' &&
+                                    <div
+                                        className='d-flex flex-column justify-content-start h-100'>
+                                        <span className='d-flex me-auto mt-auto'>
+                                            <div
+                                                className='ms-auto notice__edit-btn'
+                                                onClick={() => handleEditNotice(notice.$id, notice.text)}
+                                            >
+                                                <i className='bi bi-pencil' />
+                                            </div>
+                                            <div
+                                                className='ms-2 notice__delete-btn'
+                                                onClick={() => handleDeleteNotice(notice.$id)}
+                                            >
+                                                <i className='bi bi-trash3' />
+                                            </div>
+                                        </span>
+                                    </div>
+                                }
+                            </Row>
+
+
+                            {/* ////////////////////////////////////////////// */}
+                            {/* <Col sm={{ span: 2, order: 1 }}>
+                                    {shouldShowUserInfo() ?
+                                        (<div className='d-flex justify-content-start align-items-start mt-auto'>
+
+                                            <Link to={`../${notice.username}`}>
+                                                <img
+                                                    src={notice.avatarUrl || defaultAvatar}
+                                                    alt="Profile"
+                                                    className='notice__avatar'
+                                                />
+                                            </Link>
+
+
+                                        </div>)
+                                        : null
+                                    }
+                                </Col>
+                                <Col sm={{ span: 10, order: 2 }}>
+                                    <p className='w-100 mt-1 mb-0 text-start notice__username' >
+                                        <Link to={`../${notice.username}`}
+                                            className='text-decoration-none'>
+                                            <strong>
+                                                {notice?.username ? truncteUsername(notice.username) : ''}
+                                            </strong>
+                                        </Link>
+                                    </p>
+                                </Col>
+                                <Col sm={{ span: 10, order: 3 }}>
+                                    <small className='text-end mt-auto notice__create-date text-nowrap'>
+                                        {formatDateToLocal(notice.timestamp)}
+                                    </small>
+
+                                    <small className='me-auto'>
+                                        <span style={{ color: 'gray' }} >
+                                            Expires In:
+                                        </span>  {countdowns[idx] || calculateCountdown(notice?.expiresAt)}
+                                    </small>
+                                </Col> */}
+                            {/* {shouldShowUserInfo() ?
+                                    (<div className='d-flex flex-column justify-content-start align-items-start mt-auto'>
+
+                                        <Link to={`../${notice.username}`}>
+                                            <img
+                                                src={notice.avatarUrl || defaultAvatar}
+                                                alt="Profile"
+                                                className='notice__avatar'
+                                            />
+                                        </Link>
+
+                                        <p
+                                            className='w-100 mt-1 mb-0 text-start notice__username'
+                                        >
+                                            <Link to={`../${notice.username}`}
+                                                className='text-decoration-none'>
+                                                <strong> 
+                                                    {notice?.username ? truncteUsername(notice.username) : ''}
+                                                </strong>
+                                            </Link>
+                                        </p>
+
+                                        <small className='text-end mt-auto notice__create-date text-nowrap'>
+                                            {formatDateToLocal(notice.timestamp)}
+                                        </small>
+
+                                        <small className='me-auto'>
+                                            <span style={{ color: 'gray' }} >
+                                                Expires In:
+                                            </span>  {countdowns[idx] || calculateCountdown(notice?.expiresAt)}
+                                        </small>
+
+                                    </div>)
+                                    :
+                                    null
+                                } */}
+
+
+
+
                             <Row className='w-100 m-auto'>
 
+                                {/* Username, Profile Picture, Edit/Delete, Interaction Col */}
+                                {/* <Col xs={3} className='d-flex flex-column justify-content-start align-items-start notice__interaction-col'>
 
+                           
+                                    {shouldShowUserInfo() ?
+                                        (<div className='d-flex flex-column justify-content-start align-items-start mt-auto'>
+
+                                            <Link to={`../${notice.username}`}>
+                                                <img
+                                                    src={notice.avatarUrl || defaultAvatar}
+                                                    alt="Profile"
+                                                    className='notice__avatar'
+                                                />
+                                            </Link>
+
+                                            <p
+                                                className='w-100 mt-1 mb-0 text-start notice__username'
+                                            >
+                                                <Link to={`../${notice.username}`}
+                                                    className='text-decoration-none'>
+                                                    <strong>
+                                                   
+                                                        {notice?.username ? truncteUsername(notice.username) : ''}
+                                                    </strong>
+                                                </Link>
+                                            </p>
+
+                                            <small className='text-end mt-auto notice__create-date text-nowrap'>
+                                                {formatDateToLocal(notice.timestamp)}
+                                            </small>
+
+                                            <small className='me-auto'>
+                                                <span style={{ color: 'gray' }} >
+                                                    Expires In:
+                                                </span>  {countdowns[idx] || calculateCountdown(notice?.expiresAt)}
+                                            </small>
+
+                                        </div>)
+                                        :
+                                        null
+                                    }
+ 
+                                    <div>
+                                        <small className='text-end mt-auto notice__create-date text-nowrap'>
+                                            {formatDateToLocal(notice.timestamp)}
+                                        </small>
+
+                                        <small className='me-auto'>
+                                            <span style={{ color: 'gray' }} >
+                                                Expires In:
+                                            </span>  {countdowns[idx] || calculateCountdown(notice?.expiresAt)}
+                                        </small>
+                                    </div>
+
+                                 
+                                    {location.pathname === '/user/profile' && eventKey === 'my-notices' &&
+                                        <div
+                                            className='d-flex flex-column justify-content-end h-100'>
+                                            <span className='d-flex ms-auto mt-auto'>
+                                                <div
+                                                    className='ms-auto notice__edit-btn'
+                                                    onClick={() => handleEditNotice(notice.$id, notice.text)}
+                                                >
+                                                    <i className='bi bi-pencil' />
+                                                </div>
+                                                <div
+                                                    className='ms-2 notice__delete-btn'
+                                                    onClick={() => handleDeleteNotice(notice.$id)}
+                                                >
+                                                    <i className='bi bi-trash3' />
+                                                </div>
+                                            </span>
+                                        </div>
+                                    }
+
+                                   <div className='d-flex flex-column justify-content-end'>
+                                        <div className='d-grid'>
+                                            {(location.pathname === '/user/profile' && eventKey === 'my-notices') ?
+                                                null
+                                                :
+                                                <>
+                                                    {(location.pathname === '/user/feed' && user_id === notice.user_id) || ((location.pathname !== `/user/profile` || location.pathname !== `/user/feed`) && user_id === notice.user_id) ?
+                                                        <div className='notice__reaction-icon-div-empty' /> :
+                                                        <div
+                                                            className='d-flex justify-content-end align-items-center notice__reaction-icon-div'
+                                                        >
+
+                                                            <div
+                                                                className={`notice__reaction-btn ${(isOtherUserBlocked || (btnPermission === false || notice.btnPermission === false))
+                                                                    ? 'disabled' : ''} ms-2`}
+                                                                onClick={() => {
+                                                                    (isOtherUserBlocked || (btnPermission === false || notice.btnPermission === false))
+                                                                        ? console.log(`YOU are blocked`) : handleLike(notice.$id, notice.user_id, likedNotices, setLikedNotices);
+                                                                }}
+                                                            >
+                                                                {likedNotices && likedNotices[notice.$id] ? (
+                                                                    <>
+                                                                        <i className='bi bi-hand-thumbs-up-fill notice__reaction-btn-fill' />
+                                                                    </>
+                                                                ) : (
+                                                                    <i className='bi bi-hand-thumbs-up notice__reaction-btn' />
+                                                                )}
+                                                            </div>
+
+
+                                                            <div
+                                                                onClick={() => {
+                                                                    (isOtherUserBlocked || (btnPermission === false || notice.btnPermission === false))
+                                                                        ? console.log(`YOU are blocked`) : handleSave(notice.$id, notice.user_id, savedNotices, setSavedNotices)
+                                                                }}
+                                                                className={`notice__reaction-btn ${(isOtherUserBlocked || (btnPermission === false || notice.btnPermission === false))
+                                                                    ? 'disabled' : ''} ms-2`}
+                                                            >
+                                                                {savedNotices && savedNotices[notice.$id] ? (
+                                                                    <i className='bi bi-floppy-fill notice__reaction-btn-fill' />
+
+                                                                ) : (
+                                                                    <i className='bi bi-floppy notice__reaction-btn' />
+                                                                )}
+                                                            </div>
+
+
+                                                            <div
+                                                                className={`notice__reaction-btn ${isOtherUserBlocked ? 'disabled' : ''} ms-2`}
+                                                            >
+                                                                <i className='bi bi-reply' />
+                                                            </div>
+                                                            <div
+                                                                onClick={() => onReportNoticeClick(notice.$id)}
+                                                                className='notice__reaction-btn ms-2'
+                                                            >
+                                                                <i className='bi bi-exclamation-circle' />
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                </>
+                                            }
+
+                                        </div>
+                                    </div>  
+                                </Col> */}
 
                                 {/* Text, Likes and Countdown Col */}
-                                <Col xs={9} className='d-flex justify-content-between flex-column notice__text-countdown-col'
+                                {/* <Col xs={9} className='d-flex justify-content-between flex-column notice__text-countdown-col'
                                 >
                                     <p className='text-break notice__text'>
                                         {notice?.noticeType === 'business' &&
@@ -505,142 +878,11 @@ export const Notices = ({
                                             {notice.noticeLikesTotal ? notice.noticeLikesTotal : notice.totalLikes} Like(s)
                                         </p>
 
-                                        <small className='me-auto'>
-                                            <span style={{ color: 'gray' }} >
-                                                Expires In:
-                                            </span>  {countdowns[idx] || calculateCountdown(notice?.expiresAt)}
-                                        </small>
+
                                     </div>
-                                </Col>
+                                </Col> */}
 
-                                {/* Username, Profile Picture, Edit/Delete, Interaction Col */}
-                                <Col xs={3} className='d-flex flex-column justify-content-end align-items-end notice__interaction-col'>
 
-                                    {/* Username and Profile Picture */}
-                                    {shouldShowUserInfo() ?
-                                        (<div className='d-flex flex-column justify-content-center align-items-end mt-auto'>
-
-                                            <Link to={`../${notice.username}`}>
-                                                <img
-                                                    src={notice.avatarUrl || defaultAvatar}
-                                                    alt="Profile"
-                                                    className='notice__avatar'
-                                                />
-                                            </Link>
-
-                                            <p
-                                                className='w-100 mt-1 mb-0 text-center notice__username'
-                                            >
-                                                <Link to={`../${notice.username}`}
-                                                    className='text-decoration-none'>
-                                                    <strong>
-                                                        {/* {
-                                                            truncteUsername(notice?.username)
-                                                            notice?.username
-                                                        }  */}
-                                                        {notice?.username ? truncteUsername(notice.username) : ''}
-                                                    </strong>
-                                                </Link>
-                                            </p>
-
-                                        </div>)
-                                        :
-                                        null
-                                    }
-
-                                    {/* Edit and Delete Notice */}
-                                    {location.pathname === '/user/profile' && eventKey === 'my-notices' &&
-                                        <div
-                                            className='d-flex flex-column justify-content-end h-100'>
-                                            <span className='d-flex ms-auto mt-auto'>
-                                                <div
-                                                    className='ms-auto notice__edit-btn'
-                                                    onClick={() => handleEditNotice(notice.$id, notice.text)}
-                                                >
-                                                    <i className='bi bi-pencil' />
-                                                </div>
-                                                <div
-                                                    className='ms-2 notice__delete-btn'
-                                                    onClick={() => handleDeleteNotice(notice.$id)}
-                                                >
-                                                    <i className='bi bi-trash3' />
-                                                </div>
-                                            </span>
-                                        </div>
-                                    }
-
-                                    {/* Interaction w/ Notice */}
-                                    <div className='d-flex flex-column justify-content-end'>
-                                        <div className='d-grid'>
-                                            {(location.pathname === '/user/profile' && eventKey === 'my-notices') ?
-                                                null
-                                                :
-                                                <>
-                                                    {(location.pathname === '/user/feed' && user_id === notice.user_id) || ((location.pathname !== `/user/profile` || location.pathname !== `/user/feed`) && user_id === notice.user_id) ?
-                                                        <div className='notice__reaction-icon-div-empty'
-                                                        // style={{ height: '25px' }}
-                                                        /> :
-                                                        <div
-                                                            className='d-flex justify-content-end align-items-center notice__reaction-icon-div'
-                                                        // style={{ height: '35px' }}
-                                                        >
-                                                            {/* Like */}
-                                                            <div
-                                                                className={`notice__reaction-btn ${(isOtherUserBlocked || (btnPermission === false || notice.btnPermission === false))
-                                                                    ? 'disabled' : ''} ms-2`}
-                                                                onClick={() => {
-                                                                    (isOtherUserBlocked || (btnPermission === false || notice.btnPermission === false))
-                                                                        ? console.log(`YOU are blocked`) : handleLike(notice.$id, notice.user_id, likedNotices, setLikedNotices);
-                                                                }}
-                                                            >
-                                                                {likedNotices && likedNotices[notice.$id] ? (
-                                                                    <>
-                                                                        <i className='bi bi-hand-thumbs-up-fill notice__reaction-btn-fill' />
-                                                                    </>
-                                                                ) : (
-                                                                    <i className='bi bi-hand-thumbs-up notice__reaction-btn' />
-                                                                )}
-                                                            </div>
-
-                                                            {/* Save */}
-                                                            <div
-                                                                onClick={() => {
-                                                                    (isOtherUserBlocked || (btnPermission === false || notice.btnPermission === false))
-                                                                        ? console.log(`YOU are blocked`) : handleSave(notice.$id, notice.user_id, savedNotices, setSavedNotices)
-                                                                }}
-                                                                className={`notice__reaction-btn ${(isOtherUserBlocked || (btnPermission === false || notice.btnPermission === false))
-                                                                    ? 'disabled' : ''} ms-2`}
-                                                            >
-                                                                {savedNotices && savedNotices[notice.$id] ? (
-                                                                    <i className='bi bi-floppy-fill notice__reaction-btn-fill' />
-
-                                                                ) : (
-                                                                    <i className='bi bi-floppy notice__reaction-btn' />
-                                                                )}
-                                                            </div>
-
-                                                            {/* Report */}
-                                                            <div
-                                                                className={`notice__reaction-btn ${isOtherUserBlocked ? 'disabled' : ''} ms-2`}
-                                                            >
-                                                                <i className='bi bi-reply' />
-                                                            </div>
-                                                            <div
-                                                                onClick={() => onReportNoticeClick(notice.$id)}
-                                                                className='notice__reaction-btn ms-2'
-                                                            >
-                                                                <i className='bi bi-exclamation-circle' />
-                                                            </div>
-                                                        </div>
-                                                    }
-                                                </>
-                                            }
-                                            <small className='text-end mt-auto notice__create-date text-nowrap'>
-                                                {formatDateToLocal(notice.timestamp)}
-                                            </small>
-                                        </div>
-                                    </div>
-                                </Col>
                             </Row>
                         </Accordion.Header>
 

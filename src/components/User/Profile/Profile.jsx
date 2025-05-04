@@ -79,11 +79,11 @@ export const Profile = ({ username, avatarUrl, isAvatarLoading, website, handleF
 
     return (
         <div className='user-profile__body'>
-            <Row className='user-profile fixed-top'>
+            {/* <Row className='user-profile fixed-top'> */}
+            <Row className='user-profile'>
 
                 {/* Folllowes/Following Count Col */}
-                <Col
-                    xs={{ span: 6, order: location.pathname !== '/user/profile' ? 3 : 2 }}
+                <Col xs={{ span: 6, order: location.pathname !== '/user/profile' ? 3 : 2 }}
                     sm={{ span: 4, order: 1 }}
                     className={`d-flex flex-sm-column ${location.pathname !== '/user/profile' && isExtraSmallScreen ? 'justify-content-sm-evenly' : 'justify-content-center'}  user-profile__follow-count-col ${location.pathname !== '/user/profile' && isExtraSmallScreen ? 'h-50' : ''}`}>
 
@@ -134,8 +134,7 @@ export const Profile = ({ username, avatarUrl, isAvatarLoading, website, handleF
                 </Col>
 
                 {/* Avatar and username Col */}
-                <Col
-                    xs={{ span: 6, order: 1 }}
+                <Col xs={{ span: 6, order: 1 }}
                     sm={{ span: 4, order: 2 }}
                     className={`d-flex flex-column justify-content-center align-items-sm-center align-items-end user-profile__avatar-col ${location.pathname !== '/user/profile' && isExtraSmallScreen ? 'pt-3' : ''}`}>
                     <div>
@@ -194,8 +193,7 @@ export const Profile = ({ username, avatarUrl, isAvatarLoading, website, handleF
 
                 {/* Follow/Block/Report Col */}
                 {location.pathname !== '/user/profile' ?
-                    <Col
-                        xs={{ span: 6, order: 2 }}
+                    <Col xs={{ span: 6, order: 2 }}
                         sm={{ span: 4, order: 3 }}
                         className='d-flex justify-content-start flex-sm-column align-items-end justify-content-sm-center user-profile__follow-block-report-col'
                     >
