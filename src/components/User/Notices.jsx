@@ -502,7 +502,7 @@ export const Notices = ({
 
                                     <div>
                                         <p className='mb-0 text-muted'>
-                                            {notice.noticeLikesTotal ?? notice.totalLikes} Like(s)
+                                            {notice.noticeLikesTotal ? notice.noticeLikesTotal : notice.totalLikes} Like(s)
                                         </p>
 
                                         <small className='me-auto'>
