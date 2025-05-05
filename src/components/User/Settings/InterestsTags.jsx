@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import { LoadingSpinner } from '../../Loading/LoadingSpinner';
 import { ErrorMessage, SuccessMessage } from './UpdateMessage';
@@ -16,6 +17,8 @@ export const InterestsTags = ({
 }) => {
 
     const allTags = tagCategories.flatMap(category => category.tags);
+
+    const location = useLocation();
 
     const { isSmallScreen } = screenUtils();
 
@@ -68,14 +71,12 @@ export const InterestsTags = ({
                 >
                     Deselect All
                 </Button>
-
-                <div style={{ marginLeft: !isSmallScreen ? '10px' : '5px' }}>
-                    <SuccessMessage message={successMsg} />
-                </div>
-                <div style={{ marginLeft: !isSmallScreen ? '10px' : '5px' }}>
-                    <ErrorMessage message={errorMsg} />
-                </div>
-
+            </div>
+            <div style={{ height: location.pathname === '/user/feed' ? null : '24px', marginLeft: !isSmallScreen ? '10px' : '5px' }}>
+                <SuccessMessage message={successMsg} />
+            </div>
+            <div style={{ height: location.pathname === '/user/feed' ? null : '24px', marginLeft: !isSmallScreen ? '10px' : '5px' }}>
+                <ErrorMessage message={errorMsg} />
             </div>
         </div>
     )

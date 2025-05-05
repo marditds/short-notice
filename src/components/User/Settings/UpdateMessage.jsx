@@ -5,7 +5,7 @@ export const SuccessMessage = ({ message }) => {
     return (
         <>
             {message &&
-                <div className='mt-1 mt-md-2'>
+                <div className='mt-1 mt-md-0 mb-0'>
                     <Form.Text style={{ color: 'var(--main-accent-color-hover)' }}>
                         {message}
                     </Form.Text>
@@ -19,7 +19,7 @@ export const ErrorMessage = ({ message }) => {
     return (
         <>
             {message &&
-                <div className='mt-1 mt-md-2'>
+                <div className='mt-1 mt-md-0 mb-0'>
                     <Form.Text style={{ color: 'var(--main-caution-color)' }}>
                         {message}
                     </Form.Text>
