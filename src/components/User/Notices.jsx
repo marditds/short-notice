@@ -488,7 +488,7 @@ export const Notices = ({
                                 }
 
                                 {/* Username and dates */}
-                                <Col xs={11} className='d-flex flex-column pe-0 justify-content-evenly'>
+                                <Col xs={11} className={`d-flex flex-column pe-0 justify-content-evenly ${((location.pathname === '/user/profile' && eventKey == 'my-notices') || (location.pathname !== '/user/profile' && eventKey == 'notices')) ? 'ps-0' : null}`}>
                                     {shouldShowUserInfo() ?
                                         <p className='w-100 mb-0 text-start notice__username'>
                                             <Link to={`../${notice.username}`}

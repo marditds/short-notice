@@ -79,8 +79,8 @@ export const Profile = ({ username, avatarUrl, isAvatarLoading, website, handleF
 
     return (
         <div className='user-profile__body'>
-            {/* <Row className='user-profile fixed-top'> */}
-            <Row className='user-profile'>
+            <Row className='user-profile fixed-top'>
+                {/* <Row className='user-profile'> */}
 
                 {/* Folllowes/Following Count Col */}
                 <Col xs={{ span: 6, order: location.pathname !== '/user/profile' ? 3 : 2 }}
