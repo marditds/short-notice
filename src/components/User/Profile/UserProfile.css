@@ -179,14 +179,9 @@
     }
 }
 
-/* .notices__accordion {
-    border-radius: var(--main-rounded-corner) !important;
-}
-
 .notices__accordion>div {
-    border: 1px solid;
-    border-radius: var(--main-rounded-corner) !important;
-} */
+    border: 0px;
+}
 
 .user-profile__tags-accordion>div,
 .user-profile__tags-accordion>div>h2>button,
@@ -214,7 +209,6 @@
 
 .user-profile__tags-accordion>div>h2>button,
 .user-profile__tags-accordion>div {
-    /* .notices__accordion>div>h2>button { */
     border-radius: 0 !important;
 }
 
@@ -225,14 +219,22 @@
     transition: var(--main-transition-speed);
 }
 
+.notice__reaction {
+    border-bottom-right-radius: var(--main-rounded-corner);
+    border-bottom-left-radius: var(--main-rounded-corner);
+}
+
 .notices__accordion>div>h2>button:hover,
 .notices__accordion>div>h2>button:not(.collapsed),
 .notice__reaction {
     background-color: rgba(255, 255, 255, 0.4) !important;
     box-shadow: 0px 0px 2px var(--main-accent-color-hover) !important;
-
 }
 
+.notices__accordion>div>h2>button:not(.collapsed) {
+    border-bottom-left-radius: 0px !important;
+    border-bottom-right-radius: 0px !important;
+}
 
 .notices__accordion>div>h2>button::after,
 .user-profile__tags-accordion>div>h2>button::after {
@@ -495,6 +497,10 @@
     background-color: var(--main-accent-color-hover) !important;
     color: var(--main-text-color) !important;
     border-color: var(--main-accent-color-hover) !important;
+}
+
+.notice__avatar-col {
+    max-width: fit-content;
 }
 
 .notice__avatar {
@@ -1051,6 +1057,11 @@
     border-color: rgb(250, 6, 6);
 }
 
+@media (min-width: 1200px) {
+    .notice__avatar-col {
+        padding-left: 0 !important;
+    }
+}
 
 @media (max-width: 767px) {
 
@@ -1096,9 +1107,13 @@
         width: 75px;
     }
 
+    .notice__avatar-col {
+        padding-right: 0px !important;
+    }
+
     .notice__avatar {
-        height: 35px;
-        width: 35px;
+        height: 30px;
+        width: 30px;
     }
 
     .notice__reaction-avatar,
@@ -1366,12 +1381,15 @@
     }
 }
 
-@media (max-width: 549px) {
-    /* .user-profile__follow-number {
-        font-size: 10pt;
+@media (max-width: 1199px) {
+    .notice__avatar-col {
+        padding-left: 0px !important;
     }
+}
 
-    .user-profile__follow-count-col {
-        flex-direction: column;
-    } */
+@media (max-width: 320px) {
+    .notice__avatar-col {
+        padding-left: 10px !important;
+        margin-right: 10px !important;
+    }
 }

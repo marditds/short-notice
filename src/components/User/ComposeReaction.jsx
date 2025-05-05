@@ -81,7 +81,7 @@ export const ComposeReaction = ({ reactionText, onReactionTextChange, reactionGi
                         <Button
                             onClick={handleReactSubmission}
                             className='notice__reaction-submit-btn ms-auto'
-                            disabled={reactionText === '' || reactionCharCount > reactionCharLimit ? true : false}
+                            disabled={(!reactionText && !reactionGif) || reactionCharCount > reactionCharLimit}
                         >
                             {isSendingReactionLoading ? <LoadingSpinner /> : 'React'}
                         </Button>

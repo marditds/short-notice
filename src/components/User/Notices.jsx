@@ -463,15 +463,15 @@ export const Notices = ({
                 {notices?.map((notice, idx) => (
                     <Accordion.Item eventKey={notice?.$id} key={notice?.$id}>
                         <Accordion.Header
-                            className='notices__accordion-header mb-3'
+                            className='notices__accordion-header mt-3 mb-0'
                             onClick={() => handleAccordionToggle(notice.$id)}
                         >
                             {/* Avatar, username, dates */}
-                            <Row className='w-100 m-auto flex-nowrap'>
+                            <Row className='w-100 mx-0 flex-nowrap'>
 
                                 {/* Avatar */}
                                 {shouldShowUserInfo() ?
-                                    <Col xs={1} className='d-flex flex-column bg-light'>
+                                    <Col xs={1} className='notice__avatar-col d-flex flex-column'>
 
                                         <div className='d-flex justify-content-center justify-content-sm-start align-items-center mt-auto'>
                                             <Link to={`../${notice.username}`}>
@@ -490,7 +490,7 @@ export const Notices = ({
                                 {/* Username and dates */}
                                 <Col xs={11} className='d-flex flex-column pe-0 justify-content-evenly'>
                                     {shouldShowUserInfo() ?
-                                        <p className='w-100 mt-1 mb-0 text-start notice__username'>
+                                        <p className='w-100 mb-0 text-start notice__username'>
                                             <Link to={`../${notice.username}`}
                                                 className='text-decoration-none'>
                                                 <strong>
@@ -522,7 +522,7 @@ export const Notices = ({
                             {/* Text */}
                             <Row>
                                 <Col>
-                                    <p className='text-break notice__text px-2'>
+                                    <p className='text-break notice__text my-1 my-md-3'>
                                         {notice?.noticeType === 'business' &&
                                             <strong>
                                                 Ad:{' '}
