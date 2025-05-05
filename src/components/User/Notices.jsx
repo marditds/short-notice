@@ -39,6 +39,8 @@ export const Notices = ({
 
     const [countdowns, setCountdowns] = useState([]);
 
+    const [likeCounts, setLikeCounts] = useState({});
+
     const [reactingNoticeId, setReactingNoticeId] = useState(null);
     const [reactionText, setReactionText] = useState('');
     const [reactionGif, setReactionGif] = useState(null);
@@ -573,9 +575,38 @@ export const Notices = ({
                                                             <div
                                                                 className={`notice__reaction-btn ${(isOtherUserBlocked || (btnPermission === false || notice.btnPermission === false))
                                                                     ? 'disabled' : ''} ms-2`}
+                                                                // onClick={() => {
+                                                                //     (isOtherUserBlocked || (btnPermission === false || notice.btnPermission === false))
+                                                                //         ? console.log(`YOU are blocked`) : handleLike(notice.$id, notice.user_id, likedNotices, setLikedNotices);
+                                                                // }}
+
                                                                 onClick={() => {
-                                                                    (isOtherUserBlocked || (btnPermission === false || notice.btnPermission === false))
-                                                                        ? console.log(`YOU are blocked`) : handleLike(notice.$id, notice.user_id, likedNotices, setLikedNotices);
+                                                                    if (isOtherUserBlocked || btnPermission === false || notice.btnPermission === false) {
+                                                                        console.log("YOU are fobiiden from completing this acction.");
+                                                                        return;
+                                                                    }
+
+                                                                    const isLiked = likedNotices[notice.$id];
+
+                                                                    console.log('isLiked:', isLiked);
+
+                                                                    const currentCount = likeCounts[notice.$id] ?? notice.noticeLikesTotal ?? notice.totalLikes ?? 0;
+
+                                                                    console.log('currentCount', currentCount);
+
+                                                                    // Update the UI immediately
+                                                                    setLikedNotices(prev => ({
+                                                                        ...prev,
+                                                                        [notice.$id]: !isLiked
+                                                                    }));
+
+                                                                    setLikeCounts(prev => ({
+                                                                        ...prev,
+                                                                        [notice.$id]: isLiked ? currentCount - 1 : currentCount + 1
+                                                                    }));
+
+                                                                    // Call backend
+                                                                    handleLike(notice.$id, notice.user_id, likedNotices, setLikedNotices);
                                                                 }}
                                                             >
                                                                 {likedNotices && likedNotices[notice.$id] ? (
@@ -583,7 +614,7 @@ export const Notices = ({
                                                                 ) : (
                                                                     <i className='bi bi-hand-thumbs-up notice__reaction-btn' />
                                                                 )} <span className='ms-1'>
-                                                                    {notice.noticeLikesTotal ?? notice.totalLikes}
+                                                                    {likeCounts[notice.$id] ?? notice.noticeLikesTotal ?? notice.totalLikes}
                                                                 </span>
                                                             </div>
 
