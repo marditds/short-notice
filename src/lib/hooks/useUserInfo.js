@@ -2,7 +2,8 @@ import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
     getAccount as fetchAccount, createBlock, getBlockedUsersByUser as fetchBlockedUsersByUser, getBlockedUsersByUserByBatch as fetchBlockedUsersByUserByBatch, getUsersBlockingUser as fetchUsersBlockingUser, removeBlockUsingBlockedId, checkIdExistsInAuth, checkEmailExistsInAuth as checkEmailInAuthFromServer, registerAuthUser, getUserById, getUserByIdQuery as fetchUserByIdQuery, deleteAuthUser, createUserSession, getSessionDetails as fetchSessionDetails, deleteUserSession, updateUser, updateUserWebsite as updtUsrWbst, updateAuthUser, deleteUser, getUserByUsername as fetchUserByUsername, getAllUsersByString as fetchAllUsersByString, deleteAllNotices, deleteAllSentReactions, removeAllSavesByUser, removeAllLikesByUser, removeAllFollows, removeAllFollowed, getUsersDocument, createFollow, unfollow, getUserFollowingsById, getUserFollowersById, followedByUserCount, followingTheUserCount, getPersonalFeedAccounts as fetchPersonalFeedAccounts, createPassocde, updatePassocde, getPassocdeByOrganizationId as fetchPassocdeByOrganizationId, createUserReport, getFollowStatus as fetchFollowStatus, isUserBlockedByOtherUser, isOtherUserBlockedByUser, deletePassocde, updateAuthPassword as changeAuthPassword, checkUsernameExists as doesUsernameExists, removeAllBlocksForBlocker, removeAllBlocksForBlocked, deleteUserInterestsFromDB, deleteAllRecievedReactions, removeAllSavesForAuthor, removeAllLikesForAuthor,
-    getUserPermissions, getAllLikesByNoticeId
+    getUserPermissions, getAllLikesByNoticeId,
+    getUserPermissionsByIdQuery
 } from '../context/dbhandler';
 import { useUserContext } from '../context/UserContext';
 import { useUserAvatar } from './useUserAvatar';
@@ -254,42 +255,102 @@ export const useUserInfo = (data) => {
         }
     }, [data]);
 
+    // const fetchUsersData = async (notices, setNotices, getAvatarUrl) => {
+    //     try {
+    //         setIsFetchingUsersData(true);
+
+    //         const ntcUsrIds = notices?.map((notice) => notice.user_id);
+    //         console.log('notice.user_id', ntcUsrIds);
+
+    //         const allUsersData = await getUserByIdQuery(ntcUsrIds);
+    //         console.log('allUsersData???', allUsersData);
+
+    //         const updatedNotices = await Promise.all(
+    //             notices.map(async (notice) => {
+    //                 const user = allUsersData.documents.find((user) => user.$id === notice.user_id);
+    //                 const avatarUrl = user?.avatar ? getAvatarUrl(user.avatar) : null;
+
+    //                 const [userPermissions, noticeLikesTotal] = await Promise.all([
+    //                     getUserPermissions(user?.$id),
+    //                     getAllLikesByNoticeId(notice.$id),
+    //                 ]);
+
+    //                 return {
+    //                     ...notice,
+    //                     avatarUrl,
+    //                     username: user?.username || 'Unknown User',
+    //                     btnPermission: userPermissions?.btns_reaction_perm,
+    //                     txtPermission: userPermissions?.txt_reaction_perm,
+    //                     noticeLikesTotal: noticeLikesTotal?.total ?? 0
+    //                 };
+    //             })
+    //         );
+
+    //         console.log('updatedNotices in fetchUsersData:', updatedNotices);
+
+    //         if (JSON.stringify(updatedNotices) !== JSON.stringify(notices)) {
+    //             setNotices(prevNotices => {
+    //                 const nonDuplicateNotices = updatedNotices.filter(newNotice =>
+    //                     !prevNotices.some(existingNotice => existingNotice.$id === newNotice.$id)
+    //                 );
+    //                 return [...prevNotices, ...nonDuplicateNotices];
+    //             });
+    //         }
+    //     } catch (error) {
+    //         console.error('Error getting users data:', error);
+    //     } finally {
+    //         setIsFetchingUsersData(false);
+    //     }
+    // };
+
     const fetchUsersData = async (notices, setNotices, getAvatarUrl) => {
         try {
             setIsFetchingUsersData(true);
 
-            const ntcIds = notices?.map((notice) => notice.user_id);
-            console.log('NTCIDS???', ntcIds);
+            const userIds = [...new Set(notices.map(notice => notice.user_id))];
+            const noticeIds = notices.map(notice => notice.$id);
 
-            const allUsersData = await getUserByIdQuery(ntcIds);
-            console.log('allUsersData???', allUsersData);
+            const [allUsersData, userPermissionsList, allLikes] = await Promise.all([
+                getUserByIdQuery(userIds),
+                getUserPermissionsByIdQuery(userIds),
+                getAllLikesByNoticeId(noticeIds)
+            ]);
 
-            const updatedNotices = await Promise.all(
-                notices.map(async (notice) => {
-                    const user = allUsersData.documents.find((user) => user.$id === notice.user_id);
-                    const userPermissions = await getUserPermissions(user.$id);
-                    const noticeLikesTotal = await getAllLikesByNoticeId(notice.$id);
+            const userMap = new Map(allUsersData.documents.map(user => [user.$id, user]));
+            const permissionsMap = new Map(userPermissionsList.map(perm => [perm.$id, perm]));
+            const likesCountMap = new Map();
 
-                    if (user && user.avatar) {
-                        const avatarUrl = getAvatarUrl(user.avatar);
-
-                        return { ...notice, avatarUrl, username: user.username, btnPermission: userPermissions.btns_reaction_perm, txtPermission: userPermissions.txt_reaction_perm, noticeLikesTotal: noticeLikesTotal.total ?? 0 };
-                    }
-                    return { ...notice, avatarUrl: null, username: user?.username || 'Unknown User', btnPermission: userPermissions.btns_reaction_perm, txtPermission: userPermissions.txt_reaction_perm, noticeLikesTotal: noticeLikesTotal.total ?? 0 };
-                })
-            );
-            console.log('updatedNotices in fetchUsersData:', updatedNotices);
-
-            if (JSON.stringify(updatedNotices) !== JSON.stringify(notices)) {
-                setNotices(prevNotices => {
-                    const nonDuplicateNotices = updatedNotices.filter(newNotice =>
-                        !prevNotices.some(existingNotice => existingNotice.$id === newNotice.$id)
-                    );
-                    return [...prevNotices, ...nonDuplicateNotices];
-                });
+            // Count likes per notice
+            for (const like of allLikes.documents) {
+                const noticeId = like.notice_id;
+                likesCountMap.set(noticeId, (likesCountMap.get(noticeId) || 0) + 1);
             }
+
+            const updatedNotices = notices.map(notice => {
+                const user = userMap.get(notice.user_id);
+                const perm = permissionsMap.get(notice.user_id);
+                const avatarUrl = user?.avatar ? getAvatarUrl(user.avatar) : null;
+                const likesTotal = likesCountMap.get(notice.$id) || 0;
+
+                return {
+                    ...notice,
+                    avatarUrl,
+                    username: user?.username || 'Unknown User',
+                    btnPermission: perm?.btns_reaction_perm,
+                    txtPermission: perm?.txt_reaction_perm,
+                    noticeLikesTotal: likesTotal
+                };
+            });
+
+            setNotices(prevNotices => {
+                const nonDuplicateNotices = updatedNotices.filter(newNotice =>
+                    !prevNotices.some(existingNotice => existingNotice.$id === newNotice.$id)
+                );
+                return [...prevNotices, ...nonDuplicateNotices];
+            });
+
         } catch (error) {
-            console.error('Error getting users data:', error);
+            console.error('Error fetching users data:', error);
         } finally {
             setIsFetchingUsersData(false);
         }

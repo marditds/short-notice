@@ -290,20 +290,6 @@ export const getUserByIdQuery = async (userId) => {
     }
 };
 
-export const getUserPermissionsByIdQuery = async (userId) => {
-    try {
-        const response = await databases.listDocuments(
-            dbEnv,
-            permissionsCollEnv,
-            [Query.equal('$id', userId)]
-        );
-        return response;
-    } catch (error) {
-        console.error('Error querying user permission by ID:', error);
-        throw error;
-    }
-};
-
 export const getUserByEmail = async (email) => {
 
     if (!email) {
@@ -1069,6 +1055,7 @@ export const createUserPermissions = async (userId) => {
         console.error('Error getting user permissions:', error);
     }
 }
+
 export const getUserPermissions = async (userId) => {
     try {
         const permissions = await databases.getDocument(
@@ -1083,6 +1070,20 @@ export const getUserPermissions = async (userId) => {
         console.error('Error getting user permissions:', error);
     }
 }
+
+export const getUserPermissionsByIdQuery = async (userId) => {
+    try {
+        const response = await databases.listDocuments(
+            dbEnv,
+            permissionsCollEnv,
+            [Query.equal('$id', userId)]
+        );
+        return response.documents;
+    } catch (error) {
+        console.error('Error querying user permission by ID:', error);
+        throw error;
+    }
+};
 
 export const updateUserPermissions = async (userId, btns_reaction_perm, txt_reaction_perm) => {
     try {
@@ -1484,9 +1485,7 @@ export const getAllLikesByNoticeId = async (notice_id) => {
         const res = await databases.listDocuments(
             dbEnv,
             likesCollEnv,
-            [
-                Query.equal('notice_id', notice_id)
-            ]
+            [Query.equal('notice_id', notice_id)]
         )
         return res;
     } catch (error) {
@@ -1895,10 +1894,6 @@ export const createReaction = async (sender_id, recipient_id, content, timestamp
                 expiresAt,
                 reactionGif
             },
-            // [
-            //     Permission.write(Role.users()),
-            //     Permission.write(Role.guests())
-            // ]
         )
         // console.log('Reaction created successfuly:', response);
         return response;
