@@ -7,9 +7,6 @@ import { truncteUsername } from '../../lib/utils/usernameUtils';
 import { LoadingSpinner } from '../Loading/LoadingSpinner';
 import { formatDateToLocal } from '../../lib/utils/dateUtils';
 
-
-
-
 export const Reactions = ({
     loadingStates,
     notice,
@@ -105,9 +102,9 @@ export const Reactions = ({
                             </Button>
                             :
                             <div className='text-center text-muted py-2 py-md-3'>
-                                <i className="bi bi-asterisk"></i>
-                                <i className="bi bi-asterisk"></i>
-                                <i className="bi bi-asterisk"></i>
+                                <i className='bi bi-asterisk' />
+                                <i className='bi bi-asterisk' />
+                                <i className='bi bi-asterisk' />
                             </div>
                         }
                     </div>

@@ -18,6 +18,9 @@ const Permissions = () => {
 
             setReactionBtnState(res.btns_reaction_perm);
             setReactionTxtState(res.txt_reaction_perm);
+
+            setIsReactionBtnAllowed(res.btns_reaction_perm);
+            setIsReactionTxtAllowed(res.txt_reaction_perm);
         }
 
         fetchUserPermissions();
@@ -28,21 +31,60 @@ const Permissions = () => {
         console.log('reactionTxtState', reactionTxtState);
     }, [reactionBtnState, reactionTxtState])
 
+    const permissionSwitches = [
+        {
+            id: 'permission-switch-button',
+            label: 'Likes and Saves',
+            checked: isReactionBtnAllowed,
+            onChange: () => {
+                const newVal = !isReactionBtnAllowed;
+                setIsReactionBtnAllowed(newVal);
+                updateUserPermissions(user_id, newVal, isReactionTxtAllowed);
+            }
+        },
+        {
+            id: 'permission-switch-text',
+            label: 'Text reaction',
+            checked: isReactionTxtAllowed,
+            onChange: () => {
+                const newVal = !isReactionTxtAllowed;
+                setIsReactionTxtAllowed(newVal);
+                updateUserPermissions(user_id, isReactionBtnAllowed, newVal);
+            }
+        }
+    ];
+
+
     return (
         <Row xs={1} sm={2}>
             <Col>
                 <h4 className=''>Permissions:</h4>
-                {/* <p className='mb-0'>Update your {usrnm && usrnm.toLowerCase()}. The maximum number of characters for your {usrnm && usrnm.toLowerCase()} is 16.</p> */}
+                <p className='mb-0'>Control how other users interact with your notices. Permissions are granted by default. To revoke a permission, click or tap the switch.</p>
             </Col>
             <Col className='mt-3 mt-sm-0 d-flex flex-column justify-content-end align-items-center '>
-                <Form
+                {permissionSwitches.map((item, index) => (
+                    <Form as={Row} className="w-100 m-0 flex-column" key={item.id}>
+                        <Col>
+                            <Form.Check
+                                type="switch"
+                                id={item.id}
+                                label={item.label}
+                                checked={item.checked}
+                                onChange={item.onChange}
+                                className="settings__permission-switch"
+                            />
+                        </Col>
+                    </Form>
+                ))}
+
+                {/* <Form
                     as={Row}
-                    className='w-100 m-0 flex-column settings__username-form'
+                    className='w-100 m-0 flex-column'
                 >
                     <Col>
                         <Form.Check
                             type='switch'
-                            id='permission-switch'
+                            id='permission-switch-button'
                             label='Likes and Saves'
                             checked={isReactionBtnAllowed}
                             onChange={() => {
@@ -50,12 +92,13 @@ const Permissions = () => {
                                 setIsReactionBtnAllowed(newVal);
                                 updateUserPermissions(user_id, newVal, isReactionTxtAllowed);
                             }}
+                            className='settings__permission-switch'
                         />
                     </Col>
                 </Form>
                 <Form
                     as={Row}
-                    className='w-100 m-0 flex-column settings__username-form'
+                    className='w-100 m-0 flex-column'
                 >
                     <Col>
                         <Form.Check
@@ -68,9 +111,10 @@ const Permissions = () => {
                                 setIsReactionTxtAllowed(newVal);
                                 updateUserPermissions(user_id, isReactionBtnAllowed, newVal);
                             }}
+                            className='settings__permission-switch'
                         />
                     </Col>
-                </Form>
+                </Form> */}
             </Col>
         </Row>
     )

@@ -582,7 +582,7 @@ export const Notices = ({
 
                                                                 onClick={() => {
                                                                     if (isOtherUserBlocked || btnPermission === false || notice.btnPermission === false) {
-                                                                        console.log("YOU are fobiiden from completing this acction.");
+                                                                        console.log("YOU are forbidden from completing this action.");
                                                                         return;
                                                                     }
 
@@ -629,7 +629,6 @@ export const Notices = ({
                                                             >
                                                                 {savedNotices && savedNotices[notice.$id] ? (
                                                                     <i className='bi bi-floppy-fill notice__reaction-btn-fill' />
-
                                                                 ) : (
                                                                     <i className='bi bi-floppy notice__reaction-btn' />
                                                                 )}
@@ -911,7 +910,10 @@ export const Notices = ({
                                     </>
                                     :
                                     <p className='text-center text-muted mb-0'>
-                                        This user has disabled reactions on their notices.
+                                        {notice.user_id === user_id ?
+                                            'You have disabled reactions on your notices'
+                                            :
+                                            'This user has disabled reactions on their notices'}.
                                     </p>
                             }
                         </Accordion.Body>

@@ -346,6 +346,10 @@
     background-color: var(--main-caution-color-hover) !important;
 }
 
+.settings__permission-switch>label {
+    cursor: pointer;
+}
+
 @media (max-width: 1399px) {
     .settings__update-interests-btn:nth-child(2) {
         margin-top: 0;

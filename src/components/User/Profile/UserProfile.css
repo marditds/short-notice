@@ -234,7 +234,6 @@
 /* .notices__accordion>div>h2>button:not(.collapsed),
 .notice__reaction { */
 .notices__accordion>div>h2>button:not(.collapsed) {
-    /* box-shadow: 0px 0px 5px var(--main-accent-color-hover) !important; */
     box-shadow: -4px 0 5px -4px var(--main-accent-color-hover) !important;
     box-shadow: 4px 0 5px -4px var(--main-accent-color-hover) !important;
     box-shadow: 0 -4px 5px -4px var(--main-accent-color-hover) !important;
@@ -244,7 +243,6 @@
     box-shadow: -4px 0 5px -4px var(--main-accent-color-hover) !important;
     box-shadow: 4px 0 5px -4px var(--main-accent-color-hover) !important;
     box-shadow: 0 4px 5px -4px var(--main-accent-color-hover) !important;
-
 }
 
 .notices__accordion>div>h2>button:not(.collapsed) {

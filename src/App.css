@@ -67,6 +67,34 @@ a {
     transition: var(--main-transition-speed);
 }
 
+input[type="checkbox"] {
+    box-shadow: none !important;
+    border-color: var(--main-accent-color);
+    border-radius: var(--main-rounded-corner) !important;
+    background-image: url('../src/assets/square-fill.svg') !important;
+    background-color: var(--main-dropdown-bg-color);
+    transition: var(--main-transition-speed);
+    cursor: pointer;
+}
+
+input[type="checkbox"]:active,
+input[type="checkbox"]:focus {
+    border-color: var(--main-accent-color-hover) !important;
+}
+
+input[type="checkbox"]:focus {
+    border-width: 2px;
+    border-style: double;
+}
+
+input[type="checkbox"]:checked {
+    box-shadow: none !important;
+    background-color: white !important;
+    border-color: var(--main-accent-color);
+    background-image: url('../src/assets/square-fill.svg') !important;
+}
+
+
 a:hover {
     color: var(--main-accent-color);
 }
