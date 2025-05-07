@@ -359,7 +359,7 @@ export const Notices = ({
 
                 console.log('ACTIVE NOTICE:', notice);
 
-                if (txtPermission === false || (notice.txtPermission === false)) {
+                if ((txtPermission === false) || (notice.txtPermission === false)) {
                     console.log('Permission denied: Not loading reactions');
                     return;
                 }
@@ -887,13 +887,13 @@ export const Notices = ({
 
 
                             </Row>
+                            {/* ////////////////////////////////////////////// */}
+
                         </Accordion.Header>
 
-
                         <Accordion.Body className='notice__reaction'>
-
                             {
-                                (txtPermission ?? notice.txtPermission) ?
+                                txtPermission !== false && notice.txtPermission !== false ?
                                     <>
                                         {isOtherUserBlocked || notice.user_id === user_id ? null :
                                             <Row className='m-auto'>
