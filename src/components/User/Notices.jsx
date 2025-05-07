@@ -369,7 +369,7 @@ export const Notices = ({
 
                 console.log('initialReactions', initialReactions);
 
-                const usersIds = initialReactions?.documents.map((reaction) => reaction.sender_id);
+                const usersIds = [...new Set(initialReactions?.documents.map((reaction) => reaction.sender_id).filter(Boolean))];
 
                 console.log('usersIds', usersIds);
 

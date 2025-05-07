@@ -307,7 +307,7 @@ export const useUserInfo = (data) => {
         try {
             setIsFetchingUsersData(true);
 
-            const userIds = [...new Set(notices.map(notice => notice.user_id))];
+            const userIds = [...new Set(notices.map(notice => notice.user_id).filter(Boolean))];
             const noticeIds = notices.map(notice => notice.$id);
 
             const [allUsersData, userPermissionsList, allLikes] = await Promise.all([
