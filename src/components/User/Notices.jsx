@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { formatDateToLocal, calculateCountdown } from '../../lib/utils/dateUtils';
 import { Row, Col, Accordion, Image } from 'react-bootstrap';
+import { useNotices } from '../../lib/hooks/useNotices';
 import defaultAvatar from '../../assets/default.png';
 import { Reactions } from './Reactions';
 import { screenUtils } from '../../lib/utils/screenUtils';
@@ -30,7 +31,7 @@ export const Notices = ({
     reportReaction,
     btnPermission,
     txtPermission,
-    totalLikesForEachNotice
+    // totalLikesForEachNotice
     // handleDeleteReaction
 }) => {
     const location = useLocation();
@@ -40,6 +41,8 @@ export const Notices = ({
     const [countdowns, setCountdowns] = useState([]);
 
     const [likeCounts, setLikeCounts] = useState({});
+
+    const [noticeMap, setNoticeMap] = useState(null);
 
     const [reactingNoticeId, setReactingNoticeId] = useState(null);
     const [reactionText, setReactionText] = useState('');
@@ -69,7 +72,6 @@ export const Notices = ({
     const [showReportReactionConfirmation, setShowReportReactionConfirmation] = useState(false);
     const [isProcessingReactionReport, setIsProcessingReactionReport] = useState(false);
 
-
     useEffect(() => {
         const intervalId = setInterval(() => {
             const newCountdowns = notices?.map(notice => calculateCountdown(notice.expiresAt));
@@ -80,6 +82,12 @@ export const Notices = ({
     }, [notices]);
 
     const [reactionCharCount, setReactionCharCount] = useState(0);
+
+    useEffect(() => {
+        if (notices?.length) {
+            setNoticeMap(new Map(notices.map(notice => [notice.$id, notice])));
+        }
+    }, [notices]);
 
     const onReactionTextChange = (e) => {
         setReactionText(e.target.value);
@@ -320,6 +328,7 @@ export const Notices = ({
     }, [activeNoticeId, reactingNoticeId])
 
     const handleAccordionToggle = async (noticeId) => {
+
         if (activeNoticeId === noticeId) {
             setActiveNoticeId(null);
             setReactingNoticeId(null);
@@ -346,6 +355,15 @@ export const Notices = ({
         if (!loadedReactions[noticeId] && !loadingStates[noticeId]) {
             setLoadingStates(prev => ({ ...prev, [noticeId]: true }));
             try {
+                const notice = noticeMap?.get(noticeId);
+
+                console.log('ACTIVE NOTICE:', notice);
+
+                if (txtPermission === false || (notice.txtPermission === false)) {
+                    console.log('Permission denied: Not loading reactions');
+                    return;
+                }
+
                 const initialReactions = await getReactionsForNotice(noticeId, limit);
 
                 console.log('initialReactions', initialReactions);

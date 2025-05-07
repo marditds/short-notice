@@ -320,7 +320,6 @@ export const useUserInfo = (data) => {
             const permissionsMap = new Map(userPermissionsList.map(perm => [perm.$id, perm]));
             const likesCountMap = new Map();
 
-            // Count likes per notice
             for (const like of allLikes.documents) {
                 const noticeId = like.notice_id;
                 likesCountMap.set(noticeId, (likesCountMap.get(noticeId) || 0) + 1);
