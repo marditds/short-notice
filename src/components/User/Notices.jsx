@@ -253,11 +253,11 @@ export const Notices = ({
                 return;
             }
 
-            const usersIds = noticeReactions.documents.map((reaction) => reaction.sender_id);
+            const usersIds = [...new Set(noticeReactions?.documents.map((reaction) => reaction.sender_id).filter(Boolean))];
 
             console.log('usersIds', usersIds);
 
-            const users = await Promise.all(usersIds.map(async (userId) => await getUserAccountByUserId(userId)));
+            const users = await getUsersByIdQuery(usersIds);
 
             console.log('users', users);
 
@@ -357,8 +357,6 @@ export const Notices = ({
             setLoadingStates(prev => ({ ...prev, [noticeId]: true }));
             try {
                 const notice = noticeMap?.get(noticeId);
-
-                console.log('ACTIVE NOTICE:', notice);
 
                 if ((txtPermission === false) || (notice.txtPermission === false)) {
                     console.log('Permission denied: Not loading reactions');
