@@ -1611,6 +1611,33 @@ export const getAllSavedNotices = async (saveNoticeIds) => {
     }
 };
 
+export const getAllSavesByNoticeId = async (notice_id) => {
+    try {
+        const res = await databases.listDocuments(
+            dbEnv,
+            savesCollEnv,
+            [Query.equal('notice_id', notice_id)]
+        )
+        return res;
+    } catch (error) {
+        console.error('Error getting all saves by notice id.', error);
+    }
+}
+
+export const getAllSavesTotalByNoticeId = async (notice_id) => {
+    try {
+        const res = await databases.listDocuments(
+            dbEnv,
+            savesCollEnv,
+            [Query.equal('notice_id', notice_id)]
+        )
+        return res.documents;
+    } catch (error) {
+        console.error('Error getting all saves by notice id.', error);
+    }
+}
+
+
 export const createReport = async (notice_id, author_id, reason, user_id, noticeText) => {
     try {
         const response = await databases.createDocument(

@@ -46,7 +46,8 @@ const OtherUserProfile = () => {
         fetchUserLikes,
         fetchUserSaves,
         getUserPermissions,
-        getAllLikesTotalByNoticeId
+        getAllLikesTotalByNoticeId,
+        getAllSavesTotalByNoticeId,
     } = useNotices(userEmail);
 
     const {
@@ -318,27 +319,41 @@ const OtherUserProfile = () => {
                     });
                 }
 
-                const likesForEachNotice = {};
+                const [allLikes, allSaves] = await Promise.all([
+                    getAllLikesTotalByNoticeId(ntcsIds),
+                    getAllSavesTotalByNoticeId(ntcsIds)
+                ]);
 
-                const noticeLikesTotal = await getAllLikesTotalByNoticeId(ntcsIds);
+                console.log('TOTAL LIKES:', allLikes);
+                console.log('TOTAL SAVES:', allSaves);
 
-                console.log('TOTAL LIKES:', noticeLikesTotal);
+                const likesCountMap = new Map();
+                const savesCountMap = new Map();
 
-                noticeLikesTotal.forEach(like => {
-                    const id = like.notice_id;
-                    likesForEachNotice[id] = (likesForEachNotice[id] || 0) + 1;
+                for (const like of allLikes) {
+                    const noticeId = like.notice_id;
+                    likesCountMap.set(noticeId, (likesCountMap.get(noticeId) || 0) + 1);
+                }
+
+                for (const save of allSaves) {
+                    const noticeId = save.notice_id;
+                    savesCountMap.set(noticeId, (savesCountMap.get(noticeId) || 0) + 1);
+                }
+
+                const noticesWithLikesAndSaves = usrNtcs.map(notice => {
+                    const likesTotal = likesCountMap.get(notice.$id) || 0;
+                    const savesTotal = savesCountMap.get(notice.$id) || 0;
+
+                    return {
+                        ...notice,
+                        noticeLikesTotal: likesTotal,
+                        noticeSavesTotal: savesTotal
+                    }
                 });
 
-                console.log('likesForEachNotice', likesForEachNotice);
+                console.log('noticesWithLikesAndSaves', noticesWithLikesAndSaves);
 
-                const noticesWithLikes = usrNtcs.map(notice => ({
-                    ...notice,
-                    totalLikes: likesForEachNotice[notice.$id] || 0
-                }));
-
-                console.log('noticesWithLikes', noticesWithLikes);
-
-                setOtherUserNotices(prev => [...prev, ...noticesWithLikes]);
+                setOtherUserNotices(prev => [...prev, ...noticesWithLikesAndSaves]);
 
                 if (usrNtcs?.length < limitNotices) {
                     setHasMoreNotices(false);

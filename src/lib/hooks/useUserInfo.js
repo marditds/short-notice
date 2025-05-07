@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import {
     getAccount as fetchAccount, createBlock, getBlockedUsersByUser as fetchBlockedUsersByUser, getBlockedUsersByUserByBatch as fetchBlockedUsersByUserByBatch, getUsersBlockingUser as fetchUsersBlockingUser, removeBlockUsingBlockedId, checkIdExistsInAuth, checkEmailExistsInAuth as checkEmailInAuthFromServer, registerAuthUser, getUserById, getUserByIdQuery as fetchUserByIdQuery, getUsersByIdQuery as fetchUsersByIdQuery, deleteAuthUser, createUserSession, getSessionDetails as fetchSessionDetails, deleteUserSession, updateUser, updateUserWebsite as updtUsrWbst, updateAuthUser, deleteUser, getUserByUsername as fetchUserByUsername, getAllUsersByString as fetchAllUsersByString, deleteAllNotices, deleteAllSentReactions, removeAllSavesByUser, removeAllLikesByUser, removeAllFollows, removeAllFollowed, getUsersDocument, createFollow, unfollow, getUserFollowingsById, getUserFollowersById, followedByUserCount, followingTheUserCount, getPersonalFeedAccounts as fetchPersonalFeedAccounts, createPassocde, updatePassocde, getPassocdeByOrganizationId as fetchPassocdeByOrganizationId, createUserReport, getFollowStatus as fetchFollowStatus, isUserBlockedByOtherUser, isOtherUserBlockedByUser, deletePassocde, updateAuthPassword as changeAuthPassword, checkUsernameExists as doesUsernameExists, removeAllBlocksForBlocker, removeAllBlocksForBlocked, deleteUserInterestsFromDB, deleteAllRecievedReactions, removeAllSavesForAuthor, removeAllLikesForAuthor,
     getUserPermissions, getAllLikesByNoticeId,
-    getUserPermissionsByIdQuery
+    getUserPermissionsByIdQuery,
+    getAllSavesByNoticeId
 } from '../context/dbhandler';
 import { useUserContext } from '../context/UserContext';
 import { useUserAvatar } from './useUserAvatar';
@@ -310,19 +311,26 @@ export const useUserInfo = (data) => {
             const userIds = [...new Set(notices.map(notice => notice.user_id).filter(Boolean))];
             const noticeIds = notices.map(notice => notice.$id);
 
-            const [allUsersData, userPermissionsList, allLikes] = await Promise.all([
+            const [allUsersData, userPermissionsList, allLikes, allSaves] = await Promise.all([
                 getUserByIdQuery(userIds),
                 getUserPermissionsByIdQuery(userIds),
-                getAllLikesByNoticeId(noticeIds)
+                getAllLikesByNoticeId(noticeIds),
+                getAllSavesByNoticeId(noticeIds)
             ]);
 
             const userMap = new Map(allUsersData.documents.map(user => [user.$id, user]));
             const permissionsMap = new Map(userPermissionsList.map(perm => [perm.$id, perm]));
             const likesCountMap = new Map();
+            const savesCountMap = new Map();
 
             for (const like of allLikes.documents) {
                 const noticeId = like.notice_id;
                 likesCountMap.set(noticeId, (likesCountMap.get(noticeId) || 0) + 1);
+            }
+
+            for (const save of allSaves.documents) {
+                const noticeId = save.notice_id;
+                savesCountMap.set(noticeId, (savesCountMap.get(noticeId) || 0) + 1);
             }
 
             const updatedNotices = notices.map(notice => {
@@ -330,6 +338,7 @@ export const useUserInfo = (data) => {
                 const perm = permissionsMap.get(notice.user_id);
                 const avatarUrl = user?.avatar ? getAvatarUrl(user.avatar) : null;
                 const likesTotal = likesCountMap.get(notice.$id) || 0;
+                const savesTotal = savesCountMap.get(notice.$id) || 0;
 
                 return {
                     ...notice,
@@ -337,7 +346,8 @@ export const useUserInfo = (data) => {
                     username: user?.username || 'Unknown User',
                     btnPermission: perm?.btns_reaction_perm,
                     txtPermission: perm?.txt_reaction_perm,
-                    noticeLikesTotal: likesTotal
+                    noticeLikesTotal: likesTotal,
+                    noticeSavesTotal: savesTotal
                 };
             });
 

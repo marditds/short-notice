@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { createNotice, getUserNotices, updateNotice, deleteNotice, saveDeletedNoticeId, deleteAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSave, getUserSaves, removeSave, createReport, createLike, removeLike, getUserLikes, getAllLikedNotices as fetchAllLikedNotices, getAllLikesByNoticeId as fetchAllLikesByNoticeId, getUserLikesNotInFeed, getUserSavesNotInFeed, getAllSavedNotices as fetchAllSavedNotices, createReaction, deleteReaction, getAllReactionsBySenderId as fetchAllReactionsBySenderId, getAllReactions as fetchAllReactions, getAllReactionsByRecipientId as fetchAllReactionsByRecipientId, getNoticeByNoticeId as fetchNoticeByNoticeId, getAllReactionsByNoticeId as fetchAllReactionsByNoticeId, getReactionByReactionId as fetchReactionByReactionId, deleteAllSentReactions, createReactionReport, getNoticeByUserId as fetchNoticeByUserId, removeAllSavesForNotice, removeAllLikesForNotice, updateUserPermissions as updatePermissions, getUserPermissions as fetchUserPermissions, getAllLikesTotalByNoticeId as fetchAllLikesTotalByNoticeId } from '../../lib/context/dbhandler';
+import { createNotice, getUserNotices, updateNotice, deleteNotice, saveDeletedNoticeId, deleteAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSave, getUserSaves, removeSave, createReport, createLike, removeLike, getUserLikes, getAllLikedNotices as fetchAllLikedNotices, getAllLikesByNoticeId as fetchAllLikesByNoticeId, getUserLikesNotInFeed, getUserSavesNotInFeed, getAllSavedNotices as fetchAllSavedNotices, createReaction, deleteReaction, getAllReactionsBySenderId as fetchAllReactionsBySenderId, getAllReactions as fetchAllReactions, getAllReactionsByRecipientId as fetchAllReactionsByRecipientId, getNoticeByNoticeId as fetchNoticeByNoticeId, getAllReactionsByNoticeId as fetchAllReactionsByNoticeId, getReactionByReactionId as fetchReactionByReactionId, deleteAllSentReactions, createReactionReport, getNoticeByUserId as fetchNoticeByUserId, removeAllSavesForNotice, removeAllLikesForNotice, updateUserPermissions as updatePermissions, getUserPermissions as fetchUserPermissions, getAllLikesTotalByNoticeId as fetchAllLikesTotalByNoticeId, getAllSavesTotalByNoticeId as fetchAllSavesTotalByNoticeId } from '../../lib/context/dbhandler';
 import { useUserContext } from '../context/UserContext.jsx';
 import { useUserInfo } from './useUserInfo.js';
 import { useGemini } from './useGemini';
@@ -255,6 +255,8 @@ export const useNotices = (data) => {
 
             try {
                 const createdNotice = await createNotice(newNotice);
+
+
 
                 setLatestNotice(createdNotice);
                 console.log('THIS WILL BE THE LATEST NOTICE:', createdNotice);
@@ -739,6 +741,16 @@ export const useNotices = (data) => {
         }
     };
 
+    const getAllSavesTotalByNoticeId = async (noticeId) => {
+        try {
+            const res = await fetchAllSavesTotalByNoticeId(noticeId);
+            console.log('All saves for a notice by its id:', res);
+            return res;
+        } catch (error) {
+            console.error('Error fetching all saves by notice id.', error);
+        }
+    }
+
     const handleReportNotice = async (notice_id, author_id, reason, noticeText) => {
         try {
             await createReport(notice_id, author_id, reason, user_id, noticeText);
@@ -947,6 +959,7 @@ export const useNotices = (data) => {
         getAllLikesByNoticeId,
         getAllSavedNotices,
         getAllLikesTotalByNoticeId,
+        getAllSavesTotalByNoticeId,
         handleReportNotice,
         handleLike,
         setLikedNotices,

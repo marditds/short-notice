@@ -377,6 +377,7 @@
 }
 
 .notice__template-checkbox>input {
+    background-image: none !important;
     border-color: var(--main-text-muted);
     background-color: transparent;
     transition: var(--main-transition-speed);

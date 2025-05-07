@@ -40,6 +40,7 @@ export const Notices = ({
     const [countdowns, setCountdowns] = useState([]);
 
     const [likeCounts, setLikeCounts] = useState({});
+    const [saveCounts, setSaveCounts] = useState({});
 
     const [noticeMap, setNoticeMap] = useState(null);
 
@@ -580,21 +581,22 @@ export const Notices = ({
                                             <div className='d-flex justify-content-start align-items-center notice__reaction-icon-div'
                                             >
                                                 {
-                                                    (location.pathname === '/user/feed' && user_id === notice.user_id) ?
-                                                        <span className='d-flex mt-auto my-auto'>
-                                                            <i className='bi bi-hand-thumbs-up notice__reaction-btn-fill me-1' /> {notice.noticeLikesTotal ?? notice.totalLikes}
-                                                        </span> :
-
+                                                    (
+                                                        notice.user_id === user_id
+                                                    ) ?
+                                                        <>
+                                                            <span className='d-flex mt-auto my-auto'>
+                                                                <i className='bi bi-hand-thumbs-up notice__reaction-btn-fill me-2' /> {notice.noticeLikesTotal}
+                                                            </span>
+                                                            <span className='ms-4 d-flex mt-auto my-auto'>
+                                                                <i className='bi bi-floppy notice__reaction-btn-fill me-2' /> {notice.noticeLikesTotal}
+                                                            </span>
+                                                        </>
+                                                        :
                                                         <>
                                                             {/* Like */}
                                                             <div
-                                                                className={`notice__reaction-btn ${(isOtherUserBlocked || (btnPermission === false || notice.btnPermission === false))
-                                                                    ? 'disabled' : ''} ms-2`}
-                                                                // onClick={() => {
-                                                                //     (isOtherUserBlocked || (btnPermission === false || notice.btnPermission === false))
-                                                                //         ? console.log(`YOU are blocked`) : handleLike(notice.$id, notice.user_id, likedNotices, setLikedNotices);
-                                                                // }}
-
+                                                                className={`d-flex align-items-center notice__reaction-btn ${(isOtherUserBlocked || (btnPermission === false || notice.btnPermission === false)) ? 'disabled' : ''} ms-2`}
                                                                 onClick={() => {
                                                                     if (isOtherUserBlocked || btnPermission === false || notice.btnPermission === false) {
                                                                         console.log("YOU are forbidden from completing this action.");
@@ -605,7 +607,7 @@ export const Notices = ({
 
                                                                     console.log('isLiked:', isLiked);
 
-                                                                    const currentCount = likeCounts[notice.$id] ?? notice.noticeLikesTotal ?? notice.totalLikes ?? 0;
+                                                                    const currentCount = likeCounts[notice.$id] ?? notice.noticeLikesTotal ?? 0;
 
                                                                     console.log('currentCount', currentCount);
 
@@ -625,28 +627,55 @@ export const Notices = ({
                                                                 }}
                                                             >
                                                                 {likedNotices && likedNotices[notice.$id] ? (
-                                                                    <i className='bi bi-hand-thumbs-up-fill notice__reaction-btn-fill' />
+                                                                    <i className='bi bi-hand-thumbs-up-fill notice__reaction-btn-fill me-2' />
                                                                 ) : (
-                                                                    <i className='bi bi-hand-thumbs-up notice__reaction-btn' />
-                                                                )} <span className='ms-1'>
-                                                                    {likeCounts[notice.$id] ?? notice.noticeLikesTotal ?? notice.totalLikes}
+                                                                    <i className='bi bi-hand-thumbs-up notice__reaction-btn me-2' />
+                                                                )} <span>
+                                                                    {likeCounts[notice.$id] ?? notice.noticeLikesTotal}
                                                                 </span>
                                                             </div>
 
                                                             {/* Save */}
                                                             <div
+                                                                className={`d-flex align-items-center notice__reaction-btn ${(isOtherUserBlocked || (btnPermission === false || notice.btnPermission === false)) ? 'disabled' : ''} ms-4`}
                                                                 onClick={() => {
-                                                                    (isOtherUserBlocked || (btnPermission === false || notice.btnPermission === false))
-                                                                        ? console.log(`YOU are blocked`) : handleSave(notice.$id, notice.user_id, savedNotices, setSavedNotices)
+                                                                    if (isOtherUserBlocked || btnPermission === false || notice.btnPermission === false) {
+                                                                        console.log("YOU are forbidden from completing this action.");
+                                                                        return;
+                                                                    }
+
+                                                                    const isSaved = savedNotices[notice.$id];
+
+                                                                    console.log('isSaved:', isSaved);
+
+                                                                    const currentCount = saveCounts[notice.$id] ?? notice.noticeSavesTotal ?? 0;
+
+                                                                    console.log('currentCount', currentCount);
+
+                                                                    // Update the UI immediately
+                                                                    setSavedNotices(prev => ({
+                                                                        ...prev,
+                                                                        [notice.$id]: !isSaved
+                                                                    }));
+
+                                                                    setSaveCounts(prev => ({
+                                                                        ...prev,
+                                                                        [notice.$id]: isSaved ? currentCount - 1 : currentCount + 1
+                                                                    }));
+
+                                                                    // Call backend
+                                                                    handleSave(notice.$id, notice.user_id, savedNotices, setSavedNotices);
                                                                 }}
-                                                                className={`notice__reaction-btn ${(isOtherUserBlocked || (btnPermission === false || notice.btnPermission === false))
-                                                                    ? 'disabled' : ''} ms-4`}
                                                             >
                                                                 {savedNotices && savedNotices[notice.$id] ? (
-                                                                    <i className='bi bi-floppy-fill notice__reaction-btn-fill' />
+                                                                    <i className='bi bi-floppy-fill notice__reaction-btn-fill me-2' />
                                                                 ) : (
-                                                                    <i className='bi bi-floppy notice__reaction-btn' />
-                                                                )}
+                                                                    <i className='bi bi-floppy notice__reaction-btn me-2' />
+                                                                )} <span>
+                                                                    <span className='ms-1'>
+                                                                        {saveCounts[notice.$id] ?? notice.noticeSavesTotal}
+                                                                    </span>
+                                                                </span>
                                                             </div>
 
                                                             {/* <div
@@ -669,14 +698,26 @@ export const Notices = ({
                                     </>
                                 }
 
-
+                                {/* FOR USER PROFILE ONLY */}
                                 {/* Edit/Delete */}
                                 {location.pathname === '/user/profile' && eventKey === 'my-notices' &&
                                     <div
                                         className='d-flex  justify-content-start h-100'>
-                                        <span className='d-flex mt-auto my-auto'>
-                                            <i className='bi bi-hand-thumbs-up notice__reaction-btn-fill me-1' /> {notice.noticeLikesTotal ?? notice.totalLikes}
-                                        </span>
+                                        {/* <span className='d-flex mt-auto my-auto'>
+                                            <i className='bi bi-hand-thumbs-up notice__reaction-btn-fill me-1' /> {notice.noticeLikesTotal}
+
+                                            <i className='bi bi-floppy notice__reaction-btn-fill me-1' /> {notice.noticeSavesTotal}
+                                        </span> */}
+
+                                        <>
+                                            <span className='d-flex mt-auto my-auto'>
+                                                <i className='bi bi-hand-thumbs-up notice__reaction-btn-fill me-2' /> {notice.noticeLikesTotal}
+                                            </span>
+                                            <span className='ms-4 d-flex mt-auto my-auto'>
+                                                <i className='bi bi-floppy notice__reaction-btn-fill me-2' /> {notice.noticeLikesTotal}
+                                            </span>
+                                        </>
+
                                         <span className='d-flex ms-auto mt-auto'>
                                             <div
                                                 className='ms-auto notice__edit-btn'
