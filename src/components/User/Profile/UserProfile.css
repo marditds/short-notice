@@ -595,15 +595,27 @@
     color: var(--main-text-color);
     background-color: var(--main-bg-color) 0.5 !important;
     backdrop-filter: blur(3px);
-    border-top-left-radius: var(--main-rounded-corner) !important;
-    border-top-right-radius: var(--main-rounded-corner) !important;
-    border-bottom-left-radius: 0 !important;
-    border-bottom-right-radius: 0 !important;
+    border: 1px solid !important;
+    border-color: var(--main-dropdown-bg-color) !important;
     box-shadow: none !important;
 }
 
-.user-profile__notice-tab>li>button:hover {
+.user-profile__notice-tab>li:nth-child(1)>button {
+    border-top-left-radius: var(--main-rounded-corner) !important;
+    border-top-right-radius: 0 !important;
+}
 
+.user-profile__notice-tab>li:nth-child(2)>button {
+    border-top-left-radius: 0 !important;
+    border-top-right-radius: 0 !important;
+}
+
+.user-profile__notice-tab>li:nth-child(3)>button {
+    border-top-left-radius: 0 !important;
+    border-top-right-radius: var(--main-rounded-corner) !important;
+}
+
+.user-profile__notice-tab>li>button:hover {
     color: var(--main-accent-color-hover) !important;
 }
 
