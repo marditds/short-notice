@@ -285,8 +285,20 @@ export const getUserByIdQuery = async (userId) => {
         );
         return response;
     } catch (error) {
-        // console.error('Error fetching user by ID:', error);
-        throw error;
+        console.error('Error fetching user by ID:', error);
+    }
+};
+
+export const getUsersByIdQuery = async (userIds) => {
+    try {
+        const response = await databases.listDocuments(
+            dbEnv,
+            usersCollEnv,
+            [Query.equal('$id', userIds)]
+        );
+        return response.documents;
+    } catch (error) {
+        console.error('Error fetching users by IDs:', error);
     }
 };
 

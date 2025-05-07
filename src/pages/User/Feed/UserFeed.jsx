@@ -52,7 +52,7 @@ const UserFeed = () => {
         addNotice,
     } = useNotices(userEmail);
 
-    const { isFetchingUsersData, fetchUsersData, getUserAccountByUserId } = useUserInfo(userEmail);
+    const { isFetchingUsersData, fetchUsersData, getUserAccountByUserId, getUsersByIdQuery } = useUserInfo(userEmail);
 
     const { isLargeScreen } = screenUtils();
 
@@ -387,6 +387,7 @@ const UserFeed = () => {
                         handleReact={handleReact}
                         getReactionsForNotice={getReactionsForNotice}
                         getUserAccountByUserId={getUserAccountByUserId}
+                        getUsersByIdQuery={getUsersByIdQuery}
                         getReactionByReactionId={getReactionByReactionId}
                         reportReaction={reportReaction}
                     />

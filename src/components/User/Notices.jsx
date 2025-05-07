@@ -28,6 +28,7 @@ export const Notices = ({
     getReactionsForNotice,
     getReactionByReactionId,
     getUserAccountByUserId,
+    getUsersByIdQuery,
     reportReaction,
     btnPermission,
     txtPermission,
@@ -372,7 +373,7 @@ export const Notices = ({
 
                 console.log('usersIds', usersIds);
 
-                const users = await Promise.all(usersIds.map(async (userId) => await getUserAccountByUserId(userId)));
+                const users = await getUsersByIdQuery(usersIds);
 
                 console.log('users', users);
 
