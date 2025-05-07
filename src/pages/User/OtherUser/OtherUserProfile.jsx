@@ -29,14 +29,8 @@ const OtherUserProfile = () => {
     } = useUserContext();
 
     const [currUserId, setCurrUserId] = useState(null);
-    // const [currUserId, setCurrUserId] = useState(() => {
-    //     return localStorage.getItem('currUserId') || null;
-    // });
 
     const {
-        user_id,
-        // likedNotices,
-        // savedNotices,
         noticesReactions,
         setFellowUserId,
         handleLike,
@@ -52,12 +46,10 @@ const OtherUserProfile = () => {
         fetchUserLikes,
         fetchUserSaves,
         getUserPermissions,
-        getAllLikesByNoticeId,
         getAllLikesTotalByNoticeId
     } = useNotices(userEmail);
 
     const {
-        // userId,
         isFollowingUserLoading,
         isInitialFollowCheckLoading,
         isFollowing,
@@ -71,8 +63,8 @@ const OtherUserProfile = () => {
         handleBlock,
         getUserByUsername,
         getUserAccountByUserId,
+        getUsersByIdQuery,
         fetchUsersData,
-        // getBlockedUsersByUser,
         handleFollow,
         getFollowStatus,
         getfollwedByUserCount,
@@ -775,6 +767,7 @@ const OtherUserProfile = () => {
                                                     handleReact={handleReact}
                                                     getReactionsForNotice={getReactionsForNotice}
                                                     getUserAccountByUserId={getUserAccountByUserId}
+                                                    getUsersByIdQuery={getUsersByIdQuery}
                                                     getReactionByReactionId={getReactionByReactionId}
                                                     reportReaction={reportReaction}
                                                 />
@@ -828,6 +821,7 @@ const OtherUserProfile = () => {
                                                     handleReact={handleReact}
                                                     getReactionsForNotice={getReactionsForNotice}
                                                     getUserAccountByUserId={getUserAccountByUserId}
+                                                    getUsersByIdQuery={getUsersByIdQuery}
                                                     getReactionByReactionId={getReactionByReactionId}
                                                     reportReaction={reportReaction}
                                                 />
@@ -882,6 +876,7 @@ const OtherUserProfile = () => {
                                                     handleReact={handleReact}
                                                     getReactionsForNotice={getReactionsForNotice}
                                                     getUserAccountByUserId={getUserAccountByUserId}
+                                                    getUsersByIdQuery={getUsersByIdQuery}
                                                     getReactionByReactionId={getReactionByReactionId}
                                                     reportReaction={reportReaction}
 

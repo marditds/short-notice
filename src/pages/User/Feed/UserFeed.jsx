@@ -52,7 +52,7 @@ const UserFeed = () => {
         addNotice,
     } = useNotices(userEmail);
 
-    const { isFetchingUsersData, fetchUsersData, getUserAccountByUserId, getUsersByIdQuery } = useUserInfo(userEmail);
+    const { fetchUsersData, getUserAccountByUserId, getUsersByIdQuery } = useUserInfo(userEmail);
 
     const { isLargeScreen } = screenUtils();
 

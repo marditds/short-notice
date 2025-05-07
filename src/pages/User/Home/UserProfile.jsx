@@ -15,7 +15,6 @@ import '../../../components/User/Profile/UserProfile.css';
 import { EndAsterisks } from '../../../components/User/EndAsterisks.jsx';
 import { NoticesPlaceholder } from '../../../components/User/NoticesPlaceholder.jsx';
 import { ModifyModal } from '../../../components/User/Modals.jsx';
-import { createUserSession, getAccount } from '../../../lib/context/dbhandler.js';
 
 const UserProfile = () => {
 
@@ -27,36 +26,24 @@ const UserProfile = () => {
         userEmail,
         userWebsite,
         isApploading,
-        accountType,
-        setUserId,
-        setUserEmail,
-        setUsername
+        accountType
     } = useUserContext();
 
     const {
-        // user_id,
-        // userNotices,
         latestNotice,
         savedNotices,
         likedNotices,
-        isLoading,
         isAddingNotice,
-        removingNoticeId,
         isSavingEdit,
         isRemovingNotice,
-        tagCategories,
         isGeminiLoading,
-        setTagCategories,
         onGeminiRunClick,
-        hakop,
         fetchUserSaves,
         fetchUserLikes,
         setLikedNotices,
         setSavedNotices,
         addNotice,
-        editNotice,
         handleSaveEdit,
-        removeNotice,
         handleDelete,
         setRemovingNoticeId,
         handleLike,
@@ -71,20 +58,14 @@ const UserProfile = () => {
         reportReaction,
         getAllLikesTotalByNoticeId
     } = useNotices(userEmail);
-    // } = useNotices(userEmail || localStorage.getItem('email'));
 
     const {
-        // userId,
-        // userWebsite,
         followersCount,
         followingCount,
         isGetFollowingTheUserCountLoading,
         isGetFollwedByUserCountLoading,
-        // getAccount,
-        getSessionDetails,
-        setUserWebsite,
         getUserAccountByUserId,
-        getUserByUsername,
+        getUsersByIdQuery,
         fetchUsersData,
         getfollwedByUserCount,
         getFollowingTheUserCount,
@@ -92,20 +73,14 @@ const UserProfile = () => {
         fetchAccountsFollowedByUser,
         getBlockedUsersByUser
     } = useUserInfo(userEmail);
-    // } = useUserInfo(userEmail || localStorage.getItem('email'));
 
     const { isSmallScreen } = screenUtils();
 
-    // const [accountType, setAccountType] = useState(null);
-
     const [noticeText, setNoticeText] = useState('');
-    // const [noticeGif, setNoticeGif] = useState(null);
-    // const [duration, setDuration] = useState(24);
     const [editingNoticeId, setEditingNoticeId] = useState(null);
     const [showEditModal, setShowEditModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-    // const [notices, setNotices] = useState([]);
     const [userProfileNotices, setUserProfileNotices] = useState([]);
     const [savedNoticesData, setSavedNoticesData] = useState([]);
     const [likedNoticesData, setLikedNoticesData] = useState([]);
@@ -294,7 +269,7 @@ const UserProfile = () => {
         }
     }, [userId])
 
-    // // Display notice in UI immediately after it is added 
+    // Display notice in UI immediately after it is added 
     useEffect(() => {
         if (latestNotice && Object.keys(latestNotice).length > 0) {
 
@@ -312,7 +287,7 @@ const UserProfile = () => {
         }
     }, [latestNotice])
 
-    // // Fetch saves and users' data for saves tab
+    // Fetch saves and users' data for saves tab
     useEffect(() => {
         const fetchSaveNotices = async () => {
 
@@ -382,7 +357,7 @@ const UserProfile = () => {
         }
     }, [userId, offsetSaves, isSavesClicked])
 
-    // // Fetch likes and users' data for likes tab 
+    // Fetch likes and users' data for likes tab 
     useEffect(() => {
         const fetchLikedNotices = async () => {
 
@@ -649,6 +624,7 @@ const UserProfile = () => {
                                 handleDeleteNotice={handleDeleteNotice}
                                 getReactionsForNotice={getReactionsForNotice}
                                 getUserAccountByUserId={getUserAccountByUserId}
+                                getUsersByIdQuery={getUsersByIdQuery}
                                 getReactionByReactionId={getReactionByReactionId}
                                 handleReportNotice={handleReportNotice}
                                 reportReaction={reportReaction}
@@ -698,6 +674,7 @@ const UserProfile = () => {
                                     handleReact={handleReact}
                                     getReactionsForNotice={getReactionsForNotice}
                                     getUserAccountByUserId={getUserAccountByUserId}
+                                    getUsersByIdQuery={getUsersByIdQuery}
                                     getReactionByReactionId={getReactionByReactionId}
                                     reportReaction={reportReaction}
                                 />
@@ -755,6 +732,7 @@ const UserProfile = () => {
                                     handleReact={handleReact}
                                     getReactionsForNotice={getReactionsForNotice}
                                     getUserAccountByUserId={getUserAccountByUserId}
+                                    getUsersByIdQuery={getUsersByIdQuery}
                                     getReactionByReactionId={getReactionByReactionId}
                                     reportReaction={reportReaction}
                                 />
@@ -776,8 +754,7 @@ const UserProfile = () => {
                             </>
                             :
                             <NoticesPlaceholder location={location} section={'liked'}
-                                // icon={<BsHandThumbsUp />}
-                                icon={<i className="bi bi-hand-thumbs-up"></i>}
+                                icon={<i className='bi bi-hand-thumbs-up' />}
                             />
                         ) :
                         <div className='d-flex justify-content-center'>

@@ -31,9 +31,7 @@ export const Notices = ({
     getUsersByIdQuery,
     reportReaction,
     btnPermission,
-    txtPermission,
-    // totalLikesForEachNotice
-    // handleDeleteReaction
+    txtPermission
 }) => {
     const location = useLocation();
 
