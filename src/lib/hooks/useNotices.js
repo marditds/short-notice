@@ -330,8 +330,6 @@ export const useNotices = (data) => {
 
     const removeNotice = async (noticeId) => {
 
-        // console.log('Attempting to delete notice with ID:', noticeId);
-
         if (!noticeId) {
             console.error("Invalid notice ID");
             return;
@@ -342,27 +340,6 @@ export const useNotices = (data) => {
 
         try {
             await deleteNotice(noticeId);
-
-            // const [deleteNoticeRes, likesRes, savesRes] = await Promise.allSettled([
-            //     deleteNotice(noticeId),
-            //     removeAllSavesForNotice(noticeId),
-            //     removeAllLikesForNotice(noticeId)
-            // ])
-
-            // if (deleteNoticeRes.status === "fulfilled") {
-            //     console.log("Notice deleted successfully:", noticeId);
-            //     return deleteNoticeRes.value; // Return deleted notice details
-            // } else {
-            //     console.error("Error deleting notice:", deleteNoticeRes.reason);
-            // }
-
-            // Log errors for likes & saves deletion (optional)
-            // if (likesRes.status === "rejected") {
-            //     console.error("Error deleting likes:", likesRes.reason);
-            // }
-            // if (savesRes.status === "rejected") {
-            //     console.error("Error deleting saves:", savesRes.reason);
-            // }
 
         } catch (error) {
             if (error.code === 404) {
