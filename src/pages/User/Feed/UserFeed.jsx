@@ -316,12 +316,6 @@ const UserFeed = () => {
         </div>;
     }
 
-    // if (isAppLoading) {
-    //     return <div className='d-flex justify-content-center align-items-center'>
-    //         <LoadingSpinner classAnun={'me-2'} />Loading...
-    //     </div>;
-    // }
-
     return (
         <div style={{ marginTop: '80px' }} className='w-100'>
             <FeedBody

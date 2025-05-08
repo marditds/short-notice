@@ -611,7 +611,6 @@ export const Notices = ({
 
                                                                     console.log('currentCount', currentCount);
 
-                                                                    // Update the UI immediately
                                                                     setLikedNotices(prev => ({
                                                                         ...prev,
                                                                         [notice.$id]: !isLiked
@@ -622,7 +621,6 @@ export const Notices = ({
                                                                         [notice.$id]: isLiked ? currentCount - 1 : currentCount + 1
                                                                     }));
 
-                                                                    // Call backend
                                                                     handleLike(notice.$id, notice.user_id, likedNotices, setLikedNotices);
                                                                 }}
                                                             >
@@ -651,8 +649,7 @@ export const Notices = ({
                                                                     const currentCount = saveCounts[notice.$id] ?? notice.noticeSavesTotal ?? 0;
 
                                                                     console.log('currentCount', currentCount);
-
-                                                                    // Update the UI immediately
+                                                                    y
                                                                     setSavedNotices(prev => ({
                                                                         ...prev,
                                                                         [notice.$id]: !isSaved
@@ -663,7 +660,6 @@ export const Notices = ({
                                                                         [notice.$id]: isSaved ? currentCount - 1 : currentCount + 1
                                                                     }));
 
-                                                                    // Call backend
                                                                     handleSave(notice.$id, notice.user_id, savedNotices, setSavedNotices);
                                                                 }}
                                                             >
@@ -677,12 +673,6 @@ export const Notices = ({
                                                                     </span>
                                                                 </span>
                                                             </div>
-
-                                                            {/* <div
-                                                        className={`notice__reaction-btn ${isOtherUserBlocked ? 'disabled' : ''} ms-2`}
-                                                    >
-                                                        <i className='bi bi-reply' />
-                                                    </div> */}
 
                                                             {/* Report */}
                                                             <div
@@ -703,12 +693,6 @@ export const Notices = ({
                                 {location.pathname === '/user/profile' && eventKey === 'my-notices' &&
                                     <div
                                         className='d-flex  justify-content-start h-100'>
-                                        {/* <span className='d-flex mt-auto my-auto'>
-                                            <i className='bi bi-hand-thumbs-up notice__reaction-btn-fill me-1' /> {notice.noticeLikesTotal}
-
-                                            <i className='bi bi-floppy notice__reaction-btn-fill me-1' /> {notice.noticeSavesTotal}
-                                        </span> */}
-
                                         <>
                                             <span className='d-flex mt-auto my-auto'>
                                                 <i className='bi bi-hand-thumbs-up notice__reaction-btn-fill me-2' /> {notice.noticeLikesTotal}
@@ -735,197 +719,6 @@ export const Notices = ({
                                     </div>
                                 }
                             </Row>
-
-
-                            {/* ////////////////////////////////////////////// */}
-
-                            <Row className='w-100 m-auto'>
-
-                                {/* Username, Profile Picture, Edit/Delete, Interaction Col */}
-                                {/* <Col xs={3} className='d-flex flex-column justify-content-start align-items-start notice__interaction-col'>
-
-                           
-                                    {shouldShowUserInfo() ?
-                                        (<div className='d-flex flex-column justify-content-start align-items-start mt-auto'>
-
-                                            <Link to={`../${notice.username}`}>
-                                                <img
-                                                    src={notice.avatarUrl || defaultAvatar}
-                                                    alt="Profile"
-                                                    className='notice__avatar'
-                                                />
-                                            </Link>
-
-                                            <p
-                                                className='w-100 mt-1 mb-0 text-start notice__username'
-                                            >
-                                                <Link to={`../${notice.username}`}
-                                                    className='text-decoration-none'>
-                                                    <strong>
-                                                   
-                                                        {notice?.username ? truncteUsername(notice.username) : ''}
-                                                    </strong>
-                                                </Link>
-                                            </p>
-
-                                            <small className='text-end mt-auto notice__create-date text-nowrap'>
-                                                {formatDateToLocal(notice.timestamp)}
-                                            </small>
-
-                                            <small className='me-auto'>
-                                                <span style={{ color: 'gray' }} >
-                                                    Expires In:
-                                                </span>  {countdowns[idx] || calculateCountdown(notice?.expiresAt)}
-                                            </small>
-
-                                        </div>)
-                                        :
-                                        null
-                                    }
- 
-                                    <div>
-                                        <small className='text-end mt-auto notice__create-date text-nowrap'>
-                                            {formatDateToLocal(notice.timestamp)}
-                                        </small>
-
-                                        <small className='me-auto'>
-                                            <span style={{ color: 'gray' }} >
-                                                Expires In:
-                                            </span>  {countdowns[idx] || calculateCountdown(notice?.expiresAt)}
-                                        </small>
-                                    </div>
-
-                                 
-                                    {location.pathname === '/user/profile' && eventKey === 'my-notices' &&
-                                        <div
-                                            className='d-flex flex-column justify-content-end h-100'>
-                                            <span className='d-flex ms-auto mt-auto'>
-                                                <div
-                                                    className='ms-auto notice__edit-btn'
-                                                    onClick={() => handleEditNotice(notice.$id, notice.text)}
-                                                >
-                                                    <i className='bi bi-pencil' />
-                                                </div>
-                                                <div
-                                                    className='ms-2 notice__delete-btn'
-                                                    onClick={() => handleDeleteNotice(notice.$id)}
-                                                >
-                                                    <i className='bi bi-trash3' />
-                                                </div>
-                                            </span>
-                                        </div>
-                                    }
-
-                                   <div className='d-flex flex-column justify-content-end'>
-                                        <div className='d-grid'>
-                                            {(location.pathname === '/user/profile' && eventKey === 'my-notices') ?
-                                                null
-                                                :
-                                                <>
-                                                    {(location.pathname === '/user/feed' && user_id === notice.user_id) || ((location.pathname !== `/user/profile` || location.pathname !== `/user/feed`) && user_id === notice.user_id) ?
-                                                        <div className='notice__reaction-icon-div-empty' /> :
-                                                        <div
-                                                            className='d-flex justify-content-end align-items-center notice__reaction-icon-div'
-                                                        >
-
-                                                            <div
-                                                                className={`notice__reaction-btn ${(isOtherUserBlocked || (btnPermission === false || notice.btnPermission === false))
-                                                                    ? 'disabled' : ''} ms-2`}
-                                                                onClick={() => {
-                                                                    (isOtherUserBlocked || (btnPermission === false || notice.btnPermission === false))
-                                                                        ? console.log(`YOU are blocked`) : handleLike(notice.$id, notice.user_id, likedNotices, setLikedNotices);
-                                                                }}
-                                                            >
-                                                                {likedNotices && likedNotices[notice.$id] ? (
-                                                                    <>
-                                                                        <i className='bi bi-hand-thumbs-up-fill notice__reaction-btn-fill' />
-                                                                    </>
-                                                                ) : (
-                                                                    <i className='bi bi-hand-thumbs-up notice__reaction-btn' />
-                                                                )}
-                                                            </div>
-
-
-                                                            <div
-                                                                onClick={() => {
-                                                                    (isOtherUserBlocked || (btnPermission === false || notice.btnPermission === false))
-                                                                        ? console.log(`YOU are blocked`) : handleSave(notice.$id, notice.user_id, savedNotices, setSavedNotices)
-                                                                }}
-                                                                className={`notice__reaction-btn ${(isOtherUserBlocked || (btnPermission === false || notice.btnPermission === false))
-                                                                    ? 'disabled' : ''} ms-2`}
-                                                            >
-                                                                {savedNotices && savedNotices[notice.$id] ? (
-                                                                    <i className='bi bi-floppy-fill notice__reaction-btn-fill' />
-
-                                                                ) : (
-                                                                    <i className='bi bi-floppy notice__reaction-btn' />
-                                                                )}
-                                                            </div>
-
-
-                                                            <div
-                                                                className={`notice__reaction-btn ${isOtherUserBlocked ? 'disabled' : ''} ms-2`}
-                                                            >
-                                                                <i className='bi bi-reply' />
-                                                            </div>
-                                                            <div
-                                                                onClick={() => onReportNoticeClick(notice.$id)}
-                                                                className='notice__reaction-btn ms-2'
-                                                            >
-                                                                <i className='bi bi-exclamation-circle' />
-                                                            </div>
-                                                        </div>
-                                                    }
-                                                </>
-                                            }
-
-                                        </div>
-                                    </div>  
-                                </Col> */}
-
-                                {/* Text, Likes and Countdown Col */}
-                                {/* <Col xs={9} className='d-flex justify-content-between flex-column notice__text-countdown-col'
-                                >
-                                    <p className='text-break notice__text'>
-                                        {notice?.noticeType === 'business' &&
-                                            <strong>
-                                                Ad:{' '}
-                                            </strong>
-                                        }
-                                        {notice?.text}
-                                    </p>
-
-                                    {notice?.noticeUrl &&
-                                        <p className='notice__link-in-notice-p'>
-
-                                            <a href={notice?.noticeUrl} target='_blank' rel='noopener noreferrer'
-                                                className='notice__link-in-notice'
-                                            >
-                                                {notice?.noticeUrl}
-                                            </a>
-                                        </p>
-                                    }
-
-
-                                    {notice?.noticeGif &&
-                                        <Image src={notice?.noticeGif}
-                                            className='mb-2 notice__gif'
-                                            width={isExtraSmallScreen ? '90%' : (isSmallScreen ? '60%' : '60%')}
-                                            fluid />
-                                    }
-
-                                    <div>
-                                        <p className='mb-0 text-muted'>
-                                            {notice.noticeLikesTotal ? notice.noticeLikesTotal : notice.totalLikes} Like(s)
-                                        </p>
-
-
-                                    </div>
-                                </Col> */}
-
-
-                            </Row>
-                            {/* ////////////////////////////////////////////// */}
 
                         </Accordion.Header>
 

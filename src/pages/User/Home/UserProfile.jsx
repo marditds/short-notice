@@ -595,8 +595,6 @@ const UserProfile = () => {
         }
     ];
 
-
-
     if (isApploading) {
         return <div className='user-profile__loading'>
             <div>

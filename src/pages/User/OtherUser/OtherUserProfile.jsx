@@ -647,10 +647,6 @@ const OtherUserProfile = () => {
         }
     }, [currUserId]);
 
-    const timerSpacing = 'mx-2';
-    const timerDisplay = 'd-flex';
-    const classname = `${timerDisplay} ${timerSpacing}`;
-
     // checking passocde for organization
     const checkPasscode = async () => {
         setIsCheckingPasscode(true);
@@ -686,13 +682,11 @@ const OtherUserProfile = () => {
         console.log('Event Key:', eventKey);
     }, [eventKey])
 
-
     useEffect(() => {
         console.log('savedNoticesData', savedNoticesData);
         console.log('savedNoticesData.length', savedNoticesData.length);
 
     }, [savedNoticesData])
-
 
     const noticeTabs = [
         {
@@ -724,7 +718,6 @@ const OtherUserProfile = () => {
             loadingText: `Loading ${otherUsername}'s likes...`,
         },
     ];
-
 
     if (isOtherUserLoading || isAppLoading || isFetchingUserinContextLoading || isInitialFollowCheckLoading) {
         return <div className='other-user-profile__loading'>
@@ -789,7 +782,7 @@ const OtherUserProfile = () => {
                                 className='user-profile__notice-tab fixed-bottom'
                                 onSelect={(key) => setEventKey(key)}
                             >
-                                {/* NOTICES TAB */}
+                                {/* Notices */}
                                 <Tab
                                     eventKey='notices'
                                     title="Notices"
