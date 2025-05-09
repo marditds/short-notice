@@ -11,9 +11,10 @@ import { EndAsterisks } from '../EndAsterisks';
 export const BlockedAccounts = () => {
 
     const { username, userEmail } = useUserContext();
+
     const { userId,
         getBlockedUsersByUserByBatch,
-        getUserAccountByUserId,
+        getUserByIdQuery,
         deleteBlockUsingBlockedId
     } = useUserInfo(userEmail);
 
@@ -21,7 +22,7 @@ export const BlockedAccounts = () => {
     const [isBlockListInitialRunLoading, setIsBlockListInitialRunLoading] = useState(false);
     const [isUnblockingLoading, setIsUnblockingLoading] = useState(false);
 
-    const [limit] = useState(3);
+    const [limit] = useState(5);
     const [offset, setOffset] = useState(0);
     const [hasMoreBlockedProfiles, setHasMoreBlockedProfiles] = useState(true);
     const [isLoadingMore, setIsLoadingMore] = useState(false);
@@ -40,29 +41,24 @@ export const BlockedAccounts = () => {
             const blckdLst = await getBlockedUsersByUserByBatch(userId, limit, offset);
             console.log(`These are accounts blocked by${username}':`, blckdLst);
 
-            let blockedIdArr = [];
-
-            for (let i = 0; i < blckdLst?.length; i++) {
-                blockedIdArr.push(blckdLst[i].blocked_id);
+            if (!blckdLst || blckdLst.length === 0) {
+                setHasMoreBlockedProfiles(false);
+                return 'No results';
             }
+
+            const blockedIdArr = blckdLst.map(user => user.blocked_id);
 
             console.log('blockedIdArr', blockedIdArr);
 
-            let blockedUsers = [];
-
-            for (let i = 0; i < blockedIdArr?.length; i++) {
-                const usr = await getUserAccountByUserId(blockedIdArr[i]);
-                console.log('usr', usr);
-                blockedUsers.push(usr);
-            }
-
-            blockedUsers.sort((a, b) => a.username.localeCompare(b.username));
+            const blockedUsers = await getUserByIdQuery(blockedIdArr);
 
             console.log('blockedUsers', blockedUsers);
 
+            blockedUsers.documents.sort((a, b) => a.username.localeCompare(b.username));
+
             if (blockedUsers) {
                 setBlockedUsers(prevUsers => {
-                    const moreUsers = blockedUsers?.filter(user =>
+                    const moreUsers = blockedUsers.documents?.filter(user =>
                         !prevUsers?.some(loadedUser => loadedUser.$id === user.$id)
                     );
 
@@ -72,7 +68,7 @@ export const BlockedAccounts = () => {
                 return 'No results';
             }
 
-            if (blockedUsers?.length < limit) {
+            if (blockedUsers.documents?.length < limit) {
                 setHasMoreBlockedProfiles(false);
             } else {
                 setHasMoreBlockedProfiles(true);
@@ -111,7 +107,7 @@ export const BlockedAccounts = () => {
         }
     }
 
-    const handleDelteBlock = async (blocked_id) => {
+    const handleDeleteBlock = async (blocked_id) => {
         try {
             setIsUnblockingLoading(true);
 
@@ -149,12 +145,12 @@ export const BlockedAccounts = () => {
                                     <div key={user.$id} className='d-flex justify-content-start  align-items-start'>
                                         <div className='d-flex w-100 align-items-center settings__blocked-accounts-profiles'>
                                             {user.username.length <= 10 ? user.username : user.username.slice(0, 10) + '...'}
-                                            < img src={avatarUrl(user.avatar) || defaultAvatar}
+                                            <img src={avatarUrl(user.avatar) || defaultAvatar}
                                                 alt="profile_pic"
                                                 className='settings__blocked-accounts-profile-avatar'
                                             />
                                             <Button
-                                                onClick={async () => handleDelteBlock(user.$id)}
+                                                onClick={async () => handleDeleteBlock(user.$id)}
                                                 className='p-0 d-flex align-items-center justify-content-center 
                                             settings__unblocked-btn
                                             '

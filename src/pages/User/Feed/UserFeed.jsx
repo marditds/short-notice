@@ -15,7 +15,7 @@ import { ComposeNotice } from '../../../components/User/ComposeNotice';
 const UserFeed = () => {
 
     const { accountType,
-        userId, isLoggedIn, userEmail
+        userId, username, isLoggedIn, userEmail
     } = useUserContext();
 
     const {
@@ -118,10 +118,6 @@ const UserFeed = () => {
                 setIsLoadingGeneralFeedNotices(true)
                 setIsLoadingMoreInitial(true);
                 setIsLoadingMore(true);
-
-                // const abc = Object.values(selectedTags).some(tagKey => tagKey === true);
-
-                // console.log('RRRRRRRRRRRRRR:', abc);
 
                 const feedNotices = await getFeedNotices(selectedTags, limit, null);
 
@@ -371,6 +367,7 @@ const UserFeed = () => {
                     <Notices
                         notices={notices}
                         user_id={userId}
+                        username={username}
                         likedNotices={!isFeedToggled ? personalFeedLikedNotices : likedNotices}
                         savedNotices={!isFeedToggled ? personalFeedSavedNotices : savedNotices}
                         handleLike={handleLike}

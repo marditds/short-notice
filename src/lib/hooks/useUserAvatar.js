@@ -1,8 +1,14 @@
 import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { endpointEnv, projectEnv, avatarBucketEnv, uploadAvatar, deleteAvatarFromStrg, updateAvatar, deleteAvatarFromDoc, getUserById, getAllUsersByString } from '../context/dbhandler';
 import { getAvatarUrl } from '../utils/avatarUtils';
+import { useUserContext } from '../context/UserContext';
 
-export const useUserAvatar = (userId) => {
+export const useUserAvatar = (id) => {
+
+    const { userId } = useUserContext();
+
+    const location = useLocation();
 
     const [avatarUrl, setAvatarUrl] = useState(null);
     const [isAvatarLoading, setIsAvatarLoading] = useState(false);
@@ -11,19 +17,19 @@ export const useUserAvatar = (userId) => {
     const [avatarUploadSuccessMsg, setAvatarUploadSuccessMsg] = useState(null);
 
     useEffect(() => {
-        // console.time('avatar-fetch');
-        setIsAvatarLoading(true);
+
+        if (id === null || location.pathname !== '/user/profile') {
+            console.log("Not fetching avatar in this component.");
+            return;
+        }
 
         const fetchUserAvatar = async () => {
 
-            if (userId === null) {
-                console.log("No userId, skipping fetch");
-                return;
-            }
-
-            // const retryFetch = async (retries = 3, delay = 1000) => {
             try {
-                const user = await getUserById(userId);
+                setIsAvatarLoading(true);
+                const user = await getUserById(id);
+
+                console.log('THIS IS USER IN fetchUserAvatar:', user);
 
                 if (user && user.avatar) {
 
@@ -36,21 +42,19 @@ export const useUserAvatar = (userId) => {
                 }
             } catch (error) {
                 console.error('Error fetching Avatar:', error);
-                // if (retries > 0) {
-                //     console.log(`Retrying fetch... (${retries} attempts left)`);
-                //     setTimeout(() => retryFetch(retries - 1, delay), delay);
-                // }
+
             } finally {
                 setIsAvatarLoading(false);
             }
-            // };
-            // retryFetch();
         };
         fetchUserAvatar();
-        // fetchUserAvatar().finally(() => console.timeEnd('avatar-fetch'));
-    }, [userId, avatarUrl]);
+    }, [id, location.pathname]);
 
-    const getUserAvatarById = async (userId) => {
+    useEffect(() => {
+        console.log('isAvatarLoading', isAvatarLoading);
+    }, [isAvatarLoading])
+
+    const getUserAvatarById = async () => {
         try {
             const user = await getUserById(userId);
             console.log('user,', user);
@@ -65,19 +69,10 @@ export const useUserAvatar = (userId) => {
         }
     }
 
-    useEffect(() => {
-        console.log('isAvatarLoading', isAvatarLoading);
-    }, [isAvatarLoading])
-
     const getUserAvatarByString = async (str) => {
         try {
             const users = await getAllUsersByString(str);
             console.log('users,', users);
-
-            // const url = getAvatarUrl(user.avatar);
-            // console.log('url,', url);
-
-            // return url;
 
         } catch (error) {
             console.error('Error getting user avatar:', error);
@@ -148,12 +143,8 @@ export const useUserAvatar = (userId) => {
     }
 
     const handleDeleteAvatarFromStrg = async (fileId) => {
-
-        // console.log('fileId in handleDeleteAvatarFromStrg:', fileId);
-
         try {
             const response = await deleteAvatarFromStrg(fileId);
-            // console.log('Avatar deleted from storage:', response);
 
         } catch (error) {
             console.error('Error deleting avatar from storage:', error);
@@ -163,7 +154,7 @@ export const useUserAvatar = (userId) => {
     const handleDeleteAvatarFromDoc = async () => {
         try {
             const response = await deleteAvatarFromDoc(userId);
-            // console.log('Avatar deleted from doc successfully:', response);
+
         } catch (error) {
             console.error('Error deleting avatar from doc:', error);
         }

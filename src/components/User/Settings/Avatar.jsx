@@ -32,42 +32,6 @@ export const Avatar = () => {
         setFileFormatError, setAvatarUploadSuccessMsg
     } = useUserAvatar(userId);
 
-    // const handleFileChange = async (e) => {
-
-    //     console.log('Changing avatar...');
-
-    //     console.log('THIS IS e', e);
-
-    //     const file = e.target.files[0];
-
-    //     if (!file) { return; }
-
-    //     console.log('this is FILE:', file);
-
-    //     if (
-    //         file.type
-    //         !== 'image/png' &&
-    //         file.type
-    //         !== 'image/jpeg' &&
-    //         file.type
-    //         !== 'image/jpg'
-    //     ) {
-    //         setFileFormatError('Accepted file formats are PNG and JPG/JPEG.');
-    //         setAvatarUploadSuccessMsg('');
-    //         return;
-    //     }
-
-    //     if (avatarUrl) {
-    //         const fileId = extractFileIdFromUrl(avatarUrl);
-    //         await Promise.allSettled([
-    //             handleDeleteAvatarFromStrg(fileId),
-    //             handleAvatarUpload(e)
-    //         ]);
-    //     } else {
-    //         await handleAvatarUpload(e);
-    //     }
-    // };
-
     const handleFileChange = async (e) => {
         const file = e.target.files[0];
         if (!file) return;

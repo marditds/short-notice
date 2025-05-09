@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Row, Col, Form } from 'react-bootstrap';
 
-
 export const Visibility = () => {
 
     const [privacyStatus, setPrivacyStatus] = useState('Public');

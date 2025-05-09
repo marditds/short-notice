@@ -23,6 +23,7 @@ export const Notices = ({
     eventKey,
     isOtherUserBlocked,
     user_id,
+    username,
     likedNotices,
     savedNotices,
     getReactionsForNotice,
@@ -492,7 +493,7 @@ export const Notices = ({
                                     <Col xs={1} className='notice__avatar-col d-flex flex-column'>
 
                                         <div className='d-flex justify-content-center justify-content-sm-start align-items-center mt-auto'>
-                                            <Link to={`../${notice.username}`}>
+                                            <Link to={notice.username !== username ? `../${notice.username}` : `../profile`}>
                                                 <img
                                                     src={notice.avatarUrl || defaultAvatar}
                                                     alt="Profile"
@@ -509,8 +510,7 @@ export const Notices = ({
                                 <Col xs={11} className={`d-flex flex-column pe-0 justify-content-evenly ${((location.pathname === '/user/profile' && eventKey == 'my-notices') || (location.pathname !== '/user/profile' && eventKey == 'notices')) ? 'ps-0' : null}`}>
                                     {shouldShowUserInfo() ?
                                         <p className='w-100 mb-0 text-start notice__username'>
-                                            <Link to={`../${notice.username}`}
-                                                className='text-decoration-none'>
+                                            <Link to={notice.username !== username ? `../${notice.username}` : `../profile`} className='text-decoration-none'>
                                                 <strong>
                                                     {notice?.username ? truncteUsername(notice.username) : ''}
                                                 </strong>
@@ -649,7 +649,7 @@ export const Notices = ({
                                                                     const currentCount = saveCounts[notice.$id] ?? notice.noticeSavesTotal ?? 0;
 
                                                                     console.log('currentCount', currentCount);
-                                                                    y
+
                                                                     setSavedNotices(prev => ({
                                                                         ...prev,
                                                                         [notice.$id]: !isSaved
@@ -753,6 +753,7 @@ export const Notices = ({
                                             reactionUsernameMap={reactionUsernameMap}
                                             showLoadMoreBtn={showLoadMoreBtn}
                                             user_id={user_id}
+                                            username={username}
                                             handleLoadMoreReactions={handleLoadMoreReactions}
                                             handleReportReaction={handleReportReaction}
                                         />

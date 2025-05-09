@@ -3,6 +3,8 @@ import { endpointEnv, projectEnv, avatarBucketEnv } from '../context/dbhandler';
 export const getAvatarUrl = (avatarId) => {
     if (!avatarId) return null;
 
+    console.log(`Getting avatar for ${avatarId}.`);
+
     const url = `${endpointEnv}/storage/buckets/${avatarBucketEnv}/files/${avatarId}/view?project=${projectEnv}`;
     return url;
 };

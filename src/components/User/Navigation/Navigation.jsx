@@ -32,16 +32,7 @@ export const Navigation = ({
         isAddingNotice,
         isGeminiLoading,
         addNotice,
-        onGeminiRunClick,
-        // selectedTags,
-        // isInterestsLoading,
-        // tagCategories,
-        // isInterestsUpdating,
-        // isAnyTagSelected,
-        // toggleInterestsTag, 
-        // updateInterests,
-        // deselectAllInterestTags,
-        // fetchUserInterests
+        onGeminiRunClick
     } = useNotices(userId);
 
     const { isLargeScreen, isMediumScreen, isSmallScreen, isExtraSmallScreen } = screenUtils();
@@ -55,31 +46,36 @@ export const Navigation = ({
             title: 'Feed',
             icon: 'bi bi-rss',
             onClick: () => console.log('Feed clicked'),
-            url: '/user/feed'
+            url: '/user/feed',
+            disabled: location.pathname === '/user/feed' ? true : false
         },
         {
             title: 'Profile',
             icon: 'bi bi-person-square',
             onClick: () => console.log('Profile clicked'),
-            url: '/user/profile'
+            url: '/user/profile',
+            disabled: location.pathname === '/user/profile' ? true : false
         },
         {
             title: 'Settings',
             icon: 'bi bi-gear',
             onClick: () => console.log('Settings clicked'),
-            url: '/user/settings'
+            url: '/user/settings',
+            disabled: location.pathname === '/user/settings' ? true : false
         },
         {
             title: 'Help Center',
             icon: 'bi bi-question-square',
             onClick: () => console.log('Support clicked'),
-            url: '/user/help-center'
+            url: '/user/help-center',
+            disabled: location.pathname === '/user/help-center' ? true : false
         },
         {
             title: 'Legal',
             icon: 'bi bi-shield-shaded',
             onClick: () => console.log('Legal clicked'),
-            url: '/user/legal'
+            url: '/user/legal',
+            disabled: location.pathname === '/user/legal' ? true : false
         },
         {
             title: 'Sign out',
@@ -193,11 +189,15 @@ export const Navigation = ({
                                         key={idx}
                                         as={Link}
                                         to={dropdownItem.url}
+                                        disabled={dropdownItem.disabled}
                                         onClick={dropdownItem.onClick} className='userhome__body--btn w-100'
                                     >
-                                        <div className='position-relative'>
+                                        <div className='position-relative'
+                                            style={{ color: dropdownItem.disabled ? 'var(--main-accent-color-hover)' : '' }}>
                                             <i className={`${dropdownItem.icon} mx-2`} />
-                                            <span>{dropdownItem.title}</span>
+                                            <span>
+                                                {dropdownItem.title}
+                                            </span>
                                         </div>
                                     </NavDropdown.Item>
                                 )

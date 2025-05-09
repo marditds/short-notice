@@ -274,7 +274,9 @@ export const useNotices = (data) => {
     };
 
     useEffect(() => {
-        console.log('THIS IS THE LATEST NOTICE:', latestNotice);
+        if (latestNotice) {
+            console.log('THIS IS THE LATEST NOTICE:', latestNotice);
+        }
     }, [latestNotice])
 
     const editNotice = async (noticeId, newText) => {

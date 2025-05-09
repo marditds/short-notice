@@ -849,6 +849,7 @@ const OtherUserProfile = () => {
                                                     <Notices
                                                         notices={tab.data}
                                                         user_id={userId}
+                                                        username={username}
                                                         likedNotices={likedNotices}
                                                         savedNotices={savedNotices}
                                                         eventKey={eventKey}

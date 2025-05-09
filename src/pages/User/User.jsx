@@ -1,10 +1,9 @@
 import React, { useEffect } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { Container, Button, Row, Col } from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
 import { Navigation } from '../../components/User/Navigation/Navigation';
 import { useUserContext } from '../../lib/context/UserContext';
 import { useUserInfo } from '../../lib/hooks/useUserInfo';
-import { LoadingSpinner } from '../../components/Loading/LoadingSpinner';
 import '../../components/User/Navigation/Navigation.css';
 import { LoadingComponent } from '../../components/Loading/LoadingComponent';
 
@@ -33,7 +32,6 @@ const User = () => {
             console.log('HAS USERNAME IS TRUE!');
 
             const currentPath = window.location.pathname;
-
 
             if (currentPath === '/user' && isSessionInProgress) {
                 navigate('/user/feed');
@@ -68,7 +66,6 @@ const User = () => {
                 className='userhome__body'
                 style={{ maxWidth: location.pathname !== '/user/feed' ? '1320px' : '100%' }}
             >
-                {/* <Button style={{ marginTop: '65px' }} onClick={getSession}>get session details</Button> */}
                 <Outlet />
             </Container>
         </Container>

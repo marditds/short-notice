@@ -25,11 +25,6 @@ const UserSettings = () => {
         setIsLoading(false);
     })
 
-    useEffect(() => {
-        console.log('accountType in UserSetting:', accountType);
-    }, [accountType])
-
-
     if (isLoading) {
         return <LoadingComponent />
     }

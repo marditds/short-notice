@@ -18,7 +18,8 @@ export const Reactions = ({
     isLoadingMoreReactions,
     handleLoadMoreReactions,
     handleReportReaction,
-    user_id }) => {
+    user_id,
+    username }) => {
 
     const { isExtraSmallScreen, isSmallScreen } = screenUtils();
 
@@ -53,7 +54,7 @@ export const Reactions = ({
                             {/* Profile Picture, Username, and Report Icon Col*/}
                             <Col xs={4} sm={3} className='d-flex flex-column pe-sm-3 pe-md-4 align-items-center justify-content-end notice__reaction-info-col'>
                                 <div className='d-flex flex-column justify-content-end align-items-end ms-auto'>
-                                    <Link to={`/user/${reactionUsernameMap[notice.$id]?.[reaction.sender_id]}`}
+                                    <Link to={reactionUsernameMap[notice.$id]?.[reaction.sender_id] !== username ? `/user/${reactionUsernameMap[notice.$id]?.[reaction.sender_id]}` : `/user/profile`}
                                     >
                                         <img
                                             src={avatarUrl(reactionAvatarMap[notice.$id]?.[reaction.sender_id]) || defaultAvatar}
@@ -61,13 +62,13 @@ export const Reactions = ({
                                             className='notice__reaction-avatar'
                                         />
                                     </Link>
-                                    <Link to={`/user/${reactionUsernameMap[notice.$id]?.[reaction.sender_id]}`}
+
+                                    <Link to={reactionUsernameMap[notice.$id]?.[reaction.sender_id] !== username ? `/user/${reactionUsernameMap[notice.$id]?.[reaction.sender_id]}` : `/user/profile`}
                                         className='text-decoration-none notice__reaction-username'>
                                         <strong className='ms-auto me-0'>
                                             {
                                                 truncteUsername(reactionUsernameMap[notice.$id]?.[reaction.sender_id])
                                             }
-                                            {/* {reactionUsernameMap[notice.$id]?.[reaction.sender_id] || 'Unknown user'} */}
                                         </strong>
                                     </Link>
                                 </div>
