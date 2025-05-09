@@ -210,6 +210,11 @@ const UserProfile = () => {
         try {
             const usrNtcs = await fetchUserNotices(userId, limit, lastId);
 
+            if (usrNtcs.length === 0) {
+                console.log('User has no posts. Exiting through  the front door.');
+                return;
+            }
+
             console.log('usrNtcs', usrNtcs);
 
             const ntcsIds = usrNtcs?.map(ntc => ntc.$id);
@@ -227,14 +232,18 @@ const UserProfile = () => {
             const likesCountMap = new Map();
             const savesCountMap = new Map();
 
-            for (const like of allLikes) {
-                const noticeId = like.notice_id;
-                likesCountMap.set(noticeId, (likesCountMap.get(noticeId) || 0) + 1);
+            if (allLikes) {
+                for (const like of allLikes) {
+                    const noticeId = like.notice_id;
+                    likesCountMap.set(noticeId, (likesCountMap.get(noticeId) || 0) + 1);
+                }
             }
 
-            for (const save of allSaves) {
-                const noticeId = save.notice_id;
-                savesCountMap.set(noticeId, (savesCountMap.get(noticeId) || 0) + 1);
+            if (allSaves) {
+                for (const save of allSaves) {
+                    const noticeId = save.notice_id;
+                    savesCountMap.set(noticeId, (savesCountMap.get(noticeId) || 0) + 1);
+                }
             }
 
             const noticesWithLikesAndSaves = usrNtcs.map(notice => {

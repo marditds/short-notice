@@ -13,7 +13,7 @@ const User = () => {
         setIsLoggedIn,
         userId, setUserId,
         userEmail, setUserEmail,
-        setUsername,
+        username, setUsername,
         hasUsername, setHasUsername,
         accountType, setAccountType,
         isAppLoading, setIsAppLoading,
@@ -51,7 +51,7 @@ const User = () => {
     return (
         <Container fluid className='w-100 p-0 px-lg-1'>
             <Navigation
-                userId={userId}
+                username={username}
                 removeSession={removeSession}
                 setIsLoggedIn={setIsLoggedIn}
                 accountType={accountType}

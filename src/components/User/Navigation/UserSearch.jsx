@@ -4,13 +4,13 @@ import { useUserInfo } from '../../../lib/hooks/useUserInfo';
 import { getAvatarUrl as avatarUrl } from '../../../lib/utils/avatarUtils';
 import defaultAvatar from '../../../assets/default.png';
 import { screenUtils } from '../../../lib/utils/screenUtils';
-import { Button, Form, Modal, Stack } from 'react-bootstrap';
+import { Button, Modal, Stack } from 'react-bootstrap';
 import { UserSearchModal } from '../Modals';
 import { SearchForm } from './SearchForm';
 import { LoadingSpinner } from '../../Loading/LoadingSpinner';
 import { EndAsterisks } from '../EndAsterisks';
 
-export const UserSearch = () => {
+export const UserSearch = ({ username }) => {
 
     const { getAllUsersByString } = useUserInfo();
 
@@ -22,7 +22,7 @@ export const UserSearch = () => {
     const [srchUsrmInUI, setSrchUsrmInUI] = useState('');
     const [usrnmPlaceholher, setUsrnmPlaceholher] = useState('');
     const [usersResult, setUsersResult] = useState([]);
-    const [limit] = useState(7);
+    const [limit] = useState(11);
     const [lastId, setLastId] = useState(null);
 
     const [hasMoreProfiles, setHasMoreProfiles] = useState(true);
@@ -173,20 +173,6 @@ export const UserSearch = () => {
                     handleOnKeyDown={handleOnKeyDown}
                     formControlBsClassNames={'d-none d-sm-block ms-2'}
                 />
-                {/* <Form> 
-                     <Form.Group controlId="userSearch">
-                        <Form.Label className='visually-hidden'>Search Username</Form.Label>
-                        <Form.Control
-                            as="textarea"
-                            rows={1}
-                            placeholder='Username Search'
-                            value={srchUsrmInUI}
-                            onChange={onNavFieldUserSearchChange}
-                            onKeyDown={handleOnKeyDown}
-                            className='tools__search-field d-none d-sm-block ms-2'
-                        />
-                    </Form.Group>
-                </Form> */}
             </div>
 
             {/* Search results */}
@@ -220,20 +206,6 @@ export const UserSearch = () => {
                         handleOnKeyDown={handleOnKeyDown}
                         formControlBsClassNames={'w-100 mb-3'}
                     />
-                    {/* <Form className='w-100'>
-                        <Form.Group controlId="userSearch">
-                            <Form.Label className='visually-hidden'>Search Username</Form.Label>
-                            <Form.Control
-                                as="textarea"
-                                rows={1}
-                                placeholder='Username Search'
-                                value={srchUsrmInUI}
-                                onChange={onNavFieldUserSearchChange}
-                                onKeyDown={handleOnKeyDown}
-                                className='tools__search-field w-100 mb-3'
-                            />
-                        </Form.Group>
-                    </Form> */}
                     <Button
                         onClick={handleModalSearch}
                         className='ms-2 px-2 tools__search-btn'
@@ -259,7 +231,7 @@ export const UserSearch = () => {
                                         key={user.$id}
                                         className='tools__search--search-results-profiles'
                                     >
-                                        <Link to={`../user/${user.username}`}
+                                        <Link to={user.username !== username ? `../user/${user.username}` : `../user/profile`}
                                             className='w-100 d-flex align-items-center justify-content-end'
                                             onClick={handleCloseSeachUsersModal}
                                         >

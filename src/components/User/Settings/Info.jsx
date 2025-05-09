@@ -10,12 +10,11 @@ export const Info = () => {
 
     const {
         username,
-        userEmail,
         accountType,
         setUsername,
         setRegisteredUsername } = useUserContext();
 
-    const { checkUsernameExists, handleUpdateUser } = useUserInfo(userEmail);
+    const { checkUsernameExists, handleUpdateUser } = useUserInfo();
 
     const [localUsername, setLocalUsername] = useState(username);
     const [isUpdating, setIsUpdating] = useState(false);

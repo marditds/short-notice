@@ -1,14 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Form, Row, Col, Button } from 'react-bootstrap';
-import { useUserContext } from '../../../lib/context/UserContext';
 import { useUserInfo } from '../../../lib/hooks/useUserInfo';
 import { LoadingSpinner } from '../../Loading/LoadingSpinner';
 import { ErrorMessage, SuccessMessage } from './UpdateMessage';
 
 export const Passcode = () => {
 
-    const { userEmail } = useUserContext();
-    const { editPasscode } = useUserInfo(userEmail);
+    const { editPasscode } = useUserInfo();
 
     const [passcodeVal, setPasscodeVal] = useState();
     const [isUpdating, setIsUpdating] = useState(false);

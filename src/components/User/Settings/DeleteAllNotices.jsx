@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useUserContext } from '../../../lib/context/UserContext';
 import { useNotices } from '../../../lib/hooks/useNotices';
 import { Row, Col, Button, Modal } from 'react-bootstrap';
@@ -6,8 +6,9 @@ import { LoadingSpinner } from '../../Loading/LoadingSpinner';
 
 export const DeleteAllNotices = () => {
 
-    const { userEmail } = useUserContext();
-    const { user_id, removeAllNoticesByUser } = useNotices(userEmail);
+    // const {userId} = useUserContext();
+
+    const { user_id, removeAllNoticesByUser } = useNotices();
 
     const [showModal, setShowModal] = useState(false);
     const [loading, setLoading] = useState(false);

@@ -277,13 +277,13 @@ const OtherUserProfile = () => {
             try {
                 const usrNtcs = await getNoticeByUserId(currUserId, limitNotices, offsetNotices);
 
-                console.log('HAKOBOS', usrNtcs);
-
                 if (!usrNtcs.length) {
-                    console.log("No new notices found.");
+                    console.log("The user has not posted anything.");
                     setHasMoreNotices(false);
                     return;
                 }
+
+                console.log('HAKOBOS', usrNtcs);
 
                 const ntcsIds = usrNtcs?.map(ntc => ntc.$id);
 

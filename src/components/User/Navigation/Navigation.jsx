@@ -1,29 +1,23 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Container, Nav, Navbar, NavDropdown, Image, Button } from 'react-bootstrap';
-// import { PiDotsThreeOutlineVertical } from "react-icons/pi";
 import { UserSearch } from './UserSearch';
 import { screenUtils } from '../../../lib/utils/screenUtils';
 import snLogo from '../../../assets/sn_long.png'
 import { ComposeNoticeModal } from '../Modals';
 import { ComposeNotice } from '../ComposeNotice';
 import { useNotices } from '../../../lib/hooks/useNotices';
-// import { InterestsTags } from '../Settings/InterestsTags';
-// import { Loading } from '../../Loading/Loading';
 
 export const Navigation = ({
-    userId,
+    username,
     removeSession,
-    // googleLogout,
     accountType,
     setIsLoggedIn,
     setUserId,
     setUserEmail,
     setUsername,
-    setRegisteredUsername,
     setHasUsername,
     setAccountType,
-    setHasAccountType,
     setIsAppLoading }) => {
 
     const location = useLocation();
@@ -33,9 +27,9 @@ export const Navigation = ({
         isGeminiLoading,
         addNotice,
         onGeminiRunClick
-    } = useNotices(userId);
+    } = useNotices();
 
-    const { isLargeScreen, isMediumScreen, isSmallScreen, isExtraSmallScreen } = screenUtils();
+    const { isLargeScreen, isExtraSmallScreen } = screenUtils();
 
     //Compose Notice
     const [noticeText, setNoticeText] = useState('');
@@ -110,19 +104,11 @@ export const Navigation = ({
                         <Image src={snLogo} alt='short_notice_logo' className='navigation__logo' fluid />
                     </Navbar.Brand>
 
-                    <UserSearch userId={userId} />
+                    <UserSearch username={username} />
 
                     {
                         location.pathname !== '/user/feed' ? null :
                             <>
-                                {/* Update Interests Button */}
-                                {/* <Button
-                                    onClick={onShowInterestsTagsClick}
-                                    className='navigation__compose-btn d-xl-none d-block my-auto ms-sm-auto ms-2'
-                                >
-                                    <i className='bi bi-tag d-flex justify-content-center align-items-center' />
-                                </Button> */}
-
                                 {/* Compose Notice Button */}
                                 <Button
                                     onClick={() => setShowComposeNoticeModalFunction(true)}
@@ -149,31 +135,10 @@ export const Navigation = ({
                                         }}
                                     />
                                 </ComposeNoticeModal>
-
-                                {/* Interests Tags Modal */}
-                                {/* <InterestsModal
-                                    showTagsModalFunction={showTagsModalFunction}
-                                    handleCloseTagsModalFunction={() => setShowTagsModalFunction(false)}
-                                >
-                                    {!isInterestsLoading
-                                        ?
-                                        <InterestsTags
-                                            tagCategories={tagCategories}
-                                            selectedTags={selectedTags}
-                                            isInterestsUpdating={isInterestsUpdating}
-                                            isAnyTagSelected={isAnyTagSelected}
-                                            toggleInterestsTag={toggleInterestsTag}
-                                            updateInterests={updateInterests}
-                                            deselectAllInterestTags={deselectAllInterestTags}
-                                        />
-                                        :
-                                        <div className='d-flex justify-content-center my-2'>
-                                            <LoadingSpinner />
-                                        </div>
-                                    }
-                                </InterestsModal> */}
                             </>
                     }
+
+                    {/* Menu dropdown */}
                     <NavDropdown
                         drop='down'
                         id="dropdown-basic-button"

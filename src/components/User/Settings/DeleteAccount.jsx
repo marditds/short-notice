@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useUserContext } from '../../../lib/context/UserContext';
 import { useUserInfo } from '../../../lib/hooks/useUserInfo';
 import { Row, Col, Modal, Button } from 'react-bootstrap';
 import { LoadingSpinner } from '../../Loading/LoadingSpinner';
@@ -8,8 +7,7 @@ import { LoadingSpinner } from '../../Loading/LoadingSpinner';
 
 export const DeleteAccount = () => {
 
-    const { userEmail } = useUserContext();
-    const { handleDeleteUser } = useUserInfo(userEmail);
+    const { handleDeleteUser } = useUserInfo();
     const navigate = useNavigate();
     const [showModal, setShowModal] = useState(false);
     const [loading, setLoading] = useState(false);

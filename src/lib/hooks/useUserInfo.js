@@ -6,9 +6,9 @@ import {
 import { useUserContext } from '../context/UserContext';
 import { useUserAvatar } from './useUserAvatar';
 
-export const useUserInfo = (data) => {
+export const useUserInfo = () => {
 
-    const { setUsername, userId, accountType } = useUserContext();
+    const { userId, setUsername, accountType } = useUserContext();
 
     const {
         avatarUrl,
@@ -38,17 +38,6 @@ export const useUserInfo = (data) => {
 
     const [isProcessingBlock, setIsProcessingBlock] = useState(false);
 
-
-    // useEffect(() => {
-    //     const fetchUserId = async () => {
-    //         if (data) {
-    //             const id = await UserId(data);
-    //             setUserId(id);
-    //         }
-    //     };
-    //     fetchUserId();
-    // }, [data]);
-
     const getAccount = async () => {
         try {
             const accnt = await fetchAccount();
@@ -62,6 +51,11 @@ export const useUserInfo = (data) => {
     }
 
     const registerUser = async (id, email, username) => {
+
+        if (!id || !email || !username) {
+            return;
+        }
+
         try {
             const newAuthUsr = await registerAuthUser(id, email, username);
             console.log('newAuthUsr - useUserInfo:', newAuthUsr);
@@ -73,6 +67,11 @@ export const useUserInfo = (data) => {
     }
 
     const createSession = async (email) => {
+
+        if (!email) {
+            return;
+        }
+
         try {
             const usrSession = await createUserSession(email);
             return usrSession;
@@ -102,6 +101,11 @@ export const useUserInfo = (data) => {
     }
 
     const checkUsernameExists = async (username) => {
+
+        if (!username) {
+            return;
+        }
+
         try {
             const usernameExists = await doesUsernameExists(username);
 
@@ -110,17 +114,17 @@ export const useUserInfo = (data) => {
             }
 
         } catch (error) {
-            console.error('Error checking username:', err);
+            console.error('Error checking username:', error);
             return 'Something went wrong. Try again later.'
         }
     }
 
     const handleUpdateUser = async (username) => {
 
-        if (!userId) {
-            console.error('User ID is not set.');
+        if (!userId || !username) {
             return;
         }
+
         try {
             console.log('userId', userId);
 
@@ -142,6 +146,11 @@ export const useUserInfo = (data) => {
     }
 
     const updateAuthPassword = async (newPassword, oldPassword) => {
+
+        if (!newPassword || !oldPassword) {
+            return;
+        }
+
         try {
             const res = await changeAuthPassword(newPassword, oldPassword);
             return res;
@@ -152,14 +161,11 @@ export const useUserInfo = (data) => {
 
     const updateUserWebsite = async (website) => {
 
-        if (!userId) {
-            console.error('User ID is not set.');
+        if (!website) {
             return;
         }
 
         try {
-            console.log('userId', userId);
-
             console.log('website', website);
 
             const res = await updtUsrWbst({ userId, website });
@@ -215,6 +221,11 @@ export const useUserInfo = (data) => {
     }
 
     const checkingEmailInAuth = async (email) => {
+
+        if (!email) {
+            return;
+        }
+
         try {
             console.log('this email will be sent - useserInfo:', email);
 
@@ -226,6 +237,11 @@ export const useUserInfo = (data) => {
     }
 
     const getUserByUsername = async (username) => {
+
+        if (!username) {
+            return;
+        }
+
         console.log('getUserByUsername in useUserInfo', username);
 
         try {
@@ -239,6 +255,12 @@ export const useUserInfo = (data) => {
     }
 
     const getAllUsersByString = async (username, limit, cursorAfter) => {
+
+        if (username == null || limit == null) {
+            console.log(`Missing required parameter:`, { username, limit });
+            return;
+        }
+
         try {
             const usrnm = await fetchAllUsersByString(username, limit, cursorAfter);
             console.log('username found:', usrnm);
@@ -248,65 +270,22 @@ export const useUserInfo = (data) => {
         }
     };
 
-    const getUsersData = useCallback(async () => {
-        try {
-            const response = await getUsersDocument();
-            return response;
-        } catch (error) {
-            console.error('Error getting users data:', error);
-
-        }
-    }, [data]);
-
-    // const fetchUsersData = async (notices, setNotices, getAvatarUrl) => {
+    // const getUsersData = useCallback(async () => {
     //     try {
-    //         setIsFetchingUsersData(true);
-
-    //         const ntcUsrIds = notices?.map((notice) => notice.user_id);
-    //         console.log('notice.user_id', ntcUsrIds);
-
-    //         const allUsersData = await getUserByIdQuery(ntcUsrIds);
-    //         console.log('allUsersData???', allUsersData);
-
-    //         const updatedNotices = await Promise.all(
-    //             notices.map(async (notice) => {
-    //                 const user = allUsersData.documents.find((user) => user.$id === notice.user_id);
-    //                 const avatarUrl = user?.avatar ? getAvatarUrl(user.avatar) : null;
-
-    //                 const [userPermissions, noticeLikesTotal] = await Promise.all([
-    //                     getUserPermissions(user?.$id),
-    //                     getAllLikesByNoticeId(notice.$id),
-    //                 ]);
-
-    //                 return {
-    //                     ...notice,
-    //                     avatarUrl,
-    //                     username: user?.username || 'Unknown User',
-    //                     btnPermission: userPermissions?.btns_reaction_perm,
-    //                     txtPermission: userPermissions?.txt_reaction_perm,
-    //                     noticeLikesTotal: noticeLikesTotal?.total ?? 0
-    //                 };
-    //             })
-    //         );
-
-    //         console.log('updatedNotices in fetchUsersData:', updatedNotices);
-
-    //         if (JSON.stringify(updatedNotices) !== JSON.stringify(notices)) {
-    //             setNotices(prevNotices => {
-    //                 const nonDuplicateNotices = updatedNotices.filter(newNotice =>
-    //                     !prevNotices.some(existingNotice => existingNotice.$id === newNotice.$id)
-    //                 );
-    //                 return [...prevNotices, ...nonDuplicateNotices];
-    //             });
-    //         }
+    //         const response = await getUsersDocument();
+    //         return response;
     //     } catch (error) {
     //         console.error('Error getting users data:', error);
-    //     } finally {
-    //         setIsFetchingUsersData(false);
+
     //     }
-    // };
+    // }, [data]);
 
     const fetchUsersData = async (notices, setNotices, getAvatarUrl) => {
+
+        if (!notices || !setNotices || !getAvatarUrl) {
+            return;
+        }
+
         try {
             setIsFetchingUsersData(true);
 
@@ -368,6 +347,11 @@ export const useUserInfo = (data) => {
     };
 
     const followUser = async (otherUser_id) => {
+
+        if (!otherUser_id) {
+            return;
+        }
+
         try {
             setIsFollowingUserLoading(true);
 
@@ -393,6 +377,11 @@ export const useUserInfo = (data) => {
     }
 
     const handleFollow = async (currUserId) => {
+
+        if (!currUserId) {
+            return;
+        }
+
         try {
             await followUser(currUserId);
             setIsFollowing(prevState => !prevState);
@@ -402,6 +391,11 @@ export const useUserInfo = (data) => {
     }
 
     const unfollowUser = async (otherUser_id) => {
+
+        if (!otherUser_id) {
+            return;
+        }
+
         try {
             await unfollow(userId, otherUser_id);
             console.log('User unfollow successful');
@@ -411,6 +405,11 @@ export const useUserInfo = (data) => {
     }
 
     const getUnfollowedByOtherUser = async (otherUser_id) => {
+
+        if (!otherUser_id) {
+            return;
+        }
+
         try {
             await unfollow(otherUser_id, userId);
             console.log('Getting unfollowed successful');
@@ -421,6 +420,11 @@ export const useUserInfo = (data) => {
 
     // User follows them
     const getfollwedByUserCount = async (id) => {
+
+        if (!id) {
+            return;
+        }
+
         console.log('Fetching the followebByCount for user:', id);
 
         try {
@@ -438,6 +442,12 @@ export const useUserInfo = (data) => {
     }
 
     const fetchAccountsFollowedByUser = async (id, limit, offset) => {
+
+        if (id == null || limit == null || offset == null) {
+            console.log(`Missing required parameter:`, { id, limit, offset });
+            return;
+        }
+
         try {
             const followedByUser = await getUserFollowingsById(id, limit, offset);
             console.log('followedByUser,', followedByUser);
@@ -474,8 +484,12 @@ export const useUserInfo = (data) => {
     }
 
     const getPersonalFeedAccounts = async (user_id) => {
-        try {
 
+        if (!user_id) {
+            return;
+        }
+
+        try {
             const accountsFollowedByUser = await fetchPersonalFeedAccounts(user_id);
 
             return accountsFollowedByUser;
@@ -487,6 +501,11 @@ export const useUserInfo = (data) => {
 
     // They follow the user
     const getFollowingTheUserCount = async (id) => {
+
+        if (!id) {
+            return;
+        }
+
         try {
             setIsGetFollowingTheUserCountLoading(true);
 
@@ -502,6 +521,13 @@ export const useUserInfo = (data) => {
     }
 
     const fetchAccountsFollowingTheUser = async (id, limit, offset) => {
+
+        if (id == null || limit == null || offset == null) {
+            console.log(`Missing required parameter:`, { id, limit, offset });
+            return;
+        }
+
+
         try {
             const followingTheUser = await getUserFollowersById(id, limit, offset);
             console.log('followingTheUser,', followingTheUser);
@@ -538,6 +564,12 @@ export const useUserInfo = (data) => {
     }
 
     const getFollowStatus = async (user_id, otherUser_id) => {
+
+        if (!user_id || !otherUser_id) {
+            console.log('This user does not follow their host.');
+            return;
+        }
+
         try {
             console.log('getting follow status - 2', { user_id, otherUser_id });
             setIsInitialFollowCheckLoading(true);
@@ -564,6 +596,11 @@ export const useUserInfo = (data) => {
 
     const getFollowingStatus = async (otherUser_id) => {
 
+        if (!otherUser_id) {
+            console.log('The host does not care about the user.');
+            return;
+        }
+
         console.log('Is other user following me?', { otherUser_id });
 
         try {
@@ -588,6 +625,11 @@ export const useUserInfo = (data) => {
     }
 
     const getUserAccountByUserId = async (userId) => {
+
+        if (!userId) {
+            return;
+        }
+
         try {
             const accnt = await getUserById(userId);
 
@@ -600,6 +642,11 @@ export const useUserInfo = (data) => {
     }
 
     const getUserByIdQuery = async (userId) => {
+
+        if (!userId) {
+            return;
+        }
+
         try {
             const user = await fetchUserByIdQuery(userId);
             return user;
@@ -609,6 +656,11 @@ export const useUserInfo = (data) => {
     }
 
     const getUsersByIdQuery = async (userId) => {
+
+        if (!userId) {
+            return;
+        }
+
         try {
             const user = await fetchUsersByIdQuery(userId);
             return user;
@@ -618,6 +670,10 @@ export const useUserInfo = (data) => {
     }
 
     const makePasscode = async (userId, passcode, accountType) => {
+        if (!userId || !passcode || !accountType) {
+            return;
+        }
+
         try {
             console.log('usr id', userId);
             console.log('passcode', passcode);
@@ -630,6 +686,11 @@ export const useUserInfo = (data) => {
     }
 
     const editPasscode = async (passcode) => {
+
+        if (!passcode) {
+            return;
+        }
+
         try {
             console.log('usr id', userId);
             console.log('passcode', passcode);
@@ -644,6 +705,11 @@ export const useUserInfo = (data) => {
     }
 
     const getPassocdeByOrganizationId = async (userId) => {
+
+        if (!userId) {
+            return;
+        }
+
         try {
             const res = await fetchPassocdeByOrganizationId(userId);
             return res.documents;
@@ -653,6 +719,11 @@ export const useUserInfo = (data) => {
     }
 
     const makeBlock = async (currUser_id) => {
+
+        if (!currUser_id) {
+            return;
+        }
+
         try {
             console.log('userId', userId);
             console.log('currUser_id', currUser_id);
@@ -665,6 +736,11 @@ export const useUserInfo = (data) => {
     }
 
     const handleBlock = async (currUserId) => {
+
+        if (!currUserId) {
+            return;
+        }
+
         setIsProcessingBlock(true);
         try {
             await makeBlock(currUserId);
@@ -683,6 +759,11 @@ export const useUserInfo = (data) => {
     }
 
     const getBlockedUsersByUser = async (user_id) => {
+
+        if (!user_id) {
+            return;
+        }
+
         try {
             console.log('userId', user_id);
 
@@ -695,6 +776,12 @@ export const useUserInfo = (data) => {
     }
 
     const getBlockedUsersByUserByBatch = async (user_id, limit, offset) => {
+
+        if (user_id == null || limit == null || offset == null) {
+            console.log(`Missing required parameter:`, { user_id, limit, offset });
+            return;
+        }
+
         try {
             console.log('userId', user_id);
 
@@ -707,6 +794,11 @@ export const useUserInfo = (data) => {
     }
 
     const getUsersBlockingUser = async (user_id) => {
+
+        if (!user_id) {
+            return;
+        }
+
         try {
             console.log('userId', user_id);
 
@@ -719,6 +811,11 @@ export const useUserInfo = (data) => {
     }
 
     const checkIsOtherUserBlockedByUser = async (user_id, otherUser_id) => {
+
+        if (!user_id || !otherUser_id) {
+            return;
+        }
+
         console.log('Starting checkIsOtherUserBlockedByUser...');
 
         try {
@@ -730,6 +827,11 @@ export const useUserInfo = (data) => {
     }
 
     const checkIsUserBlockedByOtherUser = async (otherUser_id, user_id) => {
+
+        if (!otherUser_id || !user_id) {
+            return;
+        }
+
         console.log('Starting checkIsUserBlockedByOtherUser...');
 
         try {
@@ -741,6 +843,11 @@ export const useUserInfo = (data) => {
     }
 
     const deleteBlockUsingBlockedId = async (blocked_id) => {
+
+        if (!blocked_id) {
+            return;
+        }
+
         try {
             console.log('blocked_id', blocked_id);
 
@@ -752,6 +859,11 @@ export const useUserInfo = (data) => {
     }
 
     const handleUserReport = async (reported_id, reason) => {
+
+        if (!reported_id || !reason) {
+            return;
+        }
+
         try {
             await createUserReport(reported_id, reason, userId);
             console.log('Reporting user successful!');
@@ -796,7 +908,7 @@ export const useUserInfo = (data) => {
         checkUsernameExists,
         updateUserWebsite,
         handleDeleteUser,
-        getUsersData,
+        // getUsersData,
         fetchUsersData,
         followUser,
         handleFollow,

@@ -40,7 +40,10 @@ export const UserWebsite = () => {
                 console.error('Error getting user', error);
             }
         };
-        gettingUserDetails();
+        if (username) {
+            gettingUserDetails();
+        }
+
     }, [username])
 
     useEffect(() => {
