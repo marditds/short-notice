@@ -86,7 +86,7 @@ const UserProfile = () => {
     const [savedNoticesData, setSavedNoticesData] = useState([]);
     const [likedNoticesData, setLikedNoticesData] = useState([]);
 
-    const { avatarUrl, isAvatarLoading } = useUserAvatar(userId);
+    const { avatarUrl, isAvatarLoading, fetchUserAvatarForProfile } = useUserAvatar(userId);
 
     const [followingAccounts, setFollowingAccounts] = useState([]);
     const [followersAccounts, setFollowersAccounts] = useState([]);
@@ -277,9 +277,10 @@ const UserProfile = () => {
         }
     };
 
-    // Fetch notices for user on component load
+    // Fetch avatar and notices for user on component load
     useEffect(() => {
         if (userId) {
+            fetchUserAvatarForProfile(userId);
             fetchNotices();
         }
     }, [userId])

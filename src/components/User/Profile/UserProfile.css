@@ -53,6 +53,14 @@
     width: 100px;
 }
 
+.user-profile__follow-status {
+    width: max-content !important;
+    background-color: rgba(var(--main-accent-color-values), 0.4);
+    border-radius: var(--main-rounded-corner);
+    padding-inline: 5px;
+    padding-block: 2px;
+    font-size: smaller;
+}
 
 /* .notice__reaction-avatar, */
 /* .follower__avatar,

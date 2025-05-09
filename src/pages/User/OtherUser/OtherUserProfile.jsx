@@ -96,7 +96,7 @@ const OtherUserProfile = () => {
     const [savedNoticesData, setSavedNoticesData] = useState([]);
     const [likedNoticesData, setLikedNoticesData] = useState([]);
 
-    const { avatarUrl, isAvatarLoading } = useUserAvatar(currUserId);
+    const { avatarUrl, isAvatarLoading, fetchUserAvatarForProfile } = useUserAvatar(currUserId);
 
     const [followingAccounts, setFollowingAccounts] = useState([]);
     const [followersAccounts, setFollowersAccounts] = useState([]);
@@ -234,6 +234,8 @@ const OtherUserProfile = () => {
                             setBtnPermission(permissions.btns_reaction_perm ?? true);
                             setTxtPermission(permissions.txt_reaction_perm ?? true);
                         }
+
+                        fetchUserAvatarForProfile(otherUser.$id);
 
                     }
                 } else {

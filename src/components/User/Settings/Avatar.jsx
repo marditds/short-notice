@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Row, Col, Form, Button } from 'react-bootstrap';
 import { LoadingSpinner } from '../../Loading/LoadingSpinner';
 import defaultAvatar from '../../../assets/default.png';
@@ -26,11 +26,18 @@ export const Avatar = () => {
     const {
         avatarUrl, isUploading, isAvatarLoading, fileFormatError, avatarUploadSuccessMsg,
         setAvatarUrl,
+        fetchUserAvatarForProfile,
         handleAvatarUpload, handleDeleteAvatarFromStrg, handleDeleteAvatarFromDoc,
         extractFileIdFromUrl,
         setIsUploading,
         setFileFormatError, setAvatarUploadSuccessMsg
     } = useUserAvatar(userId);
+
+    useEffect(() => {
+        if (userId) {
+            fetchUserAvatarForProfile(userId);
+        }
+    }, [userId])
 
     const handleFileChange = async (e) => {
         const file = e.target.files[0];

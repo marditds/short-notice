@@ -16,39 +16,35 @@ export const useUserAvatar = (id) => {
     const [fileFormatError, setFileFormatError] = useState(null);
     const [avatarUploadSuccessMsg, setAvatarUploadSuccessMsg] = useState(null);
 
-    useEffect(() => {
 
-        if (id === null || location.pathname !== '/user/profile') {
-            console.log("Not fetching avatar in this component.");
+    const fetchUserAvatarForProfile = async (user_id) => {
+
+        if (!user_id) {
             return;
         }
 
-        const fetchUserAvatar = async () => {
+        try {
+            setIsAvatarLoading(true);
+            const user = await getUserById(user_id);
 
-            try {
-                setIsAvatarLoading(true);
-                const user = await getUserById(id);
+            console.log('THIS IS USER IN fetchUserAvatar:', user);
 
-                console.log('THIS IS USER IN fetchUserAvatar:', user);
+            if (user && user.avatar) {
 
-                if (user && user.avatar) {
+                const url = getAvatarUrl(user.avatar);
 
-                    const url = getAvatarUrl(user.avatar);
-
-                    setAvatarUrl(url);
-                } else {
-                    console.log("No avatar found for user");
-                    setAvatarUrl(null);
-                }
-            } catch (error) {
-                console.error('Error fetching Avatar:', error);
-
-            } finally {
-                setIsAvatarLoading(false);
+                setAvatarUrl(url);
+            } else {
+                console.log("No avatar found for user");
+                setAvatarUrl(null);
             }
-        };
-        fetchUserAvatar();
-    }, [id, location.pathname]);
+        } catch (error) {
+            console.error('Error fetching Avatar:', error);
+
+        } finally {
+            setIsAvatarLoading(false);
+        }
+    };
 
     useEffect(() => {
         console.log('isAvatarLoading', isAvatarLoading);
@@ -173,6 +169,7 @@ export const useUserAvatar = (id) => {
         fileFormatError,
         avatarUploadSuccessMsg,
         setAvatarUrl,
+        fetchUserAvatarForProfile,
         getUserAvatarById,
         handleAvatarUpload,
         handleDeleteAvatarFromStrg,

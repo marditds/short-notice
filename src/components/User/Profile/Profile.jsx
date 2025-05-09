@@ -21,7 +21,7 @@ export const Profile = ({ username, avatarUrl, isAvatarLoading, website, handleF
     const [showReportUserConfirmation, setShowReportUserConfirmation] = useState(false);
     const [isProcessingReport, setIsProcessingReport] = useState(false);
 
-    const { isExtraSmallScreen } = screenUtils();
+    const { isExtraSmallScreen, isSmallScreen, isMediumScreen, isLargeScreen } = screenUtils();
 
     const handleShowFollowersModal = () => {
         setShowFollowersModal(true);
@@ -155,36 +155,37 @@ export const Profile = ({ username, avatarUrl, isAvatarLoading, website, handleF
                         </div>
 
                         {/* Username */}
-                        <p className='my-0 text-center'>
+                        <p className='mb-0 mt-0 mt-md-1 text-center position-relative d-flex flex-column flex-sm-row justify-content-center align-items-center'>
                             <strong>
                                 {username}
-                                {
-                                    website &&
-                                    <>
-                                        <br />
-                                        <a href={website} target='_blank' className='text-decoration-none user-profile__website'>
-                                            <i className='bi bi-link-45deg me-1' />
-                                            {website
-                                                .replace(/^https?:\/\//, '')
-                                                .replace(/^www\./, '')
-                                            }
-                                        </a>
-                                    </>
-                                }
-                                {(userWebsite === null || userWebsite === '') &&
-                                    <>
-                                        <br />
-                                        <Link to='/user/settings' className='user-profile__website'>
-                                            <i className='bi bi-link-45deg' />
-                                            Add a website
-                                        </Link>
-                                    </>
-                                }
-                                {isOtherUserFollowingMe && <>
-                                    <br />
-                                    They care about what you have to share 😁
-                                </>}
                             </strong>
+                            {isOtherUserFollowingMe &&
+                                <span className='w-100 user-profile__follow-status ms-0 ms-sm-2'>
+                                    Follows you
+                                </span>
+                            }
+                        </p>
+                        <p className='my-0 text-center'>
+                            {
+                                website &&
+                                <>
+                                    <a href={website} target='_blank' className='text-decoration-none user-profile__website'>
+                                        <i className='bi bi-link-45deg me-1' />
+                                        {website
+                                            .replace(/^https?:\/\//, '')
+                                            .replace(/^www\./, '')
+                                        }
+                                    </a>
+                                </>
+                            }
+                            {(userWebsite === null || userWebsite === '') &&
+                                <>
+                                    <Link to='/user/settings' className='user-profile__website'>
+                                        <i className='bi bi-link-45deg' />
+                                        Add a website
+                                    </Link>
+                                </>
+                            }
                         </p>
                     </div>
                 </Col>
