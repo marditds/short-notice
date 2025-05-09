@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-    getAccount as fetchAccount, createBlock, getBlockedUsersByUser as fetchBlockedUsersByUser, getBlockedUsersByUserByBatch as fetchBlockedUsersByUserByBatch, getUsersBlockingUser as fetchUsersBlockingUser, removeBlockUsingBlockedId, checkIdExistsInAuth, checkEmailExistsInAuth as checkEmailInAuthFromServer, registerAuthUser, getUserById, getUserByIdQuery as fetchUserByIdQuery, getUsersByIdQuery as fetchUsersByIdQuery, deleteAuthUser, createUserSession, getSessionDetails as fetchSessionDetails, deleteUserSession, updateUser, updateUserWebsite as updtUsrWbst, updateAuthUser, deleteUser, getUserByUsername as fetchUserByUsername, getAllUsersByString as fetchAllUsersByString, deleteAllNotices, deleteAllSentReactions, removeAllSavesByUser, removeAllLikesByUser, removeAllFollows, removeAllFollowed, getUsersDocument, createFollow, unfollow, getUserFollowingsById, getUserFollowersById, followedByUserCount, followingTheUserCount, getPersonalFeedAccounts as fetchPersonalFeedAccounts, createPassocde, updatePassocde, getPassocdeByOrganizationId as fetchPassocdeByOrganizationId, createUserReport, getFollowStatus as fetchFollowStatus, isUserBlockedByOtherUser, isOtherUserBlockedByUser, deletePassocde, updateAuthPassword as changeAuthPassword, checkUsernameExists as doesUsernameExists, removeAllBlocksForBlocker, removeAllBlocksForBlocked, deleteUserInterestsFromDB, getAllLikesByNoticeId, getUserPermissionsByIdQuery, getAllSavesByNoticeId
+    getAccount as fetchAccount, createBlock, getBlockedUsersByUser as fetchBlockedUsersByUser, getBlockedUsersByUserByBatch as fetchBlockedUsersByUserByBatch, getUsersBlockingUser as fetchUsersBlockingUser, removeBlockUsingBlockedId, checkIdExistsInAuth, checkEmailExistsInAuth as checkEmailInAuthFromServer, registerAuthUser, getUserById, getUserByIdQuery as fetchUserByIdQuery, getUsersByIdQuery as fetchUsersByIdQuery, deleteAuthUser, createUserSession, getSessionDetails as fetchSessionDetails, deleteUserSession, updateUser, updateUserWebsite as updtUsrWbst, updateAuthUser, deleteUser, getUserByUsername as fetchUserByUsername, getAllUsersByString as fetchAllUsersByString, deleteAllNotices, deleteAllSentReactions, removeAllSavesByUser, removeAllLikesByUser, removeAllFollows, removeAllFollowed, getUsersDocument, createFollow, unfollow, getUserFollowingsById, getUserFollowersById, followedByUserCount, followingTheUserCount, getPersonalFeedAccounts as fetchPersonalFeedAccounts, createPassocde, updatePassocde, getPassocdeByOrganizationId as fetchPassocdeByOrganizationId, createUserReport, getFollowStatus as fetchFollowStatus, getFollowingStatus as fetchFollowingStatus, isUserBlockedByOtherUser, isOtherUserBlockedByUser, deletePassocde, updateAuthPassword as changeAuthPassword, checkUsernameExists as doesUsernameExists, removeAllBlocksForBlocker, removeAllBlocksForBlocked, deleteUserInterestsFromDB, getAllLikesByNoticeId, getUserPermissionsByIdQuery, getAllSavesByNoticeId
 } from '../context/dbhandler';
 import { useUserContext } from '../context/UserContext';
 import { useUserAvatar } from './useUserAvatar';
@@ -27,9 +27,14 @@ export const useUserInfo = (data) => {
     const [isGetFollwedByUserCountLoading, setIsGetFollwedByUserCountLoading] = useState(false);
     const [isGetFollowingTheUserCountLoading, setIsGetFollowingTheUserCountLoading] = useState(false);
 
+    // Am I following the otherUser
     const [isFollowingUserLoading, setIsFollowingUserLoading] = useState(false);
     const [isInitialFollowCheckLoading, setIsInitialFollowCheckLoading] = useState(true);
     const [isFollowing, setIsFollowing] = useState(false);
+
+    // Is otherUser following me?
+    const [isotherUserFollowingMeCheckLoading, setIsotherUserFollowingMeCheckLoading] = useState(false);
+    const [isOtherUserFollowingMe, setIsOtherUserFollowingMe] = useState(false);
 
     const [isProcessingBlock, setIsProcessingBlock] = useState(false);
 
@@ -541,13 +546,38 @@ export const useUserInfo = (data) => {
 
             console.log('fetchFollowStatus', res);
 
-
             // Setting the button to 'Following' if user follows the other user 
             if (res.total > 0) {
                 console.log('Follow each other', res);
                 setIsFollowing(true);
             } else {
-                setIsFollowing(false)
+                setIsFollowing(false);
+                return;
+            }
+            return res;
+        } catch (error) {
+            console.error('Error getting follow status:', error);
+        } finally {
+            setIsInitialFollowCheckLoading(false);
+        }
+    }
+
+    const getFollowingStatus = async (otherUser_id) => {
+
+        console.log('Is other user following me?', { otherUser_id });
+
+        try {
+            setIsotherUserFollowingMeCheckLoading(true);
+
+            const res = await fetchFollowingStatus(otherUser_id, userId);
+
+            console.log('otherUserFollowingMe Status', res);
+
+            if (res.total > 0) {
+                setIsOtherUserFollowingMe(true);
+            } else {
+                setIsOtherUserFollowingMe(false);
+                return;
             }
             return res;
         } catch (error) {
@@ -738,13 +768,12 @@ export const useUserInfo = (data) => {
         isFollowing,
         followersCount,
         followingCount,
+        isotherUserFollowingMeCheckLoading,
+        isOtherUserFollowingMe,
         isProcessingBlock,
-        // username, 
         isGetFollwedByUserCountLoading,
         isGetFollowingTheUserCountLoading,
         isFetchingUsersData,
-        // followersAccounts,
-        // followingAccounts,
         getAccount,
         updateAuthPassword,
         checkIsOtherUserBlockedByUser,
@@ -773,6 +802,7 @@ export const useUserInfo = (data) => {
         handleFollow,
         unfollowUser,
         getFollowStatus,
+        getFollowingStatus,
         setIsFollowing,
         getfollwedByUserCount,
         getFollowingTheUserCount,

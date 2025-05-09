@@ -976,7 +976,6 @@ export const deleteAllNotices = async (userId) => {
                 noticesCollEnv,
                 notice.$id
             );
-            // await deleteNotice(notice.$id);
         });
 
         await Promise.all(deletionTasks);
@@ -1875,12 +1874,39 @@ export const getUserFollowersById = async (otherUser_id, limit, offset) => {
 export const getFollowStatus = async (user_id, otherUser_id) => {
     console.log('getting follow status - 1', { user_id, otherUser_id });
 
+    if (!user_id || !otherUser_id) {
+        return;
+    }
+
     try {
         const res = await databases.listDocuments(
             dbEnv,
             followingCollEnv,
             [
                 Query.and([Query.equal('user_id', user_id), Query.equal('otherUser_id', otherUser_id)])
+            ]
+        )
+        console.log('AND QUERY', res);
+
+        return res;
+    } catch (error) {
+        console.error('Error matching with user', error);
+    }
+}
+
+export const getFollowingStatus = async (otherUser_id, user_id) => {
+    console.log('Is other user following me?', { otherUser_id, user_id, });
+
+    if (!user_id || !otherUser_id) {
+        return;
+    }
+
+    try {
+        const res = await databases.listDocuments(
+            dbEnv,
+            followingCollEnv,
+            [
+                Query.and([Query.equal('user_id', otherUser_id), Query.equal('otherUser_id', user_id)])
             ]
         )
         console.log('AND QUERY', res);
@@ -2024,7 +2050,6 @@ export const deleteAllReactionsForOneNotice = async (notice_id) => {
         );
 
         const deleteOnReactionForOneNoticePromises = reactions.documents.map(reaction =>
-            // deleteReaction(reaction.$id)
             deleteDoc(
                 reactionsCollEnv,
                 reaction.$id

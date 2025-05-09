@@ -8,7 +8,7 @@ import { BlockModal, ReportModal, FollowModal } from '../Modals.jsx';
 import { LoadingSpinner } from '../../Loading/LoadingSpinner.jsx';
 
 export const Profile = ({ username, avatarUrl, isAvatarLoading, website, handleFollow, handleBlock, currUserId, followingCount, followersCount, isFollowing, followingAccounts, followersAccounts, isFollowingUserLoading, isGetFollwedByUserCountLoading,
-    isGetFollowingTheUserCountLoading, isBlocked, isOtherUserBlocked, handleUserReport, hasMoreFollowing, hasMoreFollowers, loadFollowing, loadFollowers, isLoadingMoreFollowing, isLoadingMoreFollowers, isProcessingBlock, userWebsite }) => {
+    isGetFollowingTheUserCountLoading, isBlocked, isOtherUserBlocked, handleUserReport, hasMoreFollowing, hasMoreFollowers, loadFollowing, loadFollowers, isLoadingMoreFollowing, isLoadingMoreFollowers, isOtherUserFollowingMe, isProcessingBlock, userWebsite }) => {
 
     const location = useLocation();
 
@@ -148,11 +148,6 @@ export const Profile = ({ username, avatarUrl, isAvatarLoading, website, handleF
                                             alt="Profile"
                                             className='user-profile__avatar'
                                         />
-                                        {/* {!avatarUrl &&
-                                            <span className='position-absolute'>
-                                                <i className='bi bi-plus-square' />
-                                            </span>
-                                        } */}
                                     </>
                                     :
                                     <LoadingSpinner />
@@ -185,7 +180,10 @@ export const Profile = ({ username, avatarUrl, isAvatarLoading, website, handleF
                                         </Link>
                                     </>
                                 }
-
+                                {isOtherUserFollowingMe && <>
+                                    <br />
+                                    They care about what you have to share 😁
+                                </>}
                             </strong>
                         </p>
                     </div>

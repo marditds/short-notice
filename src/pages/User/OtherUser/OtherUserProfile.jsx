@@ -54,6 +54,8 @@ const OtherUserProfile = () => {
         isFollowingUserLoading,
         isInitialFollowCheckLoading,
         isFollowing,
+        isotherUserFollowingMeCheckLoading,
+        isOtherUserFollowingMe,
         followersCount,
         followingCount,
         isProcessingBlock,
@@ -68,6 +70,7 @@ const OtherUserProfile = () => {
         fetchUsersData,
         handleFollow,
         getFollowStatus,
+        getFollowingStatus,
         getfollwedByUserCount,
         getFollowingTheUserCount,
         fetchAccountsFollowingTheUser,
@@ -597,6 +600,11 @@ const OtherUserProfile = () => {
         getFollowStatus(userId, currUserId);
     }, [userId, currUserId])
 
+    //Is otherUser following me?
+    useEffect(() => {
+        getFollowingStatus(currUserId);
+    }, [currUserId])
+
     // Fetch followers count
     useEffect(() => {
         getFollowingTheUserCount(currUserId);
@@ -757,6 +765,7 @@ const OtherUserProfile = () => {
                     isFollowing={isFollowing}
                     isFollowingUserLoading={isFollowingUserLoading}
                     isInitialFollowCheckLoading={isInitialFollowCheckLoading}
+                    isOtherUserFollowingMe={isOtherUserFollowingMe}
                     isAvatarLoading={isAvatarLoading}
                     isGetFollowingTheUserCountLoading={isGetFollowingTheUserCountLoading}
                     isGetFollwedByUserCountLoading={isGetFollwedByUserCountLoading}
