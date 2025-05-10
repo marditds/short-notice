@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { updateAuthPasswordRecovery } from '../../lib/context/dbhandler';
 import { Col, Container, Row } from 'react-bootstrap';
@@ -10,7 +10,6 @@ const ResetPassword = () => {
 
     const [userId, setUserId] = useState(null);
     const [secret, setSecret] = useState(null);
-    const [email, setEmail] = useState(null);
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [isResetPasswordLoading, setIsResetPasswordLoading] = useState(false);

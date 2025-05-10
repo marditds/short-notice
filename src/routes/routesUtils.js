@@ -1,4 +1,4 @@
-import { redirect, useLocation } from "react-router-dom";
+import { redirect } from "react-router-dom";
 import { getAccount } from "../lib/context/dbhandler";
 
 const withAuth = (loader, path) => {

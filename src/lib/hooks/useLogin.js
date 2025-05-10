@@ -23,6 +23,10 @@ export const useLogin = () => {
 
     const createUserInCollection = async () => {
 
+        if (!username || !userEmail) {
+            return;
+        }
+
         console.log('createUserInCollection 1:', username, userId, givenName, accountType);
 
         try {
@@ -131,6 +135,11 @@ export const useLogin = () => {
     };
 
     const cancelAccountSetup = async (id) => {
+
+        if (!id) {
+            return;
+        }
+
         try {
             setIsSetupCancellationLoading(true);
             await deleteAuthUser(id);

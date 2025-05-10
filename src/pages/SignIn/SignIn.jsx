@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createUserSession, getAccount } from '../../lib/context/dbhandler';
 import { useUserContext } from '../../lib/context/UserContext';
@@ -31,6 +31,10 @@ const SignIn = () => {
 
         if (newYearWish) {
             setErrorMsg('Try again.');
+            return;
+        }
+
+        if (!email || !password) {
             return;
         }
 

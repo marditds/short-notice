@@ -184,23 +184,23 @@ const CreateAccount = () => {
 
 
     // Getting things ready
-    // if (isSetupCancellationLoading || userEmail === null) {
-    //     return <div className='min-vh-100'>
-    //         <Container className='min-vh-100 flex-grow-1'>
-    //             <Row className='min-vh-100 flex-grow-1  justify-content-center align-items-center'>
-    //                 <Col className='d-flex justify-content-center align-items-center'>
-    //                     <LoadingSpinner classAnun='me-2' />
-    //                     {
-    //                         (userEmail === null) && 'Getting things ready. Hang tight.'
-    //                     }
-    //                     {
-    //                         isSetupCancellationLoading && 'Cancelling your account creation. Please wait...'
-    //                     }
-    //                 </Col>
-    //             </Row>
-    //         </Container>
-    //     </div>
-    // }
+    if (isSetupCancellationLoading || userEmail === null) {
+        return <div className='min-vh-100'>
+            <Container className='min-vh-100 flex-grow-1'>
+                <Row className='min-vh-100 flex-grow-1  justify-content-center align-items-center'>
+                    <Col className='d-flex justify-content-center align-items-center'>
+                        <LoadingSpinner classAnun='me-2' />
+                        {
+                            (userEmail === null) && 'Getting things ready. Hang tight.'
+                        }
+                        {
+                            isSetupCancellationLoading && 'Cancelling your account creation. Please wait...'
+                        }
+                    </Col>
+                </Row>
+            </Container>
+        </div>
+    }
 
     return (
         <Container

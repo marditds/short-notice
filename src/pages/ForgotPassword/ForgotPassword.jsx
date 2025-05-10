@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { createAuthPasswordRecovery } from '../../lib/context/dbhandler';
 import { Col, Container, Row } from 'react-bootstrap';
 import { SignFormLayout } from '../../components/LoginForm/SignFormLayout';

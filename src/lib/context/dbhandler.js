@@ -263,6 +263,11 @@ export const getUsersDocument = async () => {
 };
 
 export const getUserById = async (userId) => {
+
+    if (!userId) {
+        return;
+    }
+
     try {
         const response = await databases.getDocument(
             dbEnv,
@@ -277,6 +282,11 @@ export const getUserById = async (userId) => {
 };
 
 export const getUserByIdQuery = async (userId) => {
+
+    if (!userId) {
+        return;
+    }
+
     try {
         const response = await databases.listDocuments(
             dbEnv,
@@ -290,6 +300,11 @@ export const getUserByIdQuery = async (userId) => {
 };
 
 export const getUsersByIdQuery = async (userIds) => {
+
+    if (!userIds) {
+        return;
+    }
+
     try {
         const response = await databases.listDocuments(
             dbEnv,
@@ -305,7 +320,7 @@ export const getUsersByIdQuery = async (userIds) => {
 export const getUserByEmail = async (email) => {
 
     if (!email) {
-        throw new Error("Email is null or undefined.");
+        return;
     }
 
     try {

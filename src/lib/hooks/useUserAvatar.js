@@ -1,14 +1,11 @@
 import { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
 import { endpointEnv, projectEnv, avatarBucketEnv, uploadAvatar, deleteAvatarFromStrg, updateAvatar, deleteAvatarFromDoc, getUserById, getAllUsersByString } from '../context/dbhandler';
 import { getAvatarUrl } from '../utils/avatarUtils';
 import { useUserContext } from '../context/UserContext';
 
-export const useUserAvatar = (id) => {
+export const useUserAvatar = () => {
 
     const { userId } = useUserContext();
-
-    const location = useLocation();
 
     const [avatarUrl, setAvatarUrl] = useState(null);
     const [isAvatarLoading, setIsAvatarLoading] = useState(false);
@@ -139,6 +136,11 @@ export const useUserAvatar = (id) => {
     }
 
     const handleDeleteAvatarFromStrg = async (fileId) => {
+
+        if (!fileId) {
+            return;
+        }
+
         try {
             const response = await deleteAvatarFromStrg(fileId);
 
