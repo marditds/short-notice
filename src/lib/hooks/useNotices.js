@@ -273,12 +273,6 @@ export const useNotices = () => {
         }
     };
 
-    useEffect(() => {
-        if (latestNotice) {
-            console.log('THIS IS THE LATEST NOTICE:', latestNotice);
-        }
-    }, [latestNotice])
-
     const editNotice = async (noticeId, newText) => {
         setIsSavingEdit(true);
         try {
@@ -366,6 +360,11 @@ export const useNotices = () => {
     }
 
     const removeAllNoticesByUser = async (user_id) => {
+
+        if (!user_id) {
+            return;
+        }
+
         try {
             const response = await deleteAllNotices(user_id);
             return response;
@@ -412,6 +411,11 @@ export const useNotices = () => {
     }
 
     const getFeedNotices = async (selectedTags, limit, lastId) => {
+
+        if (!user_id || !selectedTags) {
+            return;
+        }
+
         try {
             console.log('SELECTED TAGS IN useNotices:', selectedTags);
 
@@ -431,7 +435,6 @@ export const useNotices = () => {
             return;
         }
         try {
-
             const accountsFollowedByUser = await getPersonalFeedAccounts(user_id);
 
             const idsForAccountsFollowedByUser = accountsFollowedByUser?.map((user) => user.$id);
@@ -460,6 +463,11 @@ export const useNotices = () => {
     // }, [data]);
 
     const getNoticesByUser = async (user_id, limit, lastId) => {
+
+        if (!user_id) {
+            return;
+        }
+
         try {
             const response = await getUserNotices(user_id, limit, lastId);
 
@@ -469,11 +477,14 @@ export const useNotices = () => {
         }
     };
 
-    const fetchUserNotices = async (id, limit, lastId) => {
-        if (!id) return;
+    const fetchUserNotices = async (user_id, limit, lastId) => {
+
+        if (!user_id) {
+            return;
+        }
 
         try {
-            const usrNotices = await getNoticesByUser(id, limit, lastId);
+            const usrNotices = await getNoticesByUser(user_id, limit, lastId);
 
             console.log('usrNotices - useNotices:', usrNotices);
 
@@ -485,6 +496,11 @@ export const useNotices = () => {
     }
 
     const getNoticeByNoticeId = async (notice_id) => {
+
+        if (!notice_id) {
+            return;
+        }
+
         try {
             const res = await fetchNoticeByNoticeId(notice_id);
 
@@ -497,6 +513,11 @@ export const useNotices = () => {
     }
 
     const getInterests = async (user_id) => {
+
+        if (!user_id) {
+            return;
+        }
+
         try {
             const interests = await getUserInterests(user_id);
             return interests;
@@ -506,6 +527,11 @@ export const useNotices = () => {
     }
 
     const updateInterests = async () => {
+
+        if (!user_id) {
+            return;
+        }
+
         setIsInterestsUpdating(true);
         if (user_id) {
             try {
@@ -525,6 +551,11 @@ export const useNotices = () => {
     }
 
     const fetchUserInterests = async () => {
+
+        if (!user_id) {
+            return;
+        }
+
         setIsInterestsLoading(true);
         if (user_id) {
             try {
@@ -570,6 +601,11 @@ export const useNotices = () => {
     }
 
     const updateUserPermissions = async (userId, btns_reaction_perm, reaction_text) => {
+
+        if (!userId) {
+            return;
+        }
+
         try {
             const res = await updatePermissions(userId, btns_reaction_perm, reaction_text);
 
@@ -580,6 +616,11 @@ export const useNotices = () => {
     }
 
     const getUserPermissions = async (userId) => {
+
+        if (!userId) {
+            return;
+        }
+
         try {
             const res = await fetchUserPermissions(userId);
             console.log('res in getUserPermissions', res);
@@ -591,6 +632,11 @@ export const useNotices = () => {
     }
 
     const handleSave = async (notice_id, author_id, savedNoticesArr, setSaveFunc) => {
+
+        if (!notice_id) {
+            return;
+        }
+
         try {
             if (savedNoticesArr[notice_id]) {
                 await removeSave(savedNoticesArr[notice_id]);
@@ -612,6 +658,11 @@ export const useNotices = () => {
     }
 
     const handleLike = async (notice_id, author_id, likedNoticesArr, setLikeFunc) => {
+
+        if (!notice_id) {
+            return;
+        }
+
         try {
             if (likedNoticesArr[notice_id]) {
                 await removeLike(likedNoticesArr[notice_id]);
@@ -632,11 +683,16 @@ export const useNotices = () => {
         }
     };
 
-    const getNoticeByUserId = async (id, limit, offset) => {
+    const getNoticeByUserId = async (user_id, limit, offset) => {
+
+        if (!user_id) {
+            return;
+        }
+
         try {
             console.log('LIMIT - useNotice', limit);
 
-            const res = await fetchNoticeByUserId(id, limit, offset);
+            const res = await fetchNoticeByUserId(user_id, limit, offset);
 
             console.log('NOTICES:', res);
 
@@ -647,6 +703,11 @@ export const useNotices = () => {
     }
 
     const getAllLikesByNoticeId = async (noticeId) => {
+
+        if (!noticeId) {
+            return;
+        }
+
         try {
             const res = await fetchAllLikesByNoticeId(noticeId);
             console.log('All likes for a notice by its id:', res);
@@ -657,6 +718,11 @@ export const useNotices = () => {
     }
 
     const getAllLikesTotalByNoticeId = async (noticeId) => {
+
+        if (!noticeId) {
+            return;
+        }
+
         try {
             const res = await fetchAllLikesTotalByNoticeId(noticeId);
             console.log('All likes for a notice by its id:', res);
@@ -668,6 +734,11 @@ export const useNotices = () => {
 
     // For saves icon 
     const fetchUserSaves = async (user_id, noticeIds) => {
+
+        if (!user_id) {
+            return;
+        }
+
         try {
             const res = await getUserSaves(user_id, noticeIds);
 
@@ -681,6 +752,11 @@ export const useNotices = () => {
 
     // For likes icon
     const fetchUserLikes = async (user_id, noticeIds) => {
+
+        if (!user_id) {
+            return;
+        }
+
         try {
             const res = await getUserLikes(user_id, noticeIds);
 
@@ -694,8 +770,12 @@ export const useNotices = () => {
 
     // For likes tab
     const getAllLikedNotices = async (userId, visitor_id, limit, offset) => {
-        try {
 
+        if (!userId) {
+            return;
+        }
+
+        try {
             console.log('Starting getAllLikedNotices in unseNotices.js');
 
             const userLikes = await getUserLikesNotInFeed(userId, visitor_id, limit, offset);
@@ -716,6 +796,11 @@ export const useNotices = () => {
 
     // For saves tab
     const getAllSavedNotices = async (userId, visitor_id, limit, offset) => {
+
+        if (!userId) {
+            return;
+        }
+
         try {
 
             const userSaves = await getUserSavesNotInFeed(userId, visitor_id, limit, offset);
@@ -735,6 +820,11 @@ export const useNotices = () => {
     };
 
     const getAllSavesTotalByNoticeId = async (noticeId) => {
+
+        if (!noticeId) {
+            return;
+        }
+
         try {
             const res = await fetchAllSavesTotalByNoticeId(noticeId);
             console.log('All saves for a notice by its id:', res);
@@ -745,6 +835,11 @@ export const useNotices = () => {
     }
 
     const handleReportNotice = async (notice_id, author_id, reason, noticeText) => {
+
+        if (!notice_id) {
+            return;
+        }
+
         try {
             await createReport(notice_id, author_id, reason, user_id, noticeText);
             console.log('Notice reported successfully!');
@@ -755,6 +850,10 @@ export const useNotices = () => {
     };
 
     const handleReact = async (otherUser_id, content, notice_id, expiresAt, reactionGif) => {
+
+        if (!notice_id) {
+            return;
+        }
 
         const now = new Date();
 
@@ -768,6 +867,11 @@ export const useNotices = () => {
     }
 
     const removeReaction = async (reactionId) => {
+
+        if (!reactionId) {
+            return;
+        }
+
         try {
             await deleteReaction(reactionId);
             console.log('Reaction removed successfully.');
@@ -777,6 +881,11 @@ export const useNotices = () => {
     }
 
     const removeAllReactionsByUser = async (user_id) => {
+
+        if (!user_id) {
+            return;
+        }
+
         try {
             const response = await deleteAllSentReactions(user_id);
             return response;
@@ -798,6 +907,11 @@ export const useNotices = () => {
     }
 
     const getAllReactionsBySenderId = async (user_id) => {
+
+        if (!user_id) {
+            return;
+        }
+
         try {
             const response = await fetchAllReactionsBySenderId(user_id);
             console.log('getAllReactionsBySenderId', response);
@@ -808,6 +922,11 @@ export const useNotices = () => {
     }
 
     const getAllReactionsByRecipientId = async (recipient_id) => {
+
+        if (!recipient_id) {
+            return;
+        }
+
         try {
             const response = await fetchAllReactionsByRecipientId(recipient_id);
             // console.log('getAllReactionsByRecipientId', response);
@@ -822,6 +941,11 @@ export const useNotices = () => {
 
     // Get reactions from DB
     const getReactionsForNotice = async (notice_id, limit, cursor = null) => {
+
+        if (!notice_id) {
+            return;
+        }
+
         try {
             const response = await fetchAllReactionsByNoticeId(notice_id, limit, cursor);
             console.log('getAllReactionsByNoticeId', response);
@@ -832,6 +956,11 @@ export const useNotices = () => {
     }
 
     const getReactionByReactionId = async (reactionId) => {
+
+        if (!reactionId) {
+            return;
+        }
+
         try {
             const reaction = await fetchReactionByReactionId(reactionId);
             console.log('Succes fetching reaction:', reaction);
@@ -842,6 +971,11 @@ export const useNotices = () => {
     }
 
     const reportReaction = async (reaction_id, author_id, reason, reaction_text) => {
+
+        if (!reaction_id) {
+            return;
+        }
+
         try {
             await createReactionReport(reaction_id, author_id, reason, user_id, reaction_text);
             console.log('Reporting reacion successful!');

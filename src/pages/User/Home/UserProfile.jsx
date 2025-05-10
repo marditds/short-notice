@@ -571,6 +571,13 @@ const UserProfile = () => {
         setRemovingNoticeId(null);
     }
 
+    // log latest notice
+    useEffect(() => {
+        if (latestNotice) {
+            console.log('THIS IS THE LATEST NOTICE:', latestNotice);
+        }
+    }, [latestNotice])
+
 
     const noticeTabs = [
         {
