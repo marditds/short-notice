@@ -13,9 +13,11 @@ export const Navigation = ({
     removeSession,
     accountType,
     setIsLoggedIn,
+    setUser,
     setUserId,
     setUserEmail,
     setUsername,
+    setGivenName,
     setHasUsername,
     setAccountType,
     setIsAppLoading }) => {
@@ -78,12 +80,15 @@ export const Navigation = ({
                 try {
                     setIsAppLoading(true);
                     await removeSession();
+                    localStorage.removeItem('authToken');
                     setIsLoggedIn(false);
                     setUserId(null);
                     setUserEmail(null);
                     setUsername('');
                     setHasUsername(false);
+                    setGivenName('');
                     setAccountType('');
+                    setUser(null);
                     console.log('Signed out successfully.');
                     window.location.href = '/';
                 } catch (error) {

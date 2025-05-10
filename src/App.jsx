@@ -22,6 +22,9 @@ function App() {
       if (currentPath === '/' && isSessionInProgress) {
         navigate('/user/feed');
       }
+    } else {
+      console.log('flan fstan flan fstan');
+      return;
     }
   }, [hasUsername, isSessionInProgress]);
 

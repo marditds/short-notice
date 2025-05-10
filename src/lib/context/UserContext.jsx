@@ -29,6 +29,15 @@ export const UserProvider = ({ children }) => {
                 console.log('START - Checking session status...');
                 setIsAppLoading(true);
 
+                const authToken = localStorage.getItem('authToken');
+
+                if (!authToken) {
+                    console.log('Not authenticated.');
+                    setIsSessionInProgress(false);
+                    setIsLoggedIn(false);
+                    return;
+                }
+
                 const usr = await getAccount();
                 if (usr) {
                     console.log('Session in progress.', usr);

@@ -64,11 +64,13 @@ const User = () => {
                 setIsLoggedIn={setIsLoggedIn}
                 accountType={accountType}
                 setIsAppLoading={setIsAppLoading}
+                setUser={setUser}
                 setUserId={setUserId}
                 setUserEmail={setUserEmail}
                 setUsername={setUsername}
                 setHasUsername={setHasUsername}
                 setAccountType={setAccountType}
+                setGivenName={setGivenName}
             />
             <Container
                 className='userhome__body'

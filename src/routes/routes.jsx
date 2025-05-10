@@ -77,18 +77,20 @@ export const routes = [
         loader: async () => {
             console.log('RUNNING \'/\' LOADER:');
 
-            const authenticatedUser = await getAccount();
+            // const authenticatedUser = await getAccount();
 
-            if (authenticatedUser) {
-                console.log('User is already authenticated, checking if they have a username');
+            // if (authenticatedUser) {
+            //     console.log('User is already authenticated, checking if they have a username');
 
-                const user = await getUserByEmail(authenticatedUser.email);
+            //     const user = await getUserByEmail(authenticatedUser.email);
 
-                if (user && user?.username) {
-                    console.log('User has username, redirecting to feed');
-                    return redirect('/user/feed');
-                }
-            }
+            //     if (user && user?.username) {
+            //         console.log('User has username, redirecting to feed');
+            //         return redirect('/user/feed');
+            //     } else {
+            //         return redirect('create-account');
+            //     }
+            // }
             return null;
         },
         children: [
