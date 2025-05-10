@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useLocation, useOutletContext } from 'react-router-dom';
 import { Profile } from '../../../components/User/Profile/Profile.jsx';
 import { Notices } from '../../../components/User/Notices';
 import { Tabs, Tab, Button } from 'react-bootstrap';
-import { useUserContext } from '../../../lib/context/UserContext';
 import { useUserInfo } from '../../../lib/hooks/useUserInfo.js';
 import { getAvatarUrl as avatarUtil } from '../../../lib/utils/avatarUtils.js';
 import { useUserAvatar } from '../../../lib/hooks/useUserAvatar.js';
@@ -27,7 +26,7 @@ const UserProfile = () => {
         userWebsite,
         isApploading,
         accountType
-    } = useUserContext();
+    } = useOutletContext();
 
     const {
         latestNotice,
@@ -58,7 +57,7 @@ const UserProfile = () => {
         reportReaction,
         getAllLikesTotalByNoticeId,
         getAllSavesTotalByNoticeId
-    } = useNotices(userEmail);
+    } = useNotices();
 
     const {
         followersCount,
@@ -73,7 +72,7 @@ const UserProfile = () => {
         fetchAccountsFollowingTheUser,
         fetchAccountsFollowedByUser,
         getBlockedUsersByUser
-    } = useUserInfo(userEmail);
+    } = useUserInfo();
 
     const { isSmallScreen } = screenUtils();
 
@@ -260,7 +259,6 @@ const UserProfile = () => {
             console.log('noticesWithLikesAndSaves', noticesWithLikesAndSaves);
 
             if (noticesWithLikesAndSaves?.length > 0) {
-
                 if (lastId !== 0) {
                     setUserProfileNotices((prevNotices) => [
                         ...prevNotices,

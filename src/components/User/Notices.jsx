@@ -581,15 +581,13 @@ export const Notices = ({
                                             <div className='d-flex justify-content-start align-items-center notice__reaction-icon-div'
                                             >
                                                 {
-                                                    (
-                                                        notice.user_id === user_id
-                                                    ) ?
+                                                    (notice.user_id === user_id) ?
                                                         <>
                                                             <span className='d-flex mt-auto my-auto'>
                                                                 <i className='bi bi-hand-thumbs-up notice__reaction-btn-fill me-2' /> {notice.noticeLikesTotal}
                                                             </span>
                                                             <span className='ms-4 d-flex mt-auto my-auto'>
-                                                                <i className='bi bi-floppy notice__reaction-btn-fill me-2' /> {notice.noticeLikesTotal}
+                                                                <i className='bi bi-floppy notice__reaction-btn-fill me-2' /> {notice.noticeSavesTotal}
                                                             </span>
                                                         </>
                                                         :
@@ -646,7 +644,7 @@ export const Notices = ({
 
                                                                     console.log('isSaved:', isSaved);
 
-                                                                    const currentCount = saveCounts[notice.$id] ?? notice.noticeSavesTotal ?? 0;
+                                                                    const currentCount = saveCounts[notice.$id] ?? notice.noticeSavesTotalc ?? 0;
 
                                                                     console.log('currentCount', currentCount);
 
@@ -692,13 +690,13 @@ export const Notices = ({
                                 {/* Edit/Delete */}
                                 {location.pathname === '/user/profile' && eventKey === 'my-notices' &&
                                     <div
-                                        className='d-flex  justify-content-start h-100'>
+                                        className='d-flex justify-content-start h-100'>
                                         <>
                                             <span className='d-flex mt-auto my-auto'>
-                                                <i className='bi bi-hand-thumbs-up notice__reaction-btn-fill me-2' /> {notice.noticeLikesTotal}
+                                                <i className='bi bi-hand-thumbs-up notice__reaction-btn-fill me-2' /> {notice?.noticeLikesTotal}
                                             </span>
                                             <span className='ms-4 d-flex mt-auto my-auto'>
-                                                <i className='bi bi-floppy notice__reaction-btn-fill me-2' /> {notice.noticeLikesTotal}
+                                                <i className='bi bi-floppy notice__reaction-btn-fill me-2' /> {notice?.noticeSavesTotal}
                                             </span>
                                         </>
 

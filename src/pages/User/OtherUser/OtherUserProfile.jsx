@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useParams, useNavigate, useLocation, useOutletContext } from 'react-router-dom';
 import { Profile } from '../../../components/User/Profile/Profile.jsx';
 import { Notices } from '../../../components/User/Notices.jsx';
 import { Tabs, Tab, Button } from 'react-bootstrap';
-import { useUserContext } from '../../../lib/context/UserContext.jsx';
 import { useUserInfo } from '../../../lib/hooks/useUserInfo.js';
 import { getAvatarUrl as avatarUtil } from '../../../lib/utils/avatarUtils.js';
 import { useUserAvatar } from '../../../lib/hooks/useUserAvatar.js';
@@ -26,7 +25,7 @@ const OtherUserProfile = () => {
         userId,
         userEmail,
         isAppLoading, isFetchingUserinContextLoading
-    } = useUserContext();
+    } = useOutletContext();
 
     const [currUserId, setCurrUserId] = useState(null);
 
@@ -48,7 +47,7 @@ const OtherUserProfile = () => {
         getUserPermissions,
         getAllLikesTotalByNoticeId,
         getAllSavesTotalByNoticeId,
-    } = useNotices(userEmail);
+    } = useNotices();
 
     const {
         isFollowingUserLoading,
@@ -77,7 +76,7 @@ const OtherUserProfile = () => {
         fetchAccountsFollowedByUser,
         getPassocdeByOrganizationId,
         handleUserReport
-    } = useUserInfo(userEmail);
+    } = useUserInfo();
 
     const { isSmallScreen } = screenUtils();
 
