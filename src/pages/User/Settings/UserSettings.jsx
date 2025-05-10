@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useUserContext } from '../../../lib/context/UserContext.jsx';
+import { useState, useEffect } from 'react';
+import { useOutletContext } from 'react-router-dom';
 import { Avatar } from '../../../components/User/Settings/Avatar.jsx';
 import { Info } from '../../../components/User/Settings/Info.jsx';
 import { UserPassword } from '../../../components/User/Settings/UserPassword.jsx';
@@ -17,7 +17,15 @@ import Permissions from '../../../components/User/Settings/Permissions.jsx';
 
 const UserSettings = () => {
 
-    const { accountType } = useUserContext();
+    const {
+        userId,
+        username,
+        userWebsite,
+        accountType,
+        setUsername,
+        setRegisteredUsername,
+        setUserWebsite
+    } = useOutletContext();
 
     const [isLoading, setIsLoading] = useState(true);
 
@@ -32,9 +40,16 @@ const UserSettings = () => {
     return (
         <Container fluid className='settings'>
             <Stack className='settings__sections'>
-                <Avatar />
+                <Avatar
+                    userId={userId}
+                />
                 <hr className='settings__hr' />
-                <Info />
+                <Info
+                    username={username}
+                    accountType={accountType}
+                    setUsername={setUsername}
+                    setRegisteredUsername={setRegisteredUsername}
+                />
                 <hr className='settings__hr' />
                 <UserPassword />
                 <hr className='settings__hr' />
@@ -44,15 +59,28 @@ const UserSettings = () => {
                         <hr />
                     </>
                 }
-                <UserWebsite />
+                <UserWebsite
+                    username={username}
+                    userWebsite={userWebsite}
+                    setUserWebsite={setUserWebsite}
+                />
                 <hr className='settings__hr' />
-                <Interests />
+                <Interests
+                    userId={userId}
+                />
                 <hr className='settings__hr' />
-                <BlockedAccounts />
+                <BlockedAccounts
+                    userId={userId}
+                    username={username}
+                />
                 <hr className='settings__hr' />
-                <Permissions />
+                <Permissions
+                    userId={userId}
+                />
                 <hr className='settings__hr' />
-                <DeleteAllNotices />
+                <DeleteAllNotices
+                    userId={userId}
+                />
                 <hr className='settings__hr' />
                 <Visibility />
                 <hr className='settings__hr' />

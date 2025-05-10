@@ -1,18 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { useUserContext } from '../../../lib/context/UserContext';
+import { useEffect, useState } from 'react';
 import { Row, Col, Form, Button, Alert } from 'react-bootstrap';
 import { useUserInfo } from '../../../lib/hooks/useUserInfo';
 import { forbiddenUsrnms, usrnmMaxLngth } from '../../../lib/utils/usernameUtils';
 import { LoadingSpinner } from '../../Loading/LoadingSpinner';
 import { ErrorMessage, SuccessMessage } from './UpdateMessage';
 
-export const Info = () => {
-
-    const {
-        username,
-        accountType,
-        setUsername,
-        setRegisteredUsername } = useUserContext();
+export const Info = ({
+    username,
+    accountType,
+    setUsername,
+    setRegisteredUsername
+}) => {
 
     const { checkUsernameExists, handleUpdateUser } = useUserInfo();
 

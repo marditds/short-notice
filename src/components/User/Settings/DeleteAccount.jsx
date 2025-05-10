@@ -8,7 +8,9 @@ import { LoadingSpinner } from '../../Loading/LoadingSpinner';
 export const DeleteAccount = () => {
 
     const { handleDeleteUser } = useUserInfo();
+
     const navigate = useNavigate();
+
     const [showModal, setShowModal] = useState(false);
     const [loading, setLoading] = useState(false);
     const [accountDeleteMsg, setAccountDeleteMsg] = useState(null);

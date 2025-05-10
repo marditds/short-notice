@@ -1,16 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Row, Col, Form, Button } from 'react-bootstrap';
 import { LoadingSpinner } from '../../Loading/LoadingSpinner';
 import defaultAvatar from '../../../assets/default.png';
-import { useUserContext } from '../../../lib/context/UserContext';
 import { useUserAvatar } from '../../../lib/hooks/useUserAvatar';
 import { getCroppedAvatar } from '../../../lib/utils/avatarUtils';
 import Cropper from 'react-easy-crop';
 import { AvatarCropModal } from '../Modals';
 
-export const Avatar = () => {
-
-    const { userId } = useUserContext();
+export const Avatar = ({ userId }) => {
 
     const [showAvatarCropModal, setShowAvatarCropModal] = useState(false);
     const [imageName, setImageName] = useState(null);

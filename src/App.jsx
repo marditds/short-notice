@@ -9,18 +9,7 @@ import { LoadingComponent } from './components/Loading/LoadingComponent.jsx';
 
 function App() {
 
-  const {
-    isLoggedIn, setIsLoggedIn,
-    userId, setUserId,
-    username, setUsername,
-    userEmail, setUserEmail,
-    registeredUsername, setRegisteredUsername,
-    accountType, setAccountType,
-    hasAccountType, setHasAccountType,
-    hasUsername, setHasUsername,
-    isAppLoading, setIsAppLoading,
-    isSessionInProgress
-  } = useUserContext();
+  const { isLoggedIn, hasUsername, isAppLoading, isSessionInProgress } = useUserContext();
 
   const navigate = useNavigate();
 
@@ -35,15 +24,6 @@ function App() {
       }
     }
   }, [hasUsername, isSessionInProgress]);
-
-  useEffect(() => {
-    console.log('[hasUsername]', hasUsername);
-  }, [hasUsername])
-
-  useEffect(() => {
-    console.log('[isSessionInProgress]', isSessionInProgress);
-  }, [isSessionInProgress])
-
 
   // if (isServerDown === true) {
   //   return (
@@ -85,19 +65,7 @@ function App() {
           <PreLogin />
         </>
         :
-        <Outlet
-          context={{
-            isLoggedIn, setIsLoggedIn,
-            userId, setUserId,
-            userEmail, setUserEmail,
-            username, setUsername,
-            registeredUsername, setRegisteredUsername,
-            hasUsername, setHasUsername,
-            accountType, setAccountType,
-            hasAccountType, setHasAccountType,
-            isAppLoading, setIsAppLoading
-          }}
-        />
+        <Outlet />
       }
     </>
   );

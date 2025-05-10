@@ -1,13 +1,11 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { Row, Col } from 'react-bootstrap';
-import { useUserContext } from '../../../lib/context/UserContext';
 import { useNotices } from '../../../lib/hooks/useNotices';
 import { InterestsTags } from './InterestsTags';
 import { LoadingSpinner } from '../../Loading/LoadingSpinner';
 
-export const Interests = () => {
+export const Interests = ({ userId }) => {
 
-    const { userId, userEmail } = useUserContext();
     const {
         tagCategories,
         isInterestsUpdating,
@@ -17,7 +15,7 @@ export const Interests = () => {
         updateInterests,
         toggleInterestsTag,
         deselectAllInterestTags
-    } = useNotices(userEmail);
+    } = useNotices();
 
     useEffect(() => {
         // if (location.pathname === feed or settings)

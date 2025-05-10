@@ -1,11 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Col, Form, Row } from 'react-bootstrap';
 import { useNotices } from '../../../lib/hooks/useNotices';
-import { useUserContext } from '../../../lib/context/UserContext';
 
-const Permissions = () => {
-
-    const { userId } = useUserContext();
+const Permissions = ({ userId }) => {
 
     const { updateUserPermissions, getUserPermissions } = useNotices();
 

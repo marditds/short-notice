@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Row, Col, Button } from 'react-bootstrap';
-import { useUserContext } from '../../../lib/context/UserContext';
 import { useUserInfo } from '../../../lib/hooks/useUserInfo';
 import { getAvatarUrl as avatarUrl } from '../../../lib/utils/avatarUtils';
 import defaultAvatar from '../../../assets/default.png';
@@ -8,15 +7,13 @@ import { LoadingSpinner } from '../../Loading/LoadingSpinner';
 import { AiFillCloseCircle } from "react-icons/ai";
 import { EndAsterisks } from '../EndAsterisks';
 
-export const BlockedAccounts = () => {
+export const BlockedAccounts = ({ userId, username }) => {
 
-    const { username, userEmail } = useUserContext();
-
-    const { userId,
+    const {
         getBlockedUsersByUserByBatch,
         getUserByIdQuery,
         deleteBlockUsingBlockedId
-    } = useUserInfo(userEmail);
+    } = useUserInfo();
 
     const [blockedUsers, setBlockedUsers] = useState([]);
     const [isBlockListInitialRunLoading, setIsBlockListInitialRunLoading] = useState(false);

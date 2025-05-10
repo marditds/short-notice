@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useOutletContext } from 'react-router-dom';
 import { useUserContext } from '../../../lib/context/UserContext';
 import { useNotices } from '../../../lib/hooks/useNotices';
 import { useUserInfo } from '../../../lib/hooks/useUserInfo';
@@ -14,9 +15,7 @@ import { ComposeNotice } from '../../../components/User/ComposeNotice';
 
 const UserFeed = () => {
 
-    const { accountType,
-        userId, username, isLoggedIn, userEmail
-    } = useUserContext();
+    const { accountType, userId, username, isLoggedIn, userEmail } = useOutletContext();
 
     const {
         personalFeedLikedNotices,
@@ -188,12 +187,12 @@ const UserFeed = () => {
             console.log('USER ID IN PERSONAL FEED:', userId);
             console.log('USER LOG IN IN PERSONAL FEED:', isLoggedIn);
 
-            try {
-                if (!userId || !isLoggedIn) {
-                    console.log('User not fully logged in. Skipping feed fetch.');
-                    return;
-                }
+            if (!userId || !isLoggedIn) {
+                console.log('User not fully logged in. Skipping feed fetch.');
+                return;
+            }
 
+            try {
                 console.log('userId in fetchInitialPersonalFeed()', userId);
                 console.log('isLoggedIn in fetchInitialPersonalFeed()', isLoggedIn);
 

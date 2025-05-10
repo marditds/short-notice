@@ -10,21 +10,29 @@ import { LoadingComponent } from '../../components/Loading/LoadingComponent';
 const User = () => {
 
     const {
-        setIsLoggedIn,
+        isLoggedIn, setIsLoggedIn,
         userId, setUserId,
         userEmail, setUserEmail,
         username, setUsername,
+        userWebsite, setUserWebsite,
+        givenName, setGivenName,
+        registeredUsername, setRegisteredUsername,
         hasUsername, setHasUsername,
         accountType, setAccountType,
+        hasAccountType, setHasAccountType,
         isAppLoading, setIsAppLoading,
-        isSessionInProgress
+        isCheckEmailExistanceLoading, setIsCheckEmailExistanceLoading,
+        isFetchingUserinContextLoading,
+        user, setUser,
+        isSessionInProgress, setIsSessionInProgress,
+        isLogInBtnClicked, setIsLogInBtnClicked
     } = useUserContext();
 
     const location = useLocation();
 
     const navigate = useNavigate();
 
-    const { removeSession } = useUserInfo(userEmail);
+    const { removeSession } = useUserInfo();
 
     // redirect to feed on /user, /user/
     useEffect(() => {
@@ -66,7 +74,24 @@ const User = () => {
                 className='userhome__body'
                 style={{ maxWidth: location.pathname !== '/user/feed' ? '1320px' : '100%' }}
             >
-                <Outlet />
+                <Outlet context={{
+                    isLoggedIn, setIsLoggedIn,
+                    userId, setUserId,
+                    userEmail, setUserEmail,
+                    username, setUsername,
+                    userWebsite, setUserWebsite,
+                    givenName, setGivenName,
+                    registeredUsername, setRegisteredUsername,
+                    hasUsername, setHasUsername,
+                    accountType, setAccountType,
+                    hasAccountType, setHasAccountType,
+                    isAppLoading, setIsAppLoading,
+                    isCheckEmailExistanceLoading, setIsCheckEmailExistanceLoading,
+                    isFetchingUserinContextLoading,
+                    user, setUser,
+                    isSessionInProgress, setIsSessionInProgress,
+                    isLogInBtnClicked, setIsLogInBtnClicked
+                }} />
             </Container>
         </Container>
     );

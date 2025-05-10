@@ -1,10 +1,10 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { createNotice, getUserNotices, updateNotice, deleteNotice, saveDeletedNoticeId, deleteAllNotices, getFilteredNotices, updateUserInterests, getUserInterests, createSave, getUserSaves, removeSave, createReport, createLike, removeLike, getUserLikes, getAllLikedNotices as fetchAllLikedNotices, getAllLikesByNoticeId as fetchAllLikesByNoticeId, getUserLikesNotInFeed, getUserSavesNotInFeed, getAllSavedNotices as fetchAllSavedNotices, createReaction, deleteReaction, getAllReactionsBySenderId as fetchAllReactionsBySenderId, getAllReactions as fetchAllReactions, getAllReactionsByRecipientId as fetchAllReactionsByRecipientId, getNoticeByNoticeId as fetchNoticeByNoticeId, getAllReactionsByNoticeId as fetchAllReactionsByNoticeId, getReactionByReactionId as fetchReactionByReactionId, deleteAllSentReactions, createReactionReport, getNoticeByUserId as fetchNoticeByUserId, removeAllSavesForNotice, removeAllLikesForNotice, updateUserPermissions as updatePermissions, getUserPermissions as fetchUserPermissions, getAllLikesTotalByNoticeId as fetchAllLikesTotalByNoticeId, getAllSavesTotalByNoticeId as fetchAllSavesTotalByNoticeId } from '../../lib/context/dbhandler';
 import { useUserContext } from '../context/UserContext.jsx';
 import { useUserInfo } from './useUserInfo.js';
 import { useGemini } from './useGemini';
 
-export const useNotices = (data) => {
+export const useNotices = () => {
 
     const { userId: user_id } = useUserContext();
 
@@ -426,6 +426,10 @@ export const useNotices = (data) => {
     };
 
     const getPersonalFeedNotices = async (limit, lastId) => {
+
+        if (!user_id) {
+            return;
+        }
         try {
 
             const accountsFollowedByUser = await getPersonalFeedAccounts(user_id);
@@ -445,7 +449,17 @@ export const useNotices = (data) => {
         }
     }
 
-    const getNoticesByUser = useCallback(async (user_id, limit, lastId) => {
+    // const getNoticesByUser = useCallback(async (user_id, limit, lastId) => {
+    //     try {
+    //         const response = await getUserNotices(user_id, limit, lastId);
+
+    //         return response;
+    //     } catch (error) {
+    //         console.error('Error getNoticesByUser - useNotices');
+    //     }
+    // }, [data]);
+
+    const getNoticesByUser = async (user_id, limit, lastId) => {
         try {
             const response = await getUserNotices(user_id, limit, lastId);
 
@@ -453,7 +467,7 @@ export const useNotices = (data) => {
         } catch (error) {
             console.error('Error getNoticesByUser - useNotices');
         }
-    }, [data]);
+    };
 
     const fetchUserNotices = async (id, limit, lastId) => {
         if (!id) return;

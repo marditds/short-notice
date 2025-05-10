@@ -1,23 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { useUserContext } from '../../../lib/context/UserContext';
+import { useEffect, useState } from 'react';
 import { useUserInfo } from '../../../lib/hooks/useUserInfo';
 import { Row, Col, Form, Button } from 'react-bootstrap';
 import { LoadingSpinner } from '../../Loading/LoadingSpinner';
 import { ErrorMessage, SuccessMessage } from './UpdateMessage';
 
-export const UserWebsite = () => {
+export const UserWebsite = ({
+    username,
+    userWebsite,
+    setUserWebsite
+}) => {
 
-    const {
-        username,
-        userEmail,
-        userWebsite,
-        setUserWebsite
-    } = useUserContext();
-
-    const {
-        updateUserWebsite,
-        getUserByUsername
-    } = useUserInfo(userEmail);
+    const { updateUserWebsite, getUserByUsername } = useUserInfo();
 
     const [isUpdatingWebsite, setIsUpdatingWebsite] = useState(false);
 
