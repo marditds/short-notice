@@ -158,10 +158,15 @@ export const useNotices = () => {
     useEffect(() => {
         const fetchUserLikes = async () => {
             try {
-                if (!user_id || generalFeedNotices.length === 0) return;
+                if (!user_id || generalFeedNotices.length === 0) {
+                    console.log('You don\'t have any notice in your general feed.');
+                    return
+                };
 
                 const noticeIdsInFeed = generalFeedNotices.map(notice => notice.$id);
                 const userLikes = await getUserLikes(user_id, noticeIdsInFeed);
+
+                console.log('Your likes in general feed.', userLikes);
 
                 setLikedNotices(prevLikes => {
                     const updatedLikes = { ...prevLikes };
@@ -182,7 +187,12 @@ export const useNotices = () => {
     useEffect(() => {
         const fetchPersonalFeedLikes = async () => {
             try {
-                if (!user_id || personalFeedNotices.length === 0) return;
+                if (!user_id || personalFeedNotices.length === 0) {
+                    console.log('You don\'t have any notice in your personal feed.');
+                    return
+                };
+
+                console.log('Fetching user likes for personal feed.');
 
                 const noticeIdsInFeed = personalFeedNotices.map(notice => notice.$id);
                 const userLikes = await getUserLikes(user_id, noticeIdsInFeed);

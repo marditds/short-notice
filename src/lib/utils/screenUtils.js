@@ -5,10 +5,15 @@ export const screenUtils = () => {
     const width = window.innerWidth;
 
     const [isExtraSmallScreen, setIsExtraSmallScreen] = useState(width < 576);
+
     const [isSmallScreen, setIsSmallScreen] = useState(width >= 576 && width < 768);
+
     const [isMediumScreen, setIsMediumScreen] = useState(width >= 768 && width < 992);
+
     const [isLargeScreen, setIsLargeScreen] = useState(width >= 992 && width < 1200);
+
     const [isExtraLargeScreen, setIsExtraLargeScreen] = useState(width >= 1200 && width < 1400);
+
     const [isDoubleExtraLargeScreen, setIsDoubleExtraLargeScreen] = useState(width >= 1400);
 
     useEffect(() => {
@@ -95,5 +100,5 @@ export const screenUtils = () => {
     //     return () => window.removeEventListener('resize', handleResize);
     // }, [])
 
-    return { isExtraLargeScreen, isLargeScreen, isMediumScreen, isSmallScreen, isExtraSmallScreen }
+    return { isExtraLargeScreen, isLargeScreen, isMediumScreen, isSmallScreen, isExtraSmallScreen, isDoubleExtraLargeScreen }
 }

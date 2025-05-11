@@ -101,6 +101,13 @@ export const Navigation = ({
         }
     ]
 
+    // const shouldUseAutoMargin = (
+    //     (
+    //         (location.pathname === '/user/profile' || location.pathname === '/user/settings')
+    //         && !isExtraSmallScreen
+    //     ) || isExtraLargeScreen || isDoubleExtraLargeScreen
+    // );
+
     return (
         <>
             <Nav className='userhome__body--profile--tools w-100 d-flex fixed-top'>
@@ -148,9 +155,10 @@ export const Navigation = ({
                         drop='down'
                         id="dropdown-basic-button"
                         className={`my-auto userhome__body--profile--tools--dropdown 
-                            ${(location.pathname === '/user/feed' && !isLargeScreen) ? 'ms-auto' : 'ms-1'} 
+                           ${(location.pathname === '/user/feed' && !isLargeScreen) ? 'ms-auto' : 'ms-1'} 
                             ${(location.pathname !== '/user/feed' && !isExtraSmallScreen) ? 'ms-auto' : 'ms-1'}
                             `}
+
                         title={<i className='bi bi-three-dots-vertical navigation__three-dots d-flex justify-content-center align-items-center' />}>
                         {
                             dropdownItems.map((dropdownItem, idx) => {

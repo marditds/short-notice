@@ -1,13 +1,12 @@
-import React from 'react';
 import { Form, Row, Col, Button } from 'react-bootstrap';
 import { screenUtils } from '../../../../lib/utils/screenUtils';
 
 export const FeedToggle = ({ isFeedToggled, handleFeedToggle, handleRefresh, isAnyTagSelected }) => {
 
-    const { isLargeScreen } = screenUtils();
+    const { isExtraLargeScreen, isDoubleExtraLargeScreen } = screenUtils();
 
     return (
-        <Form className={`d-flex justify-content-center align-items-center ${!isLargeScreen ? 'w-75 ms-auto' : 'w-100'}`}
+        <Form className={`d-flex justify-content-center align-items-center ${isDoubleExtraLargeScreen || isExtraLargeScreen ? 'w-75 ms-auto' : 'w-100'}`}
         >
             <Form.Group as={Row} className='align-items-center'>
 

@@ -820,7 +820,7 @@ const OtherUserProfile = () => {
                 />
                 <>
                     {!isBlocked ?
-                        <div style={{ marginTop: !isSmallScreen ? '230px' : '170px' }}>
+                        <div style={{ marginTop: !isSmallScreen ? '180px' : '170px' }}>
                             <Tabs
                                 activeKey={eventKey}
                                 defaultActiveKey='notices'

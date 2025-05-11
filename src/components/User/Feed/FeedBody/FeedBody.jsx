@@ -1,4 +1,3 @@
-import React from 'react';
 import { Row, Col } from 'react-bootstrap';
 import { FeedToggle } from './FeedToggle';
 import '../Feed.css';
@@ -7,7 +6,7 @@ export const FeedBody = ({ isFeedToggled, handleFeedToggle, handleRefresh, isAny
 
     return (
         <>
-            <Row className='fixed-top w-100 ms-auto me-auto user-feed__header'>
+            <Row className='fixed-top w-100 mx-auto user-feed__header'>
                 <Col>
                     <FeedToggle
                         isAnyTagSelected={isAnyTagSelected}

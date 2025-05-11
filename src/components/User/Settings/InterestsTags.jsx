@@ -35,7 +35,7 @@ export const InterestsTags = ({
                         <div
                             onClick={() => toggleInterestsTag(tag.key)}
 
-                            className={`settings__update-interests-tag ${selectedTags[tag.key] && 'tagIsChecked'}`}
+                            className={`settings__update-interests-tag ${selectedTags[tag.key] ? 'tagIsChecked' : ''}`}
                         >
                             {tag.name}
                         </div>
