@@ -227,12 +227,14 @@ export const Notices = ({
         const updatedUsernameMap = { ...usernameMap[noticeId] };
         const updatedAvatarMap = { ...avatarMap[noticeId] };
 
-        users.forEach(user => {
-            if (user) {
-                updatedUsernameMap[user.$id] = user.username;
-                updatedAvatarMap[user.$id] = user.avatar;
-            }
-        });
+        if (users) {
+            users.forEach(user => {
+                if (user) {
+                    updatedUsernameMap[user.$id] = user.username;
+                    updatedAvatarMap[user.$id] = user.avatar;
+                }
+            });
+        }
 
         return { updatedUsernameMap, updatedAvatarMap };
     };
@@ -358,12 +360,17 @@ export const Notices = ({
             try {
                 const notice = noticeMap?.get(noticeId);
 
-                if ((txtPermission === false) || (notice.txtPermission === false)) {
+                if ((txtPermission === false) || (notice?.txtPermission === false)) {
                     console.log('Permission denied: Not loading reactions');
                     return;
                 }
 
                 const initialReactions = await getReactionsForNotice(noticeId, limit);
+
+                if (initialReactions.documents.length === 0) {
+                    console.log('This notice has not reactions. Stop the fetch.');
+                    return;
+                }
 
                 console.log('initialReactions', initialReactions);
 
@@ -401,8 +408,8 @@ export const Notices = ({
                     [noticeId]: initialReactions?.documents || []
                 }));
 
-                const newCursor = initialReactions.documents.length > 0
-                    ? initialReactions.documents[initialReactions.documents.length - 1].$id
+                const newCursor = initialReactions?.documents.length > 0
+                    ? initialReactions?.documents[initialReactions?.documents.length - 1].$id
                     : null;
 
                 setCursors(prev => ({
@@ -644,7 +651,7 @@ export const Notices = ({
 
                                                                     console.log('isSaved:', isSaved);
 
-                                                                    const currentCount = saveCounts[notice.$id] ?? notice.noticeSavesTotalc ?? 0;
+                                                                    const currentCount = saveCounts[notice.$id] ?? notice.noticeSavesTotal ?? 0;
 
                                                                     console.log('currentCount', currentCount);
 
