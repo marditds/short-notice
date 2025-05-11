@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
-import { useUserContext } from '../../../lib/context/UserContext';
 import { useNotices } from '../../../lib/hooks/useNotices';
 import { useUserInfo } from '../../../lib/hooks/useUserInfo';
 import { getAvatarUrl as avatarUtil } from '../../../lib/utils/avatarUtils';
@@ -268,10 +267,6 @@ const UserFeed = () => {
             fetchSubsequentPersonalFeed();
         }
     }, [loadMorePersonal]);
-
-    useEffect(() => {
-        console.log('personalFeedNotices:', personalFeedNotices);
-    }, [personalFeedNotices])
 
     const handleFeedToggle = () => {
         if (isAnyTagSelected === true) {

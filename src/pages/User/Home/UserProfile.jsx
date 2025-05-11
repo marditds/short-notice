@@ -205,6 +205,12 @@ const UserProfile = () => {
 
     // function for fetching notices
     const fetchNotices = async () => {
+
+        if (!userId) {
+            console.log('Get back to me when the user\'s info loads.');
+            return;
+        }
+
         setIsLoadingMore(true);
         try {
             const usrNtcs = await fetchUserNotices(userId, limit, lastId);
@@ -301,9 +307,9 @@ const UserProfile = () => {
                 const noticeExists = prevNotices.some(notice => notice.$id === latestNotice.$id);
                 if (!noticeExists) {
 
-                    const latestNoticeWithLike = { ...latestNotice, noticeLikesTotal: 0 }
+                    const latestNoticeWithReactionNumbers = { ...latestNotice, noticeLikesTotal: 0, noticeSavesTotal: 0 }
 
-                    return [latestNoticeWithLike, ...prevNotices];
+                    return [latestNoticeWithReactionNumbers, ...prevNotices];
                 }
                 return prevNotices;
             });
@@ -313,6 +319,11 @@ const UserProfile = () => {
     // Fetch saves and users' data for saves tab
     useEffect(() => {
         const fetchSaveNotices = async () => {
+
+            if (!userId) {
+                console.log('Get back to me when the user\'s info loads.');
+                return;
+            }
 
             if (offsetSaves === 0) {
                 setIsLoadingSaves(true);
@@ -324,6 +335,12 @@ const UserProfile = () => {
                 const allSavedNotices = await getAllSavedNotices(userId, userId, limitSaves, offsetSaves);
 
                 console.log('allSavedNotices', allSavedNotices);
+
+                if (!Array.isArray(allSavedNotices) || allSavedNotices.length === 0) {
+                    console.log("You have not saved anything.");
+                    setHasMoreNotices(false);
+                    return;
+                }
 
                 const ntcsIds = allSavedNotices?.map(ntc => ntc.$id);
 
@@ -386,6 +403,10 @@ const UserProfile = () => {
 
             console.log('Starting fetchLikedNotices in UserProfile.jsx');
 
+            if (!userId) {
+                console.log('Get back to me when the user\'s info loads.');
+                return;
+            }
 
             if (offsetLikes === 0) {
                 setIsLoadingLikes(true);
@@ -397,6 +418,12 @@ const UserProfile = () => {
                 const allLikedNotices = await getAllLikedNotices(userId, userId, limitLikes, offsetLikes);
 
                 console.log('allLikedNotices - UserProfile.jsx', allLikedNotices);
+
+                if (!Array.isArray(allLikedNotices) || allLikedNotices.length === 0) {
+                    console.log("You have not liked anything.");
+                    setHasMoreNotices(false);
+                    return;
+                }
 
                 const ntcsIds = allLikedNotices?.map(ntc => ntc.$id);
 

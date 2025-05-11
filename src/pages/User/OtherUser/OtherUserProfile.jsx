@@ -174,6 +174,11 @@ const OtherUserProfile = () => {
     useEffect(() => {
         const getCurrUser = async () => {
             try {
+
+                if (!username) {
+                    return;
+                }
+
                 setIsOtherUserLoading(true);
                 console.log('otherUsername', otherUsername);
 
@@ -267,6 +272,11 @@ const OtherUserProfile = () => {
 
         const fetchNotices = async () => {
 
+            if (!currUserId) {
+                console.log('Get back to me when the user\'s info loads.');
+                return;
+            }
+
             if (offsetNotices === 0) {
                 setIsLoadingNotices(true);
             } else {
@@ -274,9 +284,14 @@ const OtherUserProfile = () => {
             }
 
             try {
+
+                console.log('user_id, limit, offset', { currUserId, limitNotices, offsetNotices });
+
                 const usrNtcs = await getNoticeByUserId(currUserId, limitNotices, offsetNotices);
 
-                if (!usrNtcs.length) {
+                console.log('usrNtcs in OtherUserProfile:', usrNtcs);
+
+                if (!Array.isArray(usrNtcs) || usrNtcs.length === 0) {
                     console.log("The user has not posted anything.");
                     setHasMoreNotices(false);
                     return;
@@ -405,6 +420,11 @@ const OtherUserProfile = () => {
     useEffect(() => {
         const fetchSaveNotices = async () => {
 
+            if (!currUserId) {
+                console.log('Get back to me when the user\'s info loads.');
+                return;
+            }
+
             if (offsetSaves === 0) {
                 setIsLoadingSaves(true);
             } else {
@@ -415,6 +435,12 @@ const OtherUserProfile = () => {
                 console.log('currUserId - allSavedNotices', currUserId);
 
                 const allSavedNotices = await getAllSavedNotices(currUserId, userId, limitSaves, offsetSaves);
+
+                if (!Array.isArray(allSavedNotices) || allSavedNotices.length === 0) {
+                    console.log("They have not saved anything.");
+                    setHasMoreNotices(false);
+                    return;
+                }
 
                 console.log('allSavedNotices', allSavedNotices);
 
@@ -484,6 +510,11 @@ const OtherUserProfile = () => {
     useEffect(() => {
         const fetchLikedNotices = async () => {
 
+            if (!currUserId) {
+                console.log('Get back to me when the user\'s info loads.');
+                return;
+            }
+
             if (offsetLikes === 0) {
                 setIsLoadingLikes(true);
             } else {
@@ -492,6 +523,12 @@ const OtherUserProfile = () => {
 
             try {
                 const allLikedNotices = await getAllLikedNotices(currUserId, userId, limitLikes, offsetLikes);
+
+                if (!Array.isArray(allLikedNotices) || allLikedNotices.length === 0) {
+                    console.log("They have not liked anything.");
+                    setHasMoreNotices(false);
+                    return;
+                }
 
                 console.log('allLikedNotices - OtherUserProfile', allLikedNotices);
 

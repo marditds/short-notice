@@ -256,12 +256,9 @@ export const useNotices = () => {
             try {
                 const createdNotice = await createNotice(newNotice);
 
-
-
                 setLatestNotice(createdNotice);
                 console.log('THIS WILL BE THE LATEST NOTICE:', createdNotice);
                 console.log('expiresAt', expiresAt);
-
 
                 return createdNotice;
 
@@ -685,6 +682,9 @@ export const useNotices = () => {
 
     const getNoticeByUserId = async (user_id, limit, offset) => {
 
+        console.log('user_id, limit, offset', { user_id, limit, offset });
+
+
         if (!user_id) {
             return;
         }
@@ -703,6 +703,8 @@ export const useNotices = () => {
     }
 
     const getAllLikesByNoticeId = async (noticeId) => {
+
+        console.log('noticeId in getAllLikesByNoticeId', noticeId);
 
         if (!noticeId) {
             return;

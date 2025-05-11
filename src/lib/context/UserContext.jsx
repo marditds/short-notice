@@ -40,7 +40,8 @@ export const UserProvider = ({ children }) => {
 
                 const usr = await getAccount();
                 if (usr) {
-                    console.log('Session in progress.', usr);
+
+                    console.log('Session in progress.', authToken);
                     setIsSessionInProgress(true);
                     setUserEmail(usr.email);
                     setUserId(usr.$id);

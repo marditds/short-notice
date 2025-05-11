@@ -51,16 +51,10 @@ const SignIn = () => {
             } else {
                 console.log('THIS IS USER Sesssion:', userSession);
 
-                const user = await getAccount();
-
-                console.log('THIS IS USER in SIGNIN:', user);
-
                 localStorage.setItem('authToken', userSession.$id);
 
-                setUserEmail(user.email);
-                setUserId(user.$id);
-                setGivenName(user.name);
-                setUser(user);
+                setUserEmail(userSession.providerUid);
+                setUserId(userSession.userId);
                 setIsLoggedIn(true);
 
                 loginSuccess = true;
