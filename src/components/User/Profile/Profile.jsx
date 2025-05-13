@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { Row, Col, Button, Dropdown } from 'react-bootstrap';
 import { getAvatarUrl } from '../../../lib/utils/avatarUtils.js';
@@ -7,8 +7,7 @@ import { screenUtils } from '../../../lib/utils/screenUtils.js';
 import { BlockModal, ReportModal, FollowModal } from '../Modals.jsx';
 import { LoadingSpinner } from '../../Loading/LoadingSpinner.jsx';
 
-export const Profile = ({ username, avatarUrl, isAvatarLoading, website, handleFollow, handleBlock, currUserId, followingCount, followersCount, isFollowing, followingAccounts, followersAccounts, isFollowingUserLoading, isGetFollwedByUserCountLoading,
-    isGetFollowingTheUserCountLoading, isBlocked, isOtherUserBlocked, handleUserReport, hasMoreFollowing, hasMoreFollowers, loadFollowing, loadFollowers, isLoadingMoreFollowing, isLoadingMoreFollowers, isOtherUserFollowingMe, isProcessingBlock, userWebsite }) => {
+export const Profile = ({ username, avatarUrl, isAvatarLoading, website, handleFollow, handleBlock, currUserId, followingCount, followersCount, isFollowing, followingAccounts, followersAccounts, isFollowingUserLoading, isGetFollwedByUserCountLoading, isGetFollowingTheUserCountLoading, isBlocked, isOtherUserBlocked, handleUserReport, hasMoreFollowing, hasMoreFollowers, loadFollowing, loadFollowers, isLoadingMoreFollowing, isLoadingMoreFollowers, isOtherUserFollowingMe, isProcessingBlock, userWebsite }) => {
 
     const location = useLocation();
 
@@ -76,6 +75,8 @@ export const Profile = ({ username, avatarUrl, isAvatarLoading, website, handleF
         setShowReportUserModal(false);
         setReportReason(null);
     }
+
+    const usernameRef = useRef(null);
 
     return (
         <div className='user-profile__body'>
@@ -154,27 +155,39 @@ export const Profile = ({ username, avatarUrl, isAvatarLoading, website, handleF
                             }
                         </div>
 
-                        {/* Username */}
-                        <p className='mb-0 mt-0 mt-md-1 text-center position-relative d-flex flex-column flex-sm-row justify-content-center align-items-center'>
-                            <strong>
+                        {/* Username and website */}
+                        <p className='mb-0 pt-1 pt-sm-0 my-0 my-sm-1 text-center position-relative'>
+                            <strong ref={usernameRef}>
                                 {username}
                             </strong>
-                            {isOtherUserFollowingMe &&
-                                <span className='w-100 user-profile__follow-status ms-0 ms-sm-2'>
+
+                            {isOtherUserFollowingMe && !isExtraSmallScreen &&
+                                <span
+                                    className='position-absolute user-profile__follow-status'
+                                    style={{
+                                        marginLeft: '8px',
+                                        top: 0,
+                                        whiteSpace: 'nowrap',
+                                    }}
+                                >
+                                    Follows you
+                                </span>
+                            }
+
+                            {isOtherUserFollowingMe && isExtraSmallScreen &&
+                                <span className='d-block mx-auto my-1 user-profile__follow-status'>
                                     Follows you
                                 </span>
                             }
                         </p>
-                        <p className='my-0 text-center'>
+
+                        <p className='mt-1 mt-sm-0 mb-0 text-center'>
                             {
                                 website &&
                                 <>
                                     <a href={website} target='_blank' className='text-decoration-none user-profile__website'>
                                         <i className='bi bi-link-45deg me-1' />
-                                        {website
-                                            .replace(/^https?:\/\//, '')
-                                            .replace(/^www\./, '')
-                                        }
+                                        Visit Website
                                     </a>
                                 </>
                             }

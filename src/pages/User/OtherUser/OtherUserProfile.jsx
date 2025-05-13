@@ -78,7 +78,7 @@ const OtherUserProfile = () => {
         handleUserReport
     } = useUserInfo();
 
-    const { isSmallScreen } = screenUtils();
+    const { isExtraSmallScreen, isSmallScreen } = screenUtils();
 
     const [accountType, setAccountType] = useState(null);
     const [accountTypeCheck, setAccountTypeCheck] = useState(false);
@@ -820,7 +820,7 @@ const OtherUserProfile = () => {
                 />
                 <>
                     {!isBlocked ?
-                        <div style={{ marginTop: !isSmallScreen ? '180px' : '170px' }}>
+                        <div style={{ marginTop: (isExtraSmallScreen || isSmallScreen) ? '190px' : '235px' }}>
                             <Tabs
                                 activeKey={eventKey}
                                 defaultActiveKey='notices'

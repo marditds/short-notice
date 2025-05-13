@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useUserInfo } from '../../../lib/hooks/useUserInfo';
 import { getAvatarUrl as avatarUrl } from '../../../lib/utils/avatarUtils';

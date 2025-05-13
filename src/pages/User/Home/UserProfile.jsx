@@ -74,7 +74,7 @@ const UserProfile = () => {
         getBlockedUsersByUser
     } = useUserInfo();
 
-    const { isSmallScreen } = screenUtils();
+    const { isExtraSmallScreen, isSmallScreen } = screenUtils();
 
     const [noticeText, setNoticeText] = useState('');
     const [editingNoticeId, setEditingNoticeId] = useState(null);
@@ -670,7 +670,7 @@ const UserProfile = () => {
             />
 
             {/* Compose notice */}
-            <div style={{ marginTop: !isSmallScreen ? '175px' : '170px' }}>
+            <div style={{ marginTop: (isExtraSmallScreen || isSmallScreen) ? '170px' : '230px' }}>
                 <ComposeNotice
                     isAddingNotice={isAddingNotice}
                     noticeText={noticeText}
