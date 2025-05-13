@@ -31,7 +31,7 @@ export const Navigation = ({
         onGeminiRunClick
     } = useNotices();
 
-    const { isLargeScreen, isExtraSmallScreen } = screenUtils();
+    const { isDoubleExtraLargeScreen, isExtraLargeScreen, isExtraSmallScreen } = screenUtils();
 
     //Compose Notice
     const [noticeText, setNoticeText] = useState('');
@@ -101,12 +101,16 @@ export const Navigation = ({
         }
     ]
 
-    // const shouldUseAutoMargin = (
-    //     (
-    //         (location.pathname === '/user/profile' || location.pathname === '/user/settings')
-    //         && !isExtraSmallScreen
-    //     ) || isExtraLargeScreen || isDoubleExtraLargeScreen
-    // );
+    const navBtnsSpacing = (() => {
+        const isFeedPage = location.pathname === '/user/feed';
+
+        if ((isFeedPage && (isDoubleExtraLargeScreen || isExtraLargeScreen)) ||
+            (!isFeedPage && !isExtraSmallScreen)) {
+            return 'ms-auto';
+        }
+        return 'ms-1';
+    })();
+
 
     return (
         <>
@@ -154,9 +158,7 @@ export const Navigation = ({
                     <NavDropdown
                         drop='down'
                         id="dropdown-basic-button"
-                        className={`my-auto userhome__body--profile--tools--dropdown 
-                           ${(location.pathname === '/user/feed' && !isLargeScreen) ? 'ms-auto' : 'ms-1'} 
-                            ${(location.pathname !== '/user/feed' && !isExtraSmallScreen) ? 'ms-auto' : 'ms-1'}
+                        className={`my-auto userhome__body--profile--tools--dropdown ${navBtnsSpacing}
                             `}
 
                         title={<i className='bi bi-three-dots-vertical navigation__three-dots d-flex justify-content-center align-items-center' />}>
