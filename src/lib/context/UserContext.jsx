@@ -29,22 +29,26 @@ export const UserProvider = ({ children }) => {
                 console.log('START - Checking session status...');
                 setIsAppLoading(true);
 
-                const authToken = localStorage.getItem('authToken');
+                const userIdInSession = localStorage.getItem('authUserId');
 
-                if (!authToken) {
+                if (!userIdInSession) {
                     console.log('Not authenticated.');
                     setIsSessionInProgress(false);
                     setIsLoggedIn(false);
                     return;
                 }
 
-                const usr = await getAccount();
-                if (usr) {
+                // const usr = await getAccount();
+                if (userIdInSession) {
 
-                    console.log('Session in progress.', authToken);
+                    const userEmailInSession = localStorage.getItem('authUserEmail');
+
+                    console.log('Session in progress.', userIdInSession);
+                    console.log('userEmailInSession', userEmailInSession);
+
                     setIsSessionInProgress(true);
-                    setUserEmail(usr.email);
-                    setUserId(usr.$id);
+                    setUserEmail(userEmailInSession);
+                    setUserId(userIdInSession);
                     setIsLoggedIn(true);
                 } else {
                     console.log('No session found.');

@@ -51,8 +51,8 @@ const SignIn = () => {
             } else {
                 console.log('THIS IS USER Sesssion:', userSession);
 
-                localStorage.setItem('authToken', userSession.$id);
-                // localStorage.setItem('authEmail', userSession.);
+                localStorage.setItem('authUserId', userSession.userId);
+                localStorage.setItem('authUserEmail', userSession.providerUid);
 
                 setUserEmail(userSession.providerUid);
                 setUserId(userSession.userId);

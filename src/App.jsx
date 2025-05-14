@@ -23,7 +23,7 @@ function App() {
         navigate('/user/feed');
       }
     } else {
-      console.log('flan fstan flan fstan');
+      console.log('No username found. App.jsx');
       return;
     }
   }, [hasUsername, isSessionInProgress]);
