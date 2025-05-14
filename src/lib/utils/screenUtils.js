@@ -100,5 +100,5 @@ export const screenUtils = () => {
     //     return () => window.removeEventListener('resize', handleResize);
     // }, [])
 
-    return { isExtraLargeScreen, isLargeScreen, isMediumScreen, isSmallScreen, isExtraSmallScreen, isDoubleExtraLargeScreen }
+    return { isDoubleExtraLargeScreen, isExtraLargeScreen, isLargeScreen, isMediumScreen, isSmallScreen, isExtraSmallScreen }
 }

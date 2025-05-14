@@ -52,6 +52,7 @@ const SignIn = () => {
                 console.log('THIS IS USER Sesssion:', userSession);
 
                 localStorage.setItem('authToken', userSession.$id);
+                // localStorage.setItem('authEmail', userSession.);
 
                 setUserEmail(userSession.providerUid);
                 setUserId(userSession.userId);

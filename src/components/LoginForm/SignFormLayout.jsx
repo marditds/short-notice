@@ -29,7 +29,7 @@ export const SignFormLayout = ({
     children,
 }) => {
 
-    const { isSmallScreen, isExtraSmallScreen, isMediumScreen } = screenUtils();
+    const { isDoubleExtraLargeScreen, isExtraLargeScreen, isLargeScreen, isMediumScreen, isSmallScreen, isExtraSmallScreen } = screenUtils();
 
     const randomName = React.useMemo(() => {
         return 'rnnm_' + Math.random().toString(36).substring(2, 12);
@@ -41,29 +41,37 @@ export const SignFormLayout = ({
         <Container
             className={`${type === 'signup' ? 'min-vh-100' : 'mt-5'} 
         d-flex flex-column justify-content-center align-items-center`}>
-            <div className='d-flex flex-column justify-content-evenly align-items-center p-4 signup-form--bg' style={{ width: !isSmallScreen ? '580px' : '100%' }}>
+            <div className='d-flex flex-column justify-content-evenly align-items-center p-4 signup-form--bg'
+                style={{ width: !isSmallScreen && !isExtraSmallScreen ? '580px' : '100%' }}>
                 {/* Title */}
                 <Row className='w-100 mb-2'>
-                    <Col className={`${isMediumScreen ? 'px-0' : ''} d-block d-lg-flex align-items-lg-baseline ${!isMediumScreen ? 'ms-0' : 'ms-auto me-auto'}`} style={{ maxWidth: maxColWidth }}>
-                        <h2 className={`d-block d-lg-flex align-items-lg-baseline`}>
+                    <Col className={`
+                        ${(isExtraSmallScreen || isSmallScreen || isMediumScreen) ? 'px-0' : ''} 
+                        d-block d-lg-flex align-items-lg-baseline 
+                        ${(!isExtraSmallScreen && !isSmallScreen && !isMediumScreen) ? 'ms-0' : 'ms-auto me-auto'}
+                        `} style={{ maxWidth: maxColWidth }}>
+                        <h2 className={`d-block d-md-flex align-items-md-baseline`}>
                             <span className='signup-form--title--span'>
                                 {titleText}
                             </span>
-                            <Image src={logo} className='ms-0 ms-lg-2 d-block d-lg-inline' width={'210'} fluid />
+                            <Image src={logo} className='ms-0 ms-md-2 d-block d-lg-inline' width={'210'} fluid />
                         </h2>
                     </Col>
                 </Row>
 
                 {/* Form */}
                 <Row className='w-100'>
-                    <Form onSubmit={onSubmit} style={{ paddingInline: !isMediumScreen ? '12px' : '0px' }}>
+                    <Form onSubmit={onSubmit} style={{ paddingInline: (!isMediumScreen && !isSmallScreen && !isExtraSmallScreen) ? '12px' : '0px' }}>
 
                         {type === 'forgot' &&
-                            <Col className={`mb-0 mb-md-0 d-flex ${!isMediumScreen ? 'ms-auto' : 'mx-auto'}`} style={{ maxWidth: maxColWidth }}>
+                            <Col className={`mb-0 mb-md-0 d-flex 
+                                ${(!isExtraSmallScreen && !isSmallScreen && !isMediumScreen) ? 'ms-auto' : 'mx-auto'}
+                            `} style={{ maxWidth: maxColWidth }}>
                                 <p>
                                     Enter the email associated with your ShortNotice account.
                                 </p>
-                            </Col>}
+                            </Col>
+                        }
 
                         {formFields?.map(({ label, type, value, onChange, controlId }, idx) => (
                             <Form.Group
@@ -73,13 +81,16 @@ export const SignFormLayout = ({
                                 controlId={controlId}
                             >
                                 <Form.Label
-                                    className={`mb-1 mb-lg-0 ${isMediumScreen && 'w-100 d-flex justify-content-start'}`}
-                                    style={{ maxWidth: isMediumScreen && maxColWidth, color: 'var(--main-text-color)' }}
+                                    className={`mb-1 mb-lg-0 
+                                        ${(isExtraSmallScreen || isSmallScreen || isMediumScreen) && 'w-100 d-flex justify-content-start'}
+                                    `}
+                                    style={{ maxWidth: (isExtraSmallScreen || isSmallScreen || isMediumScreen) && maxColWidth, color: 'var(--main-text-color)' }}
                                 >
                                     {label}
                                 </Form.Label>
                                 <Form.Control
-                                    className={`signup-form--field ${!isMediumScreen ? 'ms-auto' : 'ms-auto me-auto'}`}
+                                    className={`signup-form--field ${!isExtraSmallScreen && !isSmallScreen && !isMediumScreen ? 'ms-auto' : 'ms-auto me-auto'}
+                                    `}
                                     style={{ maxWidth: maxColWidth }}
                                     type={type}
                                     value={value}
@@ -114,10 +125,10 @@ export const SignFormLayout = ({
                             />
                         </Form.Group>
 
-
+                        {/* Forgot pass link */}
                         {type === 'signin' &&
                             <Col
-                                className={`mb-2 ${!isMediumScreen ? 'ms-auto' : 'mx-auto'}`}
+                                className={`mb-2 ${(!isExtraSmallScreen && !isSmallScreen && !isMediumScreen) ? 'ms-auto' : 'mx-auto'}`}
                                 style={{ maxWidth: maxColWidth }}
                             >
                                 <Form.Text className='text-muted text-end d-flex justify-content-end'>
@@ -128,8 +139,9 @@ export const SignFormLayout = ({
                             </Col>
                         }
 
+                        {/* Password guide */}
                         {type !== 'forgot' &&
-                            <Col className={`mb-0 mb-md-0 d-flex ${!isMediumScreen ? 'ms-auto' : 'mx-auto'}`}
+                            <Col className={`mb-0 mb-md-0 d-flex ${(!isExtraSmallScreen && !isSmallScreen && !isMediumScreen) ? 'ms-auto' : 'mx-auto'}`}
                                 style={{ maxWidth: maxColWidth }}>
                                 <Form.Text className='text-muted'>
                                     <ul className='ps-3'>
@@ -142,7 +154,7 @@ export const SignFormLayout = ({
 
                         {/* ReCAPTCHA */}
                         {showRecaptcha && (
-                            <Col className={`d-flex ${!isMediumScreen ? 'ms-auto' : 'mx-auto'}`} style={{ maxWidth: maxColWidth }}>
+                            <Col className={`d-flex ${(!isExtraSmallScreen && !isSmallScreen && !isMediumScreen) ? 'ms-auto' : 'mx-auto'}`} style={{ maxWidth: maxColWidth }}>
                                 {captchaSiteKey ? (
                                     <ReCAPTCHA
                                         className="hakobos"
@@ -157,7 +169,7 @@ export const SignFormLayout = ({
                             </Col>
                         )}
                         {captchaErrorMessage && (
-                            <Col className={`mb-3 ${!isMediumScreen ? 'd-flex ms-auto' : 'd-flex mx-auto'}`} style={{ maxWidth: maxColWidth }}>
+                            <Col className={`mb-3 ${(!isExtraSmallScreen && !isSmallScreen && !isMediumScreen) ? 'd-flex ms-auto' : 'd-flex mx-auto'}`} style={{ maxWidth: maxColWidth }}>
                                 {captchaErrorMessage}
                             </Col>
                         )}
@@ -166,7 +178,7 @@ export const SignFormLayout = ({
                             <div className='mt-3 mb-3'>
                                 {/* Agreements */}
                                 {agreements?.map(({ id, textBefore, linkText, onClick, onChange }, index) => (
-                                    <Col key={id} className={`mb-1 mb-md-2 ${index !== 0 ? 'my-1' : ''} ${!isMediumScreen ? 'ms-auto' : 'mx-auto'}`} style={{ maxWidth: maxColWidth }}>
+                                    <Col key={id} className={`mb-1 mb-md-2 ${index !== 0 ? 'my-1' : ''} ${(!isExtraSmallScreen && !isSmallScreen && !isMediumScreen) ? 'ms-auto' : 'mx-auto'}`} style={{ maxWidth: maxColWidth }}>
                                         <Form.Check
                                             type='checkbox'
                                             id={id}
@@ -187,12 +199,11 @@ export const SignFormLayout = ({
                             </div>
                         }
 
-
                         {/* Submit button */}
-                        <Col className={`d-flex flex-column ${!isMediumScreen ? 'ms-auto' : 'mx-auto'}`} style={{ maxWidth: maxColWidth }}>
+                        <Col className={`d-flex flex-column ${(!isExtraSmallScreen && !isSmallScreen && !isMediumScreen) ? 'ms-auto' : 'mx-auto'}`} style={{ maxWidth: maxColWidth }}>
                             <Button
                                 type='submit'
-                                className={`signup-form__btn me-0 ms-auto ${isExtraSmallScreen && 'w-100'}`}
+                                className={`signup-form__btn me-0 ms-auto ${(isExtraSmallScreen && isSmallScreen && isMediumScreen) && 'w-100'}`}
                                 disabled={isSubmitDisabled || wishValue !== ''}
                             >
                                 {!isLoading ? submitButtonText : <LoadingSpinner />}
@@ -219,7 +230,7 @@ export const SignFormLayout = ({
                 {/* Alternate route */}
                 {
                     ((type !== 'reset') && (type !== 'forgot')) && <Row className='mt-2 w-100'>
-                        <Col className={` pe-0 pe-lg-3 ${!isMediumScreen ? 'd-flex ms-auto' : 'd-flex mx-auto'}`} style={{ maxWidth: maxColWidth }}>
+                        <Col className={` pe-0 pe-lg-3 ${(!isExtraSmallScreen && !isSmallScreen && !isMediumScreen) ? 'd-flex ms-auto' : 'd-flex mx-auto'}`} style={{ maxWidth: maxColWidth }}>
                             <p className='mb-0 me-0 ms-auto'>
                                 {alternateRouteText} <Link to={alternateRouteLink} className='signup-form__signin-btn'>{type === 'signup' ? 'Sign In' : 'Sign Up'}</Link>
                             </p>
@@ -227,10 +238,10 @@ export const SignFormLayout = ({
                     </Row>
                 }
 
-            </div>
+            </div >
 
             {/* Modals */}
             {children}
-        </Container>
+        </Container >
     );
 };

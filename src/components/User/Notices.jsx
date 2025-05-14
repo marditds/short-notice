@@ -367,8 +367,8 @@ export const Notices = ({
 
                 const initialReactions = await getReactionsForNotice(noticeId, limit);
 
-                if (initialReactions.documents.length === 0) {
-                    console.log('This notice has not reactions. Stop the fetch.');
+                if (!initialReactions || initialReactions.documents.length === 0) {
+                    console.log('Closing the accordion, or this notice has no reactions. Stop the fetch.');
                     return;
                 }
 

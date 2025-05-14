@@ -670,7 +670,7 @@ const UserProfile = () => {
             />
 
             {/* Compose notice */}
-            <div style={{ marginTop: (isExtraSmallScreen || isSmallScreen) ? '170px' : '230px' }}>
+            <div style={{ marginTop: (isExtraSmallScreen || isSmallScreen) ? '175px' : '235px' }}>
                 <ComposeNotice
                     isAddingNotice={isAddingNotice}
                     noticeText={noticeText}
