@@ -484,13 +484,14 @@ export const Notices = ({
             <Accordion
                 className='notices__accordion'
                 activeKey={activeNoticeId}
-                onSelect={handleAccordionToggle}
+            // onSelect={handleAccordionToggle}
             >
                 {notices?.map((notice, idx) => (
                     <Accordion.Item eventKey={notice?.$id} key={notice?.$id}>
                         <Accordion.Header
                             className='notices__accordion-header mt-3 mb-0'
-                            onClick={() => handleAccordionToggle(notice.$id)}
+                            // onClick={() => handleAccordionToggle(notice.$id)}
+                            onClick={(e) => { e.stopPropagation(); }}
                         >
                             {/* Avatar, username, dates */}
                             <Row className='w-100 mx-0 flex-nowrap'>
@@ -596,13 +597,19 @@ export const Notices = ({
                                                             <span className='ms-4 d-flex mt-auto my-auto'>
                                                                 <i className='bi bi-floppy notice__reaction-btn-fill me-2' /> {notice.noticeSavesTotal}
                                                             </span>
+                                                            <span className='ms-4 d-flex mt-auto my-auto'>
+                                                                <i className='bi bi-reply notice__reaction-btn-fill me-2' /> {notice.noticeSavesTotal}
+                                                            </span>
                                                         </>
                                                         :
                                                         <>
                                                             {/* Like */}
                                                             <div
                                                                 className={`d-flex align-items-center notice__reaction-btn ${(isOtherUserBlocked || (btnPermission === false || notice.btnPermission === false)) ? 'disabled' : ''} ms-2`}
-                                                                onClick={() => {
+                                                                onClick={(e) => {
+
+                                                                    e.stopPropagation();
+
                                                                     if (isOtherUserBlocked || btnPermission === false || notice.btnPermission === false) {
                                                                         console.log("YOU are forbidden from completing this action.");
                                                                         return;
@@ -641,7 +648,10 @@ export const Notices = ({
                                                             {/* Save */}
                                                             <div
                                                                 className={`d-flex align-items-center notice__reaction-btn ${(isOtherUserBlocked || (btnPermission === false || notice.btnPermission === false)) ? 'disabled' : ''} ms-4`}
-                                                                onClick={() => {
+                                                                onClick={(e) => {
+
+                                                                    e.stopPropagation();
+
                                                                     if (isOtherUserBlocked || btnPermission === false || notice.btnPermission === false) {
                                                                         console.log("YOU are forbidden from completing this action.");
                                                                         return;
@@ -673,6 +683,29 @@ export const Notices = ({
                                                                 ) : (
                                                                     <i className='bi bi-floppy notice__reaction-btn me-2' />
                                                                 )} <span>
+                                                                    <span className='ms-1'>
+                                                                        {saveCounts[notice.$id] ?? notice.noticeSavesTotal}
+                                                                    </span>
+                                                                </span>
+                                                            </div>
+
+                                                            {/* React */}
+                                                            <div
+                                                                className={`d-flex align-items-center notice__reaction-btn ${(isOtherUserBlocked || (btnPermission === false || notice.btnPermission === false)) ? 'disabled' : ''} ms-4`}
+                                                                onClick={(e) => {
+
+                                                                    if (isOtherUserBlocked || btnPermission === false || notice.btnPermission === false) {
+                                                                        console.log("YOU are forbidden from completing this action.");
+                                                                        return;
+                                                                    }
+                                                                    handleAccordionToggle(notice.$id);
+                                                                    console.log('Leaving a reaction btn');
+
+
+                                                                }}
+                                                            >
+                                                                <i className='bi bi-reply notice__reaction-btn' />
+                                                                <span>
                                                                     <span className='ms-1'>
                                                                         {saveCounts[notice.$id] ?? notice.noticeSavesTotal}
                                                                     </span>
