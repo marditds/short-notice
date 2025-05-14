@@ -1,4 +1,5 @@
 import { Client, Storage, Account, Databases, ID, Query, Permission, Role, Functions } from 'appwrite';
+import { dbFunctionKeysProvider } from './keysProvider';
 
 export const endpointEnv = import.meta.env.VITE_ENDPOINT;
 export const projectEnv = import.meta.env.VITE_PROJECT;
@@ -535,8 +536,14 @@ export const checkEmailExistsInAuth = async (email) => {
         console.log('Payload being sent:');
         console.log(payload);
 
+        const user_auth_function_id = await dbFunctionKeysProvider('user_auth_function');
+
+        if (!user_auth_function_id) {
+            throw new Error('Failed to load function ID');
+        }
+
         const response = await functions.createExecution(
-            import.meta.env.VITE_USER_AUTH_FUNCTION_ID,  // your function ID
+            user_auth_function_id,
             payload
         );
 
@@ -583,8 +590,14 @@ export const deleteAuthUser = async (userId) => {
         console.log('Payload being sent:');
         console.log(payload);
 
+        const user_delete_function_id = await dbFunctionKeysProvider('user_delete_function');
+
+        if (user_delete_function_id) {
+            throw new Error('Failed to load function ID');
+        }
+
         const res = await functions.createExecution(
-            import.meta.env.VITE_USER_DELETE_FUNCTION_ID,
+            user_delete_function_id,
             payload
         )
         if (res.status === 'completed') {
