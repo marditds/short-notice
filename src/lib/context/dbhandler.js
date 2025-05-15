@@ -741,6 +741,7 @@ export const getUserNotices = async (user_id, limit, lastId) => {
         );
 
         return response.documents;
+
     } catch (error) {
         console.error('Error fetching notices:', error);
         return [];
@@ -910,6 +911,10 @@ export const getFilteredNotices = async (selectedTags, limit, lastId, userId) =>
             noticesCollEnv,
             queries
         );
+
+        if (notices.total === 0) {
+            return;
+        }
 
         return notices.documents;
     } catch (error) {
@@ -1966,6 +1971,10 @@ export const getPersonalFeedAccounts = async (user_id) => {
         )
 
         console.log("LET'S SEEEE:", res);
+
+        if (res.total === 0) {
+            return;
+        }
 
         const otherUserIds = res.documents.map(otherUser => otherUser.otherUser_id)
 

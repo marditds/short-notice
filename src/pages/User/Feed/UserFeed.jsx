@@ -203,6 +203,11 @@ const UserFeed = () => {
 
                 const allNotices = await getPersonalFeedNotices(limitPersonal, null);
 
+                if (allNotices === undefined || allNotices.length === 0) {
+                    setHasMorePersonalNotices(false);
+                    return;
+                }
+
                 console.log('allNotices', allNotices);
 
                 let usrNtcs = allNotices?.flat();
@@ -244,6 +249,10 @@ const UserFeed = () => {
                 setIsLoadingMorePersonal(true);
 
                 const allNotices = await getPersonalFeedNotices(limitPersonal, lastIdPersonal);
+
+                if (allNotices === undefined || allNotices.length === 0) {
+                    return;
+                }
 
                 console.log('allNotices', allNotices);
 

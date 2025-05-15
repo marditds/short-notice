@@ -444,6 +444,10 @@ export const useNotices = () => {
         try {
             const accountsFollowedByUser = await getPersonalFeedAccounts(user_id);
 
+            if (!accountsFollowedByUser) {
+                return;
+            }
+
             const idsForAccountsFollowedByUser = accountsFollowedByUser?.map((user) => user.$id);
 
             const notices = await getNoticesByUser(idsForAccountsFollowedByUser, limit, lastId);

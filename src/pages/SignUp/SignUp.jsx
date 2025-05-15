@@ -153,6 +153,9 @@ const SignUp = () => {
                 setGivenName(user.name);
                 setUser(user);
 
+                localStorage.setItem('authUserId', user.$id);
+                localStorage.setItem('authUserEmail', user.email);
+
                 signupSuccess = true;
             }
 

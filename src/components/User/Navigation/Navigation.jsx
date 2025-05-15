@@ -80,8 +80,9 @@ export const Navigation = ({
                 try {
                     setIsAppLoading(true);
                     await removeSession();
-                    localStorage.removeItem('authUserId');
-                    localStorage.removeItem('authUserEmail');
+                    localStorage.clear();
+                    // localStorage.removeItem('authUserId');
+                    // localStorage.removeItem('authUserEmail');
                     setIsLoggedIn(false);
                     setUserId(null);
                     setUserEmail(null);
