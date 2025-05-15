@@ -1022,9 +1022,19 @@ export const getUserInterests = async (userId) => {
             interestsCollEnv,
             userId
         );
-        return response;
+        console.log('response in getUserInterests', response);
+
+        if (response) {
+            return response;
+        } else {
+            return;
+        }
     } catch (error) {
-        console.error('Error fetching user interests:', error);
+        if (error.code === 404) {
+            console.log('User hasn\'t set their interests yet.');
+        } else {
+            console.error('Error fetching user interests:', error);
+        }
     }
 }
 
