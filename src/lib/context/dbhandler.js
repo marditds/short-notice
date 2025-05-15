@@ -592,7 +592,7 @@ export const deleteAuthUser = async (userId) => {
 
         const user_delete_function_id = await dbFunctionKeysProvider('user_delete_function');
 
-        if (user_delete_function_id) {
+        if (!user_delete_function_id) {
             throw new Error('Failed to load function ID');
         }
 

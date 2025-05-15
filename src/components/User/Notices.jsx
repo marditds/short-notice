@@ -482,17 +482,12 @@ export const Notices = ({
             <Accordion
                 className='notices__accordion'
                 alwaysOpen
-            // activeKey={activeNoticeId}  
+                activeKey={activeNoticeId}
             >
                 {notices?.map((notice, idx) => (
                     <Accordion.Item eventKey={notice?.$id} key={notice?.$id}>
                         <Accordion.Header
-                            className='notices__accordion-header mt-3 mb-0'
-                            onClick={(e) => {
-                                // e.stopPropagation();
-                                e.preventDefault();
-                            }}
-                        >
+                            className='notices__accordion-header mt-3 mb-0'   >
                             {/* Avatar, username, dates */}
                             <Row className='w-100 mx-0 flex-nowrap'>
 

@@ -4,6 +4,7 @@ import { createUserSession, getAccount } from '../../lib/context/dbhandler';
 import { useUserContext } from '../../lib/context/UserContext';
 import sn_logo from '../../assets/sn_long.png';
 import { SignFormLayout } from '../../components/LoginForm/SignFormLayout';
+import { getUserByIdQuery } from '../../lib/context/dbhandler';
 
 const SignIn = () => {
 
@@ -12,7 +13,8 @@ const SignIn = () => {
         setUserEmail,
         setGivenName,
         setUser,
-        setIsLoggedIn
+        setIsLoggedIn,
+        setHasUsername
     } = useUserContext();
 
     const navigate = useNavigate();
@@ -39,6 +41,7 @@ const SignIn = () => {
         }
 
         let loginSuccess = false;
+        let userExistsInCollection = false;
 
         try {
             setIsLoggingInLoading(true);
@@ -59,6 +62,12 @@ const SignIn = () => {
                 setIsLoggedIn(true);
 
                 loginSuccess = true;
+
+                const user = await getUserByIdQuery(userSession.userId);
+
+                if (user.total > 0) {
+                    userExistsInCollection = true;
+                }
             }
 
             console.log('Logged in clicked.');
@@ -67,8 +76,10 @@ const SignIn = () => {
             setErrorMsg('Something went wrong. Please try again.');
         } finally {
             setIsLoggingInLoading(false);
-            if (loginSuccess) {
+            if (loginSuccess && userExistsInCollection) {
                 navigate('/user/feed');
+            } else {
+                navigate('/create-account');
             }
         }
     }

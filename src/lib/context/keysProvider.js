@@ -27,18 +27,16 @@ export const dbFunctionKeysProvider = async (key) => {
 
     if (import.meta.env.DEV) {
         const localKeyMap = {
-            captcha: "VITE_CAPTCHA_SITE_KEY",
-            gemini: "VITE_GEMINI_API_KEY",
-            tenor: "VITE_TENOR_API_KEY",
             user_auth_function: "VITE_USER_AUTH_FUNCTION_ID",
-            user_delete_function: "USER_DELETE_FUNCTION_ID",
-            user_session_function: "USER_SESSION_FUNCTION_ID",
+            user_delete_function: "VITE_USER_DELETE_FUNCTION_ID",
+            user_session_function: "VITE_USER_SESSION_FUNCTION_ID",
         };
 
         const localKey = import.meta.env[localKeyMap[key]];
         if (localKey) {
             return localKey;
         }
+
     }
 
     try {
