@@ -204,6 +204,8 @@ export const useUserInfo = () => {
             await deleteUser(userId);
             await deleteAuthUser(userId);
 
+            localStorage.clear();
+
             console.log('User deleted successfully.');
             return 'Hajogh';
         } catch (error) {

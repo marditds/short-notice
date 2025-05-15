@@ -1,13 +1,10 @@
-import React, { StrictMode, useEffect } from 'react';
+import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import {
   createBrowserRouter,
-  RouterProvider,
-  redirect,
-  Outlet,
-  useLocation
+  RouterProvider
 } from 'react-router-dom';
-import { UserProvider, useUserContext } from './lib/context/UserContext.jsx';
+import { UserProvider } from './lib/context/UserContext.jsx';
 import { addAuthGuards } from './routes/routesUtils.js';
 import { routes } from './routes/routes.jsx';
 
