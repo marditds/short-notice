@@ -4,7 +4,7 @@ import { Profile } from '../../../components/User/Profile/Profile.jsx';
 import { Notices } from '../../../components/User/Notices.jsx';
 import { Tabs, Tab, Button } from 'react-bootstrap';
 import { useUserInfo } from '../../../lib/hooks/useUserInfo.js';
-import { getAvatarUrl as avatarUtil } from '../../../lib/utils/avatarUtils.js';
+import { getAvatarUrl } from '../../../lib/utils/avatarUtils.js';
 import { useUserAvatar } from '../../../lib/hooks/useUserAvatar.js';
 import { useNotices } from '../../../lib/hooks/useNotices.js';
 import { screenUtils } from '../../../lib/utils/screenUtils.js';
@@ -489,7 +489,7 @@ const OtherUserProfile = () => {
 
                 console.log('SAVE - noticesWithoutTypeOrganization', noticesWithoutTypeOrganization);
 
-                await fetchUsersData(noticesWithoutTypeOrganization, setSavedNoticesData, avatarUtil);
+                await fetchUsersData(noticesWithoutTypeOrganization, setSavedNoticesData, getAvatarUrl);
             } catch (error) {
                 console.error('Error fetching saves - ', error);
             } finally {
@@ -569,7 +569,7 @@ const OtherUserProfile = () => {
                     });
                 }
 
-                await fetchUsersData(noticesWithoutTypeOrganization, setLikedNoticesData, avatarUtil);
+                await fetchUsersData(noticesWithoutTypeOrganization, setLikedNoticesData, getAvatarUrl);
 
                 if (allLikedNotices?.length < limitLikes) {
                     setHasMoreLikes(false);

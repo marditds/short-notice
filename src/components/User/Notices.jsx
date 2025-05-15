@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { formatDateToLocal, calculateCountdown } from '../../lib/utils/dateUtils';
 import { Row, Col, Accordion, Image } from 'react-bootstrap';
-import { useNotices } from '../../lib/hooks/useNotices';
 import defaultAvatar from '../../assets/default.png';
 import { Reactions } from './Reactions';
 import { screenUtils } from '../../lib/utils/screenUtils';
@@ -480,18 +479,19 @@ export const Notices = ({
 
     return (
         <>
-            {/* {!isLoadingNotices ? */}
             <Accordion
                 className='notices__accordion'
-                activeKey={activeNoticeId}
-            // onSelect={handleAccordionToggle}
+                alwaysOpen
+            // activeKey={activeNoticeId}  
             >
                 {notices?.map((notice, idx) => (
                     <Accordion.Item eventKey={notice?.$id} key={notice?.$id}>
                         <Accordion.Header
                             className='notices__accordion-header mt-3 mb-0'
-                            // onClick={() => handleAccordionToggle(notice.$id)}
-                            onClick={(e) => { e.stopPropagation(); }}
+                            onClick={(e) => {
+                                // e.stopPropagation();
+                                e.preventDefault();
+                            }}
                         >
                             {/* Avatar, username, dates */}
                             <Row className='w-100 mx-0 flex-nowrap'>
@@ -700,8 +700,6 @@ export const Notices = ({
                                                                     }
                                                                     handleAccordionToggle(notice.$id);
                                                                     console.log('Leaving a reaction btn');
-
-
                                                                 }}
                                                             >
                                                                 <i className='bi bi-reply notice__reaction-btn' />

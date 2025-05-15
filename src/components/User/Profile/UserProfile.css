@@ -581,6 +581,7 @@
 
 .notices__accordion-header {
     transition: var(--main-transition-speed);
+    cursor: zoom-in !important;
 }
 
 .notices__accordion-header:hover>button>div>div>div>a>img,

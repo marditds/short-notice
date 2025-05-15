@@ -4,7 +4,7 @@ import { Profile } from '../../../components/User/Profile/Profile.jsx';
 import { Notices } from '../../../components/User/Notices';
 import { Tabs, Tab, Button } from 'react-bootstrap';
 import { useUserInfo } from '../../../lib/hooks/useUserInfo.js';
-import { getAvatarUrl as avatarUtil } from '../../../lib/utils/avatarUtils.js';
+import { getAvatarUrl } from '../../../lib/utils/avatarUtils.js';
 import { useUserAvatar } from '../../../lib/hooks/useUserAvatar.js';
 import { useNotices } from '../../../lib/hooks/useNotices.js';
 import { screenUtils } from '../../../lib/utils/screenUtils.js';
@@ -292,10 +292,10 @@ const UserProfile = () => {
 
     // Fetch avatar and notices for user on component load
     useEffect(() => {
-        if (userId) {
-            fetchUserAvatarForProfile(userId);
-            fetchNotices();
-        }
+        // if (userId) {
+        fetchUserAvatarForProfile(userId);
+        fetchNotices();
+        // }
     }, [userId])
 
     // Display notice in UI immediately after it is added 
@@ -374,7 +374,7 @@ const UserProfile = () => {
                 }
 
                 // Data populating the notice
-                await fetchUsersData(allSavedNotices, setSavedNoticesData, avatarUtil);
+                await fetchUsersData(allSavedNotices, setSavedNoticesData, getAvatarUrl);
 
                 if (allSavedNotices?.length < limit) {
                     setHasMoreSaves(false);
@@ -457,7 +457,7 @@ const UserProfile = () => {
                 }
 
                 // Data populating the notice
-                await fetchUsersData(allLikedNotices, setLikedNoticesData, avatarUtil);
+                await fetchUsersData(allLikedNotices, setLikedNoticesData, getAvatarUrl);
 
                 if (allLikedNotices?.length < limit) {
                     setHasMoreLikes(false);

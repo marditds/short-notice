@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { endpointEnv, projectEnv, avatarBucketEnv, uploadAvatar, deleteAvatarFromStrg, updateAvatar, deleteAvatarFromDoc, getUserById, getAllUsersByString } from '../context/dbhandler';
 import { getAvatarUrl } from '../utils/avatarUtils';
 import { useUserContext } from '../context/UserContext';
@@ -27,6 +27,7 @@ export const useUserAvatar = () => {
             console.log('THIS IS USER IN fetchUserAvatar:', user);
 
             if (user && user.avatar) {
+                console.log('Calling getAvatarUrl now:');
 
                 const url = getAvatarUrl(user.avatar);
 
@@ -43,14 +44,12 @@ export const useUserAvatar = () => {
         }
     };
 
-    useEffect(() => {
-        console.log('isAvatarLoading', isAvatarLoading);
-    }, [isAvatarLoading])
-
     const getUserAvatarById = async () => {
         try {
             const user = await getUserById(userId);
             console.log('user,', user);
+
+            console.log('Calling getAvatarUrl now:');
 
             const url = getAvatarUrl(user.avatar);
             console.log('getAvatarUrl,', url);

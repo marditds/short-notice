@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useUserInfo } from '../../../lib/hooks/useUserInfo';
-import { getAvatarUrl as avatarUrl } from '../../../lib/utils/avatarUtils';
+import { getAvatarUrl } from '../../../lib/utils/avatarUtils';
 import defaultAvatar from '../../../assets/default.png';
 import { screenUtils } from '../../../lib/utils/screenUtils';
 import { Button, Modal, Stack } from 'react-bootstrap';
@@ -236,7 +236,7 @@ export const UserSearch = ({ username }) => {
                                             onClick={handleCloseSeachUsersModal}
                                         >
                                             {user?.username}
-                                            < img src={avatarUrl(user.avatar) || defaultAvatar}
+                                            < img src={getAvatarUrl(user.avatar) || defaultAvatar}
                                                 alt="Profile"
                                                 className='d-flex tools__search--search-results-profiles-avatar'
                                             />

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Form, Button, Image } from 'react-bootstrap';
 import GifPicker from 'gif-picker-react';
 import { keysProvider } from '../../lib/context/keysProvider';
@@ -44,9 +44,7 @@ export const ComposeReaction = ({ reactionText, onReactionTextChange, reactionGi
                     />
 
                     {/* reaction count */}
-                    <div
-                        className={`mt-2 user-profile__notice-char-counter ${reactionCharCount > reactionCharLimit && 'extra'}`}
-                    >
+                    <div className={`mt-2 user-profile__notice-char-counter ${reactionCharCount > reactionCharLimit && 'extra'}`}>
                         {`${reactionCharCount}/${reactionCharLimit} characters`}
                     </div>
 

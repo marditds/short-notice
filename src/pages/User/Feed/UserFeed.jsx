@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import { useNotices } from '../../../lib/hooks/useNotices';
 import { useUserInfo } from '../../../lib/hooks/useUserInfo';
-import { getAvatarUrl as avatarUtil } from '../../../lib/utils/avatarUtils';
+import { getAvatarUrl } from '../../../lib/utils/avatarUtils';
 import { screenUtils } from '../../../lib/utils/screenUtils';
 import { Notices } from '../../../components/User/Notices';
 import { Button } from 'react-bootstrap';
@@ -121,7 +121,7 @@ const UserFeed = () => {
 
                 console.log('Fetched notices:', feedNotices);
 
-                await fetchUsersData(feedNotices, setGeneralFeedNotices, avatarUtil);
+                await fetchUsersData(feedNotices, setGeneralFeedNotices, getAvatarUrl);
 
                 if (feedNotices.length < limit) {
                     setHasMoreGeneralNotices(false);
@@ -160,7 +160,7 @@ const UserFeed = () => {
                 const notices = await getFeedNotices(selectedTags, limit, lastId);
                 console.log('Fetched notices:', notices);
 
-                await fetchUsersData(notices, setGeneralFeedNotices, avatarUtil);
+                await fetchUsersData(notices, setGeneralFeedNotices, getAvatarUrl);
 
                 if (notices.length < limit) {
                     setHasMoreGeneralNotices(false);
@@ -209,7 +209,7 @@ const UserFeed = () => {
 
                 console.log('AFTER FLATATION:', usrNtcs);
 
-                await fetchUsersData(usrNtcs, setPersonalFeedNotices, avatarUtil);
+                await fetchUsersData(usrNtcs, setPersonalFeedNotices, getAvatarUrl);
 
                 if (usrNtcs.length < limitPersonal) {
                     setHasMorePersonalNotices(false);
@@ -249,7 +249,7 @@ const UserFeed = () => {
 
                 let usrNtcs = allNotices.flat();
 
-                await fetchUsersData(usrNtcs, setPersonalFeedNotices, avatarUtil);
+                await fetchUsersData(usrNtcs, setPersonalFeedNotices, getAvatarUrl);
 
                 if (usrNtcs.length < limitPersonal) {
                     setHasMorePersonalNotices(false);
