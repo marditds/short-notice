@@ -6,7 +6,7 @@ const TOS = () => {
     return (
         <Container className={'tos__contianer'}>
             <Row className={'tos__row my-3 my-md-5'}>
-                <Col className={'tos__col'}>
+                <Col className='tos__col px-3 px-sm-0'>
                     <TOSList />
                 </Col>
             </Row>

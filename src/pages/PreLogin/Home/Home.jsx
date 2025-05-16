@@ -16,7 +16,7 @@ import { screenUtils } from '../../../lib/utils/screenUtils';
 
 const Home = () => {
 
-    const { isSmallScreen } = screenUtils();
+    const { isExtraSmallScreen, isSmallScreen } = screenUtils();
 
     const features = [
         {
@@ -32,16 +32,16 @@ const Home = () => {
         {
             title: 'Edit your notices: ',
             description: 'Need to make changes? No problem. Edit your notices anytime before the timer runs out. It\'s your space, your rules.',
-            icon: <BsPencil size={!isSmallScreen ? 28 : 17.5} />
+            icon: <BsPencil size={!isExtraSmallScreen && !isSmallScreen ? 28 : 17.5} />
         },
         {
             title: 'Interact with others\' notices: ',
             description: 'Like, save, and react to others\' notices.',
             icon: (
                 <span>
-                    <BsHandThumbsUp size={!isSmallScreen ? 28 : 17.5} /> {' '}
-                    <BsFloppy size={!isSmallScreen ? 30 : 18.75} /> {' '}
-                    <BsReply size={!isSmallScreen ? 38 : 23.75} />
+                    <BsHandThumbsUp size={!isExtraSmallScreen && !isSmallScreen ? 28 : 17.5} /> {' '}
+                    <BsFloppy size={!isExtraSmallScreen && !isSmallScreen ? 30 : 18.75} /> {' '}
+                    <BsReply size={!isExtraSmallScreen && !isSmallScreen ? 38 : 23.75} />
                 </span>
             ),
         },
@@ -85,7 +85,7 @@ const Home = () => {
             title: 'For Groups: ',
             description: 'Keep internal updates secure by requiring group members to enter a passcode to view notices.',
             subtext: '*The notices by the group leaders will also appear in the group members\' personal feed.',
-            icon: <RiTeamFill size={!isSmallScreen ? 43 : 26.88} />,
+            icon: <RiTeamFill size={!isExtraSmallScreen && !isSmallScreen ? 43 : 26.88} />,
         },
         {
             title: 'For Instructors: ',
@@ -187,7 +187,7 @@ const Home = () => {
                                                     {feature.description}
                                                 </p>
                                             </div>
-                                            <div style={{ fontSize: !isSmallScreen ? '24pt' : '15pt' }} className='text-center my-2 my-md-3'>{feature.icon}</div>
+                                            <div style={{ fontSize: !isExtraSmallScreen && !isSmallScreen ? '24pt' : '15pt' }} className='text-center my-2 my-md-3'>{feature.icon}</div>
                                         </div>
 
                                     </Col>
@@ -221,7 +221,7 @@ const Home = () => {
                                                     <strong>{perk.title} </strong>{perk.description}
                                                 </p>
                                             </div>
-                                            <div style={{ fontSize: !isSmallScreen ? '24pt' : '15pt' }} className='text-center my-2 my-md-3'>{perk.icon}</div>
+                                            <div style={{ fontSize: !isExtraSmallScreen && !isSmallScreen ? '24pt' : '15pt' }} className='text-center my-2 my-md-3'>{perk.icon}</div>
                                         </div>
                                     </Col>
                                 )
@@ -245,7 +245,7 @@ const Home = () => {
                                                 {example.subtext && <sub><br />{example.subtext}</sub>}
                                             </p>
                                         </div>
-                                        <div style={{ fontSize: !isSmallScreen ? '24pt' : '15pt' }} className='text-center my-2 my-md-3'>
+                                        <div style={{ fontSize: !isExtraSmallScreen && !isSmallScreen ? '24pt' : '15pt' }} className='text-center my-2 my-md-3'>
                                             {example.icon}
                                         </div>
                                     </div>

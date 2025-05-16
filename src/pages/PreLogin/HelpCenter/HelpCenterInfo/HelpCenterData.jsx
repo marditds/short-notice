@@ -5,7 +5,7 @@ import HelpCenterDataPageContent from '../../../../components/HelpCenter/HelpCen
 const HelpCenterData = () => {
 
     return (
-        <Container>
+        <Container className='px-0'>
             <HelpCenterDataPageContent />
         </Container>
     )

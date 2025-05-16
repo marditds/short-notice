@@ -316,9 +316,6 @@ export const useUserInfo = () => {
                 savesCountMap.set(noticeId, (savesCountMap.get(noticeId) || 0) + 1);
             }
 
-            console.log("ABABABABABABABAA");
-
-
             const updatedNotices = notices.map(notice => {
                 const user = userMap.get(notice.user_id);
                 const perm = permissionsMap.get(notice.user_id);

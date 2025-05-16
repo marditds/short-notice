@@ -7,7 +7,7 @@ const Attributions = () => {
 
     let { attributesData } = AttributionsData();
 
-    let { isSmallScreen } = screenUtils();
+    let { isExtraSmallScreen, isSmallScreen } = screenUtils();
 
     return (
         <Container className='d-grid gap-5'>
@@ -21,7 +21,7 @@ const Attributions = () => {
                                     {/* <h4 className='mb-0 me-2'>{attribute.title}</h4> */}
 
                                     <Image src={attribute.icon}
-                                        style={{ maxHeight: !isSmallScreen ? '38px' : '21.875px' }}
+                                        style={{ maxHeight: !isExtraSmallScreen && !isSmallScreen ? '38px' : '21.875px' }}
                                         fluid />
 
                                 </div>

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { Row, Col, Image } from 'react-bootstrap';
 import sn_small from '../../assets/sn_long.png';
@@ -8,7 +7,7 @@ import './HelpCenter.css';
 
 const HelpCenterHomePageContent = () => {
 
-    const { isSmallScreen } = screenUtils();
+    const { isExtraSmallScreen, isSmallScreen } = screenUtils();
 
     const { helpCenterHeaders } = HelpCenterArrs();
 
@@ -21,7 +20,7 @@ const HelpCenterHomePageContent = () => {
 
                 <h3 className='help-center__h3 text-break'>
                     You have arrived at
-                    <Image src={sn_small} width={!isSmallScreen ? 218 : 137} className='ms-1 ms-sm-2 help-center__img' fluid />
+                    <Image src={sn_small} width={!isExtraSmallScreen && !isSmallScreen ? 218 : 137} className='ms-1 ms-sm-2 help-center__img' fluid />
                     's help center.
                 </h3>
 

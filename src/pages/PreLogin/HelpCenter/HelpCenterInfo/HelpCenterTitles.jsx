@@ -8,7 +8,7 @@ const HelpCenterTitles = () => {
     let { helpCenterTitlesPath } = useParams();
 
     return (
-        <Container>
+        <Container className='px-0'>
             {location.pathname === `/help-center/${helpCenterTitlesPath}` && <HelpCenterTitlesPageContent />}
             <Outlet />
         </Container>
