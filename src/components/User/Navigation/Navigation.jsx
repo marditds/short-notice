@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Container, Nav, Navbar, NavDropdown, Image, Button } from 'react-bootstrap';
 import { UserSearch } from './UserSearch';
 import { screenUtils } from '../../../lib/utils/screenUtils';
@@ -23,6 +23,8 @@ export const Navigation = ({
     setIsAppLoading }) => {
 
     const location = useLocation();
+
+    const navigate = useNavigate();
 
     const {
         isAddingNotice,
@@ -92,7 +94,7 @@ export const Navigation = ({
                     setAccountType('');
                     setUser(null);
                     console.log('Signed out successfully.');
-                    window.location.href = '/';
+                    navigate('/')
                 } catch (error) {
                     console.error('Error logging out:', error);
                 } finally {

@@ -24,9 +24,6 @@ function App() {
       }
     } else {
       console.log('No username found. App.jsx');
-      if (isSessionInProgress) {
-        navigate('/create-account')
-      }
       return;
     }
   }, [hasUsername, isSessionInProgress]);

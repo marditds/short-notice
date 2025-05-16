@@ -34,7 +34,8 @@ export const CreateUsername = ({ accountType, username, onUsernameChange }) => {
                                 : (
                                     (accountType === 'personal' && 'username') ||
                                     (accountType === 'business' && 'business name') ||
-                                    (accountType === 'organization' && 'organization/group name')
+                                    (accountType === 'organization' && 'organization/group name') ||
+                                    ''
                                 )
                         }
                         value={username || ''}

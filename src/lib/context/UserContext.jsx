@@ -1,10 +1,13 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { getAccount, getUserById } from './dbhandler';
-import { redirect, useNavigate } from 'react-router-dom';
+import { redirect, useLocation, useNavigate } from 'react-router-dom';
 
 const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
+
+    const navigate = useNavigate();
+    const location = useLocation();
 
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [user, setUser] = useState(null);
@@ -76,6 +79,12 @@ export const UserProvider = ({ children }) => {
 
                 const usr = await getUserById(userId);
                 console.log('usr in UserContext:', usr);
+
+                if (usr === 404) {
+                    if (location.pathname !== '/create-account') {
+                        navigate('/create-account');
+                    }
+                }
 
                 setAccountType(usr.accountType);
                 setUserWebsite(usr.website);

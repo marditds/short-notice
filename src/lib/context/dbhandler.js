@@ -277,8 +277,10 @@ export const getUserById = async (userId) => {
         );
         return response;
     } catch (error) {
-        // console.error('Error fetching user by ID:', error);
-        throw error;
+        console.error('Error getting user by ID:', error);
+        if (error.code === 404) {
+            return 404;
+        }
     }
 };
 

@@ -206,7 +206,7 @@ const CreateAccount = () => {
         <Container
             className='createUsername__container d-flex justify-content-center align-items-center min-vh-100'
         >
-            <div className="d-flex flex-column justify-content-evenly align-items-center p-4 signup-form--bg"
+            <div className="d-flex flex-column justify-content-evenly align-items-center p-2 p-sm-4 signup-form--bg"
                 style={{ width: '696px' }}
             >
                 <Form
@@ -214,14 +214,14 @@ const CreateAccount = () => {
                         e.preventDefault();
                         handleDoneClickCreateAccount();
                     }}
-                    className={`my-5 my-sm-0 ${isSmallScreen ? 'w-100' : ''}`}>
+                    className={`my-5 my-sm-0 ${isSmallScreen || isExtraSmallScreen ? 'w-100' : ''}`}>
                     <Stack gap={3} className=''>
 
                         <AccountType setAccountType={setAccountType} accountType={accountType} />
 
                         {/* Username and Password */}
                         {
-                            accountType !== '' &&
+                            (accountType !== '' && accountType !== undefined) &&
                             <Row xs={1} sm={2} className='align-items-start bbbbbb'>
                                 <Col className=''>
                                     <CreateUsername accountType={accountType} username={username} onUsernameChange={onUsernameChange} />

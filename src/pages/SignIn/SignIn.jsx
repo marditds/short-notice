@@ -78,8 +78,6 @@ const SignIn = () => {
             setIsLoggingInLoading(false);
             if (loginSuccess && userExistsInCollection) {
                 navigate('/user/feed');
-            } else {
-                navigate('/create-account');
             }
         }
     }

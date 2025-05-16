@@ -241,9 +241,9 @@ const MainRender = () => {
 
   return (
     <StrictMode>
-      <UserProvider>
-        <RouterProvider router={router} />
-      </UserProvider>
+      {/* <UserProvider> */}
+      <RouterProvider router={router} />
+      {/* </UserProvider> */}
     </StrictMode>
   );
 };
