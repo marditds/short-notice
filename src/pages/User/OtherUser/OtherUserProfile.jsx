@@ -277,6 +277,11 @@ const OtherUserProfile = () => {
                 return;
             }
 
+            if (accountType === 'organization' && accountTypeCheck === false) {
+                console.log('Enter the passcode to load the notices.');
+                return;
+            }
+
             if (offsetNotices === 0) {
                 setIsLoadingNotices(true);
             } else {
@@ -391,7 +396,7 @@ const OtherUserProfile = () => {
 
         callFunctionIfNotBlocked(fetchNotices);
 
-    }, [currUserId, offsetNotices])
+    }, [currUserId, offsetNotices, accountTypeCheck])
 
     // Reset the notices/saves/likes and offset by currUserId change
     useEffect(() => {
@@ -609,6 +614,12 @@ const OtherUserProfile = () => {
     // Fetch accounts following the other user
     const loadFollowers = async () => {
         if (!hasMoreFollowers || isLoadingMoreFollowers) return;
+
+        if (accountType === 'organization' && accountTypeCheck === false) {
+            console.log('Enter the passcode to load curr user\'s followers.');
+            return;
+        }
+
         try {
             setIsLoadingMoreFollowers(true);
 
@@ -635,27 +646,54 @@ const OtherUserProfile = () => {
 
     //Fetch follow status
     useEffect(() => {
+
+        if (accountType === 'organization' && accountTypeCheck === false) {
+            console.log('Enter the passcode to learn follow status.');
+            return;
+        }
         getFollowStatus(userId, currUserId);
-    }, [userId, currUserId])
+    }, [userId, currUserId, accountTypeCheck])
 
     //Is otherUser following me?
     useEffect(() => {
+
+        if (accountType === 'organization' && accountTypeCheck === false) {
+            console.log('Enter the passcode to learn follow status.');
+            return;
+        }
         getFollowingStatus(currUserId);
-    }, [currUserId])
+
+    }, [currUserId, accountTypeCheck])
 
     // Fetch followers count
     useEffect(() => {
+
+        if (accountType === 'organization' && accountTypeCheck === false) {
+            console.log('Enter the passcode to get the follower count.');
+            return;
+        }
+
         getFollowingTheUserCount(currUserId);
-    }, [currUserId, isFollowing])
+    }, [currUserId, isFollowing, accountTypeCheck])
 
     // Fetch following count
     useEffect(() => {
+        if (accountType === 'organization' && accountTypeCheck === false) {
+            console.log('Enter the passcode to get the following count.');
+            return;
+        }
         getfollwedByUserCount(currUserId);
-    }, [currUserId])
+    }, [currUserId, accountTypeCheck])
 
     // Fetch accounts followed by the other user
     const loadFollowing = async () => {
         if (!hasMoreFollowing || isLoadingMoreFollowing) return;
+
+        if (accountType === 'organization' && accountTypeCheck === false) {
+            console.log('Enter the passcode to load accounts followed by the curr user\'s.');
+            return;
+        }
+
         try {
             setIsLoadingMoreFollowing(true);
 
@@ -765,7 +803,7 @@ const OtherUserProfile = () => {
         },
     ];
 
-    if (isOtherUserLoading || isAppLoading || isFetchingUserinContextLoading || isInitialFollowCheckLoading) {
+    if (isOtherUserLoading || isAppLoading || isFetchingUserinContextLoading || (accountType !== 'organization' && isInitialFollowCheckLoading)) {
         return <div className='other-user-profile__loading'>
             <div>
                 <LoadingSpinner />
