@@ -593,7 +593,7 @@ export const Notices = ({
                                                                 <i className='bi bi-floppy notice__reaction-btn-fill me-2' /> {notice.noticeSavesTotal}
                                                             </span>
                                                             <span className='ms-4 d-flex mt-auto my-auto'>
-                                                                <i className='bi bi-reply notice__reaction-btn-fill me-2' /> {notice.noticeSavesTotal}
+                                                                <i className='bi bi-reply notice__reaction-btn-fill me-2' />
                                                             </span>
                                                         </>
                                                         :
@@ -686,10 +686,10 @@ export const Notices = ({
 
                                                             {/* React */}
                                                             <div
-                                                                className={`d-flex align-items-center notice__reaction-btn ${(isOtherUserBlocked || (btnPermission === false || notice.btnPermission === false)) ? 'disabled' : ''} ms-4`}
+                                                                className={`d-flex align-items-center notice__reaction-btn ${(isOtherUserBlocked || (txtPermission === false || notice.txtPermission === false)) ? 'disabled' : ''} ms-4`}
                                                                 onClick={(e) => {
 
-                                                                    if (isOtherUserBlocked || btnPermission === false || notice.btnPermission === false) {
+                                                                    if (isOtherUserBlocked || txtPermission === false || notice.txtPermission === false) {
                                                                         console.log("YOU are forbidden from completing this action.");
                                                                         return;
                                                                     }
@@ -698,11 +698,11 @@ export const Notices = ({
                                                                 }}
                                                             >
                                                                 <i className='bi bi-reply notice__reaction-btn' />
-                                                                <span>
+                                                                {/* <span>
                                                                     <span className='ms-1'>
                                                                         {saveCounts[notice.$id] ?? notice.noticeSavesTotal}
                                                                     </span>
-                                                                </span>
+                                                                </span> */}
                                                             </div>
 
                                                             {/* Report */}
@@ -754,49 +754,39 @@ export const Notices = ({
                         </Accordion.Header>
 
                         <Accordion.Body className='notice__reaction'>
-                            {
-                                txtPermission !== false && notice.txtPermission !== false ?
-                                    <>
-                                        {isOtherUserBlocked || notice.user_id === user_id ? null :
-                                            <Row className='m-auto'>
-                                                <Col className='px-0 px-sm-3 px-md-4 d-flex flex-column justify-content-end'>
-                                                    <ComposeReaction
-                                                        reactionText={reactionText}
-                                                        reactionGif={reactionGif}
-                                                        setReactionGif={setReactionGif}
-                                                        isSendingReactionLoading={isSendingReactionLoading}
-                                                        reactionCharCount={reactionCharCount}
-                                                        onReactionTextChange={onReactionTextChange}
-                                                        handleReactSubmission={handleReactSubmission}
-                                                    />
-                                                    <hr />
-                                                </Col>
-                                            </Row>
-                                        }
 
-                                        <Reactions
-                                            notice={notice}
-                                            defaultAvatar={defaultAvatar}
-                                            loadedReactions={loadedReactions}
-                                            isLoadingMoreReactions={isLoadingMoreReactions}
-                                            loadingStates={loadingStates}
-                                            reactionAvatarMap={reactionAvatarMap}
-                                            reactionUsernameMap={reactionUsernameMap}
-                                            showLoadMoreBtn={showLoadMoreBtn}
-                                            user_id={user_id}
-                                            username={username}
-                                            handleLoadMoreReactions={handleLoadMoreReactions}
-                                            handleReportReaction={handleReportReaction}
+                            {isOtherUserBlocked || notice.user_id === user_id ? null :
+                                <Row className='m-auto'>
+                                    <Col className='px-0 px-sm-3 px-md-4 d-flex flex-column justify-content-end'>
+                                        <ComposeReaction
+                                            reactionText={reactionText}
+                                            reactionGif={reactionGif}
+                                            setReactionGif={setReactionGif}
+                                            isSendingReactionLoading={isSendingReactionLoading}
+                                            reactionCharCount={reactionCharCount}
+                                            onReactionTextChange={onReactionTextChange}
+                                            handleReactSubmission={handleReactSubmission}
                                         />
-                                    </>
-                                    :
-                                    <p className='text-center text-muted mb-0'>
-                                        {notice.user_id === user_id ?
-                                            'You have disabled reactions on your notices'
-                                            :
-                                            'This user has disabled reactions on their notices'}.
-                                    </p>
+                                        <hr />
+                                    </Col>
+                                </Row>
                             }
+
+                            <Reactions
+                                notice={notice}
+                                defaultAvatar={defaultAvatar}
+                                loadedReactions={loadedReactions}
+                                isLoadingMoreReactions={isLoadingMoreReactions}
+                                loadingStates={loadingStates}
+                                reactionAvatarMap={reactionAvatarMap}
+                                reactionUsernameMap={reactionUsernameMap}
+                                showLoadMoreBtn={showLoadMoreBtn}
+                                user_id={user_id}
+                                username={username}
+                                handleLoadMoreReactions={handleLoadMoreReactions}
+                                handleReportReaction={handleReportReaction}
+                            />
+
                         </Accordion.Body>
 
                     </Accordion.Item>

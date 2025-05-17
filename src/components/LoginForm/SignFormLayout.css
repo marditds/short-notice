@@ -63,6 +63,11 @@
      color: var(--main-accent-color) !important;
  }
 
+ .signup-form--terms--checkbox>input {
+     background-image: none !important;
+     border-radius: calc(var(--main-rounded-corner) / 2) !important;
+ }
+
  .signup-form--terms--checkbox>input:active,
  .signup-form--terms--checkbox>input:focus {
      box-shadow: none;
@@ -71,12 +76,13 @@
 
  .signup-form--terms--checkbox>input:checked {
      background-color: var(--main-accent-color) !important;
+     background-image: url('../../../src/assets/x.svg') !important;
      border-color: var(--main-accent-color) !important;
  }
 
  .signup-form--terms--checkbox>input:focus:checked,
  .signup-form--terms--checkbox>input:active:checked {
-     background-color: var(--main-accent-color-hover) !important;
+     /* background-color: var(--main-accent-color-hover) !important; */
      border-color: var(--main-text-color) !important;
  }
 
