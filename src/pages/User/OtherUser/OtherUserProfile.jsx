@@ -53,13 +53,15 @@ const OtherUserProfile = () => {
         isFollowingUserLoading,
         isInitialFollowCheckLoading,
         isFollowing,
-        isotherUserFollowingMeCheckLoading,
         isOtherUserFollowingMe,
         followersCount,
         followingCount,
         isProcessingBlock,
         isGetFollwedByUserCountLoading,
         isGetFollowingTheUserCountLoading,
+        accountTypeCheck,
+        setAccountTypeCheck,
+        accountTypeCheckFunc,
         checkIsOtherUserBlockedByUser,
         checkIsUserBlockedByOtherUser,
         handleBlock,
@@ -81,7 +83,6 @@ const OtherUserProfile = () => {
     const { isExtraSmallScreen, isSmallScreen } = screenUtils();
 
     const [accountType, setAccountType] = useState(null);
-    const [accountTypeCheck, setAccountTypeCheck] = useState(false);
     const [passcode, setPasscode] = useState('');
     const [isCheckingPasscode, setIsCheckingPasscode] = useState(false);
     const [isPasscodeIncorrect, setIsPasscodeIncorrect] = useState(false);
@@ -231,16 +232,6 @@ const OtherUserProfile = () => {
                         setFellowUserId(prevId => (prevId !== otherUser.$id ? otherUser.$id : prevId));
                         setAccountType(otherUser.accountType);
                         setOtherUserWebsite(otherUser.website);
-
-                        const permissions = await getUserPermissions(otherUser.$id);
-                        console.log('permissions', permissions);
-                        if (permissions !== undefined) {
-                            setBtnPermission(permissions.btns_reaction_perm ?? true);
-                            setTxtPermission(permissions.txt_reaction_perm ?? true);
-                        }
-
-                        fetchUserAvatarForProfile(otherUser.$id);
-
                     }
                 } else {
                     console.error('Error fetching users:', otherUserRes.reason || userRes.reason);
@@ -261,6 +252,16 @@ const OtherUserProfile = () => {
         console.log('CurrUserId', currUserId);
     }, [currUserId])
 
+    //Get Other User Avatar
+    useEffect(() => {
+
+        if (accountTypeCheckFunc(accountType, 'Enter the passcode to load the user avatar.') === false) {
+            return;
+        }
+
+        fetchUserAvatarForProfile(currUserId);
+    }, [currUserId, accountTypeCheck])
+
     // Set tab back to 'Notices' when user changes
     useEffect(() => {
         setEventKey('notices');
@@ -277,8 +278,7 @@ const OtherUserProfile = () => {
                 return;
             }
 
-            if (accountType === 'organization' && accountTypeCheck === false) {
-                console.log('Enter the passcode to load the notices.');
+            if (accountTypeCheckFunc(accountType, 'Enter the passcode to load the notices.') === false) {
                 return;
             }
 
@@ -615,8 +615,7 @@ const OtherUserProfile = () => {
     const loadFollowers = async () => {
         if (!hasMoreFollowers || isLoadingMoreFollowers) return;
 
-        if (accountType === 'organization' && accountTypeCheck === false) {
-            console.log('Enter the passcode to load curr user\'s followers.');
+        if (accountTypeCheckFunc(accountType, 'Enter the passcode to load curr user\'s followers.') === false) {
             return;
         }
 
@@ -647,8 +646,7 @@ const OtherUserProfile = () => {
     //Fetch follow status
     useEffect(() => {
 
-        if (accountType === 'organization' && accountTypeCheck === false) {
-            console.log('Enter the passcode to learn follow status.');
+        if (accountTypeCheckFunc(accountType, 'Enter the passcode to learn follow status.') === false) {
             return;
         }
         getFollowStatus(userId, currUserId);
@@ -657,8 +655,7 @@ const OtherUserProfile = () => {
     //Is otherUser following me?
     useEffect(() => {
 
-        if (accountType === 'organization' && accountTypeCheck === false) {
-            console.log('Enter the passcode to learn follow status.');
+        if (accountTypeCheckFunc(accountType, 'Enter the passcode to learn follow status.') === false) {
             return;
         }
         getFollowingStatus(currUserId);
@@ -668,18 +665,16 @@ const OtherUserProfile = () => {
     // Fetch followers count
     useEffect(() => {
 
-        if (accountType === 'organization' && accountTypeCheck === false) {
-            console.log('Enter the passcode to get the follower count.');
+        if (accountTypeCheckFunc(accountType, 'Enter the passcode to get the follower count.') === false) {
             return;
         }
-
         getFollowingTheUserCount(currUserId);
     }, [currUserId, isFollowing, accountTypeCheck])
 
     // Fetch following count
     useEffect(() => {
-        if (accountType === 'organization' && accountTypeCheck === false) {
-            console.log('Enter the passcode to get the following count.');
+
+        if (accountTypeCheckFunc(accountType, 'Enter the passcode to get the following count.') === false) {
             return;
         }
         getfollwedByUserCount(currUserId);
@@ -689,8 +684,7 @@ const OtherUserProfile = () => {
     const loadFollowing = async () => {
         if (!hasMoreFollowing || isLoadingMoreFollowing) return;
 
-        if (accountType === 'organization' && accountTypeCheck === false) {
-            console.log('Enter the passcode to load accounts followed by the curr user\'s.');
+        if (accountTypeCheckFunc(accountType, 'Enter the passcode to load accounts followed by the curr user\'s.') === false) {
             return;
         }
 
@@ -718,6 +712,29 @@ const OtherUserProfile = () => {
         }
     }
 
+    // Fetch permissions for other user
+    useEffect(() => {
+
+        const fetchUserPermissions = async () => {
+
+            if (accountTypeCheckFunc(accountType, 'Enter the passcode to load the permissions.') === false) {
+                return;
+            }
+
+            if (currUserId) {
+                const permissions = await getUserPermissions(currUserId);
+                console.log('permissions', permissions);
+                if (permissions !== undefined) {
+                    setBtnPermission(permissions.btns_reaction_perm ?? true);
+                    setTxtPermission(permissions.txt_reaction_perm ?? true);
+                }
+            }
+        }
+
+        fetchUserPermissions();
+
+    }, [currUserId, accountTypeCheck])
+
     // Restting follow(ing/ers) data
     useEffect(() => {
         if (currUserId) {
@@ -735,13 +752,7 @@ const OtherUserProfile = () => {
     const checkPasscode = async () => {
         setIsCheckingPasscode(true);
         try {
-            console.log('accountTypeCheck', accountTypeCheck);
-
             const psscd = await getPassocdeByOrganizationId(currUserId);
-
-            // localStorage.setItem('passcode', passcode);
-
-            // console.log('Stored passcode in localStorage:', localStorage.getItem('passcode'));
 
             if (psscd[0].passcode === passcode) {
                 setAccountTypeCheck(true);
@@ -756,10 +767,6 @@ const OtherUserProfile = () => {
             setIsCheckingPasscode(false);
         }
     }
-
-    useEffect(() => {
-        console.log('accountTypeCheck', accountTypeCheck);
-    }, [accountTypeCheck])
 
     useEffect(() => {
         console.log('Pathname:', location.pathname);
@@ -814,7 +821,7 @@ const OtherUserProfile = () => {
         </div>;
     }
 
-    if (accountType === 'organization' && accountTypeCheck === false) {
+    if (accountTypeCheckFunc(accountType, 'Passcode needed to view the profile.') === false) {
         return <Passcode
             passcode={passcode}
             isCheckingPasscode={isCheckingPasscode}

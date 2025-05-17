@@ -18,6 +18,8 @@ export const useUserInfo = () => {
 
     const navigate = useNavigate();
 
+    const [accountTypeCheck, setAccountTypeCheck] = useState(false);
+
     const [isFetchingUsersData, setIsFetchingUsersData] = useState(false);
 
     const [following, setFollowing] = useState({});
@@ -874,6 +876,18 @@ export const useUserInfo = () => {
         }
     }
 
+    const accountTypeCheckFunc = (accountType, rejectionReason = '') => {
+
+        if (accountType === 'organization' && accountTypeCheck === false) {
+            if (rejectionReason) {
+                console.log(rejectionReason);
+            }
+            return false;
+        }
+        return true;
+    };
+
+
     return {
         userId,
         isFollowingUserLoading,
@@ -888,6 +902,9 @@ export const useUserInfo = () => {
         isGetFollwedByUserCountLoading,
         isGetFollowingTheUserCountLoading,
         isFetchingUsersData,
+        accountTypeCheck,
+        setAccountTypeCheck,
+        accountTypeCheckFunc,
         getAccount,
         updateAuthPassword,
         checkIsOtherUserBlockedByUser,
