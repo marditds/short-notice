@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { formatDateToLocal, calculateCountdown } from '../../lib/utils/dateUtils';
 import { Row, Col, Accordion, Image } from 'react-bootstrap';
@@ -60,6 +60,8 @@ export const Notices = ({
     const [loadingStates, setLoadingStates] = useState({});
     const [loadedReactions, setLoadedReactions] = useState({});
     const [activeNoticeId, setActiveNoticeId] = useState(null);
+
+    const accordionRef = useRef(null);
 
     const [showReportModal, setShowReportModal] = useState(false);
     const [reportingNoticeId, setReprotingNoticeId] = useState(null);
@@ -350,7 +352,24 @@ export const Notices = ({
             return;
         }
 
-        setActiveNoticeId(noticeId);
+        const headerElement = document.getElementById(`accordion-header-${noticeId}`);
+        if (headerElement) {
+
+            headerElement.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+
+            const currentPosition = window.pageYOffset || document.documentElement.scrollTop;
+            window.scrollTo({
+                top: currentPosition - 83,
+                behavior: 'smooth'
+            });
+
+            setTimeout(() => {
+                setActiveNoticeId(noticeId);
+            }, 100);
+        } else {
+            setActiveNoticeId(noticeId);
+        }
+
         setReactingNoticeId(noticeId);
 
         // If reactions aren't loaded and not currently loading 
@@ -481,13 +500,14 @@ export const Notices = ({
         <>
             <Accordion
                 className='notices__accordion'
-                alwaysOpen
                 activeKey={activeNoticeId}
+            // onSelect={()}
             >
                 {notices?.map((notice, idx) => (
                     <Accordion.Item eventKey={notice?.$id} key={notice?.$id}>
                         <Accordion.Header
-                            className='notices__accordion-header mt-3 mb-0'   >
+                            id={`accordion-header-${notice.$id}`}
+                            className='notices__accordion-header mt-3 mb-0'>
                             {/* Avatar, username, dates */}
                             <Row className='w-100 mx-0 flex-nowrap'>
 
@@ -687,7 +707,7 @@ export const Notices = ({
                                                             {/* React */}
                                                             <div
                                                                 className={`d-flex align-items-center notice__reaction-btn ${(isOtherUserBlocked || (txtPermission === false || notice.txtPermission === false)) ? 'disabled' : ''} ms-4`}
-                                                                onClick={(e) => {
+                                                                onClick={() => {
 
                                                                     if (isOtherUserBlocked || txtPermission === false || notice.txtPermission === false) {
                                                                         console.log("YOU are forbidden from completing this action.");
