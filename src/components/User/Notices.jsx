@@ -698,11 +698,6 @@ export const Notices = ({
                                                                 }}
                                                             >
                                                                 <i className='bi bi-reply notice__reaction-btn' />
-                                                                {/* <span>
-                                                                    <span className='ms-1'>
-                                                                        {saveCounts[notice.$id] ?? notice.noticeSavesTotal}
-                                                                    </span>
-                                                                </span> */}
                                                             </div>
 
                                                             {/* Report */}
@@ -766,6 +761,8 @@ export const Notices = ({
                                             reactionCharCount={reactionCharCount}
                                             onReactionTextChange={onReactionTextChange}
                                             handleReactSubmission={handleReactSubmission}
+
+
                                         />
                                         <hr />
                                     </Col>
