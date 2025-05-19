@@ -359,7 +359,7 @@ export const Notices = ({
 
             const currentPosition = window.pageYOffset || document.documentElement.scrollTop;
             window.scrollTo({
-                top: currentPosition - 83,
+                top: currentPosition - 200,
                 behavior: 'smooth'
             });
 
@@ -378,7 +378,7 @@ export const Notices = ({
             try {
                 const notice = noticeMap?.get(noticeId);
 
-                if ((txtPermission === false) || (notice?.txtPermission === false)) {
+                if ((txtPermission === false) || (notice?.txtPermission === false) && (notice?.user_id !== user_id)) {
                     console.log('Permission denied: Not loading reactions');
                     return;
                 }
@@ -501,13 +501,13 @@ export const Notices = ({
             <Accordion
                 className='notices__accordion'
                 activeKey={activeNoticeId}
-            // onSelect={()}
             >
                 {notices?.map((notice, idx) => (
-                    <Accordion.Item eventKey={notice?.$id} key={notice?.$id}>
+                    <Accordion.Item eventKey={notice?.$id} key={notice?.$id} className='notices__accordion-item'>
                         <Accordion.Header
                             id={`accordion-header-${notice.$id}`}
-                            className='notices__accordion-header mt-3 mb-0'>
+                            className='notices__accordion-header mt-3 mb-0'
+                        >
                             {/* Avatar, username, dates */}
                             <Row className='w-100 mx-0 flex-nowrap'>
 
@@ -569,7 +569,7 @@ export const Notices = ({
                                                 Ad:{' '}
                                             </strong>
                                         }
-                                        {notice?.text}
+                                        {notice?.text}dfgdgdf
                                     </p>
 
                                     {notice?.noticeUrl &&
@@ -612,8 +612,13 @@ export const Notices = ({
                                                             <span className='ms-4 d-flex mt-auto my-auto'>
                                                                 <i className='bi bi-floppy notice__reaction-btn-fill me-2' /> {notice.noticeSavesTotal}
                                                             </span>
-                                                            <span className='ms-4 d-flex mt-auto my-auto'>
-                                                                <i className='bi bi-reply notice__reaction-btn-fill me-2' />
+                                                            <span className='ms-4 d-flex mt-auto my-auto'
+                                                                onClick={() => {
+                                                                    handleAccordionToggle(notice.$id);
+                                                                    console.log('Leaving a reaction btn');
+                                                                }}
+                                                            >
+                                                                <i className='bi bi-reply notice__reaction-btn-fill me-2 fs-4 notice__reaction-users-own' />
                                                             </span>
                                                         </>
                                                         :
@@ -746,6 +751,9 @@ export const Notices = ({
                                             <span className='ms-4 d-flex mt-auto my-auto'>
                                                 <i className='bi bi-floppy notice__reaction-btn-fill me-2' /> {notice?.noticeSavesTotal}
                                             </span>
+                                            <span className='ms-4 d-flex mt-auto my-auto'>
+                                                <i className='bi bi-reply notice__reaction-btn-fill me-2' />
+                                            </span>
                                         </>
 
                                         <span className='d-flex ms-auto mt-auto'>
@@ -803,6 +811,13 @@ export const Notices = ({
                                 handleLoadMoreReactions={handleLoadMoreReactions}
                                 handleReportReaction={handleReportReaction}
                             />
+                            {(txtPermission === false || notice.txtPermission === false) &&
+                                <Row className='mb-2 my-sm-3'>
+                                    <Col className='text-center'>
+                                        To allow other users to post reactions to your notices, change your <Link to='../settings'>settings</Link>.
+                                    </Col>
+                                </Row>
+                            }
 
                         </Accordion.Body>
 
