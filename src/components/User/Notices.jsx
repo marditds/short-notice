@@ -569,7 +569,7 @@ export const Notices = ({
                                                 Ad:{' '}
                                             </strong>
                                         }
-                                        {notice?.text}dfgdgdf
+                                        {notice?.text}
                                     </p>
 
                                     {notice?.noticeUrl &&
@@ -751,8 +751,13 @@ export const Notices = ({
                                             <span className='ms-4 d-flex mt-auto my-auto'>
                                                 <i className='bi bi-floppy notice__reaction-btn-fill me-2' /> {notice?.noticeSavesTotal}
                                             </span>
-                                            <span className='ms-4 d-flex mt-auto my-auto'>
-                                                <i className='bi bi-reply notice__reaction-btn-fill me-2' />
+                                            <span className='ms-4 d-flex mt-auto my-auto'
+                                                onClick={() => {
+                                                    handleAccordionToggle(notice.$id);
+                                                    console.log('Leaving a reaction btn');
+                                                }}
+                                            >
+                                                <i className='bi bi-reply notice__reaction-btn-fill me-2 notice__reaction-users-own' />
                                             </span>
                                         </>
 
