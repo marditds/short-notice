@@ -653,7 +653,7 @@ export const deleteUserSession = async () => {
     try {
         if (currentSession) {
             await account.deleteSession(currentSession.$id);
-            console.log('Session deleted successfully');
+            console.log('Session deleted successfully.');
         }
         console.log('REDIRECTING TO /');
     } catch (error) {

@@ -24,40 +24,49 @@ export const UserProvider = ({ children }) => {
     const [isFetchingUserinContextLoading, setIsFetchingUserinContextLoading] = useState(false);
     const [isCheckEmailExistanceLoading, setIsCheckEmailExistanceLoading] = useState(false);
     const [isSessionInProgress, setIsSessionInProgress] = useState(false);
+    const [isSignOutInProgress, setIsSignOutInProgress] = useState(false);
     const [isLogInBtnClicked, setIsLogInBtnClicked] = useState(false);
 
     // Checkig Session Status
     useEffect(() => {
         const checkingSessionStatus = async () => {
+
+            if (isSignOutInProgress) {
+                console.log('Sign out in progress. Not checking session status. Sowy 🤣.');
+                return;
+            }
+
             try {
                 console.log('START - Checking session status...');
+
                 setIsAppLoading(true);
+
+                if (location.pathname === '/' && isSignOutInProgress) {
+                    console.log('On root path during sign-out. Skipping session check.');
+                    return;
+                }
 
                 const userIdInSession = localStorage.getItem('authUserId');
 
                 if (!userIdInSession) {
-                    console.log('Not authenticated.');
+                    console.log('No session found.');
                     setIsSessionInProgress(false);
                     setIsLoggedIn(false);
                     return;
                 }
 
                 // const usr = await getAccount();
-                if (userIdInSession) {
 
-                    const userEmailInSession = localStorage.getItem('authUserEmail');
+                const userEmailInSession = localStorage.getItem('authUserEmail');
 
-                    console.log('Session in progress.', userIdInSession);
-                    console.log('userEmailInSession', userEmailInSession);
+                console.log('Session in progress.', userIdInSession);
+                console.log('userEmailInSession', userEmailInSession);
 
-                    setIsSessionInProgress(true);
-                    setUserEmail(userEmailInSession);
-                    setUserId(userIdInSession);
-                    setIsLoggedIn(true);
-                } else {
-                    console.log('No session found.');
-                    setIsSessionInProgress(false);
-                }
+                setIsSessionInProgress(true);
+                setUserEmail(userEmailInSession);
+                setUserId(userIdInSession);
+                setIsLoggedIn(true);
+
             } catch (error) {
                 console.error('Error checking session status:', error);
             } finally {
@@ -66,7 +75,7 @@ export const UserProvider = ({ children }) => {
             }
         };
         checkingSessionStatus();
-    }, [])
+    }, [isSignOutInProgress])
 
     // Fetch username, account type, and website by user Id
     useEffect(() => {
@@ -123,6 +132,7 @@ export const UserProvider = ({ children }) => {
                 isFetchingUserinContextLoading,
                 user, setUser,
                 isSessionInProgress, setIsSessionInProgress,
+                isSignOutInProgress, setIsSignOutInProgress,
                 isLogInBtnClicked, setIsLogInBtnClicked
             }}>
             {children}

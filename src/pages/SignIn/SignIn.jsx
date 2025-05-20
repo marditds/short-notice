@@ -1,20 +1,19 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { createUserSession, getAccount } from '../../lib/context/dbhandler';
+import { createUserSession } from '../../lib/context/dbhandler';
 import { useUserContext } from '../../lib/context/UserContext';
 import sn_logo from '../../assets/sn_long.png';
 import { SignFormLayout } from '../../components/LoginForm/SignFormLayout';
 import { getUserByIdQuery } from '../../lib/context/dbhandler';
+import { LoadingComponent } from '../../components/Loading/LoadingComponent';
 
 const SignIn = () => {
 
     const {
+        isLoggedIn,
         setUserId,
         setUserEmail,
-        setGivenName,
-        setUser,
         setIsLoggedIn,
-        setHasUsername
     } = useUserContext();
 
     const navigate = useNavigate();
@@ -24,6 +23,13 @@ const SignIn = () => {
     const [isLoggingInLoading, setIsLoggingInLoading] = useState(false);
     const [errorMsg, setErrorMsg] = useState(null);
     const [newYearWish, setNewYearWish] = useState('');
+
+    // Navigate to feed if logged in
+    useEffect(() => {
+        if (isLoggedIn) {
+            navigate('/user/feed')
+        }
+    }, [isLoggedIn])
 
     const onUserLogin = async (event) => {
 
@@ -98,6 +104,10 @@ const SignIn = () => {
             controlId: 'signInFormPassword',
         }
     ]
+
+    if (isLoggedIn) {
+        return <LoadingComponent />;
+    }
 
     return (
         <SignFormLayout

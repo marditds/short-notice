@@ -25,9 +25,9 @@ import UserHelpCenterTitles from '../pages/User/HelpCenter/UserHelpCenterTitles.
 import UserHelpCenterData from '../pages/User/HelpCenter/UserHelpCenterData.jsx';
 import Header from '../components/PreLogin/Header/Header.jsx';
 import Footer from '../components/PreLogin/Footer/Footer.jsx';
-import { GoogleLoginForm } from '../components/LoginForm/Google/GoogleLoginForm.jsx';
+// import { GoogleLoginForm } from '../components/LoginForm/Google/GoogleLoginForm.jsx';
 import Authenticate from '../pages/User/Home/Authenticate.jsx';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { LoadingComponent } from '../components/Loading/LoadingComponent.jsx';
 import SignUp from '../pages/SignUp/SignUp.jsx';
 import SignIn from '../pages/SignIn/SignIn.jsx';
@@ -107,9 +107,6 @@ export const routes = [
                     },
                     {
                         path: 'privacy', element: <Privacy />,
-                    },
-                    {
-                        path: 'legal', element: <Privacy />,
                     },
                     {
                         path: 'community-guidelines', element: <CommunityGuidelines />,

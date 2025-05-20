@@ -9,11 +9,16 @@ import { LoadingComponent } from './components/Loading/LoadingComponent.jsx';
 
 function App() {
 
-  const { isLoggedIn, hasUsername, isAppLoading, isSessionInProgress } = useUserContext();
+  const { isLoggedIn, hasUsername, isAppLoading, isSessionInProgress, isSignOutInProgress } = useUserContext();
 
   const navigate = useNavigate();
 
   useEffect(() => {
+
+    if (isSignOutInProgress) {
+      return;
+    }
+
     if (hasUsername) {
       console.log('HAS USERNAME IS TRUE!');
 
@@ -26,7 +31,7 @@ function App() {
       console.log('No username found. App.jsx');
       return;
     }
-  }, [hasUsername, isSessionInProgress]);
+  }, [hasUsername, isSessionInProgress, isSignOutInProgress]);
 
   // if (isServerDown === true) {
   //   return (

@@ -25,6 +25,7 @@ const User = () => {
         isFetchingUserinContextLoading,
         user, setUser,
         isSessionInProgress, setIsSessionInProgress,
+        setIsSignOutInProgress,
         isLogInBtnClicked, setIsLogInBtnClicked
     } = useUserContext();
 
@@ -64,6 +65,7 @@ const User = () => {
                 setIsLoggedIn={setIsLoggedIn}
                 accountType={accountType}
                 setIsAppLoading={setIsAppLoading}
+                setIsSignOutInProgress={setIsSignOutInProgress}
                 setUser={setUser}
                 setUserId={setUserId}
                 setUserEmail={setUserEmail}

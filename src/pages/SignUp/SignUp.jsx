@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createAuthUser, createUserSession } from '../../lib/context/dbhandler';
 import { useUserContext } from '../../lib/context/UserContext';
@@ -9,6 +9,7 @@ import CommunityGuidelinesList from '../../components/Support/CommunityGuideline
 import PrivacyList from '../../components/Legal/PrivacyList';
 import { TermsModal } from '../../components/User/Modals';
 import { SignFormLayout } from '../../components/LoginForm/SignFormLayout';
+import { LoadingComponent } from '../../components/Loading/LoadingComponent';
 
 const SignUp = () => {
 
@@ -17,6 +18,7 @@ const SignUp = () => {
         setUserEmail,
         setGivenName,
         setUser,
+        isLoggedIn
     } = useUserContext();
 
     const navigate = useNavigate();
@@ -70,6 +72,13 @@ const SignUp = () => {
             controlId: 'signUpFormPassword',
         },
     ];
+
+    // Navigate to feed if logged in
+    useEffect(() => {
+        if (isLoggedIn) {
+            navigate('/user/feed')
+        }
+    }, [isLoggedIn])
 
 
     const onCaptchaChange = (value) => {
@@ -204,6 +213,10 @@ const SignUp = () => {
             onChange: handlePrivacyPolicyCheck,
         },
     ];
+
+    if (isLoggedIn) {
+        return <LoadingComponent />;
+    }
 
     return (
         <SignFormLayout

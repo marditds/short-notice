@@ -20,7 +20,8 @@ export const Navigation = ({
     setGivenName,
     setHasUsername,
     setAccountType,
-    setIsAppLoading }) => {
+    setIsAppLoading,
+    setIsSignOutInProgress }) => {
 
     const location = useLocation();
 
@@ -80,12 +81,9 @@ export const Navigation = ({
             icon: 'bi bi-box-arrow-left',
             onClick: async () => {
                 try {
+                    setIsSignOutInProgress(true);
                     setIsAppLoading(true);
-                    await removeSession();
-                    localStorage.clear();
-                    // localStorage.removeItem('authUserId');
-                    // localStorage.removeItem('authUserEmail');
-                    setIsLoggedIn(false);
+
                     setUserId(null);
                     setUserEmail(null);
                     setUsername('');
@@ -93,12 +91,21 @@ export const Navigation = ({
                     setGivenName('');
                     setAccountType('');
                     setUser(null);
+                    setIsLoggedIn(false);
+
+                    localStorage.clear();
+                    console.log('Storage is cleared.');
+
+                    await removeSession();
+
                     console.log('Signed out successfully.');
-                    navigate('/')
+                    navigate('/');
+
                 } catch (error) {
                     console.error('Error logging out:', error);
                 } finally {
                     setIsAppLoading(false);
+                    setIsSignOutInProgress(false);
                 }
             },
             url: '/'

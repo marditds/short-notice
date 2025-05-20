@@ -359,7 +359,7 @@ export const Notices = ({
 
             const currentPosition = window.pageYOffset || document.documentElement.scrollTop;
             window.scrollTo({
-                top: currentPosition - 200,
+                top: currentPosition - 80,
                 behavior: 'smooth'
             });
 
@@ -618,7 +618,7 @@ export const Notices = ({
                                                                     console.log('Leaving a reaction btn');
                                                                 }}
                                                             >
-                                                                <i className='bi bi-reply notice__reaction-btn-fill me-2 fs-4 notice__reaction-users-own' />
+                                                                <i className={`bi bi-reply notice__reaction-btn-fill me-2  notice__reaction-users-own`} />
                                                             </span>
                                                         </>
                                                         :
