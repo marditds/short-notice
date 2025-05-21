@@ -817,9 +817,19 @@ export const Notices = ({
                                 handleReportReaction={handleReportReaction}
                             />
                             {(txtPermission === false || notice.txtPermission === false) &&
-                                <Row className='mb-2 my-sm-3'>
+                                <Row className='my-2 my-sm-3'>
                                     <Col className='text-center'>
-                                        To allow other users to post reactions to your notices, change your <Link to='../settings'>settings</Link>.
+                                        {
+                                            notice.user_id === user_id ? (
+                                                <>
+                                                    To allow other users to post reactions to your notices, change your <Link to="../settings">settings</Link>.
+                                                </>
+                                            ) : (
+                                                <>
+                                                    This user does not allow reactions to their notices.
+                                                </>
+                                            )
+                                        }
                                     </Col>
                                 </Row>
                             }

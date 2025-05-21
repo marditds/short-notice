@@ -1180,6 +1180,20 @@ export const updateUserPermissions = async (userId, btns_reaction_perm, txt_reac
     }
 };
 
+export const deleteUserPermissions = async (userId) => {
+    try {
+        await deleteDoc(
+            permissionsCollEnv,
+            userId
+        )
+        console.log(`${userId}'s permissions doc deleted from DB.`);
+
+    } catch (error) {
+        console.error('Error deleting user permissions:', error);
+        return 'Something went wrong. Please try again later.';
+    }
+};
+
 export const deleteUserInterestsFromDB = async (userId) => {
     try {
         await deleteDoc(
