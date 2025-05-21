@@ -27,7 +27,6 @@ export const DeleteAccount = () => {
                 setTimeout(() => {
                     setLoading(false);
                     navigate('/');
-                    window.location.reload();
                 }, 1500);
             } else {
                 setAccountDeleteMsg('Unexpected error. Please try again later.');

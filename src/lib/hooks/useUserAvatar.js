@@ -32,9 +32,12 @@ export const useUserAvatar = () => {
                 const url = getAvatarUrl(user.avatar);
 
                 setAvatarUrl(url);
+
+                return url;
             } else {
                 console.log("No avatar found for user");
                 setAvatarUrl(null);
+                return null;
             }
         } catch (error) {
             console.error('Error fetching Avatar:', error);

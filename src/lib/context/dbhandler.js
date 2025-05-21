@@ -1421,7 +1421,6 @@ export const removeAllLikesForNotice = async (notice_id) => {
         const removeLikesPromises = likes.documents.map(like =>
             // removeLike(like.$id)
             deleteDoc(
-                dbEnv,
                 likesCollEnv,
                 like.$id
             )

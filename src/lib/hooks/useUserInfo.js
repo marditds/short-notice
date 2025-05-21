@@ -12,7 +12,7 @@ export const useUserInfo = () => {
     const { userId, setUsername, accountType } = useUserContext();
 
     const {
-        avatarUrl,
+        fetchUserAvatarForProfile,
         extractFileIdFromUrl,
         handleDeleteAvatarFromStrg
     } = useUserAvatar(userId);
@@ -200,9 +200,15 @@ export const useUserInfo = () => {
                 await deletePassocde(userId);
             }
 
-            if (avatarUrl) {
+            const avatarUrl = await fetchUserAvatarForProfile(userId);
+
+            console.log('This is avatarUrl:', avatarUrl);
+
+            if (avatarUrl !== null) {
                 const fileId = extractFileIdFromUrl(avatarUrl);
                 await handleDeleteAvatarFromStrg(fileId);
+            } else {
+                console.log('User avatar is 404');
             }
 
             await deleteUser(userId);
