@@ -24,6 +24,7 @@ const UserProfile = () => {
         userId,
         userEmail,
         userWebsite,
+        userAvatarId,
         isApploading,
         accountType
     } = useOutletContext();
@@ -143,6 +144,10 @@ const UserProfile = () => {
     useEffect(() => {
         console.log('userId in UserProfile:', userId);
     }, [userId])
+
+    useEffect(() => {
+        console.log('userAvatarId in UserProfile:', userAvatarId);
+    }, [userAvatarId])
 
     // useEffect(() => {
     //     const testingGetAccount = async () => {
@@ -290,13 +295,21 @@ const UserProfile = () => {
         }
     };
 
-    // Fetch avatar and notices for user on component load
+
+
+    // Fetch notices for user on component load
     useEffect(() => {
-        // if (userId) {
-        fetchUserAvatarForProfile(userId);
+        // if (userId) { 
         fetchNotices();
         // }
     }, [userId])
+
+    // Fetch avatar for user on component load
+    useEffect(() => {
+        // if (userId) { 
+        fetchUserAvatarForProfile(userAvatarId);
+        // }
+    }, [userAvatarId])
 
     // Display notice in UI immediately after it is added 
     useEffect(() => {

@@ -9,7 +9,27 @@ import { useUserAvatar } from './useUserAvatar';
 
 export const useUserInfo = () => {
 
-    const { userId, setUsername, accountType } = useUserContext();
+    const { userId,
+        accountType,
+        userAvatarId,
+        setUsername,
+        setIsLoggedIn,
+        setUserId,
+        setUserEmail,
+        setUserWebsite,
+        setUserAvatarId,
+        setGivenName,
+        setRegisteredUsername,
+        setHasUsername,
+        setAccountType,
+        setHasAccountType,
+        setIsAppLoading,
+        setIsCheckEmailExistanceLoading,
+        setUser,
+        setIsSessionInProgress,
+        setIsSignOutInProgress,
+        setIsLogInBtnClicked
+    } = useUserContext();
 
     const {
         fetchUserAvatarForProfile,
@@ -180,6 +200,26 @@ export const useUserInfo = () => {
         }
     }
 
+    const resetUserContext = () => {
+        setIsLoggedIn(false);
+        setUserId(null);
+        setUserEmail(null);
+        setUserWebsite(null);
+        setUserAvatarId(null);
+        setUsername('');
+        setGivenName('');
+        setRegisteredUsername('');
+        setAccountType('');
+        setHasUsername(false);
+        setHasAccountType(false);
+        setIsAppLoading(false);
+        setIsCheckEmailExistanceLoading(false);
+        setUser(null);
+        setIsSessionInProgress(false);
+        setIsSignOutInProgress(false);
+        setIsLogInBtnClicked(false);
+    }
+
     const handleDeleteUser = async () => {
         try {
 
@@ -200,11 +240,11 @@ export const useUserInfo = () => {
                 await deletePassocde(userId);
             }
 
-            const avatarUrl = await fetchUserAvatarForProfile(userId);
+            const avatarUrl = await fetchUserAvatarForProfile(userAvatarId);
 
-            console.log('This is avatarUrl:', avatarUrl);
+            if (avatarUrl) {
+                console.log('This is avatarUrl:', avatarUrl);
 
-            if (avatarUrl !== null) {
                 const fileId = extractFileIdFromUrl(avatarUrl);
                 await handleDeleteAvatarFromStrg(fileId);
             } else {
@@ -213,6 +253,8 @@ export const useUserInfo = () => {
 
             await deleteUser(userId);
             await deleteAuthUser(userId);
+
+            resetUserContext();
 
             localStorage.clear();
 

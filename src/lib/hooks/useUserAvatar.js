@@ -13,27 +13,33 @@ export const useUserAvatar = () => {
     const [fileFormatError, setFileFormatError] = useState(null);
     const [avatarUploadSuccessMsg, setAvatarUploadSuccessMsg] = useState(null);
 
+    const fetchUserAvatarForProfile = async (avatarId) => {
 
-    const fetchUserAvatarForProfile = async (user_id) => {
+        console.log('This is avatarId in fetchUserAvatarForProfile:', avatarId);
 
-        if (!user_id) {
-            return;
-        }
+        setIsAvatarLoading(true);
 
         try {
-            setIsAvatarLoading(true);
-            const user = await getUserById(user_id);
-
-            console.log('THIS IS USER IN fetchUserAvatar:', user);
-
-            if (user && user.avatar) {
-                console.log('Calling getAvatarUrl now:');
-
-                const url = getAvatarUrl(user.avatar);
+            if (avatarId) {
+                const url = getAvatarUrl(avatarId);
 
                 setAvatarUrl(url);
 
                 return url;
+
+                // const user = await getUserById(user_id);
+
+                // console.log('THIS IS USER IN fetchUserAvatar:', user);
+
+                // if (user && user.avatar) {
+                //     console.log('Calling getAvatarUrl now:');
+
+                //     const url = getAvatarUrl(user.avatar);
+
+                //     setAvatarUrl(url);
+
+                //     return url;
+
             } else {
                 console.log("No avatar found for user");
                 setAvatarUrl(null);
@@ -46,33 +52,6 @@ export const useUserAvatar = () => {
             setIsAvatarLoading(false);
         }
     };
-
-    const getUserAvatarById = async () => {
-        try {
-            const user = await getUserById(userId);
-            console.log('user,', user);
-
-            console.log('Calling getAvatarUrl now:');
-
-            const url = getAvatarUrl(user.avatar);
-            console.log('getAvatarUrl,', url);
-
-            return url;
-
-        } catch (error) {
-            console.error('Error getting user avatar:', error);
-        }
-    }
-
-    const getUserAvatarByString = async (str) => {
-        try {
-            const users = await getAllUsersByString(str);
-            console.log('users,', users);
-
-        } catch (error) {
-            console.error('Error getting user avatar:', error);
-        }
-    }
 
     const handleAvatarUpload = async (e) => {
 
@@ -174,7 +153,6 @@ export const useUserAvatar = () => {
         avatarUploadSuccessMsg,
         setAvatarUrl,
         fetchUserAvatarForProfile,
-        getUserAvatarById,
         handleAvatarUpload,
         handleDeleteAvatarFromStrg,
         handleDeleteAvatarFromDoc,

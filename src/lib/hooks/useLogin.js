@@ -12,9 +12,13 @@ export const useLogin = () => {
         userEmail,
         username,
         givenName,
-        setHasUsername,
         accountType,
-        setHasAccountType
+        setIsLoggedIn,
+        setHasUsername,
+        setHasAccountType,
+        setUserId,
+        setUserEmail,
+        setIsSessionInProgress
     } = useUserContext();
 
     const [isSetUserLoading, setIsSetUserLoading] = useState(false);
@@ -142,7 +146,17 @@ export const useLogin = () => {
 
         try {
             setIsSetupCancellationLoading(true);
+
             await deleteAuthUser(id);
+
+            setIsSessionInProgress(false);
+            setIsLoggedIn(false);
+
+            setUserEmail(null);
+            setUserId(null);
+
+            localStorage.clear();
+
             navigate('/');
         } catch (error) {
             console.error('Error account setup cancellation:', error);

@@ -7,7 +7,7 @@ import { getCroppedAvatar } from '../../../lib/utils/avatarUtils';
 import Cropper from 'react-easy-crop';
 import { AvatarCropModal } from '../Modals';
 
-export const Avatar = ({ userId }) => {
+export const Avatar = ({ userId, userAvatarId }) => {
 
     const [showAvatarCropModal, setShowAvatarCropModal] = useState(false);
     const [imageName, setImageName] = useState(null);
@@ -28,13 +28,14 @@ export const Avatar = ({ userId }) => {
         extractFileIdFromUrl,
         setIsUploading,
         setFileFormatError, setAvatarUploadSuccessMsg
-    } = useUserAvatar(userId);
+    } = useUserAvatar();
 
+    // fetch user avatar in settings
     useEffect(() => {
         if (userId) {
-            fetchUserAvatarForProfile(userId);
+            fetchUserAvatarForProfile(userAvatarId);
         }
-    }, [userId])
+    }, [userAvatarId])
 
     const handleFileChange = async (e) => {
         const file = e.target.files[0];

@@ -22,6 +22,7 @@ const UserSettings = () => {
         username,
         userWebsite,
         accountType,
+        userAvatarId,
         setUsername,
         setRegisteredUsername,
         setUserWebsite
@@ -42,6 +43,7 @@ const UserSettings = () => {
             <Stack className='settings__sections'>
                 <Avatar
                     userId={userId}
+                    userAvatarId={userAvatarId}
                 />
                 <hr className='settings__hr' />
                 <Info

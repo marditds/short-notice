@@ -87,6 +87,7 @@ const OtherUserProfile = () => {
     const [isCheckingPasscode, setIsCheckingPasscode] = useState(false);
     const [isPasscodeIncorrect, setIsPasscodeIncorrect] = useState(false);
     const [otherUserWebsite, setOtherUserWebsite] = useState(null);
+    const [otherUserAvatarId, setOtherUserAvatarId] = useState(null);
 
     const [isOtherUserLoading, setIsOtherUserLoading] = useState(false);
     const [isBlocked, setIsBlocked] = useState(false);
@@ -232,6 +233,7 @@ const OtherUserProfile = () => {
                         setFellowUserId(prevId => (prevId !== otherUser.$id ? otherUser.$id : prevId));
                         setAccountType(otherUser.accountType);
                         setOtherUserWebsite(otherUser.website);
+                        setOtherUserAvatarId(otherUser.avatar);
                     }
                 } else {
                     console.error('Error fetching users:', otherUserRes.reason || userRes.reason);
@@ -259,7 +261,7 @@ const OtherUserProfile = () => {
             return;
         }
 
-        fetchUserAvatarForProfile(currUserId);
+        fetchUserAvatarForProfile(otherUserAvatarId);
     }, [currUserId, accountTypeCheck])
 
     // Set tab back to 'Notices' when user changes

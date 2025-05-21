@@ -15,6 +15,7 @@ export const UserProvider = ({ children }) => {
     const [userEmail, setUserEmail] = useState(null);
     const [username, setUsername] = useState('');
     const [userWebsite, setUserWebsite] = useState(null);
+    const [userAvatarId, setUserAvatarId] = useState(null);
     const [givenName, setGivenName] = useState('');
     const [registeredUsername, setRegisteredUsername] = useState('');
     const [hasUsername, setHasUsername] = useState(false);
@@ -96,6 +97,7 @@ export const UserProvider = ({ children }) => {
                 }
 
                 setAccountType(usr.accountType);
+                setUserAvatarId(usr.avatar);
                 setUserWebsite(usr.website);
                 setUsername(usr.username);
                 setHasUsername(true);
@@ -109,8 +111,10 @@ export const UserProvider = ({ children }) => {
             }
         }
 
-        if (isLoggedIn && userId) {
+        if (location.pathname !== '/create-account') {
             fetchUserByUserId();
+        } else {
+            console.log('Bari galust.');
         }
     }, [userId, isLoggedIn])
 
@@ -122,6 +126,7 @@ export const UserProvider = ({ children }) => {
                 userEmail, setUserEmail,
                 username, setUsername,
                 userWebsite, setUserWebsite,
+                userAvatarId, setUserAvatarId,
                 givenName, setGivenName,
                 registeredUsername, setRegisteredUsername,
                 hasUsername, setHasUsername,
