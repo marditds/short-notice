@@ -220,10 +220,6 @@
     box-shadow: none !important;
 }
 
-.hakobos {
-    transform: scale(1);
-    transform-origin: 0 0;
-}
 
 @media (max-width: 767px) {
 
@@ -239,17 +235,5 @@
 
     .signup__btn--sub--div {
         margin-top: 0px;
-    }
-}
-
-@media (max-width: 400px) {
-    .hakobos {
-        transform: scale(0.7);
-    }
-}
-
-@media (max-width: 320px) {
-    .hakobos {
-        transform: scale(0.8);
     }
 }

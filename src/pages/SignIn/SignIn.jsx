@@ -116,7 +116,7 @@ const SignIn = () => {
             logo={sn_logo}
             onSubmit={onUserLogin}
             formFields={formFields}
-            submitButtonText="Sign in"
+            submitButtonText="Sign In"
             isLoading={isLoggingInLoading}
             errorMsg={errorMsg}
             wishValue={newYearWish}

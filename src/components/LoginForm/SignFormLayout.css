@@ -86,7 +86,7 @@
      border-color: var(--main-text-color) !important;
  }
 
- .hakobos {
+ .form__recaptcha-box {
      transform: scale(1);
      transform-origin: 0 0;
  }
@@ -111,13 +111,13 @@
  }
 
  @media (max-width: 400px) {
-     .hakobos {
+     .form__recaptcha-box {
          transform: scale(0.7);
      }
  }
 
  @media (max-width: 320px) {
-     .hakobos {
-         transform: scale(0.8);
+     .form__recaptcha-box {
+         transform: scale(0.7);
      }
  }

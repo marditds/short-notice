@@ -25,6 +25,7 @@ const SignUp = () => {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [name, setName] = useState('');
     const [easterWish, setEasterWish] = useState('');
 
@@ -71,6 +72,13 @@ const SignUp = () => {
             onChange: (e) => setPassword(e.target.value),
             controlId: 'signUpFormPassword',
         },
+        {
+            label: 'Confirm Password:',
+            type: 'password',
+            value: confirmPassword,
+            onChange: (e) => setConfirmPassword(e.target.value),
+            controlId: 'signUpFormConfirmPassword',
+        }
     ];
 
     // Navigate to feed if logged in
@@ -139,6 +147,11 @@ const SignUp = () => {
 
         if (easterWish) {
             setErrorMsg('Try again.');
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            setErrorMsg('The password and confirmation must match exactly.');
             return;
         }
 

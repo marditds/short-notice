@@ -157,7 +157,7 @@ export const SignFormLayout = ({
                             <Col className={`d-flex ${(!isExtraSmallScreen && !isSmallScreen && !isMediumScreen) ? 'ms-auto' : 'mx-auto'}`} style={{ maxWidth: maxColWidth }}>
                                 {captchaSiteKey ? (
                                     <ReCAPTCHA
-                                        className="hakobos"
+                                        className="form__recaptcha-box"
                                         sitekey={captchaSiteKey}
                                         onChange={onCaptchaChange}
                                         onExpired={() => onCaptchaChange(null)}

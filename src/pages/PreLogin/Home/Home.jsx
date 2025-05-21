@@ -161,7 +161,7 @@ const Home = () => {
 
                                     <span className='mt-2 mt-sm-0'>
                                         <GoogleLoginForm
-                                            subtitle={<>Already have an account? <Link to='signin'>Sign in</Link>
+                                            subtitle={<>Already have an account? <Link to='signin'>Sign In</Link>
                                             </>}
                                         />
                                     </span>
@@ -256,7 +256,7 @@ const Home = () => {
 
                     {/* CTA */}
                     <CallToAction sectionName={'features'}>
-                        <GoogleLoginForm subtitle={<>Already have an account? <Link to='signin'>Sign in</Link></>} />
+                        <GoogleLoginForm subtitle={<>Already have an account? <Link to='signin'>Sign In</Link></>} />
                     </CallToAction>
 
                     {/* HOW IT WORKS */}
@@ -286,7 +286,7 @@ const Home = () => {
 
                     {/* CTA */}
                     <CallToAction sectionName={'how'}>
-                        <GoogleLoginForm subtitle={<>Already have an account? <Link to='signin'>Sign in</Link></>} />
+                        <GoogleLoginForm subtitle={<>Already have an account? <Link to='signin'>Sign In</Link></>} />
                     </CallToAction>
 
                     {/* FAQ */}

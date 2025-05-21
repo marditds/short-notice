@@ -40,8 +40,11 @@ export const HelpCenterArrs = () => {
         'manage-account': [
             { header: 'Email change', path: 'email-change' },
             { header: 'Username change', path: 'username-change' },
+            { header: 'Password change', path: 'password-change' },
             { header: 'Avatar change', path: 'avatar-change' },
+            { header: 'Granting permissions', path: 'granting-permissions' },
             { header: 'Set/update interests', path: 'set-update-interests' },
+            { header: 'Set/update website', path: 'set-update-website' },
             { header: 'Account visibility', path: 'account-visibility' },
             { header: 'Deleting account', path: 'deleting-account' }
         ],
@@ -68,8 +71,11 @@ export const HelpCenterArrs = () => {
         'manage-account': {
             'email-change': 'Email change',
             'username-change': 'Username change',
+            'password-change': 'Password change',
             'avatar-change': 'Avatar change',
+            'granting-permissions': 'Granting permissions',
             'set-update-interests': 'Set/update interests',
+            'set-update-website': 'Set/update website',
             'account-visibility': 'Account visibility',
             'deleting-account': 'Deleting account'
         },
@@ -89,11 +95,11 @@ export const HelpCenterArrs = () => {
         'how-to': {
             intro: 'To create a ShortNotice account, follow these simple steps:',
             steps: [
-                'Click or tap "Sign in with Google."',
-                'Enter the email or phone number associated with your Google account.',
-                'Click or tap "Next."',
-                'Enter your password.',
-                'Click or tap "Next."',
+                'Click or tap "Sign Up" located in the top navigation bar.',
+                'Enter your name, email, and password.',
+                'Re-enter your password in the "Confirm Password" field.',
+                'Complete the reCAPTCHA challenge.',
+                'Acknowledge and agree to the Terms of Service, Community Guidelines, and Privacy Policy.',
                 'Click or tap "Continue."',
                 'Select your account type.',
                 'Enter your username.',
@@ -110,16 +116,13 @@ export const HelpCenterArrs = () => {
             outro: 'If there are any changes, users will be notified promptly.'
         },
         'sign-in-information': {
-            intro: 'To sign-in to your account, follow these steps:',
+            intro: 'To sign in to your account, follow these steps:',
             steps: [
-                'Click or tap "Sign in with Google."',
-                'Enter the email or phone number associated with your ShortNotice account.',
-                'Click or tap "Next."',
-                'Enter your password.',
-                'Click or tap "Next."',
-                'Click or tap"Continue."'
+                'Click or tap "Sign In" located in the top navigation bar.',
+                'Enter the email address and password associated with your ShortNotice account.',
+                'Click or tap "Sign In."',
             ],
-            outro: 'By following these steps, you will log in to your ShortNotice account.'
+            outro: 'By following these steps, you will be signed in to your ShortNotice account.'
         },
         'sign-out-information': {
             intro: 'To sign out of your account, follow these steps:',
@@ -127,7 +130,7 @@ export const HelpCenterArrs = () => {
                 <span>Click or tap the three dots <i className="bi bi-three-dots-vertical"></i> located in the top-right corner of the screen.</span>,
                 'Select "Sign out."'
             ],
-            outro: 'By following these steps, you will log out of your ShortNotice account.'
+            outro: 'By following these steps, you will be signed out of your ShortNotice account.'
         },
         'platform-requirements': {
             intro: 'To access ShortNotice, you will need the following:',
@@ -158,6 +161,21 @@ export const HelpCenterArrs = () => {
             ],
             outro: 'By following these steps, you can successfully change your username.'
         },
+        'password-change': {
+            intro: 'To change your password, follow these steps:',
+            steps: [
+                <span>
+                    Click or tap the three dots <i className="bi bi-three-dots-vertical"></i> located in the top-right corner of the screen.
+                </span>,
+                'Select "Settings."',
+                'Click or tap the "Password" field in the "Update Password" section.',
+                'Enter your current password',
+                'Enter your new password',
+                'Re-enter your new password',
+                'Click or tap "Update."'
+            ],
+            outro: 'By following these steps, you can successfully change your password.'
+        },
         'avatar-change': {
             intro: 'To change your avatar, follow these steps:',
             steps: [
@@ -170,6 +188,16 @@ export const HelpCenterArrs = () => {
             ],
             outro: 'By following these steps, you can successfully change your avatar.'
         },
+        'granting-permissions': {
+            intro: 'To change who can interact with your posts, follow these steps:',
+            steps: [
+                <span>Click or tap the three dots <i className="bi bi-three-dots-vertical"></i> located in the top-right corner of the screen.</span>,
+                'Select "Settings."',
+                'Click or tap the switches in the "Permissions" section.',
+                'The permissions will update automatically.'
+            ],
+            outro: 'By following these steps, you can control how others interact with your posts.'
+        },
         'set-update-interests': {
             intro: 'To set or update your interests, follow these steps:',
             steps: [
@@ -179,6 +207,17 @@ export const HelpCenterArrs = () => {
                 'Click or tap "Update Interests."'
             ],
             outro: 'By following these steps, you can set or update your interests. Without setting your interests, your general feed will only include your notices.'
+        },
+        'set-update-website': {
+            intro: 'To set or update your website, follow these steps:',
+            steps: [
+                <span>Click or tap the three dots <i className="bi bi-three-dots-vertical"></i> located in the top-right corner of the screen.</span>,
+                'Select "Settings."',
+                'Click or tap the "Website" field in the "Update Website" section.',
+                'Enter your website',
+                'Click or tap "Update."'
+            ],
+            outro: 'By following these steps, you can successfully set or update your website.'
         },
         'account-visibility': {
             intro: 'Currently, you cannot change the visibility of your personal account.',
