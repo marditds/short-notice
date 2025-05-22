@@ -144,33 +144,17 @@ const OtherUserProfile = () => {
     // Tabs' EventKey
     const [eventKey, setEventKey] = useState('notices');
 
-    // Check for username vs. otherUsername
+    // redirect to profile if otherUsername === username
     useEffect(() => {
         if (otherUsername === username) {
             navigate('/user/profile');
         }
     }, [otherUsername, username, navigate]);
 
-    //THIS IS MY ID
-    useEffect(() => {
-        console.log('THIS IS MY ID:', userId);
-    }, [userId]);
-
     // Scroll to top on pathname(location) change
     useEffect(() => {
         window.scrollTo(0, 0);
     }, [location]);
-
-    // Hello
-    useEffect(() => {
-        console.log('Barev', username);
-    }, [username]);
-    useEffect(() => {
-        console.log('userId', userId);
-    }, [userId]);
-    useEffect(() => {
-        console.log('userEmail', userEmail);
-    }, [userEmail]);
 
     // Get Other User
     useEffect(() => {
@@ -249,18 +233,11 @@ const OtherUserProfile = () => {
         getCurrUser();
     }, [username, otherUsername])
 
-    // CurrUserId
-    useEffect(() => {
-        console.log('CurrUserId', currUserId);
-    }, [currUserId])
-
     //Get Other User Avatar
     useEffect(() => {
-
         if (accountTypeCheckFunc(accountType, 'Enter the passcode to load the user avatar.') === false) {
             return;
         }
-
         fetchUserAvatarForProfile(otherUserAvatarId);
     }, [currUserId, accountTypeCheck])
 
@@ -609,10 +586,6 @@ const OtherUserProfile = () => {
         }
     }, [eventKey]);
 
-    useEffect(() => {
-        console.log('isLoadingMoreLikes updated:', isLoadingMoreLikes);
-    }, [isLoadingMoreLikes]);
-
     // Fetch accounts following the other user
     const loadFollowers = async () => {
         if (!hasMoreFollowers || isLoadingMoreFollowers) return;
@@ -647,7 +620,6 @@ const OtherUserProfile = () => {
 
     //Fetch follow status
     useEffect(() => {
-
         if (accountTypeCheckFunc(accountType, 'Enter the passcode to learn follow status.') === false) {
             return;
         }
@@ -656,7 +628,6 @@ const OtherUserProfile = () => {
 
     //Is otherUser following me?
     useEffect(() => {
-
         if (accountTypeCheckFunc(accountType, 'Enter the passcode to learn follow status.') === false) {
             return;
         }
@@ -769,17 +740,6 @@ const OtherUserProfile = () => {
             setIsCheckingPasscode(false);
         }
     }
-
-    useEffect(() => {
-        console.log('Pathname:', location.pathname);
-        console.log('Event Key:', eventKey);
-    }, [eventKey])
-
-    useEffect(() => {
-        console.log('savedNoticesData', savedNoticesData);
-        console.log('savedNoticesData.length', savedNoticesData.length);
-
-    }, [savedNoticesData])
 
     const noticeTabs = [
         {

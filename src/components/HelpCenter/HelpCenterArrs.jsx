@@ -127,7 +127,7 @@ export const HelpCenterArrs = () => {
         'sign-out-information': {
             intro: 'To sign out of your account, follow these steps:',
             steps: [
-                <span>Click or tap the three dots <i className="bi bi-three-dots-vertical"></i> located in the top-right corner of the screen.</span>,
+                <span>Click or tap the three dots <i className='bi bi-three-dots-vertical' role='img' aria-label='menu icon' /> located in the top-right corner of the screen.</span>,
                 'Select "Sign out."'
             ],
             outro: 'By following these steps, you will be signed out of your ShortNotice account.'
@@ -152,7 +152,7 @@ export const HelpCenterArrs = () => {
             intro: 'To change your username, follow these steps:',
             steps: [
                 <span>
-                    Click or tap the three dots <i className="bi bi-three-dots-vertical"></i> located in the top-right corner of the screen.
+                    Click or tap the three dots <i className='bi bi-three-dots-vertical' role='img' aria-label='menu icon' /> located in the top-right corner of the screen.
                 </span>,
                 'Select "Settings."',
                 'Click or tap the "Username" field in the "Update Username" section.',
@@ -165,7 +165,7 @@ export const HelpCenterArrs = () => {
             intro: 'To change your password, follow these steps:',
             steps: [
                 <span>
-                    Click or tap the three dots <i className="bi bi-three-dots-vertical"></i> located in the top-right corner of the screen.
+                    Click or tap the three dots <i className='bi bi-three-dots-vertical' role='img' aria-label='menu icon' /> located in the top-right corner of the screen.
                 </span>,
                 'Select "Settings."',
                 'Click or tap the "Password" field in the "Update Password" section.',
@@ -179,7 +179,7 @@ export const HelpCenterArrs = () => {
         'avatar-change': {
             intro: 'To change your avatar, follow these steps:',
             steps: [
-                <span>Click or tap the three dots <i className="bi bi-three-dots-vertical"></i> located in the top - right corner of the screen.</span >,
+                <span>Click or tap the three dots <i className='bi bi-three-dots-vertical' role='img' aria-label='menu icon' /> located in the top - right corner of the screen.</span >,
                 'Select "Settings."',
                 'Click or tap the "Upload Avatar" field in the "Update Avatar" section.',
                 'Select your avatar.',
@@ -191,7 +191,7 @@ export const HelpCenterArrs = () => {
         'granting-permissions': {
             intro: 'To change who can interact with your posts, follow these steps:',
             steps: [
-                <span>Click or tap the three dots <i className="bi bi-three-dots-vertical"></i> located in the top-right corner of the screen.</span>,
+                <span>Click or tap the three dots <i className='bi bi-three-dots-vertical' role='img' aria-label='menu icon' /> located in the top-right corner of the screen.</span>,
                 'Select "Settings."',
                 'Click or tap the switches in the "Permissions" section.',
                 'The permissions will update automatically.'
@@ -201,7 +201,7 @@ export const HelpCenterArrs = () => {
         'set-update-interests': {
             intro: 'To set or update your interests, follow these steps:',
             steps: [
-                <span>Click or tap the three dots <i className='bi bi-three-dots-vertical' /> located in the top-right corner of the screen.</span >,
+                <span>Click or tap the three dots <i className='bi bi-three-dots-vertical' role='img' aria-label='menu icon' /> located in the top-right corner of the screen.</span >,
                 'Select "Settings."',
                 'Click or tap the categories listed in the "Update Interests" section.',
                 'Click or tap "Update Interests."'
@@ -211,7 +211,7 @@ export const HelpCenterArrs = () => {
         'set-update-website': {
             intro: 'To set or update your website, follow these steps:',
             steps: [
-                <span>Click or tap the three dots <i className="bi bi-three-dots-vertical"></i> located in the top-right corner of the screen.</span>,
+                <span>Click or tap the three dots <i className='bi bi-three-dots-vertical' role='img' aria-label='menu icon' /> located in the top-right corner of the screen.</span>,
                 'Select "Settings."',
                 'Click or tap the "Website" field in the "Update Website" section.',
                 'Enter your website',
@@ -229,7 +229,7 @@ export const HelpCenterArrs = () => {
         'deleting-account': {
             intro: 'To delete your ShortNotice account, follow these steps:',
             steps: [
-                <span>Click or tap the three dots <i className='bi bi-three-dots-vertical'></i> located in the top-right corner of the screen.</span>,
+                <span>Click or tap the three dots <i className='bi bi-three-dots-vertical' role='img' aria-label='menu icon' /> located in the top-right corner of the screen.</span>,
                 'Select "Settings."',
                 'Click or tap "Delete Account" in the "Delete Account" section.',
                 'Click or tap "Yes, Delete My Account."',
@@ -239,14 +239,14 @@ export const HelpCenterArrs = () => {
         'create-notice': {
             intro: 'To create a notice, follow these steps:',
             steps: [
-                <span>Click or tap the three dots <i className='bi bi-three-dots-vertical' /> located in the top-right corner of the screen.</span>,
+                <span>Click or tap the three dots <i className='bi bi-three-dots-vertical' role='img' aria-label='menu icon' /> located in the top-right corner of the screen.</span>,
                 'Select "Profile."',
                 'Click or tap the text field below the avatar.',
                 'Enter your text.',
                 'Click or tap the URL field below the text field to add a URL (optional).',
                 'Click or tap the checkbox for "Use template" to enable the templates\' menu (optional).',
-                <span>Click or tap the <i className='bi bi-stars' /> button to auto-generate a template.</span>,
-                <span>Click or tap the <i className='bi bi-filetype-gif' /> button to add a GIF (optional).</span>,
+                <span>Click or tap the <i className='bi bi-stars' role='img' aria-label='stars icon' /> button to auto-generate a template.</span>,
+                <span>Click or tap the <i className='bi bi-filetype-gif' role='img' aria-label='gif icon' /> button to add a GIF (optional).</span>,
                 <span>Click or tap one of the accordion buttons to add tags.{' '}<small>At leat one tag is require per notice.</small></span>,
                 'Click or tap the dropdown menu and select the duration for which you want your notice to remain live.',
                 'Click or tap "Notify."',
@@ -257,10 +257,10 @@ export const HelpCenterArrs = () => {
         'edit-notice': {
             intro: 'To edit a notice, follow these steps:',
             steps: [
-                <span>Click or tap the three dots <i className='bi bi-three-dots-vertical' /> located in the top-right corner of the screen.</span>,
+                <span>Click or tap the three dots <i className='bi bi-three-dots-vertical' role='img' aria-label='menu icon' /> located in the top-right corner of the screen.</span>,
                 'Select "Profile."',
                 'Find the notice text you wish to edit.',
-                <span>Click or tap the pencil <i className='bi bi-pencil' /> icon.</span>,
+                <span>Click or tap the pencil <i className='bi bi-pencil' role='img' aria-label='pencil icon' /> icon.</span>,
                 'Modify the text in the opened modal.',
                 'Click or tap "Save."'
             ],
@@ -269,19 +269,19 @@ export const HelpCenterArrs = () => {
         'delete-notice': {
             intro: 'To delete notice, follow these steps:',
             steps: [
-                <span>Click or tap the three dots <i className='bi bi-three-dots-vertical' /> located in the top-right corner of the screen.</span>,
+                <span>Click or tap the three dots <i className='bi bi-three-dots-vertical' role='img' aria-label='menu icon' /> located in the top-right corner of the screen.</span>,
                 'Select "Profile."',
                 'Find the notice you wish to delete.',
-                <span>Click or tap the trash can <i className='bi bi-trash3' /> icon.</span>,
+                <span>Click or tap the trash can <i className='bi bi-trash3' role='img' aria-label='trash bin icon' /> icon.</span>,
             ],
             outro: 'By following these steps, you will successfully delete your notice.'
         },
         'post-reaction-to-notices': {
             intro: 'To post a reaction to others\' notices, follow these steps:',
             steps: [
-                'Click or tap the notice to which you wish to post a reaction.',
+                <span>Click or tap the <i className='bi bi-reply' role='img' aria-label='reply icon' /> to which you wish to post a reaction.</span>,
                 'Enter your text in the text filed located below the notice.',
-                <span>Click or tap the <i className='bi bi-filetype-gif' /> icon to add a GIF (optional).</span>,
+                <span>Click or tap the <i className='bi bi-filetype-gif' role='img' aria-label='gif icon' /> icon to add a GIF (optional).</span>,
                 'Click or tap "React."',
             ],
             outro: 'By following these steps, you will successfully post your reaction to the notice(s) shared by others.'
@@ -290,8 +290,8 @@ export const HelpCenterArrs = () => {
             intro: 'To interact with the notice(s) shared by others, follow these steps:',
             steps: [
                 'Find the notice you wish to interact with.',
-                <span>Click or tap the thumbs up <i className='bi bi-hand-thumbs-up' /> icon to like the notice.</span>,
-                <span>Click or tap the floppy disk <i className='bi bi-floppy' /> to save the notice.</span>
+                <span>Click or tap the thumbs up <i className='bi bi-hand-thumbs-up' role='img' aria-label='thumbs up icon' /> icon to like the notice.</span>,
+                <span>Click or tap the floppy disk <i className='bi bi-floppy' role='img' aria-label='floppy icon' /> to save the notice.</span>
             ],
             outro: 'By following these steps, you will successfully interact with the notice(s) shared by others.'
         },
@@ -299,7 +299,7 @@ export const HelpCenterArrs = () => {
             intro: 'To report the notice(s) shared by others, follow these steps:',
             steps: [
                 'Find the notice you wish to report.',
-                <span>Click or tap the exclamation icon <i className='bi bi-exclamation-circle' />.</span>,
+                <span>Click or tap the exclamation icon <i className='bi bi-exclamation-circle' role='img' aria-label='exlamation icon' />.</span>,
                 'Select the reason you believe the notice should be reported.',
                 'Click or tap "Report."'
             ],
@@ -308,7 +308,7 @@ export const HelpCenterArrs = () => {
         'view-saved-liked': {
             intro: 'To view your saved and liked notices, follow these steps:',
             steps: [
-                <span>Click or tap the three dots <i className='bi bi-three-dots-vertical' /> located in the top-right corner of the screen.</span>,
+                <span>Click or tap the three dots <i className='bi bi-three-dots-vertical' role='img' aria-label='menu icon' /> located in the top-right corner of the screen.</span>,
                 'Select "Profile."',
                 'Click or tap "Saves" to view your saved notices located at the bottom-center of the page.',
                 'Click or tap "Likes" to view your liked notices located at the bottom-right of page.'

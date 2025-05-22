@@ -129,85 +129,6 @@ const UserProfile = () => {
     // Tabs' EventKey
     const [eventKey, setEventKey] = useState('my-notices');
 
-    useEffect(() => {
-        console.log('accountType in UserProfile:', accountType);
-    }, [accountType])
-
-    useEffect(() => {
-        console.log('userEmail in UserProfile:', userEmail);
-    }, [userEmail])
-
-    useEffect(() => {
-        console.log('userWebsite in UserProfile:', userWebsite);
-    }, [userWebsite])
-
-    useEffect(() => {
-        console.log('userId in UserProfile:', userId);
-    }, [userId])
-
-    useEffect(() => {
-        console.log('userAvatarId in UserProfile:', userAvatarId);
-    }, [userAvatarId])
-
-    // useEffect(() => {
-    //     const testingGetAccount = async () => {
-    //         try {
-    //             const session = await getSessionDetails();
-    //             console.log('Active Session:', session);
-
-    //             const accnt = await getAccount();
-    //             console.log('THIS IS ACCOUNT:', accnt);
-    //             console.log('THIS IS ACCOUNT ID:', accnt.$id);
-    // setUserId(accnt.$id);
-    // setUserEmail(accnt.email);
-    // if(!accnt || accnt === undefined){
-    //     await createSession()
-    // }
-
-    //         } catch (error) {
-    //             console.error('Error getting account:', error);
-    //         }
-    //     }
-    //     testingGetAccount();
-    // }, [])
-
-    // Fetch account type and website by user Id
-
-    // useEffect(() => {
-    //     const fetchUserByUserId = async () => {
-    //         try {
-    //             const usr = await getUserAccountByUserId(userId);
-    //             console.log('UserProfile.jsx - usr', usr);
-
-    //             setAccountType(usr.accountType);
-    //             setUserWebsite(usr.website);
-    //             setUsername(usr.username);
-
-    //         } catch (error) {
-    //             console.log('Error creating notice', error);
-    //         }
-    //     }
-    //     console.log('website in UserProfile.jsx', userWebsite);
-
-    //     fetchUserByUserId();
-    // }, [userId])
-
-    //fetchBlockedUsersByUser
-    useEffect(() => {
-        const fetchBlockedUsersByUser = async () => {
-            try {
-                console.log('userIdsasasa,', userId);
-
-                const res = await getBlockedUsersByUser(userId);
-                console.log('Bloccked users:', res);
-
-            } catch (error) {
-                console.error('Error fetching blocked users', error);
-            }
-        }
-        // fetchBlockedUsersByUser();
-    }, [userId])
-
     // function for fetching notices
     const fetchNotices = async () => {
 
@@ -295,20 +216,14 @@ const UserProfile = () => {
         }
     };
 
-
-
     // Fetch notices for user on component load
     useEffect(() => {
-        // if (userId) { 
         fetchNotices();
-        // }
     }, [userId])
 
     // Fetch avatar for user on component load
     useEffect(() => {
-        // if (userId) { 
         fetchUserAvatarForProfile(userAvatarId);
-        // }
     }, [userAvatarId])
 
     // Display notice in UI immediately after it is added 
@@ -501,10 +416,6 @@ const UserProfile = () => {
         }
     }, [eventKey]);
 
-    useEffect(() => {
-        console.log('Hello', username);
-    }, [username])
-
     // Fetch accounts followed by user
     const loadFollowing = async () => {
         if (!hasMoreFollowing || isLoadingMoreFollowing) return;
@@ -561,7 +472,6 @@ const UserProfile = () => {
 
     // Fetch following count
     useEffect(() => {
-        console.log('Fetching the followebByCount for user:', userId);
         if (userId) {
             getfollwedByUserCount(userId);
         }
@@ -617,7 +527,6 @@ const UserProfile = () => {
             console.log('THIS IS THE LATEST NOTICE:', latestNotice);
         }
     }, [latestNotice])
-
 
     const noticeTabs = [
         {

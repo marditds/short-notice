@@ -83,30 +83,10 @@ const UserFeed = () => {
     const notices = !isFeedToggled ? personalFeedNotices : generalFeedNotices;
     const feedType = !isFeedToggled ? 'personal' : 'general';
 
-    useEffect(() => {
-        console.log('userId in UserFeed:', userId);
-    }, [userId])
-
     // Fetch user interests tags
     useEffect(() => {
         fetchUserInterests();
     }, [userId]);
-
-    useEffect(() => {
-        console.log('isFeedToggled STATUS:', isFeedToggled);
-    }, [isFeedToggled])
-
-    useEffect(() => {
-        console.log('fetchedInterests:', fetchedInterests);
-    }, [fetchedInterests])
-
-    useEffect(() => {
-        console.log('isAnyTagSelected', isAnyTagSelected);
-    }, [isAnyTagSelected])
-
-    useEffect(() => {
-        console.log("FeedBody detected interest changes:", selectedTags);
-    }, [selectedTags]);
 
     // Fetch feed (general)-(initial)
     useEffect(() => {

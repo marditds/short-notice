@@ -31,7 +31,7 @@ export const UserSearch = ({ username }) => {
     const onNavFieldUserSearchChange = (e) => {
         setLastId(null);
         const value = e.target.value;
-        if (/^[a-zA-Z]*$/.test(value)) {
+        if (/^[a-zA-Z0-9]*$/.test(value)) {
             setSrchUsrmInUI(value);
         }
     };
@@ -129,7 +129,7 @@ export const UserSearch = ({ username }) => {
 
     const handleOnKeyDown = (e) => {
         if (
-            !e.key.match(/^[a-zA-Z]$/) &&
+            !e.key.match(/^[a-zA-Z0-9]$/) &&
             e.key !== "Backspace" &&
             e.key !== "Delete" &&
             e.key !== "ArrowLeft" &&
