@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { formatDateToLocal, calculateCountdown } from '../../lib/utils/dateUtils';
-import { Row, Col, Accordion, Image } from 'react-bootstrap';
+import { Row, Col, Accordion, Image, Button } from 'react-bootstrap';
 import defaultAvatar from '../../assets/default.png';
 import { Reactions } from './Reactions';
 import { screenUtils } from '../../lib/utils/screenUtils';
@@ -333,7 +333,11 @@ export const Notices = ({
 
     const handleAccordionToggle = async (noticeId) => {
 
-        if (activeNoticeId === noticeId) {
+        const isExpanded = expandedNoticeId === noticeId;
+
+        // Collapse logic
+        if (isExpanded) {
+            setExpandedNoticeId(null);
             setActiveNoticeId(null);
             setReactingNoticeId(null);
             setShowLoadMoreBtn(false);
@@ -349,19 +353,16 @@ export const Notices = ({
                 delete newState[noticeId];
                 return newState;
             });
+
             return;
         }
 
+        // Expand logic
         const headerElement = document.getElementById(`accordion-header-${noticeId}`);
         if (headerElement) {
-
             headerElement.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-
             const currentPosition = window.pageYOffset || document.documentElement.scrollTop;
-            window.scrollTo({
-                top: currentPosition - 80,
-                behavior: 'smooth'
-            });
+            window.scrollTo({ top: currentPosition - 80, behavior: 'smooth' });
 
             setTimeout(() => {
                 setActiveNoticeId(noticeId);
@@ -370,70 +371,54 @@ export const Notices = ({
             setActiveNoticeId(noticeId);
         }
 
+        setExpandedNoticeId(noticeId);
+        setActiveNoticeId(noticeId);
         setReactingNoticeId(noticeId);
 
-        // If reactions aren't loaded and not currently loading 
+        // Load reactions if not already loaded
         if (!loadedReactions[noticeId] && !loadingStates[noticeId]) {
             setLoadingStates(prev => ({ ...prev, [noticeId]: true }));
             try {
                 const notice = noticeMap?.get(noticeId);
-
                 if ((txtPermission === false) || (notice?.txtPermission === false) && (notice?.user_id !== user_id)) {
                     console.log('Permission denied: Not loading reactions');
                     return;
                 }
 
                 const initialReactions = await getReactionsForNotice(noticeId, limit);
-
                 if (!initialReactions || initialReactions.documents.length === 0) {
-                    console.log('Closing the accordion, or this notice has no reactions. Stop the fetch.');
+                    console.log('No reactions to load');
                     return;
                 }
 
                 console.log('initialReactions', initialReactions);
 
-                const usersIds = [...new Set(initialReactions?.documents.map((reaction) => reaction.sender_id).filter(Boolean))];
-
+                const usersIds = [...new Set(initialReactions.documents.map((reaction) => reaction.sender_id).filter(Boolean))];
                 console.log('usersIds', usersIds);
 
                 const users = await getUsersByIdQuery(usersIds);
 
                 console.log('users', users);
 
-                const { updatedUsernameMap, updatedAvatarMap } = updateReactionMaps(
-                    users,
-                    noticeId,
-                    reactionUsernameMap,
-                    reactionAvatarMap
-                );
-
-                setReactionUsernameMap(prev => ({
-                    ...prev,
-                    [noticeId]: updatedUsernameMap
-                }));
-
-                setReactionAvatarMap(prev => ({
-                    ...prev,
-                    [noticeId]: updatedAvatarMap
-                }));
+                const { updatedUsernameMap, updatedAvatarMap } = updateReactionMaps(users, noticeId, reactionUsernameMap, reactionAvatarMap);
 
                 console.log('ReactionUsernameMap', reactionUsernameMap);
 
                 console.log('ReactionAvatarMap', reactionAvatarMap);
 
+                setReactionUsernameMap(prev => ({ ...prev, [noticeId]: updatedUsernameMap }));
+                setReactionAvatarMap(prev => ({ ...prev, [noticeId]: updatedAvatarMap }));
+
                 setLoadedReactions(prev => ({
                     ...prev,
-                    [noticeId]: initialReactions?.documents || []
+                    [noticeId]: initialReactions.documents
                 }));
 
-                const newCursor = initialReactions?.documents.length > 0
-                    ? initialReactions?.documents[initialReactions?.documents.length - 1].$id
+                const newCursor = initialReactions.documents.length > 0
+                    ? initialReactions.documents[initialReactions.documents.length - 1].$id
                     : null;
 
-                setCursors(prev => ({
-                    ...prev,
-                    [noticeId]: newCursor
-                }));
+                setCursors(prev => ({ ...prev, [noticeId]: newCursor }));
 
             } catch (error) {
                 console.error('Error loading initial reactions:', error);
@@ -495,20 +480,52 @@ export const Notices = ({
         );
     };
 
+    const [expandedNoticeId, setExpandedNoticeId] = useState(null);
+    const containerRefs = useRef({});
+
+    const toggleItem = (id) => {
+        setExpandedItems(prev => ({
+            ...prev,
+            [id]: !prev[id]
+        }));
+    };
+
+    useEffect(() => {
+        Object.entries(containerRefs.current).forEach(([id, el]) => {
+            if (!el) return;
+
+            if (id === expandedNoticeId) {
+                const scrollHeight = el.scrollHeight;
+                el.style.height = scrollHeight + 'px';
+                const timeout = setTimeout(() => {
+                    el.style.height = 'auto';
+                }, 300);
+                return () => clearTimeout(timeout);
+            } else {
+                const currentHeight = el.scrollHeight;
+                el.style.height = currentHeight + 'px';
+                void el.offsetHeight; // reflow
+                el.style.height = '0px';
+            }
+        });
+    }, [expandedNoticeId]);
+
+
+    useEffect(() => {
+        console.log('loadedReactions', loadedReactions);
+
+    }, [loadedReactions])
 
     return (
         <>
             {/* Notices in DIV */}
-            <div
-                className=''
-            >
+            <div>
                 {notices?.map((notice, idx) =>
                     // One notice item
                     <div key={idx} className='p-3 border-black border rounded rounded-3 mb-2'>
 
-                        {/* header */}
-                        <div className='notices__accordion-header mb-0'>
-                            {/* Avatar, username, dates */}
+                        {/* notice header */}
+                        <div className={'p-1'}>
                             <Row className='w-100 mx-0 flex-nowrap'>
 
                                 {/* Avatar */}
@@ -605,6 +622,7 @@ export const Notices = ({
                                             >
                                                 {
                                                     (notice.user_id === user_id) ?
+                                                        // User's own notice
                                                         <>
                                                             <span className='d-flex mt-auto my-auto'>
                                                                 <i className='bi bi-hand-thumbs-up notice__reaction-btn-fill me-2' role='img' aria-label='thumbs up like icon' /> {notice.noticeLikesTotal}
@@ -624,8 +642,8 @@ export const Notices = ({
                                                         :
                                                         <>
                                                             {/* Like */}
-                                                            <div
-                                                                className={`d-flex align-items-center notice__reaction-btn ${(isOtherUserBlocked || (btnPermission === false || notice.btnPermission === false)) ? 'disabled' : ''} ms-2`}
+                                                            <Button
+                                                                className={`d-flex align-items-center notice__reaction-btn p-0 ${(isOtherUserBlocked || (btnPermission === false || notice.btnPermission === false)) ? 'disabled' : ''} ms-2`}
                                                                 onClick={(e) => {
 
                                                                     e.stopPropagation();
@@ -663,11 +681,11 @@ export const Notices = ({
                                                                 )} <span>
                                                                     {likeCounts[notice.$id] ?? notice.noticeLikesTotal}
                                                                 </span>
-                                                            </div>
+                                                            </Button>
 
                                                             {/* Save */}
-                                                            <div
-                                                                className={`d-flex align-items-center notice__reaction-btn ${(isOtherUserBlocked || (btnPermission === false || notice.btnPermission === false)) ? 'disabled' : ''} ms-4`}
+                                                            <Button
+                                                                className={`d-flex align-items-center notice__reaction-btn p-0 ${(isOtherUserBlocked || (btnPermission === false || notice.btnPermission === false)) ? 'disabled' : ''} ms-4`}
                                                                 onClick={(e) => {
 
                                                                     e.stopPropagation();
@@ -707,11 +725,11 @@ export const Notices = ({
                                                                         {saveCounts[notice.$id] ?? notice.noticeSavesTotal}
                                                                     </span>
                                                                 </span>
-                                                            </div>
+                                                            </Button>
 
                                                             {/* React */}
-                                                            <div
-                                                                className={`d-flex align-items-center notice__reaction-btn ${(isOtherUserBlocked || (txtPermission === false || notice.txtPermission === false)) ? 'disabled' : ''} ms-4`}
+                                                            <Button
+                                                                className={`d-flex align-items-center notice__reaction-btn p-0 ${(isOtherUserBlocked || (txtPermission === false || notice.txtPermission === false)) ? 'disabled' : ''} ms-4`}
                                                                 onClick={() => {
 
                                                                     if (isOtherUserBlocked || txtPermission === false || notice.txtPermission === false) {
@@ -723,7 +741,7 @@ export const Notices = ({
                                                                 }}
                                                             >
                                                                 <i className='bi bi-reply notice__reaction-btn' />
-                                                            </div>
+                                                            </Button>
 
                                                             {/* Report */}
                                                             <div
@@ -780,297 +798,15 @@ export const Notices = ({
                             </Row>
                         </div>
 
-                    </div>
-                )}
-            </div>
-
-            {/* Notices in Accordion */}
-            <Accordion
-                className='notices__accordion'
-                activeKey={activeNoticeId}
-            >
-                {notices?.map((notice, idx) => (
-                    <Accordion.Item eventKey={notice?.$id} key={notice?.$id} className='notices__accordion-item'>
-                        <Accordion.Header
-                            id={`accordion-header-${notice.$id}`}
-                            className='notices__accordion-header mt-3 mb-0'
+                        {/* notice body */}
+                        <div
+                            ref={(el) => (containerRefs.current[notice.$id] = el)}
+                            className="expandable"
+                            style={{ overflow: 'hidden', transition: 'height 0.3s ease', height: '0px' }}
                         >
-                            {/* Avatar, username, dates */}
-                            <Row className='w-100 mx-0 flex-nowrap'>
+                            <div >
 
-                                {/* Avatar */}
-                                {shouldShowUserInfo() ?
-                                    <Col xs={1} className='notice__avatar-col d-flex flex-column'>
-
-                                        <div className='d-flex justify-content-center justify-content-sm-start align-items-center mt-auto'>
-                                            <Link to={notice.username !== username ? `../${notice.username}` : `../profile`}>
-                                                <img
-                                                    src={notice.avatarUrl || defaultAvatar}
-                                                    alt="Profile"
-                                                    className='notice__avatar'
-                                                />
-                                            </Link>
-                                        </div>
-
-                                    </Col>
-                                    : null
-                                }
-
-                                {/* Username and dates */}
-                                <Col xs={11} className={`d-flex flex-column pe-0 justify-content-evenly ${((location.pathname === '/user/profile' && eventKey == 'my-notices') || (location.pathname !== '/user/profile' && eventKey == 'notices')) ? 'ps-0' : null}`}>
-                                    {shouldShowUserInfo() ?
-                                        <p className='w-100 mb-0 text-start notice__username'>
-                                            <Link to={notice.username !== username ? `../${notice.username}` : `../profile`} className='text-decoration-none'>
-                                                <strong>
-                                                    {notice?.username ? truncteUsername(notice.username) : ''}
-                                                </strong>
-                                            </Link>
-                                        </p>
-                                        : null}
-                                    <div>
-                                        {/* Creation date */}
-                                        <small className='text-end mt-auto notice__create-date text-nowrap me-4'>
-                                            <span style={{ color: 'gray' }} >
-                                                Created:
-                                            </span> {formatDateToLocal(notice.timestamp)}
-                                        </small>
-
-                                        {/* Expiration countdown */}
-                                        <small className='me-auto'>
-                                            <span style={{ color: 'gray' }} >
-                                                Expires In:
-                                            </span>  {countdowns[idx] || calculateCountdown(notice?.expiresAt)}
-                                        </small>
-                                    </div>
-                                </Col>
-                            </Row>
-
-                            <hr className='my-3' />
-
-                            {/* Text */}
-                            <Row>
-                                <Col>
-                                    <p className='text-break notice__text my-1 my-md-3'>
-                                        {notice?.noticeType === 'business' &&
-                                            <strong>
-                                                Ad:{' '}
-                                            </strong>
-                                        }
-                                        {notice?.text}
-                                    </p>
-
-                                    {notice?.noticeUrl &&
-                                        <p className='notice__link-in-notice-p'>
-
-                                            <a href={notice?.noticeUrl} target='_blank' rel='noopener noreferrer'
-                                                className='notice__link-in-notice'
-                                            >
-                                                {notice?.noticeUrl}
-                                            </a>
-                                        </p>
-                                    }
-
-                                    {notice?.noticeGif &&
-                                        <Image src={notice?.noticeGif}
-                                            className='mb-2 notice__gif'
-                                            width={isExtraSmallScreen ? '90%' : (isSmallScreen ? '60%' : '60%')}
-                                            fluid />
-                                    }
-                                </Col>
-                            </Row>
-
-                            <hr className='my-3' />
-                            {/* Interaction / edit / delete */}
-                            <Row>
-                                {/* Like, save, reply, and report */}
-                                {(location.pathname === '/user/profile' && eventKey === 'my-notices') ?
-                                    null
-                                    :
-                                    <>
-                                        {
-                                            <div className='d-flex justify-content-start align-items-center notice__reaction-icon-div'
-                                            >
-                                                {
-                                                    (notice.user_id === user_id) ?
-                                                        <>
-                                                            <span className='d-flex mt-auto my-auto'>
-                                                                <i className='bi bi-hand-thumbs-up notice__reaction-btn-fill me-2' role='img' aria-label='thumbs up like icon' /> {notice.noticeLikesTotal}
-                                                            </span>
-                                                            <span className='ms-4 d-flex mt-auto my-auto'>
-                                                                <i className='bi bi-floppy notice__reaction-btn-fill me-2' /> {notice.noticeSavesTotal}
-                                                            </span>
-                                                            <span className='ms-4 d-flex mt-auto my-auto'
-                                                                onClick={() => {
-                                                                    handleAccordionToggle(notice.$id);
-                                                                    console.log('Leaving a reaction btn');
-                                                                }}
-                                                            >
-                                                                <i className={`bi bi-reply notice__reaction-btn-fill me-2  notice__reaction-users-own`} />
-                                                            </span>
-                                                        </>
-                                                        :
-                                                        <>
-                                                            {/* Like */}
-                                                            <div
-                                                                className={`d-flex align-items-center notice__reaction-btn ${(isOtherUserBlocked || (btnPermission === false || notice.btnPermission === false)) ? 'disabled' : ''} ms-2`}
-                                                                onClick={(e) => {
-
-                                                                    e.stopPropagation();
-
-                                                                    if (isOtherUserBlocked || btnPermission === false || notice.btnPermission === false) {
-                                                                        console.log("YOU are forbidden from completing this action.");
-                                                                        return;
-                                                                    }
-
-                                                                    const isLiked = likedNotices[notice.$id];
-
-                                                                    console.log('isLiked:', isLiked);
-
-                                                                    const currentCount = likeCounts[notice.$id] ?? notice.noticeLikesTotal ?? 0;
-
-                                                                    console.log('currentCount', currentCount);
-
-                                                                    setLikedNotices(prev => ({
-                                                                        ...prev,
-                                                                        [notice.$id]: !isLiked
-                                                                    }));
-
-                                                                    setLikeCounts(prev => ({
-                                                                        ...prev,
-                                                                        [notice.$id]: isLiked ? currentCount - 1 : currentCount + 1
-                                                                    }));
-
-                                                                    handleLike(notice.$id, notice.user_id, likedNotices, setLikedNotices);
-                                                                }}
-                                                            >
-                                                                {likedNotices && likedNotices[notice.$id] ? (
-                                                                    <i className='bi bi-hand-thumbs-up-fill notice__reaction-btn-fill me-2' role='img' aria-label='thumbs up like icon' />
-                                                                ) : (
-                                                                    <i className='bi bi-hand-thumbs-up notice__reaction-btn me-2' />
-                                                                )} <span>
-                                                                    {likeCounts[notice.$id] ?? notice.noticeLikesTotal}
-                                                                </span>
-                                                            </div>
-
-                                                            {/* Save */}
-                                                            <div
-                                                                className={`d-flex align-items-center notice__reaction-btn ${(isOtherUserBlocked || (btnPermission === false || notice.btnPermission === false)) ? 'disabled' : ''} ms-4`}
-                                                                onClick={(e) => {
-
-                                                                    e.stopPropagation();
-
-                                                                    if (isOtherUserBlocked || btnPermission === false || notice.btnPermission === false) {
-                                                                        console.log("YOU are forbidden from completing this action.");
-                                                                        return;
-                                                                    }
-
-                                                                    const isSaved = savedNotices[notice.$id];
-
-                                                                    console.log('isSaved:', isSaved);
-
-                                                                    const currentCount = saveCounts[notice.$id] ?? notice.noticeSavesTotal ?? 0;
-
-                                                                    console.log('currentCount', currentCount);
-
-                                                                    setSavedNotices(prev => ({
-                                                                        ...prev,
-                                                                        [notice.$id]: !isSaved
-                                                                    }));
-
-                                                                    setSaveCounts(prev => ({
-                                                                        ...prev,
-                                                                        [notice.$id]: isSaved ? currentCount - 1 : currentCount + 1
-                                                                    }));
-
-                                                                    handleSave(notice.$id, notice.user_id, savedNotices, setSavedNotices);
-                                                                }}
-                                                            >
-                                                                {savedNotices && savedNotices[notice.$id] ? (
-                                                                    <i className='bi bi-floppy-fill notice__reaction-btn-fill me-2' />
-                                                                ) : (
-                                                                    <i className='bi bi-floppy notice__reaction-btn me-2' />
-                                                                )} <span>
-                                                                    <span className='ms-1'>
-                                                                        {saveCounts[notice.$id] ?? notice.noticeSavesTotal}
-                                                                    </span>
-                                                                </span>
-                                                            </div>
-
-                                                            {/* React */}
-                                                            <div
-                                                                className={`d-flex align-items-center notice__reaction-btn ${(isOtherUserBlocked || (txtPermission === false || notice.txtPermission === false)) ? 'disabled' : ''} ms-4`}
-                                                                onClick={() => {
-
-                                                                    if (isOtherUserBlocked || txtPermission === false || notice.txtPermission === false) {
-                                                                        console.log("YOU are forbidden from completing this action.");
-                                                                        return;
-                                                                    }
-                                                                    handleAccordionToggle(notice.$id);
-                                                                    console.log('Leaving a reaction btn');
-                                                                }}
-                                                            >
-                                                                <i className='bi bi-reply notice__reaction-btn' />
-                                                            </div>
-
-                                                            {/* Report */}
-                                                            <div
-                                                                onClick={() => onReportNoticeClick(notice.$id)}
-                                                                className='notice__reaction-btn ms-auto'
-                                                            >
-                                                                <i className='bi bi-exclamation-circle' role='img' aria-label='exlamation icon' />
-                                                            </div>
-                                                        </>
-                                                }
-                                            </div>
-                                        }
-                                    </>
-                                }
-
-                                {/* FOR USER PROFILE ONLY */}
-                                {/* Edit/Delete */}
-                                {location.pathname === '/user/profile' && eventKey === 'my-notices' &&
-                                    <div
-                                        className='d-flex justify-content-start h-100'>
-                                        <>
-                                            <span className='d-flex mt-auto my-auto'>
-                                                <i className='bi bi-hand-thumbs-up notice__reaction-btn-fill me-2' role='img' aria-label='thumbs up like icon' /> {notice?.noticeLikesTotal}
-                                            </span>
-                                            <span className='ms-4 d-flex mt-auto my-auto'>
-                                                <i className='bi bi-floppy notice__reaction-btn-fill me-2' /> {notice?.noticeSavesTotal}
-                                            </span>
-                                            <span className='ms-4 d-flex mt-auto my-auto'
-                                                onClick={() => {
-                                                    handleAccordionToggle(notice.$id);
-                                                    console.log('Leaving a reaction btn');
-                                                }}
-                                            >
-                                                <i className='bi bi-reply notice__reaction-btn-fill me-2 notice__reaction-users-own' />
-                                            </span>
-                                        </>
-
-                                        <span className='d-flex ms-auto mt-auto'>
-                                            <div
-                                                className='ms-auto notice__edit-btn'
-                                                onClick={() => handleEditNotice(notice.$id, notice.text)}
-                                            >
-                                                <i className='bi bi-pencil' />
-                                            </div>
-                                            <div
-                                                className='ms-2 notice__delete-btn'
-                                                onClick={() => handleDeleteNotice(notice.$id)}
-                                            >
-                                                <i className='bi bi-trash3' />
-                                            </div>
-                                        </span>
-                                    </div>
-                                }
-                            </Row>
-
-                        </Accordion.Header>
-
-                        <Accordion.Body className='notice__reaction'>
-
-                            {isOtherUserBlocked || notice.user_id === user_id ? null :
+                                {/* Compose reaction */}
                                 <Row className='m-auto'>
                                     <Col className='px-0 px-sm-3 px-md-4 d-flex flex-column justify-content-end'>
                                         <ComposeReaction
@@ -1087,46 +823,46 @@ export const Notices = ({
                                         <hr />
                                     </Col>
                                 </Row>
-                            }
 
-                            <Reactions
-                                notice={notice}
-                                defaultAvatar={defaultAvatar}
-                                loadedReactions={loadedReactions}
-                                isLoadingMoreReactions={isLoadingMoreReactions}
-                                loadingStates={loadingStates}
-                                reactionAvatarMap={reactionAvatarMap}
-                                reactionUsernameMap={reactionUsernameMap}
-                                showLoadMoreBtn={showLoadMoreBtn}
-                                user_id={user_id}
-                                username={username}
-                                handleLoadMoreReactions={handleLoadMoreReactions}
-                                handleReportReaction={handleReportReaction}
-                            />
-                            {(txtPermission === false || notice.txtPermission === false) &&
-                                <Row className='my-2 my-sm-3'>
-                                    <Col className='text-center'>
-                                        {
-                                            notice.user_id === user_id ? (
-                                                <>
-                                                    To allow other users to post reactions to your notices, change your <Link to="../settings">settings</Link>.
-                                                </>
-                                            ) : (
-                                                <>
-                                                    This user does not allow reactions to their notices.
-                                                </>
-                                            )
-                                        }
-                                    </Col>
-                                </Row>
-                            }
+                                {/* Reactions */}
+                                <Reactions
+                                    notice={notice}
+                                    defaultAvatar={defaultAvatar}
+                                    loadedReactions={loadedReactions}
+                                    isLoadingMoreReactions={isLoadingMoreReactions}
+                                    loadingStates={loadingStates}
+                                    reactionAvatarMap={reactionAvatarMap}
+                                    reactionUsernameMap={reactionUsernameMap}
+                                    showLoadMoreBtn={showLoadMoreBtn}
+                                    user_id={user_id}
+                                    username={username}
+                                    handleLoadMoreReactions={handleLoadMoreReactions}
+                                    handleReportReaction={handleReportReaction}
+                                />
+                                {(txtPermission === false || notice.txtPermission === false) &&
+                                    <Row className='my-2 my-sm-3'>
+                                        <Col className='text-center'>
+                                            {
+                                                notice.user_id === user_id ? (
+                                                    <>
+                                                        To allow other users to post reactions to your notices, change your <Link to="../settings">settings</Link>.
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        This user does not allow reactions to their notices.
+                                                    </>
+                                                )
+                                            }
+                                        </Col>
+                                    </Row>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                )}
+            </div>
 
-                        </Accordion.Body>
 
-                    </Accordion.Item>
-                ))
-                }
-            </Accordion>
 
             {/* Notice report modal */}
             <ReportModal
