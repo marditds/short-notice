@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { formatDateToLocal, calculateCountdown } from '../../lib/utils/dateUtils';
-import { Row, Col, Accordion, Image, Button } from 'react-bootstrap';
+import { Row, Col, Image, Button } from 'react-bootstrap';
 import defaultAvatar from '../../assets/default.png';
 import { Reactions } from './Reactions';
 import { screenUtils } from '../../lib/utils/screenUtils';
@@ -379,22 +379,22 @@ export const Notices = ({
             return;
         }
 
-        // const headerElement = document.getElementById(`accordion-header-${noticeId}`);
-        // if (headerElement) {
-        //     headerElement.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-        //     const currentPosition = window.pageYOffset || document.documentElement.scrollTop;
-        //     window.scrollTo({ top: currentPosition - 80, behavior: 'smooth' });
-
-        //     setTimeout(() => {
-        //         setActiveNoticeId(noticeId);
-        //     }, 100);
-        // } else {
-        //     setActiveNoticeId(noticeId);
-        // }
-
         setExpandedNoticeId(noticeId);
         setActiveNoticeId(noticeId);
         setReactingNoticeId(noticeId);
+
+        const scrollHeaderIntoView = () => {
+            const headerElement = document.getElementById(`accordion-header-${noticeId}`);
+            if (headerElement) {
+                const headerTop = headerElement.offsetTop;
+                window.scrollTo({
+                    top: headerTop - 80,
+                    behavior: 'smooth'
+                });
+            }
+        };
+
+        setTimeout(scrollHeaderIntoView, 150);
 
         // Load reactions if not already loaded
         if (!loadedReactions[noticeId] && !loadingStates[noticeId]) {
@@ -510,7 +510,11 @@ export const Notices = ({
                     <div key={idx} className={`py-3 py-md-4 mt-2 mb-3 notices__accordion-item ${expandedNoticeId === notice.$id ? 'expanded' : ''}`}>
 
                         {/* notice header */}
-                        <div className={'px-3 px-md-4 notices__accordion-header'}>
+                        <div
+                            id={`accordion-header-${notice.$id}`}
+                            className={'px-3 px-md-4 notices__accordion-header'}
+                        >
+                            {/* Avatar and username */}
                             <Row className='w-100 mx-0 flex-nowrap'>
 
                                 {/* Avatar */}
@@ -803,8 +807,6 @@ export const Notices = ({
                                         reactionCharCount={reactionCharCount}
                                         onReactionTextChange={onReactionTextChange}
                                         handleReactSubmission={handleReactSubmission}
-
-
                                     />
                                     <hr className='my-3' />
                                 </Col>
