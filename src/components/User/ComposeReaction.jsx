@@ -11,22 +11,22 @@ export const ComposeReaction = ({ reactionText, onReactionTextChange, reactionGi
 
     const reactionCharLimit = 300;
 
-    // const [reactionGif, setReactionGif] = useState(null);
     const [tenorApiKey, setTenorApiKey] = useState(null);
 
     const [isGifBtnClicked, setIsGifBtnClicked] = useState(false);
 
-    const handleGifBtn = () => {
+    const openGifPickerBtn = () => {
         setIsGifBtnClicked((preVal) => !preVal);
+    }
+
+    const handleOnGifClick = (item) => {
+        setReactionGif(item.url);
+        setIsGifBtnClicked(false);
     }
 
     useEffect(() => {
         keysProvider('tenor', setTenorApiKey);
     }, []);
-
-    useEffect(() => {
-        console.log('reactionGif', reactionGif);
-    }, [reactionGif])
 
     return (
         <>
@@ -69,13 +69,16 @@ export const ComposeReaction = ({ reactionText, onReactionTextChange, reactionGi
                         </div>
                     }
 
-                    {/* handleGifBtn */}
+
                     <div className='my-2 d-flex'>
+
+                        {/* Open GIF picker btn */}
                         <Button className='notice__react-gif-btn py-1 px-2'
-                            onClick={handleGifBtn}>
+                            onClick={openGifPickerBtn}>
                             <i className='bi bi-filetype-gif' />
                         </Button>
 
+                        {/* Submit reaction btn */}
                         <Button
                             onClick={handleReactSubmission}
                             className='notice__reaction-submit-btn ms-auto'
@@ -90,7 +93,7 @@ export const ComposeReaction = ({ reactionText, onReactionTextChange, reactionGi
                         <div className='d-flex justify-content-start align-items-center'>
                             <GifPicker
                                 tenorApiKey={tenorApiKey}
-                                onGifClick={(item) => setReactionGif(item.url)}
+                                onGifClick={(item) => handleOnGifClick(item)}
                                 width={!isSmallScreen ? '50vw' : '80vw'} height='400px'
                             />
                         </div>

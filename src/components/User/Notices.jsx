@@ -60,7 +60,6 @@ export const Notices = ({
     const [loadingStates, setLoadingStates] = useState({});
     const [loadedReactions, setLoadedReactions] = useState({});
     const [activeNoticeId, setActiveNoticeId] = useState(null);
-    const [expandedNoticeId, setExpandedNoticeId] = useState(null);
 
     const noticeBodyRef = useRef({});
 
@@ -97,7 +96,7 @@ export const Notices = ({
         Object.entries(noticeBodyRef.current).forEach(([id, el]) => {
             if (!el) return;
 
-            if (id === expandedNoticeId) {
+            if (id === activeNoticeId) {
                 const scrollHeight = el.scrollHeight;
                 el.style.height = scrollHeight + 'px';
                 const timeout = setTimeout(() => {
@@ -111,7 +110,7 @@ export const Notices = ({
                 el.style.height = '0px';
             }
         });
-    }, [expandedNoticeId]);
+    }, [activeNoticeId]);
 
     const onReactionTextChange = (e) => {
         setReactionText(e.target.value);
@@ -355,11 +354,10 @@ export const Notices = ({
 
     const handleAccordionToggle = async (noticeId) => {
 
-        const isExpanded = expandedNoticeId === noticeId;
+        const isExpanded = activeNoticeId === noticeId;
 
         // Collapse logic
         if (isExpanded) {
-            setExpandedNoticeId(null);
             setActiveNoticeId(null);
             setReactingNoticeId(null);
             setShowLoadMoreBtn(false);
@@ -379,7 +377,6 @@ export const Notices = ({
             return;
         }
 
-        setExpandedNoticeId(noticeId);
         setActiveNoticeId(noticeId);
         setReactingNoticeId(noticeId);
 
@@ -507,7 +504,7 @@ export const Notices = ({
             <div className='notices__accordion'>
                 {notices?.map((notice, idx) =>
                     // One notice item
-                    <div key={idx} className={`py-3 py-md-4 mt-2 mb-3 notices__accordion-item ${expandedNoticeId === notice.$id ? 'expanded' : ''}`}>
+                    <div key={idx} className={`py-3 py-md-4 mt-2 mb-3 notices__accordion-item ${activeNoticeId === notice.$id ? 'expanded' : ''}`}>
 
                         {/* notice header */}
                         <div
@@ -735,12 +732,12 @@ export const Notices = ({
                                                             </Button>
 
                                                             {/* Report */}
-                                                            <div
+                                                            <Button
                                                                 onClick={() => onReportNoticeClick(notice.$id)}
-                                                                className='notice__reaction-btn ms-auto'
+                                                                className='notice__reaction-btn ms-auto p-0 me-2'
                                                             >
                                                                 <i className='bi bi-exclamation-circle' role='img' aria-label='exlamation icon' />
-                                                            </div>
+                                                            </Button>
                                                         </>
                                                 }
                                             </div>
@@ -797,20 +794,21 @@ export const Notices = ({
                         >
 
                             {/* Compose reaction */}
-                            <Row className='m-auto mt-3'>
-                                <Col className='px-3 px-md-4 d-flex flex-column justify-content-end'>
-                                    <ComposeReaction
-                                        reactionText={reactionText}
-                                        reactionGif={reactionGif}
-                                        setReactionGif={setReactionGif}
-                                        isSendingReactionLoading={isSendingReactionLoading}
-                                        reactionCharCount={reactionCharCount}
-                                        onReactionTextChange={onReactionTextChange}
-                                        handleReactSubmission={handleReactSubmission}
-                                    />
-                                    <hr className='my-3' />
-                                </Col>
-                            </Row>
+                            {isOtherUserBlocked || notice.user_id === user_id ? null :
+                                <Row className='m-auto mt-3'>
+                                    <Col className='px-3 px-md-4 d-flex flex-column justify-content-end'>
+                                        <ComposeReaction
+                                            reactionText={reactionText}
+                                            reactionGif={reactionGif}
+                                            setReactionGif={setReactionGif}
+                                            isSendingReactionLoading={isSendingReactionLoading}
+                                            reactionCharCount={reactionCharCount}
+                                            onReactionTextChange={onReactionTextChange}
+                                            handleReactSubmission={handleReactSubmission}
+                                        />
+                                    </Col>
+                                </Row>
+                            }
 
                             {/* Reactions */}
                             <Reactions
@@ -844,13 +842,10 @@ export const Notices = ({
                                     </Col>
                                 </Row>
                             }
-
                         </div>
                     </div>
                 )}
             </div>
-
-
 
             {/* Notice report modal */}
             <ReportModal
