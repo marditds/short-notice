@@ -151,9 +151,9 @@ export const Reactions = ({
             const avatarUrl = getAvatarUrl(avatarId);
 
             return (
-                <Row key={reaction.$id} className='m-auto'>
+                <Row key={reaction.$id} className='m-auto px-3 px-sm-3 px-md-4'>
                     {/* Reaction Text Col */}
-                    <Col xs={8} sm={9} className='notice__reaction-text-col px-0 ps-sm-3 ps-md-4 text-break'>
+                    <Col xs={8} sm={9} className='notice__reaction-text-col px-0 text-break'>
                         {reaction.content}
                         {reaction.reactionGif && (
                             <>
@@ -174,7 +174,7 @@ export const Reactions = ({
                     <Col
                         xs={4}
                         sm={3}
-                        className='d-flex flex-column pe-sm-3 pe-md-4 align-items-center justify-content-end notice__reaction-info-col'
+                        className='d-flex flex-column px-0 align-items-center justify-content-end notice__reaction-info-col'
                     >
                         <div className='d-flex flex-column justify-content-end align-items-end ms-auto'>
                             <Link
@@ -220,7 +220,7 @@ export const Reactions = ({
                             {formatDateToLocal(reaction.$createdAt)}
                         </div>
                     </Col>
-                    <hr className='my-2 my-md-3' />
+                    <hr className='my-3' />
                 </Row>
             );
         });
@@ -237,7 +237,7 @@ export const Reactions = ({
             ) : loadedReactions[notice.$id]?.length > 0 ? (
                 <>
                     {renderedReactions}
-                    <div>
+                    <div className='px-3 px-md-4'>
                         {showLoadMoreBtn ? (
                             <Button
                                 onClick={() => handleLoadMoreReactions(notice.$id)}

@@ -286,7 +286,7 @@
 
                 {isOtherUserBlocked || notice.user_id === user_id ? null :
                     <Row className='m-auto'>
-                        <Col className='px-0 px-sm-3 px-md-4 d-flex flex-column justify-content-end'>
+                        <Col className='px-3 px-md-4 d-flex flex-column justify-content-end'>
                             <ComposeReaction
                                 reactionText={reactionText}
                                 reactionGif={reactionGif}

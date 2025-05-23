@@ -60,8 +60,9 @@ export const Notices = ({
     const [loadingStates, setLoadingStates] = useState({});
     const [loadedReactions, setLoadedReactions] = useState({});
     const [activeNoticeId, setActiveNoticeId] = useState(null);
+    const [expandedNoticeId, setExpandedNoticeId] = useState(null);
 
-    const accordionRef = useRef(null);
+    const noticeBodyRef = useRef({});
 
     const [showReportModal, setShowReportModal] = useState(false);
     const [reportingNoticeId, setReprotingNoticeId] = useState(null);
@@ -90,6 +91,27 @@ export const Notices = ({
             setNoticeMap(new Map(notices.map(notice => [notice.$id, notice])));
         }
     }, [notices]);
+
+    // Expansion animation effect
+    useEffect(() => {
+        Object.entries(noticeBodyRef.current).forEach(([id, el]) => {
+            if (!el) return;
+
+            if (id === expandedNoticeId) {
+                const scrollHeight = el.scrollHeight;
+                el.style.height = scrollHeight + 'px';
+                const timeout = setTimeout(() => {
+                    el.style.height = 'auto';
+                }, 300);
+                return () => clearTimeout(timeout);
+            } else {
+                const currentHeight = el.scrollHeight;
+                el.style.height = currentHeight + 'px';
+                void el.offsetHeight;
+                el.style.height = '0px';
+            }
+        });
+    }, [expandedNoticeId]);
 
     const onReactionTextChange = (e) => {
         setReactionText(e.target.value);
@@ -357,19 +379,18 @@ export const Notices = ({
             return;
         }
 
-        // Expand logic
-        const headerElement = document.getElementById(`accordion-header-${noticeId}`);
-        if (headerElement) {
-            headerElement.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-            const currentPosition = window.pageYOffset || document.documentElement.scrollTop;
-            window.scrollTo({ top: currentPosition - 80, behavior: 'smooth' });
+        // const headerElement = document.getElementById(`accordion-header-${noticeId}`);
+        // if (headerElement) {
+        //     headerElement.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        //     const currentPosition = window.pageYOffset || document.documentElement.scrollTop;
+        //     window.scrollTo({ top: currentPosition - 80, behavior: 'smooth' });
 
-            setTimeout(() => {
-                setActiveNoticeId(noticeId);
-            }, 100);
-        } else {
-            setActiveNoticeId(noticeId);
-        }
+        //     setTimeout(() => {
+        //         setActiveNoticeId(noticeId);
+        //     }, 100);
+        // } else {
+        //     setActiveNoticeId(noticeId);
+        // }
 
         setExpandedNoticeId(noticeId);
         setActiveNoticeId(noticeId);
@@ -480,52 +501,16 @@ export const Notices = ({
         );
     };
 
-    const [expandedNoticeId, setExpandedNoticeId] = useState(null);
-    const containerRefs = useRef({});
-
-    const toggleItem = (id) => {
-        setExpandedItems(prev => ({
-            ...prev,
-            [id]: !prev[id]
-        }));
-    };
-
-    useEffect(() => {
-        Object.entries(containerRefs.current).forEach(([id, el]) => {
-            if (!el) return;
-
-            if (id === expandedNoticeId) {
-                const scrollHeight = el.scrollHeight;
-                el.style.height = scrollHeight + 'px';
-                const timeout = setTimeout(() => {
-                    el.style.height = 'auto';
-                }, 300);
-                return () => clearTimeout(timeout);
-            } else {
-                const currentHeight = el.scrollHeight;
-                el.style.height = currentHeight + 'px';
-                void el.offsetHeight; // reflow
-                el.style.height = '0px';
-            }
-        });
-    }, [expandedNoticeId]);
-
-
-    useEffect(() => {
-        console.log('loadedReactions', loadedReactions);
-
-    }, [loadedReactions])
-
     return (
         <>
             {/* Notices in DIV */}
-            <div>
+            <div className='notices__accordion'>
                 {notices?.map((notice, idx) =>
                     // One notice item
-                    <div key={idx} className='p-3 border-black border rounded rounded-3 mb-2'>
+                    <div key={idx} className={`py-3 py-md-4 mt-2 mb-3 notices__accordion-item ${expandedNoticeId === notice.$id ? 'expanded' : ''}`}>
 
                         {/* notice header */}
-                        <div className={'p-1'}>
+                        <div className={'px-3 px-md-4 notices__accordion-header'}>
                             <Row className='w-100 mx-0 flex-nowrap'>
 
                                 {/* Avatar */}
@@ -678,7 +663,8 @@ export const Notices = ({
                                                                     <i className='bi bi-hand-thumbs-up-fill notice__reaction-btn-fill me-2' role='img' aria-label='thumbs up like icon' />
                                                                 ) : (
                                                                     <i className='bi bi-hand-thumbs-up notice__reaction-btn me-2' />
-                                                                )} <span>
+                                                                )}
+                                                                <span>
                                                                     {likeCounts[notice.$id] ?? notice.noticeLikesTotal}
                                                                 </span>
                                                             </Button>
@@ -720,7 +706,8 @@ export const Notices = ({
                                                                     <i className='bi bi-floppy-fill notice__reaction-btn-fill me-2' />
                                                                 ) : (
                                                                     <i className='bi bi-floppy notice__reaction-btn me-2' />
-                                                                )} <span>
+                                                                )}
+                                                                <span>
                                                                     <span className='ms-1'>
                                                                         {saveCounts[notice.$id] ?? notice.noticeSavesTotal}
                                                                     </span>
@@ -800,63 +787,62 @@ export const Notices = ({
 
                         {/* notice body */}
                         <div
-                            ref={(el) => (containerRefs.current[notice.$id] = el)}
-                            className="expandable"
+                            ref={(el) => (noticeBodyRef.current[notice.$id] = el)}
+                            className={`expandable notice__reaction`}
                             style={{ overflow: 'hidden', transition: 'height 0.3s ease', height: '0px' }}
                         >
-                            <div >
 
-                                {/* Compose reaction */}
-                                <Row className='m-auto'>
-                                    <Col className='px-0 px-sm-3 px-md-4 d-flex flex-column justify-content-end'>
-                                        <ComposeReaction
-                                            reactionText={reactionText}
-                                            reactionGif={reactionGif}
-                                            setReactionGif={setReactionGif}
-                                            isSendingReactionLoading={isSendingReactionLoading}
-                                            reactionCharCount={reactionCharCount}
-                                            onReactionTextChange={onReactionTextChange}
-                                            handleReactSubmission={handleReactSubmission}
+                            {/* Compose reaction */}
+                            <Row className='m-auto mt-3'>
+                                <Col className='px-3 px-md-4 d-flex flex-column justify-content-end'>
+                                    <ComposeReaction
+                                        reactionText={reactionText}
+                                        reactionGif={reactionGif}
+                                        setReactionGif={setReactionGif}
+                                        isSendingReactionLoading={isSendingReactionLoading}
+                                        reactionCharCount={reactionCharCount}
+                                        onReactionTextChange={onReactionTextChange}
+                                        handleReactSubmission={handleReactSubmission}
 
 
-                                        />
-                                        <hr />
+                                    />
+                                    <hr className='my-3' />
+                                </Col>
+                            </Row>
+
+                            {/* Reactions */}
+                            <Reactions
+                                notice={notice}
+                                defaultAvatar={defaultAvatar}
+                                loadedReactions={loadedReactions}
+                                isLoadingMoreReactions={isLoadingMoreReactions}
+                                loadingStates={loadingStates}
+                                reactionAvatarMap={reactionAvatarMap}
+                                reactionUsernameMap={reactionUsernameMap}
+                                showLoadMoreBtn={showLoadMoreBtn}
+                                user_id={user_id}
+                                username={username}
+                                handleLoadMoreReactions={handleLoadMoreReactions}
+                                handleReportReaction={handleReportReaction}
+                            />
+                            {(txtPermission === false || notice.txtPermission === false) &&
+                                <Row className='my-2 my-sm-3'>
+                                    <Col className='text-center'>
+                                        {
+                                            notice.user_id === user_id ? (
+                                                <>
+                                                    To allow other users to post reactions to your notices, change your <Link to="../settings">settings</Link>.
+                                                </>
+                                            ) : (
+                                                <>
+                                                    This user does not allow reactions to their notices.
+                                                </>
+                                            )
+                                        }
                                     </Col>
                                 </Row>
+                            }
 
-                                {/* Reactions */}
-                                <Reactions
-                                    notice={notice}
-                                    defaultAvatar={defaultAvatar}
-                                    loadedReactions={loadedReactions}
-                                    isLoadingMoreReactions={isLoadingMoreReactions}
-                                    loadingStates={loadingStates}
-                                    reactionAvatarMap={reactionAvatarMap}
-                                    reactionUsernameMap={reactionUsernameMap}
-                                    showLoadMoreBtn={showLoadMoreBtn}
-                                    user_id={user_id}
-                                    username={username}
-                                    handleLoadMoreReactions={handleLoadMoreReactions}
-                                    handleReportReaction={handleReportReaction}
-                                />
-                                {(txtPermission === false || notice.txtPermission === false) &&
-                                    <Row className='my-2 my-sm-3'>
-                                        <Col className='text-center'>
-                                            {
-                                                notice.user_id === user_id ? (
-                                                    <>
-                                                        To allow other users to post reactions to your notices, change your <Link to="../settings">settings</Link>.
-                                                    </>
-                                                ) : (
-                                                    <>
-                                                        This user does not allow reactions to their notices.
-                                                    </>
-                                                )
-                                            }
-                                        </Col>
-                                    </Row>
-                                }
-                            </div>
                         </div>
                     </div>
                 )}
