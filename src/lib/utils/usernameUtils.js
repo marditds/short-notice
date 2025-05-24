@@ -4,7 +4,7 @@ export const usrnmMaxLngth = 16;
 
 export const usrnmTruncateLngth = 9;
 
-export const truncteUsername = (username) => {
+export const truncateUsername = (username) => {
     if (typeof username !== 'string') {
         throw new Error('Username must be a string');
     }

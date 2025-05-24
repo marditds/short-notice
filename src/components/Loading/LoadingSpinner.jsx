@@ -6,7 +6,7 @@ import './Loading.css'
 export const LoadingSpinner = ({ size, color, classAnun }) => {
 
     return (
-        <span>
+        <span aria-hidden='true' >
             <TbFidgetSpinner
                 size={size}
                 color={color}

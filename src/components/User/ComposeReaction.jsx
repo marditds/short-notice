@@ -34,6 +34,10 @@ export const ComposeReaction = ({ reactionText, onReactionTextChange, reactionGi
                 <Form.Group className='mb-0' controlId='reactionField'>
 
                     {/* reaction text field */}
+                    <Form.Label className="visually-hidden" id="reaction-text-label">
+                        Reaction text
+                    </Form.Label>
+
                     <Form.Control
                         as="textarea"
                         rows={3}
@@ -41,10 +45,14 @@ export const ComposeReaction = ({ reactionText, onReactionTextChange, reactionGi
                         onChange={onReactionTextChange}
                         className="user-profile__form-control"
                         placeholder={`Your reaction text here.`}
+                        aria-labelledby='reaction-text-label'
                     />
 
                     {/* reaction count */}
-                    <div className={`mt-2 user-profile__notice-char-counter ${reactionCharCount > reactionCharLimit && 'extra'}`}>
+                    <div
+                        className={`mt-2 user-profile__notice-char-counter ${reactionCharCount > reactionCharLimit && 'extra'}`}
+                        aria-live='polite'
+                    >
                         {`${reactionCharCount}/${reactionCharLimit} characters`}
                     </div>
 
@@ -52,11 +60,14 @@ export const ComposeReaction = ({ reactionText, onReactionTextChange, reactionGi
                     {reactionGif &&
                         <div>
                             <div className='position-relative'>
-                                <div className='position-absolute d-flex justify-content-end pe-2'
+                                <div
+                                    className='position-absolute d-flex justify-content-end pe-2'
                                     style={{ width: !isSmallScreen ? '30%' : '50%' }}
                                 >
-                                    <Button onClick={() => setReactionGif(null)}
+                                    <Button
+                                        onClick={() => setReactionGif(null)}
                                         className='mt-3 notice__react-remove-gif-btn'
+                                        aria-label='Remove selected GIF'
                                     >
                                         <i className='bi bi-x-square-fill' />
                                     </Button>
@@ -64,6 +75,7 @@ export const ComposeReaction = ({ reactionText, onReactionTextChange, reactionGi
                                 <Image src={reactionGif}
                                     width={!isSmallScreen ? '30%' : '50%'}
                                     className='mt-2 notice__gif'
+                                    alt='Selected GIF for reaction'
                                     fluid />
                             </div>
                         </div>
@@ -73,8 +85,11 @@ export const ComposeReaction = ({ reactionText, onReactionTextChange, reactionGi
                     <div className='my-2 d-flex'>
 
                         {/* Open GIF picker btn */}
-                        <Button className='notice__react-gif-btn py-1 px-2'
-                            onClick={openGifPickerBtn}>
+                        <Button
+                            className='notice__react-gif-btn py-1 px-2'
+                            onClick={openGifPickerBtn}
+                            aria-label='Open GIF picker'
+                        >
                             <i className='bi bi-filetype-gif' />
                         </Button>
 
@@ -83,6 +98,7 @@ export const ComposeReaction = ({ reactionText, onReactionTextChange, reactionGi
                             onClick={handleReactSubmission}
                             className='notice__reaction-submit-btn ms-auto'
                             disabled={(!reactionText && !reactionGif) || reactionCharCount > reactionCharLimit}
+                            aria-label='Submit your reaction'
                         >
                             {isSendingReactionLoading ? <LoadingSpinner /> : 'React'}
                         </Button>

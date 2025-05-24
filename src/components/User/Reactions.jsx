@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Row, Col, Button, Image } from 'react-bootstrap';
 import { getAvatarUrl } from '../../lib/utils/avatarUtils';
 import { screenUtils } from '../../lib/utils/screenUtils';
-import { truncteUsername } from '../../lib/utils/usernameUtils';
+import { truncateUsername } from '../../lib/utils/usernameUtils';
 import { LoadingSpinner } from '../Loading/LoadingSpinner';
 import { formatDateToLocal } from '../../lib/utils/dateUtils';
 
@@ -25,7 +25,13 @@ export const Reactions = ({
 
     const renderedReactions = useMemo(() => {
         return loadedReactions[notice.$id]?.map((reaction) => {
+
+            const reactionUser = reactionUsernameMap[notice.$id]?.[reaction.sender_id];
+
+            const isOwnProfile = reactionUser === username;
+
             const avatarId = reactionAvatarMap[notice.$id]?.[reaction.sender_id];
+
             const avatarUrl = getAvatarUrl(avatarId);
 
             return (
@@ -33,7 +39,7 @@ export const Reactions = ({
                     <hr className='my-3' />
 
                     {/* Reaction Text Col */}
-                    <Col xs={8} sm={9} className='notice__reaction-text-col px-0 text-break'>
+                    <Col xs={8} sm={9} className='notice__reaction-text-col px-0 text-break' role='article' aria-label='User reaction text'>
                         {reaction.content}
                         {reaction.reactionGif && (
                             <>
@@ -44,6 +50,7 @@ export const Reactions = ({
                                     width={
                                         isExtraSmallScreen ? '100%' : isSmallScreen ? '60%' : '60%'
                                     }
+                                    alt='Reaction GIF'
                                     fluid
                                 />
                             </>
@@ -58,45 +65,40 @@ export const Reactions = ({
                     >
                         <div className='d-flex flex-column justify-content-end align-items-end ms-auto'>
                             <Link
-                                to={
-                                    reactionUsernameMap[notice.$id]?.[reaction.sender_id] !== username
-                                        ? `/user/${reactionUsernameMap[notice.$id]?.[reaction.sender_id]}`
-                                        : `/user/profile`
-                                }
+                                to={isOwnProfile ? `/user/profile` : `/user/${reactionUser}`}
+                                aria-label={isOwnProfile ? 'Go to your profile' : `Go to ${reactionUser}'s profile`}
                             >
                                 <img
                                     src={avatarUrl || defaultAvatar}
-                                    alt='Profile'
+                                    alt={isOwnProfile ? 'Your avatar' : `${reactionUser}'s avatar`}
                                     className='notice__reaction-avatar'
                                 />
                             </Link>
 
                             <Link
-                                to={
-                                    reactionUsernameMap[notice.$id]?.[reaction.sender_id] !== username
-                                        ? `/user/${reactionUsernameMap[notice.$id]?.[reaction.sender_id]}`
-                                        : `/user/profile`
-                                }
-                                className='text-decoration-none notice__reaction-username'
+                                to={isOwnProfile ? '/user/profile' : `/user/${reactionUser}`}
+                                className="text-decoration-none notice__reaction-username"
+                                aria-label={isOwnProfile ? 'Go to your profile' : `Go to ${reactionUser}'s profile`}
                             >
                                 <strong className='ms-auto me-0'>
-                                    {truncteUsername(
-                                        reactionUsernameMap[notice.$id]?.[reaction.sender_id]
+                                    {truncateUsername(
+                                        reactionUser
                                     )}
                                 </strong>
                             </Link>
                         </div>
                         {reaction.sender_id !== user_id ? (
-                            <div
-                                className='ms-auto mt-sm-1 d-flex d-flex align-items-center notice__reaction-interaction-div notice__reaction-btn'
+                            <Button
+                                className='ms-auto mt-sm-1 d-flex d-flex align-items-center notice__reaction-interaction-div notice__reaction-btn p-0'
                                 onClick={() => handleReportReaction(reaction.$id)}
+                                aria-label='Report this reaction'
                             >
                                 <i className='bi bi-exclamation-circle'></i>
-                            </div>
+                            </Button>
                         ) : (
                             <div className='notice__reaction-interaction-div-empty' />
                         )}
-                        <div className='ms-auto'>
+                        <div className='ms-auto' aria-label={`Reaction posted on ${formatDateToLocal(reaction.$createdAt)}`}>
                             {formatDateToLocal(reaction.$createdAt)}
                         </div>
                     </Col>
@@ -108,10 +110,11 @@ export const Reactions = ({
     return (
         <>
             {loadingStates[notice.$id] ? (
-                <div className='text-center py-3'>
+                <div className='text-center py-3' role='status' aria-live='polite'>
                     <LoadingSpinner size={!isSmallScreen ? 24 : 18} />
                     <LoadingSpinner size={!isSmallScreen ? 24 : 18} />
                     <LoadingSpinner size={!isSmallScreen ? 24 : 18} />
+                    <span className='visually-hidden'>Loading the reactions for this notice</span>
                 </div>
             ) : loadedReactions[notice.$id]?.length > 0 ? (
                 <>
@@ -125,26 +128,34 @@ export const Reactions = ({
                                 onClick={() => handleLoadMoreReactions(notice.$id)}
                                 className='notice__load-reactions-btn'
                                 disabled={isLoadingMoreReactions}
+                                aria-label={
+                                    isLoadingMoreReactions
+                                        ? 'Loading the next batch of reactions for this notice'
+                                        : 'Load more reactions'
+                                }
+                                aria-busy={isLoadingMoreReactions}
                             >
                                 {isLoadingMoreReactions ? (
                                     <>
                                         <LoadingSpinner size={24} /> Loading...
+                                        <span className='visually-hidden'>Loading the next batch of reactions for this notice</span>
                                     </>
                                 ) : (
                                     'Load More Reactions'
                                 )}
                             </Button>
                         ) : (
-                            <div className='text-center text-muted py-2 py-md-3'>
+                            <div className='text-center text-muted py-2 py-md-3' aria-live='polite'>
                                 <i className='bi bi-asterisk' />
                                 <i className='bi bi-asterisk' />
                                 <i className='bi bi-asterisk' />
+                                <span className='visually-hidden'>No more reactions for this notice.</span>
                             </div>
                         )}
                     </div>
                 </>
             ) : (
-                <div className='text-center text-muted py-3'>
+                <div className='text-center text-muted py-3' aria-live='polite'>
                     No reactions for this notice
                 </div>
             )}

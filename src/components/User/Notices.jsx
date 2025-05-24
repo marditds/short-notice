@@ -5,7 +5,7 @@ import { Row, Col, Image, Button } from 'react-bootstrap';
 import defaultAvatar from '../../assets/default.png';
 import { Reactions } from './Reactions';
 import { screenUtils } from '../../lib/utils/screenUtils';
-import { truncteUsername } from '../../lib/utils/usernameUtils';
+import { truncateUsername } from '../../lib/utils/usernameUtils';
 import { ComposeReaction } from './ComposeReaction';
 import { ReportModal } from './Modals';
 
@@ -504,12 +504,17 @@ export const Notices = ({
             <div className='notices__accordion'>
                 {notices?.map((notice, idx) =>
                     // One notice item
-                    <div key={idx} className={`py-3 py-md-4 mt-2 mb-3 notices__accordion-item ${activeNoticeId === notice.$id ? 'expanded' : ''}`}>
+                    <div
+                        key={idx}
+                        className={`py-3 py-md-4 mt-2 mb-3 notices__accordion-item ${activeNoticeId === notice.$id ? 'expanded' : ''}`}
+                    >
 
                         {/* notice header */}
                         <div
                             id={`accordion-header-${notice.$id}`}
                             className={'px-3 px-md-4 notices__accordion-header'}
+                            role='region'
+                            aria-label={`Notice from ${notice.username}`}
                         >
                             {/* Avatar and username */}
                             <Row className='w-100 mx-0 flex-nowrap'>
@@ -517,12 +522,14 @@ export const Notices = ({
                                 {/* Avatar */}
                                 {shouldShowUserInfo() ?
                                     <Col xs={1} className='notice__avatar-col d-flex flex-column'>
-
                                         <div className='d-flex justify-content-center justify-content-sm-start align-items-center mt-auto'>
-                                            <Link to={notice.username !== username ? `../${notice.username}` : `../profile`}>
+                                            <Link
+                                                to={notice.username !== username ? `../${notice.username}` : `../profile`}
+                                                aria-label={notice.username === username ? 'Go to your profile' : `Go to ${notice.username}'s profile`}
+                                            >
                                                 <img
                                                     src={notice.avatarUrl || defaultAvatar}
-                                                    alt="Profile"
+                                                    alt={`${notice.username}'s avatar`}
                                                     className='notice__avatar'
                                                 />
                                             </Link>
@@ -535,24 +542,29 @@ export const Notices = ({
                                 {/* Username and dates */}
                                 <Col xs={11} className={`d-flex flex-column pe-0 justify-content-evenly ${((location.pathname === '/user/profile' && eventKey == 'my-notices') || (location.pathname !== '/user/profile' && eventKey == 'notices')) ? 'ps-0' : null}`}>
                                     {shouldShowUserInfo() ?
-                                        <p className='w-100 mb-0 text-start notice__username'>
-                                            <Link to={notice.username !== username ? `../${notice.username}` : `../profile`} className='text-decoration-none'>
+                                        <p className='w-100 mb-0 text-start notice__username' aria-label={`Username: ${notice.username}`}>
+                                            <Link
+                                                to={notice.username !== username ? `../${notice.username}` : `../profile`}
+                                                aria-label={notice.username === username ? 'Go to your profile' : `Go to ${notice.username}'s profile`}
+                                                className='text-decoration-none'>
                                                 <strong>
-                                                    {notice?.username ? truncteUsername(notice.username) : ''}
+                                                    {notice?.username ? truncateUsername(notice.username) : ''}
                                                 </strong>
                                             </Link>
                                         </p>
                                         : null}
                                     <div>
                                         {/* Creation date */}
-                                        <small className='text-end mt-auto notice__create-date text-nowrap me-4'>
+                                        <small className='text-end mt-auto notice__create-date text-nowrap me-4'
+                                            aria-label={`Created on ${formatDateToLocal(notice.timestamp)}`}>
                                             <span style={{ color: 'gray' }} >
                                                 Created:
                                             </span> {formatDateToLocal(notice.timestamp)}
                                         </small>
 
                                         {/* Expiration countdown */}
-                                        <small className='me-auto'>
+                                        <small className='me-auto'
+                                            aria-label={`Expires In ${formatDateToLocal(notice.timestamp)}`}>
                                             <span style={{ color: 'gray' }} >
                                                 Expires In:
                                             </span>  {countdowns[idx] || calculateCountdown(notice?.expiresAt)}
@@ -566,7 +578,7 @@ export const Notices = ({
                             {/* Text */}
                             <Row>
                                 <Col>
-                                    <p className='text-break notice__text my-1 my-md-3'>
+                                    <p className='text-break notice__text my-1 my-md-3' role='document' aria-label='Notice content'>
                                         {notice?.noticeType === 'business' &&
                                             <strong>
                                                 Ad:{' '}
@@ -577,9 +589,12 @@ export const Notices = ({
 
                                     {notice?.noticeUrl &&
                                         <p className='notice__link-in-notice-p'>
-
-                                            <a href={notice?.noticeUrl} target='_blank' rel='noopener noreferrer'
+                                            <a
+                                                href={notice?.noticeUrl}
+                                                target='_blank'
+                                                rel='noopener noreferrer'
                                                 className='notice__link-in-notice'
+                                                aria-label={`External link to ${notice.noticeUrl}`}
                                             >
                                                 {notice?.noticeUrl}
                                             </a>
@@ -587,10 +602,13 @@ export const Notices = ({
                                     }
 
                                     {notice?.noticeGif &&
-                                        <Image src={notice?.noticeGif}
+                                        <Image
+                                            src={notice?.noticeGif}
                                             className='mb-2 notice__gif'
                                             width={isExtraSmallScreen ? '90%' : (isSmallScreen ? '60%' : '60%')}
-                                            fluid />
+                                            alt='GIF related to the notice'
+                                            fluid
+                                        />
                                     }
                                 </Col>
                             </Row>
@@ -614,16 +632,17 @@ export const Notices = ({
                                                                 <i className='bi bi-hand-thumbs-up notice__reaction-btn-fill me-2' role='img' aria-label='thumbs up like icon' /> {notice.noticeLikesTotal}
                                                             </span>
                                                             <span className='ms-4 d-flex mt-auto my-auto'>
-                                                                <i className='bi bi-floppy notice__reaction-btn-fill me-2' /> {notice.noticeSavesTotal}
+                                                                <i className='bi bi-floppy notice__reaction-btn-fill me-2' role='img' aria-label='floppy save icon' /> {notice.noticeSavesTotal}
                                                             </span>
-                                                            <span className='ms-4 d-flex mt-auto my-auto'
+                                                            <Button className='ms-4 d-flex mt-auto my-auto bg-transparent border-0 p-0 notice__reaction-users-own'
                                                                 onClick={() => {
                                                                     handleAccordionToggle(notice.$id);
                                                                     console.log('Leaving a reaction btn');
                                                                 }}
+                                                                aria-label='Expand your own notice to load the reactions'
                                                             >
                                                                 <i className={`bi bi-reply notice__reaction-btn-fill me-2  notice__reaction-users-own`} />
-                                                            </span>
+                                                            </Button>
                                                         </>
                                                         :
                                                         <>
@@ -659,9 +678,10 @@ export const Notices = ({
 
                                                                     handleLike(notice.$id, notice.user_id, likedNotices, setLikedNotices);
                                                                 }}
+                                                                aria-label={likedNotices?.[notice.$id] ? 'Unlike this notice' : 'Like this notice'}
                                                             >
                                                                 {likedNotices && likedNotices[notice.$id] ? (
-                                                                    <i className='bi bi-hand-thumbs-up-fill notice__reaction-btn-fill me-2' role='img' aria-label='thumbs up like icon' />
+                                                                    <i className='bi bi-hand-thumbs-up-fill notice__reaction-btn-fill me-2' />
                                                                 ) : (
                                                                     <i className='bi bi-hand-thumbs-up notice__reaction-btn me-2' />
                                                                 )}
@@ -702,6 +722,7 @@ export const Notices = ({
 
                                                                     handleSave(notice.$id, notice.user_id, savedNotices, setSavedNotices);
                                                                 }}
+                                                                aria-label={savedNotices?.[notice.$id] ? 'Unsave this notice' : 'Save this notice'}
                                                             >
                                                                 {savedNotices && savedNotices[notice.$id] ? (
                                                                     <i className='bi bi-floppy-fill notice__reaction-btn-fill me-2' />
@@ -727,6 +748,7 @@ export const Notices = ({
                                                                     handleAccordionToggle(notice.$id);
                                                                     console.log('Leaving a reaction btn');
                                                                 }}
+                                                                aria-label={`Expand ${notice.username}\'s notice to load the reactions or post a reaction.`}
                                                             >
                                                                 <i className='bi bi-reply notice__reaction-btn' />
                                                             </Button>
@@ -735,8 +757,9 @@ export const Notices = ({
                                                             <Button
                                                                 onClick={() => onReportNoticeClick(notice.$id)}
                                                                 className='notice__reaction-btn ms-auto p-0 me-2'
+                                                                aria-label='Report this notice'
                                                             >
-                                                                <i className='bi bi-exclamation-circle' role='img' aria-label='exlamation icon' />
+                                                                <i className='bi bi-exclamation-circle' />
                                                             </Button>
                                                         </>
                                                 }
@@ -755,31 +778,34 @@ export const Notices = ({
                                                 <i className='bi bi-hand-thumbs-up notice__reaction-btn-fill me-2' role='img' aria-label='thumbs up like icon' /> {notice?.noticeLikesTotal}
                                             </span>
                                             <span className='ms-4 d-flex mt-auto my-auto'>
-                                                <i className='bi bi-floppy notice__reaction-btn-fill me-2' /> {notice?.noticeSavesTotal}
+                                                <i className='bi bi-floppy notice__reaction-btn-fill me-2' role='img' aria-label='floppy save icon' /> {notice?.noticeSavesTotal}
                                             </span>
-                                            <span className='ms-4 d-flex mt-auto my-auto'
+                                            <Button className='ms-4 d-flex mt-auto my-auto p-0 bg-transparent border-0 notice__reaction-users-own-profile'
                                                 onClick={() => {
                                                     handleAccordionToggle(notice.$id);
                                                     console.log('Leaving a reaction btn');
                                                 }}
+                                                aria-label='Expand your own notice to load the reactions'
                                             >
                                                 <i className='bi bi-reply notice__reaction-btn-fill me-2 notice__reaction-users-own' />
-                                            </span>
+                                            </Button>
                                         </>
 
                                         <span className='d-flex ms-auto mt-auto'>
-                                            <div
-                                                className='ms-auto notice__edit-btn'
+                                            <Button
+                                                className='ms-auto notice__edit-btn p-0'
                                                 onClick={() => handleEditNotice(notice.$id, notice.text)}
+                                                aria-label='Edit this notice'
                                             >
                                                 <i className='bi bi-pencil' />
-                                            </div>
-                                            <div
-                                                className='ms-2 notice__delete-btn'
+                                            </Button>
+                                            <Button
+                                                className='ms-2 notice__delete-btn p-0'
                                                 onClick={() => handleDeleteNotice(notice.$id)}
+                                                aria-label='Delete this notice'
                                             >
                                                 <i className='bi bi-trash3' />
-                                            </div>
+                                            </Button>
                                         </span>
                                     </div>
                                 }
@@ -788,9 +814,11 @@ export const Notices = ({
 
                         {/* notice body */}
                         <div
-                            ref={(el) => (noticeBodyRef.current[notice.$id] = el)}
+                            ref={(element) => (noticeBodyRef.current[notice.$id] = element)}
                             className={`expandable notice__reaction`}
                             style={{ overflow: 'hidden', transition: 'height 0.3s ease', height: '0px' }}
+                            role="region"
+                            aria-label={`Expanded content for the notice by ${notice.username}`}
                         >
 
                             {/* Compose reaction */}
@@ -827,7 +855,7 @@ export const Notices = ({
                             />
                             {(txtPermission === false || notice.txtPermission === false) &&
                                 <Row className='my-2 my-sm-3'>
-                                    <Col className='text-center'>
+                                    <Col className='text-center' aria-live='polite'>
                                         {
                                             notice.user_id === user_id ? (
                                                 <>

@@ -36,7 +36,7 @@
                             <p className='w-100 mb-0 text-start notice__username'>
                                 <Link to={notice.username !== username ? `../${notice.username}` : `../profile`} className='text-decoration-none'>
                                     <strong>
-                                        {notice?.username ? truncteUsername(notice.username) : ''}
+                                        {notice?.username ? truncateUsername(notice.username) : ''}
                                     </strong>
                                 </Link>
                             </p>
