@@ -620,37 +620,54 @@ const OtherUserProfile = () => {
 
     //Fetch follow status
     useEffect(() => {
-        if (accountTypeCheckFunc(accountType, 'Enter the passcode to learn follow status.') === false) {
-            return;
+
+        const fetchFollowStatus = () => {
+            if (accountTypeCheckFunc(accountType, 'Enter the passcode to learn follow status.') === false) {
+                return;
+            }
+            getFollowStatus(userId, currUserId);
         }
-        getFollowStatus(userId, currUserId);
+        callFunctionIfNotBlocked(fetchFollowStatus);
+
     }, [userId, currUserId, accountTypeCheck])
 
     //Is otherUser following me?
     useEffect(() => {
-        if (accountTypeCheckFunc(accountType, 'Enter the passcode to learn follow status.') === false) {
-            return;
+
+        const fetchFollowingStatus = () => {
+            if (accountTypeCheckFunc(accountType, 'Enter the passcode to learn follow status.') === false) {
+                return;
+            }
+            getFollowingStatus(currUserId);
         }
-        getFollowingStatus(currUserId);
+        callFunctionIfNotBlocked(fetchFollowingStatus);
 
     }, [currUserId, accountTypeCheck])
 
     // Fetch followers count
     useEffect(() => {
 
-        if (accountTypeCheckFunc(accountType, 'Enter the passcode to get the follower count.') === false) {
-            return;
+        const fetchFollowersCount = () => {
+            if (accountTypeCheckFunc(accountType, 'Enter the passcode to get the follower count.') === false) {
+                return;
+            }
+            getFollowingTheUserCount(currUserId);
         }
-        getFollowingTheUserCount(currUserId);
+        callFunctionIfNotBlocked(fetchFollowersCount);
     }, [currUserId, isFollowing, accountTypeCheck])
 
     // Fetch following count
     useEffect(() => {
 
-        if (accountTypeCheckFunc(accountType, 'Enter the passcode to get the following count.') === false) {
-            return;
+        const fetchFollowingCount = () => {
+            if (accountTypeCheckFunc(accountType, 'Enter the passcode to get the following count.') === false) {
+                return;
+            }
+            getfollwedByUserCount(currUserId);
         }
-        getfollwedByUserCount(currUserId);
+
+        callFunctionIfNotBlocked(fetchFollowingCount);
+
     }, [currUserId, accountTypeCheck])
 
     // Fetch accounts followed by the other user
@@ -704,7 +721,7 @@ const OtherUserProfile = () => {
             }
         }
 
-        fetchUserPermissions();
+        callFunctionIfNotBlocked(fetchUserPermissions);
 
     }, [currUserId, accountTypeCheck])
 
