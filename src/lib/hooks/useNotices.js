@@ -963,7 +963,7 @@ export const useNotices = () => {
         }
 
         try {
-            const response = await fetchAllReactionsByNoticeId(notice_id, limit, cursor);
+            const response = await fetchAllReactionsByNoticeId(notice_id, limit, cursor, user_id);
             console.log('getAllReactionsByNoticeId', response);
             return response;
         } catch (error) {

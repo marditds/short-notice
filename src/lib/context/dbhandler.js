@@ -2150,7 +2150,7 @@ export const getAllReactionsByRecipientId = async (recipient_id) => {
     }
 }
 
-export const getAllReactionsByNoticeId = async (notice_id, limit, cursor = null) => {
+export const getAllReactionsByNoticeId = async (notice_id, limit, cursor = null, userId) => {
     try {
         const [blockedUsers, usersBlockingMe] = await Promise.all([
             getBlockedUsersByUser(userId),
