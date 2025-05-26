@@ -41,6 +41,8 @@ export const useUserInfo = () => {
 
     const [accountTypeCheck, setAccountTypeCheck] = useState(false);
 
+    const [isUserBlocked, setIsUserBlocked] = useState(false);
+
     const [isFetchingUsersData, setIsFetchingUsersData] = useState(false);
 
     const [following, setFollowing] = useState({});
@@ -479,6 +481,11 @@ export const useUserInfo = () => {
             return;
         }
 
+        if (isUserBlocked) {
+            console.log('This user blocked you - followebByCount');
+            return;
+        }
+
         console.log('Fetching the followebByCount for user:', id);
 
         try {
@@ -560,6 +567,11 @@ export const useUserInfo = () => {
             return;
         }
 
+        if (isUserBlocked) {
+            console.log('This user blocked you - follwers by user count');
+            return;
+        }
+
         try {
             setIsGetFollowingTheUserCountLoading(true);
 
@@ -624,8 +636,13 @@ export const useUserInfo = () => {
             return;
         }
 
+        if (isUserBlocked) {
+            console.log('This user blocked you - follow status');
+            setIsInitialFollowCheckLoading(false);
+            return;
+        }
+
         try {
-            console.log('getting follow status - 2', { user_id, otherUser_id });
             setIsInitialFollowCheckLoading(true);
 
             const res = await fetchFollowStatus(user_id, otherUser_id);
@@ -649,6 +666,11 @@ export const useUserInfo = () => {
     }
 
     const getFollowingStatus = async (otherUser_id) => {
+
+        if (isUserBlocked) {
+            console.log('This user blocked you - Is other user following me?');
+            return;
+        }
 
         if (!otherUser_id) {
             console.log('The host does not care about the user.');
@@ -674,7 +696,7 @@ export const useUserInfo = () => {
         } catch (error) {
             console.error('Error getting follow status:', error);
         } finally {
-            setIsInitialFollowCheckLoading(false);
+            setIsotherUserFollowingMeCheckLoading(false);
         }
     }
 
@@ -937,6 +959,19 @@ export const useUserInfo = () => {
         return true;
     };
 
+    // Call function only if user is not blocked
+    const callFunctionIfUserIsNotBlocked = async (functionName, unloadedData) => {
+        if (isUserBlocked === false) {
+            try {
+                await functionName();
+            } catch (error) {
+                console.log('Error running function:', error);
+            }
+        } else {
+            console.log('This user blocked you - ', unloadedData);
+        }
+    }
+
 
     return {
         userId,
@@ -953,6 +988,9 @@ export const useUserInfo = () => {
         isGetFollowingTheUserCountLoading,
         isFetchingUsersData,
         accountTypeCheck,
+        isUserBlocked,
+        setIsUserBlocked,
+        callFunctionIfUserIsNotBlocked,
         setAccountTypeCheck,
         accountTypeCheckFunc,
         getAccount,

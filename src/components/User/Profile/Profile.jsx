@@ -7,7 +7,7 @@ import { screenUtils } from '../../../lib/utils/screenUtils.js';
 import { BlockModal, ReportModal, FollowModal } from '../Modals.jsx';
 import { LoadingSpinner } from '../../Loading/LoadingSpinner.jsx';
 
-export const Profile = ({ username, avatarUrl, isAvatarLoading, website, handleFollow, handleBlock, currUserId, followingCount, followersCount, isFollowing, followingAccounts, followersAccounts, isFollowingUserLoading, isGetFollwedByUserCountLoading, isGetFollowingTheUserCountLoading, isBlocked, isOtherUserBlocked, handleUserReport, hasMoreFollowing, hasMoreFollowers, loadFollowing, loadFollowers, isLoadingMoreFollowing, isLoadingMoreFollowers, isOtherUserFollowingMe, isProcessingBlock, userWebsite }) => {
+export const Profile = ({ username, avatarUrl, isAvatarLoading, website, handleFollow, handleBlock, currUserId, followingCount, followersCount, isFollowing, followingAccounts, followersAccounts, isFollowingUserLoading, isGetFollwedByUserCountLoading, isGetFollowingTheUserCountLoading, isUserBlocked, isOtherUserBlocked, handleUserReport, hasMoreFollowing, hasMoreFollowers, loadFollowing, loadFollowers, isLoadingMoreFollowing, isLoadingMoreFollowers, isOtherUserFollowingMe, isProcessingBlock, userWebsite }) => {
 
     const location = useLocation();
 
@@ -89,7 +89,7 @@ export const Profile = ({ username, avatarUrl, isAvatarLoading, website, handleF
                     className={`d-flex flex-sm-column ${location.pathname !== '/user/profile' && isExtraSmallScreen ? 'justify-content-sm-evenly' : 'justify-content-center'}  user-profile__follow-count-col ${location.pathname !== '/user/profile' && isExtraSmallScreen ? 'h-50' : ''}`}>
 
                     {
-                        isBlocked ?
+                        isUserBlocked ?
                             null :
                             <>
                                 <Button
@@ -211,7 +211,7 @@ export const Profile = ({ username, avatarUrl, isAvatarLoading, website, handleF
                     >
                         <>
                             {
-                                isBlocked ? null :
+                                isUserBlocked ? null :
                                     <Button
                                         className={`user-profile__interaction-btn
                                 ${isFollowing ? 'following' : ''} mb-2 ms-sm-auto`}
@@ -230,7 +230,7 @@ export const Profile = ({ username, avatarUrl, isAvatarLoading, website, handleF
                             }
 
                             {isExtraSmallScreen ?
-                                <Dropdown className={`mb-2 ${isBlocked ? 'ms-0' : 'ms-2'} user-profile__interaction-dropdown`}>
+                                <Dropdown className={`mb-2 ${isUserBlocked ? 'ms-0' : 'ms-2'} user-profile__interaction-dropdown`}>
                                     <Dropdown.Toggle id='dropdown-block-report'>
                                         <i className='bi bi-three-dots' />
                                     </Dropdown.Toggle>

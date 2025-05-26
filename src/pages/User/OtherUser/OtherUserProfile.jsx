@@ -60,6 +60,9 @@ const OtherUserProfile = () => {
         isGetFollwedByUserCountLoading,
         isGetFollowingTheUserCountLoading,
         accountTypeCheck,
+        isUserBlocked,
+        setIsUserBlocked,
+        callFunctionIfUserIsNotBlocked,
         setAccountTypeCheck,
         accountTypeCheckFunc,
         checkIsOtherUserBlockedByUser,
@@ -90,7 +93,7 @@ const OtherUserProfile = () => {
     const [otherUserAvatarId, setOtherUserAvatarId] = useState(null);
 
     const [isOtherUserLoading, setIsOtherUserLoading] = useState(false);
-    const [isBlocked, setIsBlocked] = useState(false);
+
     const [isOtherUserBlocked, setIsOtherUserBlocked] = useState(false);
 
     const [otherUserNotices, setOtherUserNotices] = useState([]);
@@ -204,7 +207,7 @@ const OtherUserProfile = () => {
 
                         if (blckdByOtherUser === true) {
                             console.log('isUserBlockedByOtherUser ', blckdByOtherUser);
-                            setIsBlocked(true);
+                            setIsUserBlocked(true);
                         }
                     } else {
                         console.error('Error fetching blocked users by user:', isUserBlockedByOtherUserRes.reason);
@@ -229,7 +232,7 @@ const OtherUserProfile = () => {
             }
         }
         setIsOtherUserBlocked(false);
-        setIsBlocked(false);
+        setIsUserBlocked(false);
         getCurrUser();
     }, [username, otherUsername])
 
@@ -373,7 +376,7 @@ const OtherUserProfile = () => {
             }
         };
 
-        callFunctionIfNotBlocked(fetchNotices);
+        callFunctionIfUserIsNotBlocked(fetchNotices, 'fetched notice for other user');
 
     }, [currUserId, offsetNotices, accountTypeCheck])
 
@@ -386,19 +389,6 @@ const OtherUserProfile = () => {
         setOffsetLikes(0);
         setLikedNoticesData([]);
     }, [currUserId])
-
-    // Call function only if user is not blocked
-    const callFunctionIfNotBlocked = async (functionName) => {
-        if (isBlocked === false) {
-            try {
-                await functionName();
-            } catch (error) {
-                console.log('Error running function:', error);
-            }
-        } else {
-            console.log('This user blocked you.');
-        }
-    }
 
     // Fetch saves and users' data for saves tab 
     useEffect(() => {
@@ -485,7 +475,7 @@ const OtherUserProfile = () => {
         };
 
         if (isSavesClicked === true) {
-            callFunctionIfNotBlocked(fetchSaveNotices);
+            callFunctionIfUserIsNotBlocked(fetchSaveNotices, 'fetch saves for other user');
         }
 
     }, [currUserId, offsetSaves, isSavesClicked])
@@ -572,7 +562,7 @@ const OtherUserProfile = () => {
         };
 
         if (isLikesClicked === true) {
-            callFunctionIfNotBlocked(fetchLikedNotices);
+            callFunctionIfUserIsNotBlocked(fetchLikedNotices, 'fetch likes for other user');
         }
 
     }, [currUserId, offsetLikes, isLikesClicked])
@@ -627,7 +617,7 @@ const OtherUserProfile = () => {
             }
             getFollowStatus(userId, currUserId);
         }
-        callFunctionIfNotBlocked(fetchFollowStatus);
+        fetchFollowStatus();
 
     }, [userId, currUserId, accountTypeCheck])
 
@@ -640,7 +630,7 @@ const OtherUserProfile = () => {
             }
             getFollowingStatus(currUserId);
         }
-        callFunctionIfNotBlocked(fetchFollowingStatus);
+        fetchFollowingStatus();
 
     }, [currUserId, accountTypeCheck])
 
@@ -653,7 +643,7 @@ const OtherUserProfile = () => {
             }
             getFollowingTheUserCount(currUserId);
         }
-        callFunctionIfNotBlocked(fetchFollowersCount);
+        fetchFollowersCount();
     }, [currUserId, isFollowing, accountTypeCheck])
 
     // Fetch following count
@@ -666,7 +656,7 @@ const OtherUserProfile = () => {
             getfollwedByUserCount(currUserId);
         }
 
-        callFunctionIfNotBlocked(fetchFollowingCount);
+        fetchFollowingCount();
 
     }, [currUserId, accountTypeCheck])
 
@@ -721,7 +711,7 @@ const OtherUserProfile = () => {
             }
         }
 
-        callFunctionIfNotBlocked(fetchUserPermissions);
+        callFunctionIfUserIsNotBlocked(fetchUserPermissions, 'fetch permissions for other user');
 
     }, [currUserId, accountTypeCheck])
 
@@ -818,7 +808,7 @@ const OtherUserProfile = () => {
                     avatarUrl={avatarUrl}
                     currUserId={currUserId}
                     website={otherUserWebsite}
-                    isBlocked={isBlocked}
+                    isUserBlocked={isUserBlocked}
                     isOtherUserBlocked={isOtherUserBlocked}
                     followingAccounts={followingAccounts}
                     followersAccounts={followersAccounts}
@@ -843,7 +833,7 @@ const OtherUserProfile = () => {
                     loadFollowing={loadFollowing}
                 />
                 <>
-                    {!isBlocked ?
+                    {!isUserBlocked ?
                         <div style={{ marginTop: (isExtraSmallScreen || isSmallScreen) ? '190px' : '235px' }}>
                             <Tabs
                                 activeKey={eventKey}
