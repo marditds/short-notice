@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { Row, Col, Button, Dropdown } from 'react-bootstrap';
 import { getAvatarUrl } from '../../../lib/utils/avatarUtils.js';
@@ -64,7 +64,7 @@ export const Profile = ({ username, avatarUrl, isAvatarLoading, website, handleF
                     setShowReportUserModal(false);
                 }, 2000);
             } catch (error) {
-                console.error("Error reporting user:", error);
+                console.error('Error reporting user:', error);
             } finally {
                 setIsProcessingReport(false);
             }
@@ -81,7 +81,6 @@ export const Profile = ({ username, avatarUrl, isAvatarLoading, website, handleF
     return (
         <div className='user-profile__body'>
             <Row className='user-profile fixed-top'>
-                {/* <Row className='user-profile'> */}
 
                 {/* Folllowes/Following Count Col */}
                 <Col xs={{ span: 6, order: location.pathname !== '/user/profile' ? 3 : 2 }}
@@ -97,6 +96,7 @@ export const Profile = ({ username, avatarUrl, isAvatarLoading, website, handleF
                                         handleShowFollowersModal();
                                         loadFollowers()
                                     }}
+                                    aria-label={`View ${followersCount || 0} followers`}
                                     className='user-profile__follow-number d-flex flex-row flex-sm-column align-items-start p-0'
                                 >
                                     {(followersCount === null || isGetFollowingTheUserCountLoading) ?
@@ -116,6 +116,7 @@ export const Profile = ({ username, avatarUrl, isAvatarLoading, website, handleF
                                         handleShowFollowingModal();
                                         await loadFollowing()
                                     }}
+                                    aria-label={`View ${followingCount || 0} following`}
                                     className='user-profile__follow-number d-flex flex-row flex-sm-column align-items-start p-0'
                                 >
                                     {(followingCount === null || isGetFollwedByUserCountLoading) ?
@@ -140,13 +141,16 @@ export const Profile = ({ username, avatarUrl, isAvatarLoading, website, handleF
                     className={`d-flex flex-column justify-content-center align-items-sm-center align-items-end user-profile__avatar-col ${location.pathname !== '/user/profile' && isExtraSmallScreen ? 'pt-3' : ''}`}>
                     <div>
                         {/* Avatar */}
-                        <div className='d-flex justify-content-center align-items-center'>
+                        <div
+                            className='d-flex justify-content-center align-items-center'
+                            role='img'
+                            aria-label='User profile picture'>
                             {
                                 !isAvatarLoading ?
                                     <>
                                         <img
                                             src={avatarUrl ? avatarUrl : defaultAvatar}
-                                            alt="Profile"
+                                            alt={`${username}'s profile picture`}
                                             className='user-profile__avatar'
                                         />
                                     </>
@@ -185,7 +189,13 @@ export const Profile = ({ username, avatarUrl, isAvatarLoading, website, handleF
                         <p className='mt-1 mt-sm-0 mb-0 text-center'>
                             {/* Display website */}
                             {(website && !isUserBlocked) &&
-                                <a href={website} target='_blank' className='text-decoration-none user-profile__website'>
+                                <a
+                                    href={website}
+                                    target='_blank'
+                                    rel='noopener noreferrer'
+                                    aria-label='Visit user website'
+                                    className='text-decoration-none user-profile__website'
+                                >
                                     <i className='bi bi-link-45deg me-1' />
                                     Visit Website
                                 </a>
@@ -194,7 +204,11 @@ export const Profile = ({ username, avatarUrl, isAvatarLoading, website, handleF
                             {/* Add website - User Profile Only */}
                             {(userWebsite === null || userWebsite === '') &&
                                 <>
-                                    <Link to='/user/settings' className='user-profile__website'>
+                                    <Link
+                                        to='/user/settings'
+                                        className='user-profile__website'
+                                        aria-label='Add a website to your profile in your settings'
+                                    >
                                         <i className='bi bi-link-45deg' />
                                         Add a website
                                     </Link>
@@ -222,6 +236,8 @@ export const Profile = ({ username, avatarUrl, isAvatarLoading, website, handleF
                                             height: 'fit-content', width: 'fit-content',
                                         }}
                                         disabled={isOtherUserBlocked ? true : false}
+                                        aria-pressed={isFollowing}
+                                        aria-label={isFollowing ? 'Unfollow user' : 'Follow user'}
                                     >
                                         {isFollowingUserLoading ? <LoadingSpinner /> :
                                             <>
@@ -233,7 +249,7 @@ export const Profile = ({ username, avatarUrl, isAvatarLoading, website, handleF
 
                             {isExtraSmallScreen ?
                                 <Dropdown className={`mb-2 ${isUserBlocked ? 'ms-0' : 'ms-2'} user-profile__interaction-dropdown`}>
-                                    <Dropdown.Toggle id='dropdown-block-report'>
+                                    <Dropdown.Toggle id='dropdown-block-report' aria-label='More actions'>
                                         <i className='bi bi-three-dots' />
                                     </Dropdown.Toggle>
                                     <Dropdown.Menu className='p-0'>
@@ -245,6 +261,7 @@ export const Profile = ({ username, avatarUrl, isAvatarLoading, website, handleF
                                                     height: 'fit-content', width: '100%',
                                                 }}
                                                 disabled={isOtherUserBlocked ? true : false}
+                                                aria-label={isOtherUserBlocked ? 'User is blocked' : 'Block user'}
                                             >
                                                 {isOtherUserBlocked ? 'Blocked' : 'Block'}
                                             </Button>
@@ -253,6 +270,7 @@ export const Profile = ({ username, avatarUrl, isAvatarLoading, website, handleF
                                             <Button
                                                 onClick={handleReportUser}
                                                 className='user-profile__interaction-btn'
+                                                aria-label='Report user'
                                                 style={{
                                                     height: 'fit-content', width: '100%',
                                                 }}>
@@ -270,12 +288,14 @@ export const Profile = ({ username, avatarUrl, isAvatarLoading, website, handleF
                                             height: 'fit-content', width: 'fit-content', marginLeft: 'auto'
                                         }}
                                         disabled={isOtherUserBlocked ? true : false}
+                                        aria-label={isOtherUserBlocked ? 'User is blocked' : 'Block user'}
                                     >
                                         {isOtherUserBlocked ? 'Blocked' : 'Block'}
                                     </Button>
                                     <Button
                                         onClick={handleReportUser}
                                         className='user-profile__interaction-btn mt-2'
+                                        aria-label='Report user'
                                         style={{
                                             height: 'fit-content', width: 'fit-content', marginLeft: 'auto'
                                         }}>
@@ -288,7 +308,6 @@ export const Profile = ({ username, avatarUrl, isAvatarLoading, website, handleF
                     :
                     null
                 }
-
 
             </Row>
 

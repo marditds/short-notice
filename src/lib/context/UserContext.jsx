@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { getAccount, getUserById } from './dbhandler';
-import { redirect, useLocation, useNavigate } from 'react-router-dom';
+import { getUserById } from './dbhandler';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const UserContext = createContext();
 

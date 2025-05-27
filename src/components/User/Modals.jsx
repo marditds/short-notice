@@ -1,9 +1,7 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { reportCategories } from '../Support/communityGuidelines';
 import { Modal, Form, Button } from 'react-bootstrap';
 import { LoadingSpinner } from '../Loading/LoadingSpinner';
-import { SlClose } from "react-icons/sl";
 import { EndAsterisks } from './EndAsterisks';
 
 
@@ -15,16 +13,18 @@ export const ReportModal = ({
     setReportReason,
     isProcessing }) => {
     return (
-        <Modal show={showReportModalFunction}
+        <Modal
+            show={showReportModalFunction}
             onHide={handleCloseReportModalFunction}
             className='notice__report--modal p-0'
+            aria-labelledby='report-notice-modal-title'
         >
             <Modal.Header className='border-bottom-0'>
-                <Modal.Title>Report Notice</Modal.Title>
+                <Modal.Title id='report-notice-modal-title'>Report Notice</Modal.Title>
             </Modal.Header>
             <Modal.Body className='notice__report--modal-body py-0'>
                 {showReportConfirmationCheck ? (
-                    <p>Your report has been successfully submitted!</p>
+                    <p role='status'>Your report has been successfully submitted!</p>
                 ) : (
                     <Form
                         className='notice__report--modal-form'
@@ -36,7 +36,7 @@ export const ReportModal = ({
                                     key={category.key}
                                     type='radio'
                                     label={category.name}
-                                    id={category.name}
+                                    id={`report-${category.key}`}
                                     name='reportReason'
                                     onChange={() => setReportReason(category.key)}
                                     className='notice__report--radio'
@@ -49,14 +49,18 @@ export const ReportModal = ({
             <Modal.Footer className='border-top-0 notice__report--modal-footer'>
                 {showReportConfirmationCheck ? null : (
                     <>
-                        <Button onClick={handleCloseReportModalFunction}
+                        <Button
+                            onClick={handleCloseReportModalFunction}
                             className='notice__report--modal-btn'
+                            aria-label='Cancel report'
                         >
                             Cancel
                         </Button>
-                        <Button onClick={handleReportSubmissionFunction}
+                        <Button
+                            onClick={handleReportSubmissionFunction}
                             className='notice__report--modal-btn'
-                        // disabled={!reportReason}
+                            aria-label='Submit report'
+                            disabled={isProcessing}
                         >
                             {isProcessing ? <LoadingSpinner /> : 'Report'}
                         </Button>
@@ -148,29 +152,35 @@ export const BlockModal = ({
             show={showBlockModalFunction}
             onHide={handleCloseBlockModalFunction}
             className='user-profile__block--modal'
+            aria-labelledby='block-user-modal-title'
         >
             <Modal.Header
                 className='justify-content-end border-bottom-0 user-profile__block--modal-header pb-0 w-100'
             >
                 <Button
                     onClick={handleCloseBlockModalFunction}
+                    aria-label='Close block modal'
                 >
-                    <i className='bi bi-x-square' />
+                    <i className='bi bi-x-square' aria-hidden='true' />
                 </Button>
             </Modal.Header>
             <Modal.Body
                 className='user-profile__block--modal-body'
             >
-                <p>Are you sure you want to block <strong>{username}</strong>?</p>
+                <p id='block-user-modal-title'>Are you sure you want to block <strong>{username}</strong>?</p>
             </Modal.Body>
             <Modal.Footer className='user-profile__block--modal-footer border-top-0 pt-0'>
-                <Button onClick={() => handleBlock(currUserId)}
+                <Button
+                    onClick={() => handleBlock(currUserId)}
                     className='me-2 user-profile__block--modal-body-btn'
+                    aria-label={`Confirm blocking ${username}`}
                 >
                     {isProcessing ? <LoadingSpinner /> : 'Yes'}
                 </Button>
-                <Button onClick={handleCloseBlockModalFunction}
+                <Button
+                    onClick={handleCloseBlockModalFunction}
                     className='user-profile__block--modal-body-btn'
+                    aria-label='Cancel blocking user'
                 >
                     Cancel
                 </Button>
@@ -187,16 +197,19 @@ export const FollowModal = ({
             show={showFollowModal}
             onHide={handleCloseFollowModal}
             className='user-profile__following--modal'
+            aria-labelledby='follow-modal-title'
+            role='dialog'
         >
             <Modal.Header
                 className='user-profile__following--modal-header w-100 border-bottom-0'
             >
-                <Modal.Title>{followModalTitle}</Modal.Title>
+                <Modal.Title id='follow-modal-title'>{followModalTitle}</Modal.Title>
                 <Button
                     onClick={handleCloseFollowModal}
                     className='ms-auto'
+                    aria-label='Close follow modal'
                 >
-                    <i className='bi bi-x-square' />
+                    <i className='bi bi-x-square' aria-hidden='true' />
                 </Button>
             </Modal.Header>
             <Modal.Body
@@ -209,10 +222,14 @@ export const FollowModal = ({
                                 to={`/user/${followAccount.username}`}
                                 className='w-100 d-flex justify-content-between align-items-center'
                                 onClick={handleCloseFollowModal}
+                                aria-label={`View profile of ${followAccount.username}`}
                             >
-                                {followAccount.username}
-                                <img src={getAvatarUrl(followAccount.avatar) || defaultAvatar}
-                                    className='follower__avatar' />
+                                <span>{followAccount.username}</span>
+                                <img
+                                    src={getAvatarUrl(followAccount.avatar) || defaultAvatar}
+                                    className='follower__avatar'
+                                    alt={`${followAccount.username}'s avatar`}
+                                />
                             </Link>
                         </div>
                     )
@@ -239,13 +256,18 @@ export const FollowModal = ({
                         }
                     }
                         disabled={isLoadingMoreFollow ? true : false}
-                        className="w-100 user-profile__following--modal-results-expand-btn">
+                        className='w-100 user-profile__following--modal-results-expand-btn'
+                        aria-label='Load more results'
+                    >
                         {
                             isLoadingMoreFollow ? (
                                 <div className='d-block mx-auto w-100'>
                                     <LoadingSpinner size={22} color={'var(--main-accent-color-hover)'} />
                                 </div>
-                            ) : <i className='bi bi-chevron-down user-profile__following--modal-results-expand-btn-icon' />
+                            ) : <i
+                                className='bi bi-chevron-down user-profile__following--modal-results-expand-btn-icon'
+                                aria-hidden='true'
+                            />
                         }
                     </Button>
                 }

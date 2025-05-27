@@ -968,8 +968,6 @@ const OtherUserProfile = () => {
                         </div>
                         :
                         <div style={{ color: 'white', textAlign: 'center', marginTop: '223px' }}>
-                            {/* <i className='bi bi-sign-dead-end-fill user-profile__blocked-icon' /> */}
-                            {/* <i className='bi bi-sign-dead-end user-profile__blocked-icon' /> */}
                             <i className='bi bi-ban user-profile__blocked-icon' />
                             <br />
                             <p className='mb-0 user-profile__blocked-text'>
@@ -977,7 +975,6 @@ const OtherUserProfile = () => {
                                 <br />
                                 <strong>{otherUsername}</strong> has blocked you from accessing their account.
                             </p>
-                            {/* <br /> */}
                         </div>
                     }
                 </>
