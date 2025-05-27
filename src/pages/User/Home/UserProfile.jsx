@@ -560,10 +560,11 @@ const UserProfile = () => {
     ];
 
     if (isApploading) {
-        return <div className='user-profile__loading'>
+        return <div className='user-profile__loading' role='status' aria-live='polite'>
             <div>
-                {/* <LoadingSpinner />Loading {username}'s profile */}
                 <LoadingSpinner /><span className='ms-2'>Loading your profile</span>
+
+                <span className='visually-hidden'>Loading your profile</span>
             </div>
         </div>;
     }
@@ -610,10 +611,11 @@ const UserProfile = () => {
             {/* Notices tabs */}
             <Tabs
                 defaultActiveKey="my-notices"
-                id="justify-tab-example"
+                id="notices-tabs"
                 justify
                 className='user-profile__notice-tab fixed-bottom'
                 onSelect={(key) => setEventKey(key)}
+                role="tablist"
             >
                 {/* My Notices */}
                 <Tab
@@ -642,9 +644,17 @@ const UserProfile = () => {
                                         onClick={fetchNotices}
                                         disabled={isLoadingMore || !hasMoreNotices}
                                         className='mt-3 notices__load-more-notices-btn'
+                                        aria-label={
+                                            isLoadingMore
+                                                ? 'Loading more notices'
+                                                : 'Load more notices'
+                                        }
                                     >
                                         {isLoadingMore ?
-                                            <><LoadingSpinner size={18} /> Loading...</>
+                                            <>
+                                                <LoadingSpinner size={18} /> <span className='visually-hidden'>Loading more notices</span>
+                                                Loading...
+                                            </>
                                             : 'Load More'}
                                     </Button>
                                     :
@@ -688,10 +698,17 @@ const UserProfile = () => {
                                                 onClick={() => tab.setOffset(tab.offset + tab.limit)}
                                                 disabled={tab.isLoadingMore || !tab.hasMore}
                                                 className='notices__load-more-notices-btn'
+                                                aria-label={
+                                                    tab.isLoadingMore
+                                                        ? `Loading more ${tab.title.toLowerCase()}`
+                                                        : `Load more ${tab.title.toLowerCase()}`
+                                                }
                                             >
                                                 {tab.isLoadingMore ? (
                                                     <>
-                                                        <LoadingSpinner size={24} /> Loading...
+                                                        <LoadingSpinner size={24} />
+                                                        <span className="visually-hidden">Loading more {tab.title.toLowerCase()}</span>
+                                                        Loading...
                                                     </>
                                                 ) : (
                                                     'Load More'
@@ -710,7 +727,10 @@ const UserProfile = () => {
                                 />
                             )
                         ) : (
-                            <div className='d-flex justify-content-center'>
+                            <div className='d-flex justify-content-center'
+                                role="status"
+                                aria-live="polite"
+                            >
                                 <LoadingSpinner />
                                 <span className='ms-2'>{tab.loadingText}</span>
                             </div>

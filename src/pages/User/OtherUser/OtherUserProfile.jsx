@@ -888,7 +888,7 @@ const OtherUserProfile = () => {
                                                         >
                                                             {isLoadingMore ?
                                                                 <>
-                                                                    <LoadingSpinner size={24} />
+                                                                    <LoadingSpinner size={18} />
                                                                     <span className='visually-hidden'>Loading more notices</span>
                                                                     Loading...
                                                                 </>

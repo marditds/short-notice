@@ -72,21 +72,27 @@ export const ReportModal = ({
 }
 
 export const ModifyModal = ({ modifyModalTitle, showModifyModal, handleCloseModifyModal, handleSaveEdit, noticeText, setNoticeText, handleDelete, isRemovingNotice, isSavingEdit }) => {
+
+    const isEdit = modifyModalTitle === 'Edit';
+    const isDelete = modifyModalTitle === 'Delete';
+
     return (
         <Modal show={showModifyModal}
             onHide={handleCloseModifyModal}
             className='notice__edit--modal'
+            aria-labelledby='modify-modal-title'
+            aria-describedby={isEdit ? 'edit-instructions' : isDelete ? 'delete-warning' : undefined}
         >
             <Modal.Header
                 className='notice__edit--modal-header'
             >
-                <Modal.Title>{modifyModalTitle} Notice</Modal.Title>
+                <Modal.Title id='modify-modal-title'>{modifyModalTitle} Notice</Modal.Title>
             </Modal.Header>
             <Modal.Body
                 className='notice__edit--modal-body'
             >
                 {
-                    modifyModalTitle === 'Edit' &&
+                    isEdit &&
                     <Form>
                         <Form.Group className='mb-0 mb-md-3' controlId='editNotice'>
                             <Form.Label>Your Notice Text</Form.Label>
@@ -96,13 +102,18 @@ export const ModifyModal = ({ modifyModalTitle, showModifyModal, handleCloseModi
                                 value={noticeText}
                                 onChange={(e) => setNoticeText(e.target.value)}
                                 className='notice__edit--modal-form-control'
+                                aria-required='true'
+                                aria-describedby='edit-instructions'
                             />
+                            <Form.Text className='visually-hidden' id='edit-instructions'>
+                                You can edit your notice here.
+                            </Form.Text>
                         </Form.Group>
                     </Form>
                 }
                 {
-                    modifyModalTitle === 'Delete' &&
-                    <p className='mb-0'>
+                    isDelete &&
+                    <p className='mb-0' id='delete-warning'>
                         Are you sure you want to delete this notice?
                     </p>
                 }
@@ -111,28 +122,42 @@ export const ModifyModal = ({ modifyModalTitle, showModifyModal, handleCloseModi
                 className='notice__edit--modal-footer'
             >
                 <Button
-
                     onClick={handleCloseModifyModal}
                     className='notice__edit--modal-btn'
+                    variant='secondary'
                 >
                     Cancel
                 </Button>
                 <Button
                     onClick={
                         () => {
-                            if (modifyModalTitle === 'Edit') {
-                                handleSaveEdit();
-                            }
-                            if (modifyModalTitle === 'Delete') {
-                                handleDelete();
-                            }
+                            if (isEdit) {
+                                handleSaveEdit()
+                            };
+                            if (isDelete) {
+                                handleDelete()
+                            };
                         }
                     }
-                    disabled={isRemovingNotice}
+                    disabled={isEdit ? isSavingEdit : isRemovingNotice}
                     className='notice__edit--modal-btn'
+                    aria-label={isEdit ? 'Save edited notice' : 'Confirm delete notice'}
                 >
-                    {isSavingEdit ? <LoadingSpinner /> : (modifyModalTitle === 'Edit' && 'Save')}
-                    {isRemovingNotice ? <LoadingSpinner /> : (modifyModalTitle === 'Delete' && 'Delete')}
+                    {isSavingEdit ?
+                        <>
+                            <LoadingSpinner aria-hidden='true' />
+                            <span className='visually-hidden'>Processing...</span>
+                        </> :
+                        (isEdit && 'Save')
+                    }
+
+                    {isRemovingNotice ?
+                        <>
+                            <LoadingSpinner aria-hidden='true' />
+                            <span className='visually-hidden'>Processing...</span>
+                        </> :
+                        (isDelete && 'Delete')
+                    }
                 </Button>
             </Modal.Footer>
         </Modal>
