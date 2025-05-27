@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import { LoadingSpinner } from '../../Loading/LoadingSpinner';
@@ -26,8 +26,13 @@ export const InterestsTags = ({
     const [successMsg, setSuccessMsg] = useState('');
 
     return (
-        <div className='d-flex flex-column'>
-            <div className='d-flex flex-wrap'>
+        <fieldset aria-labelledby='interests-legend' className='border-0 p-0 m-0'>
+
+            <legend id='interests-legend' className='visually-hidden'>
+                Select your interests
+            </legend>
+
+            <div className='d-flex flex-wrap' aria-label='Interest tags'>
                 {allTags.map((tag) => (
                     <div
                         key={tag.key}
@@ -36,13 +41,17 @@ export const InterestsTags = ({
                             onClick={() => toggleInterestsTag(tag.key)}
 
                             className={`settings__update-interests-tag ${selectedTags[tag.key] ? 'tagIsChecked' : ''}`}
+
+                            aria-pressed={selectedTags[tag.key]}
                         >
                             {tag.name}
                         </div>
                     </div>
                 ))}
             </div>
-            <div className='d-xxl-flex d-grid'>
+
+            {/* Update and deselect buttons */}
+            <div className='d-xxl-flex d-grid' role='group' aria-label='Interest tag actions'>
                 <Button
                     onClick={async () => {
                         const updateInterestsRes = await updateInterests();
@@ -63,21 +72,57 @@ export const InterestsTags = ({
                     }
                     }
                     className='settings__update-interests-btn'
+                    aria-describedby={successMsg ? 'success-message' : errorMsg ? 'error-message' : undefined}
+                    aria-label='Update selected interest tags'
                 >
-                    {isInterestsUpdating ? <LoadingSpinner /> : 'Update Interests'}
+                    {isInterestsUpdating ? (
+                        <>
+                            <LoadingSpinner />
+                            <span className='visually-hidden' role='status' aria-live='polite'>
+                                Updating interests...
+                            </span>
+                        </>
+                    ) : (
+                        'Update Interests'
+                    )}
                 </Button>
+
                 <Button onClick={deselectAllInterestTags}
                     className='settings__update-interests-btn'
+                    aria-label='Deselect all selected interest tags'
                 >
                     Deselect All
                 </Button>
             </div>
-            <div style={{ height: location.pathname === '/user/feed' ? null : '24px', marginLeft: !isSmallScreen ? '10px' : '5px' }}>
-                <SuccessMessage message={successMsg} />
-            </div>
-            <div style={{ height: location.pathname === '/user/feed' ? null : '24px', marginLeft: !isSmallScreen ? '10px' : '5px' }}>
-                <ErrorMessage message={errorMsg} />
-            </div>
-        </div>
+
+            {successMsg && (
+                <div
+                    id='success-message'
+                    aria-live='polite'
+                    role='status'
+                    style={{
+                        height: location.pathname === '/user/feed' ? undefined : '24px',
+                        marginLeft: !isSmallScreen ? '10px' : '5px',
+                    }}
+                >
+                    <SuccessMessage message={successMsg} />
+                </div>
+            )}
+
+            {errorMsg && (
+                <div
+                    id='error-message'
+                    role='alert'
+                    aria-live='assertive'
+                    style={{
+                        height: location.pathname === '/user/feed' ? undefined : '24px',
+                        marginLeft: !isSmallScreen ? '10px' : '5px',
+                    }}
+                >
+                    <ErrorMessage message={errorMsg} />
+                </div>
+            )}
+
+        </fieldset>
     )
 } 

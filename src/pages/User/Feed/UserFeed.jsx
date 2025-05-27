@@ -320,11 +320,16 @@ const UserFeed = () => {
                         deselectAllInterestTags={deselectAllInterestTags}
                     />
                     :
-                    <LoadingSpinner />
+                    <>
+                        <LoadingSpinner />
+                        <span className='visually-hidden' role='status' aria-live='polite'>
+                            Loading interests...
+                        </span>
+                    </>
                 }
 
-                    <p className='mb-3' style={{ marginLeft: '10px' }}>
-                        <i className='bi bi-info-square' /> Ineterest tags are applicable to your general feed only.
+                    <p className='mb-3' style={{ marginLeft: '10px' }} id='interest-tags-info'>
+                        <i className='bi bi-info-square' aria-hidden='true' /> Ineterest tags are applicable to your general feed only.
                     </p>
                     <hr className='mt-0' />
                     <div style={{ marginInline: '10px' }}>
@@ -379,6 +384,9 @@ const UserFeed = () => {
                             <span className='ms-2'>
                                 Loading {feedType} feed...
                             </span>
+                            <span className='visually-hidden' role='status' aria-live='polite'>
+                                Loading {feedType} feed...
+                            </span>
                         </div>
                     </div>
                 }
@@ -386,7 +394,7 @@ const UserFeed = () => {
                 {/* Tag selection message */}
                 {
                     !isAnyTagSelected && isFeedToggled ?
-                        <div className='h-100 pt-4'>
+                        <div className='h-100 pt-4' role="note" aria-live="polite">
                             <p className='text-center'>
                                 {`To view notices in your general feed, you must select at least one interest tag in your ${!isLargeScreen ? 'side menu' : 'settings'}`}.
                             </p>
@@ -396,7 +404,7 @@ const UserFeed = () => {
                 }
 
                 {/* Load More Button */}
-                <div className="d-flex justify-content-center">
+                <div className='d-flex justify-content-center' aria-live="polite" aria-atomic="true">
                     {(!isFeedToggled && hasMorePersonalNotices) || (isFeedToggled && hasMoreGeneralNotices) ?
                         <Button
                             onClick={() => {
@@ -408,14 +416,31 @@ const UserFeed = () => {
                             }}
                             disabled={(isLoadingMore || isLoadingMorePersonal) ? true : false}
                             className={`my-4 notices__load-more-notices-btn ${(isLoadingMoreInitial || isLoadingMorePersonalInitial) ? 'd-none' : 'd-block'}`}
+                            aria-label={
+                                isLoadingPersonalFeedNotices || isLoadingMore || isLoadingMorePersonal
+                                    ? 'Loading more notices'
+                                    : 'Load more notices'
+                            }
                         >
                             {isLoadingPersonalFeedNotices || isLoadingMore || isLoadingMorePersonal ?
-                                <><LoadingSpinner size={16} /> Loading...</>
-                                : 'Load More Hakop'}
+                                <>
+                                    <LoadingSpinner size={16} /> Loading...
+                                    <span className='visually-hidden' role='status'>
+                                        Loading {feedType} feed...
+                                    </span>
+                                </>
+                                : 'Load More'
+                            }
                         </Button>
                         :
                         <div className={`${isAnyTagSelected && 'my-4'}`}>
-                            {!isFeedToggled && <>{personalFeedNotices.length === 0 ? 'Start following accounts to populate your personal feed!' : <EndAsterisks />}</>}
+                            {!isFeedToggled && <>{personalFeedNotices.length === 0 ?
+                                <p role="alert" className="text-center">
+                                    Start following accounts to populate your personal feed!
+                                </p>
+                                : <EndAsterisks />}
+                            </>}
+
                             {(isFeedToggled && isAnyTagSelected) && <EndAsterisks />}
                         </div>
                     }
