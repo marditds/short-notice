@@ -1174,6 +1174,8 @@
          font-size: 60px;
      }
 
+     .notice__reaction-users-own-profile>i,
+     .notice__reaction-users-own>i,
      .user-profile__blocked-text-icon,
      .notice__react-gif-btn>i,
      .notice__react-remove-gif-btn>i,
