@@ -134,7 +134,7 @@ export const Profile = ({ username, avatarUrl, isAvatarLoading, website, handleF
                     }
                 </Col>
 
-                {/* Avatar and username Col */}
+                {/* Avatar, username, website Col */}
                 <Col xs={{ span: 6, order: 1 }}
                     sm={{ span: 4, order: 2 }}
                     className={`d-flex flex-column justify-content-center align-items-sm-center align-items-end user-profile__avatar-col ${location.pathname !== '/user/profile' && isExtraSmallScreen ? 'pt-3' : ''}`}>
@@ -155,7 +155,7 @@ export const Profile = ({ username, avatarUrl, isAvatarLoading, website, handleF
                             }
                         </div>
 
-                        {/* Username and website */}
+                        {/* Username and follow badge */}
                         <p className='mb-0 pt-1 pt-sm-0 my-0 my-sm-1 text-center position-relative'>
                             <strong ref={usernameRef}>
                                 {username}
@@ -181,16 +181,17 @@ export const Profile = ({ username, avatarUrl, isAvatarLoading, website, handleF
                             }
                         </p>
 
+                        {/* Website in profile */}
                         <p className='mt-1 mt-sm-0 mb-0 text-center'>
-                            {
-                                website &&
-                                <>
-                                    <a href={website} target='_blank' className='text-decoration-none user-profile__website'>
-                                        <i className='bi bi-link-45deg me-1' />
-                                        Visit Website
-                                    </a>
-                                </>
+                            {/* Display website */}
+                            {(website && !isUserBlocked) &&
+                                <a href={website} target='_blank' className='text-decoration-none user-profile__website'>
+                                    <i className='bi bi-link-45deg me-1' />
+                                    Visit Website
+                                </a>
                             }
+
+                            {/* Add website - User Profile Only */}
                             {(userWebsite === null || userWebsite === '') &&
                                 <>
                                     <Link to='/user/settings' className='user-profile__website'>
@@ -200,6 +201,7 @@ export const Profile = ({ username, avatarUrl, isAvatarLoading, website, handleF
                                 </>
                             }
                         </p>
+
                     </div>
                 </Col>
 

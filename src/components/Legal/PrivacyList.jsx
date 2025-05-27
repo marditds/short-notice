@@ -1,25 +1,30 @@
-import React from 'react';
 import PrivacyData from './PrivacyData';
-import { Container, ListGroup } from 'react-bootstrap';
+import { ListGroup } from 'react-bootstrap';
 
 const Privacy = () => {
 
     const { privacyPolicyData } = PrivacyData();
 
     return (
-        <ListGroup as={'ul'} className='privacyPolicy__list-group'>
-            <h3 className='ps-0 ps-sm-3'>Privacy Policy</h3>
-            {
-                privacyPolicyData.map((privacyPolicy, idx) => {
-                    return (
-                        <ListGroup.Item as={'li'} key={idx} className='privacyPolicy__list-group-item my-1'>
-                            <h5 className='mb-1'>{privacyPolicy.title}</h5>
-                            {privacyPolicy.description}
-                        </ListGroup.Item>
-                    )
-                })
-            }
-        </ListGroup>
+        <section aria-labelledby='privacy-policy-heading'>
+            <h2 id='privacy-policy-heading' className='ps-0 ps-sm-3'>
+                Privacy Policy
+            </h2>
+            <ListGroup as='ul' className='privacyPolicy__list-group'>
+                {privacyPolicyData.map((privacyPolicy, idx) => (
+                    <ListGroup.Item
+                        as='li'
+                        key={idx}
+                        className='privacyPolicy__list-group-item my-1'
+                    >
+                        <h3 tabIndex={-1} className='mb-1 heading-h5-style'>
+                            {privacyPolicy.title}
+                        </h3>
+                        {privacyPolicy.description}
+                    </ListGroup.Item>
+                ))}
+            </ListGroup>
+        </section>
     )
 }
 

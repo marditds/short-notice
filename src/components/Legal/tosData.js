@@ -12,8 +12,12 @@ export const tosData = [
         description: "By using ShortNotice, users accept full responsibility for any content they share on the platform. ShortNotice is not responsible for the accuracy, reliability, or legality of user-generated content, including links. Users are solely responsible for ensuring their content complies with all applicable laws and does not infringe on the rights of others."
     },
     {
+        title: "Blocking and Interaction Limitations",
+        description: "ShortNotice allows users to block other accounts to manage their personal experience. Blocking affects visibility and interactions in the following ways:\nWhen you block another user:\n- You can still view their username, avatar, website (if added), followers/following lists, and notices.\n- You can view and interact with notices they have liked or saved.\n- You cannot follow them or interact with notices they have shared (e.g., like, save, or react).\n- You may report their account.\nWhen you are blocked by another user:\n- You can view their username and avatar.\n- You cannot access their followers/following lists, their notices, or any notices they have liked or saved.\n- You may still block or report them.\nThis system is designed to reduce unwanted interactions while maintaining a degree of transparency. By using ShortNotice, you agree to these rules regarding blocking and visibility."
+    },
+    {
         title: "Content Moderation",
-        description: " ShortNotice reserves the right to remove content or suspend accounts at its sole discretion if it deems the content inappropriate, harmful, or in violation of these terms. We are not obligated to provide prior notice or justification for such actions."
+        description: "ShortNotice reserves the right to remove content or suspend accounts at its sole discretion if it deems the content inappropriate, harmful, or in violation of these terms. We are not obligated to provide prior notice or justification for such actions."
     },
     {
         title: "Exclusivity of Content",
@@ -21,7 +25,7 @@ export const tosData = [
     },
     {
         title: "Third-Party Affiliation and Services",
-        description: "ShortNotice is not affiliated with or endorsed by Google. Any use of Google services (such as reCAPTCHA or Google Gemini) is subject to Google's terms and policies. Google Gemini is integrated to provide users with auto-generated content templates, which are offered as suggestions. ShortNotice does not guarantee their accuracy, appropriateness, or legality. Users are responsible for reviewing and modifying suggested content before posting. Additionally, ShortNotice integrates Tenor to support GIFs. However, Tenor's content is not curated or controlled by ShortNotice. Users must ensure that any GIFs shared comply with relevant laws and community standards. ShortNotice also relies on Appwrite for backend infrastructure, including data storage and management.As a result, any issues related to availability, performance, or data loss stemming from Appwrite or integrated third- party services are outside of our control.Users acknowledge that the reliability of ShortNotice depends partly on the performance of services provided by Appwrite and Google."
+        description: "ShortNotice is not affiliated with or endorsed by Google. Any use of Google services (such as reCAPTCHA or Google Gemini) is subject to Google's terms and policies. Google Gemini is integrated to provide users with auto-generated content templates, which are offered as suggestions. ShortNotice does not guarantee their accuracy, appropriateness, or legality. Users are responsible for reviewing and modifying suggested content before posting. Additionally, ShortNotice integrates Tenor to support GIFs. However, Tenor's content is not curated or controlled by ShortNotice. Users must ensure that any GIFs shared comply with relevant laws and community standards. ShortNotice also relies on Appwrite for backend infrastructure, including data storage and management.As a result, any issues related to availability, performance, or data loss stemming from Appwrite or integrated third- party services are outside of our control. Users acknowledge that the reliability of ShortNotice depends partly on the performance of services provided by Appwrite and Google."
     },
     {
         title: "Security and Account Access",

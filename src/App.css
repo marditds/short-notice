@@ -51,6 +51,11 @@ body {
 
     font-size: var(--pc-font-size);
     transition: var(--main-transition-speed);
+
+}
+
+.heading-h5-style {
+    font-size: 1.25rem;
 }
 
 *::selection {
