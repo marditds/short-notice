@@ -6,30 +6,41 @@ export const FeedBody = ({ isFeedToggled, handleFeedToggle, handleRefresh, isAny
 
     return (
         <>
-            <Row className='fixed-top w-100 mx-auto user-feed__header'>
-                <Col>
-                    <FeedToggle
-                        isAnyTagSelected={isAnyTagSelected}
-                        isFeedToggled={isFeedToggled}
-                        handleFeedToggle={handleFeedToggle}
-                        handleRefresh={handleRefresh}
-                    />
-                </Col>
-            </Row>
+            <header className='fixed-top w-100 mx-auto user-feed__header' role='banner'>
+                <Row>
+                    <Col>
+                        <FeedToggle
+                            isAnyTagSelected={isAnyTagSelected}
+                            isFeedToggled={isFeedToggled}
+                            handleFeedToggle={handleFeedToggle}
+                            handleRefresh={handleRefresh}
+                        />
+                    </Col>
+                </Row>
+            </header>
 
             {/* Side section */}
             <Row className='position-relative'>
-
-                {/* Feed tag selection */}
-                <Col xs={3} className='flex-column d-xl-block d-none fixed-top w-25'
+                <Col xs={3}
+                    className='d-xl-block d-none w-25'
                     style={{
-                        position: 'sticky', top: '100px', height: 'calc(100vh - 100px)', overflowY: 'auto'
+                        position: 'sticky',
+                        top: '100px',
+                        height: 'calc(100vh - 100px)',
+                        overflowY: 'auto'
                     }}>
-                    {sideContent}
+                    <aside
+                        role='complementary'
+                        aria-label='Feed tag selection'
+                    >
+                        {sideContent}
+                    </aside>
                 </Col>
 
                 <Col xl={9} xs={12} className={`ms-auto`}>
-                    {children}
+                    <main id='main-content' aria-label='User feed notices'>
+                        {children}
+                    </main>
                 </Col>
 
             </Row>

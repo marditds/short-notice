@@ -26,8 +26,16 @@
     border-color: var(--main-accent-color-hover) !important;
 }
 
-.user-feed__toggle-label {
-    cursor: pointer;
+.user-feed__toggle-label,
+.user-feed__toggle-label:hover,
+.user-feed__toggle-label:active {
+    color: var(--main-text-color) !important;
+    font-size: var(--pc-font-size);
+}
+
+.user-feed__toggle-label:focus {
+    box-shadow: none !important;
+    color: var(--main-accent-color) !important;
 }
 
 .user-feed__toggle-label.toggle-label-muted {
@@ -69,6 +77,13 @@
     .user-feed__refresh-btn {
         height: 23px !important;
         width: 23px !important;
+    }
+
+    .user-feed__toggle-label,
+    .user-feed__toggle-label:hover,
+    .user-feed__toggle-label:active,
+    .user-feed__toggle-label:focus {
+        font-size: var(--mobile-font-size);
     }
 
 }

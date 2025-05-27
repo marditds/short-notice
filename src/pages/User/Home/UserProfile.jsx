@@ -559,6 +559,7 @@ const UserProfile = () => {
         }
     ];
 
+    // Loading page
     if (isApploading) {
         return <div className='user-profile__loading' role='status' aria-live='polite'>
             <div>

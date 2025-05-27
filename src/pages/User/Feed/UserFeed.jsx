@@ -288,9 +288,11 @@ const UserFeed = () => {
         &&
         (personalFeedNotices.length === 0 || generalFeedNotices.length === 0)
     ) {
-        return <div className='pt-5 h-100 user-feed__loading-div'>
+        return <div className='pt-5 h-100 user-feed__loading-div' role='status' aria-live='polite'>
             <div>
                 <LoadingSpinner /><span className='ms-2'>{`Loading your feed...`}</span>
+
+                <span className='visually-hidden'>Loading your feed</span>
             </div>
         </div>;
     }

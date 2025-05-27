@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { keysProvider } from '../../lib/context/keysProvider';
 import { screenUtils } from '../../lib/utils/screenUtils';
 import { useNotices } from '../../lib/hooks/useNotices';
-import { Form, Button, Image, Dropdown } from 'react-bootstrap';
+import { Form, Button, Image } from 'react-bootstrap';
 import { NoticeTags } from './NoticeTags';
 import { LoadingSpinner } from '../Loading/LoadingSpinner';
 import GifPicker from 'gif-picker-react';
@@ -134,8 +134,7 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
     return (
         <Form className='user-profile__form'>
             <Form.Group
-                className="mb-2 mb-md-3 user-profile__form-group"
-                controlId="noticeTextarea">
+                className='mb-2 mb-md-3 user-profile__form-group'>
 
                 {/* Text field */}
                 <Form.Control
@@ -145,6 +144,8 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
                     onChange={onTextareaChange}
                     className='user-profile__form-control'
                     placeholder={'Got a notice to share?'}
+                    aria-label='Notice text input'
+                    id='notice-textarea'
                 />
 
                 {/* Notice URL */}
@@ -155,6 +156,8 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
                     onChange={onNoticeUrlChange}
                     className='user-profile__form-control my-2'
                     placeholder='https://'
+                    id='notice-url'
+                    aria-label='Optional URL for your notice'
                 />
 
                 {/* Character count & template checkbox */}
@@ -165,17 +168,21 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
                     {/* Template checkbox */}
                     <Form.Check
                         inline
-                        id="use-template-checkbox"
-                        label="Use template"
-                        type="checkbox"
+                        id='use-template-checkbox'
+                        label='Use template'
+                        type='checkbox'
                         checked={isTemplateChecked}
                         onChange={onTemplateCheckboxChange}
-                        className="ms-0 z-1 mb-0 me-0 notice__template-checkbox"
-                        style={{ minHeight: "0" }}
+                        className='ms-0 z-1 mb-0 me-0 notice__template-checkbox'
+                        style={{ minHeight: '0' }}
+                        aria-label='Toggle use of notice template'
                     />
 
                     {/* Character count */}
-                    <span className='ms-auto'>{`${charCount}/${charLimit} characters`}</span>
+                    <span className='ms-auto' aria-live='polite'
+                        aria-atomic='true'>
+                        {`${charCount}/${charLimit} characters`}
+                    </span>
                 </div>
 
                 {/* GIF */}
@@ -187,6 +194,7 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
                             >
                                 <Button onClick={() => setNoticeGif(null)}
                                     className='mt-3 notice__remove-gif-btn'
+                                    aria-label='Remove selected GIF'
                                 >
                                     <i className='bi bi-x-square-fill' />
                                 </Button>
@@ -194,7 +202,9 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
                             <Image src={noticeGif}
                                 width={!isSmallScreen ? '30%' : '50%'}
                                 className='mt-2 notice__gif'
-                                fluid />
+                                fluid
+                                alt='Selected GIF for your notice'
+                            />
                         </div>
                     </div>
                 }
@@ -205,10 +215,11 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
                     {/* Template selection */}
                     <Form.Select
                         className='notice__template-dropdown-btn'
-                        id='dropdown-template'
+                        id='dropdown-for-notice-template'
                         value={templateSubject || ''}
                         disabled={!isTemplateChecked}
                         onChange={(e) => setTemplateSubject(e.target.value)}
+                        aria-label='Select a template for your notice'
                     >
                         <option value='' disabled>Select a Template</option>
                         {templateItems[noticeType]?.map((templateItem, idx) => (
@@ -225,6 +236,7 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
                             onGeminiRunClick(templateSubject);
                         }}
                         disabled={!isTemplateChecked}
+                        aria-label='Generate notice text using AI'
                     >
                         {!isGeminiLoading ?
                             <i className='bi bi-stars' />
@@ -235,7 +247,9 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
 
                     {/* GIF Button */}
                     <Button className='notice__gif-btn ms-auto py-1 px-2'
-                        onClick={handleGifBtn}>
+                        onClick={handleGifBtn}
+                        aria-label='Add a GIF to your notice'
+                    >
                         <i className='bi bi-filetype-gif' />
                     </Button>
 
@@ -257,7 +271,7 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
             {/* Tags */}
             <h6
                 className='mb-2 user-profile__tags-title'>
-                Add tags <i className='bi bi-tag' />: <span className='small' style={{ color: 'gray' }}>At least 1 required.</span>
+                Add tags <i className='bi bi-tag' aria-hidden='true' />: <span className='small' style={{ color: 'gray' }}>At least 1 required.</span>
             </h6>
 
             <NoticeTags
@@ -270,15 +284,17 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
             <div
                 className='my-4 d-flex align-items-center user-profile__timer-settings'>
                 <h6
+                    htmlFor='notice-timer-select'
                     className='mb-0 user-profile__timer-label'>
                     Set Notice Timer
                 </h6>
 
                 <Form.Select
-                    aria-label="notice-timer-hh"
+                    id='notice-timer-select'
                     className='w-25 ms-2 me-1 user-profile__timer-select'
                     value={duration}
                     onChange={(e) => setDuration(Number(e.target.value))}
+                    aria-label='Select duration for notice timer in hours'
                 >
                     <option>0.15</option>
                     {hours?.map(hour => (
@@ -288,14 +304,21 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
                     ))}
 
                 </Form.Select>
-                <span className='me-1'>hrs</span>
+                <span className='me-1' aria-hidden='true'>hrs</span>
 
                 <Button
                     onClick={handleNotify}
                     disabled={noticeText === '' || isAddingNotice || !isAnyTagSelected || charCount > charLimit}
                     className='ms-auto user-profile__notify-btn'
                 >
-                    {isAddingNotice ? <LoadingSpinner /> : 'Notify'}
+                    {isAddingNotice ?
+                        <>
+                            <LoadingSpinner />
+                            <span className='visually-hidden' aria-live='polite' role='status'>
+                                Loading...
+                            </span>
+                        </>
+                        : 'Notify'}
                 </Button>
             </div>
 
