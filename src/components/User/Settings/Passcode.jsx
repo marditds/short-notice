@@ -19,7 +19,7 @@ export const Passcode = () => {
 
         console.log('input', input);
 
-        if (/^\d{0,25}$/.test(input)) {
+        if (input.length <= 25) {
             setPasscodeVal(input);
 
             if (input.length > 0 && input.length < 6) {

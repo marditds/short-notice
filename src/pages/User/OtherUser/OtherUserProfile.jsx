@@ -779,17 +779,20 @@ const OtherUserProfile = () => {
         },
     ];
 
+    // Loading component
     if (isOtherUserLoading || isAppLoading || isFetchingUserinContextLoading || (accountType !== 'organization' && isInitialFollowCheckLoading)) {
-        return <div className='other-user-profile__loading'>
+        return (<div className='other-user-profile__loading' role='status' aria-live='polite'>
             <div>
                 <LoadingSpinner />
                 <span className='ms-2'>
                     Loading {otherUsername}'s profile
                 </span>
+                <span className='visually-hidden'>Loading {otherUsername}'s profile</span>
             </div>
-        </div>;
+        </div>);
     }
 
+    // Passcode for oranizations
     if (accountTypeCheckFunc(accountType, 'Passcode needed to view the profile.') === false) {
         return <Passcode
             passcode={passcode}
@@ -842,12 +845,10 @@ const OtherUserProfile = () => {
                                 justify
                                 className='user-profile__notice-tab fixed-bottom'
                                 onSelect={(key) => setEventKey(key)}
+                                role="tablist"
                             >
                                 {/* Notices */}
-                                <Tab
-                                    eventKey='notices'
-                                    title="Notices"
-                                >
+                                <Tab eventKey='notices' title='Notices'  >
                                     {!isLoadingNotices ?
                                         (otherUserNotices?.length !== 0 ?
                                             <>
@@ -879,9 +880,18 @@ const OtherUserProfile = () => {
                                                             onClick={() => setOffsetNotices(offsetNotices + limitNotices)}
                                                             disabled={isLoadingMore || !hasMoreNotices}
                                                             className='user-profile__load-more-notices-btn'
+                                                            aria-label={
+                                                                isLoadingMore
+                                                                    ? 'Loading more notices'
+                                                                    : 'Load more notices'
+                                                            }
                                                         >
                                                             {isLoadingMore ?
-                                                                <><LoadingSpinner size={24} /> Loading...</>
+                                                                <>
+                                                                    <LoadingSpinner size={24} />
+                                                                    <span className='visually-hidden'>Loading more notices</span>
+                                                                    Loading...
+                                                                </>
                                                                 : 'Load More'}
                                                         </Button>
                                                         :
@@ -894,7 +904,11 @@ const OtherUserProfile = () => {
                                                 otherUsername={otherUsername}
                                             />
                                         ) :
-                                        <div className='d-flex justify-content-center pt-5'>
+                                        <div
+                                            className='d-flex justify-content-center pt-5'
+                                            role='status'
+                                            aria-live='polite'
+                                        >
                                             <LoadingSpinner /><span className='ms-2'>Loading {otherUsername}'s notices...</span>
                                         </div>
                                     }
@@ -903,7 +917,7 @@ const OtherUserProfile = () => {
 
                                 {/* Saves and Likes   */}
                                 {noticeTabs.map(tab => (
-                                    <Tab key={tab.key} eventKey={tab.key} title={tab.title}>
+                                    <Tab key={tab.key} eventKey={tab.key} title={tab.title} >
                                         {!tab.isLoading ? (
                                             tab.data.length !== 0 ? (
                                                 <>
@@ -932,10 +946,17 @@ const OtherUserProfile = () => {
                                                                 onClick={() => tab.setOffset(tab.offset + tab.limit)}
                                                                 disabled={tab.isLoadingMore || !tab.hasMore}
                                                                 className="user-profile__load-more-notices-btn"
+                                                                aria-label={
+                                                                    tab.isLoadingMore
+                                                                        ? `Loading more ${tab.title.toLowerCase()}`
+                                                                        : `Load more ${tab.title.toLowerCase()}`
+                                                                }
                                                             >
                                                                 {tab.isLoadingMore ? (
                                                                     <>
-                                                                        <LoadingSpinner size={24} /> Loading...
+                                                                        <LoadingSpinner size={24} />
+                                                                        <span className="visually-hidden">Loading more {tab.title.toLowerCase()}</span>
+                                                                        Loading...
                                                                     </>
                                                                 ) : (
                                                                     'Load More'
@@ -955,7 +976,10 @@ const OtherUserProfile = () => {
                                                 />
                                             )
                                         ) : (
-                                            <div className="d-flex justify-content-center pt-5">
+                                            <div className="d-flex justify-content-center pt-5"
+                                                role="status"
+                                                aria-live="polite"
+                                            >
                                                 <LoadingSpinner />
                                                 <span className="ms-2">{tab.loadingText}</span>
                                             </div>

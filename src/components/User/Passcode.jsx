@@ -6,27 +6,28 @@ export const Passcode = ({ passcode, setPasscode, checkPasscode, isCheckingPassc
     const onPasscodeChange = (e) => {
         const input = e.target.value;
 
-        if (/^\d{0,25}$/.test(input)) {
+        if (input.length <= 25) {
             setPasscode(input);
-            console.log(input);
         }
     }
 
     return (
         <div className='user-profile__organization-passcode'>
             <div>
-                <Form onSubmit={(e) => { e.preventDefault(); checkPasscode(); }} className='d-flex align-items-end'>
+                <Form onSubmit={(e) => { e.preventDefault(); checkPasscode(); }} className='d-flex align-items-end' aria-describedby={isPasscodeIncorrect ? 'passcode-error' : undefined}>
                     <Row className='flex-column'>
                         <Col>
                             <Form.Group
                                 controlId="formOrganizationPasscode">
-
                                 <Form.Label>Passcode: </Form.Label>
                                 <Form.Control
                                     type="password"
                                     value={passcode}
                                     onChange={onPasscodeChange}
                                     className='user-profile__organization-passcode-field'
+                                    aria-required='true'
+                                    aria-invalid={isPasscodeIncorrect}
+                                    aria-describedby={isPasscodeIncorrect ? 'passcode-error' : undefined}
                                 />
                             </Form.Group>
                         </Col>
@@ -35,8 +36,14 @@ export const Passcode = ({ passcode, setPasscode, checkPasscode, isCheckingPassc
                                 type='submit'
                                 disabled={passcode.length < 6}
                                 className='user-profile__organization-passcode-btn'
+                                aria-label='Submit passcode'
                             >
-                                {!isCheckingPasscode ? 'Submit' : <LoadingSpinner />}
+                                {!isCheckingPasscode ?
+                                    'Submit' :
+                                    <>
+                                        <LoadingSpinner />
+                                        <span className="visually-hidden">Checking passcode...</span>
+                                    </>}
                             </Button>
                         </Col>
                         <Col>
@@ -46,12 +53,16 @@ export const Passcode = ({ passcode, setPasscode, checkPasscode, isCheckingPassc
                         </Col>
                     </Row>
                 </Form>
-                <p className='mb-0 mt-2 position-absolute fw-bold' style={{ color: 'var(--main-caution-color)' }}>
-                    {
-                        isPasscodeIncorrect && 'Invalid passcode. Please try again or contact your leader.'
-                    }
-                </p>
-
+                {isPasscodeIncorrect && (
+                    <p
+                        id='passcode-error'
+                        className='mb-0 mt-2 position-absolute fw-bold'
+                        style={{ color: 'var(--main-caution-color)' }}
+                        role='alert'
+                    >
+                        Invalid passcode. Please try again or contact your leader.
+                    </p>
+                )}
             </div>
         </div>
     )
