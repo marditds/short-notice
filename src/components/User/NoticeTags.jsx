@@ -1,5 +1,5 @@
 import { useLocation } from 'react-router-dom';
-import { Accordion, Form } from 'react-bootstrap';
+import { Accordion } from 'react-bootstrap';
 import { FaAngleDown } from 'react-icons/fa6';
 
 
@@ -10,45 +10,53 @@ export const NoticeTags = ({ tagCategories, handleTagSelect, selectedTags }) => 
 
     return (
         <Accordion defaultActiveKey={['0']} className='user-profile__tags-accordion'>
-            <fieldset style={{ border: 'none', padding: 0, margin: 0 }}>
-                {tagCategories.map((category, categoryIndex) => (
-                    <Accordion.Item eventKey={categoryIndex} key={category.group}>
+            {tagCategories.map((category, categoryIndex) => (
+                <Accordion.Item eventKey={categoryIndex.toString()} key={category.group}>
+                    <Accordion.Header className='d-flex w-100'>
+                        <FaAngleDown size={20} className='me-3' />
+                        {category.group}
+                    </Accordion.Header>
 
-                        <Accordion.Header className='d-flex w-100'>
-                            <FaAngleDown size={20} className='me-3' />
-                            {category.group}
-                        </Accordion.Header>
+                    <Accordion.Body className='user-profile__tags-accordion-body'>
+                        <fieldset style={{ border: 'none', padding: 0, margin: 0 }}>
+                            <legend className="visually-hidden">
+                                Select tags for {category.group}
+                            </legend>
+                            <div
+                                className='d-flex flex-wrap justify-content-around w-100'
+                            >
+                                {category.tags.map((tag) => {
+                                    const isChecked = !!selectedTags[tag.key];
+                                    const inputId = `tag-${category.group}-${tag.key}`;
 
-                        <Accordion.Body
-                            role='group'
-                            aria-label={`Select tags for ${category.group}`}
-                            className='d-flex flex-wrap justify-content-around w-100 user-profile__tags-accordion-body'
-                        >
-                            {category.tags.map((tag) => {
-
-                                const isChecked = !!selectedTags[tag.key];
-
-                                return (
-                                    <label
-                                        key={tag.name}
-                                        className={`${location.pathname === '/user/profile/' ? 'mt-1 mt-sm-0' : 'mt-1'} user-profile__notice-tag ${isChecked ? 'tagIsChecked' : ''
-                                            }`}
-                                        style={{ cursor: 'pointer', userSelect: 'none', margin: '0.25rem' }}
-                                    >
-                                        <input
-                                            type='checkbox'
-                                            checked={isChecked}
-                                            onChange={() => handleTagSelect(category.group, tag, isChecked)}
-                                            className='visually-hidden'
-                                        />
-                                        <span>{tag.name}</span>
-                                    </label>
-                                )
-                            })}
-                        </Accordion.Body>
-                    </Accordion.Item>
-                ))}
-            </fieldset>
+                                    return (
+                                        <div
+                                            key={tag.key}
+                                            className={`user-profile__notice-tag-wrapper ${location.pathname === '/user/profile/' ? 'mt-1 mt-sm-0' : 'mt-1'}`}
+                                            style={{ margin: '0.25rem' }}
+                                        >
+                                            <input
+                                                id={inputId}
+                                                type="checkbox"
+                                                checked={isChecked}
+                                                onChange={() => handleTagSelect(category.group, tag, isChecked)}
+                                                className="visually-hidden user-profile__notice-tag-checkbox"
+                                            />
+                                            <label
+                                                htmlFor={inputId}
+                                                className={`user-profile__notice-tag ${isChecked ? 'tagIsChecked' : ''}`}
+                                                style={{ cursor: 'pointer', userSelect: 'none' }}
+                                            >
+                                                {tag.name}
+                                            </label>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </fieldset>
+                    </Accordion.Body>
+                </Accordion.Item>
+            ))}
         </Accordion>
     );
 }

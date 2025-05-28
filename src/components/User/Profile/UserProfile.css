@@ -266,11 +266,11 @@
      transition: var(--main-transition-speed);
  }
 
-
- .user-profile__notice-tag:focus,
+ .user-profile__notice-tag-checkbox:focus+.user-profile__notice-tag,
+ .user-profile__notice-tag-checkbox:active+.user-profile__notice-tag,
  .user-profile__notice-tag:hover {
      border-color: var(--main-accent-color-hover) !important;
-     background-color: var(--main-accent-color-hover) !important;
+     background-color: var(--main-accent-color-hover);
  }
 
  .user-profile__notice-tag.tagIsChecked {
@@ -1154,11 +1154,11 @@
      }
 
      .user-profile__tags-accordion-body {
-         padding-top: 0px;
-         padding-bottom: 10px;
+         padding-top: 10px !important;
+         padding-bottom: 10px !important;
      }
 
-     .user-profile__tags-accordion-body>div:focus {
+     .user-profile__tags-accordion-body>fieldset>div:focus {
          background-color: var(--main-accent-color-hover);
      }
 
@@ -1301,10 +1301,6 @@
          font-size: var(--mobile-icon-size) !important;
          height: 14px;
          width: 14px;
-     }
-
-     .settings__update-interests-tag {
-         font-size: var(--mobile-font-size) !important;
      }
  }
 

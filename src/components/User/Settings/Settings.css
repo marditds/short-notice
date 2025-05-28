@@ -219,7 +219,6 @@
     max-width: 500px;
     display: flex;
     flex-wrap: wrap;
-    /* justify-content: space-between; */
     gap: 10px;
     margin: 10px
 }
@@ -234,11 +233,12 @@
     box-shadow: none !important;
 }
 
-
-.settings__update-interests-tag:focus,
+.settings__update-interests-tag-checkbox:focus+.settings__update-interests-tag,
+.settings__update-interests-tag-checkbox:active+.settings__update-interests-tag,
 .settings__update-interests-tag:hover {
     border-color: var(--main-accent-color-hover) !important;
-    background-color: var(--main-accent-color-hover) !important;
+    background-color: var(--main-accent-color-hover);
+    cursor: pointer;
 }
 
 .settings__update-interests-tag.tagIsChecked {
@@ -447,6 +447,10 @@
     .settings__update-interests-btn,
     .settings__update-interests-tag-col {
         margin: 5px
+    }
+
+    .settings__update-interests-tag {
+        font-size: var(--mobile-font-size) !important;
     }
 }
 

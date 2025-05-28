@@ -32,20 +32,25 @@ export const InterestsTags = ({
                 Select your interests
             </legend>
 
-            <div className='d-flex flex-wrap' aria-label='Interest tags'>
+            <div className='d-flex flex-wrap' role='group' aria-labelledby='interest-tags-label'>
+                <span id='interest-tags-label' className='visually-hidden'>Interest tags</span>
                 {allTags.map((tag) => (
-                    <div
-                        key={tag.key}
-                        className='settings__update-interests-tag-col' >
-                        <Button
-                            onClick={() => toggleInterestsTag(tag.key)}
-
-                            className={`bg-transparent settings__update-interests-tag ${selectedTags[tag.key] ? 'tagIsChecked' : ''}`}
-
-                            aria-pressed={selectedTags[tag.key]}
+                    <div key={tag.key} className='settings__update-interests-tag-col'>
+                        <input
+                            type='checkbox'
+                            id={`tag-${tag.key}`}
+                            checked={!!selectedTags[tag.key]}
+                            onChange={() => toggleInterestsTag(tag.key)}
+                            className='visually-hidden settings__update-interests-tag-checkbox'
+                            aria-checked={!!selectedTags[tag.key]}
+                            aria-label={tag.name}
+                        />
+                        <label
+                            htmlFor={`tag-${tag.key}`}
+                            className={`settings__update-interests-tag ${selectedTags[tag.key] ? 'tagIsChecked' : ''}`}
                         >
                             {tag.name}
-                        </Button>
+                        </label>
                     </div>
                 ))}
             </div>
