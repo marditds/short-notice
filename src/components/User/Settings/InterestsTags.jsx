@@ -37,15 +37,15 @@ export const InterestsTags = ({
                     <div
                         key={tag.key}
                         className='settings__update-interests-tag-col' >
-                        <div
+                        <Button
                             onClick={() => toggleInterestsTag(tag.key)}
 
-                            className={`settings__update-interests-tag ${selectedTags[tag.key] ? 'tagIsChecked' : ''}`}
+                            className={`bg-transparent settings__update-interests-tag ${selectedTags[tag.key] ? 'tagIsChecked' : ''}`}
 
                             aria-pressed={selectedTags[tag.key]}
                         >
                             {tag.name}
-                        </div>
+                        </Button>
                     </div>
                 ))}
             </div>
@@ -66,6 +66,7 @@ export const InterestsTags = ({
                         setErrorMsg('');
                         setSuccessMsg('Interest(s) updated successfully.')
 
+                        // For user feed only
                         if (isAnyTagSelected && onUpdateInterests) {
                             onUpdateInterests();
                         }

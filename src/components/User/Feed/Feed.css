@@ -39,7 +39,8 @@
 }
 
 .user-feed__toggle-label.toggle-label-muted {
-    color: var(--main-text-muted);
+    color: var(--main-text-muted) !important;
+    cursor: not-allowed;
 }
 
 .user-feed__compose-btn,

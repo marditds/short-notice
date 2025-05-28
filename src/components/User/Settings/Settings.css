@@ -225,21 +225,24 @@
 }
 
 .settings__update-interests-tag {
-    padding: 5px 10px;
-    border: 1px solid;
-    border-radius: var(--main-rounded-corner);
-    border-color: var(--main-accent-color);
-    cursor: pointer;
-    transition: var(--main-transition-speed);
+    padding: 5px 10px !important;
+    border: 1px solid !important;
+    border-radius: var(--main-rounded-corner) !important;
+    border-color: var(--main-accent-color) !important;
+    color: var(--main-text-color) !important;
+    transition: var(--main-transition-speed) !important;
+    box-shadow: none !important;
 }
 
+
+.settings__update-interests-tag:focus,
 .settings__update-interests-tag:hover {
-    border-color: var(--main-accent-color-hover);
-    background-color: var(--main-accent-color-hover);
+    border-color: var(--main-accent-color-hover) !important;
+    background-color: var(--main-accent-color-hover) !important;
 }
 
 .settings__update-interests-tag.tagIsChecked {
-    background-color: var(--main-accent-color);
+    background-color: var(--main-accent-color) !important;
     color: black
 }
 

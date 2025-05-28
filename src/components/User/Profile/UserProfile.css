@@ -266,14 +266,16 @@
      transition: var(--main-transition-speed);
  }
 
+
+ .user-profile__notice-tag:focus,
  .user-profile__notice-tag:hover {
-     border-color: var(--main-accent-color-hover);
-     background-color: var(--main-accent-color-hover);
+     border-color: var(--main-accent-color-hover) !important;
+     background-color: var(--main-accent-color-hover) !important;
  }
 
  .user-profile__notice-tag.tagIsChecked {
      color: black !important;
-     background-color: var(--main-accent-color);
+     background-color: var(--main-accent-color) !important;
  }
 
  .notice__template-dropdown-btn {

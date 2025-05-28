@@ -71,30 +71,36 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
             setCharCount(0);
             setDuration(24);
 
-            setTagCategories(prevCategories => prevCategories?.map(category => ({
-                ...category,
-                values: category.values?.map(() => false)
-            })));
+            setTagCategories(prevCategories =>
+                prevCategories?.map(category => ({
+                    ...category,
+                    values: Object.fromEntries(
+                        Object.keys(category.values || {}).map(key => [key, false])
+                    )
+                }))
+            );
+
         }
     };
 
     const hours = Array.from({ length: 7 }, (_, i) => (i + 1) * 24);
     // const hours = [1, 357, 2, 3, 5, 10, 15, 20, 48, 72]
 
-    const handleTagSelect = (categoryGroup, tagIndex, tag, isSelected) => {
-        setTagCategories(prevCategories => prevCategories?.map(category => {
-            if (category.group === categoryGroup) {
-                const newValues = [...category.values];
-                newValues[tagIndex] = !isSelected;
-                return { ...category, values: newValues };
-            }
-            return category;
-        }));
+    const handleTagSelect = (categoryGroup, tag, isSelected) => {
+        setTagCategories(prevCategories =>
+            prevCategories?.map(category => {
+                if (category.group === categoryGroup) {
+                    const newValues = { ...category.values };
+                    newValues[tag.key] = !isSelected;
+                    return { ...category, values: newValues };
+                }
+                return category;
+            })
+        );
 
         setSelectedTags(prev => {
             const updatedTags = { ...prev };
-
-            if (updatedTags[tag.key]) {
+            if (isSelected) {
                 delete updatedTags[tag.key];
             } else {
                 updatedTags[tag.key] = true;
@@ -102,6 +108,7 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
             return updatedTags;
         });
     };
+
 
     const handleGifBtn = () => {
         setIsGifBtnClicked((preVal) => !preVal);

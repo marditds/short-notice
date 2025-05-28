@@ -537,16 +537,18 @@ export const useNotices = () => {
         }
     }
 
-    const updateInterests = async () => {
+    const updateInterests = async (tags = null) => {
 
         if (!user_id) {
             return;
         }
 
+        const interestsTags = tags || selectedTags;
+
         setIsInterestsUpdating(true);
         if (user_id) {
             try {
-                const interests = await updateUserInterests(user_id, selectedTags);
+                const interests = await updateUserInterests(user_id, interestsTags);
                 console.log('Interests updated:', interests);
                 setIsAnyTagSelected(Object.values(interests).some(tagKey => tagKey === true));
                 setFetchedInterests(interests);
@@ -607,8 +609,10 @@ export const useNotices = () => {
         }));
     };
 
-    const deselectAllInterestTags = () => {
+    const deselectAllInterestTags = async () => {
         setSelectedTags({});
+
+        await updateInterests({});
     }
 
     const updateUserPermissions = async (userId, btns_reaction_perm, reaction_text) => {
