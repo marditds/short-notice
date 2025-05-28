@@ -74,13 +74,13 @@ export const Passcode = () => {
                             placeholder='Enter your passcode'
                             value={passcodeVal || ''}
                             onChange={handlePasscodeChange}
-
                             className='settings__username-field'
+                            aria-describedby='passcodeHelp'
                         />
-                        <Form.Text className='settings__username-unique'>
+                        <Form.Text id='passcodeHelp' className='settings__username-unique'>
                             <ul className='mb-0 ps-3'>
-                                <li>Your passcode must contain at least six digits.</li>
-                                <li>Your passcode cannot be longer than 25 digits.</li>
+                                <li>Your passcode must contain at least six characters.</li>
+                                <li>Your passcode cannot be longer than 25 characters.</li>
                             </ul>
                         </Form.Text>
                     </Form.Group>

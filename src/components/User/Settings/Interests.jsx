@@ -26,10 +26,15 @@ export const Interests = ({ userId }) => {
     return (
         <Row xs={1} sm={2}>
             <Col>
-                <h4>Update Interests:</h4>
-                <p>You decide the kind of notices fetch in your general feed.</p>
+                <h4 id='update-interests-heading'>
+                    Update Interests:
+                </h4>
+
+                <p id='update-interests-description'>
+                    You decide the kind of notices fetch in your general feed.
+                </p>
             </Col>
-            <Col>
+            <Col role='region' aria-labelledby='update-interests-heading' aria-describedby='update-interests-description'>
                 {
                     !isInterestsLoading
                         ?
@@ -42,7 +47,12 @@ export const Interests = ({ userId }) => {
                             updateInterests={updateInterests}
                         />
                         :
-                        <LoadingSpinner />
+                        <>
+                            <LoadingSpinner />
+                            <span className='visually-hidden' role='status' aria-live='polite'>
+                                Loading your interests...
+                            </span>
+                        </>
                 }
             </Col>
         </Row>

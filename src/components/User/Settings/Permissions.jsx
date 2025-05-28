@@ -34,7 +34,7 @@ const Permissions = ({ userId }) => {
     const permissionSwitches = [
         {
             id: 'permission-switch-button',
-            label: 'Likes and Saves',
+            label: `Likes and Saves ${isReactionBtnAllowed ? '(granted)' : '(revoked)'}`,
             checked: isReactionBtnAllowed,
             onChange: () => {
                 const newVal = !isReactionBtnAllowed;
@@ -44,7 +44,7 @@ const Permissions = ({ userId }) => {
         },
         {
             id: 'permission-switch-text',
-            label: 'Text reaction',
+            label: `Text reaction ${isReactionTxtAllowed ? '(granted)' : '(revoked)'}`,
             checked: isReactionTxtAllowed,
             onChange: () => {
                 const newVal = !isReactionTxtAllowed;
@@ -58,12 +58,23 @@ const Permissions = ({ userId }) => {
     return (
         <Row xs={1} sm={2}>
             <Col>
-                <h4 className=''>Permissions:</h4>
-                <p className='mb-0'>Control how other users interact with your notices. Permissions are granted by default. To revoke a permission, click or tap the switch.</p>
+                <h4 id='permissions-heading'>Permissions:</h4>
+                <p id='permissions-description' className='mb-0'>
+                    Control how other users interact with your notices. Permissions are granted by default. To revoke a permission, click or tap the switch.
+                </p>
             </Col>
-            <Col className='mt-3 mt-sm-0 d-flex flex-column justify-content-end align-items-center '>
+            <Col className='mt-3 mt-sm-0 d-flex flex-column justify-content-end align-items-center'
+                role='region'
+                aria-labelledby='permissions-heading'
+                aria-describedby='permissions-description'
+            >
                 {permissionSwitches.map((item) => (
-                    <Form as={Row} className='w-100 m-0 flex-column' key={item.id}>
+                    <Form
+                        as={'fieldset'}
+                        className='w-100 m-0 flex-column'
+                        key={item.id}
+                    >
+                        <legend className='visually-hidden'>{item.label} permission</legend>
                         <Col>
                             <Form.Check
                                 type='switch'

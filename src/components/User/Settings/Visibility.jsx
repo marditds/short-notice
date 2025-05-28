@@ -15,17 +15,20 @@ export const Visibility = () => {
                 <h4
                     style={{ width: '100px' }}
                     className='me-5'
+                    id='privacy-status'
                 >
                     {privacyStatus}
                 </h4>
-                <Form>
+                <Form aria-describedby='privacy-switch-desc'>
                     <Form.Check
-                        type="switch"
-                        id="visibility-switch"
-                        label="Switch to private"
+                        type='switch'
+                        id='visibility-switch'
+                        label='Switch to private'
                         disabled
+                        aria-disabled='true'
+                        aria-describedby='privacy-switch-desc'
                     />
-                    <Form.Text className='settings__username-switch'>
+                    <Form.Text id='privacy-switch-desc' className='settings__username-switch'>
                         Feature currently unavailable.
                     </Form.Text>
                 </Form>

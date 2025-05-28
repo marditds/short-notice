@@ -381,17 +381,20 @@ export const TermsModal = ({ showTermModal, handleCloseTermModal, children }) =>
 
 export const AvatarCropModal = ({ showAvatarCropModal, handleCloseAvatarCropModal, handleSaveCroppedImage, isUploading, loadingSpinner, children }) => {
     return (
-        <Modal show={showAvatarCropModal} onHide={handleCloseAvatarCropModal} className='setting__avatar-crop-modal createAccount__agreement-modal' style={{ zIndex: '9999999' }}>
+        <Modal show={showAvatarCropModal} onHide={handleCloseAvatarCropModal} className='setting__avatar-crop-modal createAccount__agreement-modal' style={{ zIndex: '9999999' }} aria-labelledby="avatarCropModalLabel">
+            <Modal.Header className="visually-hidden">
+                <h2 id="avatarCropModalLabel">Crop your avatar</h2>
+            </Modal.Header>
             <Modal.Body className='setting__avatar-crop-modal-body createAccount__agreement-modal-body px-2'>
                 {children}
             </Modal.Body>
             <Modal.Footer className='border-top-0 pt-0 user-profile__block--modal-footer'>
 
-                <Button onClick={handleCloseAvatarCropModal} className='setting__avatar-crop-cancel-btn d-flex justify-content-center align-items-center ms-0 me-1' >
+                <Button onClick={handleCloseAvatarCropModal} className='setting__avatar-crop-cancel-btn d-flex justify-content-center align-items-center ms-0 me-1' aria-label="Cancel avatar cropping">
                     Cancel
                 </Button>
 
-                <Button onClick={handleSaveCroppedImage} className='setting__avatar-crop-save-btn d-flex justify-content-center align-items-center mx-0'>
+                <Button onClick={handleSaveCroppedImage} className='setting__avatar-crop-save-btn d-flex justify-content-center align-items-center mx-0' aria-label="Save cropped avatar">
                     {!isUploading ? 'Save' : loadingSpinner}
                 </Button>
 

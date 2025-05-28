@@ -175,14 +175,6 @@ const CreateAccount = () => {
         }
     };
 
-    // useEffect(() => {
-    // console.log('captchaKey:', captchaKey);
-    //     if (isCaptchaVerified === false) {
-    //         setCaptchaKey(null);
-    //     }
-    // }, [captchaKey, isCaptchaVerified])
-
-
     // Getting things ready
     if (isSetupCancellationLoading || userEmail === null) {
         return <div className='min-vh-100'>

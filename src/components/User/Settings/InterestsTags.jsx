@@ -95,33 +95,30 @@ export const InterestsTags = ({
                 </Button>
             </div>
 
-            {successMsg && (
-                <div
-                    id='success-message'
-                    aria-live='polite'
-                    role='status'
-                    style={{
-                        height: location.pathname === '/user/feed' ? undefined : '24px',
-                        marginLeft: !isSmallScreen ? '10px' : '5px',
-                    }}
-                >
-                    <SuccessMessage message={successMsg} />
-                </div>
-            )}
 
-            {errorMsg && (
-                <div
-                    id='error-message'
-                    role='alert'
-                    aria-live='assertive'
-                    style={{
-                        height: location.pathname === '/user/feed' ? undefined : '24px',
-                        marginLeft: !isSmallScreen ? '10px' : '5px',
-                    }}
-                >
-                    <ErrorMessage message={errorMsg} />
-                </div>
-            )}
+            <div
+                id='success-message'
+                aria-live='polite'
+                role='status'
+                style={{
+                    height: location.pathname === '/user/feed' ? undefined : '24px',
+                    marginLeft: !isSmallScreen ? '10px' : '5px',
+                }}
+            >
+                <SuccessMessage message={successMsg} />
+            </div>
+
+            <div
+                id='error-message'
+                role='alert'
+                aria-live='assertive'
+                style={{
+                    height: location.pathname === '/user/feed' ? undefined : '24px',
+                    marginLeft: !isSmallScreen ? '10px' : '5px',
+                }}
+            >
+                <ErrorMessage message={errorMsg} />
+            </div>
 
         </fieldset>
     )

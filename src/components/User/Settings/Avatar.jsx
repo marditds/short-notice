@@ -103,7 +103,7 @@ export const Avatar = ({ userId, userAvatarId }) => {
                 setFileFormatError('');
             }
         } catch (error) {
-            console.error("Error deleting avatar:", error);
+            console.error('Error deleting avatar:', error);
             setFileFormatError('Failed to delete avatar.');
             setAvatarUploadSuccessMsg('');
         } finally {
@@ -125,7 +125,7 @@ export const Avatar = ({ userId, userAvatarId }) => {
                 {!isAvatarLoading ?
                     <img
                         src={avatarUrl ? avatarUrl : defaultAvatar}
-                        alt='user_avatar'
+                        alt='Current User avatar'
                         className='setting__avatar-display me-3'
                     />
                     :
@@ -133,12 +133,14 @@ export const Avatar = ({ userId, userAvatarId }) => {
                 }
 
                 <Form as={Row} className='flex-column settings__upload-avatar-form'>
-                    <Form.Group as={Col} className="mb-2 mb-md-3" controlId="profilePictureUpload">
+                    <Form.Group as={Col} className='mb-2 mb-md-3' controlId='profilePictureUpload'>
 
                         {isUploading ?
                             (
                                 <>
-                                    Updating avatar <LoadingSpinner />
+                                    <span role='status' aria-live='polite'>
+                                        Updating avatar <LoadingSpinner />
+                                    </span>
                                 </>
                             )
                             : (
@@ -154,19 +156,29 @@ export const Avatar = ({ userId, userAvatarId }) => {
                                 </>
                             )}
                     </Form.Group>
-                    <Col className="">
+                    <Col>
                         <Button
                             onClick={handleDeleteAvatar}
                             disabled={isDeleting ? true : false}
                             className='float-start settings__delete-avatar-btn'
+                            aria-live={isDeleting ? 'assertive' : undefined}
                         >
-                            {isDeleting ? 'Deleting...' : 'Delete Avatar'}
-                            {isDeleting && <LoadingSpinner />}
+                            {isDeleting ? (
+                                <>
+                                    Deleting... <LoadingSpinner />
+                                </>
+                            ) : (
+                                'Delete Avatar'
+                            )}
                         </Button>
                     </Col>
+
                     {fileFormatError &&
                         <Col className='mt-1 mt-md-2'>
-                            <Form.Text style={{ color: 'var(--main-caution-color)' }}>
+                            <Form.Text
+                                role='alert'
+                                style={{ color: 'var(--main-caution-color)' }}
+                            >
                                 {fileFormatError}
                             </Form.Text>
                         </Col>
@@ -174,7 +186,10 @@ export const Avatar = ({ userId, userAvatarId }) => {
 
                     {avatarUploadSuccessMsg &&
                         <Col className='mt-1 mt-md-2'>
-                            <Form.Text style={{ color: 'var(--main-accent-color-hover)' }}>
+                            <Form.Text
+                                role='alert'
+                                style={{ color: 'var(--main-accent-color-hover)' }}
+                            >
                                 {avatarUploadSuccessMsg}
                             </Form.Text>
                         </Col>
@@ -220,6 +235,10 @@ export const Avatar = ({ userId, userAvatarId }) => {
                                 value={zoom}
                                 onChange={(e) => setZoom(Number(e.target.value))}
                                 className='setting__avatar-crop-zoom-slider'
+                                aria-valuemin={1}
+                                aria-valuemax={3}
+                                aria-valuenow={zoom}
+                                aria-label='Avatar zoom level'
                             />
                         </Form.Group>
 

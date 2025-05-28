@@ -50,13 +50,15 @@ export const DeleteAccount = () => {
         <>
             <Row xs={1} sm={2}>
                 <Col>
-                    <h4>Delete Account:</h4>
-                    <p className='mb-2 mb-sm-0'>WARNING: Deleting your account will result in the loss of all data, which cannot be recovered. Please proceed with caution.</p>
+                    <h4 id='delete-account-heading'>Delete Account:</h4>
+                    <p id='delete-account-description' className='mb-2 mb-sm-0'>WARNING: Deleting your account will result in the loss of all data, which cannot be recovered. Please proceed with caution.</p>
                 </Col>
                 <Col className='d-grid align-content-end'>
                     <Button
                         onClick={handleShowModal}
                         className='settings__delete-account-btn'
+                        aria-describedby='delete-account-description'
+                        aria-haspopup='dialog'
                     >
                         Delete Account
                     </Button>
@@ -66,6 +68,11 @@ export const DeleteAccount = () => {
             <Modal show={showModal}
                 onHide={handleCloseModal}
                 className='settings__delete-account-modal'
+                aria-labelledby='delete-account-modal-title'
+                aria-describedby='delete-account-modal-desc'
+                role='dialog'
+                tabIndex={-1}
+                autoFocus
             >
                 {!accountDeleteMsg ? <><Modal.Header
                     className='settings__delete-account-modal-header border-bottom-0'
@@ -83,14 +90,27 @@ export const DeleteAccount = () => {
                         <Button onClick={handleCloseModal}
                             disabled={loading}
                             className='settings__delete-account-btn final cancel d-flex justify-content-center align-items-center'
+                            aria-label='Cancel account deletion'
                         >
                             Cancel
                         </Button>
                         <Button
                             onClick={confirmDeletion}
                             className='settings__delete-account-btn final d-flex justify-content-center align-items-center'
+                            disabled={loading}
+                            aria-disabled={loading}
+                            aria-live='polite'
                         >
-                            {loading ? <LoadingSpinner /> : 'Yes, Delete My Account'}
+                            {loading ? (
+                                <>
+                                    <LoadingSpinner />
+                                    <span className='visually-hidden' role='status' aria-live='polite'>
+                                        Deleting account, please wait...
+                                    </span>
+                                </>
+                            ) : (
+                                'Yes, Delete My Account'
+                            )}
                         </Button>
                     </Modal.Footer>
                 </>

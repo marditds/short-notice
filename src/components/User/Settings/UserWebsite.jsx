@@ -98,33 +98,44 @@ export const UserWebsite = ({
             <Col className='mt-3 mt-sm-0 d-flex justify-content-end align-items-center settings__website-col'>
                 <Form
                     as={Row}
-                    // onSubmit={handleSubmit}
                     className='w-100 m-0 flex-column settings__website-form'
+                    aria-labelledby='update-website-heading'
                 >
                     <Form.Group
                         as={Col}
                         className='pe-sm-0 settings__website-form-group'
                         controlId='websiteField'>
-                        <Form.Label className='mb-1 mb-md-2'>
+                        <Form.Label className='mb-1 mb-md-2' id='update-website-heading'>
                             Website:
                         </Form.Label>
                         <Form.Control
-                            type='website'
+                            type='url'
                             placeholder={websitePlaceholder}
                             value={userWebsite || ''}
                             onChange={handleUserWebsiteChange}
                             onKeyDown={handleOnKeyDown}
                             className='settings__website-field'
+                            aria-describedby='website-help-text'
                         />
+                        <Form.Text id='website-help-text' className='visually-hidden'>
+                            Please enter a valid URL (e.g., https://example.com).
+                        </Form.Text>
                     </Form.Group>
                     <Col className='settings__update-website-btn-col'>
                         <Button
-                            type='submit'
                             disabled={isUpdatingWebsite ? true : false}
                             className='settings__update-website-btn mt-1 mt-md-2'
                             onClick={handleUpdateUserWebsite}>
-                            {isUpdatingWebsite ? 'Updating...' : 'Update'}
-                            {isUpdatingWebsite && <LoadingSpinner />}
+                            {isUpdatingWebsite ? (
+                                <>
+                                    <LoadingSpinner /> Updating...
+                                    <span className='visually-hidden' role='status' aria-live='polite'>
+                                        Updating website...
+                                    </span>
+                                </>
+                            ) : (
+                                'Update'
+                            )}
                         </Button>
 
                         <SuccessMessage message={successMsg} />

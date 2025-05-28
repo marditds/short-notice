@@ -122,30 +122,39 @@ export const Info = ({
                             {usrnm}:
                         </Form.Label>
                         <Form.Control
-                            type='username'
+                            type='text'
                             placeholder='Enter your username'
                             value={(localUsername && localUsername) || ''}
                             onChange={handleUsernameChange}
                             onKeyDown={handleOnKeyDown}
                             className='settings__username-field'
+                            aria-describedby={`usernameHelp ${successMsg ? "usernameSuccess" : ""} ${errorMsg ? "usernameError" : ""}`.trim()}
                         />
-                        <Form.Text className='settings__username-unique'>
+                        <Form.Text id="usernameHelp" className='settings__username-unique'>
                             Your {usrnm && usrnm.toLowerCase()} must be unique.
                         </Form.Text>
                     </Form.Group>
+
                     <Col className='settings__update-username-btn-col'>
 
                         <Button
                             type='submit'
-                            disabled={isUpdating || localUsername === '' ? true : false || localUsername === username}
+                            disabled={isUpdating || localUsername === '' || localUsername === username}
                             className='settings__update-username-btn mt-1 mt-md-2'
-                            onClick={handleSubmit}>
-                            {isUpdating ? 'Updating...' : 'Update'}
-                            {isUpdating && <LoadingSpinner />}
+                            onClick={handleSubmit}
+                            aria-live="polite"
+                        >
+                            {isUpdating ? (
+                                <>
+                                    Updating... <LoadingSpinner />
+                                </>
+                            ) : (
+                                'Update'
+                            )}
                         </Button>
 
-                        <SuccessMessage message={successMsg} />
-                        <ErrorMessage message={errorMsg} />
+                        <SuccessMessage id={'usernameSuccess'} message={successMsg} />
+                        <ErrorMessage id={'usernameError'} message={errorMsg} />
 
                     </Col>
                 </Form>

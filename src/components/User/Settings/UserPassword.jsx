@@ -104,8 +104,9 @@ export const UserPassword = () => {
                             value={newPasswordVal || ''}
                             onChange={handleNewPasswordChange}
                             className='settings__username-field mb-1 mb-md-2'
+                            aria-describedby='password-requirements'
                         />
-                        <Form.Text className='settings__username-unique'>
+                        <Form.Text id='password-requirements' className='settings__username-unique'>
                             <ul className='mb-1 mb-md-2 ps-3'>
                                 <li>Your password must contain at least 8 characters.</li>
                                 <li>Your password must not exceed 256 characters.</li>
