@@ -109,8 +109,9 @@
     display: flex;
 }
 
-.help-center__offcanvas-body>ul {
+.help-center__offcanvas-body>section {
     justify-content: center;
+    align-items: center;
 }
 
 .help-center__breadcrumb-link {

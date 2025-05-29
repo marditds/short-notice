@@ -76,6 +76,10 @@
     color: var(--main-accent-color-hover);
 }
 
+.contact__icon {
+    font-size: var(--pc-icon-size);
+}
+
 .commGuide__list-title,
 .commGuide__list-intro,
 .commGuide__list-p,
@@ -154,6 +158,10 @@
 
     .home__body-organization-row-intro-icon {
         font-size: 18pt;
+    }
+
+    .contact__icon {
+        font-size: var(--mobile-icon-size);
     }
 }
 

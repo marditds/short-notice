@@ -19,22 +19,23 @@ const HelpCenterTitlesPageContent = ({ isLoggedIn }) => {
                 isLoggedIn={isLoggedIn}
             />
 
-            <h4 className='help__center-titles-title fw-bold mt-2'>
-                {sectionTitleByPath[helpCenterTitlesPath] || 'Help Center'}
-            </h4>
-            <ListGroup as='ul' className='help__center-titles-list'>
-                {
-                    sectionTopicsByPath[helpCenterTitlesPath].map((title, idx) => {
-                        return (
-                            <ListGroup.Item as={'li'} className='help__center-titles-list-item' key={idx}>
+            <section aria-labelledby="help-topics-heading">
+                <h4 id="help-topics-heading" className='help__center-titles-title fw-bold mt-2'>
+                    {sectionTitleByPath[helpCenterTitlesPath] || 'Help Center'}
+                </h4>
+                <ListGroup as='ul' className='help__center-titles-list'>
+                    {
+                        sectionTopicsByPath[helpCenterTitlesPath].map((title, idx) => (
+                            <ListGroup.Item as='li' className='help__center-titles-list-item' key={idx}>
                                 <Link to={`./${title.path}`}>
                                     {title.header}
                                 </Link>
                             </ListGroup.Item>
-                        )
-                    })
-                }
-            </ListGroup>
+                        ))
+                    }
+                </ListGroup>
+            </section>
+
         </>
     )
 }
