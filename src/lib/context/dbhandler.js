@@ -646,15 +646,27 @@ export const getSession = async () => {
 
 export const deleteUserSession = async () => {
 
-    const currentSession = await account.getSession('current');
+    // const currentSession = await account.getSession('current');
 
-    console.log('currentSession', currentSession);
+    // console.log('currentSession', currentSession);
 
     try {
-        if (currentSession) {
-            await account.deleteSession(currentSession.$id);
-            console.log('Session deleted successfully.');
-        }
+        // if (sessionId) {
+        await account.deleteSession('current');
+        console.log('Session deleted successfully.');
+        // }
+        console.log('REDIRECTING TO /');
+    } catch (error) {
+        console.error('Error deleting the session:', error);
+    }
+}
+
+export const deleteUserAllSessions = async () => {
+
+    try {
+        await account.deleteSessions();
+        console.log('All sessions deleted successfully.');
+
         console.log('REDIRECTING TO /');
     } catch (error) {
         console.error('Error deleting the session:', error);

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useOutletContext } from 'react-router-dom';
+import { useUserInfo } from '../../../lib/hooks/useUserInfo.js';
 import { Avatar } from '../../../components/User/Settings/Avatar.jsx';
 import { Info } from '../../../components/User/Settings/Info.jsx';
 import { UserPassword } from '../../../components/User/Settings/UserPassword.jsx';

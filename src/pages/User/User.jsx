@@ -11,6 +11,7 @@ const User = () => {
 
     const {
         isLoggedIn, setIsLoggedIn,
+        sessionId, setSessionId,
         userId, setUserId,
         userEmail, setUserEmail,
         username, setUsername,
@@ -64,6 +65,7 @@ const User = () => {
                 username={username}
                 removeSession={removeSession}
                 setIsLoggedIn={setIsLoggedIn}
+                setSessionId={setSessionId}
                 accountType={accountType}
                 setIsAppLoading={setIsAppLoading}
                 setIsSignOutInProgress={setIsSignOutInProgress}
@@ -81,6 +83,7 @@ const User = () => {
             >
                 <Outlet context={{
                     isLoggedIn, setIsLoggedIn,
+                    sessionId, setSessionId,
                     userId, setUserId,
                     userEmail, setUserEmail,
                     username, setUsername,
@@ -96,7 +99,8 @@ const User = () => {
                     isFetchingUserinContextLoading,
                     user, setUser,
                     isSessionInProgress, setIsSessionInProgress,
-                    isLogInBtnClicked, setIsLogInBtnClicked
+                    isLogInBtnClicked, setIsLogInBtnClicked,
+                    setIsSignOutInProgress
                 }} />
             </Container>
         </Container>

@@ -291,12 +291,28 @@
     overflow-y: auto;
 }
 
+.settings__sign-out-btn,
 .settings__delete-notices-btn,
 .settings__delete-account-btn {
     max-width: fit-content;
     box-shadow: none !important;
     height: 36px;
     border-radius: var(--main-rounded-corner) !important;
+}
+
+.settings__sign-out-btn {
+    background-color: transparent;
+    color: var(--main-text-color);
+    border-color: var(--main-accent-color);
+    font-size: var(--pc-font-size) !important;
+}
+
+.settings__sign-out-btn:active,
+.settings__sign-out-btn:focus,
+.settings__sign-out-btn:hover {
+    background-color: var(--main-accent-color-hover) !important;
+    border-color: var(--main-accent-color-hover) !important;
+    color: var(--main-text-color) !important;
 }
 
 .settings__delete-notices-btn.cancel,
@@ -322,7 +338,6 @@
 .settings__delete-notices-btn.cancel:focus,
 .settings__delete-account-btn.cancel:focus {
     background-color: var(--main-accent-color-hover) !important;
-
 }
 
 
@@ -402,7 +417,8 @@
     .settings__update-interests-btn,
     .settings__load-blocked-btn,
     .settings__delete-notices-btn,
-    .settings__delete-account-btn {
+    .settings__delete-account-btn,
+    .settings__sign-out-btn {
         font-size: var(--mobile-font-size) !important;
         height: 31px;
         display: flex;

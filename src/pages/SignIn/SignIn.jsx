@@ -11,6 +11,7 @@ const SignIn = () => {
 
     const {
         isLoggedIn,
+        setSessionId,
         setUserId,
         setUserEmail,
         setIsLoggedIn,
@@ -63,6 +64,7 @@ const SignIn = () => {
                 localStorage.setItem('authUserId', userSession.userId);
                 localStorage.setItem('authUserEmail', userSession.providerUid);
 
+                setSessionId(userSession.$id);
                 setUserEmail(userSession.providerUid);
                 setUserId(userSession.userId);
                 setIsLoggedIn(true);

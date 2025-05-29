@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
     getAccount as fetchAccount, createBlock, getBlockedUsersByUser as fetchBlockedUsersByUser, getBlockedUsersByUserByBatch as fetchBlockedUsersByUserByBatch, getUsersBlockingUser as fetchUsersBlockingUser, removeBlockUsingBlockedId, checkIdExistsInAuth, checkEmailExistsInAuth as checkEmailInAuthFromServer, registerAuthUser, getUserById, getUserByIdQuery as fetchUserByIdQuery, getUsersByIdQuery as fetchUsersByIdQuery, deleteAuthUser, createUserSession, getSessionDetails as fetchSessionDetails, deleteUserSession, updateUser, updateUserWebsite as updtUsrWbst, updateAuthUser, deleteUser, getUserByUsername as fetchUserByUsername, getAllUsersByString as fetchAllUsersByString, deleteAllNotices, deleteAllSentReactions, removeAllSavesByUser, removeAllLikesByUser, removeAllFollows, removeAllFollowed, getUsersDocument, createFollow, unfollow, getUserFollowingsById, getUserFollowersById, followedByUserCount, followingTheUserCount, getPersonalFeedAccounts as fetchPersonalFeedAccounts, createPassocde, updatePassocde, getPassocdeByOrganizationId as fetchPassocdeByOrganizationId, createUserReport, getFollowStatus as fetchFollowStatus, getFollowingStatus as fetchFollowingStatus, isUserBlockedByOtherUser, isOtherUserBlockedByUser, deletePassocde, updateAuthPassword as changeAuthPassword, checkUsernameExists as doesUsernameExists, removeAllBlocksForBlocker, removeAllBlocksForBlocked, deleteUserInterestsFromDB, getAllLikesByNoticeId, getUserPermissionsByIdQuery, getAllSavesByNoticeId,
-    deleteUserPermissions
+    deleteUserPermissions,
+    deleteUserAllSessions
 } from '../context/dbhandler';
 import { useUserContext } from '../context/UserContext';
 import { useUserAvatar } from './useUserAvatar';
@@ -14,6 +15,7 @@ export const useUserInfo = () => {
         userAvatarId,
         setUsername,
         setIsLoggedIn,
+        setSessionId,
         setUserId,
         setUserEmail,
         setUserWebsite,
@@ -125,6 +127,15 @@ export const useUserInfo = () => {
         }
     }
 
+    const removeAllSessions = async () => {
+        try {
+            const usrSession = await deleteUserAllSessions();
+            return usrSession;
+        } catch (error) {
+            console.error('Error removing session:', error);
+        }
+    }
+
     const checkUsernameExists = async (username) => {
 
         if (!username) {
@@ -204,6 +215,7 @@ export const useUserInfo = () => {
 
     const resetUserContext = () => {
         setIsLoggedIn(false);
+        setSessionId(null);
         setUserId(null);
         setUserEmail(null);
         setUserWebsite(null);
@@ -1008,6 +1020,7 @@ export const useUserInfo = () => {
         registerUser,
         createSession,
         removeSession,
+        removeAllSessions,
         getUserByUsername,
         getAllUsersByString,
         getSessionDetails,

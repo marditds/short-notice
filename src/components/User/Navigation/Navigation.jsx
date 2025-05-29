@@ -13,6 +13,7 @@ export const Navigation = ({
     removeSession,
     accountType,
     setIsLoggedIn,
+    setSessionId,
     setUser,
     setUserId,
     setUserEmail,
@@ -92,6 +93,7 @@ export const Navigation = ({
                     setAccountType('');
                     setUser(null);
                     setIsLoggedIn(false);
+                    setSessionId(null);
 
                     localStorage.clear();
                     console.log('Storage is cleared.');
