@@ -4,13 +4,13 @@ import { Container, Row, Col } from 'react-bootstrap';
 import { GoogleLoginForm } from '../../../components/LoginForm/Google/GoogleLoginForm';
 import { Hero } from '../../../components/PreLogin/Home/Hero';
 import { CallToAction } from '../../../components/PreLogin/Home/CallToAction';
-import { MdOutlinePassword } from "react-icons/md";
-import { BsReply } from "react-icons/bs";
-import { BsPencil } from "react-icons/bs";
-import { BsHandThumbsUp } from "react-icons/bs";
-import { BsFloppy } from "react-icons/bs";
-import { RiTeamFill } from "react-icons/ri";
-import { RiNumber1, RiNumber2, RiNumber3, RiNumber4 } from "react-icons/ri";
+import { MdOutlinePassword } from 'react-icons/md';
+import { BsReply } from 'react-icons/bs';
+import { BsPencil } from 'react-icons/bs';
+import { BsHandThumbsUp } from 'react-icons/bs';
+import { BsFloppy } from 'react-icons/bs';
+import { RiTeamFill } from 'react-icons/ri';
+import { RiNumber1, RiNumber2, RiNumber3, RiNumber4 } from 'react-icons/ri';
 import { screenUtils } from '../../../lib/utils/screenUtils';
 
 
@@ -65,17 +65,17 @@ const Home = () => {
     const organizationPerks = [
         {
             title: 'Private:',
-            description: "Protect updates with passcodes for exclusive access.",
+            description: 'Protect updates with passcodes for exclusive access.',
             icon: <MdOutlinePassword />
         },
         {
             title: 'Effortless Setup:',
-            description: "Leaders create passcodes; group members enter the code.",
+            description: 'Leaders create passcodes; group members enter the code.',
             icon: '✅'
         },
         {
             title: 'Ephemeral by Design:',
-            description: "Notices vanish after the timer ends, requiring no cleanup.",
+            description: 'Notices vanish after the timer ends, requiring no cleanup.',
             icon: '⌚'
         }
     ];
@@ -172,86 +172,100 @@ const Home = () => {
 
                     {/* FEATURES */}
                     <div>
-                        <Row as='ul' className='home__body-features-row list-unstyled'>
-                            <h2>FEATURES</h2>
-                            {features.map((feature, idx) => {
-                                return (
-                                    <Col as='li' key={idx}
-                                        xs={12} md={6} xl={4}
-                                        className='home__body-features-col d-flex align-items-stretch'
-                                    >
-                                        <div className='px-3 py-2 home__body-features-col-div d-flex flex-column justify-content-between h-100'>
-                                            <div className='mt-1 mt-md-3'>
-                                                <p className='mb-0'>
-                                                    <strong>{feature.title}</strong>
-                                                    {feature.description}
-                                                </p>
+                        <section aria-labelledby='features-heading'>
+                            <h2 id='features-heading'>Features</h2>
+                            <Row as='ul' role='list' className='home__body-features-row list-unstyled'>
+                                {features.map((feature, idx) => {
+                                    return (
+                                        <Col as='li' role='listitem' key={idx}
+                                            xs={12} md={6} xl={4}
+                                            className='home__body-features-col d-flex align-items-stretch'
+                                        >
+                                            <div className='px-3 py-2 home__body-features-col-div d-flex flex-column justify-content-between h-100'>
+                                                <div className='mt-1 mt-md-3'>
+                                                    <p className='mb-0'>
+                                                        <strong>{feature.title}</strong>
+                                                        {feature.description}
+                                                    </p>
+                                                </div>
+                                                <div style={{ fontSize: !isExtraSmallScreen && !isSmallScreen ? '24pt' : '15pt' }} className='text-center my-2 my-md-3' aria-hidden='true'>
+                                                    {feature.icon}
+                                                </div>
                                             </div>
-                                            <div style={{ fontSize: !isExtraSmallScreen && !isSmallScreen ? '24pt' : '15pt' }} className='text-center my-2 my-md-3'>{feature.icon}</div>
-                                        </div>
-
-                                    </Col>
-                                )
-                            })}
-                        </Row>
+                                        </Col>
+                                    )
+                                })}
+                            </Row>
+                        </section>
 
                         {/* Organization */}
                         {/* Organization Intro */}
-                        <Row className='home__body-organization-row-into mt-5'>
-                            <Col >
-                                <h4 className='text-center d-flex align-items-start justify-content-center'>
-                                    <i className='bi bi-diagram-3-fill home__body-organization-row-intro-icon me-0 me-lg-3' />
-                                    Designed to streamline communication from higherups to group members.
-                                </h4>
-                                <p className='text-center fw-bold'>Empower your organization with secure and controlled communication. Use passcodes to ensure only authorized members see posts. Perfect for teachers sharing with students or managers updating their group members.</p>
-                            </Col>
-
-                        </Row>
+                        <section className='mt-5' aria-labelledby='organization-intro-heading'>
+                            <h2 id='organization-intro-heading' className='visually-hidden'>Organization Communication</h2>
+                            <Row className='home__body-organization-row-into mt-5'>
+                                <Col >
+                                    <h4 className='text-center d-flex align-items-start justify-content-center'>
+                                        <i className='bi bi-diagram-3-fill home__body-organization-row-intro-icon me-0 me-lg-3' aria-hidden='true' />
+                                        Designed to streamline communication from higherups to group members.
+                                    </h4>
+                                    <p className='text-center fw-bold'>Empower your organization with secure and controlled communication. Use passcodes to ensure only authorized members see posts. Perfect for teachers sharing with students or managers updating their group members.</p>
+                                </Col>
+                            </Row>
+                        </section>
 
                         {/* Organization Perks */}
-                        <Row as='ul' className='home__body-organization-perks-row list-unstyled'>
-                            {organizationPerks.map((perk, idx) => {
-                                return (
-                                    <Col as='li' key={idx}
-                                        xs={12} md={6} xl={4}
-                                        className='home__body-organization-perks-col d-flex align-items-stretch'>
-                                        <div className='home__body-organization-perks-col-div px-3 py-2 d-flex flex-column justify-content-between h-100'>
-                                            <div className='mt-1 mt-md-3'>
-                                                <p className='mb-0'>
-                                                    <strong>{perk.title} </strong>{perk.description}
-                                                </p>
+                        <section aria-labelledby='organization-perks-heading'>
+                            <h2 id='organization-perks-heading' className='visually-hidden'>Organization Perks</h2>
+                            <Row as='ul' className='home__body-organization-perks-row list-unstyled'>
+                                {organizationPerks.map((perk, idx) => {
+                                    return (
+                                        <Col as='li' role='listitem' key={idx}
+                                            xs={12} md={6} xl={4}
+                                            className='home__body-organization-perks-col d-flex align-items-stretch'>
+                                            <div className='home__body-organization-perks-col-div px-3 py-2 d-flex flex-column justify-content-between h-100'>
+                                                <div className='mt-1 mt-md-3'>
+                                                    <p className='mb-0'>
+                                                        <strong>{perk.title} </strong>{perk.description}
+                                                    </p>
+                                                </div>
+                                                <div style={{ fontSize: !isExtraSmallScreen && !isSmallScreen ? '24pt' : '15pt' }} className='text-center my-2 my-md-3' aria-hidden='true'>
+                                                    {perk.icon}
+                                                </div>
                                             </div>
-                                            <div style={{ fontSize: !isExtraSmallScreen && !isSmallScreen ? '24pt' : '15pt' }} className='text-center my-2 my-md-3'>{perk.icon}</div>
-                                        </div>
-                                    </Col>
-                                )
-                            })}
-                        </Row>
+                                        </Col>
+                                    )
+                                })}
+                            </Row>
+                        </section>
 
                         {/* Organization Example */}
-                        <Row as="ul" className="home__body-organization-examples-row list-unstyled">
-                            {organizationExamples.map((example, idx) => (
-                                <Col
-                                    key={idx}
-                                    as="li"
-                                    xs={12} md={6}
-                                    className="home__body-organization-example-col d-flex align-items-stretch"
-                                >
-                                    <div className='home__body-organization-example-col-div px-3 py-2 d-flex flex-column justify-content-between h-100'>
-                                        <div className='mt-1 mt-md-3'>
-                                            <p className='mb-0'>
-                                                <strong>{example.title}</strong>
-                                                <span>{example.description}</span>
-                                                {example.subtext && <sub><br />{example.subtext}</sub>}
-                                            </p>
+                        <section aria-labelledby='organization-examples-heading'>
+                            <h2 id='organization-examples-heading' className='visually-hidden'>Examples</h2>
+                            <Row as='ul' className='home__body-organization-examples-row list-unstyled'>
+                                {organizationExamples.map((example, idx) => (
+                                    <Col
+                                        key={idx}
+                                        as='li'
+                                        role='listitem'
+                                        xs={12} md={6}
+                                        className='home__body-organization-example-col d-flex align-items-stretch'
+                                    >
+                                        <div className='home__body-organization-example-col-div px-3 py-2 d-flex flex-column justify-content-between h-100'>
+                                            <div className='mt-1 mt-md-3'>
+                                                <p className='mb-0'>
+                                                    <strong>{example.title}</strong>
+                                                    <span>{example.description}</span>
+                                                    {example.subtext && <sub><br />{example.subtext}</sub>}
+                                                </p>
+                                            </div>
+                                            <div style={{ fontSize: !isExtraSmallScreen && !isSmallScreen ? '24pt' : '15pt' }} className='text-center my-2 my-md-3' aria-hidden='true'>
+                                                {example.icon}
+                                            </div>
                                         </div>
-                                        <div style={{ fontSize: !isExtraSmallScreen && !isSmallScreen ? '24pt' : '15pt' }} className='text-center my-2 my-md-3'>
-                                            {example.icon}
-                                        </div>
-                                    </div>
-                                </Col>
-                            ))}
-                        </Row>
+                                    </Col>
+                                ))}
+                            </Row>
+                        </section>
                     </div>
 
                     {/* CTA */}
@@ -261,27 +275,29 @@ const Home = () => {
 
                     {/* HOW IT WORKS */}
                     <div>
-                        <Row as='ol' className='home__body-how-row list-unstyled mb-0'>
-                            <h2>HOW IT WORKS</h2>
-                            {steps.map((step, idx) => {
-                                return (
-                                    <Col as='li' key={idx}
-                                        xs={6} md={3}
-                                        className='home__body-how-col d-flex align-items-stretch'>
-                                        <div className='home__body-how-col-div px-3 py-2 d-flex flex-column justify-content-between h-100'>
-                                            <div className='text-center mt-3'>
-                                                {step.icon}
+                        <section aria-labelledby="how-it-works-heading" className="my-5">
+                            <h2 id="how-it-works-heading">How It Works</h2>
+                            <Row as='ol' role="list" className='home__body-how-row list-unstyled mb-0'>
+                                {steps.map((step, idx) => {
+                                    return (
+                                        <Col as='li' role="listitem" key={idx}
+                                            xs={6} md={3}
+                                            className='home__body-how-col d-flex align-items-stretch'>
+                                            <div className='home__body-how-col-div px-3 py-2 d-flex flex-column justify-content-between h-100'>
+                                                <div className='text-center mt-3' aria-hidden="true">
+                                                    {step.icon}
+                                                </div>
+                                                <div className='my-3'>
+                                                    <p className='mb-0'>
+                                                        <strong>{step.title} </strong>{step.description}
+                                                    </p>
+                                                </div>
                                             </div>
-                                            <div className='my-3'>
-                                                <p className='mb-0'>
-                                                    <strong>{step.title} </strong>{step.description}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </Col>
-                                )
-                            })}
-                        </Row>
+                                        </Col>
+                                    )
+                                })}
+                            </Row>
+                        </section>
                     </div>
 
                     {/* CTA */}
@@ -291,21 +307,27 @@ const Home = () => {
 
                     {/* FAQ */}
                     <div>
-                        <Row as='section' aria-labelledby='faq-title' className='faq-section'>
-                            <Col xs={12}>
-                                <h2 id='faq-title' className={!isSmallScreen ? 'mb-4' : 'mb-2'}>Frequently Asked Questions</h2>
-                            </Col>
-                            {faq.map((item, index) => (
-                                <Col as='details' xs={12} key={index} className='mb-3'>
-
-                                    <summary className='fw-bold'>
-                                        {item.question}
-                                    </summary>
-                                    <p className='mt-2'>{item.answer}</p>
+                        <section aria-labelledby="faq-title" className="faq-section my-5">
+                            <Row as='section' aria-labelledby='faq-title' className='faq-section'>
+                                <Col xs={12}>
+                                    <h2 id='faq-title' className={!isSmallScreen ? 'mb-4' : 'mb-2'}>Frequently Asked Questions</h2>
                                 </Col>
-                            ))}
-                        </Row>
+                                {faq.map((item, index) => (
+                                    <Col xs={12} key={index} className='mb-3'>
+                                        <details>
+                                            <summary className='fw-bold' aria-controls={`faq-answer-${index}`} aria-expanded="false">
+                                                {item.question}
+                                            </summary>
+                                            <div id={`faq-answer-${index}`} className="mt-2">
+                                                <p className="mb-0">{item.answer}</p>
+                                            </div>
+                                        </details>
+                                    </Col>
+                                ))}
+                            </Row>
+                        </section>
                     </div>
+
                 </Container>
             </main>
         </div>

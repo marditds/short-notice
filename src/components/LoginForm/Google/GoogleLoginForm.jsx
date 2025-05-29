@@ -18,16 +18,19 @@ export const GoogleLoginForm = ({ subtitle }) => {
     }
 
     return (
-        <Row className='login__btn d-flex flex-sm-column justify-content-center align-items-center'>
+        <Row className='login__btn d-flex flex-sm-column justify-content-center align-items-center' role="group"
+            aria-label="Sign-up actions">
 
             <Col className='d-flex justify-content-center'>
-                <Button as={Link} to={'signup'} className='signup__btn'>
+                <Button as={Link} to={'signup'} className='signup__btn' aria-label="Sign up for an account">
                     Sign Up
                 </Button>
             </Col>
             <Col className='d-flex justify-content-center'>
                 <div className='signup__btn--sub--div'>
-                    <p className='signup__btn--sub mb-0'>{subtitle}</p>
+                    <p className='signup__btn--sub mb-0 mt-1' id="signup-subtext">
+                        {subtitle}
+                    </p>
                 </div>
             </Col>
             {/* <Button onClick={handleOnGoogleLoginClick} className='p-0 border-0 d-block mx-auto signup__btn' aria-label='Sign in with Google'>

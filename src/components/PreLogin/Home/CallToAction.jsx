@@ -25,15 +25,14 @@ export const CallToAction = ({ sectionName, children }) => {
     };
 
     return (
-        <Row>
+        <Row as="section" aria-labelledby="cta-heading">
             <Col className='cta-col'>
                 <div className='cta-col-div px-3 px-sm-5 py-3 py-md-5 d-sm-flex justify-content-evenly align-items-center '>
                     <div>
                         <h2 className='text-center text-sm-start mb-0'>{joinNowTexts[sectionName] || 'Join now and discover more!'}</h2>
                     </div>
-                    {/* </Col>
-                    <Col> */}
-                    <div className='d-flex justify-content-center mt-2 mt-sm-0 '>
+
+                    <div className='d-flex justify-content-center mt-2 mt-sm-0' role="group" aria-label="Call to Action Buttons">
                         {children}
                     </div>
                 </div>
