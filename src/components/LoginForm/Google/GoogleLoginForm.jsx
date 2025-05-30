@@ -1,21 +1,19 @@
-import React from 'react';
-import { googleOAuthLogin } from '../../../lib/context/dbhandler';
+// import { googleOAuthLogin } from '../../../lib/context/dbhandler';
+// import { useUserContext } from '../../../lib/context/UserContext';
 import { Link } from 'react-router-dom';
 import { Button, Row, Col } from 'react-bootstrap';
-import { useUserContext } from '../../../lib/context/UserContext';
 import './GoogelLoginForm.css';
-import google_btn from '../../../assets/web_neutral_sq_SI@1x.png';
 
 export const GoogleLoginForm = ({ subtitle }) => {
 
-    const { setIsLogInBtnClicked } = useUserContext();
+    // const { setIsLogInBtnClicked } = useUserContext();
 
-    const handleOnGoogleLoginClick = () => {
-        console.log('handleOnGoogleLoginClick is clicked.');
+    // const handleOnGoogleLoginClick = () => {
+    //     console.log('handleOnGoogleLoginClick is clicked.');
 
-        setIsLogInBtnClicked(true);
-        googleOAuthLogin();
-    }
+    //     setIsLogInBtnClicked(true);
+    //     googleOAuthLogin();
+    // }
 
     return (
         <Row className='login__btn d-flex flex-sm-column justify-content-center align-items-center' role="group"
