@@ -36,8 +36,8 @@ export const HelpCenterOffcanvas = ({ sectionTitleByPath, helpCenterTitlesPath, 
                 aria-labelledby='offcanvas-title'
             >
                 <Offcanvas.Body className='help-center__offcanvas-body'>
-                    <section aria-labelledby='offcanvas-title' className='d-flex align-items-center justify-content-center flex-column'>
-                        <h6 id='offcanvas-title' className='mb-3 text-right'>
+                    <section aria-labelledby='offcanvas-title' className='d-flex  flex-column justify-content-center align-items-start'>
+                        <h6 id='offcanvas-title' className='mb-3'>
                             {helpCenterTitlesPath && sectionTitleByPath[helpCenterTitlesPath]}
                         </h6>
                         <ListGroup as='ul' className='help__center-titles-list'>

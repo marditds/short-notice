@@ -34,7 +34,7 @@
     color: var(--main-text-color-selected);
 }
 
-.help__center-titles-list {
+.help__center-titles-list-section {
     min-width: fit-content;
 }
 
@@ -51,6 +51,10 @@
     color: var(--main-text-color);
     text-decoration: none;
     transition: var(--main-transition-speed);
+}
+
+.help__center-titles-list-item>a {
+    width: fit-content !important;
 }
 
 .help__center-titles-list>.help__center-titles-list-item>a:hover {
@@ -85,7 +89,7 @@
     border-color: var(--main-accent-color) !important;
     font-size: 18px !important;
     transition: var(--main-transition-speed) !important;
-
+    max-height: 61px;
 }
 
 .help-center__title-switch-btn:hover,
