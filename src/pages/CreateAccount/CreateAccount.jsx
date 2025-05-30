@@ -1,24 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { Container, Stack, Row, Col, Form, Button, Alert, Modal } from 'react-bootstrap';
-import { useNavigate, useNavigation } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Container, Stack, Row, Col, Form, Button } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 import { useUserContext } from '../../lib/context/UserContext';
 import { getUserByUsername, getAccount, updateAuthUser } from '../../lib/context/dbhandler';
 import { AccountType } from '../../components/Setup/AccountType';
 import './CreateAccount.css';
-import { keysProvider } from '../../lib/context/keysProvider';
-import ReCAPTCHA from 'react-google-recaptcha';
+// import { keysProvider } from '../../lib/context/keysProvider';
+// import ReCAPTCHA from 'react-google-recaptcha';
 import { CreateUsername } from '../../components/Setup/CreateUsername';
 import { SetPasscode } from '../../components/Setup/SetPasscode';
 import { useUserInfo } from '../../lib/hooks/useUserInfo';
 import { forbiddenUsrnms, usrnmMaxLngth } from '../../lib/utils/usernameUtils';
 import { LoadingSpinner } from '../../components/Loading/LoadingSpinner';
-import TOSList from '../../components/Legal/TOSList';
-import CommunityGuidelinesList from '../../components/Support/CommunityGuidelinesList';
-import PrivacyList from '../../components/Legal/PrivacyList';
 import { useLogin } from '../../lib/hooks/useLogin';
-import { SignFormLayout } from '../../components/LoginForm/SignFormLayout';
 import { screenUtils } from '../../lib/utils/screenUtils';
-
 
 const CreateAccount = () => {
 
@@ -28,9 +23,9 @@ const CreateAccount = () => {
         setIsLoggedIn,
         userId, setUserId,
         username, setUsername,
-        userEmail, setUserEmail,
-        givenName, setGivenName,
+        setUserEmail, setGivenName,
         accountType, setAccountType,
+        userEmail, givenName,
         setHasAccountType,
         setHasUsername
     } = useUserContext();
@@ -112,7 +107,7 @@ const CreateAccount = () => {
         // }
 
         if (forbiddenUsrnms.includes(username)) {
-            setErrorMessage(`The username "${username}" is not allowed. Please choose a different username.`);
+            setErrorMessage(`The username '${username}' is not allowed. Please choose a different username.`);
             return;
         }
 
@@ -177,10 +172,10 @@ const CreateAccount = () => {
 
     // Getting things ready
     if (isSetupCancellationLoading || userEmail === null) {
-        return <div className='min-vh-100'>
+        return <main className='min-vh-100'>
             <Container className='min-vh-100 flex-grow-1'>
                 <Row className='min-vh-100 flex-grow-1  justify-content-center align-items-center'>
-                    <Col className='d-flex justify-content-center align-items-center'>
+                    <Col className='d-flex justify-content-center align-items-center' role='status' aria-live='polite'>
                         <LoadingSpinner classAnun='me-2' />
                         {
                             (userEmail === null) && 'Getting things ready. Hang tight.'
@@ -191,79 +186,96 @@ const CreateAccount = () => {
                     </Col>
                 </Row>
             </Container>
-        </div>
+        </main>
     }
 
     return (
-        <Container
-            className='createUsername__container d-flex justify-content-center align-items-center min-vh-100'
-        >
-            <div className="d-flex flex-column justify-content-evenly align-items-center p-2 p-sm-4 signup-form--bg"
-                style={{ width: '696px' }}
+        <main>
+            <Container
+                className='createUsername__container d-flex justify-content-center align-items-center min-vh-100'
             >
-                <Form
-                    onSubmit={(e) => {
-                        e.preventDefault();
-                        handleDoneClickCreateAccount();
-                    }}
-                    className={`my-5 my-sm-0 ${isSmallScreen || isExtraSmallScreen ? 'w-100' : ''}`}>
-                    <Stack gap={3} className=''>
+                <div className='d-flex flex-column justify-content-evenly align-items-center p-2 p-sm-4 signup-form--bg'
+                    style={{ width: '696px' }}
+                >
+                    <h2 id='create-account-heading' className='visually-hidden'>
+                        Create Account
+                    </h2>
+                    <Form
+                        onSubmit={(e) => {
+                            e.preventDefault();
+                            handleDoneClickCreateAccount();
+                        }}
+                        className={`my-5 my-sm-0 ${isSmallScreen || isExtraSmallScreen ? 'w-100' : ''}`}
+                        aria-labelledby='create-account-heading'
+                    >
+                        <Stack gap={3}>
 
-                        <AccountType setAccountType={setAccountType} accountType={accountType} />
+                            {/* Account type */}
+                            <AccountType setAccountType={setAccountType} accountType={accountType} />
 
-                        {/* Username and Password */}
-                        {
-                            (accountType !== '' && accountType !== undefined) &&
-                            <Row xs={1} sm={2} className='align-items-start bbbbbb'>
-                                <Col className=''>
-                                    <CreateUsername accountType={accountType} username={username} onUsernameChange={onUsernameChange} />
-                                </Col>
-                                {
-                                    accountType === 'organization' &&
+                            {/* Username and passcode */}
+                            {
+                                (accountType !== '' && accountType !== undefined) &&
+                                <Row xs={1} sm={2} className='align-items-start'>
                                     <Col>
-                                        <SetPasscode accountType={accountType} passcode={passcode} onPasscodeChange={onPasscodeChange} />
+                                        <fieldset aria-labelledby='username-section' className='border-0 p-0 m-0'>
+                                            <legend id='username-section' className='visually-hidden'>
+                                                Username section
+                                            </legend>
+                                            <CreateUsername accountType={accountType} username={username} onUsernameChange={onUsernameChange} />
+                                        </fieldset>
                                     </Col>
-                                }
-                            </Row>
-                        }
+                                    {
+                                        accountType === 'organization' &&
+                                        <Col>
+                                            <fieldset aria-labelledby='passcode-section' className='border-0 p-0 m-0'>
+                                                <legend id='passcode-section' className='visually-hidden'>
+                                                    Passcode section
+                                                </legend>
+                                                <SetPasscode accountType={accountType} passcode={passcode} onPasscodeChange={onPasscodeChange} />
+                                            </fieldset>
+                                        </Col>
+                                    }
+                                </Row>
+                            }
 
-                        {/* Create Account Buttons  */}
-                        <div className='mb-sm-0 d-flex justify-content-between justify-content-sm-end'>
+                            {/* Create Account Buttons  */}
+                            <div className='mb-sm-0 d-flex justify-content-between justify-content-sm-end'>
+                                <Button
+                                    type='button'
+                                    onClick={async () => {
+                                        await cancelAccountSetup(userId);
+                                    }}
+                                    className='createAccount__btn'>
+                                    Cancel
+                                </Button>
 
-                            <Button
-                                type='button'
-                                onClick={async () => {
-                                    await cancelAccountSetup(userId);
-                                }}
-                                className='createAccount__btn'>
-                                Cancel
-                            </Button>
+                                <Button
+                                    type='submit'
+                                    disabled={!username || username.trim() === '' || username.includes(' ') || username.length > usrnmMaxLngth || (accountType === 'organization' && passcode.length < 6) || !accountType || isHandleDoneClickLoading}
+                                    className='createAccount__btn  ms-sm-2'
+                                    aria-live='polite'
+                                >
+                                    {
+                                        (isSetUserLoading || isHandleDoneClickLoading) ?
+                                            <LoadingSpinner /> :
+                                            'Done'
+                                    }
+                                </Button>
 
-                            <Button
-                                type='submit'
-                                disabled={!username || username.trim() === '' || username.includes(' ') || username.length > usrnmMaxLngth || (accountType === 'organization' && passcode.length < 6) || !accountType || isHandleDoneClickLoading}
-                                className='createAccount__btn  ms-sm-2'
-                            >
-                                {
-                                    (isSetUserLoading || isHandleDoneClickLoading) ?
-                                        <LoadingSpinner /> :
-                                        'Done'
-                                }
-                            </Button>
+                            </div>
+                            {
+                                errorMessage &&
+                                <Form.Text role='alert' aria-live='assertive' style={{ color: 'var(--main-caution-color)' }}>
+                                    {errorMessage}
+                                </Form.Text>
+                            }
 
-                        </div>
-                        {
-                            errorMessage &&
-                            <Form.Text style={{ color: 'var(--main-caution-color)' }}>
-                                {errorMessage}
-                            </Form.Text>
-                        }
-
-                    </Stack>
-                </Form>
-            </div>
-        </Container>
-
+                        </Stack>
+                    </Form>
+                </div>
+            </Container>
+        </main>
     )
 };
 

@@ -130,4 +130,8 @@ a:hover {
         font-size: var(--mobile-font-size)
     }
 
+    .heading-h5-style {
+        font-size: var(--mobile-h5-size);
+    }
+
 }

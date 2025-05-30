@@ -9,7 +9,7 @@ export const CreateUsername = ({ accountType, username, onUsernameChange }) => {
     return (
         <Row>
             <Form.Group controlId='user__username--field'>
-                <Form.Label className='mb-0'>
+                <Form.Label className='mb-0' aria-live='polite'>
                     {
                         accountType === '' && 'Please select an account type'
                     }
@@ -23,74 +23,73 @@ export const CreateUsername = ({ accountType, username, onUsernameChange }) => {
                         accountType === 'organization' && 'Enter the name of your organization/group.'
                     }
                 </Form.Label>
-                <div
-                // className={((accountType === 'personal' || accountType === 'business') && !isExtraSmallScreen) ? 'd-flex' : ''}
-                >
-                    <Form.Control
-                        type='username'
-                        placeholder={
+
+                <Form.Control
+                    type='text'
+                    placeholder={
+                        accountType === ''
+                            ? ''
+                            : (
+                                (accountType === 'personal' && 'username') ||
+                                (accountType === 'business' && 'business name') ||
+                                (accountType === 'organization' && 'organization/group name') ||
+                                ''
+                            )
+                    }
+                    value={username || ''}
+                    onChange={onUsernameChange}
+                    disabled={accountType === ''}
+                    className='my-1 my-sm-2 createUsername__username-field'
+                    aria-describedby='username-guidance'
+                />
+
+                <div className='text-muted' id='username-guidance'>
+                    <ul className='mb-0 ps-3'>
+                        {
                             accountType === ''
-                                ? ''
+                                ? <li>
+                                    Your account name must be unique
+                                </li>
                                 : (
-                                    (accountType === 'personal' && 'username') ||
-                                    (accountType === 'business' && 'business name') ||
-                                    (accountType === 'organization' && 'organization/group name') ||
-                                    ''
+                                    (accountType === 'personal' &&
+                                        <>
+                                            <li>
+                                                Your username must be unique.
+                                            </li>
+                                            <li>
+                                                Your usernane must not exceed 16 characters.
+                                            </li>
+                                            <li>
+                                                Your usernane can only include letters and numbers.
+                                            </li>
+                                        </>
+                                    ) ||
+                                    (accountType === 'business' &&
+                                        <>
+                                            <li>
+                                                Your business name must be unique.</li>
+                                            <li>
+                                                Your business name must not exceed 16 characters.
+                                            </li>
+                                            <li>
+                                                Your business name can only include letters and numbers.
+                                            </li>
+                                        </>
+                                    ) ||
+                                    (accountType === 'organization' &&
+                                        <>
+                                            <li>Your organization's name must be unique.</li>
+                                            <li>
+                                                Your organization's name must not exceed 16 characters.
+                                            </li>
+                                            <li>
+                                                Your organization's name can only include letters and numbers.
+                                            </li>
+                                        </>
+                                    )
                                 )
                         }
-                        value={username || ''}
-                        onChange={onUsernameChange}
-                        disabled={accountType === ''}
-                        className='my-1 my-sm-2 createUsername__username-field'
-                    />
-                    <Form.Text className='text-muted'>
-                        <ul className='mb-0 ps-3'>
-                            {
-                                accountType === ''
-                                    ? <li>
-                                        Your account name must be unique
-                                    </li>
-                                    : (
-                                        (accountType === 'personal' &&
-                                            <>
-                                                <li>
-                                                    Your username must be unique.
-                                                </li>
-                                                <li>
-                                                    Your usernane must not exceed 16 characters.
-                                                </li>
-                                                <li>
-                                                    Your usernane can only include letters and numbers.
-                                                </li>
-                                            </>
-                                        ) ||
-                                        (accountType === 'business' &&
-                                            <>
-                                                <li>
-                                                    Your business name must be unique.</li>
-                                                <li>
-                                                    Your business name must not exceed 16 characters.
-                                                </li>
-                                                <li>
-                                                    Your business name can only include letters and numbers.
-                                                </li>
-                                            </>
-                                        ) ||
-                                        (accountType === 'organization' &&
-                                            <>
-                                                <li>Your organization's name must be unique.</li>
-                                                <li>
-                                                    Your organization's name must not exceed 16 characters.
-                                                </li>
-                                                <li>
-                                                    Your organization's name can only include letters and numbers.
-                                                </li>
-                                            </>
-                                        )
-                                    )
-                            }
-                        </ul>
-                    </Form.Text>
+                    </ul>
                 </div>
             </Form.Group>
         </Row>
