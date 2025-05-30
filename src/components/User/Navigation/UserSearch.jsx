@@ -130,16 +130,16 @@ export const UserSearch = ({ username }) => {
     const handleOnKeyDown = (e) => {
         if (
             !e.key.match(/^[a-zA-Z0-9]$/) &&
-            e.key !== "Backspace" &&
-            e.key !== "Delete" &&
-            e.key !== "ArrowLeft" &&
-            e.key !== "ArrowRight" &&
-            e.key !== "Tab"
+            e.key !== 'Backspace' &&
+            e.key !== 'Delete' &&
+            e.key !== 'ArrowLeft' &&
+            e.key !== 'ArrowRight' &&
+            e.key !== 'Tab'
         ) {
             e.preventDefault();
         }
 
-        if (e.key === "Enter") {
+        if (e.key === 'Enter') {
             e.preventDefault();
             console.log(e.key)
             if (srchUsrmInUI !== '') {
@@ -151,7 +151,7 @@ export const UserSearch = ({ username }) => {
             }
         }
 
-        if (e.key === "Escape") {
+        if (e.key === 'Escape') {
             handleCloseSeachUsersModal();
         }
     }
@@ -180,45 +180,52 @@ export const UserSearch = ({ username }) => {
                 show={show}
                 handleCloseUserSearchModalFunction={handleCloseSeachUsersModal}
                 modalHeaderContent={<>
-                    <Modal.Title>
+                    <Modal.Title id='userSearchModalTitle'>
                         {isResultLoading ?
-                            `Looking for "${usrnmPlaceholher}"...`
+                            `Looking for '${usrnmPlaceholher}'...`
                             :
                             usersResult.length > 0 ?
-                                `Results for "${usrnmPlaceholher}"`
+                                `Results for '${usrnmPlaceholher}'`
                                 :
                                 'Search Username'
                         }
                     </Modal.Title>
                     <Button
                         className='ms-auto p-0 tools__search--results-modal-close-btn'
-                        onClick={handleCloseSeachUsersModal}>
-                        <i className='bi bi-x-square' />
+                        onClick={handleCloseSeachUsersModal}
+                        aria-label='Close user search modal'
+                    >
+                        <i className='bi bi-x-square' aria-hidden='true' />
                     </Button>
                 </>}
+                aria-labelledby='userSearchModalTitle'
+                aria-modal='true'
+                role='dialog'
             >
                 {/* Modal Body */}
                 <div className='d-flex'>
                     <SearchForm
-                        className={'w-100'}
+                        className='w-100'
                         value={srchUsrmInUI}
                         onChange={onNavFieldUserSearchChange}
                         handleOnKeyDown={handleOnKeyDown}
-                        formControlBsClassNames={'w-100 mb-3'}
+                        formControlBsClassNames='w-100 mb-3'
                     />
                     <Button
                         onClick={handleModalSearch}
                         className='ms-2 px-2 tools__search-btn'
                         disabled={srchUsrmInUI === '' ? true : false}
+                        aria-label='Submit username search'
                     >
-                        <i className='bi bi-search' />
+                        <i className='bi bi-search' aria-hidden='true' />
                     </Button>
                 </div>
 
                 <Stack
                     gap={3}
                     direction='horizontal'
-                    className='d-flex flex-wrap justify-content-start'>
+                    className='d-flex flex-wrap justify-content-start'
+                    aria-live='polite'>
                     {isResultLoading ?
                         <div className='d-block mx-auto'>
                             <LoadingSpinner size={20} color={'var(--main-text-color)'} />
@@ -231,20 +238,24 @@ export const UserSearch = ({ username }) => {
                                         key={user.$id}
                                         className='tools__search--search-results-profiles'
                                     >
-                                        <Link to={user.username !== username ? `../user/${user.username}` : `../user/profile`}
+                                        <Link
+                                            to={user.username !== username ? `../user/${user.username}` : `../user/profile`}
                                             className='w-100 d-flex align-items-center justify-content-end'
                                             onClick={handleCloseSeachUsersModal}
+                                            aria-label={`Go to profile of ${user.username}`}
                                         >
                                             {user?.username}
                                             < img src={getAvatarUrl(user.avatar) || defaultAvatar}
-                                                alt="Profile"
+                                                alt={`${user.username}'s avatar`}
                                                 className='d-flex tools__search--search-results-profiles-avatar'
                                             />
                                         </Link>
                                     </div>
                                 )
                                 :
-                                usrnmPlaceholher !== '' ? ('No user found') : null
+                                usrnmPlaceholher !== '' ?
+                                    <p role='alert'>No user found</p>
+                                    : null
                         )
                     }
                 </Stack>
@@ -256,11 +267,12 @@ export const UserSearch = ({ username }) => {
                                 onClick={handleLoadMoreProfiles}
                                 disabled={isLoadingMore || !hasMoreProfiles}
                                 className='w-100 tools__search--results-expand-btn'
+                                aria-label='Load more user profiles'
                             >
                                 {isLoadingMore ?
                                     <LoadingSpinner size={24} color={'var(--main-accent-color)'} />
                                     :
-                                    <i className='bi bi-chevron-down tools__search--results-expand-btn-icon'></i>
+                                    <i className='bi bi-chevron-down tools__search--results-expand-btn-icon' aria-hidden='true' />
                                 }
                             </Button>
                             :

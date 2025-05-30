@@ -124,13 +124,12 @@ export const Navigation = ({
         return 'ms-1';
     })();
 
-
     return (
         <>
             <Nav className='userhome__body--profile--tools w-100 d-flex fixed-top'>
                 <Container fluid className='d-flex'>
                     <Navbar.Brand href='./feed' className='mt-auto mb-auto ms-2 me-2'>
-                        <Image src={snLogo} alt='short_notice_logo' className='navigation__logo' fluid />
+                        <Image src={snLogo} alt='Short Notice Logo' className='navigation__logo' fluid />
                     </Navbar.Brand>
 
                     <UserSearch username={username} />
@@ -142,6 +141,7 @@ export const Navigation = ({
                                 <Button
                                     onClick={() => setShowComposeNoticeModalFunction(true)}
                                     className='navigation__compose-btn d-xl-none d-block my-auto ms-sm-auto ms-2'
+                                    aria-label='Open compose notice modal'
                                 >
                                     <i className='bi bi-plus-square d-flex justify-content-center align-items-center' />
                                 </Button>
@@ -170,7 +170,7 @@ export const Navigation = ({
                     {/* Menu dropdown */}
                     <NavDropdown
                         drop='down'
-                        id="dropdown-basic-button"
+                        id='dropdown-basic-button'
                         className={`my-auto userhome__body--profile--tools--dropdown ${navBtnsSpacing}
                             `}
 

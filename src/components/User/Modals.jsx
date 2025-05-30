@@ -310,13 +310,17 @@ export const ComposeNoticeModal = ({
         <Modal show={showComposeNoticeModalFunction}
             onHide={handleCloseComposeNoticeModalFunction}
             className='notice__compose--modal p-0'
+            aria-labelledby='composeNoticeTitle'
+            aria-modal='true'
+            role='dialog'
         >
             <Modal.Header className='border-bottom-0'>
                 <Modal.Title className='w-100'>
                     Compose Notice
                 </Modal.Title>
-                <Button onClick={handleCloseComposeNoticeModalFunction} className='ms-auto me-0 p-0 notice__compose--close-btn'>
-                    <i className='bi bi-x-square' />
+                <Button onClick={handleCloseComposeNoticeModalFunction} className='ms-auto me-0 p-0 notice__compose--close-btn'
+                    aria-label='Close compose notice modal'>
+                    <i className='bi bi-x-square' aria-hidden='true' />
                 </Button>
             </Modal.Header>
             <Modal.Body className='notice__compose--modal-body py-0'>
@@ -353,6 +357,9 @@ export const UserSearchModal = ({ children, show, handleCloseUserSearchModalFunc
             onHide={handleCloseUserSearchModalFunction}
             style={{ zIndex: '9999999' }}
             className='tools__search--results-modal'
+            aria-labelledby='userSearchModalTitle'
+            aria-modal='true'
+            role='dialog'
         >
             <Modal.Header className='w-100 pb-0'>
                 {modalHeaderContent}
@@ -381,20 +388,20 @@ export const TermsModal = ({ showTermModal, handleCloseTermModal, children }) =>
 
 export const AvatarCropModal = ({ showAvatarCropModal, handleCloseAvatarCropModal, handleSaveCroppedImage, isUploading, loadingSpinner, children }) => {
     return (
-        <Modal show={showAvatarCropModal} onHide={handleCloseAvatarCropModal} className='setting__avatar-crop-modal createAccount__agreement-modal' style={{ zIndex: '9999999' }} aria-labelledby="avatarCropModalLabel">
-            <Modal.Header className="visually-hidden">
-                <h2 id="avatarCropModalLabel">Crop your avatar</h2>
+        <Modal show={showAvatarCropModal} onHide={handleCloseAvatarCropModal} className='setting__avatar-crop-modal createAccount__agreement-modal' style={{ zIndex: '9999999' }} aria-labelledby='avatarCropModalLabel'>
+            <Modal.Header className='visually-hidden'>
+                <h2 id='avatarCropModalLabel'>Crop your avatar</h2>
             </Modal.Header>
             <Modal.Body className='setting__avatar-crop-modal-body createAccount__agreement-modal-body px-2'>
                 {children}
             </Modal.Body>
             <Modal.Footer className='border-top-0 pt-0 user-profile__block--modal-footer'>
 
-                <Button onClick={handleCloseAvatarCropModal} className='setting__avatar-crop-cancel-btn d-flex justify-content-center align-items-center ms-0 me-1' aria-label="Cancel avatar cropping">
+                <Button onClick={handleCloseAvatarCropModal} className='setting__avatar-crop-cancel-btn d-flex justify-content-center align-items-center ms-0 me-1' aria-label='Cancel avatar cropping'>
                     Cancel
                 </Button>
 
-                <Button onClick={handleSaveCroppedImage} className='setting__avatar-crop-save-btn d-flex justify-content-center align-items-center mx-0' aria-label="Save cropped avatar">
+                <Button onClick={handleSaveCroppedImage} className='setting__avatar-crop-save-btn d-flex justify-content-center align-items-center mx-0' aria-label='Save cropped avatar'>
                     {!isUploading ? 'Save' : loadingSpinner}
                 </Button>
 
