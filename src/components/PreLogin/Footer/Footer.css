@@ -2,12 +2,16 @@
     background-color: transparent;
 }
 
+.footer__col {
+    min-width: fit-content !important;
+    padding-left: 0;
+}
+
 .footer__container h5,
-.footer__container a {
+.footer__col>ul>li>a {
     color: var(--main-text-color) !important;
     transition: var(--main-transition-speed) !important;
     text-decoration: none;
-
 }
 
 .footer__container a:hover {
@@ -34,6 +38,11 @@ h5 {
 
 .footer__logo {
     width: 149.5px;
+}
+
+.footer__link {
+    color: var(--main-text-color) !important;
+    font-weight: 500;
 }
 
 @media (max-width: 767px) {

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { Container, Row, Col, Image } from 'react-bootstrap';
 import { footerData } from './footerData.js';
@@ -15,115 +14,131 @@ const Footer = () => {
     const copyrightTextBreak = isMediumScreen && footerData.copyright.replace('newLine', '');
 
     return (
-        <Container fluid className='footer__container'>
-            <Container>
-                <Row xs={1} lg={3} xl={6} className='flex-columns mt-5'>
+        <footer role='contentinfo' aria-label='Site footer'>
+            <Container fluid className='footer__container'>
+                <Container>
+                    <Row xs={1} lg={3} xl={6} className='mt-5'>
 
-                    {/* LOGO */}
-                    <Col className='d-flex flex-column footer__col mb-3 mb-lg-0'>
-                        <Link to='/'>
-                            <Image src={snLogo} alt='shortnotice_logo' height='26px'
-                                // width={!isSmallScreen ? 'auto' : '149.5px'} 
-                                className='mb-2 footer__logo' fluid />
-                        </Link>
-                        {
-                            !isMediumScreen ?
-                                <div>
-                                    {copyrightText.map((text, idx) => {
-                                        return (
+                        {/* LOGO */}
+                        <Col className='d-flex flex-column footer__col mb-3 mb-lg-0'>
+                            <Link to='/' aria-label='Homepage'>
+                                <Image
+                                    src={snLogo}
+                                    alt='ShortNotice logo'
+                                    height='26px'
+                                    className='mb-2 footer__logo'
+                                    fluid
+                                />
+                            </Link>
+                            {
+                                !isMediumScreen ? (
+                                    <div>
+                                        {copyrightText.map((text, idx) => (
                                             <p key={idx} className='mb-0'>{text}</p>
-                                        )
-                                    })}
-                                </div>
-                                :
-                                <>
-                                    {copyrightTextBreak}
-                                </>
-                        }
-                    </Col>
-
-                    {/* COMPANY */}
-                    <Col className='footer__col'>
-                        <h4>Company</h4>
-                        {
-                            footerData.company.map((companyData, idx) => {
-                                return (
-                                    <Link key={idx} to={companyData.url}>
-                                        <h6>{companyData.name}</h6>
-                                    </Link>
-
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <>
+                                        {copyrightTextBreak}
+                                    </>
                                 )
-                            })
-                        }
-                    </Col>
+                            }
+                        </Col>
 
-                    {/* EXPLORE */}
-                    <Col className='footer__col'>
-                        <h4>Explore</h4>
-                        {
-                            footerData.explore.map((exploreData, idx) => {
-                                return (
-                                    <Link key={idx} to={exploreData.url}>
-                                        <h6>{exploreData.name}</h6>
-                                    </Link>
-                                )
-                            })
-                        }
-                    </Col>
+                        {/* COMPANY */}
+                        <nav aria-label='Company links' className='footer__col'>
+                            <h4>Company</h4>
+                            <ul className='footer__list ps-0'>
+                                {footerData.company.map((item, idx) => (
+                                    <li key={idx} className='list-unstyled ps-0 mb-1'>
+                                        <Link to={item.url} className='footer__link'>
+                                            {item.name}
+                                        </Link>
+                                    </li>
+                                ))}
+                            </ul>
+                        </nav>
 
-                    {/* LEGAL */}
-                    <Col className='footer__col'>
-                        <h4>Legal</h4>
-                        {
-                            footerData.legal.map((legalData, idx) => {
-                                return (
-                                    <Link key={idx} to={legalData.url}>
-                                        <h6>{legalData.name}</h6>
-                                    </Link>
-                                )
-                            })
-                        }
-                    </Col>
+                        {/* EXPLORE */}
+                        <nav aria-label='Explore links' className='footer__col'>
+                            <h4>Explore</h4>
+                            <ul className='footer__list ps-0'>
+                                {footerData.explore.map((item, idx) => (
+                                    <li key={idx} className='list-unstyled ps-0 mb-1'>
+                                        <Link to={item.url} className='footer__link'>
+                                            {item.name}
+                                        </Link>
+                                    </li>
+                                ))}
+                            </ul>
+                        </nav>
 
-                    {/* SUPPORT */}
-                    <Col className='footer__col'>
-                        <h4>Support</h4>
-                        {
-                            footerData.support.map((supportData, idx) => {
-                                return (
-                                    <Link key={idx} to={supportData.url}>
-                                        <h6>{supportData.name}</h6>
-                                    </Link>
-                                )
-                            })
-                        }
-                    </Col>
+                        {/* LEGAL */}
+                        <nav aria-label='Legal links' className='footer__col'>
+                            <h4>Legal</h4>
+                            <ul className='footer__list ps-0'>
+                                {footerData.legal.map((item, idx) => (
+                                    <li key={idx} className='list-unstyled ps-0 mb-1'>
+                                        <Link to={item.url} className='footer__link'>
+                                            {item.name}
+                                        </Link>
+                                    </li>
+                                ))}
+                            </ul>
+                        </nav>
 
-                    {/* SOCIALS */}
-                    <Col className='footer__col'>
-                        <h4>Socials</h4>
-                        {
-                            footerData.followUs.map((followUsData, idx) => {
-                                return (
-                                    <Link key={idx} to={followUsData.url} target='_blank'>
-                                        <h6>{followUsData.name}</h6>
-                                        {/* <i className={followUsData.icon} /> */}
-                                    </Link>
-                                )
-                            })
-                        }
-                    </Col>
-                </Row>
+                        {/* SUPPORT */}
+                        <nav aria-label='Support links' className='footer__col'>
+                            <h4>Support</h4>
+                            <ul className='footer__list ps-0'>
+                                {footerData.support.map((item, idx) => (
+                                    <li key={idx} className='list-unstyled ps-0 mb-1'>
+                                        <Link to={item.url} className='footer__link'>
+                                            {item.name}
+                                        </Link>
+                                    </li>
+                                ))}
+                            </ul>
+                        </nav>
 
-                {/* COPYRIGHT */}
-                <Row md={12} className='flex-column justify-content-center mt-3 mb-4'>
-                    <Col className='footer__col d-flex justify-content-center'>
-                        <a href={footerData.developer[0].link} target='_blank'>{footerData.developer[0].text}</a>
-                    </Col>
-                </Row>
+                        {/* SOCIALS */}
+                        <nav aria-label='Social media links' className='footer__col'>
+                            <h4>Socials</h4>
+                            <ul className='footer__list ps-0'>
+                                {footerData.followUs.map((item, idx) => (
+                                    <li key={idx} className='list-unstyled ps-0 mb-1'>
+                                        <a
+                                            href={item.url}
+                                            target='_blank'
+                                            rel='noopener noreferrer'
+                                            className='footer__link'
+                                        >
+                                            {item.name}
+                                        </a>
+                                    </li>
+                                ))}
+                            </ul>
+                        </nav>
 
+                    </Row>
+
+                    {/* COPYRIGHT */}
+                    <Row md={12} className='flex-column justify-content-center mt-3 mb-4'>
+                        <Col className='footer__col d-flex justify-content-center'>
+                            <a
+                                href={footerData.developer[0].link}
+                                target='_blank'
+                                rel='noopener noreferrer'
+                                className='footer__link text-decoration-none'
+                            >
+                                {footerData.developer[0].text}
+                            </a>
+                        </Col>
+                    </Row>
+
+                </Container>
             </Container>
-        </Container>
+        </footer>
     )
 }
 
