@@ -1,9 +1,7 @@
 import { Client, Query, Databases } from 'node-appwrite';
 
-// This Appwrite function will be executed every time your function is triggered
 export default async ({ req, res, log, error }) => {
-  // You can use the Appwrite SDK to interact with other services
-  // For this example, we're using the Users service
+
   const client = new Client()
     .setEndpoint(process.env.VITE_ENDPOINT)
     .setProject(process.env.VITE_PROJECT)
@@ -11,22 +9,13 @@ export default async ({ req, res, log, error }) => {
 
   const databases = new Databases(client);
 
-
   try {
-    // log('Request method: ' + req.method);
-    // log('Request headers: ' + JSON.stringify(req.headers));
-    // log('Raw body: ' + req.body);
-    // log('Raw payload: ' + req.payload);
-
-
     const res = await databases.listDocuments(
       process.env.VITE_DATABASE,
       process.env.VITE_REACTIONS_COLLECTION
     )
 
     const reactions = res.documents;
-
-    // log(reactions);
 
     const now = new Date();
 
@@ -35,11 +24,8 @@ export default async ({ req, res, log, error }) => {
       const expiresAt = new Date(reaction.expiresAt);
 
       if (reaction.expiresAt !== null) {
-        // log('reaction.expiresAt:', reaction.expiresAt)
-        if (expiresAt <= now) {
 
-          // log('FOUND AN EXPIRED REACTION!', reaction.content);
-          // log('reaction.expiresAt:', reaction.expiresAt)
+        if (expiresAt <= now) {
 
           const [likesRes, savesRes] = await Promise.all([
             databases.listDocuments(
@@ -88,19 +74,10 @@ export default async ({ req, res, log, error }) => {
 
       }
     }
-    // Log messages and errors to the Appwrite Console
-    // These logs won't be seen by your end users
 
   } catch (err) {
     console.error("Error deleting expired notices:", error);
   }
-
-  // The req object contains the request data
-  // if (req.path === "/ping") {
-  // Use res object to respond with text(), json(), or binary()
-  // Don't forget to return a response!
-  // return res.text("Pong");
-  // }
 
   return res.json({
     motto: "Build like a team of hundreds_",
@@ -108,4 +85,4 @@ export default async ({ req, res, log, error }) => {
     connect: "https://appwrite.io/discord",
     getInspired: "https://builtwith.appwrite.io",
   });
-};
+}; 
