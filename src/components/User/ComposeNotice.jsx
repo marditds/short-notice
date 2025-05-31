@@ -133,6 +133,10 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
     }, []);
 
     useEffect(() => {
+        console.log('tenorApiKey', tenorApiKey);
+    }, [tenorApiKey]);
+
+    useEffect(() => {
         console.log('noticeUrl', noticeUrl);
     }, [noticeUrl])
 
