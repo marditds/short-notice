@@ -1,4 +1,4 @@
-import { Client, Storage, Account, Databases, ID, Query, Permission, Role, Functions } from 'appwrite';
+import { Client, Storage, Account, Databases, ID, Query, Functions } from 'appwrite';
 import { dbFunctionKeysProvider } from './keysProvider';
 
 export const endpointEnv = import.meta.env.VITE_ENDPOINT;
@@ -8,22 +8,14 @@ const client = new Client()
     .setEndpoint(endpointEnv)
     .setProject(projectEnv);
 
-console.log('client - dbhandler.js', client);
-
 export const account = new Account(client);
 
-console.log('account - dbhandler.js', account);
-
 const functions = new Functions(client);
-
-console.log('functions - dbhandler.js', functions);
 
 export default client;
 
 const storage = new Storage(client);
 export const databases = new Databases(client);
-
-console.log('databases - dbhandler.js', databases);
 
 const dbEnv = import.meta.env.VITE_DATABASE;
 const usersCollEnv = import.meta.env.VITE_USERS_COLLECTION;
@@ -645,16 +637,9 @@ export const getSession = async () => {
 }
 
 export const deleteUserSession = async () => {
-
-    // const currentSession = await account.getSession('current');
-
-    // console.log('currentSession', currentSession);
-
     try {
-        // if (sessionId) {
         await account.deleteSession('current');
         console.log('Session deleted successfully.');
-        // }
         console.log('REDIRECTING TO /');
     } catch (error) {
         console.error('Error deleting the session:', error);
