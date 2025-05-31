@@ -21,15 +21,13 @@ export const keysProvider = (key, setFunction) => {
         .catch((err) => console.error(`Error fetching ${key} tokens:`, err));
 };
 
-
 // for dbhandler use only
 export const dbFunctionKeysProvider = async (key) => {
 
     if (import.meta.env.DEV) {
         const localKeyMap = {
             user_auth_function: "VITE_USER_AUTH_FUNCTION_ID",
-            user_delete_function: "VITE_USER_DELETE_FUNCTION_ID",
-            user_session_function: "VITE_USER_SESSION_FUNCTION_ID",
+            user_delete_function: "VITE_USER_DELETE_FUNCTION_ID"
         };
 
         const localKey = import.meta.env[localKeyMap[key]];
