@@ -23,8 +23,6 @@ export default async ({ req, res, log, error }) => {
     const data = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
 
     log('data:', data);
-
-    log('data:', data)
     log('data.$id:', data.$id)
 
 
