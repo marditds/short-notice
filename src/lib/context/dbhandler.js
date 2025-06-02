@@ -108,6 +108,9 @@ export const captchaVerification = async (token) => {
 
         const payload = JSON.stringify({ token });
 
+        console.log('Payload being sent:');
+        console.log(payload);
+
         const res = await functions.createExecution(
             captcha_function_id,
             payload
