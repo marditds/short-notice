@@ -2,7 +2,9 @@ export default async ({ req, res, log, error }) => {
 
     log('token in server side 1:', req.body);
 
-    const token = req.body?.token;
+    const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
+
+    const token = body?.token;
 
     log('token in server side 2:', token);
 
