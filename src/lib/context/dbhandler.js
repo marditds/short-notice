@@ -95,7 +95,7 @@ export const createAuthUser = async (email, password, name) => {
     }
 };
 
-export const captchaVerification = async ({ token }) => {
+export const captchaVerification = async (token) => {
 
     console.log('token in dbhandler:', token);
 
