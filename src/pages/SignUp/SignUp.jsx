@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { createAuthUser, createUserSession } from '../../lib/context/dbhandler';
+import { captchaVerification, createAuthUser, createUserSession } from '../../lib/context/dbhandler';
 import { useUserContext } from '../../lib/context/UserContext';
 import sn_logo from '../../assets/sn_long.png';
 import { keysProvider } from '../../lib/context/keysProvider';
@@ -90,19 +90,23 @@ const SignUp = () => {
     }, [isLoggedIn])
 
 
-    const onCaptchaChange = (value) => {
-
-        if (value || value !== null) {
-            // console.log(value);
+    const onCaptchaChange = async (value) => {
+        if (value) {
             setCaptchaKey(value);
-            setIsCaptchaVerified(true);
-        }
 
-        if (value === null) {
+            const result = await captchaVerification(value);
+
+            if (result?.success) {
+                setIsCaptchaVerified(true);
+            } else {
+                setIsCaptchaVerified(false);
+                alert('reCAPTCHA verification failed.');
+            }
+        } else {
             setIsCaptchaVerified(false);
         }
-
     };
+
 
     const handleTOSCheck = () => {
         setTosCheck(preVal => !preVal)
@@ -195,7 +199,6 @@ const SignUp = () => {
     }
 
     useEffect(() => {
-        // console.log('captchaKey:', captchaKey);
         if (isCaptchaVerified === false) {
             setCaptchaKey(null);
         }

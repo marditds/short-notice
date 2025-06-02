@@ -1,23 +1,34 @@
-import { Client, Users, Query } from 'node-appwrite';
-
-// This Appwrite function will be executed every time your function is triggered
 export default async ({ req, res, log, error }) => {
-    // Initialize the Appwrite client
-    const client = new Client()
-        .setEndpoint(process.env.VITE_ENDPOINT) // Appwrite endpoint
-        .setProject(process.env.VITE_PROJECT) // Project ID
-        .setKey(process.env.SHORT_NOTICE_API_KEYS); // API Key for privileged access
 
-    const users = new Users(client);
+    const token = req.body?.token;
+
+    if (!token) {
+        return res.json({ success: false, message: 'Missing reCAPTCHA token' });
+    }
 
     try {
-        log('Hello from reCaptchaAccess')
+        const secretKey = process.env.CAPTCHA_SECRET_KEY;
 
-        return res.json("reCaptchaAccess function was run.");
+        const verifyResponse = await fetch(
+            'https://www.google.com/recaptcha/api/siteverify',
+            {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `secret=${secretKey}&response=${token}`,
+            }
+        );
+
+        const data = await verifyResponse.json();
+
+        if (!data.success) {
+            return res.json({ success: false, message: 'reCAPTCHA verification failed', errorCodes: data['error-codes'] });
+        }
+
+        log('reCAPTCHA verification passed.');
+        return res.json({ success: true, message: 'reCAPTCHA validated successfully' });
 
     } catch (err) {
-        error("Error occurred: " + err.message);
-        return res.json({ success: false, message: err.message });
+        error('Verification error: ' + err.message);
+        return res.json({ success: false, message: 'Server error', error: err.message });
     }
 };
-

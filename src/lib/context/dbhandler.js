@@ -95,6 +95,38 @@ export const createAuthUser = async (email, password, name) => {
     }
 };
 
+export const captchaVerification = async ({ token }) => {
+    try {
+        const captcha_function_id = await dbFunctionKeysProvider('captcha_function');
+
+        if (!captcha_function_id) {
+            throw new Error('Failed to load function ID');
+        }
+
+        const payload = JSON.stringify({ token });
+
+        const res = await functions.createExecution(
+            captcha_function_id,
+            payload
+        )
+
+        if (res.status === 'completed') {
+            try {
+                const result = JSON.parse(res.responseBody);
+                console.log(result);
+            } catch (parseError) {
+                console.error('Error parsing response:', parseError);
+                return false;
+            }
+        } else {
+            console.error("Failed to complete reCaptcha verification process.");
+        }
+
+    } catch (error) {
+        console.error('Error running reCaptcha verification process:', error);
+    }
+}
+
 export const getAccount = async () => {
     try {
         const accnt = await account.get();
