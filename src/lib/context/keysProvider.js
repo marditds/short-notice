@@ -28,7 +28,8 @@ export const dbFunctionKeysProvider = async (key) => {
         const localKeyMap = {
             user_auth_function: "VITE_USER_AUTH_FUNCTION_ID",
             user_delete_function: "VITE_USER_DELETE_FUNCTION_ID",
-            captcha_function: "VITE_CAPTCHA_FUNCTION_ID"
+            captcha_function: "VITE_CAPTCHA_FUNCTION_ID",
+            gemini_function: "VITE_GEMINI_FUNCTION_ID"
         };
 
         const localKey = import.meta.env[localKeyMap[key]];

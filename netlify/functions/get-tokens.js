@@ -26,6 +26,9 @@ exports.handler = async (event) => {
         case "captcha_function":
             response = { value: process.env.CAPTCHA_FUNCTION_ID || "MISSING_CAPTCHA_FUNCTION_ID" };
             break;
+        case "gemini_function":
+            response = { value: process.env.GEMINI_FUNCTION_ID || "MISSING_GEMINI_FUNCTION_ID" };
+            break;
         default:
             return {
                 statusCode: 400,
