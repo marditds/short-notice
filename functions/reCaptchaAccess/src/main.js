@@ -24,13 +24,12 @@ export default async ({ req, res, log, error }) => {
             }
         );
 
-        log('This is verifyResponse in server-side:', verifyResponse);
-
         const data = await verifyResponse.json();
 
         log('This is data in server-side:', data);
 
         if (!data.success) {
+            log('Verification response data:', data);
             return res.json({ success: false, message: 'reCAPTCHA verification failed', errorCodes: data['error-codes'] });
         }
 
