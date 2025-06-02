@@ -95,7 +95,7 @@ const SignUp = () => {
         console.log('value in SignUp:', value);
 
         if (value) {
-            setCaptchaKey(value);
+            // setCaptchaKey(value);
 
             const result = await captchaVerification(value);
 

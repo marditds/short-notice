@@ -15,8 +15,6 @@ export default async ({ req, res, log, error }) => {
     try {
         const secretKey = process.env.CAPTCHA_SECRET_KEY;
 
-        log('secretKey', secretKey)
-
         const verifyResponse = await fetch(
             'https://www.google.com/recaptcha/api/siteverify',
             {
