@@ -96,6 +96,9 @@ export const createAuthUser = async (email, password, name) => {
 };
 
 export const captchaVerification = async ({ token }) => {
+
+    console.log('token in dbhandler:', token);
+
     try {
         const captcha_function_id = await dbFunctionKeysProvider('captcha_function');
 

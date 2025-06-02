@@ -91,6 +91,9 @@ const SignUp = () => {
 
 
     const onCaptchaChange = async (value) => {
+
+        console.log('value in SignUp:', value);
+
         if (value) {
             setCaptchaKey(value);
 
