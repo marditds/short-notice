@@ -1,6 +1,6 @@
 export default async ({ req, res, log, error }) => {
 
-    log('token in server side 1:', req.body.token);
+    log('token in server side 1:', req.body);
 
     const token = req.body?.token;
 
