@@ -36,7 +36,7 @@ const SignUp = () => {
     const [errorMsg, setErrorMsg] = useState(null);
 
     const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
-    const [captchaKey, setCaptchaKey] = useState(null);
+    // const [captchaKey, setCaptchaKey] = useState(null);
     const [captchaSiteKey, setCaptchaSiteKey] = useState(null);
     const [captchaErrorMessage, setCaptchaErrorMessage] = useState(null);
 
@@ -203,11 +203,11 @@ const SignUp = () => {
         }
     }
 
-    useEffect(() => {
-        if (isCaptchaVerified === false) {
-            setCaptchaKey(null);
-        }
-    }, [captchaKey, isCaptchaVerified])
+    // useEffect(() => {
+    //     if (isCaptchaVerified === false) {
+    //         setCaptchaKey(null);
+    //     }
+    // }, [captchaKey, isCaptchaVerified])
 
     useEffect(() => {
         keysProvider('captcha', setCaptchaSiteKey);
