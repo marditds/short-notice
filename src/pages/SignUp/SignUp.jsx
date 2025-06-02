@@ -99,6 +99,8 @@ const SignUp = () => {
 
             const result = await captchaVerification(value);
 
+            console.log('result in SignUp', result);
+
             if (result?.success) {
                 setIsCaptchaVerified(true);
             } else {
