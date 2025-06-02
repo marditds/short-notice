@@ -110,6 +110,7 @@ export const captchaVerification = async (token) => {
 
         console.log('Payload being sent:');
         console.log(payload);
+        console.log(typeof payload);
 
         const res = await functions.createExecution(
             captcha_function_id,
