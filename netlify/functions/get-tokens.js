@@ -23,6 +23,9 @@ exports.handler = async (event) => {
         case "user_delete_function":
             response = { value: process.env.USER_DELETE_FUNCTION_ID || "MISSING_USER_DELETE_FUNCTION_ID" };
             break;
+        case "captcha_function":
+            response = { value: process.env.CAPTCHA_FUNCTION_ID || "MISSING_CAPTCHA_FUNCTION_ID" };
+            break;
         default:
             return {
                 statusCode: 400,
