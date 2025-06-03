@@ -1,16 +1,17 @@
 import { useState, useEffect } from "react";
 // import { GoogleGenerativeAI } from "@google/generative-ai";
 import { keysProvider } from "../context/keysProvider";
+import { generateNoticeTemplateWithGemini } from "../context/dbhandler";
 
 export const useGemini = () => {
 
-    const [geminiKey, setGeminiKey] = useState(null);
+    // const [geminiKey, setGeminiKey] = useState(null);
 
-    useEffect(() => {
-        keysProvider('gemini', setGeminiKey);
-    }, []);
+    // useEffect(() => {
+    //     keysProvider('gemini', setGeminiKey);
+    // }, []);
 
-    const genAI = new GoogleGenerativeAI(geminiKey);
+    // const genAI = new GoogleGenerativeAI(geminiKey);
 
     // const model = genAI ? genAI.getGenerativeModel({
     //     model: "gemini-2.0-flash",
@@ -26,7 +27,11 @@ export const useGemini = () => {
     // };
 
     const runGemini = async (prompt) => {
-        return 'hello';
+
+        const chatSession = await generateNoticeTemplateWithGemini(prompt);
+
+        console.log('chatSession', chatSession);
+
         // const chatSession = model.startChat({
         //     generationConfig,
         //     history: [],

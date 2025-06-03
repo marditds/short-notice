@@ -760,6 +760,47 @@ export const createNotice = async ({ user_id, text, timestamp, expiresAt, notice
     }
 };
 
+export const generateNoticeTemplateWithGemini = async (prompt) => {
+
+    console.log('This is user prompt:', prompt);
+
+    try {
+
+        const gemini_function_id = await dbFunctionKeysProvider('gemini_function');
+
+        if (!gemini_function_id) {
+            throw new Error('Failed to load function ID');
+        }
+
+        const payload = JSON.stringify({ prompt });
+
+        console.log('Payload being sent:');
+        console.log(payload);
+        console.log(typeof payload);
+
+        const res = await functions.createExecution(
+            gemini_function_id,
+            payload
+        )
+
+        if (res.status === 'completed') {
+            try {
+                const result = JSON.parse(res.responseBody);
+                console.log(result);
+                return result;
+            } catch (parseError) {
+                console.error('Error parsing response:', parseError);
+                return false;
+            }
+        } else {
+            console.error("Failed to complete template generation process.");
+        }
+
+    } catch (error) {
+        console.log('Error generating notice template with Gemini:', error);
+    }
+}
+
 export const getUserNotices = async (user_id, limit, lastId) => {
     try {
         const queries = [
