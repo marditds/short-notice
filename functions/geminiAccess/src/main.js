@@ -7,7 +7,7 @@ export default async ({ req, res, log, error }) => {
     await log('Entering geminiAccess function.');
 
     try {
-        const data = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
+        // const data = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
 
         const ai = new GoogleGenAI({ apiKey: GeminiApiKey });
 
