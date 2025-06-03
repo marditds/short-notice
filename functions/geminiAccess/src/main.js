@@ -2,14 +2,14 @@ import { GoogleGenAI } from '@google/genai';
 
 export default async ({ req, res, log, error }) => {
 
-    const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+    const GeminiApiKey = process.env.GEMINI_API_KEY;
 
-    log('Entering geminiAccess function.')
+    log('Entering geminiAccess function.');
 
     try {
         const data = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
 
-        const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
+        const ai = new GoogleGenAI({ apiKey: GeminiApiKey });
 
         const response = await ai.models.generateContent({
             model: 'gemini-2.0-flash-001',
@@ -26,7 +26,7 @@ export default async ({ req, res, log, error }) => {
 
         log(response.text);
 
-        log('Exiting geminiAccess function.')
+        log('Exiting geminiAccess function.');
 
         return res.json({ message: 'geminiAccess function ran successfully' });
 
