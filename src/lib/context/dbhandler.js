@@ -762,8 +762,6 @@ export const createNotice = async ({ user_id, text, timestamp, expiresAt, notice
 
 export const generateNoticeTemplateWithGemini = async (prompt) => {
 
-    console.log('This is user prompt:', prompt);
-
     try {
 
         const gemini_function_id = await dbFunctionKeysProvider('gemini_function');
@@ -773,10 +771,6 @@ export const generateNoticeTemplateWithGemini = async (prompt) => {
         }
 
         const payload = JSON.stringify({ prompt });
-
-        console.log('Payload being sent:');
-        console.log(payload);
-        console.log(typeof payload);
 
         const res = await functions.createExecution(
             gemini_function_id,

@@ -4,7 +4,6 @@ export const keysProvider = (key, setFunction) => {
     if (import.meta.env.DEV) {
         const localKeyMap = {
             captcha: "VITE_CAPTCHA_SITE_KEY",
-            gemini: "VITE_GEMINI_API_KEY",
             tenor: "VITE_TENOR_API_KEY"
         };
 

@@ -1009,16 +1009,12 @@ export const useNotices = () => {
         try {
             setIsGeminiLoading(true);
 
-            console.log('templateSubject in onGeminiRun', templateSubject);
-
             var geminiResult = '';
 
             if (templateSubject !== null) {
                 var promptTxt = `Generate a template for ${templateSubject} in 300 characters or less. You may include emojis, but they must be within the character limit. Including emojis is optional. Always include placeholder(s) in the text.`;
 
                 geminiResult = await runGemini(promptTxt);
-
-                console.log('geminiRes - useNotices:', geminiResult);
 
                 console.log(typeof (geminiResult));
 
@@ -1036,11 +1032,10 @@ export const useNotices = () => {
     }
 
     const onGeminiRunClick = async (templateSubject, setNoticeText) => {
-        console.log('templateSubject - useNotices.js', templateSubject);
 
-        const aws = await onGeminiRun(templateSubject);
+        const geminiGeneratedText = await onGeminiRun(templateSubject);
 
-        setNoticeText(aws);
+        setNoticeText(geminiGeneratedText);
     }
 
     const hakop = () => {

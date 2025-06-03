@@ -133,10 +133,6 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
     }, []);
 
     useEffect(() => {
-        console.log('tenorApiKey', tenorApiKey);
-    }, [tenorApiKey]);
-
-    useEffect(() => {
         console.log('noticeUrl', noticeUrl);
     }, [noticeUrl])
 
@@ -243,7 +239,6 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
                     {/* AI Button */}
                     <Button className='notice__ai-btn mx-2 py-1 px-2'
                         onClick={() => {
-                            console.log('Button clicked, templateSubject:', templateSubject);
                             onGeminiRunClick(templateSubject);
                         }}
                         disabled={!isTemplateChecked}
