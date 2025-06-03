@@ -32,6 +32,7 @@ export const useGemini = () => {
 
         console.log('chatSession', chatSession);
 
+        return chatSession;
         // const chatSession = model.startChat({
         //     generationConfig,
         //     history: [],
