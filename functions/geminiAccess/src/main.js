@@ -5,6 +5,8 @@ export default async ({ req, res, log, error }) => {
     const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
     try {
+        const data = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
+
         const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
 
 
@@ -22,7 +24,7 @@ export default async ({ req, res, log, error }) => {
                 }
             });
 
-            console.log(response.text);
+            log(response.text);
         }
 
         main();
