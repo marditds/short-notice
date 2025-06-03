@@ -121,6 +121,7 @@ export const captchaVerification = async (token) => {
             try {
                 const result = JSON.parse(res.responseBody);
                 console.log(result);
+                return result;
             } catch (parseError) {
                 console.error('Error parsing response:', parseError);
                 return false;

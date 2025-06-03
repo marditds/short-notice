@@ -36,8 +36,9 @@ const SignUp = () => {
     const [errorMsg, setErrorMsg] = useState(null);
 
     const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
-    // const [captchaKey, setCaptchaKey] = useState(null);
+    const [isCaptchaVerficationLoading, setIsCaptchaVerficationLoading] = useState(false);
     const [captchaSiteKey, setCaptchaSiteKey] = useState(null);
+    const [captchaSuccessMessage, setCaptchaSuccessMessage] = useState(null);
     const [captchaErrorMessage, setCaptchaErrorMessage] = useState(null);
 
     const [tosCheck, setTosCheck] = useState(false);
@@ -89,29 +90,31 @@ const SignUp = () => {
         }
     }, [isLoggedIn])
 
-
     const onCaptchaChange = async (value) => {
 
-        console.log('value in SignUp:', value);
+        setIsCaptchaVerficationLoading(true);
 
         if (value) {
-            // setCaptchaKey(value);
-
             const result = await captchaVerification(value);
-
-            console.log('result in SignUp', result);
 
             if (result?.success) {
                 setIsCaptchaVerified(true);
+                setIsCaptchaVerficationLoading(false);
+                setCaptchaSuccessMessage('reCAPTCHA verification was sucessful.')
+                setCaptchaErrorMessage(null)
             } else {
                 setIsCaptchaVerified(false);
-                alert('reCAPTCHA verification failed.');
+                setCaptchaErrorMessage('reCAPTCHA verification failed. Please try again.');
+                setCaptchaSuccessMessage(null);
+                setIsCaptchaVerficationLoading(false);
             }
         } else {
             setIsCaptchaVerified(false);
+            setIsCaptchaVerficationLoading(false);
+            setCaptchaSuccessMessage(null);
+            setCaptchaErrorMessage('reCAPTCHA verification has either expired or failed. Please try again.');
         }
     };
-
 
     const handleTOSCheck = () => {
         setTosCheck(preVal => !preVal)
@@ -251,10 +254,12 @@ const SignUp = () => {
             submitButtonText="Continue"
             isLoading={isAccountGettingCreated}
             errorMsg={errorMsg}
-            showRecaptcha
+            showRecaptcha='true'
             captchaSiteKey={captchaSiteKey}
+            isCaptchaVerficationLoading={isCaptchaVerficationLoading}
             onCaptchaChange={onCaptchaChange}
             captchaErrorMessage={captchaErrorMessage}
+            captchaSuccessMessage={captchaSuccessMessage}
             agreements={agreements}
             wishValue={easterWish}
             onWishChange={(e) => setEasterWish(e.target.value)}

@@ -20,8 +20,10 @@ export const SignFormLayout = ({
     captchaSiteKey,
     onCaptchaChange,
     captchaErrorMessage,
+    captchaSuccessMessage,
     agreements = [],
     isSubmitDisabled,
+    isCaptchaVerficationLoading,
     alternateRouteText,
     alternateRouteLink,
     wishValue,
@@ -205,15 +207,41 @@ export const SignFormLayout = ({
                             </Col>
                         )}
 
+                        {
+                            isCaptchaVerficationLoading && (
+                                <Col
+                                    className={`mb-3 ${!isExtraSmallScreen && !isSmallScreen && !isMediumScreen
+                                        ? 'd-flex ms-auto'
+                                        : 'd-flex mx-auto'
+                                        }`}
+                                    style={{ maxWidth: maxColWidth }}
+                                >
+                                    <span id='recaptcha-verification-loading'><LoadingSpinner /></span>
+                                </Col>
+                            )
+                        }
+
                         {captchaErrorMessage && (
                             <Col
                                 className={`mb-3 ${!isExtraSmallScreen && !isSmallScreen && !isMediumScreen
                                     ? 'd-flex ms-auto'
                                     : 'd-flex mx-auto'
                                     }`}
-                                style={{ maxWidth: maxColWidth }}
+                                style={{ maxWidth: maxColWidth, color: 'var(--main-caution-color-hover)' }}
                             >
                                 <span role='alert'>{captchaErrorMessage}</span>
+                            </Col>
+                        )}
+
+                        {captchaSuccessMessage && (
+                            <Col
+                                className={`mb-3 ${!isExtraSmallScreen && !isSmallScreen && !isMediumScreen
+                                    ? 'd-flex ms-auto'
+                                    : 'd-flex mx-auto'
+                                    }`}
+                                style={{ maxWidth: maxColWidth, color: 'var(--main-accent-color-hover)' }}
+                            >
+                                <span role='alert'>{captchaSuccessMessage}</span>
                             </Col>
                         )}
 
