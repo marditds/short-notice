@@ -4,7 +4,7 @@ export default async ({ req, res, log, error }) => {
 
     const GeminiApiKey = process.env.GEMINI_API_KEY;
 
-    log('Entering geminiAccess function.');
+    await log('Entering geminiAccess function.');
 
     try {
         const data = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
@@ -24,9 +24,9 @@ export default async ({ req, res, log, error }) => {
             // }
         });
 
-        log(response.text);
+        await log(response.text);
 
-        log('Exiting geminiAccess function.');
+        await log('Exiting geminiAccess function.');
 
         return res.json({ message: 'geminiAccess function ran successfully' });
 
