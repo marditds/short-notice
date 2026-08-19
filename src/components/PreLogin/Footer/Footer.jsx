@@ -123,7 +123,7 @@ const Footer = () => {
                     </Row>
 
                     {/* COPYRIGHT */}
-                    <Row md={12} className='flex-column justify-content-center mt-3 mb-4'>
+                    {/* <Row md={12} className='flex-column justify-content-center mt-3 mb-4'>
                         <Col className='footer__col d-flex justify-content-center'>
                             <a
                                 href={footerData.developer[0].link}
@@ -134,7 +134,7 @@ const Footer = () => {
                                 {footerData.developer[0].text}
                             </a>
                         </Col>
-                    </Row>
+                    </Row> */}
 
                 </Container>
             </Container>
