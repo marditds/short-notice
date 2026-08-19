@@ -676,7 +676,9 @@ export const getSession = async () => {
 
 export const deleteUserSession = async () => {
     try {
-        await account.deleteSession('current');
+        await account.deleteSession({
+            sessionId: 'current'
+        });
         console.log('Session deleted successfully.');
         console.log('REDIRECTING TO /');
     } catch (error) {
@@ -1515,7 +1517,7 @@ export const getUserLikesNotInFeed = async (user_id, visitor_id, limit, offset) 
             tableId: likesCollEnv,
             queries: [
                 Query.equal('user_id', user_id),
-                
+
                 ...(allBlockedIds.length > 0 ? allBlockedIds.map(id => Query.notEqual('author_id', id)) : []),
                 Query.limit(limit),
                 Query.offset(offset),
@@ -1547,9 +1549,9 @@ export const getAllLikedNotices = async (likedNoticeIds) => {
             tableId: noticesCollEnv,
             queries: [
                 Query.equal('$id', likedNoticeIds),
-                
-                
-                
+
+
+
                 Query.orderDesc('$createdAt')
             ]
         });
@@ -1669,9 +1671,9 @@ export const getAllSavedNotices = async (saveNoticeIds) => {
             tableId: noticesCollEnv,
             queries: [
                 Query.equal('$id', saveNoticeIds),
-                
-                
-                
+
+
+
                 Query.orderDesc('$createdAt')
             ]
         });

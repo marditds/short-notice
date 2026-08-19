@@ -64,6 +64,13 @@ export const UserProvider = ({ children }) => {
                 console.log('userIdInSession', userIdInSession);
                 console.log('userEmailInSession', userEmailInSession);
 
+                if (!userEmailInSession) {
+                    console.log('No session found.');
+                    setIsSessionInProgress(false);
+                    setIsLoggedIn(false);
+                    return;
+                }
+
                 setIsSessionInProgress(true);
                 setUserEmail(userEmailInSession);
                 setUserId(userIdInSession);

@@ -21,12 +21,12 @@ const Home = () => {
     const features = [
         {
             title: 'Ephemeral posting: ',
-            description: 'Pick how long your notices stay up—anywhere from 1 day to a full week.',
+            description: 'Pick how long your notices stay up, anywhere from 1 day to a full week.',
             icon: '⌚'
         },
         {
             title: 'No noise, just words (and GIFs 😜): ',
-            description: 'No photos, videos, or distractions—just authentic thoughts.',
+            description: 'No photos, videos, or distractions. Only authentic thoughts.',
             icon: '💭'
         },
         {
