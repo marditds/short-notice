@@ -103,11 +103,11 @@ const UserFeed = () => {
 
                 await fetchUsersData(feedNotices, setGeneralFeedNotices, getAvatarUrl);
 
-                if (feedNotices.length < limit) {
+                if (feedNotices?.length < limit) {
                     setHasMoreGeneralNotices(false);
                 } else {
                     setHasMoreGeneralNotices(true);
-                    setLastId(feedNotices[feedNotices.length - 1]?.$id);
+                    setLastId(feedNotices[feedNotices?.length - 1]?.$id);
                 }
 
             } catch (error) {
