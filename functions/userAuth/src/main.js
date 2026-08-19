@@ -35,7 +35,7 @@ export default async ({ req, res, log, error }) => {
     log(`Checking email: ${data.email}`)
 
     // Query users by email
-    const response = await users.list([Query.equal('email', data.email)]);
+    const response = await users.list({ queries: [Query.equal('email', data.email)] });
 
 
     log(`Response from Appwrite: ${JSON.stringify(response)}`);
