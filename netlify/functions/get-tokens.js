@@ -1,4 +1,4 @@
-exports.handler = async (event) => {
+export const handler = async (event) => {
     const params = new URLSearchParams(event.queryStringParameters);
     const keyType = params.get("key");
 
