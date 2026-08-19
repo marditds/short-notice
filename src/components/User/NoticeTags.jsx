@@ -1,12 +1,13 @@
+import { useId } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Accordion } from 'react-bootstrap';
 import { FaAngleDown } from 'react-icons/fa6';
 
-
-
 export const NoticeTags = ({ tagCategories, handleTagSelect, selectedTags }) => {
 
     const location = useLocation();
+
+    const instanceId = useId();
 
     return (
         <Accordion defaultActiveKey={['0']} className='user-profile__tags-accordion'>
@@ -27,7 +28,7 @@ export const NoticeTags = ({ tagCategories, handleTagSelect, selectedTags }) => 
                             >
                                 {category.tags.map((tag) => {
                                     const isChecked = !!selectedTags[tag.key];
-                                    const inputId = `tag-${category.group}-${tag.key}`;
+                                    const inputId = `${instanceId}-tag-${category.group}-${tag.key}`;
 
                                     return (
                                         <div
