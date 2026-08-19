@@ -16,9 +16,9 @@ ShortNotice is an ephemeral social platform: short text (and GIF) posts that aut
 
 ## Tech Stack
 
-- **Frontend:** React 18, React Router, React Bootstrap, react-easy-crop, gif-picker-react
+- **Frontend:** React 19, React Router, React Bootstrap, react-easy-crop, gif-picker-react
 - **Auth:** Appwrite
-- **Backend:** Appwrite (database, storage), Netlify Functions (Node.js)
+- **Backend:** Appwrite (database, storage), Netlify Functions
 - **AI:** Google Gemini API
 - **Infra:** Vite, Netlify, reCAPTCHA
 
@@ -26,7 +26,7 @@ ShortNotice is an ephemeral social platform: short text (and GIF) posts that aut
 
 | Function          | Purpose                                                                                                  |
 | ----------------- | -------------------------------------------------------------------------------------------------------- |
-| `deleteExpired`   | Scheduled job that cascades-deletes expired notices along with their related likes, saves, and reactions |
+| `deleteExpired`   | Scheduled job that deletes expired notices along with their related likes, saves, and reactions          |
 | `geminiAccess`    | Calls the Gemini API to help generate notice text                                                        |
 | `reCaptchaAccess` | Server-side reCAPTCHA verification                                                                       |
 | `userAuth`        | Backend auth handling                                                                                    |
@@ -34,7 +34,7 @@ ShortNotice is an ephemeral social platform: short text (and GIF) posts that aut
 
 ## How Expiration Works
 
-Every notice is stored with an `expiresAt` timestamp. The `deleteExpired` function runs on a schedule, checks for notices past their expiration, and removes the notice along with every related record (likes, saves, reactions) across collections — keeping the feed genuinely temporary rather than just visually hidden.
+Every notice is stored with an `expiresAt` timestamp. The `deleteExpired` function runs on a schedule, checks for notices past their expiration, and removes the notice along with every related record (likes, saves, reactions) across tables — keeping the feed temporary rather than just visually hidden.
 
 ## Getting Started
 
@@ -43,4 +43,4 @@ npm install
 npm run dev
 ```
 
-Requires an Appwrite project (database/collections configured) and Netlify Functions with environment variables for Appwrite, Gemini, and reCAPTCHA credentials.
+Requires an Appwrite project (database/tables configured) and Netlify Functions with environment variables for Appwrite, Gemini, and reCAPTCHA credentials.
