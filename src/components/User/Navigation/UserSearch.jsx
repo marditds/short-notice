@@ -51,29 +51,29 @@ export const UserSearch = ({ username }) => {
 
             console.log('users:', users);
 
-            if (users?.documents !== undefined || users?.documents?.length > 0) {
+            if (users?.rows !== undefined || users?.rows?.length > 0) {
                 if (newSearchTerm === false) {
                     setUsersResult(prevUsers => {
-                        const moreUsers = users.documents?.filter(user =>
+                        const moreUsers = users.rows?.filter(user =>
                             !prevUsers.some(loadedUser => loadedUser.$id === user.$id)
                         );
                         return [...prevUsers, ...moreUsers];
                     });
                 } else {
-                    console.log('LOGGGGG', users.documents);
-                    setUsersResult(users?.documents);
+                    console.log('LOGGGGG', users.rows);
+                    setUsersResult(users?.rows);
                 }
             } else {
                 setUsersResult([]);
             }
 
-            if (users?.documents.length < limit) {
-                console.log('Is users?.documents.length < limit?', users?.documents.length + ', ' + limit);
+            if (users?.rows.length < limit) {
+                console.log('Is users?.rows.length < limit?', users?.rows.length + ', ' + limit);
                 setHasMoreProfiles(false);
             } else {
-                console.log('Is users?.documents.length < limit?', users?.documents.length + ', ' + limit);
+                console.log('Is users?.rows.length < limit?', users?.rows.length + ', ' + limit);
                 setHasMoreProfiles(true);
-                setLastId(users.documents[users.documents.length - 1].$id);
+                setLastId(users.rows[users.rows.length - 1].$id);
             }
         } catch (error) {
             console.error('Error listing users:', error);

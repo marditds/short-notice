@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Form, Button, Image } from 'react-bootstrap';
-import GifPicker from 'gif-picker-react';
+// import GifPicker from 'gif-picker-react';
 import { keysProvider } from '../../lib/context/keysProvider';
 import { LoadingSpinner } from '../Loading/LoadingSpinner';
 import { screenUtils } from '../../lib/utils/screenUtils';
@@ -105,7 +105,7 @@ export const ComposeReaction = ({ reactionText, onReactionTextChange, reactionGi
                     </div>
 
                     {/* GIF picker */}
-                    {(isGifBtnClicked && tenorApiKey) &&
+                    {/* {(isGifBtnClicked && tenorApiKey) &&
                         <div className='d-flex justify-content-start align-items-center'>
                             <GifPicker
                                 tenorApiKey={tenorApiKey}
@@ -113,7 +113,7 @@ export const ComposeReaction = ({ reactionText, onReactionTextChange, reactionGi
                                 width={!isSmallScreen ? '50vw' : '80vw'} height='400px'
                             />
                         </div>
-                    }
+                    } */}
                 </Form.Group>
             </Form>
 

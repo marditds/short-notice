@@ -1,4 +1,4 @@
-import { Client, Storage, Account, Databases, ID, Query, Functions } from 'appwrite';
+import { Client, Storage, Account, TablesDB, ID, Query, Functions } from 'appwrite';
 import { dbFunctionKeysProvider } from './keysProvider';
 
 export const endpointEnv = import.meta.env.VITE_ENDPOINT;
@@ -15,7 +15,7 @@ const functions = new Functions(client);
 export default client;
 
 const storage = new Storage(client);
-export const databases = new Databases(client);
+export const tablesDB = new TablesDB(client);
 
 const dbEnv = import.meta.env.VITE_DATABASE;
 const usersCollEnv = import.meta.env.VITE_USERS_COLLECTION;
@@ -246,14 +246,14 @@ export const deleteAvatarFromStrg = async (fileId) => {
 export const updateAvatar = async (userId, avatarId) => {
 
     try {
-        const res = await databases.updateDocument(
-            dbEnv,
-            usersCollEnv,
-            userId,
-            {
+        const res = await tablesDB.updateRow({
+            databaseId: dbEnv,
+            tableId: usersCollEnv,
+            rowId: userId,
+            data: {
                 avatar: avatarId
-            },
-        );
+            }
+        });
         console.log('User profile updated successfully:', res);
         return res;
     } catch (error) {
@@ -266,14 +266,14 @@ export const deleteAvatarFromDoc = async (userId) => {
     try {
 
 
-        await databases.updateDocument(
-            dbEnv,
-            usersCollEnv,
-            userId,
-            {
+        await tablesDB.updateRow({
+            databaseId: dbEnv,
+            tableId: usersCollEnv,
+            rowId: userId,
+            data: {
                 avatar: null
-            },
-        );
+            }
+        });
         console.log('User profile avatar set to null successfully');
     } catch (error) {
         console.error('Error updating avatar in user document:', error);
@@ -282,11 +282,10 @@ export const deleteAvatarFromDoc = async (userId) => {
 
 export const getUsersDocument = async () => {
     try {
-        const response = await databases.listDocuments(
-            dbEnv,
-            usersCollEnv,
-            // userId
-        );
+        const response = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: usersCollEnv
+        });
         // console.log('Users documents:', response);
         return response;
     } catch (error) {
@@ -302,11 +301,11 @@ export const getUserById = async (userId) => {
     }
 
     try {
-        const response = await databases.getDocument(
-            dbEnv,
-            usersCollEnv,
-            userId
-        );
+        const response = await tablesDB.getRow({
+            databaseId: dbEnv,
+            tableId: usersCollEnv,
+            rowId: userId
+        });
         return response;
     } catch (error) {
         console.error('Error getting user by ID:', error);
@@ -323,11 +322,11 @@ export const getUserByIdQuery = async (userId) => {
     }
 
     try {
-        const response = await databases.listDocuments(
-            dbEnv,
-            usersCollEnv,
-            [Query.equal('$id', userId)]
-        );
+        const response = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: usersCollEnv,
+            queries: [Query.equal('$id', userId)]
+        });
         return response;
     } catch (error) {
         console.error('Error fetching user by ID:', error);
@@ -341,12 +340,12 @@ export const getUsersByIdQuery = async (userIds) => {
     }
 
     try {
-        const response = await databases.listDocuments(
-            dbEnv,
-            usersCollEnv,
-            [Query.equal('$id', userIds)]
-        );
-        return response.documents;
+        const response = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: usersCollEnv,
+            queries: [Query.equal('$id', userIds)]
+        });
+        return response.rows;
     } catch (error) {
         console.error('Error fetching users by IDs:', error);
     }
@@ -359,14 +358,14 @@ export const getUserByEmail = async (email) => {
     }
 
     try {
-        const userList = await databases.listDocuments(
-            dbEnv,
-            usersCollEnv,
-            [Query.equal('email', email)]
-        );
+        const userList = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: usersCollEnv,
+            queries: [Query.equal('email', email)]
+        });
 
         if (userList.total > 0) {
-            return userList.documents[0];
+            return userList.rows[0];
         }
 
         return null;
@@ -380,14 +379,14 @@ export const getUserByUsername = async (username) => {
     console.log('getUserByUsername in dbhandler', username);
 
     try {
-        const userList = await databases.listDocuments(
-            dbEnv,
-            usersCollEnv,
-            [Query.equal('username', username.toLowerCase())]
-        );
+        const userList = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: usersCollEnv,
+            queries: [Query.equal('username', username.toLowerCase())]
+        });
 
         if (userList.total > 0) {
-            return userList.documents[0];
+            return userList.rows[0];
         }
 
         return null;
@@ -409,11 +408,11 @@ export const getAllUsersByString = async (str, limit, cursorAfter) => {
             queryParams.push(Query.cursorAfter(cursorAfter));
         }
 
-        const userList = await databases.listDocuments(
-            dbEnv,
-            usersCollEnv,
-            queryParams
-        );
+        const userList = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: usersCollEnv,
+            queries: queryParams
+        });
 
         if (userList.total > 0) {
             console.log('dbhandler.js - userList:', userList);
@@ -429,11 +428,11 @@ export const getAllUsersByString = async (str, limit, cursorAfter) => {
 
 export const checkUsernameExists = async (username) => {
     try {
-        const users = await databases.listDocuments(
-            dbEnv,
-            usersCollEnv,
-            [Query.equal('username', username.toLowerCase())]
-        );
+        const users = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: usersCollEnv,
+            queries: [Query.equal('username', username.toLowerCase())]
+        });
         return users.total > 0;
     } catch (error) {
         console.error('Error checking username existence:', error);
@@ -445,13 +444,13 @@ export const createUser = async ({ id, email, given_name, username, accountType 
     try {
 
         // checkin email
-        const existingUser = await databases.listDocuments(
-            dbEnv,
-            usersCollEnv,
-            [Query.equal('email', email)],
-        );
+        const existingUser = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: usersCollEnv,
+            queries: [Query.equal('email', email)]
+        });
         if (existingUser.total > 0) {
-            console.log('User already exists:', existingUser.documents[0]);
+            console.log('User already exists:', existingUser.rows[0]);
             return;
         }
 
@@ -463,18 +462,17 @@ export const createUser = async ({ id, email, given_name, username, accountType 
             throw new Error('Username already exists');
         }
 
-        const response = await databases.createDocument(
-            dbEnv,
-            usersCollEnv,
-            id,
-            {
+        const response = await tablesDB.createRow({
+            databaseId: dbEnv,
+            tableId: usersCollEnv,
+            rowId: id,
+            data: {
                 email,
                 given_name,
                 username: username.toLowerCase(),
                 accountType
-            },
-
-        );
+            }
+        });
         console.log('Document created successfully:', response);
     } catch (error) {
         console.error('Error creating document:', error);
@@ -501,14 +499,14 @@ export const registerAuthUser = async (id, email, username) => {
 
 export const updateUser = async ({ userId, username }) => {
     try {
-        const res = await databases.updateDocument(
-            dbEnv,
-            usersCollEnv,
-            userId,
-            {
+        const res = await tablesDB.updateRow({
+            databaseId: dbEnv,
+            tableId: usersCollEnv,
+            rowId: userId,
+            data: {
                 username: username
-            },
-        );
+            }
+        });
         console.log('Username successfully updated.');
         return res;
     } catch (error) {
@@ -523,14 +521,14 @@ export const updateUserWebsite = async ({ userId, website }) => {
     console.log('updateUserWebsite - website', website);
 
     try {
-        const res = await databases.updateDocument(
-            dbEnv,
-            usersCollEnv,
-            userId,
-            {
+        const res = await tablesDB.updateRow({
+            databaseId: dbEnv,
+            tableId: usersCollEnv,
+            rowId: userId,
+            data: {
                 website: website
-            },
-        );
+            }
+        });
         console.log('Website successfully updated.');
         return res;
     } catch (error) {
@@ -606,11 +604,11 @@ export const checkEmailExistsInAuth = async (email) => {
 
 export const deleteUser = async (userId) => {
     try {
-        const response = await databases.deleteDocument(
-            dbEnv,
-            usersCollEnv,
-            userId,
-        );
+        const response = await tablesDB.deleteRow({
+            databaseId: dbEnv,
+            tableId: usersCollEnv,
+            rowId: userId
+        });
         console.log('User deleted successfully:', response);
     } catch (error) {
         console.error('Error deleting user:', error);
@@ -710,11 +708,11 @@ export const getSessionDetails = async () => {
 
 export const deleteDoc = async (collectionEnv, doc_id) => {
     try {
-        await databases.deleteDocument(
-            dbEnv,
-            collectionEnv,
-            doc_id
-        )
+        await tablesDB.deleteRow({
+            databaseId: dbEnv,
+            tableId: collectionEnv,
+            rowId: doc_id
+        })
     } catch (error) {
         console.error('Error deleting doc:', error);
     }
@@ -723,11 +721,11 @@ export const deleteDoc = async (collectionEnv, doc_id) => {
 export const createNotice = async ({ user_id, text, timestamp, expiresAt, noticeType, noticeGif, noticeUrl, science, technology, engineering, math, literature, history, philosophy, music, medicine, economics, law, polSci, sports
 }) => {
     try {
-        const response = await databases.createDocument(
-            dbEnv,
-            noticesCollEnv,
-            ID.unique(),
-            {
+        const response = await tablesDB.createRow({
+            databaseId: dbEnv,
+            tableId: noticesCollEnv,
+            rowId: ID.unique(),
+            data: {
                 user_id,
                 text,
                 timestamp,
@@ -748,12 +746,8 @@ export const createNotice = async ({ user_id, text, timestamp, expiresAt, notice
                 sports: sports || false,
                 noticeGif,
                 noticeUrl
-            },
-            // [
-            //     Permission.write(Role.users()),
-            //     Permission.write(Role.guests())
-            // ]
-        );
+            }
+        });
         console.log('Notice created succesfully:', response);
         return response;
     } catch (error) {
@@ -808,13 +802,13 @@ export const getUserNotices = async (user_id, limit, lastId) => {
             queries.push(Query.cursorAfter(lastId));
         }
 
-        const response = await databases.listDocuments(
-            dbEnv,
-            noticesCollEnv,
-            queries
-        );
+        const response = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: noticesCollEnv,
+            queries: queries
+        });
 
-        return response.documents;
+        return response.rows;
 
     } catch (error) {
         console.error('Error fetching notices:', error);
@@ -830,17 +824,17 @@ export const getNoticeByUserId = async (user_id, limit, offset) => {
             return [];
         }
 
-        const res = await databases.listDocuments(
-            dbEnv,
-            noticesCollEnv,
-            [
+        const res = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: noticesCollEnv,
+            queries: [
                 Query.equal('user_id', user_id),
                 Query.limit(limit),
                 Query.offset(offset),
                 Query.orderDesc('timestamp')
             ]
-        );
-        return res.documents;
+        });
+        return res.rows;
     } catch (error) {
         console.error('Error getting notice by user id:', error);
     }
@@ -848,15 +842,15 @@ export const getNoticeByUserId = async (user_id, limit, offset) => {
 
 export const getNoticeByTagname = async (tagnames) => {
     try {
-        const response = await databases.listDocuments(
-            dbEnv,
-            noticesCollEnv,
-            [
+        const response = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: noticesCollEnv,
+            queries: [
                 Query.equal(tagnames, true),
                 Query.orderDesc('timestamp'),
             ]
-        );
-        return response.documents;
+        });
+        return response.rows;
     } catch (error) {
         console.error('Error fetching notices:', error);
         return [];
@@ -865,14 +859,14 @@ export const getNoticeByTagname = async (tagnames) => {
 
 export const getNoticeByNoticeId = async (notice_id) => {
     try {
-        const response = await databases.listDocuments(
-            dbEnv,
-            noticesCollEnv,
-            [
+        const response = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: noticesCollEnv,
+            queries: [
                 Query.equal('$id', notice_id),
             ]
-        );
-        return response.documents;
+        });
+        return response.rows;
     } catch (error) {
         console.error('Error getting notices by notice_id:', error);
         return [];
@@ -881,14 +875,14 @@ export const getNoticeByNoticeId = async (notice_id) => {
 
 export const getAllNotices = async () => {
     try {
-        const response = await databases.listDocuments(
-            dbEnv,
-            noticesCollEnv,
-            [
+        const response = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: noticesCollEnv,
+            queries: [
                 Query.orderDesc('timestamp')
             ]
-        );
-        return response.documents;
+        });
+        return response.rows;
     } catch (error) {
         console.error('Error fetching notices:', error);
     }
@@ -940,17 +934,17 @@ export const getFilteredNotices = async (selectedTags, limit, lastId, userId) =>
             queries.push(Query.or(queryList));
         }
 
-        const notices = await databases.listDocuments(
-            dbEnv,
-            noticesCollEnv,
-            queries
-        );
+        const notices = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: noticesCollEnv,
+            queries: queries
+        });
 
         if (notices.total === 0) {
             return;
         }
 
-        return notices.documents;
+        return notices.rows;
     } catch (error) {
         console.error('Error fetching filtered notices:', error);
     }
@@ -958,18 +952,14 @@ export const getFilteredNotices = async (selectedTags, limit, lastId, userId) =>
 
 export const updateNotice = async (noticeId, newText) => {
     try {
-        const response = await databases.updateDocument(
-            dbEnv,
-            noticesCollEnv,
-            noticeId,
-            {
+        const response = await tablesDB.updateRow({
+            databaseId: dbEnv,
+            tableId: noticesCollEnv,
+            rowId: noticeId,
+            data: {
                 text: newText
-            },
-            // [
-            //     Permission.update(Role.users()),
-            //     Permission.update(Role.guests())
-            // ]
-        );
+            }
+        });
         console.log('Notice updated successfully:', response);
         return response;
     } catch (error) {
@@ -1009,12 +999,12 @@ export const deleteNotice = async (noticeId) => {
 export const saveDeletedNoticeId = async (notice_id) => {
     console.log('Attempting to save notice ID of deleted Notice:', notice_id);
     try {
-        const response = await databases.createDocument(
-            dbEnv,
-            import.meta.env.VITE_DELETED_NOTICES_COLLECTION,
-            ID.unique(),
-            { notice_id }
-        );
+        const response = await tablesDB.createRow({
+            databaseId: dbEnv,
+            tableId: import.meta.env.VITE_DELETED_NOTICES_COLLECTION,
+            rowId: ID.unique(),
+            data: { notice_id }
+        });
         console.log('Deleted notice id added successfully:', response);
         return response;
     } catch (error) {
@@ -1025,13 +1015,13 @@ export const saveDeletedNoticeId = async (notice_id) => {
 export const deleteAllNotices = async (userId) => {
 
     try {
-        const notices = await databases.listDocuments(
-            dbEnv,
-            noticesCollEnv,
-            [Query.equal('user_id', userId)]
-        );
+        const notices = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: noticesCollEnv,
+            queries: [Query.equal('user_id', userId)]
+        });
 
-        const deletionTasks = notices.documents.map(async (notice) => {
+        const deletionTasks = notices.rows.map(async (notice) => {
 
             await Promise.allSettled([
                 removeAllLikesForNotice(notice.$id),
@@ -1056,11 +1046,11 @@ export const deleteAllNotices = async (userId) => {
 
 export const getUserInterests = async (userId) => {
     try {
-        const response = await databases.getDocument(
-            dbEnv,
-            interestsCollEnv,
-            userId
-        );
+        const response = await tablesDB.getRow({
+            databaseId: dbEnv,
+            tableId: interestsCollEnv,
+            rowId: userId
+        });
         console.log('response in getUserInterests', response);
 
         if (response) {
@@ -1098,20 +1088,20 @@ export const updateUserInterests = async (userId, selectedTags) => {
         let response;
 
         try {
-            response = await databases.updateDocument(
-                dbEnv,
-                interestsCollEnv,
-                userId,
-                interestsData,
-            );
+            response = await tablesDB.updateRow({
+                databaseId: dbEnv,
+                tableId: interestsCollEnv,
+                rowId: userId,
+                data: interestsData
+            });
         } catch (updateError) {
             if (updateError.code === 404) {
-                response = await databases.createDocument(
-                    dbEnv,
-                    interestsCollEnv,
-                    userId,
-                    interestsData,
-                );
+                response = await tablesDB.createRow({
+                    databaseId: dbEnv,
+                    tableId: interestsCollEnv,
+                    rowId: userId,
+                    data: interestsData
+                });
             } else {
                 throw updateError;
             }
@@ -1127,15 +1117,15 @@ export const updateUserInterests = async (userId, selectedTags) => {
 
 export const createUserPermissions = async (userId) => {
     try {
-        const permissions = await databases.createDocument(
-            dbEnv,
-            permissionsCollEnv,
-            userId,
-            {
+        const permissions = await tablesDB.createRow({
+            databaseId: dbEnv,
+            tableId: permissionsCollEnv,
+            rowId: userId,
+            data: {
                 btns_reaction_perm: true,
                 txt_reaction_perm: true
             }
-        )
+        })
         console.log('User permissions created successfully:', permissions);
 
         return { btns_reaction_perm: permissions.btns_reaction_perm, txt_reaction_perm: permissions.txt_reaction_perm };
@@ -1146,11 +1136,11 @@ export const createUserPermissions = async (userId) => {
 
 export const getUserPermissions = async (userId) => {
     try {
-        const permissions = await databases.getDocument(
-            dbEnv,
-            permissionsCollEnv,
-            userId
-        )
+        const permissions = await tablesDB.getRow({
+            databaseId: dbEnv,
+            tableId: permissionsCollEnv,
+            rowId: userId
+        })
         console.log('perm in dbhandler.js:', permissions);
 
         return { btns_reaction_perm: permissions.btns_reaction_perm, txt_reaction_perm: permissions.txt_reaction_perm };
@@ -1161,12 +1151,12 @@ export const getUserPermissions = async (userId) => {
 
 export const getUserPermissionsByIdQuery = async (userId) => {
     try {
-        const response = await databases.listDocuments(
-            dbEnv,
-            permissionsCollEnv,
-            [Query.equal('$id', userId)]
-        );
-        return response.documents;
+        const response = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: permissionsCollEnv,
+            queries: [Query.equal('$id', userId)]
+        });
+        return response.rows;
     } catch (error) {
         console.error('Error querying user permission by ID:', error);
         throw error;
@@ -1179,26 +1169,26 @@ export const updateUserPermissions = async (userId, btns_reaction_perm, txt_reac
         let response;
 
         try {
-            response = await databases.updateDocument(
-                dbEnv,
-                permissionsCollEnv,
-                userId,
-                {
+            response = await tablesDB.updateRow({
+                databaseId: dbEnv,
+                tableId: permissionsCollEnv,
+                rowId: userId,
+                data: {
                     btns_reaction_perm,
                     txt_reaction_perm
                 }
-            );
+            });
         } catch (updateError) {
             if (updateError.code === 404) {
-                response = await databases.createDocument(
-                    dbEnv,
-                    permissionsCollEnv,
-                    userId,
-                    {
+                response = await tablesDB.createRow({
+                    databaseId: dbEnv,
+                    tableId: permissionsCollEnv,
+                    rowId: userId,
+                    data: {
                         btns_reaction_perm,
                         txt_reaction_perm
                     }
-                );
+                });
             } else {
                 throw updateError;
             }
@@ -1240,20 +1230,16 @@ export const deleteUserInterestsFromDB = async (userId) => {
 
 export const createSave = async (notice_id, author_id, user_id) => {
     try {
-        const response = await databases.createDocument(
-            dbEnv,
-            savesCollEnv,
-            ID.unique(),
-            {
+        const response = await tablesDB.createRow({
+            databaseId: dbEnv,
+            tableId: savesCollEnv,
+            rowId: ID.unique(),
+            data: {
                 notice_id: notice_id,
                 author_id: author_id,
                 user_id: user_id
-            },
-            // [
-            //     Permission.write(Role.users()),
-            //     Permission.write(Role.guests())
-            // ]
-        );
+            }
+        });
         console.log('Save entry created successfully:', response);
         return response;
     } catch (error) {
@@ -1264,11 +1250,11 @@ export const createSave = async (notice_id, author_id, user_id) => {
 
 export const removeSave = async (save_id) => {
     try {
-        const response = await databases.deleteDocument(
-            dbEnv,
-            savesCollEnv,
-            save_id,
-        );
+        const response = await tablesDB.deleteRow({
+            databaseId: dbEnv,
+            tableId: savesCollEnv,
+            rowId: save_id
+        });
         console.log('Save removed successfully.');
         return response;
     } catch (error) {
@@ -1280,13 +1266,13 @@ export const removeSave = async (save_id) => {
 export const removeAllSavesByUser = async (user_id) => {
 
     try {
-        const saves = await databases.listDocuments(
-            dbEnv,
-            savesCollEnv,
-            [Query.equal('user_id', user_id)]
-        )
+        const saves = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: savesCollEnv,
+            queries: [Query.equal('user_id', user_id)]
+        })
 
-        const removeSavePromises = saves.documents.map(save =>
+        const removeSavePromises = saves.rows.map(save =>
             // removeSave(save.$id)
             deleteDoc(
                 savesCollEnv,
@@ -1305,13 +1291,13 @@ export const removeAllSavesByUser = async (user_id) => {
 export const removeAllSavesForAuthor = async (author_id) => {
 
     try {
-        const saves = await databases.listDocuments(
-            dbEnv,
-            savesCollEnv,
-            [Query.equal('author_id', author_id)]
-        )
+        const saves = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: savesCollEnv,
+            queries: [Query.equal('author_id', author_id)]
+        })
 
-        const removeSavePromises = saves.documents.map(save =>
+        const removeSavePromises = saves.rows.map(save =>
             // removeSave(save.$id)
             deleteDoc(
                 savesCollEnv,
@@ -1330,13 +1316,13 @@ export const removeAllSavesForAuthor = async (author_id) => {
 export const removeAllSavesForNotice = async (notice_id) => {
 
     try {
-        const saves = await databases.listDocuments(
-            dbEnv,
-            savesCollEnv,
-            [Query.equal('notice_id', notice_id)]
-        )
+        const saves = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: savesCollEnv,
+            queries: [Query.equal('notice_id', notice_id)]
+        })
 
-        const removeSavePromises = saves.documents.map(save =>
+        const removeSavePromises = saves.rows.map(save =>
             // removeSave(save.$id)
             deleteDoc(
                 savesCollEnv,
@@ -1354,20 +1340,16 @@ export const removeAllSavesForNotice = async (notice_id) => {
 
 export const createLike = async (notice_id, author_id, user_id) => {
     try {
-        const response = await databases.createDocument(
-            dbEnv,
-            likesCollEnv,
-            ID.unique(),
-            {
+        const response = await tablesDB.createRow({
+            databaseId: dbEnv,
+            tableId: likesCollEnv,
+            rowId: ID.unique(),
+            data: {
                 notice_id: notice_id,
                 author_id: author_id,
                 user_id: user_id
-            },
-            // [
-            //     Permission.write(Role.users()),
-            //     Permission.write(Role.guests())
-            // ]
-        );
+            }
+        });
         console.log('Like created successfully:', response);
         return response;
     } catch (error) {
@@ -1378,11 +1360,11 @@ export const createLike = async (notice_id, author_id, user_id) => {
 
 export const removeLike = async (like_id) => {
     try {
-        const response = await databases.deleteDocument(
-            dbEnv,
-            likesCollEnv,
-            like_id,
-        );
+        const response = await tablesDB.deleteRow({
+            databaseId: dbEnv,
+            tableId: likesCollEnv,
+            rowId: like_id
+        });
         console.log('Like removed successfully.');
         return response;
     } catch (error) {
@@ -1394,13 +1376,13 @@ export const removeLike = async (like_id) => {
 export const removeAllLikesByUser = async (user_id) => {
 
     try {
-        const likes = await databases.listDocuments(
-            dbEnv,
-            likesCollEnv,
-            [Query.equal('user_id', user_id)]
-        )
+        const likes = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: likesCollEnv,
+            queries: [Query.equal('user_id', user_id)]
+        })
 
-        const removeLikesPromises = likes.documents.map(like =>
+        const removeLikesPromises = likes.rows.map(like =>
             // removeLike(like.$id)
             deleteDoc(
                 likesCollEnv,
@@ -1419,13 +1401,13 @@ export const removeAllLikesByUser = async (user_id) => {
 export const removeAllLikesForAuthor = async (author_id) => {
 
     try {
-        const likes = await databases.listDocuments(
-            dbEnv,
-            likesCollEnv,
-            [Query.equal('author_id', author_id)]
-        )
+        const likes = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: likesCollEnv,
+            queries: [Query.equal('author_id', author_id)]
+        })
 
-        const removeLikesPromises = likes.documents.map(like =>
+        const removeLikesPromises = likes.rows.map(like =>
             // removeLike(like.$id)
             deleteDoc(
                 likesCollEnv,
@@ -1444,13 +1426,13 @@ export const removeAllLikesForAuthor = async (author_id) => {
 export const removeAllLikesForNotice = async (notice_id) => {
 
     try {
-        const likes = await databases.listDocuments(
-            dbEnv,
-            likesCollEnv,
-            [Query.equal('notice_id', notice_id)]
-        )
+        const likes = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: likesCollEnv,
+            queries: [Query.equal('notice_id', notice_id)]
+        })
 
-        const removeLikesPromises = likes.documents.map(like =>
+        const removeLikesPromises = likes.rows.map(like =>
             // removeLike(like.$id)
             deleteDoc(
                 likesCollEnv,
@@ -1482,20 +1464,20 @@ export const getUserLikes = async (user_id, noticeIds) => {
             return [];
         }
 
-        const response = await databases.listDocuments(
-            dbEnv,
-            likesCollEnv,
-            [
+        const response = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: likesCollEnv,
+            queries: [
                 Query.equal('user_id', user_id),
                 Query.equal('notice_id', noticeIds),
                 ...(allBlockedIds.length > 0 ? allBlockedIds.map(id => Query.notEqual('author_id', id)) : []),
                 Query.orderDesc('$createdAt')
             ]
-        );
+        });
 
-        console.log('Filtered getUserLikes', response.documents);
+        console.log('Filtered getUserLikes', response.rows);
 
-        return response.documents;
+        return response.rows;
     } catch (error) {
         console.error('Error fetching user likes:', error);
         return [];
@@ -1528,22 +1510,22 @@ export const getUserLikesNotInFeed = async (user_id, visitor_id, limit, offset) 
         console.log('dbhandler - getUserLikesNotInFeed limit', limit);
         console.log('dbhandler - getUserLikesNotInFeed offset', offset);
 
-        const response = await databases.listDocuments(
-            dbEnv,
-            likesCollEnv,
-            [
+        const response = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: likesCollEnv,
+            queries: [
                 Query.equal('user_id', user_id),
-                // Query.equal('notice_id', noticeIdsInProfile),
+                
                 ...(allBlockedIds.length > 0 ? allBlockedIds.map(id => Query.notEqual('author_id', id)) : []),
                 Query.limit(limit),
                 Query.offset(offset),
                 Query.orderDesc('$createdAt')
             ]
-        );
+        });
 
-        console.log('dbhandler - getUserLikesNotInFeed', response.documents);
+        console.log('dbhandler - getUserLikesNotInFeed', response.rows);
 
-        return response.documents;
+        return response.rows;
     } catch (error) {
         console.error('Error fetching user likes:', error);
         return [];
@@ -1560,21 +1542,21 @@ export const getAllLikedNotices = async (likedNoticeIds) => {
         console.log('dbhandler - likedNoticeIds', likedNoticeIds);
 
 
-        const allLikedNotices = await databases.listDocuments(
-            dbEnv,
-            noticesCollEnv,
-            [
+        const allLikedNotices = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: noticesCollEnv,
+            queries: [
                 Query.equal('$id', likedNoticeIds),
-                // Query.notEqual('noticeType', ['organization']),
-                // Query.limit(limit),
-                // Query.offset(offset),
+                
+                
+                
                 Query.orderDesc('$createdAt')
             ]
-        );
+        });
 
-        console.log('dbhandler - full notice', allLikedNotices.documents);
+        console.log('dbhandler - full notice', allLikedNotices.rows);
 
-        return allLikedNotices.documents;
+        return allLikedNotices.rows;
     } catch (error) {
         console.error('Error fetching all liked notices:', error);
         return [];
@@ -1583,11 +1565,11 @@ export const getAllLikedNotices = async (likedNoticeIds) => {
 
 export const getAllLikesByNoticeId = async (notice_id) => {
     try {
-        const res = await databases.listDocuments(
-            dbEnv,
-            likesCollEnv,
-            [Query.equal('notice_id', notice_id)]
-        )
+        const res = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: likesCollEnv,
+            queries: [Query.equal('notice_id', notice_id)]
+        })
         return res;
     } catch (error) {
         console.error('Error getting all likes by notice id.', error);
@@ -1596,12 +1578,12 @@ export const getAllLikesByNoticeId = async (notice_id) => {
 
 export const getAllLikesTotalByNoticeId = async (notice_id) => {
     try {
-        const res = await databases.listDocuments(
-            dbEnv,
-            likesCollEnv,
-            [Query.equal('notice_id', notice_id)]
-        )
-        return res.documents;
+        const res = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: likesCollEnv,
+            queries: [Query.equal('notice_id', notice_id)]
+        })
+        return res.rows;
     } catch (error) {
         console.error('Error getting all likes by notice id.', error);
     }
@@ -1630,13 +1612,13 @@ export const getUserSaves = async (user_id, noticeIds) => {
             Query.orderDesc('$createdAt')
         ];
 
-        const response = await databases.listDocuments(
-            dbEnv,
-            savesCollEnv,
-            queries
-        );
+        const response = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: savesCollEnv,
+            queries: queries
+        });
 
-        return response.documents;
+        return response.rows;
     } catch (error) {
         console.error('Error getting saves:', error);
         return [];
@@ -1658,18 +1640,18 @@ export const getUserSavesNotInFeed = async (user_id, visitor_id, limit, offset) 
         console.log('dbhandler - limit', limit);
         console.log('dbhandler - offset', offset);
 
-        const response = await databases.listDocuments(
-            dbEnv,
-            savesCollEnv,
-            [
+        const response = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: savesCollEnv,
+            queries: [
                 Query.equal('user_id', user_id),
                 ...(allBlockedIds.length > 0 ? allBlockedIds.map(id => Query.notEqual('author_id', id)) : []),
                 Query.limit(limit),
                 Query.offset(offset),
                 Query.orderDesc('$createdAt')
             ]
-        )
-        return response.documents;
+        })
+        return response.rows;
     } catch (error) {
         console.error('Error getting saves:', error);
     }
@@ -1682,18 +1664,18 @@ export const getAllSavedNotices = async (saveNoticeIds) => {
             return [];
         }
 
-        const allSavedNotices = await databases.listDocuments(
-            dbEnv,
-            noticesCollEnv,
-            [
+        const allSavedNotices = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: noticesCollEnv,
+            queries: [
                 Query.equal('$id', saveNoticeIds),
-                // Query.notEqual('noticeType', ['organization']),
-                // Query.limit(limit),
-                // Query.offset(offset),
+                
+                
+                
                 Query.orderDesc('$createdAt')
             ]
-        );
-        return allSavedNotices.documents;
+        });
+        return allSavedNotices.rows;
     } catch (error) {
         console.error('Error fetching all save notices:', error);
         return [];
@@ -1702,11 +1684,11 @@ export const getAllSavedNotices = async (saveNoticeIds) => {
 
 export const getAllSavesByNoticeId = async (notice_id) => {
     try {
-        const res = await databases.listDocuments(
-            dbEnv,
-            savesCollEnv,
-            [Query.equal('notice_id', notice_id)]
-        )
+        const res = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: savesCollEnv,
+            queries: [Query.equal('notice_id', notice_id)]
+        })
         return res;
     } catch (error) {
         console.error('Error getting all saves by notice id.', error);
@@ -1715,12 +1697,12 @@ export const getAllSavesByNoticeId = async (notice_id) => {
 
 export const getAllSavesTotalByNoticeId = async (notice_id) => {
     try {
-        const res = await databases.listDocuments(
-            dbEnv,
-            savesCollEnv,
-            [Query.equal('notice_id', notice_id)]
-        )
-        return res.documents;
+        const res = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: savesCollEnv,
+            queries: [Query.equal('notice_id', notice_id)]
+        })
+        return res.rows;
     } catch (error) {
         console.error('Error getting all saves by notice id.', error);
     }
@@ -1729,18 +1711,18 @@ export const getAllSavesTotalByNoticeId = async (notice_id) => {
 
 export const createReport = async (notice_id, author_id, reason, user_id, noticeText) => {
     try {
-        const response = await databases.createDocument(
-            dbEnv,
-            reportsCollEnv,
-            ID.unique(),
-            {
+        const response = await tablesDB.createRow({
+            databaseId: dbEnv,
+            tableId: reportsCollEnv,
+            rowId: ID.unique(),
+            data: {
                 notice_id: notice_id,
                 author_id: author_id,
                 reason: reason,
                 user_id: user_id,
                 noticeText: noticeText
-            },
-        );
+            }
+        });
         console.log('Report created successfully');
         return response;
     } catch (error) {
@@ -1753,13 +1735,13 @@ export const createFollow = async (user_id, otherUser_id) => {
 
     try {
         // Check if follow relationship already exists
-        const followRecords = await databases.listDocuments(
-            dbEnv,
-            followingCollEnv,
-            [Query.equal('user_id', user_id)]
-        );
+        const followRecords = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: followingCollEnv,
+            queries: [Query.equal('user_id', user_id)]
+        });
 
-        const existingFollow = followRecords.documents.find(
+        const existingFollow = followRecords.rows.find(
             (follow) => follow.otherUser_id === otherUser_id
         );
 
@@ -1774,12 +1756,12 @@ export const createFollow = async (user_id, otherUser_id) => {
             return { unfollowed: true };
         } else {
             // Otherwise, create a new follow entry
-            const response = await databases.createDocument(
-                dbEnv,
-                followingCollEnv,
-                ID.unique(),
-                { user_id, otherUser_id }
-            );
+            const response = await tablesDB.createRow({
+                databaseId: dbEnv,
+                tableId: followingCollEnv,
+                rowId: ID.unique(),
+                data: { user_id, otherUser_id }
+            });
             console.log('Followed successfully');
             return { followed: true, id: response.$id };
         }
@@ -1794,11 +1776,11 @@ export const removeFollow = async (following_id) => {
     console.log('following doc id', following_id);
 
     try {
-        const response = await databases.deleteDocument(
-            dbEnv,
-            followingCollEnv,
-            following_id //follow doc id
-        )
+        const response = await tablesDB.deleteRow({
+            databaseId: dbEnv,
+            tableId: followingCollEnv,
+            rowId: following_id
+        })
         console.log('Follow removed successfully');
         return response;
     } catch (error) {
@@ -1809,13 +1791,13 @@ export const removeFollow = async (following_id) => {
 export const removeAllFollows = async (user_id) => {
 
     try {
-        const follows = await databases.listDocuments(
-            dbEnv,
-            followingCollEnv,
-            [Query.equal('user_id', user_id)]
-        )
+        const follows = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: followingCollEnv,
+            queries: [Query.equal('user_id', user_id)]
+        })
 
-        const removeFollowPromises = follows.documents.map(follow =>
+        const removeFollowPromises = follows.rows.map(follow =>
             // removeFollow(follow.$id)
             deleteDoc(
                 followingCollEnv,
@@ -1834,13 +1816,13 @@ export const removeAllFollows = async (user_id) => {
 export const removeAllFollowed = async (user_id) => {
 
     try {
-        const followeds = await databases.listDocuments(
-            dbEnv,
-            followingCollEnv,
-            [Query.equal('otherUser_id', user_id)]
-        )
+        const followeds = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: followingCollEnv,
+            queries: [Query.equal('otherUser_id', user_id)]
+        })
 
-        const removeFollowPromises = followeds.documents.map(follow =>
+        const removeFollowPromises = followeds.rows.map(follow =>
             // removeFollow(follow.$id)
             deleteDoc(
                 followingCollEnv,
@@ -1859,20 +1841,20 @@ export const removeAllFollowed = async (user_id) => {
 export const unfollow = async (user_id, otherUser_id) => {
 
     try {
-        const res = await databases.listDocuments(
-            dbEnv,
-            followingCollEnv,
-            [
+        const res = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: followingCollEnv,
+            queries: [
                 Query.or([
                     Query.and([Query.equal('user_id', user_id), Query.equal('otherUser_id', otherUser_id)]),
                     Query.and([Query.equal('user_id', otherUser_id), Query.equal('otherUser_id', user_id)])
                 ])
             ]
-        )
+        })
 
         console.log('Follow instance FOUND:', res);
 
-        for (const r of res.documents) {
+        for (const r of res.rows) {
             // await removeFollow(r.$id);
             await deleteDoc(
                 followingCollEnv,
@@ -1889,13 +1871,13 @@ export const unfollow = async (user_id, otherUser_id) => {
 
 export const followedByUserCount = async (user_id) => {
     try {
-        const res = await databases.listDocuments(
-            dbEnv,
-            followingCollEnv,
-            [
+        const res = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: followingCollEnv,
+            queries: [
                 Query.equal('user_id', user_id)
             ]
-        )
+        })
         return res.total;
     } catch (error) {
         console.error('Error followed by count:', error);
@@ -1904,13 +1886,13 @@ export const followedByUserCount = async (user_id) => {
 
 export const followingTheUserCount = async (user_id) => {
     try {
-        const res = await databases.listDocuments(
-            dbEnv,
-            followingCollEnv,
-            [
+        const res = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: followingCollEnv,
+            queries: [
                 Query.equal('otherUser_id', user_id)
             ]
-        )
+        })
         return res.total;
     } catch (error) {
         console.error('Error followed by count:', error);
@@ -1925,18 +1907,18 @@ export const getUserFollowingsById = async (user_id, limit, offset) => {
     });
 
     try {
-        const response = await databases.listDocuments(
-            dbEnv,
-            followingCollEnv,
-            [
+        const response = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: followingCollEnv,
+            queries: [
                 Query.equal('user_id', user_id),
                 Query.limit(limit),
                 Query.offset(offset),
                 Query.orderDesc('$createdAt')
             ]
-        )
-        // console.log('Successfully got following document.', response.documents);
-        return response.documents;
+        })
+        // console.log('Successfully got following document.', response.rows);
+        return response.rows;
     } catch (error) {
         console.error('Could not get following document', error);
     }
@@ -1944,18 +1926,18 @@ export const getUserFollowingsById = async (user_id, limit, offset) => {
 
 export const getUserFollowersById = async (otherUser_id, limit, offset) => {
     try {
-        const response = await databases.listDocuments(
-            dbEnv,
-            followingCollEnv,
-            [
+        const response = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: followingCollEnv,
+            queries: [
                 Query.equal('otherUser_id', otherUser_id),
                 Query.limit(limit),
                 Query.offset(offset),
                 Query.orderDesc('$createdAt')
             ]
-        )
-        // console.log('Successfully got following document.', response.documents);
-        return response.documents;
+        })
+        // console.log('Successfully got following document.', response.rows);
+        return response.rows;
     } catch (error) {
         console.error('Error getting other user following:', error);
     }
@@ -1969,13 +1951,13 @@ export const getFollowStatus = async (user_id, otherUser_id) => {
     }
 
     try {
-        const res = await databases.listDocuments(
-            dbEnv,
-            followingCollEnv,
-            [
+        const res = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: followingCollEnv,
+            queries: [
                 Query.and([Query.equal('user_id', user_id), Query.equal('otherUser_id', otherUser_id)])
             ]
-        )
+        })
         console.log('AND QUERY', res);
 
         return res;
@@ -1992,13 +1974,13 @@ export const getFollowingStatus = async (otherUser_id, user_id) => {
     }
 
     try {
-        const res = await databases.listDocuments(
-            dbEnv,
-            followingCollEnv,
-            [
+        const res = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: followingCollEnv,
+            queries: [
                 Query.and([Query.equal('user_id', otherUser_id), Query.equal('otherUser_id', user_id)])
             ]
-        )
+        })
         console.log('AND QUERY', res);
 
         return res;
@@ -2009,13 +1991,13 @@ export const getFollowingStatus = async (otherUser_id, user_id) => {
 
 export const getPersonalFeedAccounts = async (user_id) => {
     try {
-        const res = await databases.listDocuments(
-            dbEnv,
-            followingCollEnv,
-            [
+        const res = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: followingCollEnv,
+            queries: [
                 Query.equal('user_id', user_id)
             ]
-        )
+        })
 
         console.log("LET'S SEEEE:", res);
 
@@ -2023,7 +2005,7 @@ export const getPersonalFeedAccounts = async (user_id) => {
             return;
         }
 
-        const otherUserIds = res.documents.map(otherUser => otherUser.otherUser_id)
+        const otherUserIds = res.rows.map(otherUser => otherUser.otherUser_id)
 
         console.log("OTHERUSERIDS:", otherUserIds);
 
@@ -2031,7 +2013,7 @@ export const getPersonalFeedAccounts = async (user_id) => {
 
         console.log("OTHERUSERACCNTS:", personalFeedUserAccnts);
 
-        return personalFeedUserAccnts.documents;
+        return personalFeedUserAccnts.rows;
 
     } catch (error) {
         console.error('Error getting personal feed acounts:', error);
@@ -2040,11 +2022,11 @@ export const getPersonalFeedAccounts = async (user_id) => {
 
 export const createReaction = async (sender_id, recipient_id, content, timestamp, notice_id, expiresAt, reactionGif) => {
     try {
-        const response = await databases.createDocument(
-            dbEnv,
-            reactionsCollEnv,
-            ID.unique(),
-            {
+        const response = await tablesDB.createRow({
+            databaseId: dbEnv,
+            tableId: reactionsCollEnv,
+            rowId: ID.unique(),
+            data: {
                 sender_id,
                 recipient_id,
                 content,
@@ -2052,8 +2034,8 @@ export const createReaction = async (sender_id, recipient_id, content, timestamp
                 notice_id,
                 expiresAt,
                 reactionGif
-            },
-        )
+            }
+        })
         // console.log('Reaction created successfuly:', response);
         return response;
     } catch (error) {
@@ -2064,11 +2046,11 @@ export const createReaction = async (sender_id, recipient_id, content, timestamp
 export const deleteReaction = async (reactionId) => {
     console.log('Attempting to delete reaction with ID:', reactionId);
     try {
-        const response = await databases.deleteDocument(
-            dbEnv,
-            reactionsCollEnv,
-            reactionId,
-        );
+        const response = await tablesDB.deleteRow({
+            databaseId: dbEnv,
+            tableId: reactionsCollEnv,
+            rowId: reactionId
+        });
         console.log('Reaction deleted successfully:', response);
     } catch (error) {
         if (error.code === 404) {
@@ -2082,13 +2064,13 @@ export const deleteReaction = async (reactionId) => {
 export const deleteAllSentReactions = async (sender_id) => {
 
     try {
-        const reactions = await databases.listDocuments(
-            dbEnv,
-            reactionsCollEnv,
-            [Query.equal('sender_id', sender_id)],
-        );
+        const reactions = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: reactionsCollEnv,
+            queries: [Query.equal('sender_id', sender_id)]
+        });
 
-        const deleteSentReactionPromises = reactions.documents.map(reaction =>
+        const deleteSentReactionPromises = reactions.rows.map(reaction =>
             // deleteReaction(reaction.$id)
             deleteDoc(
                 reactionsCollEnv,
@@ -2109,13 +2091,13 @@ export const deleteAllRecievedReactions = async (recipient_id) => {
 
     try {
 
-        const reactions = await databases.listDocuments(
-            dbEnv,
-            reactionsCollEnv,
-            [Query.equal('recipient_id', recipient_id)],
-        );
+        const reactions = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: reactionsCollEnv,
+            queries: [Query.equal('recipient_id', recipient_id)]
+        });
 
-        const deletePromises = reactions.documents.map(reaction =>
+        const deletePromises = reactions.rows.map(reaction =>
             // deleteReaction(reaction.$id)
             deleteDoc(
                 reactionsCollEnv,
@@ -2137,13 +2119,13 @@ export const deleteAllReactionsForOneNotice = async (notice_id) => {
     try {
         console.log('deleteAllReactionsForOneNotice:', notice_id);
 
-        const reactions = await databases.listDocuments(
-            dbEnv,
-            reactionsCollEnv,
-            [Query.equal('notice_id', notice_id)],
-        );
+        const reactions = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: reactionsCollEnv,
+            queries: [Query.equal('notice_id', notice_id)]
+        });
 
-        const deleteOnReactionForOneNoticePromises = reactions.documents.map(reaction =>
+        const deleteOnReactionForOneNoticePromises = reactions.rows.map(reaction =>
             deleteDoc(
                 reactionsCollEnv,
                 reaction.$id
@@ -2163,11 +2145,11 @@ export const allReactionsForOneNotice = async (notice_id) => {
     try {
         console.log('allReactionsForOneNotice:', notice_id);
 
-        const reactions = await databases.listDocuments(
-            dbEnv,
-            reactionsCollEnv,
-            [Query.equal('notice_id', notice_id)],
-        );
+        const reactions = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: reactionsCollEnv,
+            queries: [Query.equal('notice_id', notice_id)]
+        });
 
         console.log('reactions docs:', reactions);
 
@@ -2179,10 +2161,10 @@ export const allReactionsForOneNotice = async (notice_id) => {
 
 export const getAllReactions = async () => {
     try {
-        const response = await databases.listDocuments(
-            dbEnv,
-            reactionsCollEnv
-        )
+        const response = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: reactionsCollEnv
+        })
         console.log('Successfully got ALL reactions.:', response);
         return response;
     } catch (error) {
@@ -2192,13 +2174,13 @@ export const getAllReactions = async () => {
 
 export const getAllReactionsBySenderId = async (sender_id) => {
     try {
-        const response = await databases.listDocuments(
-            dbEnv,
-            reactionsCollEnv,
-            [
+        const response = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: reactionsCollEnv,
+            queries: [
                 Query.equal('sender_id', sender_id),
             ]
-        )
+        })
         console.log('Successfully got reactions by sender doc.:', response);
         return response;
     } catch (error) {
@@ -2208,13 +2190,13 @@ export const getAllReactionsBySenderId = async (sender_id) => {
 
 export const getAllReactionsByRecipientId = async (recipient_id) => {
     try {
-        const response = await databases.listDocuments(
-            dbEnv,
-            reactionsCollEnv,
-            [
+        const response = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: reactionsCollEnv,
+            queries: [
                 Query.equal('recipient_id', recipient_id),
             ]
-        )
+        })
         console.log('Successfully got reactions by recipient_id doc.:', response);
         return response;
     } catch (error) {
@@ -2246,11 +2228,11 @@ export const getAllReactionsByNoticeId = async (notice_id, limit, cursor = null,
             queries.push(Query.cursorAfter(cursor));
         }
 
-        const response = await databases.listDocuments(
-            dbEnv,
-            reactionsCollEnv,
-            queries
-        )
+        const response = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: reactionsCollEnv,
+            queries: queries
+        })
 
         return response;
     } catch (error) {
@@ -2260,11 +2242,11 @@ export const getAllReactionsByNoticeId = async (notice_id, limit, cursor = null,
 
 export const getReactionByReactionId = async (reactionId) => {
     try {
-        const reaction = await databases.getDocument(
-            dbEnv,
-            reactionsCollEnv,
-            reactionId
-        )
+        const reaction = await tablesDB.getRow({
+            databaseId: dbEnv,
+            tableId: reactionsCollEnv,
+            rowId: reactionId
+        })
         console.log('Success getting reaction:', reaction);
         return reaction;
     } catch (error) {
@@ -2274,22 +2256,18 @@ export const getReactionByReactionId = async (reactionId) => {
 
 export const createReactionReport = async (reaction_id, author_id, reason, user_id, reaction_text) => {
     try {
-        const response = await databases.createDocument(
-            dbEnv,
-            reportsReactionsCollEnv,
-            ID.unique(),
-            {
+        const response = await tablesDB.createRow({
+            databaseId: dbEnv,
+            tableId: reportsReactionsCollEnv,
+            rowId: ID.unique(),
+            data: {
                 reaction_id: reaction_id,
                 author_id: author_id,
                 reason: reason,
                 user_id: user_id,
                 reaction_text: reaction_text
-            },
-            // [
-            //     Permission.write(Role.users()),
-            //     Permission.write(Role.guests())
-            // ]
-        );
+            }
+        });
         console.log('Report created successfully');
         return response;
     } catch (error) {
@@ -2303,16 +2281,16 @@ export const createPassocde = async (user_id, passcode, accountType) => {
         console.log('usr id', user_id);
         console.log('passcode', passcode);
         console.log('accountType', accountType);
-        const response = await databases.createDocument(
-            dbEnv,
-            passcodesCollEnv,
-            ID.unique(),
-            {
+        const response = await tablesDB.createRow({
+            databaseId: dbEnv,
+            tableId: passcodesCollEnv,
+            rowId: ID.unique(),
+            data: {
                 user_id,
                 passcode,
                 accountType
             }
-        )
+        })
         console.log('Passcode created successfuly.');
         return response;
     } catch (error) {
@@ -2324,20 +2302,20 @@ export const updatePassocde = async (user_id, passcode) => {
     try {
         console.log('usr id', user_id);
 
-        const listResponse = await databases.listDocuments(
-            dbEnv,
-            passcodesCollEnv,
-            [Query.equal('user_id', user_id)]
-        );
+        const listResponse = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: passcodesCollEnv,
+            queries: [Query.equal('user_id', user_id)]
+        });
 
-        const documentId = listResponse.documents[0].$id;
+        const documentId = listResponse.rows[0].$id;
 
-        const updateResponse = await databases.updateDocument(
-            dbEnv,
-            passcodesCollEnv,
-            documentId,
-            { passcode: passcode }
-        );
+        const updateResponse = await tablesDB.updateRow({
+            databaseId: dbEnv,
+            tableId: passcodesCollEnv,
+            rowId: documentId,
+            data: { passcode: passcode }
+        });
 
         console.log('Passcode updated successfully.');
 
@@ -2352,15 +2330,15 @@ export const updatePassocde = async (user_id, passcode) => {
 export const deletePassocde = async (user_id) => {
 
     try {
-        const passcodeDocs = await databases.listDocuments(
-            dbEnv,
-            passcodesCollEnv,
-            [Query.equal('user_id', user_id)]
-        );
+        const passcodeDocs = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: passcodesCollEnv,
+            queries: [Query.equal('user_id', user_id)]
+        });
 
         if (passcodeDocs.total > 0) {
 
-            const docId = passcodeDocs.documents[0].$id;
+            const docId = passcodeDocs.rows[0].$id;
 
             await deleteDoc(
                 passcodesCollEnv,
@@ -2383,13 +2361,13 @@ export const deletePassocde = async (user_id) => {
 
 export const getPassocdeByOrganizationId = async (user_id) => {
     try {
-        const response = await databases.listDocuments(
-            dbEnv,
-            passcodesCollEnv,
-            [
+        const response = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: passcodesCollEnv,
+            queries: [
                 Query.equal('user_id', user_id)
             ]
-        )
+        })
         return response;
     } catch (error) {
         console.error('Error getting passcode:', error);
@@ -2398,15 +2376,15 @@ export const getPassocdeByOrganizationId = async (user_id) => {
 
 export const createBlock = async (user_id, currUser_id) => {
     try {
-        const res = await databases.createDocument(
-            dbEnv,
-            blocksCollEnv,
-            ID.unique(),
-            {
+        const res = await tablesDB.createRow({
+            databaseId: dbEnv,
+            tableId: blocksCollEnv,
+            rowId: ID.unique(),
+            data: {
                 blocker_id: user_id,
                 blocked_id: currUser_id
             }
-        )
+        })
         console.log('User blocked successfully: ', res);
         return res;
     } catch (error) {
@@ -2416,15 +2394,15 @@ export const createBlock = async (user_id, currUser_id) => {
 
 export const getBlockedUsersByUser = async (blocker_id) => {
     try {
-        const res = await databases.listDocuments(
-            dbEnv,
-            blocksCollEnv,
-            [
+        const res = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: blocksCollEnv,
+            queries: [
                 Query.equal('blocker_id', blocker_id)
             ]
-        )
+        })
         console.log('Blocked users:', res);
-        return res.documents;
+        return res.rows;
     } catch (error) {
         console.error('Error getting blocked users:', error);
     }
@@ -2432,15 +2410,15 @@ export const getBlockedUsersByUser = async (blocker_id) => {
 
 export const getBlockedUsersByUserTwo = async (user_id) => {
     try {
-        const res = await databases.listDocuments(
-            dbEnv,
-            blocksCollEnv,
-            [
+        const res = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: blocksCollEnv,
+            queries: [
                 Query.equal('blocker_id', user_id)
             ]
-        )
-        console.log('Blocked users:', res.documents);
-        return res.documents;
+        })
+        console.log('Blocked users:', res.rows);
+        return res.rows;
     } catch (error) {
         console.error('Error getting blocked users:', error);
     }
@@ -2448,17 +2426,17 @@ export const getBlockedUsersByUserTwo = async (user_id) => {
 
 export const getBlockedUsersByUserByBatch = async (blocker_id, limit, offset) => {
     try {
-        const res = await databases.listDocuments(
-            dbEnv,
-            blocksCollEnv,
-            [
+        const res = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: blocksCollEnv,
+            queries: [
                 Query.equal('blocker_id', blocker_id),
                 Query.limit(limit),
                 Query.offset(offset)
             ]
-        )
+        })
         console.log('Blocked users:', res);
-        return res.documents;
+        return res.rows;
     } catch (error) {
         console.error('Error getting blocked users:', error);
     }
@@ -2466,15 +2444,15 @@ export const getBlockedUsersByUserByBatch = async (blocker_id, limit, offset) =>
 
 export const getUsersBlockingUser = async (blocked_id) => {
     try {
-        const res = await databases.listDocuments(
-            dbEnv,
-            blocksCollEnv,
-            [
+        const res = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: blocksCollEnv,
+            queries: [
                 Query.equal('blocked_id', blocked_id)
             ]
-        )
+        })
         console.log('These accounts blocked you:', res);
-        return res.documents;
+        return res.rows;
     } catch (error) {
         console.error('Error getting users:', error);
     }
@@ -2484,21 +2462,21 @@ export const isOtherUserBlockedByUser = async (user_id, otherUser_id) => {
     console.log('Starting isOtherUserBlockedByUser...');
 
     try {
-        const res = await databases.listDocuments(
-            dbEnv,
-            blocksCollEnv,
-            [
+        const res = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: blocksCollEnv,
+            queries: [
                 Query.and([
                     Query.equal('blocker_id', user_id),
                     Query.equal('blocked_id', otherUser_id)
                 ])
             ]
-        )
+        })
 
-        console.log('RESULT isOtherUserBlockedByUser', res.documents);
+        console.log('RESULT isOtherUserBlockedByUser', res.rows);
 
-        if (res.documents.length > 0) {
-            console.log('Other user is blocked!', res.documents);
+        if (res.rows.length > 0) {
+            console.log('Other user is blocked!', res.rows);
             return true;
         }
         return false;
@@ -2511,21 +2489,21 @@ export const isUserBlockedByOtherUser = async (otherUser_id, user_id) => {
     console.log('Starting isUserBlockedByOtherUser...');
 
     try {
-        const res = await databases.listDocuments(
-            dbEnv,
-            blocksCollEnv,
-            [
+        const res = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: blocksCollEnv,
+            queries: [
                 Query.and([
                     Query.equal('blocker_id', otherUser_id),
                     Query.equal('blocked_id', user_id)
                 ])
             ]
-        )
+        })
 
-        console.log('RESULT isUserBlockedByOtherUser', res.documents);
+        console.log('RESULT isUserBlockedByOtherUser', res.rows);
 
-        if (res.documents.length > 0) {
-            console.log('isOtherUserBlockedByUser', res.documents);
+        if (res.rows.length > 0) {
+            console.log('isOtherUserBlockedByUser', res.rows);
             return true;
         }
         return false;
@@ -2539,24 +2517,24 @@ export const removeBlockUsingBlockedId = async (blocked_id) => {
     try {
         console.log('To be removed:', blocked_id);
 
-        const user = await databases.listDocuments(
-            dbEnv,
-            blocksCollEnv,
-            [Query.equal('blocked_id', blocked_id)]
-        );
+        const user = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: blocksCollEnv,
+            queries: [Query.equal('blocked_id', blocked_id)]
+        });
 
         console.log('Removing block for - 1:', user);
-        console.log('Removing block for - 2:', user.documents[0].$id);
+        console.log('Removing block for - 2:', user.rows[0].$id);
 
         await deleteDoc(
             blocksCollEnv,
-            user.documents[0].$id
+            user.rows[0].$id
         )
 
         // await databases.deleteDocument(
         //     dbEnv,
         //     blocksCollEnv,
-        //     user.documents[0].$id
+        //     user.rows[0].$id
         // )
 
         console.log('Block removed succesfully');
@@ -2571,11 +2549,11 @@ export const removeBlock = async (block_doc_id) => {
     console.log('block doc id', block_doc_id);
 
     try {
-        const response = await databases.deleteDocument(
-            dbEnv,
-            blocksCollEnv,
-            block_doc_id //block doc id
-        )
+        const response = await tablesDB.deleteRow({
+            databaseId: dbEnv,
+            tableId: blocksCollEnv,
+            rowId: block_doc_id
+        })
         return response;
     } catch (error) {
         console.error('Block removal failed', error);
@@ -2585,13 +2563,13 @@ export const removeBlock = async (block_doc_id) => {
 export const removeAllBlocksForBlocker = async (blocker_id) => {
 
     try {
-        const blocks = await databases.listDocuments(
-            dbEnv,
-            blocksCollEnv,
-            [Query.equal('blocker_id', blocker_id)]
-        )
+        const blocks = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: blocksCollEnv,
+            queries: [Query.equal('blocker_id', blocker_id)]
+        })
 
-        const removeBlockerPromises = blocks.documents.map(block =>
+        const removeBlockerPromises = blocks.rows.map(block =>
             // removeBlock(block.$id)
             deleteDoc(
                 blocksCollEnv,
@@ -2610,13 +2588,13 @@ export const removeAllBlocksForBlocker = async (blocker_id) => {
 export const removeAllBlocksForBlocked = async (blocked_id) => {
 
     try {
-        const blocks = await databases.listDocuments(
-            dbEnv,
-            blocksCollEnv,
-            [Query.equal('blocked_id', blocked_id)]
-        )
+        const blocks = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: blocksCollEnv,
+            queries: [Query.equal('blocked_id', blocked_id)]
+        })
 
-        const removeBlockedPromises = blocks.documents.map(block =>
+        const removeBlockedPromises = blocks.rows.map(block =>
             // removeBlock(block.$id)
             deleteDoc(
                 blocksCollEnv,
@@ -2634,16 +2612,16 @@ export const removeAllBlocksForBlocked = async (blocked_id) => {
 
 export const createUserReport = async (reported_id, reason, reporter_id) => {
     try {
-        const response = await databases.createDocument(
-            dbEnv,
-            reportsUsersCollEnv,
-            ID.unique(),
-            {
+        const response = await tablesDB.createRow({
+            databaseId: dbEnv,
+            tableId: reportsUsersCollEnv,
+            rowId: ID.unique(),
+            data: {
                 reported_id,
                 reason,
                 reporter_id
-            },
-        );
+            }
+        });
         console.log('Report created successfully');
         return response;
     } catch (error) {
@@ -2654,11 +2632,11 @@ export const createUserReport = async (reported_id, reason, reporter_id) => {
 
 export const deleteReport = async (report_id) => {
     try {
-        await databases.deleteDocument(
-            dbEnv,
-            reportsUsersCollEnv,
-            report_id
-        )
+        await tablesDB.deleteRow({
+            databaseId: dbEnv,
+            tableId: reportsUsersCollEnv,
+            rowId: report_id
+        })
         console.log('Report deleted successfully');
 
     } catch (error) {
@@ -2673,13 +2651,13 @@ export const removeAllReportsReportingTheUser = async (reported_id) => {
     }
 
     try {
-        const docs = await databases.listDocuments(
-            dbEnv,
-            reportsUsersCollEnv,
-            [Query.equal('reported_id', reported_id)]
-        );
+        const docs = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: reportsUsersCollEnv,
+            queries: [Query.equal('reported_id', reported_id)]
+        });
 
-        const deletePromises = docs.documents.map(doc =>
+        const deletePromises = docs.rows.map(doc =>
             // deleteReport(doc.$id)
             deleteDoc(
                 reportsUsersCollEnv,
@@ -2703,13 +2681,13 @@ export const removeAllReportsReportingTheUserNotice = async (author_id) => {
     }
 
     try {
-        const docs = await databases.listDocuments(
-            dbEnv,
-            reportsUsersCollEnv,
-            [Query.equal('author_id', author_id)]
-        );
+        const docs = await tablesDB.listRows({
+            databaseId: dbEnv,
+            tableId: reportsUsersCollEnv,
+            queries: [Query.equal('author_id', author_id)]
+        });
 
-        const deletePromises = docs.documents.map(doc =>
+        const deletePromises = docs.rows.map(doc =>
             // deleteReport(doc.$id)
             deleteDoc(
                 reportsUsersCollEnv,

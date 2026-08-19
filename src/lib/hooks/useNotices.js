@@ -731,7 +731,7 @@ export const useNotices = () => {
         try {
             const res = await fetchAllLikesByNoticeId(noticeId);
             console.log('All likes for a notice by its id:', res);
-            return res.documents;
+            return res.rows;
         } catch (error) {
             console.error('Error fetching all likes by notice id.', error);
         }
@@ -951,7 +951,7 @@ export const useNotices = () => {
             const response = await fetchAllReactionsByRecipientId(recipient_id);
             // console.log('getAllReactionsByRecipientId', response);
 
-            // setReactions(response.documents);
+            // setReactions(response.rows);
 
             return response;
         } catch (error) {

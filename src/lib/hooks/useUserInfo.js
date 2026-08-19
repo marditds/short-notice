@@ -367,17 +367,17 @@ export const useUserInfo = () => {
                 getAllSavesByNoticeId(noticeIds)
             ]);
 
-            const userMap = new Map(allUsersData.documents.map(user => [user.$id, user]));
+            const userMap = new Map(allUsersData.rows.map(user => [user.$id, user]));
             const permissionsMap = new Map(userPermissionsList.map(perm => [perm.$id, perm]));
             const likesCountMap = new Map();
             const savesCountMap = new Map();
 
-            for (const like of allLikes.documents) {
+            for (const like of allLikes.rows) {
                 const noticeId = like.notice_id;
                 likesCountMap.set(noticeId, (likesCountMap.get(noticeId) || 0) + 1);
             }
 
-            for (const save of allSaves.documents) {
+            for (const save of allSaves.rows) {
                 const noticeId = save.notice_id;
                 savesCountMap.set(noticeId, (savesCountMap.get(noticeId) || 0) + 1);
             }
@@ -537,13 +537,13 @@ export const useUserInfo = () => {
 
             console.log('allFollowings', allFollowings);
 
-            if (!allFollowings || !allFollowings.documents) {
+            if (!allFollowings || !allFollowings.rows) {
                 console.warn('No follower data found for user IDs:', followedByUserIds);
                 return [];
             }
 
             const accountsFollowedByUser = followedByUserIds.map((userId) =>
-                allFollowings.documents.find((user) => user.$id === userId)
+                allFollowings.rows.find((user) => user.$id === userId)
             )
                 .filter(Boolean);
 
@@ -622,13 +622,13 @@ export const useUserInfo = () => {
 
             console.log('allFollowers', allFollowers);
 
-            if (!allFollowers || !allFollowers.documents) {
+            if (!allFollowers || !allFollowers.rows) {
                 console.warn('No follower data found for user IDs:', followingTheUserIds);
                 return [];
             }
 
             const accountsFollowingTheUser = followingTheUserIds
-                .map((userId) => allFollowers.documents.find((user) => user.$id === userId))
+                .map((userId) => allFollowers.rows.find((user) => user.$id === userId))
                 .filter(Boolean);
 
             console.log('accountsFollowingTheUser', accountsFollowingTheUser);
@@ -800,7 +800,7 @@ export const useUserInfo = () => {
 
         try {
             const res = await fetchPassocdeByOrganizationId(userId);
-            return res.documents;
+            return res.rows;
         } catch (error) {
             console.error('Error fetching passcode:', error);
         }

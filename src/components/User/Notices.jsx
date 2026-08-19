@@ -271,13 +271,13 @@ export const Notices = ({
 
             console.log('noticeReactions', noticeReactions);
 
-            if (!noticeReactions || !noticeReactions.documents.length) {
+            if (!noticeReactions || !noticeReactions.rows.length) {
                 // No more reactions to load
                 setShowLoadMoreBtn(false);
                 return;
             }
 
-            const usersIds = [...new Set(noticeReactions?.documents.map((reaction) => reaction.sender_id).filter(Boolean))];
+            const usersIds = [...new Set(noticeReactions?.rows.map((reaction) => reaction.sender_id).filter(Boolean))];
 
             console.log('usersIds', usersIds);
 
@@ -310,7 +310,7 @@ export const Notices = ({
                 ...prev,
                 [noticeId]: [
                     ...(prev[noticeId] || []),
-                    ...noticeReactions.documents.filter(newReaction =>
+                    ...noticeReactions.rows.filter(newReaction =>
                         !prev[noticeId]?.some(existingReaction =>
                             existingReaction.$id === newReaction.$id
                         )
@@ -318,8 +318,8 @@ export const Notices = ({
                 ]
             }));
 
-            const newCursor = noticeReactions.documents.length > 0
-                ? noticeReactions.documents[noticeReactions.documents.length - 1].$id
+            const newCursor = noticeReactions.rows.length > 0
+                ? noticeReactions.rows[noticeReactions.rows.length - 1].$id
                 : null;
 
             setCursors(prev => ({
@@ -327,7 +327,7 @@ export const Notices = ({
                 [noticeId]: newCursor
             }));
 
-            if (noticeReactions.documents.length < limit) {
+            if (noticeReactions.rows.length < limit) {
                 setShowLoadMoreBtn(false);
             }
 
@@ -404,14 +404,14 @@ export const Notices = ({
                 }
 
                 const initialReactions = await getReactionsForNotice(noticeId, limit);
-                if (!initialReactions || initialReactions.documents.length === 0) {
+                if (!initialReactions || initialReactions.rows.length === 0) {
                     console.log('No reactions to load');
                     return;
                 }
 
                 console.log('initialReactions', initialReactions);
 
-                const usersIds = [...new Set(initialReactions.documents.map((reaction) => reaction.sender_id).filter(Boolean))];
+                const usersIds = [...new Set(initialReactions.rows.map((reaction) => reaction.sender_id).filter(Boolean))];
                 console.log('usersIds', usersIds);
 
                 const users = await getUsersByIdQuery(usersIds);
@@ -429,11 +429,11 @@ export const Notices = ({
 
                 setLoadedReactions(prev => ({
                     ...prev,
-                    [noticeId]: initialReactions.documents
+                    [noticeId]: initialReactions.rows
                 }));
 
-                const newCursor = initialReactions.documents.length > 0
-                    ? initialReactions.documents[initialReactions.documents.length - 1].$id
+                const newCursor = initialReactions.rows.length > 0
+                    ? initialReactions.rows[initialReactions.rows.length - 1].$id
                     : null;
 
                 setCursors(prev => ({ ...prev, [noticeId]: newCursor }));

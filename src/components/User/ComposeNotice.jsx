@@ -6,7 +6,7 @@ import { useNotices } from '../../lib/hooks/useNotices';
 import { Form, Button, Image } from 'react-bootstrap';
 import { NoticeTags } from './NoticeTags';
 import { LoadingSpinner } from '../Loading/LoadingSpinner';
-import GifPicker from 'gif-picker-react';
+// import GifPicker from 'gif-picker-react';
 
 export const ComposeNotice = ({ noticeText, setNoticeText,
     // duration, 
@@ -136,6 +136,10 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
         console.log('noticeUrl', noticeUrl);
     }, [noticeUrl])
 
+    useEffect(() => {
+        console.log('selectedTags', selectedTags);
+    }, [selectedTags])
+
     const isAnyTagSelected = Object.values(selectedTags).some(Boolean);
 
     return (
@@ -252,17 +256,17 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
                     </Button>
 
                     {/* GIF Button */}
-                    <Button className='notice__gif-btn ms-auto py-1 px-2'
+                    {/* <Button className='notice__gif-btn ms-auto py-1 px-2'
                         onClick={handleGifBtn}
                         aria-label='Add a GIF to your notice'
                     >
                         <i className='bi bi-filetype-gif' />
-                    </Button>
+                    </Button> */}
 
                 </div>
 
                 {/* Gif picker */}
-                {(isGifBtnClicked && tenorApiKey) &&
+                {/* {(isGifBtnClicked && tenorApiKey) &&
                     <div className='d-flex justify-content-end align-items-center'>
                         <GifPicker
                             categoryHeight={70}
@@ -271,7 +275,7 @@ export const ComposeNotice = ({ noticeText, setNoticeText,
                             width={!isSmallScreen ? (!isMediumScreen && location.pathname === '/user/profile' ? '50%' : '80%') : '100%'}
                         />
                     </div>
-                }
+                } */}
             </Form.Group>
 
             {/* Tags */}

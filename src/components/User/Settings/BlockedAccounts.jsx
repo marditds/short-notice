@@ -51,11 +51,11 @@ export const BlockedAccounts = ({ userId, username }) => {
 
             console.log('blockedUsers', blockedUsers);
 
-            blockedUsers.documents.sort((a, b) => a.username.localeCompare(b.username));
+            blockedUsers.rows.sort((a, b) => a.username.localeCompare(b.username));
 
             if (blockedUsers) {
                 setBlockedUsers(prevUsers => {
-                    const moreUsers = blockedUsers.documents?.filter(user =>
+                    const moreUsers = blockedUsers.rows?.filter(user =>
                         !prevUsers?.some(loadedUser => loadedUser.$id === user.$id)
                     );
 
@@ -65,7 +65,7 @@ export const BlockedAccounts = ({ userId, username }) => {
                 return 'No results';
             }
 
-            if (blockedUsers.documents?.length < limit) {
+            if (blockedUsers.rows?.length < limit) {
                 setHasMoreBlockedProfiles(false);
             } else {
                 setHasMoreBlockedProfiles(true);
