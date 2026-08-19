@@ -106,10 +106,10 @@ export const captchaVerification = async (token) => {
 
         const payload = JSON.stringify({ token });
 
-        const res = await functions.createExecution(
-            captcha_function_id,
-            payload
-        )
+        const res = await functions.createExecution({
+            functionId: captcha_function_id,
+            body: payload
+        })
 
         if (res.status === 'completed') {
             try {
@@ -568,10 +568,10 @@ export const checkEmailExistsInAuth = async (email) => {
             throw new Error('Failed to load function ID');
         }
 
-        const response = await functions.createExecution(
-            user_auth_function_id,
-            payload
-        );
+        const response = await functions.createExecution({
+            functionId: user_auth_function_id,
+            body: payload
+        });
 
         console.log('Function response:', response);
         console.log('Response status:', response.status);
@@ -622,10 +622,10 @@ export const deleteAuthUser = async (userId) => {
             throw new Error('Failed to load function ID');
         }
 
-        const res = await functions.createExecution(
-            user_delete_function_id,
-            payload
-        )
+        const res = await functions.createExecution({
+            functionId: user_delete_function_id,
+            body: payload
+        })
         if (res.status === 'completed') {
             try {
                 const result = JSON.parse(res.responseBody);
@@ -763,10 +763,10 @@ export const generateNoticeTemplateWithGemini = async (prompt) => {
 
         const payload = JSON.stringify({ prompt });
 
-        const res = await functions.createExecution(
-            gemini_function_id,
-            payload
-        )
+        const res = await functions.createExecution({
+            functionId: gemini_function_id,
+            body: payload
+        })
 
         if (res.status === 'completed') {
             try {
