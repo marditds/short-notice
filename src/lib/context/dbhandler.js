@@ -55,7 +55,10 @@ export const googleOAuthLogin = async () => {
 export const handleOAuthSession = async (userId, secret) => {
 
     try {
-        await account.createSession(userId, secret);
+        await account.createSession({
+            userId: userId,
+            secret: secret
+        });
 
         // Get the user data
         const user = await account.get();
