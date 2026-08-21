@@ -1,6 +1,15 @@
-# ShortNotice
-
 **Live app:** [shortnotice.netlify.app](https://shortnotice.netlify.app/) · **Author:** [@marditds](https://github.com/marditds)
+
+<p align="center">
+  <a href="https://shortnotice.netlify.app" target="_blank"> 
+
+<img width="100%" alt="ShortNotice Logo" src="https://github.com/user-attachments/assets/f6dea2e5-4956-4622-84bb-78f65d55761b" />
+
+    
+  </a>
+</p>
+
+## Overview
 
 ShortNotice is an ephemeral social platform: short text (and GIF) posts that automatically expire and delete after a set time. It's built around impermanence by design. It is a low-noise alternative to endlessly scrolling, permanent-feed social apps.
 
