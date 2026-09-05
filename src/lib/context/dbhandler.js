@@ -647,7 +647,10 @@ export const deleteAuthUser = async (userId) => {
 
 export const createUserSession = async (email, password) => {
     try {
-        const userSession = await account.createEmailPasswordSession(email, password);
+        const userSession = await account.createEmailPasswordSession({
+            email: email,
+            password: password
+        });
         console.log('Session created successfully:', userSession);
         return userSession;
     } catch (error) {
@@ -664,7 +667,9 @@ export const createUserSession = async (email, password) => {
 
 export const getSession = async () => {
     try {
-        const currentSession = await account.getSession('current');
+        const currentSession = await account.getSession({
+            sessionId: 'current'
+        });
         console.log('CURRENT SESS:', currentSession);
     } catch (error) {
         console.error('Error getting current session deets:', error);

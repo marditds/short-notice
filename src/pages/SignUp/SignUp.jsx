@@ -15,7 +15,6 @@ const SignUp = () => {
 
     const {
         setUserId,
-        setUserSession,
         setUserEmail,
         setGivenName,
         setUser,
@@ -183,7 +182,6 @@ const SignUp = () => {
 
                 const userSession = await createUserSession(email, password);
 
-                setUserSession(userSession.$id);
                 setUserEmail(user.email);
                 setUserId(user.$id);
                 setGivenName(user.name);
